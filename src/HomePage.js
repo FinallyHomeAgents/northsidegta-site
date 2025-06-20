@@ -1,4 +1,5 @@
 import React from "react";
+import Hero from "./Hero";
 
 export default function HomePage() {
   const towns = [
@@ -12,8 +13,13 @@ export default function HomePage() {
 
   return (
     <div className="bg-white text-gray-800">
-      {/* Hero Section */}
-      <section className="bg-green-700 text-white py-20 text-center">
+      {/* ─────────── Hero Image (no overlay) ─────────── */}
+      <section>
+        <Hero />
+      </section>
+
+      {/* ─────────── Text below image ─────────── */}
+      <section className="bg-green-700 text-white py-16 px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           More Community. Less Traffic.
         </h1>
@@ -22,9 +28,12 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Towns Grid */}
+      {/* ─────────── Towns Grid ─────────── */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">Explore Featured Communities</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Explore Featured Communities
+        </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {towns.map((town) => (
             <div
@@ -43,7 +52,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Move North Section */}
+      {/* ─────────── Why Move North ─────────── */}
       <section className="bg-gray-100 py-16 px-4 text-center">
         <h2 className="text-3xl font-bold mb-6">Why Move North?</h2>
         <p className="max-w-2xl mx-auto text-lg text-gray-700">
@@ -51,7 +60,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Testimonial Section */}
+      {/* ─────────── Testimonial ─────────── */}
       <section className="py-16 px-4 text-center">
         <blockquote className="max-w-2xl mx-auto italic text-lg text-gray-600">
           “Moving north was the best decision we made. Matthew and the team made the entire process smooth and stress-free.”
@@ -59,9 +68,11 @@ export default function HomePage() {
         <p className="mt-4 text-gray-700 font-medium">— Recent Buyer, Uxbridge</p>
       </section>
 
-      {/* CTA Section */}
+      {/* ─────────── Call-to-Action ─────────── */}
       <section className="bg-green-700 text-white py-16 px-4 text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Explore the NorthSide GTA?</h2>
+        <h2 className="text-3xl font-bold mb-4">
+          Ready to Explore the NorthSide GTA?
+        </h2>
         <p className="text-lg mb-6">
           Let us help you find your perfect town and home.
         </p>
@@ -73,7 +84,7 @@ export default function HomePage() {
         </a>
       </section>
 
-      {/* Footer */}
+      {/* ─────────── Footer ─────────── */}
       <footer className="text-center text-sm text-gray-500 py-6">
         © 2025 NorthSide GTA | Finally Home Agents
       </footer>
