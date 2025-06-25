@@ -1,16 +1,14 @@
 // src/AboutPage.js
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Globe,
-  TrendingUp,
-  Users,
-  Golf,
-} from "lucide-react"; // npm i lucide-react
+import Navigation from "./Navigation";      //  ← NEW: brings in your menu bar
+import { Globe, TrendingUp, Users, Golf } from "lucide-react";
 
 export default function AboutPage() {
   return (
     <div className="bg-white text-gray-900">
+      {/* ───────── Navigation (now shows on this page) ───────── */}
+      <Navigation />
 
       {/* ───────── Hero Banner ───────── */}
       <section className="relative h-[60vh] md:h-[70vh] overflow-hidden">
@@ -38,13 +36,12 @@ export default function AboutPage() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Local Experts */}
+          {/* Local Specialists */}
           <div className="flex flex-col items-center text-center">
             <Globe className="h-12 w-12 text-green-700 mb-4" />
             <h3 className="font-semibold text-xl mb-2">Local Specialists</h3>
             <p className="text-gray-600">
-              We defined the&nbsp;NorthSide GTA so your search feels focused and
-              hyper-local.
+              We defined the NorthSide GTA so your search feels focused and hyper-local.
             </p>
           </div>
 
@@ -53,18 +50,16 @@ export default function AboutPage() {
             <TrendingUp className="h-12 w-12 text-green-700 mb-4" />
             <h3 className="font-semibold text-xl mb-2">Marketing That Sells</h3>
             <p className="text-gray-600">
-              Staging, video, drone, and data-driven strategy that turns listings into
-              stand-out stories.
+              Staging, video, drone, and data-driven strategy that turns listings into stand-out stories.
             </p>
           </div>
 
-          {/* Relationship Driven */}
+          {/* Relationship-First */}
           <div className="flex flex-col items-center text-center">
             <Users className="h-12 w-12 text-green-700 mb-4" />
             <h3 className="font-semibold text-xl mb-2">Relationship-First</h3>
             <p className="text-gray-600">
-              Clients become friends &mdash; we play golf, share victories, and stay in touch
-              long after closing.
+              Clients become friends — we play golf, share victories, and stay in touch long after closing.
             </p>
           </div>
         </div>
@@ -72,10 +67,9 @@ export default function AboutPage() {
 
       {/* ───────── Who We Are ───────── */}
       <section className="bg-gray-50 py-16 px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">Who&nbsp;We&nbsp;Are</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">Who We Are</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-
           {/* Matthew */}
           <div className="flex flex-col items-center text-center">
             <img
@@ -83,11 +77,11 @@ export default function AboutPage() {
               alt="Matthew Mulhall"
               className="h-40 w-40 rounded-full object-cover mb-6 shadow"
             />
-            <h3 className="text-2xl font-semibold mb-2">Matthew&nbsp;Mulhall</h3>
+            <h3 className="text-2xl font-semibold mb-2">Matthew Mulhall</h3>
             <p className="text-gray-600 text-sm max-w-md">
-              Proud dad of twins Steven &amp;&nbsp;Elena and multiple Top&nbsp;Agent award
-              recipient. Matthew combines competitive spirit with strategic
-              marketing to help families find &ldquo;home.&rdquo;
+              Proud dad of twins Steven &amp; Elena and multiple Top Agent award
+              winner. Matthew combines competitive spirit with strategic marketing
+              to help families find “home.”
             </p>
           </div>
 
@@ -98,11 +92,11 @@ export default function AboutPage() {
               alt="Landon Mulhall"
               className="h-40 w-40 rounded-full object-cover mb-6 shadow"
             />
-            <h3 className="text-2xl font-semibold mb-2">Landon&nbsp;Mulhall</h3>
+            <h3 className="text-2xl font-semibold mb-2">Landon Mulhall</h3>
             <p className="text-gray-600 text-sm max-w-md">
-              Focused, creative, and community-minded. Landon ensures every
-              detail is perfect, guiding clients with calm confidence and deep
-              local knowledge.
+              Focused, creative, and community-minded. Landon ensures every detail
+              is perfect, guiding clients with calm confidence and deep local
+              knowledge.
             </p>
           </div>
         </div>
@@ -114,11 +108,11 @@ export default function AboutPage() {
           <div className="flex-1">
             <h2 className="text-3xl font-bold mb-4">Life Beyond Real Estate</h2>
             <p className="text-gray-700 mb-4">
-              We grew up on the ice, the field, and the golf course &mdash; hockey,
-              soccer, baseball, and golf shaped our teamwork and drive. Today we
-              channel that passion by running a Thursday Night Golf League that
-              travels across the NorthSide GTA and hosting our annual&nbsp;
-              <strong>Finally Home Agents Golf Tournament</strong> for clients and friends.
+              We grew up on the ice, the field, and the golf course—hockey, soccer,
+              baseball, and golf shaped our teamwork and drive. Today we channel
+              that passion by running a Thursday Night Golf League across the
+              NorthSide GTA and hosting our annual <strong>Finally Home Agents
+              Golf Tournament</strong> for clients and friends.
             </p>
             <p className="text-gray-700">
               Just like pro athletes rely on elite agents, we believe your real
@@ -139,8 +133,7 @@ export default function AboutPage() {
       <section className="bg-green-700 text-white py-12 px-4 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to make your move?</h2>
         <p className="text-lg mb-6">
-          Let&rsquo;s talk about your goals and create your NorthSide GTA success
-          story.
+          Let’s talk about your goals and create your NorthSide GTA success story.
         </p>
         <Link
           to="/contact"
