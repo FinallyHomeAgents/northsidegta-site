@@ -3,9 +3,19 @@ import { Link } from "react-router-dom";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    if (menuOpen) {
+      // Trigger closing animation
+      setIsAnimating(true);
+      setTimeout(() => {
+        setMenuOpen(false);
+        setIsAnimating(false);
+      }, 300); // match animation duration
+    } else {
+      setMenuOpen(true);
+    }
   };
 
   return (
@@ -16,7 +26,7 @@ export default function Navigation() {
           NorthSide GTA
         </Link>
 
-        {/* Desktop Menu */}
+        {/* Desktop Nav */}
         <nav className="hidden md:flex space-x-8 items-center text-gray-700 font-medium">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
@@ -66,8 +76,12 @@ export default function Navigation() {
       </div>
 
       {/* Mobile Dropdown */}
-      {menuOpen && (
-        <div className="md:hidden px-4 pb-4 animate-slideDown">
+      {(menuOpen || isAnimating) && (
+        <div
+          className={`md:hidden px-4 pb-4 ${
+            isAnimating ? "animate-slideUp" : "animate-slideDown"
+          }`}
+        >
           <ul className="space-y-4 text-gray-700 font-medium">
             <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
             <li><Link to="/about" onClick={toggleMenu}>About</Link></li>
