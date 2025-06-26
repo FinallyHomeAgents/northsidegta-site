@@ -16,10 +16,13 @@ module.exports = {
       },
       animation: {
         slideDown: "slideDown 0.3s ease-out forwards",
-        slideUp: "slideUp 0.3s ease-in forwards",
+        slideUp:   "slideUp   0.3s ease-in  forwards",
       },
     },
   },
 
-  plugins: [],
+  // 👇 NEW: aspect-ratio plugin lets us use `aspect-square`
+  plugins: [
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };
