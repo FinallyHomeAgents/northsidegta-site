@@ -7,12 +7,11 @@ export default function Navigation() {
 
   const toggleMenu = () => {
     if (menuOpen) {
-      // Trigger closing animation
       setIsAnimating(true);
       setTimeout(() => {
         setMenuOpen(false);
         setIsAnimating(false);
-      }, 300); // match animation duration
+      }, 300);
     } else {
       setMenuOpen(true);
     }
@@ -21,12 +20,29 @@ export default function Navigation() {
   return (
     <header className="bg-white shadow sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-green-700">
-          NorthSide GTA
+
+        {/* Brand */}
+        <Link to="/" className="flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-2 hover:opacity-90 transition">
+
+          {/* Main title */}
+          <span className="text-xl sm:text-2xl font-extrabold text-green-700 tracking-tight leading-none">
+            NorthSide&nbsp;GTA
+          </span>
+
+          {/* Tagline for mobile (own line) */}
+          <span className="block sm:hidden text-[11px] text-gray-600 font-medium leading-tight mt-0.5">
+            Powered&nbsp;by&nbsp;Finally&nbsp;Home&nbsp;Agents
+          </span>
+
+          {/* Dot + tagline for ≥ sm */}
+          <span className="hidden sm:inline text-gray-400">•</span>
+          <span className="hidden sm:inline text-xs sm:text-sm text-gray-600 font-medium">
+            Powered&nbsp;by&nbsp;
+            <span className="font-semibold text-green-700">Finally&nbsp;Home&nbsp;Agents</span>
+          </span>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop nav */}
         <nav className="hidden md:flex space-x-8 items-center text-gray-700 font-medium">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
@@ -43,45 +59,25 @@ export default function Navigation() {
           </a>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile toggle */}
         <button
           className="md:hidden text-gray-700 focus:outline-none"
           onClick={toggleMenu}
           aria-label="Toggle Menu"
         >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {menuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 8h16M4 16h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
             )}
           </svg>
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile dropdown */}
       {(menuOpen || isAnimating) && (
-        <div
-          className={`md:hidden px-4 pb-4 ${
-            isAnimating ? "animate-slideUp" : "animate-slideDown"
-          }`}
-        >
+        <div className={`md:hidden px-4 pb-4 ${isAnimating ? "animate-slideUp" : "animate-slideDown"}`}>
           <ul className="space-y-4 text-gray-700 font-medium">
             <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
             <li><Link to="/about" onClick={toggleMenu}>About</Link></li>
