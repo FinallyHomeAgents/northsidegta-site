@@ -88,16 +88,18 @@ export default function AboutPage() {
           </div>
 
           {/* CTA */}
+          {/* routes to /sign */}
           <div className="md:ml-8 text-center">
             <Link
-              to="/signwithus"
+              to="/sign"
               className="inline-flex items-center bg-green-700 text-white px-6 py-3 rounded-full
                          shadow hover:bg-green-800 hover:-translate-y-1 transition transform duration-200"
             >
               Sign&nbsp;with&nbsp;Us
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" strokeWidth="2"
-                   viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round"
-                   d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                   viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
             <p className="mt-2 text-xs text-gray-500 leading-snug">
               Matthew &amp; Landon Mulhall, Sales Representatives<br />

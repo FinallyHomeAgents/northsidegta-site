@@ -10,7 +10,7 @@ import {
   FaFacebookF
 } from 'react-icons/fa';
 
-/* ───── dotted background (optional: move to index.css) ───── */
+/* background dots */
 const PageBackground = () => (
   <style>{`
     body{
@@ -20,7 +20,7 @@ const PageBackground = () => (
   `}</style>
 );
 
-/* ───── Google-style review slider ───── */
+/* Google-style review slider */
 function ReviewSlider() {
   const reviews = [
     { name:'Susan Booth',   quote:'“Finally Home Agents exceeded our expectations when selling our home in Holland Landing. Their professionalism and personal attention set them apart.”' },
@@ -31,7 +31,10 @@ function ReviewSlider() {
     { name:'Arron Breen',   quote:'“Matt sold our house above market and negotiated our forever home for less. Highly recommend.”' },
   ];
   const [i,setI]=useState(0);
-  useEffect(()=>{const id=setInterval(()=>setI(x=>(x+1)%reviews.length),6000);return()=>clearInterval(id);},[]);
+  useEffect(()=>{
+    const id=setInterval(()=>setI(x=>(x+1)%reviews.length),6000);
+    return()=>clearInterval(id);
+  },[]);
   return(
     <div className="rounded-xl border border-gray-200 shadow-sm bg-gray-50 overflow-hidden">
       <div className="bg-[#4285F4] h-1" />
@@ -58,9 +61,23 @@ function ReviewSlider() {
     </div>
   );
 }
-/* ───────────────────────────────────────── */
 
 export default function ContactPage() {
+  /* message-form state */
+  const [formData,setFormData] = useState({ name:'', email:'', phone:'', message:'' });
+  const [formSent,setFormSent] = useState(false);
+
+  async function handleContactSubmit(e){
+    e.preventDefault();
+    const res = await fetch('https://formspree.io/f/mwpborow',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(formData)
+    });
+    if(res.ok) setFormSent(true);
+    else alert('Something went wrong — please try again.');
+  }
+
   return (
     <>
       <PageBackground />
@@ -68,7 +85,7 @@ export default function ContactPage() {
 
       <div className="space-y-14 sm:space-y-16 px-4 md:px-20 py-8 sm:py-12">
 
-        {/* ── HERO / ANALOGY ────────────────── */}
+        {/* HERO / ANALOGY */}
         <section className="max-w-4xl mx-auto">
           <Card className="text-center space-y-4 sm:space-y-5 p-6 sm:p-10">
             <div className="flex justify-center gap-4">
@@ -76,7 +93,6 @@ export default function ContactPage() {
               <FaHandshake className="w-8 h-8 sm:w-10 sm:h-10 text-green-600"/>
             </div>
 
-            {/* responsive headline */}
             <h1 className="text-xl sm:text-3xl md:text-4xl font-bold leading-tight">
               Every&nbsp;Pro&nbsp;Has&nbsp;an&nbsp;Agent&nbsp;—<br className="sm:hidden"/>
               You&nbsp;Should&nbsp;Too.
@@ -84,46 +100,76 @@ export default function ContactPage() {
 
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
               Let’s talk about your next move. Questions about buying, selling, or life in the NorthSide&nbsp;GTA?
-              Drop us a note — no pressure, just real advice.
+              Drop us a note&nbsp;— no pressure, just real advice.
             </p>
 
             <p className="text-sm sm:text-base text-muted-foreground">
-              At <strong>Finally&nbsp;Home&nbsp;Agents</strong> we don’t just sell homes — we build partnerships.
+              At <strong>Finally&nbsp;Home&nbsp;Agents</strong> we don’t just sell homes&nbsp;— we build partnerships.
               Like a top sports agent, we negotiate, strategize, and stay in your corner for every move.
             </p>
           </Card>
         </section>
 
-        {/* ── GOOGLE REVIEWS ─────────────────── */}
+        {/* GOOGLE REVIEWS */}
         <section className="max-w-3xl mx-auto">
           <ReviewSlider />
         </section>
 
-        {/* ── CTA PROMPT ─────────────────────── */}
+        {/* CTA PROMPT */}
         <section className="text-center space-y-2">
           <h2 className="text-xl sm:text-2xl font-semibold">Reach Out Your Way.</h2>
           <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto">
-            Call, chat, or drop us a quick note—whichever’s easiest. We reply fast.
+            Call, chat, or drop us a quick note — whichever’s easiest. We reply fast.
           </p>
           <p className="flex justify-center">
             <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
-              💬 We reply within 1&nbsp;hour (9&nbsp;am – 9&nbsp;pm)
+              💬 We reply within 1&nbsp;hour&nbsp;(9&nbsp;am&nbsp;–&nbsp;9&nbsp;pm)
             </span>
           </p>
         </section>
 
-        {/* ── FORM + CONTACT CARD ────────────── */}
+        {/* FORM + CONTACT CARD */}
         <section className="grid md:grid-cols-2 gap-8 sm:gap-12 items-start">
 
-          {/* contact form */}
-          <form name="contact" method="POST" data-netlify="true" className="space-y-4 w-full">
-            <input type="hidden" name="form-name" value="contact"/>
-            <input name="name" placeholder="Full Name" className="w-full border rounded-md px-4 py-3" required/>
-            <input name="email" type="email" placeholder="Email" className="w-full border rounded-md px-4 py-3" required/>
-            <input name="phone" placeholder="Phone (optional)" className="w-full border rounded-md px-4 py-3"/>
-            <textarea name="message" rows="4" placeholder="Your Message" className="w-full border rounded-md px-4 py-3" required/>
-            <Button size="lg" type="submit" className="w-full sm:w-auto">Send Message</Button>
-          </form>
+          {/* message form */}
+          {!formSent ? (
+            <form onSubmit={handleContactSubmit} className="space-y-4 w-full">
+              <input
+                type="text" name="name" placeholder="Full Name" required
+                value={formData.name}
+                onChange={e=>setFormData({...formData,name:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <input
+                type="email" name="email" placeholder="Email" required
+                value={formData.email}
+                onChange={e=>setFormData({...formData,email:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <input
+                type="tel" name="phone" placeholder="Phone (optional)"
+                value={formData.phone}
+                onChange={e=>setFormData({...formData,phone:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <textarea
+                name="message" rows="4" placeholder="Your Message" required
+                value={formData.message}
+                onChange={e=>setFormData({...formData,message:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <Button size="lg" type="submit" className="w-full sm:w-auto">
+                Send Message
+              </Button>
+            </form>
+          ) : (
+            <Card className="p-6 text-center bg-green-50">
+              <h3 className="text-xl font-semibold text-green-700 mb-2">Thank you!</h3>
+              <p className="text-sm text-muted-foreground">
+                Your message is on its way. We’ll respond within the hour.
+              </p>
+            </Card>
+          )}
 
           {/* contact info card */}
           <Card className="space-y-4 sm:space-y-6">
@@ -134,26 +180,25 @@ export default function ContactPage() {
               <p className="text-base">📍 <span className="font-medium">NorthSide GTA</span> — <span className="italic">More Community, Less Traffic</span></p>
             </div>
 
-            {/* WhatsApp CTA */}
+            {/* WhatsApp */}
             <a
               href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20👋"
               target="_blank" rel="noreferrer"
-              className="relative flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4
+              className="relative flex items-center justify-center gap-3
                          bg-gradient-to-r from-[#25D366] via-[#20bf5e] to-[#128C7E]
-                         text-white rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.04] transition"
+                         text-white px-6 py-4 rounded-2xl shadow-xl
+                         hover:shadow-2xl hover:scale-[1.03] transition"
             >
               <span className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3
-                               bg-yellow-400 text-white text-[10px] sm:text-xs font-bold
-                               px-1.5 py-[1px] rounded-full shadow animate-bounce">
-                ✨ Chat
+                               bg-yellow-400 text-white text-xs font-bold px-1.5 py-[1px]
+                               rounded-full shadow animate-bounce">
+                Chat
               </span>
-              <svg viewBox="0 0 448 512" className="w-4 h-4 sm:w-6 sm:h-6 fill-current">
-                <path d="M380.9 97.1c-39.7-39.7-92.5-61.6-148.9-61.1C100.3 36.4 0 138 0 261.8c0 45.1 11.9 88.9 34.5 127.7L0 512l125.2-33.1c37.8 20.8 79.8 31.7 122.6 31.6h.6c123.5 0 224-100.7 224-224.6.1-59.3-22.9-115.1-64.5-156.8z"/>
-              </svg>
-              <span className="text-sm sm:text-lg font-semibold">WhatsApp</span>
+              <svg viewBox="0 0 448 512" className="w-5 h-5 fill-current"><path d="M380.9 97.1c-39.7-39.7-92.5-61.6-148.9-61.1C100.3 36.4 0 138 0 261.8c0 45.1 11.9 88.9 34.5 127.7L0 512l125.2-33.1c37.8 20.8 79.8 31.7 122.6 31.6h.6c123.5 0 224-100.7 224-224.6.1-59.3-22.9-115.1-64.5-156.8z"/></svg>
+              WhatsApp
             </a>
 
-            {/* socials with icons */}
+            {/* socials */}
             <p className="text-center text-xs sm:text-sm font-medium text-muted-foreground">
               Follow Finally Home Agents
             </p>
@@ -178,7 +223,7 @@ export default function ContactPage() {
           </Card>
         </section>
 
-        {/* ── MAP PLACEHOLDER ────────────────── */}
+        {/* MAP */}
         <section className="text-center space-y-3 sm:space-y-4">
           <h2 className="text-2xl sm:text-3xl font-semibold">Where We Work</h2>
           <p className="max-w-2xl mx-auto text-muted-foreground text-sm sm:text-base">
@@ -189,14 +234,14 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── TRUST LOGOS ───────────────────── */}
+        {/* TRUST LOGOS */}
         <section className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6">
           <img src="/Images/brokerage.png" alt="HomeLife Optimum Realty" className="h-8 sm:h-10 opacity-80"/>
           <img src="/Images/reco.png"      alt="Registered with RECO"    className="h-8 sm:h-10 opacity-80"/>
           <img src="/Images/treb.png"      alt="Member: TRREB"           className="h-8 sm:h-10 opacity-80"/>
         </section>
 
-        {/* ── QUICK CTA CARDS ───────────────── */}
+        {/* QUICK CTA CARDS */}
         <section className="grid sm:grid-cols-3 gap-4 sm:gap-6">
           {[
             { title:'Buyers',  text:'See how we help buyers' },
@@ -212,7 +257,7 @@ export default function ContactPage() {
         </section>
       </div>
 
-      {/* ── floating WhatsApp button ────────── */}
+      {/* floating WhatsApp */}
       <a href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20👋" target="_blank" rel="noreferrer"
          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16
                     rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E]

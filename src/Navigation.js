@@ -1,3 +1,4 @@
+// src/Navigation.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -23,22 +24,19 @@ export default function Navigation() {
 
         {/* Brand */}
         <Link to="/" className="flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-2 hover:opacity-90 transition">
-
-          {/* Main title */}
           <span className="text-xl sm:text-2xl font-extrabold text-green-700 tracking-tight leading-none">
             NorthSide&nbsp;GTA
           </span>
 
-          {/* Tagline for mobile (own line) */}
+          {/* mobile tagline */}
           <span className="block sm:hidden text-[11px] text-gray-600 font-medium leading-tight mt-0.5">
             Powered&nbsp;by&nbsp;Finally&nbsp;Home&nbsp;Agents
           </span>
 
-          {/* Dot + tagline for ≥ sm */}
+          {/* desktop tagline */}
           <span className="hidden sm:inline text-gray-400">•</span>
           <span className="hidden sm:inline text-xs sm:text-sm text-gray-600 font-medium">
-            Powered&nbsp;by&nbsp;
-            <span className="font-semibold text-green-700">Finally&nbsp;Home&nbsp;Agents</span>
+            Powered&nbsp;by&nbsp;<span className="font-semibold text-green-700">Finally&nbsp;Home&nbsp;Agents</span>
           </span>
         </Link>
 
@@ -51,12 +49,14 @@ export default function Navigation() {
           <Link to="/community">Community</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/vip">VIP</Link>
-          <a
-            href="/contact"
+
+          {/* Let’s Talk button as Link */}
+          <Link
+            to="/contact"
             className="ml-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 transition"
           >
-            Let’s Talk
-          </a>
+            Let’s&nbsp;Talk
+          </Link>
         </nav>
 
         {/* Mobile toggle */}
@@ -79,21 +79,22 @@ export default function Navigation() {
       {(menuOpen || isAnimating) && (
         <div className={`md:hidden px-4 pb-4 ${isAnimating ? "animate-slideUp" : "animate-slideDown"}`}>
           <ul className="space-y-4 text-gray-700 font-medium">
-            <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
-            <li><Link to="/about" onClick={toggleMenu}>About</Link></li>
-            <li><Link to="/buyers" onClick={toggleMenu}>Buyers</Link></li>
-            <li><Link to="/sellers" onClick={toggleMenu}>Sellers</Link></li>
+            <li><Link to="/"          onClick={toggleMenu}>Home</Link></li>
+            <li><Link to="/about"     onClick={toggleMenu}>About</Link></li>
+            <li><Link to="/buyers"    onClick={toggleMenu}>Buyers</Link></li>
+            <li><Link to="/sellers"   onClick={toggleMenu}>Sellers</Link></li>
             <li><Link to="/community" onClick={toggleMenu}>Community</Link></li>
-            <li><Link to="/contact" onClick={toggleMenu}>Contact</Link></li>
-            <li><Link to="/vip" onClick={toggleMenu}>VIP</Link></li>
+            <li><Link to="/contact"   onClick={toggleMenu}>Contact</Link></li>
+            <li><Link to="/vip"       onClick={toggleMenu}>VIP</Link></li>
             <li>
-              <a
-                href="/contact"
+              {/* Let’s Talk button as Link */}
+              <Link
+                to="/contact"
                 onClick={toggleMenu}
                 className="block bg-green-700 text-white text-center px-4 py-2 rounded-md hover:bg-green-800 transition"
               >
-                Let’s Talk
-              </a>
+                Let’s&nbsp;Talk
+              </Link>
             </li>
           </ul>
         </div>
