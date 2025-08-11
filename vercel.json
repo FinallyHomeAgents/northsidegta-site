@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/homeanalysis", "destination": "/" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
