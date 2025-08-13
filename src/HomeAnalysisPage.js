@@ -66,11 +66,8 @@ function ReviewSlider() {
     <section className="mx-auto mt-10 max-w-6xl rounded-2xl border bg-white p-4 sm:p-6 shadow-sm">
       <header className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <img
-            alt="Google"
-            className="h-5 w-5"
-            src="https://www.gstatic.com/images/branding/product/1x/google_g_24dp.png"
-          />
+       <img alt="Google" className="h-5 w-5" src="/Images/google-logo.png" />
+
           <span className="text-sm font-medium text-gray-700">Google Reviews</span>
           <Stars count={r.rating} />
         </div>
@@ -329,7 +326,7 @@ export default function HomeAnalysisPage() {
     );
   }
 
-  const timelineOptions = ["Immediate", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"];
+  const timelineOptions = ["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"];
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
