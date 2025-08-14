@@ -22,22 +22,19 @@ export default function Navigation() {
     <header className="bg-white shadow sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
-        {/* Brand */}
-        <Link to="/" className="flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-2 hover:opacity-90 transition">
-          <span className="text-xl sm:text-2xl font-extrabold text-green-700 tracking-tight leading-none">
-            NorthSide&nbsp;GTA
-          </span>
-
-          {/* mobile tagline */}
-          <span className="block sm:hidden text-[11px] text-gray-600 font-medium leading-tight mt-0.5">
-            Powered&nbsp;by&nbsp;Finally&nbsp;Home&nbsp;Agents
-          </span>
-
-          {/* desktop tagline */}
-          <span className="hidden sm:inline text-gray-400">•</span>
-          <span className="hidden sm:inline text-xs sm:text-sm text-gray-600 font-medium">
-            Powered&nbsp;by&nbsp;<span className="font-semibold text-green-700">Finally&nbsp;Home&nbsp;Agents</span>
-          </span>
+        {/* Brand (badge only, no text) */}
+        <Link
+          to="/"
+          className="flex items-center hover:opacity-90 transition"
+          aria-label="NorthSide GTA - Home"
+        >
+          <img
+            src="/Images/fha-badge.png"   // or .svg
+            alt="NorthSide GTA powered by Finally Home Agents"
+            className="h-10 sm:h-12 w-auto" // adjust size here
+            loading="eager"
+            decoding="async"
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -50,7 +47,7 @@ export default function Navigation() {
           <Link to="/contact">Contact</Link>
           <Link to="/vip">VIP</Link>
 
-          {/* Let’s Talk button as Link */}
+          {/* Let’s Talk button */}
           <Link
             to="/contact"
             className="ml-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 transition"
@@ -87,7 +84,6 @@ export default function Navigation() {
             <li><Link to="/contact"   onClick={toggleMenu}>Contact</Link></li>
             <li><Link to="/vip"       onClick={toggleMenu}>VIP</Link></li>
             <li>
-              {/* Let’s Talk button as Link */}
               <Link
                 to="/contact"
                 onClick={toggleMenu}

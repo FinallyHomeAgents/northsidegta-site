@@ -1,9 +1,8 @@
 // src/HomePage.js
 import React, { useEffect, useState } from "react";
-import MapHero from "./MapHero";
 import Navigation from "./Navigation";
-// import Hero from "./Hero"; // Optional: enable if you still want the old hero below the map.
-import TownCards from "./TownCards";
+import MapHero from "./MapHero";
+import TownStrip from "./TownStrip";
 import Footer from "./Footer";
 
 /* ─── Google-style rotating review slider (same as Contact page) ─── */
@@ -59,7 +58,6 @@ function ReviewSlider() {
             }`}
           >
             <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
-              {/* Make sure this file exists: public/Images/google-logo.png */}
               <img
                 src="/Images/google-logo.png"
                 alt="Google"
@@ -74,15 +72,9 @@ function ReviewSlider() {
                 ))}
               </div>
             </div>
-            <p className="italic max-w-xs sm:max-w-md text-xs sm:text-sm">
-              {r.quote}
-            </p>
-            <p className="mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">
-              — {r.name}
-            </p>
-            <p className="text-[10px] sm:text-xs text-gray-500">
-              Verified&nbsp;Client&nbsp;Review
-            </p>
+            <p className="italic max-w-xs sm:max-w-md text-xs sm:text-sm">{r.quote}</p>
+            <p className="mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">— {r.name}</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Verified&nbsp;Client&nbsp;Review</p>
           </div>
         ))}
       </div>
@@ -99,29 +91,30 @@ export default function HomePage() {
       {/* ─────────── Map-first Hero ─────────── */}
       <MapHero />
 
-      {/* Optional: Old hero below the map */}
-      {/* <Hero /> */}
+      {/* ─────────── Compact Town Strip just under the map (attached) ─────────── */}
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="-mt-3 rounded-b-2xl border border-t-0 bg-white/80 shadow-sm">
+          <div className="px-3 py-3">
+            <TownStrip />
+          </div>
+        </div>
+      </div>
 
       {/* ─────────── Intro Message ─────────── */}
       <section className="bg-green-700 text-white py-16 px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          More Community. Less Traffic.
-        </h1>
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">More Community. Less Traffic.</h1>
         <p className="text-xl md:text-2xl max-w-xl mx-auto">
-          Discover life in the NorthSide GTA — where families thrive, space is
-          affordable, and lifestyle meets nature.
+          Discover life in the NorthSide GTA — where families thrive, space is affordable, and
+          lifestyle meets nature.
         </p>
       </section>
-
-      {/* ─────────── Featured Town Cards ─────────── */}
-      <TownCards />
 
       {/* ─────────── Why Move North ─────────── */}
       <section className="bg-gray-100 py-16 px-4 text-center">
         <h2 className="text-3xl font-bold mb-6">Why Move North?</h2>
         <p className="max-w-2xl mx-auto text-lg text-gray-700">
-          Enjoy more home for your money, quieter streets, top schools, and a
-          close-knit community — all within commuting distance of Toronto.
+          Enjoy more home for your money, quieter streets, top schools, and a close-knit community —
+          all within commuting distance of Toronto.
         </p>
       </section>
 
@@ -132,12 +125,8 @@ export default function HomePage() {
 
       {/* ─────────── CTA Section ─────────── */}
       <section className="bg-green-700 text-white py-16 px-4 text-center">
-        <h2 className="text-3xl font-bold mb-4">
-          Ready to Explore the NorthSide GTA?
-        </h2>
-        <p className="text-lg mb-6">
-          Let us help you find your perfect town and home.
-        </p>
+        <h2 className="text-3xl font-bold mb-4">Ready to Explore the NorthSide GTA?</h2>
+        <p className="text-lg mb-6">Let us help you find your perfect town and home.</p>
         <a
           href="/homeanalysis"
           className="bg-white text-green-700 font-semibold py-2 px-6 rounded hover:bg-gray-200 transition"
