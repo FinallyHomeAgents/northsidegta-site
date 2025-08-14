@@ -1,24 +1,49 @@
 // src/HomePage.js
 import React, { useEffect, useState } from "react";
+import MapHero from "./MapHero";
 import Navigation from "./Navigation";
-import Hero from "./Hero";
+// import Hero from "./Hero"; // Optional: enable if you still want the old hero below the map.
 import TownCards from "./TownCards";
 import Footer from "./Footer";
 
 /* ─── Google-style rotating review slider (same as Contact page) ─── */
 function ReviewSlider() {
   const reviews = [
-    { name: "Susan Booth",   quote: "“Finally Home Agents exceeded our expectations when selling our home in Holland Landing. Their professionalism and personal attention set them apart.”" },
-    { name: "Logan Abernethy", quote: "“As a first-time buyer I had plenty of questions. Landon was patient and made my experience fantastic.”" },
-    { name: "Jessica Le",    quote: "“Landon made renting stress-free. Really nice to work with and very easy to communicate with.”" },
-    { name: "Tessa Conway",  quote: "“Landon took all the stress out of renting in a brand-new city — I am forever thankful!”" },
-    { name: "Olivia Oprea",  quote: "“Matthew found me my dream home during a crazy market. Wouldn’t have got it without him.”" },
-    { name: "Arron Breen",   quote: "“Matt sold our house above market and negotiated our forever home for less. Highly recommend.”" },
+    {
+      name: "Susan Booth",
+      quote:
+        "“Finally Home Agents exceeded our expectations when selling our home in Holland Landing. Their professionalism and personal attention set them apart.”",
+    },
+    {
+      name: "Logan Abernethy",
+      quote:
+        "“As a first-time buyer I had plenty of questions. Landon was patient and made my experience fantastic.”",
+    },
+    {
+      name: "Jessica Le",
+      quote:
+        "“Landon made renting stress-free. Really nice to work with and very easy to communicate with.”",
+    },
+    {
+      name: "Tessa Conway",
+      quote:
+        "“Landon took all the stress out of renting in a brand-new city — I am forever thankful!”",
+    },
+    {
+      name: "Olivia Oprea",
+      quote:
+        "“Matthew found me my dream home during a crazy market. Wouldn’t have got it without him.”",
+    },
+    {
+      name: "Arron Breen",
+      quote:
+        "“Matt sold our house above market and negotiated our forever home for less. Highly recommend.”",
+    },
   ];
 
   const [i, setI] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setI(x => (x + 1) % reviews.length), 6000);
+    const id = setInterval(() => setI((x) => (x + 1) % reviews.length), 6000);
     return () => clearInterval(id);
   }, []);
 
@@ -29,11 +54,17 @@ function ReviewSlider() {
         {reviews.map((r, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 flex flex-col items-center justify-center text-center
-                        transition-opacity duration-700 ${idx === i ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity duration-700 ${
+              idx === i ? "opacity-100" : "opacity-0"
+            }`}
           >
             <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
-              <img src="/Images/google-logo.png" alt="Google" className="h-5 w-5 sm:h-6 sm:w-6 object-contain" />
+              {/* Make sure this file exists: public/Images/google-logo.png */}
+              <img
+                src="/Images/google-logo.png"
+                alt="Google"
+                className="h-5 w-5 sm:h-6 sm:w-6 object-contain"
+              />
               <span className="font-semibold text-xs sm:text-sm text-gray-700 whitespace-nowrap">
                 Finally&nbsp;Home&nbsp;Agents
               </span>
@@ -43,9 +74,15 @@ function ReviewSlider() {
                 ))}
               </div>
             </div>
-            <p className="italic max-w-xs sm:max-w-md text-xs sm:text-sm">{r.quote}</p>
-            <p className="mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">— {r.name}</p>
-            <p className="text-[10px] sm:text-xs text-gray-500">Verified&nbsp;Client&nbsp;Review</p>
+            <p className="italic max-w-xs sm:max-w-md text-xs sm:text-sm">
+              {r.quote}
+            </p>
+            <p className="mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">
+              — {r.name}
+            </p>
+            <p className="text-[10px] sm:text-xs text-gray-500">
+              Verified&nbsp;Client&nbsp;Review
+            </p>
           </div>
         ))}
       </div>
@@ -55,12 +92,15 @@ function ReviewSlider() {
 
 export default function HomePage() {
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-gray-900 min-h-screen">
       {/* ─────────── Navigation ─────────── */}
       <Navigation />
 
-      {/* ─────────── Hero Section ─────────── */}
-      <Hero />
+      {/* ─────────── Map-first Hero ─────────── */}
+      <MapHero />
+
+      {/* Optional: Old hero below the map */}
+      {/* <Hero /> */}
 
       {/* ─────────── Intro Message ─────────── */}
       <section className="bg-green-700 text-white py-16 px-4 text-center">
@@ -85,7 +125,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* ─────────── Google Review Slider (replaces old quote) ─────────── */}
+      {/* ─────────── Google Review Slider ─────────── */}
       <section className="py-16 px-4 text-center">
         <ReviewSlider />
       </section>
