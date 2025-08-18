@@ -107,11 +107,16 @@ export default function MapHero() {
   return (
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
+        {/* NEW headline + subcopy */}
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-            Explore the NorthSide GTA with Finally Home Agents
+            Welcome to the NorthSide GTA.
           </h1>
-          <p className="mt-2 text-gray-600">Hover or tap a town to see highlights and ratings.</p>
+          <p className="mt-2 text-gray-700 max-w-3xl mx-auto">
+            Ready for a change? Already own? Looking to buy? Finally Home Agents are here to help
+            you explore each town’s highlights and ratings, compare your options, and take the next
+            step in the NorthSide GTA.
+          </p>
         </div>
 
         {/* Bordered hero box */}
@@ -152,7 +157,7 @@ export default function MapHero() {
             ))}
           </div>
 
-          {/* 2) Tooltip layer (above the frame) */}
+          {/* 2) Tooltip layer (inside the outer border, not clipped by the rounded img frame) */}
           <div className="absolute top-3 left-3 right-3 bottom-3 rounded-xl pointer-events-none">
             {TOWNS.map((t) => {
               const active = openId === t.id || (!isMobile && hoverId === t.id);
@@ -229,6 +234,7 @@ export default function MapHero() {
             })}
           </div>
         </div>
+
         {/* NOTE: “Prefer a list? …” REMOVED as requested */}
       </div>
     </section>
