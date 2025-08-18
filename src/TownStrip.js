@@ -1,91 +1,151 @@
 // src/TownStrip.js
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
-const TOWNS = [
-  { id: "georgina", name: "Georgina", href: "/georgina", img: "/Images/towns/georgina.jpg", blurb: "Lake life & beaches." },
-  { id: "uxbridge", name: "Uxbridge", href: "/uxbridge", img: "/Images/towns/uxbridge.jpg", blurb: "Trails & small-town charm." },
-  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/Images/towns/eastgwillimbury.jpg", blurb: "New builds & 404 access." },
-  { id: "newmarket", name: "Newmarket", href: "/newmarket", img: "/Images/towns/newmarket.jpg", blurb: "Shops, dining, GO train." },
-  { id: "stouffville", name: "Stouffville", href: "/stouffville", img: "/Images/towns/stouffville.jpg", blurb: "Family streets & parks." },
-  { id: "aurora", name: "Aurora", href: "/aurora", img: "/Images/towns/aurora.jpg", blurb: "Schools & quiet streets." },
-  { id: "scugog", name: "Scugog", href: "/scugog", img: "/Images/towns/scugog.jpg", blurb: "Heritage & lakefront." },
+/**
+ * Final order (Closest → Furthest) from your snapshot:
+ * Aurora (23), Newmarket (25), Stouffville (26), East Gwillimbury (27),
+ * Georgina/Keswick (33), Uxbridge (37), Scugog/Port Perry (40)
+ */
+const CLOSEST_TO_FURTHEST = [
+  "aurora",
+  "newmarket",
+  "stouffville",
+  "east-gwillimbury",
+  "georgina",
+  "uxbridge",
+  "scugog",
 ];
 
-/** Handles image fallback for missing files */
-function onImgError(e, town) {
+const TOWNS = [
+  { id: "georgina",         name: "Georgina",         href: "/georgina",         img: "/Images/towns/georgina.jpg",        blurb: "Lake life & beaches." },
+  { id: "uxbridge",         name: "Uxbridge",         href: "/uxbridge",         img: "/Images/towns/uxbridge.jpg",        blurb: "Trails & small-town charm." },
+  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/Images/towns/eastgwillimbury.jpg", blurb: "New builds & 404 access." },
+  { id: "newmarket",        name: "Newmarket",        href: "/newmarket",        img: "/Images/towns/newmarket.jpg",       blurb: "Shops, dining, GO train." },
+  { id: "stouffville",      name: "Stouffville",      href: "/stouffville",      img: "/Images/towns/stouffville.jpg",     blurb: "Family streets & parks." },
+  { id: "aurora",           name: "Aurora",           href: "/aurora",           img: "/Images/towns/aurora.jpg",          blurb: "Schools & quiet streets." },
+  { id: "scugog",           name: "Scugog",           href: "/scugog",           img: "/Images/towns/scugog.jpg",          blurb: "Heritage & lakefront." },
+];
+
+function onImgError(e, townId) {
   const el = e.currentTarget;
   const tried = parseInt(el.getAttribute("data-tried") || "0", 10);
-  const base = `/Images/towns/${town.id}`;
-  const variants = [`${base}.jpg`, `${base}.png`, `${base}.jpeg`, `${base.charAt(0).toUpperCase() + base.slice(1)}.jpg`];
+  const base = `/Images/towns/${townId}`;
+  const variants = [`${base}.jpg`, `${base}.png`, `${base}.jpeg`];
+  if (tried < variants.length) { el.setAttribute("data-tried", String(tried + 1)); el.src = variants[tried]; }
+  else { el.style.display = "none"; }
+}
 
-  if (tried < variants.length) {
-    el.setAttribute("data-tried", tried + 1);
-    el.src = variants[tried];
-  } else {
-    el.style.display = "none";
-  }
+function ordinal(n) {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
 export default function TownStrip() {
+  const ordered = useMemo(() => {
+    const map = new Map(TOWNS.map((t) => [t.id, t]));
+    return CLOSEST_TO_FURTHEST.map((id) => map.get(id)).filter(Boolean);
+  }, []);
+
+  const railRef = useRef(null);
+
+  // Ensure the rail starts perfectly aligned (no partial card on first load)
+  useEffect(() => {
+    if (!railRef.current) return;
+    railRef.current.scrollTo({ left: 0, behavior: "auto" });
+  }, []);
+
+  const scrollByAmount = (px) => railRef.current?.scrollBy({ left: px, behavior: "smooth" });
+
   return (
-    // Flow naturally below the map — no z-index tricks
-    <section className="relative mt-8 md:mt-10" aria-label="Explore NorthSide GTA Towns">
-      <div className="mt-2 lg:mt-3">
-        {/* -------- Mobile horizontal scroll rail -------- */}
-        <div className="block md:hidden -mx-4 px-4">
-          <div
-            className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
-            {TOWNS.map((t) => (
-              <a
-                key={t.id}
-                href={t.href}
-                className="snap-start shrink-0 w-48 rounded-xl border bg-white/95 shadow-sm hover:shadow-md transition-shadow"
-                aria-label={`Explore ${t.name}`}
-              >
-                <div className="aspect-[4/3] bg-emerald-50/30 rounded-t-xl flex items-center justify-center p-2">
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    className="max-h-full max-w-full object-contain"
-                    loading="lazy"
-                    onError={(e) => onImgError(e, t)}
-                  />
-                </div>
-                <div className="p-3">
-                  <div className="text-sm font-semibold">{t.name}</div>
-                  <div className="text-xs text-gray-600 mt-0.5">{t.blurb}</div>
-                </div>
-              </a>
-            ))}
-          </div>
+    <section aria-label="Closest to Toronto → Furthest">
+      {/* Ribbon (text tweak requested) */}
+      <div className="flex items-center justify-between mb-2 md:mb-3">
+        <div className="relative inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 text-white shadow">
+          <span className="text-[10px] font-semibold tracking-wide uppercase opacity-90">
+            Closest to Toronto → Furthest
+          </span>
+          <span className="hidden sm:inline text-[10px] opacity-85">
+            (fastest route to 404 &amp; Steeles)
+          </span>
         </div>
 
-        {/* -------- Desktop 7-col grid -------- */}
-        <div className="hidden md:grid grid-cols-3 lg:grid-cols-7 gap-3">
-          {TOWNS.map((t) => (
+        {/* Arrow controls (desktop) */}
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollByAmount(-360)}
+            className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
+            aria-label="Scroll left"
+            title="Scroll left"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByAmount(360)}
+            className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
+            aria-label="Scroll right"
+            title="Scroll right"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      {/* Scroll container — smaller cards + padding guards so nothing is clipped */}
+      <div className="relative">
+        {/* Subtle fades on edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white to-transparent rounded-l-2xl" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent rounded-r-2xl" />
+
+        <div
+          ref={railRef}
+          className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory scroll-smooth no-scrollbar px-2"
+          style={{
+            WebkitOverflowScrolling: "touch",
+            scrollPaddingLeft: "12px",
+            scrollPaddingRight: "12px",
+          }}
+        >
+          {/* Left spacer prevents first card from appearing clipped under the fade */}
+          <div className="shrink-0 w-1" aria-hidden />
+
+          {ordered.map((t, idx) => (
             <a
               key={t.id}
               href={t.href}
-              className="group rounded-xl border bg-white/95 shadow-sm hover:shadow-md transition-shadow"
+              className="snap-start shrink-0 w-[210px] md:w-[230px] group"
               aria-label={`Explore ${t.name}`}
             >
-              <div className="aspect-[4/3] bg-emerald-50/30 rounded-t-xl flex items-center justify-center p-2">
-                <img
-                  src={t.img}
-                  alt={t.name}
-                  className="max-h-full max-w-full object-contain group-hover:scale-[1.03] transition-transform duration-200"
-                  loading="lazy"
-                  onError={(e) => onImgError(e, t)}
-                />
-              </div>
-              <div className="p-3">
-                <div className="text-sm font-semibold">{t.name}</div>
-                <div className="text-xs text-gray-600 mt-0.5">{t.blurb}</div>
+              <div className="h-full rounded-2xl border bg-white/85 backdrop-blur-sm shadow-sm ring-1 ring-black/5 overflow-hidden transition
+                              group-hover:shadow-lg group-hover:-translate-y-0.5">
+                {/* Image area (smaller heights) */}
+                <div className="aspect-[4/3] bg-emerald-50/40 flex items-center justify-center">
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    className="h-24 md:h-28 object-contain drop-shadow-sm transition-transform group-hover:scale-[1.02]"
+                    loading="lazy"
+                    onError={(e) => onImgError(e, t.id)}
+                  />
+                </div>
+
+                {/* Body */}
+                <div className="p-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-[13px] font-semibold text-gray-900">{t.name}</h3>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold tracking-wide">
+                      {ordinal(idx + 1)}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-gray-600 leading-5">{t.blurb}</p>
+                </div>
               </div>
             </a>
           ))}
+
+          {/* Right spacer prevents last card from being clipped */}
+          <div className="shrink-0 w-1" aria-hidden />
         </div>
       </div>
     </section>
