@@ -1,5 +1,6 @@
 // src/MapHero.js
 import React, { useEffect, useState } from "react";
+import QuickContactCard from "./QuickContactCard";
 
 /* Category labels + display order */
 const CATEGORY_LABELS = {
@@ -105,25 +106,25 @@ export default function MapHero() {
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
   return (
+    // keep overflow visible so tooltips never clip below
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
-        {/* NEW headline + subcopy */}
-        <div className="text-center">
+        {/* Premium hero headline */}
+        <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-            Welcome to the NorthSide GTA.
+            Discover More Than Just Listings — Discover Your Next Town
           </h1>
-          <p className="mt-2 text-gray-700 max-w-3xl mx-auto">
-            Ready for a change? Already own? Looking to buy? Finally Home Agents are here to help
-            you explore each town’s highlights and ratings, compare your options, and take the next
-            step in the NorthSide GTA.
+          <p className="mt-2 text-gray-700">
+            Doing it alone is a guess. Doing it with Finally Home Agents means real insights,
+            local knowledge, and the edge in finding where you belong.
           </p>
         </div>
 
-        {/* Bordered hero box */}
-        <div className="relative mx-auto mt-6 mb-0 rounded-2xl bg-white/70 p-3 shadow-sm border">
+        {/* Bordered hero box (map + inline quick-contact) */}
+        <div className="relative mx-auto mt-6 rounded-2xl bg-white/70 p-3 shadow-sm border overflow-visible">
           <Styles />
 
-          {/* 1) Map frame: image + pins + 404 (clipped) */}
+          {/* Map frame: image + pins + 404 (clipped to rounded corners) */}
           <div className="relative rounded-xl overflow-hidden">
             <img
               src="/Images/northside-map.svg"
@@ -139,7 +140,7 @@ export default function MapHero() {
               <line x1={`${HWY404.xPct}%`} y1={`${HWY404.yBotStart}%`} x2={`${HWY404.xPct}%`} y2={`${HWY404.yBotEnd}%`} className="hwy404-line" />
             </svg>
 
-            {/* Pins (inside the clipped frame) */}
+            {/* Pins (inside clipped frame) */}
             {TOWNS.map((t) => (
               <button
                 key={t.id}
@@ -157,7 +158,7 @@ export default function MapHero() {
             ))}
           </div>
 
-          {/* 2) Tooltip layer (inside the outer border, not clipped by the rounded img frame) */}
+          {/* Tooltip layer (sits above the frame, not clipped by overflow-hidden) */}
           <div className="absolute top-3 left-3 right-3 bottom-3 rounded-xl pointer-events-none">
             {TOWNS.map((t) => {
               const active = openId === t.id || (!isMobile && hoverId === t.id);
@@ -233,9 +234,16 @@ export default function MapHero() {
               );
             })}
           </div>
-        </div>
 
-        {/* NOTE: “Prefer a list? …” REMOVED as requested */}
+          {/* Divider + Inline Quick Contact (INSIDE the same bordered box) */}
+          <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
+            <QuickContactCard
+              heading="Find Where You Truly Belong in the NorthSide GTA"
+              subheading="Finally Home Agents will guide you beyond the listings — helping you compare communities and uncover the right fit."
+              primaryLabel="START HERE"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -5,10 +5,9 @@ import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
 import QuickContactCard from "./QuickContactCard";
 import Footer from "./Footer";
-import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
 
 /* ────────────────────────────────────────────────────────────
-   Google-style rotating review slider (unchanged)
+   Google-style rotating review slider
    ──────────────────────────────────────────────────────────── */
 function ReviewSlider() {
   const reviews = [
@@ -87,101 +86,6 @@ function ReviewSlider() {
 }
 
 /* ────────────────────────────────────────────────────────────
-   “AS SEEN ON” pill — retro badge + IG/FB marks
-   Positioned to feel attached to the hero image below
-   ──────────────────────────────────────────────────────────── */
-function SocialProofPill() {
-  return (
-    <div className="mx-auto max-w-6xl px-4 -mt-2 mb-1 relative z-20 flex justify-center">
-      {/* The pill itself */}
-      <div
-        className="
-          inline-flex items-center gap-2 rounded-full
-          bg-green-700 text-white shadow-md
-          px-4 py-2 text-xs md:text-sm
-        "
-        style={{ transform: "translateY(12px)" }} // nudges it closer to the hero image
-      >
-        {/* Retro “AS SEEN ON” like TV ads */}
-        <span className="inline-flex items-center gap-1">
-          <span className="font-black italic tracking-wide">AS SEEN ON</span>
-        </span>
-
-        {/* Brand marks */}
-        <span className="inline-flex items-center gap-2 pl-1">
-          <FaInstagram
-            className="h-4 w-4 md:h-5 md:w-5"
-            style={{ color: "#E1306C" }}
-            aria-hidden="true"
-            title="Instagram"
-          />
-          <FaFacebook
-            className="h-4 w-4 md:h-5 md:w-5"
-            style={{ color: "#1877F2" }}
-            aria-hidden="true"
-            title="Facebook"
-          />
-        </span>
-
-        <span className="sr-only">Instagram and Facebook</span>
-      </div>
-    </div>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────
-   WhatsApp Promo Bar — matches a “contact-page” style banner
-   ──────────────────────────────────────────────────────────── */
-const WHATSAPP_NUMBER_E164 = "16476684646";
-const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER_E164}`;
-
-function WhatsAppPromoBar() {
-  const text =
-    "Fastest way to connect. Real answers from Finally Home Agents in minutes.";
-  const href = `${WHATSAPP_BASE}?text=${encodeURIComponent(
-    "Hi! I’d like to chat about homes in the NorthSide GTA."
-  )}`;
-
-  return (
-    <div className="mx-auto max-w-6xl px-4">
-      <div
-        className="
-          w-full rounded-xl bg-green-600 text-white shadow
-          px-4 md:px-6 py-3 md:py-4
-          flex flex-col md:flex-row md:items-center md:justify-between gap-3
-        "
-      >
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center bg-white/15 rounded-full p-2">
-            <FaWhatsapp className="h-5 w-5 md:h-6 md:w-6" />
-          </div>
-          <div>
-            <div className="text-sm md:text-base font-semibold">
-              Chat on WhatsApp — fastest reply
-            </div>
-            <div className="text-xs md:text-sm opacity-90">{text}</div>
-          </div>
-        </div>
-
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="
-            inline-flex items-center justify-center
-            bg-white text-green-700 font-semibold
-            px-4 py-2 rounded-lg hover:bg-gray-100 transition
-          "
-          title="Message us on WhatsApp"
-        >
-          Message us
-        </a>
-      </div>
-    </div>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────
    Page
    ──────────────────────────────────────────────────────────── */
 export default function HomePage() {
@@ -193,19 +97,7 @@ export default function HomePage() {
       {/* Map-first Hero */}
       <MapHero />
 
-      {/* “As Seen On” pill:
-          Placed right after the hero header; slight translateY to feel attached */}
-      <SocialProofPill />
-
-      {/* Quick contact (compact card) */}
-      <section className="mx-auto max-w-6xl px-4 mt-6 md:mt-8">
-        <QuickContactCard />
-      </section>
-
-      {/* WhatsApp bar (contact-page style) */}
-      <section className="mt-4 md:mt-6">
-        <WhatsAppPromoBar />
-      </section>
+  
 
       {/* Town Strip */}
       <section className="mx-auto max-w-6xl px-4 mt-6 md:mt-8">
