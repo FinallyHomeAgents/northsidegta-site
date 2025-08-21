@@ -1,0 +1,135 @@
+[
+  {
+    "slug": "georgina",
+    "name": "Georgina",
+    "heroImage": "/Images/towns/georgina-hero.jpg",
+    "summary": "Lake life, beaches, and room to roam with easy escapes to the water.",
+    "highlights": ["Lake Simcoe access", "Beaches & marinas", "Growing family neighbourhoods"],
+    "ratings": {
+      "housePrices": 5,
+      "commuterAccess": 4,
+      "localTraffic": 4,
+      "golf": 4,
+      "fishing": 5,
+      "trailsNature": 4,
+      "restaurants": 3,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 33 },
+    "pdf": "/PDF/Georgina-Guide.pdf"
+  },
+  {
+    "slug": "east-gwillimbury",
+    "name": "East Gwillimbury",
+    "heroImage": "/Images/towns/eg-hero.jpg",
+    "summary": "New builds, schools and quick 404 access from Sharon, Queensville & Holland Landing.",
+    "highlights": ["Newer homes", "Schools & parks", "Fast 404 access"],
+    "ratings": {
+      "housePrices": 4,
+      "commuterAccess": 4,
+      "localTraffic": 3,
+      "golf": 4,
+      "fishing": 3,
+      "trailsNature": 4,
+      "restaurants": 4,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 27 },
+    "pdf": "/PDF/East-Gwillimbury-Guide.pdf"
+  },
+  {
+    "slug": "newmarket",
+    "name": "Newmarket",
+    "heroImage": "/Images/towns/newmarket-hero.jpg",
+    "summary": "Shops, dining and GO convenience with a vibrant Main Street.",
+    "highlights": ["Historic Main Street", "GO Train access", "Shops & dining"],
+    "ratings": {
+      "housePrices": 3,
+      "commuterAccess": 5,
+      "localTraffic": 3,
+      "golf": 4,
+      "fishing": 3,
+      "trailsNature": 4,
+      "restaurants": 5,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 25 },
+    "pdf": "/PDF/Newmarket-Guide.pdf"
+  },
+  {
+    "slug": "aurora",
+    "name": "Aurora",
+    "heroImage": "/Images/towns/aurora-hero.jpg",
+    "summary": "Mature neighbourhoods, schools and quiet streets with fast commuter access.",
+    "highlights": ["Top schools", "Established streets", "GO & 404 access"],
+    "ratings": {
+      "housePrices": 3,
+      "commuterAccess": 5,
+      "localTraffic": 3,
+      "golf": 4,
+      "fishing": 2,
+      "trailsNature": 4,
+      "restaurants": 4,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 23 },
+    "pdf": "/PDF/Aurora-Guide.pdf"
+  },
+  {
+    "slug": "stouffville",
+    "name": "Stouffville",
+    "heroImage": "/Images/towns/stouffville-hero.jpg",
+    "summary": "Family streets, parks and a lively Main Street close to nature.",
+    "highlights": ["Main Street vibe", "Parks & rec", "Family-friendly"],
+    "ratings": {
+      "housePrices": 4,
+      "commuterAccess": 4,
+      "localTraffic": 4,
+      "golf": 4,
+      "fishing": 3,
+      "trailsNature": 4,
+      "restaurants": 4,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 26 },
+    "pdf": "/PDF/Stouffville-Guide.pdf"
+  },
+  {
+    "slug": "uxbridge",
+    "name": "Uxbridge",
+    "heroImage": "/Images/towns/uxbridge-hero.jpg",
+    "summary": "Trail capital charm, rolling hills and small-town feel with outdoor living.",
+    "highlights": ["Trails & nature", "Small-town charm", "Active community"],
+    "ratings": {
+      "housePrices": 3,
+      "commuterAccess": 3,
+      "localTraffic": 5,
+      "golf": 5,
+      "fishing": 3,
+      "trailsNature": 5,
+      "restaurants": 4,
+      "localEvents": 4
+    },
+    "commute": { "to404SteelesMinutes": 37 },
+    "pdf": "/PDF/Uxbridge-Guide.pdf"
+  },
+  {
+    "slug": "scugog",
+    "name": "Scugog",
+    "heroImage": "/Images/towns/scugog-hero.jpg",
+    "summary": "Port Perry heritage, lakefront sunsets and a relaxed pace by the water.",
+    "highlights": ["Lakefront living", "Main Street heritage", "Community events"],
+    "ratings": {
+      "housePrices": 4,
+      "commuterAccess": 3,
+      "localTraffic": 4,
+      "golf": 4,
+      "fishing": 5,
+      "trailsNature": 4,
+      "restaurants": 4,
+      "localEvents": 5
+    },
+    "commute": { "to404SteelesMinutes": 40 },
+    "pdf": "/PDF/Scugog-Guide.pdf"
+  }
+]
