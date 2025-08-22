@@ -52,7 +52,9 @@ export default function TownPage() {
   const town =
     towns.find((t) => (t.slug || "").toLowerCase() === paramSlug) ||
     towns.find(
-      (t) => `/${(t.slug || "").toLowerCase()}` === window.location.pathname.toLowerCase()
+      (t) =>
+        `/${(t.slug || "").toLowerCase()}` ===
+        window.location.pathname.toLowerCase()
     );
 
   if (!town) {
@@ -77,7 +79,7 @@ export default function TownPage() {
   }
 
   return (
-    // ⬇️ Prevent any horizontal widening on mobile
+    // Keep horizontal overflow hidden at the page level to prevent accidental widening.
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
       <Navigation />
 
@@ -141,7 +143,7 @@ export default function TownPage() {
       <main className="mx-auto max-w-6xl px-4 pb-12">
         <div className="grid lg:grid-cols-3 gap-6">
           {/* LEFT column: Highlights, Ratings, Commute */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6 min-w-0">
             {/* Highlights */}
             {Array.isArray(town.highlights) && town.highlights.length > 0 && (
               <section className="rounded-2xl border bg-white/80 shadow-sm p-5 md:p-6">
@@ -154,20 +156,32 @@ export default function TownPage() {
               </section>
             )}
 
-            {/* Ratings */}
+            {/* Ratings — MOBILE-FRIENDLY */}
             {town.ratings && (
-              <section className="rounded-2xl border bg-white/80 shadow-sm p-5 md:p-6">
-                <h2 className="text-xl font-semibold mb-3">Town Ratings</h2>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {CATEGORY_ORDER.filter((k) => town.ratings[k] != null).map((k) => (
-                    <div
-                      key={k}
-                      className="flex items-center justify-between border rounded-lg px-3 py-2"
-                    >
-                      <span className="text-gray-800">{CATEGORY_LABELS[k]}</span>
-                      <DotRow value={town.ratings[k]} />
-                    </div>
-                  ))}
+              <section className="rounded-2xl border bg-white/80 shadow-sm p-4 md:p-6">
+                <h2 className="text-lg md:text-xl font-semibold mb-3">
+                  Town Ratings
+                </h2>
+
+                {/* Mobile: clean vertical list; md+: two-column grid */}
+                <div className="space-y-2 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
+                  {CATEGORY_ORDER.filter((k) => town.ratings[k] != null).map(
+                    (k) => (
+                      <div
+                        key={k}
+                        className="
+                          flex items-center justify-between
+                          rounded-lg border border-gray-200
+                          px-3 py-3 md:py-2
+                        "
+                      >
+                        <span className="text-sm md:text-base text-gray-800 pr-3 break-words">
+                          {CATEGORY_LABELS[k]}
+                        </span>
+                        <DotRow value={town.ratings[k]} />
+                      </div>
+                    )
+                  )}
                 </div>
               </section>
             )}
@@ -186,15 +200,19 @@ export default function TownPage() {
               </section>
             )}
 
-            {/* Town strip to navigate others */}
-            {/* ⬇️ Hide any horizontal overflow from the card strip on mobile */}
-            <section className="pt-2 overflow-x-hidden">
-              <TownStrip />
+            {/* Town strip to navigate others — full-bleed scroller on mobile */}
+            <section className="pt-2">
+              {/* This wrapper creates its own horizontal scroll area (like Home). */}
+              <div className="-mx-4 px-4 overflow-x-auto overscroll-x-contain">
+                <div className="min-w-0">
+                  <TownStrip />
+                </div>
+              </div>
             </section>
           </div>
 
           {/* RIGHT column intentionally empty now (card moved above) */}
-          <aside className="space-y-6"></aside>
+          <aside className="space-y-6" />
         </div>
       </main>
 
