@@ -16,6 +16,7 @@ const WHATSAPP_NUMBER_E164 = "16476684646"; // no '+' for wa.me
 const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER_E164}`;
 
 export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
+  // collapsed/expanded
   const [open, setOpen] = useState(false);
 
   // form state
@@ -35,8 +36,7 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }, [email]);
 
-  const canSubmit =
-    emailValid && towns.length > 0 && notUnderContract && !submitting;
+  const canSubmit = emailValid && towns.length > 0 && notUnderContract && !submitting;
 
   const toggleTown = (t) => {
     setTowns((prev) => {
@@ -74,13 +74,12 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
       payload.append("contactPreference", pref);
       payload.append("notUnderContract", notUnderContract ? "Yes" : "No");
 
+      // Pass basic UTM through if present
       const params = new URLSearchParams(window.location.search);
-      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(
-        (k) => {
-          const v = params.get(k);
-          if (v) payload.append(k, v);
-        }
-      );
+      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach((k) => {
+        const v = params.get(k);
+        if (v) payload.append(k, v);
+      });
 
       const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
         method: "POST",
@@ -106,23 +105,23 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
 
   if (done) {
     return (
-      <div className="rounded-2xl border border-emerald-100 shadow-sm bg-white p-5 md:p-6">
+      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 shadow-sm p-5 md:p-6">
         <h3 className="text-xl font-semibold">Thanks — you’re one step closer.</h3>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-700">
           We’ll send hand-picked insights for{" "}
           <span className="font-medium">
             {towns.length ? towns.join(", ") : "the NorthSide GTA"}
           </span>{" "}
-          to <span className="font-medium">{email}</span>. For the fastest reply,
-          message us on WhatsApp.
+          to <span className="font-medium">{email}</span>. For the fastest reply, message us on
+          WhatsApp.
         </p>
         <a
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition"
+          className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg border-2 border-emerald-300 text-emerald-700 bg-white hover:border-emerald-400 hover:bg-emerald-50 transition font-semibold"
         >
-          <FaWhatsapp className="h-5 w-5" />
+          <FaWhatsapp className="h-5 w-5" style={{ color: "#25D366" }} />
           Continue on WhatsApp
         </a>
       </div>
@@ -132,65 +131,116 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
   return (
     <div
       className={[
-        "rounded-2xl border border-emerald-100 shadow-sm bg-white",
-        "transition-all duration-300",
-        "p-5 md:p-6",
+        "rounded-2xl border border-emerald-200 bg-emerald-50/70",
+        "shadow-sm transition-all duration-300",
+        open ? "p-5 md:p-6" : "p-4 md:p-5",
       ].join(" ")}
     >
-      {/* HEADER */}
-      <div className="flex flex-wrap items-start gap-4">
-        <div className="min-w-[240px] flex-1">
-          <h3 className="text-2xl md:text-[28px] font-extrabold tracking-tight text-slate-900 leading-tight">
-            Find Where You Truly Belong in the NorthSide GTA
-          </h3>
-          <p className="text-slate-600 mt-2">
-            Finally Home Agents will guide you beyond the listings — helping you
-            compare communities and uncover the right fit.
-          </p>
+      {/* Collapsed = premium “Match” block */}
+      {!open && (
+        <div className="space-y-3">
+          <div>
+            <h3 className="text-2xl md:text-[28px] font-extrabold tracking-tight text-slate-900">
+              Your NorthSide GTA Match
+            </h3>
+            <p className="text-slate-700">
+              Get a personalized shortlist of towns with insider notes, commute times, and
+              price ranges — built by Finally Home Agents.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* START HERE (primary) */}
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="
+                px-5 py-3 rounded-xl font-bold tracking-wide
+                bg-emerald-700 text-white hover:bg-emerald-800
+                shadow-[0_4px_12px_rgba(16,185,129,0.35)]
+                transition
+              "
+            >
+              START HERE
+            </button>
+
+            {/* WhatsApp (fast) — brand look + logo */}
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                inline-flex items-center gap-2 px-5 py-3 rounded-xl
+                border-2 text-emerald-700 border-emerald-300 bg-white
+                hover:border-emerald-400 hover:bg-emerald-50
+                font-semibold transition
+              "
+              title="WhatsApp (fast)"
+            >
+              <FaWhatsapp className="h-5 w-5" style={{ color: "#25D366" }} />
+              WhatsApp <span className="opacity-70">(fast)</span>
+            </a>
+
+            {/* small time badge */}
+            <span className="inline-flex items-center self-start sm:self-auto px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+              2 min
+            </span>
+          </div>
+
+          {/* Value bullets */}
+          <ul className="text-sm text-gray-800 space-y-1">
+            {[
+              "Top-3 towns matched to your lifestyle & budget",
+              "Scorecard: prices, commute, schools, vibe",
+              "VIP alerts for good-fit listings & off-market talk",
+            ].map((line) => (
+              <li key={line} className="flex items-start gap-2">
+                <span className="mt-1 inline-block h-4 w-4 rounded-full bg-emerald-600 text-white text-[10px] leading-4 text-center">✓</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Trust & footnote */}
+          <div className="text-xs text-gray-600">
+            ★★★★★ Google reviews • As seen on Instagram & Facebook
+          </div>
+          <div className="text-xs text-gray-500">No spam. Unsubscribe anytime.</div>
         </div>
+      )}
 
-        <div className="flex items-center gap-3 flex-wrap shrink-0">
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="
-              px-5 py-3 rounded-xl font-bold tracking-wide
-              bg-emerald-700 text-white hover:bg-emerald-800
-              shadow-[0_4px_12px_rgba(16,185,129,0.35)]
-              transition
-            "
-          >
-            START HERE
-          </button>
-
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              inline-flex items-center gap-2 px-4 py-2 rounded-xl
-              border-2 border-emerald-200 bg-white
-              text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50
-              font-semibold transition
-              whitespace-nowrap
-            "
-            title="WhatsApp (fast)"
-          >
-            <FaWhatsapp className="h-5 w-5" style={{ color: "#25D366" }} />
-            WhatsApp <span className="opacity-70">(fast)</span>
-          </a>
-        </div>
-      </div>
-
-      {/* a tiny spacer so the buttons never crowd the form */}
-      <div className="h-3 md:h-4" />
-
-      {/* FORM */}
+      {/* Expanded = full form */}
       {open && (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div>
+              <h3 className="text-xl md:text-2xl font-semibold">
+                Your NorthSide GTA Match
+              </h3>
+              <p className="text-gray-700">
+                Tell us where you’re looking — we’ll build your shortlist. Or tap WhatsApp for a faster response.
+              </p>
+            </div>
+
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                border-2 border-emerald-300 text-emerald-700 bg-white
+                hover:border-emerald-400 hover:bg-emerald-50 transition font-semibold
+              "
+              title="WhatsApp (fast)"
+            >
+              <FaWhatsapp className="h-5 w-5" style={{ color: "#25D366" }} />
+              WhatsApp (fast)
+            </a>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-4">
-            {/* LEFT COLUMN */}
-            <div className="md:col-span-1 space-y-4">
+            <div className="md:col-span-1 space-y-3">
+              {/* Email with live validation message */}
               <label className="block">
                 <span className="text-sm font-medium">
                   Email<span className="text-rose-600"> *</span>
@@ -200,9 +250,19 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                  className={[
+                    "mt-1 w-full rounded-lg border focus:ring-emerald-500",
+                    email && !emailValid
+                      ? "border-rose-500 focus:border-rose-500"
+                      : "border-emerald-300 focus:border-emerald-500",
+                  ].join(" ")}
                   placeholder="you@example.com"
                 />
+                {email && !emailValid && (
+                  <p className="mt-1 text-sm text-rose-600">
+                    Please enter a valid email address (e.g. name@example.com).
+                  </p>
+                )}
               </label>
 
               <label className="block">
@@ -211,7 +271,7 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-emerald-300 focus:border-emerald-500 focus:ring-emerald-500"
                   placeholder="Jane Doe"
                 />
               </label>
@@ -222,15 +282,14 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1 w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-emerald-300 focus:border-emerald-500 focus:ring-emerald-500"
                   placeholder="(555) 555-5555"
                 />
               </label>
 
-              {/* Contact preference — its own fieldset to guarantee spacing */}
-              <fieldset className="block">
-                <legend className="text-sm font-medium">Contact preference</legend>
-                <div className="mt-1 flex gap-1.5 flex-wrap">
+              <div className="block">
+                <span className="text-sm font-medium">Contact preference</span>
+                <div className="mt-1 inline-flex rounded-lg border border-emerald-300 bg-white p-1">
                   {["Email", "WhatsApp", "Either"].map((opt) => (
                     <button
                       key={opt}
@@ -239,7 +298,7 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
                         "px-3 py-1.5 rounded-md text-sm font-medium transition",
                         pref === opt
                           ? "bg-emerald-600 text-white"
-                          : "text-gray-700 hover:bg-gray-50 border border-gray-200",
+                          : "text-gray-700 hover:bg-gray-50",
                       ].join(" ")}
                       onClick={() => setPref(opt)}
                     >
@@ -247,70 +306,66 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
                     </button>
                   ))}
                 </div>
-              </fieldset>
+              </div>
             </div>
 
-            {/* RIGHT COLUMN */}
-            <div className="md:col-span-2 space-y-4">
-              <div>
-                <span className="text-sm font-medium">
-                  Areas of interest<span className="text-rose-600"> *</span>
-                </span>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={toggleAll}
-                    className={[
-                      "px-3 py-1.5 rounded-full border text-sm transition",
-                      allChecked
-                        ? "bg-emerald-600 text-white border-emerald-600"
-                        : "hover:bg-gray-50",
-                    ].join(" ")}
-                  >
-                    All of them
-                  </button>
+            <div className="md:col-span-2">
+              <span className="text-sm font-medium">
+                Areas of interest<span className="text-rose-600"> *</span>
+              </span>
 
-                  {TOWNS.map((t) => {
-                    const on = towns.includes(t);
-                    return (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => toggleTown(t)}
-                        className={[
-                          "px-3 py-1.5 rounded-full border text-sm transition",
-                          on
-                            ? "bg-emerald-600 text-white border-emerald-600"
-                            : "hover:bg-gray-50",
-                        ].join(" ")}
-                      >
-                        {t}
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={toggleAll}
+                  className={[
+                    "px-3 py-1.5 rounded-full border text-sm transition",
+                    allChecked
+                      ? "bg-emerald-600 text-white border-emerald-600"
+                      : "border-emerald-300 hover:bg-gray-50",
+                  ].join(" ")}
+                >
+                  All of them
+                </button>
+
+                {TOWNS.map((t) => {
+                  const on = towns.includes(t);
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => toggleTown(t)}
+                      className={[
+                        "px-3 py-1.5 rounded-full border text-sm transition",
+                        on
+                          ? "bg-emerald-600 text-white border-emerald-600"
+                          : "border-emerald-300 hover:bg-gray-50",
+                      ].join(" ")}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Checkbox — separated and given clear top margin */}
-              <div className="pt-1">
+              <div className="mt-4 space-y-2">
                 <label className="flex items-start gap-2">
                   <input
                     type="checkbox"
                     checked={notUnderContract}
                     onChange={(e) => setNotUnderContract(e.target.checked)}
-                    className="mt-1 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                    className="mt-1 rounded border-emerald-400 text-emerald-600 focus:ring-emerald-500"
                   />
-                  <span className="text-sm text-gray-700">
-                    I confirm I’m <strong>not currently under contract</strong>{" "}
-                    with another real estate brokerage.
+                  <span className="text-sm text-gray-800">
+                    I confirm I’m <strong>not currently under contract</strong> with another real
+                    estate brokerage.
                   </span>
                 </label>
+                <p className="text-xs text-gray-600">
+                  By submitting, you agree to receive information from Finally Home Agents. You can
+                  unsubscribe anytime.
+                </p>
               </div>
-
-              <p className="text-xs text-gray-500">
-                By submitting, you agree to receive information from Finally
-                Home Agents. You can unsubscribe anytime.
-              </p>
             </div>
           </div>
 
@@ -323,8 +378,8 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
               className={[
                 "px-4 py-2 rounded-lg font-semibold transition",
                 canSubmit
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
+                  ? "bg-emerald-700 text-white hover:bg-emerald-800"
+                  : "bg-emerald-200 text-emerald-900/60 cursor-not-allowed",
               ].join(" ")}
             >
               {submitting ? "Sending…" : "Send me updates"}
@@ -333,7 +388,7 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="px-3 py-2 rounded-lg border text-gray-700 hover:bg-gray-50 transition"
+              className="px-3 py-2 rounded-lg border border-emerald-300 text-gray-800 bg-white hover:bg-emerald-50 transition"
             >
               Collapse
             </button>

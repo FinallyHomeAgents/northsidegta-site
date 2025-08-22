@@ -7,7 +7,6 @@ import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 
-/* ---------- Ratings config ---------- */
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
   commuterAccess: "Commuter Access",
@@ -18,6 +17,7 @@ const CATEGORY_LABELS = {
   restaurants: "Restaurants",
   localEvents: "Local Events",
 };
+
 const CATEGORY_ORDER = [
   "housePrices",
   "commuterAccess",
@@ -29,7 +29,6 @@ const CATEGORY_ORDER = [
   "localEvents",
 ];
 
-/* ---------- Small components ---------- */
 function DotRow({ value = 0 }) {
   const v = Math.round(value);
   return (
@@ -46,22 +45,15 @@ function DotRow({ value = 0 }) {
   );
 }
 
-/* ================================================================== */
-/*                           Town Page                                 */
-/* ================================================================== */
 export default function TownPage() {
-  // ✅ useParams INSIDE the component (safe)
   const params = useParams();
   const paramSlug = (params.slug || params["*"] || "").toLowerCase();
 
-  // Find matching town
   const town =
-    (Array.isArray(towns) &&
-      towns.find((t) => (t.slug || "").toLowerCase() === paramSlug)) ||
-    (Array.isArray(towns) &&
-      towns.find(
-        (t) => `/${(t.slug || "").toLowerCase()}` === window.location.pathname.toLowerCase()
-      ));
+    towns.find((t) => (t.slug || "").toLowerCase() === paramSlug) ||
+    towns.find(
+      (t) => `/${(t.slug || "").toLowerCase()}` === window.location.pathname.toLowerCase()
+    );
 
   if (!town) {
     return (
@@ -93,6 +85,7 @@ export default function TownPage() {
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-8">
           <div className="rounded-2xl border bg-white/70 shadow-sm overflow-hidden">
             <div className="relative">
+              {/* Banner image (optional) */}
               {town.heroImage ? (
                 <img
                   src={town.heroImage}
@@ -103,6 +96,7 @@ export default function TownPage() {
                 <div className="w-full h-56 md:h-72 bg-gradient-to-br from-emerald-50 via-white to-emerald-50" />
               )}
 
+              {/* Title overlay */}
               <div className="absolute inset-x-0 bottom-0 p-4 md:p-6">
                 <div className="inline-block rounded-xl bg-white/90 backdrop-blur px-4 py-2 shadow">
                   <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
@@ -112,12 +106,15 @@ export default function TownPage() {
               </div>
             </div>
 
-            <div className="p-5 md:p-6">
+            {/* Summary + download + MATCH card */}
+            <div className="p-5 md:p-6 space-y-4">
               {town.summary && (
-                <p className="text-gray-700 text-base md:text-lg">{town.summary}</p>
+                <p className="text-gray-700 text-base md:text-lg">
+                  {town.summary}
+                </p>
               )}
 
-              <div className="mt-4 flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 {town.pdf && (
                   <a
                     href={town.pdf}
@@ -129,16 +126,22 @@ export default function TownPage() {
                   </a>
                 )}
               </div>
+
+              {/* Your NorthSide GTA Match — lives inside the hero box */}
+              <div className="pt-2">
+                <QuickContactCard />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Body */}
+      {/* Page body */}
       <main className="mx-auto max-w-6xl px-4 pb-12">
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* LEFT */}
+          {/* LEFT column: Highlights, Ratings, Commute */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Highlights */}
             {Array.isArray(town.highlights) && town.highlights.length > 0 && (
               <section className="rounded-2xl border bg-white/80 shadow-sm p-5 md:p-6">
                 <h2 className="text-xl font-semibold mb-3">Why {town.name}</h2>
@@ -150,6 +153,7 @@ export default function TownPage() {
               </section>
             )}
 
+            {/* Ratings */}
             {town.ratings && (
               <section className="rounded-2xl border bg-white/80 shadow-sm p-5 md:p-6">
                 <h2 className="text-xl font-semibold mb-3">Town Ratings</h2>
@@ -167,6 +171,7 @@ export default function TownPage() {
               </section>
             )}
 
+            {/* Commute */}
             {town.commute && (
               <section className="rounded-2xl border bg-white/80 shadow-sm p-5 md:p-6">
                 <h2 className="text-xl font-semibold mb-2">Commute</h2>
@@ -180,17 +185,14 @@ export default function TownPage() {
               </section>
             )}
 
+            {/* Town strip to navigate others */}
             <section className="pt-2">
               <TownStrip />
             </section>
           </div>
 
-          {/* RIGHT */}
-          <aside className="space-y-6">
-            <section className="rounded-2xl border bg-white/90 shadow-sm p-4">
-              <QuickContactCard />
-            </section>
-          </aside>
+          {/* RIGHT column intentionally empty now (card moved above) */}
+          <aside className="space-y-6"></aside>
         </div>
       </main>
 
