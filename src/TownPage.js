@@ -77,7 +77,8 @@ export default function TownPage() {
   }
 
   return (
-    <div className="bg-white text-gray-900 min-h-screen">
+    // ⬇️ Prevent any horizontal widening on mobile
+    <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
       <Navigation />
 
       {/* Hero */}
@@ -186,7 +187,8 @@ export default function TownPage() {
             )}
 
             {/* Town strip to navigate others */}
-            <section className="pt-2">
+            {/* ⬇️ Hide any horizontal overflow from the card strip on mobile */}
+            <section className="pt-2 overflow-x-hidden">
               <TownStrip />
             </section>
           </div>
