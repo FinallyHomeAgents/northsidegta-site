@@ -2,7 +2,7 @@
   {
     "slug": "georgina",
     "name": "Georgina",
-    "heroImage": "/Images/towns/georgina-hero.jpg",
+    "heroImage": "/Images/georgina-banner.jpg",
     "summary": "Lake life, beaches, and room to roam with easy escapes to the water.",
     "highlights": ["Lake Simcoe access", "Beaches & marinas", "Growing family neighbourhoods"],
     "ratings": {
@@ -21,7 +21,7 @@
   {
     "slug": "east-gwillimbury",
     "name": "East Gwillimbury",
-    "heroImage": "/Images/towns/eg-hero.jpg",
+    "heroImage": "/Images/eastgwillimbury-banner.jpg",
     "summary": "New builds, schools and quick 404 access from Sharon, Queensville & Holland Landing.",
     "highlights": ["Newer homes", "Schools & parks", "Fast 404 access"],
     "ratings": {
@@ -40,7 +40,7 @@
   {
     "slug": "newmarket",
     "name": "Newmarket",
-    "heroImage": "/Images/towns/newmarket-hero.jpg",
+    "heroImage": "/Images/newmarket-banner.jpg",
     "summary": "Shops, dining and GO convenience with a vibrant Main Street.",
     "highlights": ["Historic Main Street", "GO Train access", "Shops & dining"],
     "ratings": {
@@ -59,7 +59,7 @@
   {
     "slug": "aurora",
     "name": "Aurora",
-    "heroImage": "/Images/towns/aurora-hero.jpg",
+    "heroImage": "/Images/aurora-banner.jpg",
     "summary": "Mature neighbourhoods, schools and quiet streets with fast commuter access.",
     "highlights": ["Top schools", "Established streets", "GO & 404 access"],
     "ratings": {
@@ -78,7 +78,7 @@
   {
     "slug": "stouffville",
     "name": "Stouffville",
-    "heroImage": "/Images/towns/stouffville-hero.jpg",
+    "heroImage": "/Images/stouffville-banner.jpg",
     "summary": "Family streets, parks and a lively Main Street close to nature.",
     "highlights": ["Main Street vibe", "Parks & rec", "Family-friendly"],
     "ratings": {
@@ -97,7 +97,7 @@
   {
     "slug": "uxbridge",
     "name": "Uxbridge",
-    "heroImage": "/Images/towns/uxbridge-hero.jpg",
+    "heroImage": "/Images/uxbridge-banner.jpg",
     "summary": "Trail capital charm, rolling hills and small-town feel with outdoor living.",
     "highlights": ["Trails & nature", "Small-town charm", "Active community"],
     "ratings": {
@@ -116,7 +116,7 @@
   {
     "slug": "scugog",
     "name": "Scugog",
-    "heroImage": "/Images/towns/scugog-hero.jpg",
+    "heroImage": "/Images/scugog-banner.jpg",
     "summary": "Port Perry heritage, lakefront sunsets and a relaxed pace by the water.",
     "highlights": ["Lakefront living", "Main Street heritage", "Community events"],
     "ratings": {
