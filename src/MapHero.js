@@ -154,15 +154,6 @@ const TOWNS = [
   },
 ];
 
-/* Highway 404 overlay (two segments) tuned for your map. */
-const HWY404 = {
-  xPct: 42.4,
-  yTopStart: 42.9,
-  yTopEnd: 50.9,
-  yBotStart: 57.6,
-  yBotEnd: 71.8,
-};
-
 /* ---------- Styles ---------- */
 const Styles = () => (
   <style>{`
@@ -277,40 +268,7 @@ export default function MapHero() {
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
             <img src="/Images/northside-map.svg?v=2" alt="NorthSide GTA map with towns" />
 
-            {/* Highway 404 overlay */}
-            <svg
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              aria-hidden="true"
-            >
-              <line
-                x1={`${HWY404.xPct}%`}
-                y1={`${HWY404.yTopStart}%`}
-                x2={`${HWY404.xPct}%`}
-                y2={`${HWY404.yTopEnd}%`}
-                className="hwy404-glow"
-              />
-              <line
-                x1={`${HWY404.xPct}%`}
-                y1={`${HWY404.yTopStart}%`}
-                x2={`${HWY404.xPct}%`}
-                y2={`${HWY404.yTopEnd}%`}
-                className="hwy404-line"
-              />
-              <line
-                x1={`${HWY404.xPct}%`}
-                y1={`${HWY404.yBotStart}%`}
-                x2={`${HWY404.xPct}%`}
-                y2={`${HWY404.yBotEnd}%`}
-                className="hwy404-glow"
-              />
-              <line
-                x1={`${HWY404.xPct}%`}
-                y1={`${HWY404.yBotStart}%`}
-                x2={`${HWY404.xPct}%`}
-                y2={`${HWY404.yBotEnd}%`}
-                className="hwy404-line"
-              />
-            </svg>
+        
 
             {/* Pins */}
             {TOWNS.map((t) => (
