@@ -29,8 +29,8 @@ const TOWNS = [
   {
     id: "georgina",
     name: "Georgina",
-    x: 47.35,
-    y: 35.42,
+    x: 50.25,
+    y: 33.42,
     url: "/georgina",
     blurb: "Lake life, beaches, and room to roam.",
     ratings: {
@@ -47,8 +47,8 @@ const TOWNS = [
   {
     id: "east-gwillimbury",
     name: "East Gwillimbury",
-    x: 38.55,
-    y: 46.92,
+    x: 40.55,
+    y: 42.42,
     url: "/east-gwillimbury",
     blurb: "New builds, schools & fast 404 access.",
     ratings: {
@@ -65,8 +65,8 @@ const TOWNS = [
   {
     id: "newmarket",
     name: "Newmarket",
-    x: 32.65,
-    y: 52.08,
+    x: 35.6,
+    y: 53.58,
     url: "/newmarket",
     blurb: "Shops, dining, and GO convenience.",
     ratings: {
@@ -83,8 +83,8 @@ const TOWNS = [
   {
     id: "aurora",
     name: "Aurora",
-    x: 34.95,
-    y: 62.58,
+    x: 40.0,
+    y: 61.42,
     url: "/aurora",
     blurb: "Mature neighbourhoods, schools, and quiet streets.",
     ratings: {
@@ -101,8 +101,8 @@ const TOWNS = [
   {
     id: "stouffville",
     name: "Stouffville",
-    x: 44.95,
-    y: 60.83,
+    x: 48.3,
+    y: 58.58,
     url: "/stouffville",
     blurb: "Family streets, parks & a lively Main Street.",
     ratings: {
@@ -117,28 +117,10 @@ const TOWNS = [
     },
   },
   {
-    id: "uxbridge",
-    name: "Uxbridge",
-    x: 52.55,
-    y: 54.83,
-    url: "/uxbridge",
-    blurb: "Trail capital vibes and small-town charm.",
-    ratings: {
-      housePrices: 3,
-      commuterAccess: 3,
-      localTraffic: 5,
-      golf: 5,
-      fishing: 3,
-      trailsNature: 5,
-      restaurants: 4,
-      localEvents: 4,
-    },
-  },
-  {
     id: "scugog",
     name: "Scugog",
-    x: 60.95,
-    y: 59.17,
+    x: 65.45,
+    y: 54.67,
     url: "/scugog",
     blurb: "Port Perry heritage + lakefront sunsets.",
     ratings: {
@@ -150,6 +132,24 @@ const TOWNS = [
       trailsNature: 4,
       restaurants: 4,
       localEvents: 5,
+    },
+  },
+  {
+    id: "uxbridge",
+    name: "Uxbridge",
+    x: 55.55,
+    y: 52.0,
+    url: "/uxbridge",
+    blurb: "Trail capital vibes and small-town charm.",
+    ratings: {
+      housePrices: 3,
+      commuterAccess: 3,
+      localTraffic: 5,
+      golf: 5,
+      fishing: 3,
+      trailsNature: 5,
+      restaurants: 4,
+      localEvents: 4,
     },
   },
 ];
@@ -195,19 +195,19 @@ const Styles = () => (
   `}</style>
 );
 
-/* A small, space-efficient rating row so dots never overflow */
+/* Compact rating row so labels + dots always fit */
 function RatingRow({ label, value }) {
   const v = Math.round(value || 0);
   return (
-    <div className="flex items-center justify-between">
-      <span className="min-w-0 pr-1 text-[12.5px] md:text-[13.5px] text-gray-800">
+    <div className="flex items-center justify-between gap-2">
+      <span className="min-w-0 pr-1 text-[12px] md:text-[13px] text-gray-800 truncate">
         {label}
       </span>
       <div className="flex-none flex items-center gap-1">
         {Array.from({ length: 5 }).map((_, i) => (
           <span
             key={i}
-            className={`h-[6.5px] w-[6.5px] md:h-[8px] md:w-[8px] rounded-full ${
+            className={`h-[6px] w-[6px] md:h-[7.5px] md:w-[7.5px] rounded-full ${
               i < v ? "bg-emerald-600" : "bg-gray-300"
             }`}
           />
@@ -216,7 +216,6 @@ function RatingRow({ label, value }) {
     </div>
   );
 }
-
 
 export default function MapHero() {
   const [pulsing, setPulsing] = useState(true);
@@ -233,7 +232,7 @@ export default function MapHero() {
     window.__mapboxRef = { resize: () => {} };
   }, []);
 
-  // Capability detection (reliable across iPad/Android/desktop)
+  // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
     typeof window.matchMedia === "function" &&
@@ -254,7 +253,7 @@ export default function MapHero() {
   return (
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
-        {/* Premium hero headline (unchanged) */}
+        {/* Headline */}
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
             Discover More Than Just Listings — Discover Your Next Town
@@ -276,11 +275,7 @@ export default function MapHero() {
             onMouseLeave={() => canHover && setHoverId(null)}
           >
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
-            <img
-              src="/Images/northside-map.svg"
-              alt="NorthSide GTA map with towns"
-              className="block w-full h-auto"
-            />
+            <img src="/Images/northside-map.svg?v=2" alt="NorthSide GTA map with towns" />
 
             {/* Highway 404 overlay */}
             <svg
@@ -327,7 +322,9 @@ export default function MapHero() {
                 aria-label={t.name}
                 aria-pressed={activeId === t.id}
                 onMouseEnter={() => canHover && setHoverId(t.id)}
-                onClick={() => !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))}
+                onClick={() =>
+                  !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                }
               >
                 <span
                   className="pin"
@@ -364,14 +361,15 @@ export default function MapHero() {
                     </p>
                   )}
 
-                  {/* Ratings grid (2 columns) */}
-                  <div className="mt-3 grid grid-cols-2 gap-3">
+                  {/* Ratings grid — slightly tighter to keep everything inside */}
+                  <div className="mt-3 grid grid-cols-2 gap-2">
                     {CATEGORY_ORDER.filter(
-                      (k) => activeTown.ratings && activeTown.ratings[k] != null
+                      (k) =>
+                        activeTown.ratings && activeTown.ratings[k] != null
                     ).map((k) => (
                       <div
                         key={k}
-                        className="rounded-lg border border-emerald-100/60 px-3 py-2"
+                        className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
                       >
                         <RatingRow
                           label={CATEGORY_LABELS[k]}
@@ -416,13 +414,13 @@ export default function MapHero() {
                 </p>
               )}
 
-              <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 {CATEGORY_ORDER.filter(
                   (k) => activeTown.ratings && activeTown.ratings[k] != null
                 ).map((k) => (
                   <div
                     key={k}
-                    className="rounded-lg border border-emerald-100/60 px-3 py-2"
+                    className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
                   >
                     <RatingRow
                       label={CATEGORY_LABELS[k]}
@@ -446,7 +444,7 @@ export default function MapHero() {
             </div>
           )}
 
-          {/* Divider + Inline Quick Contact (kept the same) */}
+          {/* Divider + Inline Quick Contact (unchanged) */}
           <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
             <QuickContactCard
               heading="Find Where You Truly Belong in the NorthSide GTA"
