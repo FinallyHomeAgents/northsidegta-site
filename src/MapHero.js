@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from "react";
 import QuickContactCard from "./QuickContactCard";
 
-/* Category labels + display order */
+/* ────────────────────────────────────────────────────────────
+   Category labels + display order
+   ──────────────────────────────────────────────────────────── */
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
   commuterAccess: "Commuter Access",
@@ -24,7 +26,9 @@ const CATEGORY_ORDER = [
   "localEvents",
 ];
 
-/* Town pins (percent positions for your SVG map) */
+/* ────────────────────────────────────────────────────────────
+   Town pins (percent positions for your SVG map) — unchanged
+   ──────────────────────────────────────────────────────────── */
 const TOWNS = [
   {
     id: "georgina",
@@ -154,7 +158,9 @@ const TOWNS = [
   },
 ];
 
-/* ---------- Styles ---------- */
+/* ────────────────────────────────────────────────────────────
+   Local styles
+   ──────────────────────────────────────────────────────────── */
 const Styles = () => (
   <style>{`
   @keyframes pinPulse {
@@ -176,17 +182,16 @@ const Styles = () => (
     border-radius: 16px;
     box-shadow: 0 12px 28px rgba(2,44,34,.18);
   }
-  .hwy404-line {
-    stroke:#10b981; stroke-width:6; stroke-linecap:round; stroke-dasharray:16 14;
-    animation:hwyFlow 1.6s linear infinite; filter:drop-shadow(0 0 6px rgba(16,185,129,.35));
+  @keyframes ns-progress {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
   }
-  .hwy404-glow { stroke:rgba(16,185,129,.35); stroke-width:14; stroke-linecap:round; filter:blur(3px); opacity:.55; animation:hwyGlow 2.8s ease-in-out infinite; }
-  @keyframes hwyFlow { to { stroke-dashoffset: 22; } }
-  @keyframes hwyGlow { 0%,100% { opacity:.35 } 50% { opacity:.75 } }
   `}</style>
 );
 
-/* Compact rating row so labels + dots always fit */
+/* ────────────────────────────────────────────────────────────
+   Compact rating row so labels + dots always fit
+   ──────────────────────────────────────────────────────────── */
 function RatingRow({ label, value }) {
   const v = Math.round(value || 0);
   return (
@@ -198,7 +203,7 @@ function RatingRow({ label, value }) {
         {Array.from({ length: 5 }).map((_, i) => (
           <span
             key={i}
-            className={`h-[6px] w-[6px] md:h-[7.5px] md:w-[7.5px] rounded-full ${
+            className={`h-[6px] w-[6px] md:h-[7px] md:w-[7px] rounded-full ${
               i < v ? "bg-emerald-600" : "bg-gray-300"
             }`}
           />
@@ -208,6 +213,169 @@ function RatingRow({ label, value }) {
   );
 }
 
+/* ────────────────────────────────────────────────────────────
+   Premium inline SVG icons
+   ──────────────────────────────────────────────────────────── */
+function IconBase({ children, className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
+function XIcon({ className = "" }) {
+  return (
+    <IconBase className={className}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </IconBase>
+  );
+}
+function CheckIcon({ className = "" }) {
+  return (
+    <IconBase className={className}>
+      <path d="M20 6L9 17l-5-5" />
+    </IconBase>
+  );
+}
+function SkylineIcon({ className = "" }) {
+  return (
+    <IconBase className={className}>
+      <path d="M3 19h18M6 19v-5m3 5V8m3 11v-7m3 7v-9m3 9v-4" />
+      <path d="M12 6l1.5-1.5M12 6l-1.5-1.5" strokeOpacity=".6" />
+    </IconBase>
+  );
+}
+function TripleChevronIcon({ className = "" }) {
+  return (
+    <IconBase className={className}>
+      <path d="M7 6l5 6-5 6M12 6l5 6-5 6" />
+    </IconBase>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────
+   Premium slim auto-rotating comparison bar
+   ──────────────────────────────────────────────────────────── */
+function ComparisonBar() {
+  const items = [
+    { left: "HIGH HOME PRICES", right: "BETTER VALUE HOMES" },
+    { left: "TRAFFIC GRIDLOCK", right: "EASIER COMMUTES" },
+    { left: "LIMITED SPACE", right: "MORE GREEN SPACE" },
+    { left: "TIGHT LOTS", right: "ROOM TO BREATHE" },
+  ];
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setI((x) => (x + 1) % items.length), 4000);
+    return () => clearInterval(id);
+  }, [items.length]);
+
+  const cur = items[i];
+
+  return (
+    <div className="mx-auto max-w-6xl px-4">
+      <div className="rounded-xl overflow-hidden border border-emerald-100 shadow-sm">
+        {/* Headers */}
+        <div className="grid grid-cols-2">
+          {/* Left: Toronto Living */}
+          <div className="bg-gray-100/90 border-b border-gray-200/70">
+            <div className="flex items-center gap-2 px-4 py-2">
+              <SkylineIcon className="h-4 w-4 text-gray-600" />
+              <span className="text-[11px] font-semibold tracking-wider uppercase text-gray-700">
+                Toronto Living
+              </span>
+            </div>
+          </div>
+
+          {/* Right: NorthSide GTA with chevrons + served by FHA */}
+          <div
+            className="text-white border-b border-emerald-700/60"
+            style={{
+              background:
+                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
+            }}
+          >
+            <div className="flex items-center gap-2 px-4 py-2">
+              <span className="text-[11px] font-semibold tracking-wider uppercase">
+                NorthSide GTA
+              </span>
+              <TripleChevronIcon className="h-4 w-4 text-white/90" />
+              <span className="text-[10px] uppercase tracking-wide text-white/85">
+                Served by Finally Home Agents
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Rows */}
+        <div className="grid grid-cols-2">
+          {/* Left column */}
+          <div className="relative bg-white">
+            <div className="h-[76px] md:h-[86px] flex items-center">
+              <div className="w-full px-4 md:px-6">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="flex-none rounded-full bg-rose-50 border border-rose-200 p-1.5">
+                    <XIcon className="h-4 w-4 text-rose-600" />
+                  </div>
+                  <p className="text-[13px] md:text-[15px] font-semibold text-gray-800 leading-tight uppercase">
+                    {cur.left}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right column */}
+          <div
+            className="relative text-white"
+            style={{
+              background:
+                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
+            }}
+          >
+            <div className="h-[76px] md:h-[86px] flex items-center">
+              <div className="w-full px-4 md:px-6">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="flex-none rounded-full bg-white/15 border border-white/20 p-1.5">
+                    <CheckIcon className="h-4 w-4 text-white" />
+                  </div>
+                  <p className="text-[13px] md:text-[15px] font-bold leading-tight uppercase">
+                    {cur.right}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Animated progress bar */}
+            <div className="absolute inset-x-0 bottom-0 h-1.5 bg-white/10 overflow-hidden">
+              <div
+                className="h-full origin-left"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.9), rgba(255,255,255,0.35))",
+                  animation: "ns-progress 4s linear infinite",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────
+   MapHero
+   ──────────────────────────────────────────────────────────── */
 export default function MapHero() {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // tap state for touch devices
@@ -229,7 +397,7 @@ export default function MapHero() {
     typeof window.matchMedia === "function" &&
     window.matchMedia("(hover: hover)").matches;
 
-  // Active town depends on capability
+  // Active town depends on capability (NO default active)
   const activeId = canHover ? hoverId : openId;
   const activeTown = TOWNS.find((t) => t.id === activeId) || null;
 
@@ -244,20 +412,11 @@ export default function MapHero() {
   return (
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
-        {/* Headline */}
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-            Discover More Than Just Listings — Discover Your Next Town
-          </h1>
-          <p className="mt-2 text-gray-700">
-            Doing it alone is a guess. Doing it with Finally Home Agents means
-            real insights, local knowledge, and the edge in finding where you
-            belong.
-          </p>
-        </div>
+        {/* Premium slim comparison bar */}
+        <ComparisonBar />
 
         {/* Bordered hero box (map + inline quick-contact) */}
-        <div className="relative mx-auto mt-6 rounded-2xl bg-white/70 p-3 shadow-sm border">
+        <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
           <Styles />
 
           {/* Map frame */}
@@ -266,9 +425,11 @@ export default function MapHero() {
             onMouseLeave={() => canHover && setHoverId(null)}
           >
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
-            <img src="/Images/northside-map.svg?v=2" alt="NorthSide GTA map with towns" />
-
-        
+            <img
+              src="/Images/northside-map.svg?v=2"
+              alt="NorthSide GTA map with towns"
+              className="block w-full h-auto"
+            />
 
             {/* Pins */}
             {TOWNS.map((t) => (
@@ -313,13 +474,14 @@ export default function MapHero() {
                     </a>
                   </div>
 
+                  {/* Blurb */}
                   {activeTown.blurb && (
                     <p className="text-[14px] leading-5 text-gray-700 mt-2">
                       {activeTown.blurb}
                     </p>
                   )}
 
-                  {/* Ratings grid — slightly tighter to keep everything inside */}
+                  {/* Ratings grid — tighter so nothing clips */}
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     {CATEGORY_ORDER.filter(
                       (k) =>
