@@ -3,12 +3,15 @@ import React, { useState, useMemo, useRef } from "react";
 import Navigation from "./Navigation";
 import Card from "./components/ui/Card";
 
-// helpers reused from HomeAnalysis
+// ===== Helpers (reused) =====
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 const phoneOk = (v) => v.replace(/\D/g, "").length >= 10;
 const clamp1to10 = (n) => Math.max(1, Math.min(10, Number(n) || 1));
 
-// slim timeline data
+// ===== Config =====
+const BG_IMAGE = "/Images/northsidegta-map-bg.jpg"; // <-- change if your filename/path differs
+
+// Slim timeline (kept)
 const timeline = [
   { title: "Never Too Early",       icon: "💬", copy: "Plan timing & pricing early." },
   { title: "AI Market Analysis",    icon: "📊", copy: "Data-backed strategy." },
@@ -19,7 +22,7 @@ const timeline = [
   { title: "Closing & Beyond",      icon: "🔑", copy: "We stay to the finish." },
 ];
 
-// videos (preserved)
+// Videos (kept)
 const videos = [
   {
     title: "Queensville Showcase: 472 Seaview Heights",
@@ -31,10 +34,10 @@ const videos = [
   },
 ];
 
-// towns (multi-select limit 7)
+// Towns (multi-select limit 7)
 const TOWNS = ["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","None"];
 
-// WhatsApp Icon
+// WhatsApp icon for post-submit perk
 function WhatsAppIcon({ className = "w-5 h-5" }) {
   return (
     <svg viewBox="0 0 448 512" className={className} aria-hidden="true">
@@ -46,7 +49,7 @@ function WhatsAppIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// Two-step, in-place Seller form
+// ===== Two-step, in-place Seller form (with map background + gradient buttons) =====
 function SellerLeadCapture() {
   const [form, setForm] = useState({
     streetNumber: "",
@@ -84,15 +87,14 @@ function SellerLeadCapture() {
     return fromEnv || "xblkwrzj";
   }, []);
 
-  // make sure first & last name are required in validation
   const requiredChecks = {
     streetNumber: !!form.streetNumber.trim(),
     streetName: !!form.streetName.trim(),
     bedrooms: !!form.bedrooms,
     condition: !!form.condition,
     upgrades: !!form.upgrades,
-    firstName: !!form.firstName.trim(), // required
-    lastName: !!form.lastName.trim(),   // required
+    firstName: !!form.firstName.trim(),
+    lastName: !!form.lastName.trim(),
     phone: !!form.phone.trim() && phoneOk(form.phone),
     email: !!form.email.trim() && emailOk(form.email),
     timeline: !!form.timeline,
@@ -285,7 +287,15 @@ function SellerLeadCapture() {
 
   return (
     <section className="mx-auto max-w-5xl w-full">
-      <div className="rounded-2xl border border-emerald-200 bg-white shadow-sm overflow-hidden">
+      <div
+        className="rounded-2xl border border-emerald-200 shadow-sm overflow-hidden relative"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('${BG_IMAGE}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {/* Header with pills INSIDE the card */}
         <div className="px-6 py-5 border-b bg-emerald-50/60 border-emerald-100">
           <p className="text-[12px] font-semibold tracking-wider text-emerald-700 uppercase">
@@ -319,8 +329,11 @@ function SellerLeadCapture() {
         <div className="px-6 pt-3">
           <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-emerald-600 transition-all"
-              style={{ width: `${Math.max(6, progressPct)}%` }}
+              className="h-full transition-all"
+              style={{
+                width: `${Math.max(6, progressPct)}%`,
+                background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
+              }}
               aria-hidden
             />
           </div>
@@ -398,7 +411,11 @@ function SellerLeadCapture() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
-              <button type="submit" className="rounded-lg bg-emerald-600 text-white font-semibold px-5 py-2.5 hover:bg-emerald-700">
+              <button
+                type="submit"
+                className="rounded-lg text-white font-semibold px-5 py-2.5 hover:opacity-95"
+                style={{ background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)" }}
+              >
                 Continue
               </button>
             </div>
@@ -413,7 +430,7 @@ function SellerLeadCapture() {
             <h3 className="text-lg sm:text-xl font-semibold">Step 2 · Your Details & Timing</h3>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              {/* keep Step 1 fields visible & editable */}
+              {/* Keep Step 1 fields visible & editable */}
               <div>
                 <label className="block text-sm font-medium">Street Number</label>
                 <input
@@ -451,7 +468,7 @@ function SellerLeadCapture() {
                 </select>
               </div>
 
-              {/* condition */}
+              {/* Condition */}
               <div className="md:col-span-2">
                 <div className="flex items-end justify-between">
                   <label className="block text-sm font-medium" id="cond-desc">
@@ -468,7 +485,7 @@ function SellerLeadCapture() {
                 <div className="mt-2 text-xs text-gray-500">1 Very poor · 5 Average · 10 Pristine</div>
               </div>
 
-              {/* upgrades */}
+              {/* Upgrades */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium" id="up-desc">Level of Upgrades (1–10)</label>
                 <input
@@ -484,7 +501,7 @@ function SellerLeadCapture() {
                 </div>
               </div>
 
-              {/* estimate & notes */}
+              {/* Estimate & notes */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium">
                   What do you think your home is worth? <span className="text-gray-400">(optional)</span>
@@ -518,7 +535,7 @@ function SellerLeadCapture() {
                 />
               </div>
 
-              {/* contact (First & Last now explicitly required in UI) */}
+              {/* Contact (First & Last required) */}
               <div>
                 <label className="block text-sm font-medium">
                   First Name <span className="text-red-500">*</span>
@@ -564,7 +581,7 @@ function SellerLeadCapture() {
                 {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
               </div>
 
-              {/* timing */}
+              {/* Timing */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium">How soon might you consider a move?</label>
                 <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-sm">
@@ -581,7 +598,7 @@ function SellerLeadCapture() {
                 </div>
               </div>
 
-              {/* towns */}
+              {/* Towns */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium">
                   Which NorthSide GTA towns are you most interested in moving to?
@@ -608,13 +625,13 @@ function SellerLeadCapture() {
                 </div>
               </div>
 
-              {/* honeypot + tracking */}
+              {/* Honeypot + tracking */}
               <input name="nickname" value={form.nickname} onChange={update} className="hidden" tabIndex="-1" autoComplete="off" />
               <input type="hidden" name="utm_source" value={utm.get("utm_source") || ""} readOnly />
               <input type="hidden" name="utm_campaign" value={utm.get("utm_campaign") || ""} readOnly />
               <input type="hidden" name="device" value={device} readOnly />
 
-              {/* confirmations */}
+              {/* Confirmations */}
               <div className="md:col-span-2 space-y-3 mt-2">
                 <label className="flex items-start gap-3 text-sm">
                   <input
@@ -640,7 +657,8 @@ function SellerLeadCapture() {
               <div className="md:col-span-2 mt-2">
                 <button
                   disabled={!requiredOk || sending}
-                  className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold hover:bg-emerald-700 disabled:opacity-50"
+                  className="w-full rounded-xl text-white font-semibold px-4 py-3 disabled:opacity-50 hover:opacity-95"
+                  style={{ background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)" }}
                 >
                   {sending ? "Sending…" : "Get My Home Value"}
                 </button>
@@ -653,7 +671,7 @@ function SellerLeadCapture() {
   );
 }
 
-// Page shell
+// ===== Page shell =====
 export default function SellersPage() {
   return (
     <>
@@ -670,10 +688,10 @@ export default function SellersPage() {
           </p>
         </section>
 
-        {/* Two-step unified form card */}
+        {/* Two-step unified form card (now with map background + gradient buttons) */}
         <SellerLeadCapture />
 
-        {/* Slim horizontal timeline */}
+        {/* Slim horizontal timeline (kept) */}
         <section className="mt-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl md:text-2xl font-semibold">Your Selling Game Plan</h2>
@@ -699,7 +717,7 @@ export default function SellersPage() {
           </div>
         </section>
 
-        {/* See Us in Action (preserved) */}
+        {/* See Us in Action (videos kept) */}
         <section className="space-y-6">
           <h2 className="text-3xl font-semibold text-center">See Us in Action</h2>
           <p className="text-center text-slate-600 max-w-2xl mx-auto">

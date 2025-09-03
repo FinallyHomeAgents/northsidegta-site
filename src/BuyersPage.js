@@ -1,9 +1,24 @@
 // src/BuyersPage.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Navigation from "./Navigation";
 import Footer from "./Footer";
+
+/* ───────── helpers ───────── */
+const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const phoneOk = (v) => v.replace(/\D/g, "").length >= 10;
+
+const TOWNS = [
+  "Georgina",
+  "East Gwillimbury",
+  "Newmarket",
+  "Aurora",
+  "Stouffville",
+  "Uxbridge",
+  "Scugog",
+  "None",
+];
 
 /* ───────── Google-style review slider (kept) ───────── */
 function ReviewSlider() {
@@ -56,7 +71,7 @@ function ReviewSlider() {
   );
 }
 
-/* ───────── Little inline icons ───────── */
+/* ───────── Little inline icons (used in UI labels/headers) ───────── */
 const ShieldIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" />
@@ -80,127 +95,7 @@ const LockIcon = (props) => (
   </svg>
 );
 
-/* ───────── Registration (Match) Card ───────── */
-const WHATSAPP_NUMBER_E164 = "16476684646";
-const WHATSAPP = `https://wa.me/${WHATSAPP_NUMBER_E164}?text=${encodeURIComponent(
-  "Hi! I’d like to unlock my buyer match for the NorthSide GTA."
-)}`;
-
-function RegistrationCard() {
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
-  const [err, setErr] = useState("");
-
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    if (!emailValid) {
-      setErr("Please enter a valid email address.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const payload = new FormData();
-      payload.append("email", email);
-      payload.append("source", "Buyers Registration");
-      // carry UTM if present
-      const params = new URLSearchParams(window.location.search);
-      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach((k) => {
-        const v = params.get(k);
-        if (v) payload.append(k, v);
-      });
-      const res = await fetch("https://formspree.io/f/xanbzajw", {
-        method: "POST",
-        body: payload,
-        headers: { Accept: "application/json" },
-      });
-      if (!res.ok) throw new Error("Network error");
-      setDone(true);
-    } catch (e2) {
-      setErr("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (done) {
-    return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
-        <div className="flex items-center gap-2 text-emerald-800">
-          <CheckIcon className="h-5 w-5" />
-          <h3 className="text-xl font-bold">Access unlocked — check your inbox</h3>
-        </div>
-        <p className="mt-2 text-emerald-900/90">
-          You’re in. We’ll send your NorthSide GTA Match setup details and first steps to <span className="font-semibold">{email}</span>.
-        </p>
-        <a
-          href={WHATSAPP}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center mt-4 px-4 py-2 rounded-lg bg-emerald-700 text-white font-semibold hover:bg-emerald-800 transition"
-        >
-          Chat on WhatsApp — fastest reply
-        </a>
-        <p className="mt-2 text-xs text-emerald-900/80">No spam. Unsubscribe anytime.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="rounded-2xl border shadow-sm p-6 md:p-7 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg,#f7fff1 0%,#ffffff 55%)" }}
-    >
-      {/* subtle corner glow */}
-      <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-emerald-300/20 blur-3xl" />
-      <div className="flex items-center gap-2 text-emerald-800 mb-2">
-        <ShieldIcon className="h-5 w-5" />
-        <span className="uppercase tracking-wider text-[11px] font-semibold">
-          Exclusive Buyer Access
-        </span>
-      </div>
-
-      <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
-        Unlock Your Secret Weapon for Buying in the NorthSide GTA
-      </h3>
-      <p className="mt-1 text-slate-700">
-        Register to access your personalized town match, insider strategies, and the guidance that puts you ahead of other buyers.
-      </p>
-
-      <form onSubmit={onSubmit} className="mt-4 grid sm:grid-cols-[1fr_auto] gap-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          placeholder="you@example.com"
-          className="w-full rounded-lg border border-emerald-200 focus:ring-emerald-500 focus:border-emerald-500 px-3 py-2"
-        />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-lg bg-emerald-700 text-white font-semibold px-4 py-2 hover:bg-emerald-800 disabled:opacity-60"
-        >
-          {submitting ? "Registering..." : "Start Here"}
-        </button>
-      </form>
-      {err && <p className="mt-2 text-sm text-rose-600">{err}</p>}
-
-      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-        <span>★★★★★ Google reviews</span>
-        <span>•</span>
-        <span>AI-assisted town matching & VIP listing alerts</span>
-        <span>•</span>
-        <span>No spam. Unsubscribe anytime.</span>
-      </div>
-    </div>
-  );
-}
-
-/* ───────── Comparison: Buying on Your Own vs With Finally Home Agents ───────── */
+/* ───────── Comparison: Buying on Your Own vs With Finally Home Agents (kept) ───────── */
 function ComparisonGrid() {
   const solo = [
     "Guesswork on where to live",
@@ -270,6 +165,523 @@ function ComparisonGrid() {
   );
 }
 
+/* ───────── Detailed Buyer Sign-Up form (map background, more fields) ───────── */
+function BuyerSignupForm() {
+  const [form, setForm] = useState({
+    // Contact
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    // Buyer basics
+    budgetMin: "",
+    budgetMax: "",
+    bedrooms: "",
+    bathrooms: "",
+    propertyType: "",
+    timeline: "",
+    towns: [],
+    mustHaves: "",
+    niceToHaves: "",
+    // Confirmations
+    notUnderContract: false,
+    consent: false,
+    // honeypot
+    nickname: "",
+  });
+
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({ email: "", phone: "" });
+  const errorRef = useRef(null);
+
+  const utm = useMemo(() => new URLSearchParams(window.location.search), []);
+  const device = useMemo(() => (/Mobi/i.test(navigator.userAgent) ? "mobile" : "desktop"), []);
+
+  // Formspree endpoint (use env var if set, fallback to your existing buyers form)
+  const formspreeId = useMemo(() => {
+    const fromEnv = (process.env.REACT_APP_FORMSPREE_BUYERS_ID || "").trim();
+    return fromEnv || "xanbzajw";
+  }, []);
+
+  const requiredChecks = {
+    firstName: !!form.firstName.trim(),
+    lastName: !!form.lastName.trim(),
+    email: !!form.email.trim() && emailOk(form.email),
+    phone: !!form.phone.trim() && phoneOk(form.phone),
+    timeline: !!form.timeline,
+    notUnderContract: !!form.notUnderContract,
+    consent: !!form.consent,
+  };
+  const requiredOk = Object.values(requiredChecks).every(Boolean);
+
+  const progressPct = Math.max(
+    6,
+    Math.round(
+      (Object.values(requiredChecks).filter(Boolean).length /
+        Object.keys(requiredChecks).length) * 100
+    )
+  );
+
+  function update(e) {
+    const { name, value, type, checked } = e.target;
+    setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
+
+    if (name === "email") {
+      setFieldErrors((fe) => ({ ...fe, email: value && !emailOk(value) ? "Enter a valid email" : "" }));
+    }
+    if (name === "phone") {
+      setFieldErrors((fe) => ({ ...fe, phone: value && !phoneOk(value) ? "Enter a 10-digit phone number" : "" }));
+    }
+  }
+
+  function toggleTown(town) {
+    setForm((f) => {
+      const exists = f.towns.includes(town);
+      let next = exists ? f.towns.filter((t) => t !== town) : [...f.towns, town];
+      if (next.length > 7) next = next.slice(0, 7);
+      if (town === "None" && !exists) next = ["None"];
+      if (town !== "None" && next.includes("None")) next = next.filter((t) => t !== "None");
+      return { ...f, towns: next };
+    });
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setError("");
+
+    const emailErr = form.email ? (emailOk(form.email) ? "" : "Enter a valid email") : "Email is required";
+    const phoneErr = form.phone ? (phoneOk(form.phone) ? "" : "Enter a 10-digit phone number") : "Phone is required";
+    setFieldErrors({ email: emailErr, phone: phoneErr });
+
+    if (!formspreeId) {
+      setError("Formspree Form ID is missing. Add REACT_APP_FORMSPREE_BUYERS_ID to your .env file.");
+      setTimeout(() => errorRef.current?.focus(), 0);
+      return;
+    }
+    if (!requiredOk) {
+      setError("Please complete all required fields and fix the highlighted errors.");
+      setTimeout(() => errorRef.current?.focus(), 0);
+      return;
+    }
+    if (form.nickname) return; // honeypot
+
+    try {
+      setSending(true);
+      const endpoint = `https://formspree.io/f/${formspreeId}`;
+
+      const payload = {
+        // contact
+        first_name: form.firstName.trim(),
+        last_name: form.lastName.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        // buyer basics
+        budget_min: form.budgetMin,
+        budget_max: form.budgetMax,
+        desired_bedrooms: form.bedrooms,
+        desired_bathrooms: form.bathrooms,
+        property_type: form.propertyType,
+        timeline: form.timeline,
+        towns: form.towns.join(", "),
+        must_haves: form.mustHaves,
+        nice_to_haves: form.niceToHaves,
+        not_under_contract: form.notUnderContract ? "Yes" : "No",
+        consent: form.consent ? "Yes" : "No",
+        // tracking
+        utm_source: utm.get("utm_source") || "",
+        utm_campaign: utm.get("utm_campaign") || "",
+        device,
+        source_url: window.location.href,
+        submitted_at: new Date().toLocaleString(),
+        _subject: `New Buyer Sign-Up — ${form.firstName} ${form.lastName}`,
+        _replyto: form.email || undefined,
+      };
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        const msg = body?.errors?.[0]?.message || body?.message || `Request failed (${res.status})`;
+        throw new Error(msg);
+      }
+
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: "buyer_signup_submit" });
+        if (window.fbq) window.fbq("trackCustom", "BuyerSignupSubmit");
+      } catch {}
+
+      setDone(true);
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong sending your request. Please try again.");
+      setTimeout(() => errorRef.current?.focus(), 0);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
+        <div className="flex items-center gap-2 text-emerald-800">
+          <CheckIcon className="h-5 w-5" />
+          <h3 className="text-xl font-bold">You’re in — we’ll reach out within 24 hours</h3>
+        </div>
+        <p className="mt-2 text-emerald-900/90">
+          Thanks! A NorthSide GTA specialist will contact you via email or phone within 24 hours to kick off your personalized town match and search plan.
+        </p>
+        <p className="mt-2 text-xs text-emerald-900/80">No spam. You can unsubscribe anytime.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      id="buyers-registration"
+      className="relative rounded-2xl border shadow-sm p-6 md:p-7 overflow-hidden"
+      style={{
+        backgroundImage: "url('/Images/northsidegta-map-bg.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* optional overlay if your JPG isn’t already translucent */}
+      <div className="absolute inset-0 bg-white/0" aria-hidden="true" />
+
+      <div className="relative z-10">
+        {/* header strip */}
+        <div className="flex items-center gap-2 text-emerald-800 mb-2">
+          <ShieldIcon className="h-5 w-5" />
+          <span className="uppercase tracking-wider text-[11px] font-semibold">
+            Exclusive Buyer Access
+          </span>
+        </div>
+        <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+          Unlock Your Secret Weapon for Buying in the NorthSide GTA
+        </h3>
+        <p className="mt-1 text-slate-800">
+          Tell us a bit more and we’ll tailor your NorthSide GTA Match, strategy, and tours.
+        </p>
+
+        {/* pills */}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {[
+            { icon: "⏱️", text: "Takes ~1 minute" },
+            { icon: "✅", text: "No spam, no obligation" },
+            { icon: "🔒", text: "Secure & private" },
+            { icon: "📍", text: "Local market experts" },
+          ].map((p) => (
+            <span
+              key={p.text}
+              className="inline-flex items-center gap-1 rounded-full bg-white/90 text-emerald-800 border border-emerald-200 px-3 py-1 text-[12px] font-semibold"
+            >
+              <span>{p.icon}</span> {p.text}
+            </span>
+          ))}
+        </div>
+
+        {/* progress */}
+        <div className="mt-4">
+          <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-emerald-600 transition-all"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <div className="mt-1 text-right text-[11px] text-emerald-700 font-medium">
+            {progressPct}% complete
+          </div>
+        </div>
+
+        {/* error */}
+        {error && (
+          <div
+            ref={errorRef}
+            tabIndex={-1}
+            role="alert"
+            aria-live="assertive"
+            className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+          >
+            {error}
+          </div>
+        )}
+
+        {/* form */}
+        <form onSubmit={onSubmit} className="mt-4 grid grid-cols-1 gap-4">
+          {/* Contact */}
+          <div className="grid md:grid-cols-2 gap-3">
+            <label className="block">
+              <span className="text-sm font-medium">First Name <span className="text-red-500">*</span></span>
+              <input
+                name="firstName"
+                value={form.firstName}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                autoComplete="given-name"
+                required
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Last Name <span className="text-red-500">*</span></span>
+              <input
+                name="lastName"
+                value={form.lastName}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                autoComplete="family-name"
+                required
+              />
+            </label>
+          </div>
+          <div className="grid md:grid-cols-2 gap-3">
+            <label className="block">
+              <span className="text-sm font-medium">Email <span className="text-red-500">*</span></span>
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={update}
+                className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
+                  fieldErrors.email ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
+                } bg-white/95`}
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+              {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Phone <span className="text-red-500">*</span></span>
+              <input
+                name="phone"
+                value={form.phone}
+                onChange={update}
+                className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
+                  fieldErrors.phone ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
+                } bg-white/95`}
+                placeholder="(###) ###-####"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+              />
+              {fieldErrors.phone && <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>}
+            </label>
+          </div>
+
+          {/* Budget + timeline */}
+          <div className="grid md:grid-cols-[1fr_1fr] gap-3">
+            <label className="block">
+              <span className="text-sm font-medium">Budget (min)</span>
+              <input
+                name="budgetMin"
+                value={form.budgetMin}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                placeholder="$800,000"
+                inputMode="decimal"
+                autoComplete="off"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Budget (max)</span>
+              <input
+                name="budgetMax"
+                value={form.budgetMax}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                placeholder="$1,200,000"
+                inputMode="decimal"
+                autoComplete="off"
+              />
+            </label>
+          </div>
+
+          {/* Bedrooms / Bathrooms / Property type */}
+          <div className="grid md:grid-cols-3 gap-3">
+            <label className="block">
+              <span className="text-sm font-medium">Bedrooms (desired)</span>
+              <select
+                name="bedrooms"
+                value={form.bedrooms}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+              >
+                <option value="">Select…</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+              </select>
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Bathrooms (desired)</span>
+              <select
+                name="bathrooms"
+                value={form.bathrooms}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+              >
+                <option value="">Select…</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+              </select>
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Property type</span>
+              <select
+                name="propertyType"
+                value={form.propertyType}
+                onChange={update}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+              >
+                <option value="">Any</option>
+                <option>Detached</option>
+                <option>Semi-Detached</option>
+                <option>Townhouse</option>
+                <option>Condo</option>
+                <option>Rural</option>
+              </select>
+            </label>
+          </div>
+
+          {/* Timeline */}
+          <div>
+            <span className="block text-sm font-medium">When are you hoping to buy? <span className="text-red-500">*</span></span>
+            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-sm">
+              {["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"].map((label) => (
+                <label
+                  key={label}
+                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 whitespace-normal ${
+                    form.timeline === label ? "ring-2 ring-emerald-600 bg-white/95" : "bg-white/90 hover:bg-white"
+                  }`}
+                >
+                  <input type="radio" name="timeline" value={label} checked={form.timeline === label} onChange={update} />
+                  <span className="leading-snug">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Towns */}
+          <div>
+            <label className="block text-sm font-medium">Which NorthSide GTA towns interest you most?</label>
+            <p className="text-xs text-gray-600 mt-1">Select up to 7.</p>
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+              {TOWNS.map((town) => {
+                const checked = form.towns.includes(town);
+                return (
+                  <label
+                    key={town}
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${
+                      checked ? "ring-2 ring-emerald-600 bg-white/95" : "bg-white/90 hover:bg-white"
+                    }`}
+                  >
+                    <input type="checkbox" checked={checked} onChange={() => toggleTown(town)} />
+                    <span>{town}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div className="grid md:grid-cols-2 gap-3">
+            <label className="block">
+              <span className="text-sm font-medium">Must-haves <span className="text-gray-400">(optional)</span></span>
+              <textarea
+                name="mustHaves"
+                value={form.mustHaves}
+                onChange={update}
+                rows={3}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                placeholder="E.g., garage, yard, quiet street, near GO Station…"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium">Nice-to-haves <span className="text-gray-400">(optional)</span></span>
+              <textarea
+                name="niceToHaves"
+                value={form.niceToHaves}
+                onChange={update}
+                rows={3}
+                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                placeholder="E.g., finished basement, newer roof, south-facing yard…"
+              />
+            </label>
+          </div>
+
+          {/* confirmations */}
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="notUnderContract"
+              checked={form.notUnderContract}
+              onChange={update}
+              className="mt-1"
+              required
+            />
+            <span>
+              I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
+            </span>
+          </label>
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="consent"
+              checked={form.consent}
+              onChange={update}
+              className="mt-1"
+              required
+            />
+            <span>
+              I agree to be contacted by Finally Home Agents about my buyer match and search plan.
+              <span className="block text-gray-500 text-xs">You can unsubscribe anytime. We respect your privacy.</span>
+            </span>
+          </label>
+
+          {/* submit (gradient green) */}
+          <button
+            type="submit"
+            disabled={!requiredOk || sending}
+            className="mt-1 inline-flex items-center justify-center px-5 py-3 rounded-lg text-white font-semibold
+                       bg-gradient-to-tr from-[#31610d] to-[#23470a]
+                       hover:from-[#2b530c] hover:to-[#1c3a08]
+                       disabled:opacity-50"
+          >
+            {sending ? "Submitting…" : "Start Here"}
+          </button>
+
+          <p className="text-[11px] text-slate-700 mt-1">
+            No spam. Unsubscribe anytime.
+          </p>
+
+          {/* Honeypot */}
+          <input
+            name="nickname"
+            value={form.nickname}
+            onChange={update}
+            className="hidden"
+            tabIndex="-1"
+            autoComplete="off"
+          />
+        </form>
+
+        {/* micro line */}
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-700">
+          <span>★★★★★ Google reviews</span>
+          <span>•</span>
+          <span>AI-assisted town matching & VIP listing alerts</span>
+          <span>•</span>
+          <span>Local team. Personal guidance.</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── Page ───────── */
 export default function BuyersPage() {
   return (
@@ -296,24 +708,25 @@ export default function BuyersPage() {
             </p>
           </div>
 
+          {/* Detailed Buyer Sign-Up (map background + gradient button) */}
           <div className="mt-6">
-            <RegistrationCard />
+            <BuyerSignupForm />
           </div>
         </section>
 
-        {/* COMPARISON: shows what you unlock by registering */}
+        {/* COMPARISON: shows what you unlock by registering (kept) */}
         <section className="mx-auto max-w-6xl mt-10">
           <ComparisonGrid />
         </section>
 
-        {/* Micro social proof line */}
+        {/* Micro social proof line (kept) */}
         <section className="mx-auto max-w-6xl mt-6">
           <p className="text-center text-sm text-gray-600">
             Join NorthSide GTA buyers who found the right town — and won the right home — with Finally Home Agents.
           </p>
         </section>
 
-        {/* Reviews */}
+        {/* Reviews (kept) */}
         <section className="mx-auto max-w-3xl py-12">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
             What Our Clients Are Saying
@@ -321,7 +734,7 @@ export default function BuyersPage() {
           <ReviewSlider />
         </section>
 
-        {/* Final CTA */}
+        {/* Final CTA (kept) */}
         <section className="mx-auto max-w-6xl mb-16">
           <div
             className="rounded-2xl px-6 py-10 text-center text-white shadow-lg"
@@ -336,14 +749,15 @@ export default function BuyersPage() {
                 href="#buyers-registration"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  const el = document.getElementById("buyers-registration");
+                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
                 className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-white text-emerald-700 font-semibold hover:bg-gray-100"
               >
                 Start Here
               </a>
               <a
-                href={`https://wa.me/${WHATSAPP_NUMBER_E164}?text=${encodeURIComponent(
+                href={`https://wa.me/16476684646?text=${encodeURIComponent(
                   "Hi! I’d like to unlock my buyer match for the NorthSide GTA."
                 )}`}
                 target="_blank"
