@@ -1,5 +1,6 @@
 // src/VipPage.js
 import { useState } from 'react';
+import { Helmet } from "react-helmet-async";
 import Navigation from './Navigation';   // ← added
 
 export default function VipPage() {
@@ -41,6 +42,29 @@ export default function VipPage() {
     return (
       <>
         <Navigation />
+
+      import { Helmet } from "react-helmet-async";
+
+...
+
+<Helmet>
+  <title>VIP Listing Alerts | NorthSide GTA Buyer Advantage</title>
+  <meta
+    name="description"
+    content="Get VIP alerts for NorthSide GTA listings and off-market opportunities across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <meta
+    name="keywords"
+    content="VIP listing alerts NorthSide GTA, off-market homes, buyer alerts, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/vip" />
+
+  <meta property="og:title" content="VIP Listing Alerts | NorthSide GTA" />
+  <meta property="og:description" content="Be first to know about new and off-market opportunities." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.northsidegta.ca/vip" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
         <div
           className="min-h-screen bg-cover bg-center flex items-center justify-center px-4"
           style={{ backgroundImage: `url('/vip-bg.png')` }}

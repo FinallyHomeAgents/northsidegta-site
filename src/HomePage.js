@@ -1,5 +1,6 @@
 // src/HomePage.js
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
@@ -93,7 +94,55 @@ export default function HomePage() {
     <div className="bg-white text-gray-900 min-h-screen">
       {/* Navigation */}
       <Navigation />
+<Helmet>
+  <title>NorthSide GTA | Real Estate Agents for Buyers & Sellers</title>
+  <meta
+    name="description"
+    content="Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <meta
+    name="keywords"
+    content="NorthSide GTA real estate, homes for sale North GTA, sell my home, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, Finally Home Agents"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/" />
 
+  {/* Open Graph */}
+  <meta property="og:title" content="NorthSide GTA | Real Estate Agents for Buyers & Sellers" />
+  <meta property="og:description" content="Local team helping you buy and sell in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.northsidegta.ca/" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+
+  {/* JSON-LD: Organization + Website */}
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      name: "Finally Home Agents",
+      url: "https://www.northsidegta.ca/",
+      areaServed: [
+        "Georgina","East Gwillimbury","Newmarket","Aurora","Whitchurch-Stouffville","Uxbridge","Scugog"
+      ],
+      sameAs: [
+        "https://instagram.com/finallyhomeagents",
+        "https://facebook.com/finallyhomeagents"
+      ]
+    })}
+  </script>
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "NorthSide GTA",
+      url: "https://www.northsidegta.ca/",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://www.northsidegta.ca/search?q={query}",
+        "query-input": "required name=query"
+      }
+    })}
+  </script>
+</Helmet>
       {/* Map-first Hero */}
       <MapHero />
 

@@ -1,5 +1,6 @@
 // src/SignWithUsPage.js
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import Button     from "./components/ui/Button";
 import Card       from "./components/ui/Card";
@@ -19,6 +20,25 @@ export default function SignWithUsPage() {
     <>
       <PageBackground />
       <Navigation />
+
+      <Helmet>
+  <title>Sell With Finally Home Agents | NorthSide GTA Listing Experts</title>
+  <meta
+    name="description"
+    content="List with confidence in the NorthSide GTA. Strategy, staging, premium media and negotiation that delivers top results in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <meta
+    name="keywords"
+    content="list my home NorthSide GTA, sell house Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, real estate listing agent"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/signwithus" />
+
+  <meta property="og:title" content="Sell With Finally Home Agents | NorthSide GTA" />
+  <meta property="og:description" content="Strategy-first listing team with premium media and strong negotiation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.northsidegta.ca/signwithus" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
 
       <div className="px-4 md:px-20 py-16 space-y-12">
 
