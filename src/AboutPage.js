@@ -1,6 +1,7 @@
 // src/AboutPage.js
 import React from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import { Globe, TrendingUp, Users, Quote } from "lucide-react";   //  npm i lucide-react
 
@@ -9,6 +10,24 @@ export default function AboutPage() {
     <div className="bg-white text-gray-900">
       {/* ───────── Navigation ───────── */}
       <Navigation />
+      <Helmet>
+  <title>About Finally Home Agents | Local NorthSide GTA Realtors®</title>
+  <meta
+    name="description"
+    content="We’re a local, relationship-first real estate team serving the NorthSide GTA—Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <meta
+    name="keywords"
+    content="about Finally Home Agents, NorthSide GTA realtors, local real estate team, Newmarket, Aurora, Uxbridge"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/about" />
+
+  <meta property="og:title" content="About Finally Home Agents | NorthSide GTA" />
+  <meta property="og:description" content="Local team. Personal guidance. NorthSide GTA focus." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content="https://www.northsidegta.ca/about" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
 
       {/* ───────── Hero Banner ───────── */}
       <section className="relative h-[60vh] md:h-[70vh] overflow-hidden">

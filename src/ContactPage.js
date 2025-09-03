@@ -1,5 +1,6 @@
 // src/ContactPage.js
 import React, { useEffect, useState } from 'react';
+import { Helmet } from "react-helmet-async";
 import Navigation from './Navigation';
 import Button from './components/ui/Button';
 import Card from './components/ui/Card';
@@ -82,6 +83,24 @@ export default function ContactPage() {
     <>
       <PageBackground />
       <Navigation />
+      <Helmet>
+  <title>Contact Finally Home Agents | NorthSide GTA Realtors®</title>
+  <meta
+    name="description"
+    content="Questions about buying or selling in the NorthSide GTA? Contact Finally Home Agents—local experts for Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <meta
+    name="keywords"
+    content="contact realtor NorthSide GTA, real estate agent contact, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/contact" />
+
+  <meta property="og:title" content="Contact Finally Home Agents | NorthSide GTA" />
+  <meta property="og:description" content="Talk to a local NorthSide GTA agent today." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.northsidegta.ca/contact" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
 
       <div className="space-y-14 sm:space-y-16 px-4 md:px-20 py-8 sm:py-12">
 

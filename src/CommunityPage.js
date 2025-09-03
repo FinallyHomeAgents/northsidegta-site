@@ -1,6 +1,7 @@
 // src/CommunityPage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
 import Navigation from './Navigation';
 import Card from './components/ui/Card';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -26,6 +27,25 @@ export default function CommunityPage() {
     <>
       <PageBackground />
       <Navigation />
+
+      <Helmet>
+  <title>NorthSide GTA Communities | Georgina, EG, Newmarket, Aurora, Stouffville, Uxbridge & Scugog</title>
+  <meta
+    name="description"
+    content="Explore NorthSide GTA communities with local guides: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog—schools, commute, trails and lifestyle."
+  />
+  <meta
+    name="keywords"
+    content="NorthSide GTA communities, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, neighborhoods, schools, commute, trails"
+  />
+  <link rel="canonical" href="https://www.northsidegta.ca/community" />
+
+  <meta property="og:title" content="NorthSide GTA Communities | Local Guides & Lifestyle" />
+  <meta property="og:description" content="See which NorthSide GTA town fits you best—schools, commute & lifestyle breakdowns." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.northsidegta.ca/community" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
 
       <main className="px-4 md:px-20 py-16 flex flex-col items-center text-center space-y-16">
 
