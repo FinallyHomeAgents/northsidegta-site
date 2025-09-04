@@ -111,10 +111,16 @@ export default function HomePage() {
   <meta property="og:description" content="Local team helping you buy and sell in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.northsidegta.ca/" />
-  <meta property="og:image" content="/Images/og-home.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog" />
+  <meta property="og:image" content="https://www.northsidegta.ca/Images/og-home.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog" />
+
+  {/* Twitter Cards */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="NorthSide GTA | Real Estate Agents for Buyers & Sellers" />
+  <meta name="twitter:description" content="Find your perfect home or sell for more in the NorthSide GTA with expert agents." />
+  <meta name="twitter:image" content="https://www.northsidegta.ca/Images/og-home.jpg" />
 
   {/* JSON-LD: Organization + Website */}
   <script type="application/ld+json">
@@ -124,7 +130,13 @@ export default function HomePage() {
       name: "Finally Home Agents",
       url: "https://www.northsidegta.ca/",
       areaServed: [
-        "Georgina","East Gwillimbury","Newmarket","Aurora","Whitchurch-Stouffville","Uxbridge","Scugog"
+        "Georgina",
+        "East Gwillimbury",
+        "Newmarket",
+        "Aurora",
+        "Whitchurch-Stouffville",
+        "Uxbridge",
+        "Scugog"
       ],
       sameAs: [
         "https://instagram.com/finallyhomeagents",
@@ -146,6 +158,7 @@ export default function HomePage() {
     })}
   </script>
 </Helmet>
+
       {/* Map-first Hero */}
       <MapHero />
 
