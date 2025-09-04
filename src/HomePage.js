@@ -111,7 +111,10 @@ export default function HomePage() {
   <meta property="og:description" content="Local team helping you buy and sell in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.northsidegta.ca/" />
-  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+  <meta property="og:image" content="/Images/og-home.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog" />
 
   {/* JSON-LD: Organization + Website */}
   <script type="application/ld+json">
