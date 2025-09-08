@@ -343,17 +343,21 @@ function BuyerSignupForm() {
   }
 
   return (
-    <div
-      id="buyers-registration"
-      className="relative rounded-2xl border shadow-sm p-6 md:p-7 overflow-hidden"
-      style={{
-        backgroundImage: "url('/Images/northsidegta-map-bg.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+   <div
+  id="buyers-registration"
+  className="relative rounded-2xl border shadow-sm p-6 md:p-7 overflow-hidden"
+  style={{
+    backgroundImage: `
+      linear-gradient(135deg, rgba(49, 97, 13, 0.12) 0%, rgba(35, 71, 10, 0.12) 100%),
+      url('/Images/northsidegta-map-bg.jpg')
+    `,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+
       {/* optional overlay if your JPG isn’t already translucent */}
-      <div className="absolute inset-0 bg-white/0" aria-hidden="true" />
+      
 
       <div className="relative z-10">
         {/* header strip */}
@@ -764,7 +768,7 @@ export default function BuyersPage() {
           <div className="mt-6">
             <BuyerSignupForm />
           </div>
-        </section>
+        </section> 
 
         {/* COMPARISON: shows what you unlock by registering (kept) */}
         <section className="mx-auto max-w-6xl mt-10">
@@ -796,29 +800,7 @@ export default function BuyersPage() {
             <p className="text-lg md:text-xl opacity-90">
               Register now to unlock your Match and move forward with confidence.
             </p>
-            <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
-              <a
-                href="#buyers-registration"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const el = document.getElementById("buyers-registration");
-                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-white text-emerald-700 font-semibold hover:bg-gray-100"
-              >
-                Start Here
-              </a>
-              <a
-                href={`https://wa.me/16476684646?text=${encodeURIComponent(
-                  "Hi! I’d like to unlock my buyer match for the NorthSide GTA."
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-5 py-3 rounded-lg border border-white/30 font-semibold hover:bg-white/10"
-              >
-                WhatsApp — Fastest Reply
-              </a>
-            </div>
+           
           </div>
         </section>
       </main>

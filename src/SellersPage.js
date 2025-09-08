@@ -291,7 +291,8 @@ function SellerLeadCapture() {
       <div
         className="rounded-2xl border border-emerald-200 shadow-sm overflow-hidden relative"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('${BG_IMAGE}')`,
+          backgroundImage: `linear-gradient(rgba(49, 97, 13, 0.65), rgba(35, 71, 10, 0.55)), url('${BG_IMAGE}')`,
+
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
