@@ -1,7 +1,7 @@
 // src/App.js
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import CuratedPage from "./CuratedPage";
 import HomePage         from "./HomePage";
 import AboutPage        from "./AboutPage";
 import BuyersPage       from "./BuyersPage";
@@ -46,6 +46,7 @@ function App() {
       <Routes>
         {/* Core pages */}
         <Route path="/"             element={<HomePage />} />
+        <Route path="/collections/:slug" element={<CuratedPage />} />
         <Route path="/about"        element={<AboutPage />} />
         <Route path="/buyers"       element={<BuyersPage />} />
         <Route path="/sellers"      element={<SellersPage />} />
