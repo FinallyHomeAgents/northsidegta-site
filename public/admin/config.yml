@@ -5,23 +5,22 @@ backend:
   base_url: https://nsgta-decap-oauth.vercel.app
   auth_endpoint: /auth
 
-media_folder: "public/collections"   # where uploaded hero images are saved in repo
-public_folder: "/collections"        # how the images are referenced on the site
+media_folder: "public/collections"
+public_folder: "/collections"
 
-publish_mode: editorial_workflow     # lets you save drafts or publish immediately
+publish_mode: editorial_workflow
 
 collections:
   - name: "collections"
     label: "Curated Pages"
-    label_singular: "Curated Page"
     folder: "data/collections"
     create: true
     slug: "{{slug}}"
     format: "json"
     extension: "json"
     fields:
-      - { label: "Title", name: "title", widget: "string", hint: "e.g., Top Homes in Newmarket Under $800K" }
-      - { label: "Slug", name: "slug", widget: "string", hint: "newmarket-under-800k" }
-      - { label: "Intro", name: "intro", widget: "text", required: false, hint: "1–2 friendly lines" }
-      - { label: "Hero Image", name: "heroImage", widget: "image", hint: "1200x630, <300KB" }
-      - { label: "REALM Link", name: "realmLink", widget: "string", hint: "Paste your REALM shared link" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Intro", name: "intro", widget: "text", required: false }
+      - { label: "Hero Image", name: "heroImage", widget: "image" }
+      - { label: "REALM Link", name: "realmLink", widget: "string" }
