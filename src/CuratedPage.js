@@ -8,7 +8,7 @@ function useCurated(slug) {
   const [err, setErr] = React.useState(null);
   React.useEffect(() => {
     let ignore = false;
-    fetch(`/data/collections/${slug}.json`, { cache: "no-store" })
+    fetch(`/collections/${slug}.json`, { cache: "no-store" })
       .then(r => {
         if (!r.ok) throw new Error(`Missing JSON for ${slug}`);
         return r.json();
