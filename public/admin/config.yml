@@ -5,19 +5,38 @@ backend:
   base_url: https://nsgta-decap-oauth.vercel.app
   auth_endpoint: /auth
 
-media_folder: "public/collections"
-public_folder: "/collections"
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+publish_mode: editorial_workflow
+
+backend:
+  name: github
+  repo: FinallyHomeAgents/northsidegta-site
+  branch: main
+  base_url: https://nsgta-decap-oauth.vercel.app
+  auth_endpoint: /auth
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
 publish_mode: editorial_workflow
 
 collections:
   - name: "collections"
     label: "Curated Pages"
-    folder: "data/collections"
+    folder: "public/collections"
     create: true
     slug: "{{slug}}"
     format: "json"
     extension: "json"
+    
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Intro", name: "intro", widget: "text", required: false }
+      - { label: "Hero Image", name: "heroImage", widget: "image" }
+      - { label: "REALM Link", name: "realmLink", widget: "string" }
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Slug", name: "slug", widget: "string" }
