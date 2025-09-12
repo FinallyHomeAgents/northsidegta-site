@@ -1,16 +1,18 @@
 {
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/admin", "dest": "/admin/index.html" },
-    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
-    { "src": "/robots.txt", "dest": "/robots.txt" },
-    { "src": "/Images/(.*)", "dest": "/Images/$1" },
-    { "src": "/uploads/(.*)", "dest": "/uploads/$1" },
-    { "src": "/data/(.*)", "dest": "/data/$1" },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
 
-    { "handle": "filesystem" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/index.html", "destination": "/admin/index.html" },
+    { "source": "/admin/config.yml", "destination": "/admin/config.yml" },
 
-    { "src": "/homeanalysis", "dest": "/" },
-    { "src": "/.*", "dest": "/" }
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+
+    { "source": "/data/(.*)", "destination": "/data/$1" },
+    { "source": "/uploads/(.*)", "destination": "/uploads/$1" },
+
+    { "source": "/homeanalysis", "destination": "/" },
+    { "source": "/(.*)", "destination": "/" }
   ]
 }

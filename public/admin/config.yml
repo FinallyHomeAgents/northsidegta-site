@@ -1,28 +1,23 @@
 backend:
   name: github
-  repo: FinallyHomeAgents/northsidegta-site
+  repo: FinallyHomeAgents/northsidegta-site   # <— your repo
   branch: main
+  # NOTE: For production login you’ll add an OAuth proxy later.
+  # The CMS will load now; auth setup is the next step.
 
-# Create PRs for edits (avoids protected-branch issues)
-publish_mode: editorial_workflow
-
-# Where images get uploaded (must exist in repo)
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
   - name: "collections"
-    label: "Curated Listing Pages"
-    label_singular: "Curated Page"
+    label: "Curated Collections"
     folder: "public/data/collections"
     create: true
-    slug: "{{slug}}"
-    format: "json"
     extension: "json"
+    format: "json"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string", hint: "URL part, e.g. 'aurora-starters-800k'" }
-      - { label: "Intro", name: "intro", widget: "text", required: false }
-      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
-      - { label: "Realm Link", name: "realmLink", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime", required: false }
+      - { name: "title", label: "Page Title" }
+      - { name: "slug", label: "Slug (URL part)", pattern: ["^[a-z0-9-]+$", "Use lowercase and dashes only"] }
+      - { name: "intro", label: "Intro (optional)", required: false }
+      - { name: "realmLink", label: "Realm Link (the private URL)" }
+      - { name: "heroImage", label: "Hero Image", widget: "image" }
