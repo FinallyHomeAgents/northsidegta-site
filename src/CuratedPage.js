@@ -1,18 +1,16 @@
 // src/CuratedPage.js
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import LeadForm from "./components/LeadForm";
 
 function useCurated(slug) {
   const [page, setPage] = React.useState(null);
   const [err, setErr] = React.useState(null);
   React.useEffect(() => {
     let ignore = false;
-    fetch(`/collections/${slug}.json`, { cache: "no-store" })
-      .then(r => {
-        if (!r.ok) throw new Error(`Missing JSON for ${slug}`);
-        return r.json();
-      })
+    fetch(`/data/collections/${slug}.json`, { cache: "no-store" })
+      .then(r => { if (!r.ok) throw new Error("Missing JSON"); return r.json(); })
       .then(d => { if (!ignore) setPage(d); })
       .catch(e => { if (!ignore) setErr(e); });
     return () => { ignore = true; };
@@ -27,10 +25,8 @@ export default function CuratedPage() {
   if (err) return <main style={{maxWidth:960,margin:"40px auto"}}>Not found.</main>;
   if (!page) return <main style={{maxWidth:960,margin:"40px auto"}}>Loading…</main>;
 
-  const site = window.location.origin; // e.g. https://northsidegta.ca
-  const ogImage = page.heroImage?.startsWith("/")
-    ? `${site}${page.heroImage}`
-    : page.heroImage || "";
+  const site = typeof window !== "undefined" ? window.location.origin : "";
+  const ogImage = page.heroImage?.startsWith("/") ? `${site}${page.heroImage}` : page.heroImage || "";
 
   return (
     <>
@@ -38,33 +34,74 @@ export default function CuratedPage() {
         <title>{page.title} • NorthSide GTA</title>
         {ogImage && <meta property="og:image" content={ogImage} />}
         <meta name="description" content={page.intro || page.title} />
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
-      <main style={{ maxWidth: 960, margin: "40px auto", padding: "0 20px" }}>
-        <h1 style={{ marginBottom: 12 }}>{page.title}</h1>
-        {page.intro && <p style={{ fontSize: 18 }}>{page.intro}</p>}
+      {/* HERO */}
+      <section style={hero.wrap}>
+        <div style={{ ...hero.bg, backgroundImage: `url("${page.heroImage || "/og-home.jpg"}")` }} />
+        <div style={hero.overlay} />
+        <div style={hero.inner}>
+          <h1 style={hero.title}>{page.title}</h1>
+          {page.intro && <p style={hero.sub}>{page.intro}</p>}
+          <p style={hero.trust}>🔒 We’ll email you the private link. No spam.</p>
+        </div>
+      </section>
 
-        {page.heroImage && (
-          <div style={{ margin: "24px 0" }}>
-            <img
-              src={page.heroImage}
-              alt={page.title}
-              style={{ width: "100%", borderRadius: 12 }}
-            />
+      {/* CONTENT */}
+      <main style={content.wrap}>
+        <div style={content.left}>
+          {/* empty on purpose—single-focus page; if you want bullets, place them here */}
+        </div>
+        <div style={content.right}>
+          <LeadForm slug={page.slug} title={page.title} realmLink={page.realmLink} />
+          <div style={disclosure.box}>
+            <strong>Matthew Mulhall</strong> — Real Estate Agent — HomeLife Optimum Realty — Finally Home Agents
           </div>
-        )}
-
-        <div style={{ marginTop: 24 }}>
-          <Link to={`/lead/${page.slug}`}>
-            <button style={{ padding: "12px 18px", fontWeight: 600 }}>
-              Show me the listings
-            </button>
-          </Link>
-          <p style={{ fontSize: 12, marginTop: 8 }}>
-            You’ll enter your info and we’ll email you the listings link.
-          </p>
         </div>
       </main>
     </>
   );
+}
+
+const hero = {
+  wrap: { position: "relative", minHeight: 300, display: "grid", alignItems: "end" },
+  bg: {
+    position: "absolute", inset: 0, backgroundSize: "cover", backgroundPosition: "center",
+    filter: "saturate(.95)",
+  },
+  overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55))" },
+  inner: { position: "relative", maxWidth: 1080, margin: "0 auto", padding: "60px 20px" },
+  title: { color: "#fff", fontSize: 36, lineHeight: 1.1, margin: 0 },
+  sub: { color: "rgba(255,255,255,.92)", fontSize: 18, marginTop: 8, maxWidth: 720 },
+  trust: { color: "rgba(255,255,255,.85)", fontSize: 13, marginTop: 14 },
+};
+
+const content = {
+  wrap: {
+    maxWidth: 1080, margin: "24px auto 48px", padding: "0 20px",
+    display: "grid", gridTemplateColumns: "1fr 420px", gap: 28,
+  },
+  left: { minHeight: 1 },
+  right: { position: "relative" },
+};
+
+const disclosure = {
+  box: {
+    marginTop: 12,
+    fontSize: 12,
+    opacity: 0.8,
+    background: "#f7f7f7",
+    border: "1px solid #eee",
+    padding: "10px 12px",
+    borderRadius: 8,
+  },
+};
+
+// Mobile stack
+if (typeof window !== "undefined") {
+  const mq = window.matchMedia("(max-width: 860px)");
+  if (mq.matches) {
+    content.wrap.gridTemplateColumns = "1fr";
+  }
 }
