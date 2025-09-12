@@ -2,25 +2,27 @@ backend:
   name: github
   repo: FinallyHomeAgents/northsidegta-site
   branch: main
-  base_url: https://nsgta-decap-oauth.vercel.app
-  auth_endpoint: /auth
 
+# Create PRs for edits (avoids protected-branch issues)
+publish_mode: editorial_workflow
+
+# Where images get uploaded (must exist in repo)
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
-publish_mode: editorial_workflow
-
 collections:
   - name: "collections"
-    label: "Curated Pages"
-    folder: "data/collections"
+    label: "Curated Listing Pages"
+    label_singular: "Curated Page"
+    folder: "public/data/collections"
     create: true
     slug: "{{slug}}"
     format: "json"
     extension: "json"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL part, e.g. 'aurora-starters-800k'" }
       - { label: "Intro", name: "intro", widget: "text", required: false }
-      - { label: "Hero Image", name: "heroImage", widget: "image" }
-      - { label: "REALM Link", name: "realmLink", widget: "string" }
+      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
+      - { label: "Realm Link", name: "realmLink", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", required: false }
