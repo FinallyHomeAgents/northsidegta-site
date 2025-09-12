@@ -1,9 +1,7 @@
 backend:
   name: github
-  repo: FinallyHomeAgents/northsidegta-site   # <— your repo
+  repo: FinallyHomeAgents/northsidegta-site # your repo
   branch: main
-  # NOTE: For production login you’ll add an OAuth proxy later.
-  # The CMS will load now; auth setup is the next step.
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -17,7 +15,7 @@ collections:
     format: "json"
     fields:
       - { name: "title", label: "Page Title" }
-      - { name: "slug", label: "Slug (URL part)", pattern: ["^[a-z0-9-]+$", "Use lowercase and dashes only"] }
+      - { name: "slug", label: "Slug (URL part)", pattern: "^[a-z0-9-]+$", hint: "Use lowercase and dashes only" }
       - { name: "intro", label: "Intro (optional)", required: false }
       - { name: "realmLink", label: "Realm Link (the private URL)" }
       - { name: "heroImage", label: "Hero Image", widget: "image" }
