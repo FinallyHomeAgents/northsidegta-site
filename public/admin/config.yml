@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: FinallyHomeAgents/northsidegta-site # your repo
+  repo: FinallyHomeAgents/northsidegta-site
   branch: main
 
 media_folder: "public/uploads"
@@ -15,7 +15,10 @@ collections:
     format: "json"
     fields:
       - { name: "title", label: "Page Title" }
-      - { name: "slug", label: "Slug (URL part)", pattern: "^[a-z0-9-]+$", hint: "Use lowercase and dashes only" }
+      - name: "slug"
+        label: "Slug (URL part)"
+        widget: "string"
+        pattern: ["^[a-z0-9-]+$", "Use lowercase letters, numbers, and dashes only"]
       - { name: "intro", label: "Intro (optional)", required: false }
       - { name: "realmLink", label: "Realm Link (the private URL)" }
       - { name: "heroImage", label: "Hero Image", widget: "image" }
