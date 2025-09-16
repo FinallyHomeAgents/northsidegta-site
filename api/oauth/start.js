@@ -4,7 +4,10 @@ export default async function handler(req, res) {
   if (!GITHUB_CLIENT_ID) return res.status(500).send('Missing GITHUB_CLIENT_ID')
 
   const state = Math.random().toString(36).slice(2)
-  const redirectUri = `${getBaseUrl(req)}/api/oauth/callback`
+
+  // Force the exact callback URL you registered in GitHub
+  const redirectUri =
+    process.env.OAUTH_REDIRECT_URI || `${getBaseUrl(req)}/api/oauth/callback`
 
   const authUrl = new URL('https://github.com/login/oauth/authorize')
   authUrl.searchParams.set('client_id', GITHUB_CLIENT_ID)
