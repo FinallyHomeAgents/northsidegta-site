@@ -53,44 +53,37 @@ export default async function handler(req, res) {
       return res.status(401).send('GitHub token exchange failed')
     }
 
-    // Respond with a resilient shim:
-    // - normal path: postMessage to opener (Decap popup)
-    // - fallback: if no opener (popup blocked → full tab), show a message and redirect back to /admin/#/
+    // Write the token in the exact format Decap expects, then complete the handshake.
+    // localStorage is shared across same-origin windows, so the parent can read it.
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.send(`
       <script>
         (function () {
+          try {
+            // Store as JSON under the standard key
+            localStorage.setItem('decap-cms-user', JSON.stringify({
+              token: '${tokenJson.access_token}',
+              provider: 'github'
+            }));
+          } catch (e) {}
+
           function finish() {
             try {
               if (window.opener && !window.opener.closed) {
-                // standard Decap handshake (parent listens for this)
+                // Normal Decap handshake (still do this for compatibility)
                 window.opener.postMessage('authorizing:github', '*');
                 window.opener.postMessage('authorization:github:success:${tokenJson.access_token}', '*');
                 window.close();
                 return;
               }
             } catch (e) {}
-            // Fallback: opened in a tab (no opener) → gently return to CMS
+            // Fallback: opened as a tab → go back to CMS
             document.body.innerHTML = '<p style="font:16px/1.4 system-ui;margin:20px">Login complete. Returning to the CMS…</p>';
-            setTimeout(function(){ window.location.href = '/admin/#/'; }, 800);
+            setTimeout(function(){ window.location.href = '/admin/#/'; }, 600);
           }
 
-          // Some browsers need a tick before opener becomes available
+          // Run immediately; some browsers need a tick before opener is available
           setTimeout(finish, 0);
-
-          // Also listen for the parent handshake (covers Decap's older flow)
-          function receiveMessage(e) {
-            if (e.data !== 'authorizing:github') return;
-            try {
-              if (window.opener && !window.opener.closed) {
-                window.opener.postMessage('authorization:github:success:${tokenJson.access_token}', '*');
-                window.removeEventListener('message', receiveMessage, false);
-                window.close();
-              }
-            } catch (err) {}
-          }
-          window.addEventListener('message', receiveMessage, false);
-          try { if (window.opener && !window.opener.closed) window.opener.postMessage('authorizing:github', '*'); } catch (e) {}
         })();
       </script>
     `)
