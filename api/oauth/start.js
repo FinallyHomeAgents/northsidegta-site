@@ -1,18 +1,28 @@
-// Redirect the browser to GitHub's OAuth authorize screen.
+// /api/oauth/start.js
 export default async function handler(req, res) {
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  const redirectUri = `${process.env.PUBLIC_BASE_URL}/api/oauth/callback`;
-  const scope = "repo,user:email";
-  const state = Math.random().toString(36).slice(2); // basic CSRF token
+  const { GITHUB_CLIENT_ID, OAUTH_SCOPE = 'repo,user:email' } = process.env
+  if (!GITHUB_CLIENT_ID) return res.status(500).send('Missing GITHUB_CLIENT_ID')
 
-  res.setHeader("Set-Cookie", `oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
+  const state = Math.random().toString(36).slice(2)
+  const redirectUri = `${getBaseUrl(req)}/api/oauth/callback`
 
-  const url =
-    `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(clientId)}` +
-    `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-    `&scope=${encodeURIComponent(scope)}` +
-    `&state=${encodeURIComponent(state)}`;
+  const authUrl = new URL('https://github.com/login/oauth/authorize')
+  authUrl.searchParams.set('client_id', GITHUB_CLIENT_ID)
+  authUrl.searchParams.set('redirect_uri', redirectUri)
+  authUrl.searchParams.set('scope', OAUTH_SCOPE)
+  authUrl.searchParams.set('state', state)
 
-  res.writeHead(302, { Location: url });
-  res.end();
+  res.setHeader(
+    'Set-Cookie',
+    `oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=600`
+  )
+  return res.redirect(authUrl.toString())
+}
+
+function getBaseUrl(req) {
+  const host =
+    process.env.SITE_URL || req.headers['x-forwarded-host'] || req.headers.host
+  const proto =
+    process.env.SITE_PROTOCOL || req.headers['x-forwarded-proto'] || 'https'
+  return `${proto}://${host}`
 }
