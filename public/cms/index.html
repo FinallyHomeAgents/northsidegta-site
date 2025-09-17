@@ -3,50 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>NorthSide GTA CMS</title>
-
-    <!-- Tell Decap not to auto-start; we will start it safely after load -->
-    <script>
-      window.CMS_MANUAL_INIT = true
-    </script>
-
-    <!-- Decap bundle -->
-    <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
-
-    <style>
-      html,
-      body,
-      #nc-root {
-        height: 100%;
-        margin: 0;
-      }
-    </style>
   </head>
   <body>
-    <!-- Stable mount point for Decap -->
-    <div id="nc-root"></div>
-
-    <script>
-      ;(function () {
-        // Prevent double init on re-renders
-        if (window.__CMS_INITTED__) return
-
-        function start() {
-          if (!window.CMS || !CMS.init) return setTimeout(start, 50)
-          if (window.__CMS_INITTED__) return
-          window.__CMS_INITTED__ = true
-          CMS.init({ config: '/cms/config.yml' })
-        }
-
-        // Wait until DOM is ready, then start (avoids document.body=null)
-        if (
-          document.readyState === 'complete' ||
-          document.readyState === 'interactive'
-        ) {
-          start()
-        } else {
-          window.addEventListener('DOMContentLoaded', start)
-        }
-      })()
-    </script>
+    <!-- Load Decap; it will auto-initialize and read /cms/config.yml -->
+    <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
   </body>
 </html>
