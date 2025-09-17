@@ -7,24 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NorthSide GTA CMS</title>
 
-    <!-- Tell Decap we will start it manually -->
+    <!-- Prevent auto-init; we'll init once, safely -->
     <script>
       window.CMS_MANUAL_INIT = true
     </script>
 
-    <!-- Decap CMS (3.8.x is fine) -->
+    <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
+
+    <style>
+      /* optional: keep a neutral background while loading */
+      html,
+      body,
+      #nc-root {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
   </head>
   <body>
+    <!-- Give Decap a stable mount point -->
+    <div id="nc-root"></div>
+
     <script>
-      // Wait for the bundle to load, then initialize explicitly.
-      ;(function startCMS() {
-        if (!window.CMS || !CMS.init) {
-          return setTimeout(startCMS, 50)
+      ;(function () {
+        // Guard to avoid double init
+        if (window.__CMS_INITTED__) return
+        function start() {
+          if (!window.CMS || !CMS.init) return setTimeout(start, 50)
+          if (window.__CMS_INITTED__) return
+          window.__CMS_INITTED__ = true
+
+          CMS.init({
+            config: '/admin/config.yml',
+            // Explicit root avoids odd unmount/mount races
+            // (Decap will use #nc-root automatically if present)
+          })
         }
-        CMS.init({
-          config: '/admin/config.yml', // forces it to read the exact file you verified
-        })
+
+        // Start after the bundle is ready / DOM is stable
+        if (
+          document.readyState === 'complete' ||
+          document.readyState === 'interactive'
+        ) {
+          start()
+        } else {
+          window.addEventListener('DOMContentLoaded', start)
+        }
       })()
     </script>
   </body>
