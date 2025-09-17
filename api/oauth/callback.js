@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
         // Fallback when opened as a full tab:
         // send the user back to the admin; CMS will read localStorage on load
-        window.location.replace("/admin/#/");
+        window.location.replace("/cms/#/");
       })();
     </script>
     You can close this window.
