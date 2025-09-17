@@ -15,7 +15,6 @@ export default async function handler(req, res) {
     const savedState = getCookie(req, 'oauth_state')
 
     console.log('[oauth/callback] hit', { hasCode: !!code, state, savedState })
-
     if (!code || !state || state !== savedState) {
       console.warn('[oauth/callback] invalid state or missing code')
       return res.status(400).send('Invalid OAuth state')
@@ -27,13 +26,12 @@ export default async function handler(req, res) {
       return res.status(500).send('Missing GitHub credentials')
     }
 
-    // Exchange code -> token (per GitHub docs)
     console.log('[oauth/callback] exchanging code for token…')
     const tokenResp = await fetch(
       'https://github.com/login/oauth/access_token',
       {
         method: 'POST',
-        headers: { Accept: 'application/json' }, // response as JSON
+        headers: { Accept: 'application/json' },
         body: new URLSearchParams({
           client_id: GITHUB_CLIENT_ID,
           client_secret: GITHUB_CLIENT_SECRET,
@@ -49,7 +47,6 @@ export default async function handler(req, res) {
       'has token:',
       !!data.access_token
     )
-
     if (!data.access_token) {
       console.error('[oauth/callback] GitHub token exchange failed:', data)
       return res.status(401).send('GitHub token exchange failed')
@@ -57,10 +54,7 @@ export default async function handler(req, res) {
 
     const token = data.access_token
 
-    // HTML does three things:
-    // 1) Stores token under BOTH keys (decap + legacy netlify)
-    // 2) PostMessages BOTH formats to opener (JSON + legacy string)
-    // 3) If not a popup, redirect straight to /cms/#/collections/collections
+    // Send ONLY a JSON payload; some Decap builds JSON.parse() every message.
     const html = `<!doctype html>
 <html><body>
 <script>
@@ -70,24 +64,17 @@ export default async function handler(req, res) {
       token
     )}, provider: "github" });
 
-    // Store under both keys
+    // Store under both keys so any Decap/Netlify build can read it
     localStorage.setItem('decap-cms-user', payload);
     localStorage.setItem('netlify-cms-user', payload);
 
-    // If opened as a popup, notify opener (both formats) and close
+    // If opened as a popup, notify the opener with JSON ONLY (no legacy string)
     if (window.opener && !window.opener.closed && typeof window.opener.postMessage === "function") {
-      try { window.opener.postMessage('authorizing:github', '*'); } catch (e) {}
-      try { window.opener.postMessage(payload, '*'); } catch (e) {}
-      try { window.opener.postMessage('authorization:github:success:' + ${JSON.stringify(
-        token
-      )}, '*'); } catch (e) {}
-
+      try { window.opener.postMessage(payload, "*"); } catch (e) {}
       try { window.close(); return; } catch (e) {}
     }
-  } catch (e) {
-    // fall through to redirect
-  }
-  // Fallback when opened as a full tab: go straight to Collections UI
+  } catch (e) {}
+  // Fallback: opened as a tab → go straight to Collections UI
   window.location.replace('/cms/#/collections/collections');
 })();
 </script>

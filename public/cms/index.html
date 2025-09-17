@@ -5,43 +5,36 @@
     <title>NorthSide GTA CMS</title>
   </head>
   <body>
-    <!-- 1) Load Decap -->
-    <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
+    <!-- Pin to a stable build -->
+    <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
-    <!-- 2) Handshake shim: if a token is already stored, simulate popup success -->
     <script>
-      ;(function replayGithubAuthIfNeeded() {
+      // If token already in storage, replay ONLY the JSON message and route to collections
+      ;(function () {
         try {
           var raw =
             localStorage.getItem('decap-cms-user') ||
             localStorage.getItem('netlify-cms-user')
           if (!raw) return
+          var u = JSON.parse(raw)
+          if (!u || !u.token) return
 
-          var user = JSON.parse(raw)
-          if (!user || !user.token) return
-
-          // Send both legacy and JSON messages that Decap listens for
-          // Do it on a short delay to ensure Decap's listeners are ready
           setTimeout(function () {
             try {
-              window.postMessage('authorizing:github', '*')
-            } catch (e) {}
-            try {
               window.postMessage(
-                'authorization:github:success:' + user.token,
+                JSON.stringify({ token: u.token, provider: 'github' }),
                 '*'
               )
             } catch (e) {}
-            try {
-              window.postMessage(
-                JSON.stringify({ token: user.token, provider: 'github' }),
-                '*'
-              )
-            } catch (e) {}
+            if (
+              !location.hash ||
+              location.hash === '#/' ||
+              location.hash === '#'
+            ) {
+              location.hash = '#/collections/collections'
+            }
           }, 50)
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
       })()
     </script>
   </body>
