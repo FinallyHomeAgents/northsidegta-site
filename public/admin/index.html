@@ -1,13 +1,31 @@
+<!-- public/admin/index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NorthSide GTA CMS</title>
+
+    <!-- Tell Decap we will start it manually -->
+    <script>
+      window.CMS_MANUAL_INIT = true
+    </script>
+
+    <!-- Decap CMS (3.8.x is fine) -->
+    <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
   </head>
   <body>
-    <!-- Decap CMS (successor to Netlify CMS). Auto-loads /admin/config.yml -->
-    <script src="https://unpkg.com/decap-cms@^3.2.0/dist/decap-cms.js"></script>
+    <script>
+      // Wait for the bundle to load, then initialize explicitly.
+      ;(function startCMS() {
+        if (!window.CMS || !CMS.init) {
+          return setTimeout(startCMS, 50)
+        }
+        CMS.init({
+          config: '/admin/config.yml', // forces it to read the exact file you verified
+        })
+      })()
+    </script>
   </body>
 </html>
