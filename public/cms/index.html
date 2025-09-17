@@ -18,100 +18,139 @@
   <body>
     <div id="nc-root"></div>
 
-    <script src="https://unpkg.com/decap-cms@3.4.1/dist/decap-cms.js"></script>
-
-    <!-- Inline config -->
     <script>
-      window.CMS_CONFIG = {
-        backend: {
-          name: 'github',
-          repo: 'FinallyHomeAgents/northsidegta-site',
-          branch: 'main',
-          base_url: 'https://northsidegta.ca',
-          auth_endpoint: '/api/oauth/start',
-        },
-        media_folder: 'public/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'collections',
-            label: 'Curated Collections',
-            folder: 'public/data/collections',
-            create: true,
-            extension: 'json',
-            format: 'json',
-            identifier_field: 'slug',
-            slug: '{{slug}}',
-            fields: [
-              { name: 'title', label: 'Page Title' },
-              {
-                name: 'slug',
-                label: 'Slug (URL part)',
-                widget: 'string',
-                pattern: [
-                  '^[a-z0-9-]+$',
-                  'Use lowercase letters, numbers, and dashes only',
-                ],
-              },
-              { name: 'intro', label: 'Intro (optional)', required: false },
-              { name: 'realmLink', label: 'Realm Link (the private URL)' },
-              {
-                name: 'heroImage',
-                label: 'Hero Image',
-                widget: 'image',
-                required: false,
-              },
-            ],
-          },
-        ],
-      }
-    </script>
-
-    <script>
-      ;(function () {
-        function boot() {
-          if (!window.CMS || !CMS.init) return setTimeout(boot, 40)
-
-          try {
-            CMS.init({ config: window.CMS_CONFIG })
-            window.__cmsInited = true
-          } catch (e) {
-            window.__cmsErr = e
-            console.error('[cms] CMS.init error:', e)
+      // ---- Robust loader that tries multiple CDN/version combos ----
+      ;(function loadDecap() {
+        const candidates = [
+          'https://unpkg.com/decap-cms@3.4.1/dist/decap-cms.js',
+          'https://cdn.jsdelivr.net/npm/decap-cms@3.4.1/dist/decap-cms.js',
+          'https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js',
+        ]
+        let i = 0
+        function next() {
+          if (i >= candidates.length) {
+            console.error('[cms] Failed to load Decap CMS from all CDNs')
             return
           }
+          const src = candidates[i++]
+          const s = document.createElement('script')
+          s.src = src
+          s.async = true
+          s.onload = () => {
+            console.log('[cms] loaded:', src)
+            boot()
+          }
+          s.onerror = () => {
+            console.warn('[cms] failed:', src)
+            next()
+          }
+          document.head.appendChild(s)
+        }
+        next()
 
-          // Token bootstrap: replay token a few times after load so Decap definitely receives it
-          var tries = 0
+        // Your inline JSON config (bypasses YAML parsing issues)
+        window.CMS_CONFIG = {
+          backend: {
+            name: 'github',
+            repo: 'FinallyHomeAgents/northsidegta-site',
+            branch: 'main',
+            base_url: 'https://northsidegta.ca',
+            auth_endpoint: '/api/oauth/start',
+          },
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'collections',
+              label: 'Curated Collections',
+              folder: 'public/data/collections',
+              create: true,
+              extension: 'json',
+              format: 'json',
+              identifier_field: 'slug',
+              slug: '{{slug}}',
+              fields: [
+                { name: 'title', label: 'Page Title' },
+                {
+                  name: 'slug',
+                  label: 'Slug (URL part)',
+                  widget: 'string',
+                  pattern: [
+                    '^[a-z0-9-]+$',
+                    'Use lowercase letters, numbers, and dashes only',
+                  ],
+                },
+                { name: 'intro', label: 'Intro (optional)', required: false },
+                { name: 'realmLink', label: 'Realm Link (the private URL)' },
+                {
+                  name: 'heroImage',
+                  label: 'Hero Image',
+                  widget: 'image',
+                  required: false,
+                },
+              ],
+            },
+          ],
+        }
+
+        function boot() {
+          // Wait until the global CMS object exists
+          function waitCMS(t = 0) {
+            if (window.CMS && CMS.init) {
+              try {
+                CMS.init({ config: window.CMS_CONFIG })
+                window.__cmsInited = true
+                console.log('[cms] CMS.init called')
+                replayToken()
+              } catch (e) {
+                window.__cmsErr = e
+                console.error('[cms] CMS.init error:', e)
+              }
+              return
+            }
+            if (t > 80) {
+              console.error('[cms] CMS never loaded')
+              return
+            }
+            setTimeout(() => waitCMS(t + 1), 100)
+          }
+          waitCMS()
+        }
+
+        // Replay token a few times so Decap definitely hears it
+        function replayToken() {
+          let tries = 0
           ;(function pump() {
-            tries++
             try {
-              var raw =
+              const raw =
                 localStorage.getItem('decap-cms-user') ||
                 localStorage.getItem('netlify-cms-user')
               if (raw) {
-                var u = JSON.parse(raw)
+                const u = JSON.parse(raw)
                 if (u && u.token) {
-                  try {
-                    window.postMessage(
-                      JSON.stringify({ token: u.token, provider: 'github' }),
-                      '*'
-                    )
-                  } catch (e) {}
+                  // New JSON message + legacy string
+                  window.postMessage(
+                    JSON.stringify({ token: u.token, provider: 'github' }),
+                    '*'
+                  )
+                  window.postMessage(
+                    'authorization:github:success:' + u.token,
+                    '*'
+                  )
+                  // Move to collections if on landing
                   if (
                     !location.hash ||
                     location.hash === '#/' ||
-                    location.hash === '#'
+                    location.hash === '#/login'
                   ) {
                     location.hash = '#/collections/collections'
                   }
                 }
               }
             } catch (e) {}
-            if (tries < 25) setTimeout(pump, 200) // ~5s total
+            if (++tries < 25) setTimeout(pump, 200)
           })()
         }
-        boot()
       })()
     </script>
   </body>
