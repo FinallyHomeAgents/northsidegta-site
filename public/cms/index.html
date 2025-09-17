@@ -18,21 +18,32 @@
   <body>
     <div id="nc-root"></div>
 
+    <!-- Decap (stable) -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
     <script>
       ;(function () {
+        function log() {
+          try {
+            console.log.apply(console, arguments)
+          } catch (e) {}
+        }
         function boot() {
           if (!window.CMS || !CMS.init) return setTimeout(boot, 50)
-          if (window.__cmsInited) return
-          window.__cmsInited = true
+
+          log('[cms] CMS detected; starting init with /cms/config.yml')
 
           try {
             CMS.init({ config: '/cms/config.yml' })
+            window.__cmsInited = true // <-- set flag AFTER init call
+            log('[cms] CMS.init() called')
           } catch (e) {
-            console.error(e)
+            window.__cmsErr = e
+            console.error('[cms] CMS.init() error:', e)
+            return // don't proceed if init threw
           }
 
+          // If a token is already stored, replay JSON so auth listener fires
           try {
             var raw =
               localStorage.getItem('decap-cms-user') ||
@@ -46,7 +57,10 @@
                       JSON.stringify({ token: u.token, provider: 'github' }),
                       '*'
                     )
-                  } catch (e) {}
+                    log('[cms] replayed token to window.postMessage')
+                  } catch (e) {
+                    console.error('[cms] postMessage error:', e)
+                  }
                   if (
                     !location.hash ||
                     location.hash === '#/' ||
@@ -54,10 +68,12 @@
                   ) {
                     location.hash = '#/collections/collections'
                   }
-                }, 80)
+                }, 150)
               }
             }
-          } catch (e) {}
+          } catch (e) {
+            console.error('[cms] token replay error:', e)
+          }
         }
         boot()
       })()
