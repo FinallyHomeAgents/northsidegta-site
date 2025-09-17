@@ -12,15 +12,15 @@
         margin: 0;
       }
     </style>
-    <!-- IMPORTANT: do NOT set window.CMS_MANUAL_INIT; let Decap auto-init -->
+    <!-- No CMS_MANUAL_INIT. Let Decap auto-init. -->
   </head>
   <body>
     <div id="nc-root"></div>
 
-    <!-- 1) Load a stable Decap version -->
+    <!-- Load a stable build -->
     <script src="https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js"></script>
 
-    <!-- 2) Inline config (loaded before/with CMS so it uses this) -->
+    <!-- Inline config so Decap picks it up on boot -->
     <script>
       window.CMS_CONFIG = {
         backend: {
@@ -67,46 +67,27 @@
       }
     </script>
 
-    <!-- 3) Token re-broadcast loop (covers timing/race issues) -->
+    <!-- Light helper: if token already exists, nudge to collections after load -->
     <script>
-      ;(function replayToken() {
-        function pump() {
-          try {
-            const raw =
-              localStorage.getItem('decap-cms-user') ||
-              localStorage.getItem('netlify-cms-user')
-            if (raw) {
-              const u = JSON.parse(raw)
-              if (u && u.token) {
-                // New JSON and legacy formats
-                window.postMessage(
-                  JSON.stringify({ token: u.token, provider: 'github' }),
-                  '*'
-                )
-                window.postMessage(
-                  'authorization:github:success:' + u.token,
-                  '*'
-                )
-                // If we're on the login/landing, navigate to Collections
-                if (
-                  !location.hash ||
-                  location.hash === '#/' ||
-                  location.hash === '#/login'
-                ) {
-                  location.hash = '#/collections/collections'
-                }
-              }
+      window.addEventListener('load', function () {
+        try {
+          const raw =
+            localStorage.getItem('decap-cms-user') ||
+            localStorage.getItem('netlify-cms-user')
+          if (raw) {
+            const u = JSON.parse(raw)
+            if (
+              u &&
+              u.token &&
+              (!location.hash ||
+                location.hash === '#/' ||
+                location.hash === '#/login')
+            ) {
+              location.hash = '#/collections/collections'
             }
-          } catch (_) {}
-        }
-        // Run for ~12 seconds to cover slow listeners
-        let n = 0
-        const id = setInterval(() => {
-          pump()
-          if (++n > 100) clearInterval(id)
-        }, 120)
-        window.addEventListener('load', pump, { once: true })
-      })()
+          }
+        } catch (_) {}
+      })
     </script>
   </body>
 </html>
