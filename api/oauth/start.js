@@ -15,13 +15,11 @@ export default async function handler(req, res) {
     authUrl.searchParams.set('scope', OAUTH_SCOPE)
     authUrl.searchParams.set('state', state)
 
-    // CSRF state cookie (HttpOnly so JS can’t tamper; Lax is fine for same-site)
     res.setHeader(
       'Set-Cookie',
       `oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Secure`
     )
 
-    // Go to GitHub
     return res.redirect(authUrl.toString())
   } catch (e) {
     console.error('[oauth/start] error:', e)
@@ -30,13 +28,16 @@ export default async function handler(req, res) {
 }
 
 function getBaseUrl(req) {
-  // Prefer your production URL, then Vercel’s forwarded host, then Host header
-  const host =
-    process.env.SITE_URL || req.headers['x-forwarded-host'] || req.headers.host
+  // If SITE_URL is set (e.g. "https://northsidegta.ca"), use it AS-IS.
+  if (process.env.SITE_URL) {
+    return process.env.SITE_URL.replace(/\/+$/, '') // strip trailing slash only
+  }
+
+  // Otherwise, build from headers
+  const host = req.headers['x-forwarded-host'] || req.headers.host
 
   const proto =
-    process.env.SITE_PROTOCOL || req.headers['x-forwarded-proto'] || 'https'
+    req.headers['x-forwarded-proto'] || process.env.SITE_PROTOCOL || 'https'
 
-  // Ensure no trailing slash
   return `${proto}://${host}`.replace(/\/+$/, '')
 }
