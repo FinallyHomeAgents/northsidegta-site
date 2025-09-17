@@ -11,25 +11,38 @@
         margin: 0;
       }
     </style>
+
+    <!-- IMPORTANT: prevent auto init (avoids double-initialization crash) -->
+    <script>
+      window.CMS_MANUAL_INIT = true
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
 
-    <!-- Pin to a stable Decap build -->
+    <!-- Stable Decap build -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
     <script>
-      // Initialize Decap explicitly and, if a token already exists, replay the JSON message
       ;(function () {
-        function start() {
-          if (!window.CMS || !CMS.init) return setTimeout(start, 30)
+        function once(fn) {
+          let ran = false
+          return function () {
+            if (!ran) {
+              ran = true
+              try {
+                fn()
+              } catch (e) {}
+            }
+          }
+        }
+        const start = once(function () {
+          if (!window.CMS || !CMS.init) return
 
-          // 1) Explicitly load config from ROOT (/config.yml)
-          try {
-            CMS.init({ config: '/config.yml' })
-          } catch (e) {}
+          // Initialize Decap ONCE and point to the cms config
+          CMS.init({ config: '/cms/config.yml' })
 
-          // 2) If a token is stored, replay JSON so the auth listener fires
+          // If we already have a token (from callback), replay JSON message & go to list view
           try {
             var raw =
               localStorage.getItem('decap-cms-user') ||
@@ -55,7 +68,8 @@
               }
             }
           } catch (e) {}
-        }
+        })
+
         if (
           document.readyState === 'complete' ||
           document.readyState === 'interactive'
