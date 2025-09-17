@@ -18,10 +18,9 @@
   <body>
     <div id="nc-root"></div>
 
-    <!-- Decap (stable) -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
-    <!-- Inline config: bypass YAML parsing entirely -->
+    <!-- Inline config -->
     <script>
       window.CMS_CONFIG = {
         backend: {
@@ -70,33 +69,29 @@
 
     <script>
       ;(function () {
-        function log() {
-          try {
-            console.log.apply(console, arguments)
-          } catch (e) {}
-        }
         function boot() {
           if (!window.CMS || !CMS.init) return setTimeout(boot, 40)
 
           try {
-            CMS.init({ config: window.CMS_CONFIG }) // <-- use inline JSON config
+            CMS.init({ config: window.CMS_CONFIG })
             window.__cmsInited = true
-            log('[cms] init with inline JSON config')
           } catch (e) {
             window.__cmsErr = e
             console.error('[cms] CMS.init error:', e)
             return
           }
 
-          // Replay token if present (so the app can pick it up immediately)
-          try {
-            var raw =
-              localStorage.getItem('decap-cms-user') ||
-              localStorage.getItem('netlify-cms-user')
-            if (raw) {
-              var u = JSON.parse(raw)
-              if (u && u.token) {
-                setTimeout(function () {
+          // Token bootstrap: replay token a few times after load so Decap definitely receives it
+          var tries = 0
+          ;(function pump() {
+            tries++
+            try {
+              var raw =
+                localStorage.getItem('decap-cms-user') ||
+                localStorage.getItem('netlify-cms-user')
+              if (raw) {
+                var u = JSON.parse(raw)
+                if (u && u.token) {
                   try {
                     window.postMessage(
                       JSON.stringify({ token: u.token, provider: 'github' }),
@@ -110,10 +105,11 @@
                   ) {
                     location.hash = '#/collections/collections'
                   }
-                }, 120)
+                }
               }
-            }
-          } catch (e) {}
+            } catch (e) {}
+            if (tries < 25) setTimeout(pump, 200) // ~5s total
+          })()
         }
         boot()
       })()
