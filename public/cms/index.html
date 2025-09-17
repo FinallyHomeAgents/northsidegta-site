@@ -18,24 +18,21 @@
   <body>
     <div id="nc-root"></div>
 
-    <!-- Pin to stable Decap -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
     <script>
       ;(function () {
-        let ran = false
-        function start() {
-          if (ran) return
-          ran = true
-          if (!window.CMS || !CMS.init) {
-            ran = false
-            return setTimeout(start, 40)
+        function boot() {
+          if (!window.CMS || !CMS.init) return setTimeout(boot, 50)
+          if (window.__cmsInited) return
+          window.__cmsInited = true
+
+          try {
+            CMS.init({ config: '/cms/config.yml' })
+          } catch (e) {
+            console.error(e)
           }
 
-          // Initialize Decap ONCE with our config in /cms/
-          CMS.init({ config: '/cms/config.yml' })
-
-          // If a token already exists, replay JSON handshake and jump to list
           try {
             var raw =
               localStorage.getItem('decap-cms-user') ||
@@ -62,12 +59,7 @@
             }
           } catch (e) {}
         }
-        if (
-          document.readyState === 'complete' ||
-          document.readyState === 'interactive'
-        )
-          start()
-        else window.addEventListener('DOMContentLoaded', start)
+        boot()
       })()
     </script>
   </body>
