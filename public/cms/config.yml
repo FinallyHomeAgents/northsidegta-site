@@ -9,12 +9,14 @@ media_folder: 'public/uploads'
 public_folder: '/uploads'
 
 collections:
-  - name: 'collections'
+  - name: 'collections' # URL segment: #/collections/collections
     label: 'Curated Collections'
-    folder: 'public/data/collections'
+    folder: 'public/data/collections' # Files live here
     create: true
     extension: 'json'
     format: 'json'
+    identifier_field: 'slug' # Use slug as the unique id
+    slug: '{{slug}}' # File name uses the slug field
     fields:
       - { name: 'title', label: 'Page Title' }
       - name: 'slug'
@@ -24,4 +26,9 @@ collections:
           ['^[a-z0-9-]+$', 'Use lowercase letters, numbers, and dashes only']
       - { name: 'intro', label: 'Intro (optional)', required: false }
       - { name: 'realmLink', label: 'Realm Link (the private URL)' }
-      - { name: 'heroImage', label: 'Hero Image', widget: 'image' }
+      - {
+          name: 'heroImage',
+          label: 'Hero Image',
+          widget: 'image',
+          required: false,
+        }
