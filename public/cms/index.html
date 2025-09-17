@@ -11,8 +11,6 @@
         margin: 0;
       }
     </style>
-
-    <!-- IMPORTANT: prevent auto init (avoids double-initialization crash) -->
     <script>
       window.CMS_MANUAL_INIT = true
     </script>
@@ -20,29 +18,24 @@
   <body>
     <div id="nc-root"></div>
 
-    <!-- Stable Decap build -->
+    <!-- Pin to stable Decap -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
     <script>
       ;(function () {
-        function once(fn) {
-          let ran = false
-          return function () {
-            if (!ran) {
-              ran = true
-              try {
-                fn()
-              } catch (e) {}
-            }
+        let ran = false
+        function start() {
+          if (ran) return
+          ran = true
+          if (!window.CMS || !CMS.init) {
+            ran = false
+            return setTimeout(start, 40)
           }
-        }
-        const start = once(function () {
-          if (!window.CMS || !CMS.init) return
 
-          // Initialize Decap ONCE and point to the cms config
+          // Initialize Decap ONCE with our config in /cms/
           CMS.init({ config: '/cms/config.yml' })
 
-          // If we already have a token (from callback), replay JSON message & go to list view
+          // If a token already exists, replay JSON handshake and jump to list
           try {
             var raw =
               localStorage.getItem('decap-cms-user') ||
@@ -64,12 +57,11 @@
                   ) {
                     location.hash = '#/collections/collections'
                   }
-                }, 60)
+                }, 80)
               }
             }
           } catch (e) {}
-        })
-
+        }
         if (
           document.readyState === 'complete' ||
           document.readyState === 'interactive'
