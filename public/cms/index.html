@@ -3,38 +3,65 @@
   <head>
     <meta charset="utf-8" />
     <title>NorthSide GTA CMS</title>
+    <style>
+      html,
+      body,
+      #nc-root {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
   </head>
   <body>
-    <!-- Pin to a stable build -->
+    <div id="nc-root"></div>
+
+    <!-- Pin to a stable Decap build -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
     <script>
-      // If token already in storage, replay ONLY the JSON message and route to collections
+      // Initialize Decap explicitly and, if a token already exists, replay the JSON message
       ;(function () {
-        try {
-          var raw =
-            localStorage.getItem('decap-cms-user') ||
-            localStorage.getItem('netlify-cms-user')
-          if (!raw) return
-          var u = JSON.parse(raw)
-          if (!u || !u.token) return
+        function start() {
+          if (!window.CMS || !CMS.init) return setTimeout(start, 30)
 
-          setTimeout(function () {
-            try {
-              window.postMessage(
-                JSON.stringify({ token: u.token, provider: 'github' }),
-                '*'
-              )
-            } catch (e) {}
-            if (
-              !location.hash ||
-              location.hash === '#/' ||
-              location.hash === '#'
-            ) {
-              location.hash = '#/collections/collections'
+          // 1) Explicitly load config from ROOT (/config.yml)
+          try {
+            CMS.init({ config: '/config.yml' })
+          } catch (e) {}
+
+          // 2) If a token is stored, replay JSON so the auth listener fires
+          try {
+            var raw =
+              localStorage.getItem('decap-cms-user') ||
+              localStorage.getItem('netlify-cms-user')
+            if (raw) {
+              var u = JSON.parse(raw)
+              if (u && u.token) {
+                setTimeout(function () {
+                  try {
+                    window.postMessage(
+                      JSON.stringify({ token: u.token, provider: 'github' }),
+                      '*'
+                    )
+                  } catch (e) {}
+                  if (
+                    !location.hash ||
+                    location.hash === '#/' ||
+                    location.hash === '#'
+                  ) {
+                    location.hash = '#/collections/collections'
+                  }
+                }, 60)
+              }
             }
-          }, 50)
-        } catch (e) {}
+          } catch (e) {}
+        }
+        if (
+          document.readyState === 'complete' ||
+          document.readyState === 'interactive'
+        )
+          start()
+        else window.addEventListener('DOMContentLoaded', start)
       })()
     </script>
   </body>
