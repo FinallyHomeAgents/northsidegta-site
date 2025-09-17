@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <title>NorthSide GTA CMS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       html,
       body,
@@ -12,82 +11,96 @@
         margin: 0;
       }
     </style>
-    <!-- No CMS_MANUAL_INIT. Let Decap auto-init. -->
+    <script>
+      window.CMS_MANUAL_INIT = true
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
 
-    <!-- Load a stable build -->
+    <!-- Decap (stable) -->
     <script src="https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js"></script>
 
-    <!-- Inline config so Decap picks it up on boot -->
     <script>
-      window.CMS_CONFIG = {
-        backend: {
-          name: 'github',
-          repo: 'FinallyHomeAgents/northsidegta-site',
-          branch: 'main',
-          base_url: 'https://northsidegta.ca',
-          auth_endpoint: '/api/oauth/start',
-        },
-        media_folder: 'public/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'collections',
-            label: 'Curated Collections',
-            folder: 'public/data/collections',
-            create: true,
-            extension: 'json',
-            format: 'json',
-            identifier_field: 'slug',
-            slug: '{{slug}}',
-            fields: [
-              { name: 'title', label: 'Page Title' },
-              {
-                name: 'slug',
-                label: 'Slug (URL part)',
-                widget: 'string',
-                pattern: [
-                  '^[a-z0-9-]+$',
-                  'Use lowercase letters, numbers, and dashes only',
-                ],
-              },
-              { name: 'intro', label: 'Intro (optional)', required: false },
-              { name: 'realmLink', label: 'Realm Link (the private URL)' },
-              {
-                name: 'heroImage',
-                label: 'Hero Image',
-                widget: 'image',
-                required: false,
-              },
-            ],
-          },
-        ],
-      }
-    </script>
-
-    <!-- Light helper: if token already exists, nudge to collections after load -->
-    <script>
-      window.addEventListener('load', function () {
-        try {
-          const raw =
-            localStorage.getItem('decap-cms-user') ||
-            localStorage.getItem('netlify-cms-user')
-          if (raw) {
-            const u = JSON.parse(raw)
-            if (
-              u &&
-              u.token &&
-              (!location.hash ||
-                location.hash === '#/' ||
-                location.hash === '#/login')
-            ) {
-              location.hash = '#/collections/collections'
+      ;(function () {
+        // 1) Accept token from popup (both JSON and legacy formats)
+        window.addEventListener('message', function (e) {
+          try {
+            if (typeof e.data === 'string') {
+              // New style: JSON string {token, provider}
+              try {
+                const obj = JSON.parse(e.data)
+                if (obj && obj.token) {
+                  localStorage.setItem('decap-cms-user', JSON.stringify(obj))
+                  localStorage.setItem('netlify-cms-user', JSON.stringify(obj))
+                  reloadIfReady()
+                  return
+                }
+              } catch (_) {}
+              // Legacy style: "authorization:github:success:<token>"
+              if (e.data.startsWith('authorization:github:success:')) {
+                const token = e.data.split(':').pop()
+                const payload = { token, provider: 'github' }
+                localStorage.setItem('decap-cms-user', JSON.stringify(payload))
+                localStorage.setItem(
+                  'netlify-cms-user',
+                  JSON.stringify(payload)
+                )
+                reloadIfReady()
+                return
+              }
             }
+          } catch (err) {
+            console.error('[cms] postMessage error:', err)
           }
-        } catch (_) {}
-      })
+        })
+
+        // 2) If token already in storage (e.g., returning tab), proceed
+        function hasToken() {
+          try {
+            const raw =
+              localStorage.getItem('decap-cms-user') ||
+              localStorage.getItem('netlify-cms-user')
+            if (!raw) return false
+            const obj = JSON.parse(raw)
+            return !!(obj && obj.token)
+          } catch (_) {
+            return false
+          }
+        }
+
+        // 3) Init CMS only AFTER token exists (prevents infinite login loop)
+        function initCMS() {
+          if (!(window.CMS && CMS.init))
+            return console.warn('[cms] CMS not present yet')
+          CMS.init({ config: '/cms/config.yml' })
+          console.log('[cms] CMS.init called')
+        }
+
+        function reloadIfReady() {
+          // Some Decap builds need a reload to re-check storage
+          setTimeout(function () {
+            if (hasToken()) {
+              // Either reload or just init
+              if (!window.__cmsInited) {
+                window.__cmsInited = true
+                initCMS()
+              } else {
+                location.reload()
+              }
+            }
+          }, 50)
+        }
+
+        // 4) First load: if token exists already → init, else show login UI and wait for popup to send it
+        if (hasToken()) {
+          window.__cmsInited = true
+          initCMS()
+        } else {
+          console.log('[cms] waiting for OAuth…')
+          // CMS will render login screen; once popup returns, postMessage handler will store token & init
+        }
+      })()
     </script>
   </body>
 </html>
