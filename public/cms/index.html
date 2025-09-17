@@ -21,6 +21,53 @@
     <!-- Decap (stable) -->
     <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
 
+    <!-- Inline config: bypass YAML parsing entirely -->
+    <script>
+      window.CMS_CONFIG = {
+        backend: {
+          name: 'github',
+          repo: 'FinallyHomeAgents/northsidegta-site',
+          branch: 'main',
+          base_url: 'https://northsidegta.ca',
+          auth_endpoint: '/api/oauth/start',
+        },
+        media_folder: 'public/uploads',
+        public_folder: '/uploads',
+        collections: [
+          {
+            name: 'collections',
+            label: 'Curated Collections',
+            folder: 'public/data/collections',
+            create: true,
+            extension: 'json',
+            format: 'json',
+            identifier_field: 'slug',
+            slug: '{{slug}}',
+            fields: [
+              { name: 'title', label: 'Page Title' },
+              {
+                name: 'slug',
+                label: 'Slug (URL part)',
+                widget: 'string',
+                pattern: [
+                  '^[a-z0-9-]+$',
+                  'Use lowercase letters, numbers, and dashes only',
+                ],
+              },
+              { name: 'intro', label: 'Intro (optional)', required: false },
+              { name: 'realmLink', label: 'Realm Link (the private URL)' },
+              {
+                name: 'heroImage',
+                label: 'Hero Image',
+                widget: 'image',
+                required: false,
+              },
+            ],
+          },
+        ],
+      }
+    </script>
+
     <script>
       ;(function () {
         function log() {
@@ -29,21 +76,19 @@
           } catch (e) {}
         }
         function boot() {
-          if (!window.CMS || !CMS.init) return setTimeout(boot, 50)
-
-          log('[cms] CMS detected; starting init with /cms/config.yml')
+          if (!window.CMS || !CMS.init) return setTimeout(boot, 40)
 
           try {
-            CMS.init({ config: '/cms/config.yml' })
-            window.__cmsInited = true // <-- set flag AFTER init call
-            log('[cms] CMS.init() called')
+            CMS.init({ config: window.CMS_CONFIG }) // <-- use inline JSON config
+            window.__cmsInited = true
+            log('[cms] init with inline JSON config')
           } catch (e) {
             window.__cmsErr = e
-            console.error('[cms] CMS.init() error:', e)
-            return // don't proceed if init threw
+            console.error('[cms] CMS.init error:', e)
+            return
           }
 
-          // If a token is already stored, replay JSON so auth listener fires
+          // Replay token if present (so the app can pick it up immediately)
           try {
             var raw =
               localStorage.getItem('decap-cms-user') ||
@@ -57,10 +102,7 @@
                       JSON.stringify({ token: u.token, provider: 'github' }),
                       '*'
                     )
-                    log('[cms] replayed token to window.postMessage')
-                  } catch (e) {
-                    console.error('[cms] postMessage error:', e)
-                  }
+                  } catch (e) {}
                   if (
                     !location.hash ||
                     location.hash === '#/' ||
@@ -68,12 +110,10 @@
                   ) {
                     location.hash = '#/collections/collections'
                   }
-                }, 150)
+                }, 120)
               }
             }
-          } catch (e) {
-            console.error('[cms] token replay error:', e)
-          }
+          } catch (e) {}
         }
         boot()
       })()
