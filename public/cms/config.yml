@@ -37,3 +37,4 @@ collections:
         label: 'Hero Image'
         widget: 'image'
         required: false
+        hint: 'Upload a 1800×1200 JPG/PNG for best results.'
