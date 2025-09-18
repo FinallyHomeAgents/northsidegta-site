@@ -25,8 +25,10 @@ export default function CuratedPage() {
   if (err) return <main style={{maxWidth:960,margin:"40px auto"}}>Not found.</main>;
   if (!page) return <main style={{maxWidth:960,margin:"40px auto"}}>Loading…</main>;
 
+  const fallbackHero = "/Images/northside-map.svg";
+  const heroImageSrc = page.heroImage || fallbackHero;
   const site = typeof window !== "undefined" ? window.location.origin : "";
-  const ogImage = page.heroImage?.startsWith("/") ? `${site}${page.heroImage}` : page.heroImage || "";
+  const ogImage = heroImageSrc.startsWith("/") ? `${site}${heroImageSrc}` : heroImageSrc;
 
   return (
     <>
@@ -41,7 +43,7 @@ export default function CuratedPage() {
       <section style={hero.wrap}>
         <div style={hero.media}>
           <img
-            src={page.heroImage || "/og-home.jpg"}
+            src={heroImageSrc}
             alt="Curated collection hero"
             style={hero.image}
           />
