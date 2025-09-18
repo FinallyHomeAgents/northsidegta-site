@@ -23,3 +23,12 @@ collections:
       - { name: 'intro', label: 'Intro (optional)', required: false }
       - { name: 'realmLink', label: 'Realm Link (the private URL)' }
       - { name: 'heroImage', label: 'Hero Image', widget: 'image' }
+      - name: 'highlights'
+        label: 'Highlights (optional)'
+        widget: 'list'
+        required: false
+        summary: '{{headline}}'
+        fields:
+          - { name: 'icon', label: 'Icon or Emoji', widget: 'string', required: false }
+          - { name: 'headline', label: 'Headline', widget: 'string', required: false }
+          - { name: 'supporting', label: 'Supporting Text', widget: 'text', required: false }

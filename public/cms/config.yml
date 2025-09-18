@@ -37,3 +37,23 @@ collections:
         label: 'Hero Image'
         widget: 'image'
         required: false
+
+      - name: 'highlights'
+        label: 'Highlights (optional)'
+        widget: 'list'
+        required: false
+        summary: '{{headline}}'
+        fields:
+          - name: 'icon'
+            label: 'Icon or Emoji'
+            widget: 'string'
+            required: false
+            hint: 'Use a single emoji or up to two characters.'
+          - name: 'headline'
+            label: 'Headline'
+            widget: 'string'
+            required: false
+          - name: 'supporting'
+            label: 'Supporting Text'
+            widget: 'text'
+            required: false
