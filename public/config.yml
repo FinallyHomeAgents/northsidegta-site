@@ -22,4 +22,7 @@ collections:
           ['^[a-z0-9-]+$', 'Use lowercase letters, numbers, and dashes only']
       - { name: 'intro', label: 'Intro (optional)', required: false }
       - { name: 'realmLink', label: 'Realm Link (the private URL)' }
-      - { name: 'heroImage', label: 'Hero Image', widget: 'image' }
+      - name: 'heroImage'
+        label: 'Hero Image'
+        widget: 'image'
+        hint: 'Upload a 1920×1080 (16:9) JPG/PNG for best results.'
