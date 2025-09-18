@@ -39,7 +39,13 @@ export default function CuratedPage() {
 
       {/* HERO */}
       <section style={hero.wrap}>
-        <div style={{ ...hero.bg, backgroundImage: `url("${page.heroImage || "/og-home.jpg"}")` }} />
+        <div style={hero.media}>
+          <img
+            src={page.heroImage || "/og-home.jpg"}
+            alt="Curated collection hero"
+            style={hero.image}
+          />
+        </div>
         <div style={hero.overlay} />
         <div style={hero.inner}>
           <h1 style={hero.title}>{page.title}</h1>
@@ -65,9 +71,19 @@ export default function CuratedPage() {
 }
 
 const hero = {
-  wrap: { position: "relative", minHeight: 300, display: "grid", alignItems: "end" },
-  bg: {
-    position: "absolute", inset: 0, backgroundSize: "cover", backgroundPosition: "center",
+  wrap: {
+    position: "relative",
+    display: "grid",
+    alignItems: "end",
+    height: "min(65vh, clamp(280px, 55vw, 520px))",
+    overflow: "hidden",
+  },
+  media: { position: "absolute", inset: 0, overflow: "hidden" },
+  image: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center",
     filter: "saturate(.95)",
   },
   overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55))" },
