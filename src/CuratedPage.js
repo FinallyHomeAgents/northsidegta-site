@@ -18,6 +18,8 @@ function useCurated(slug) {
   return { page, err };
 }
 
+const HERO_BACKGROUND = "/Images/northside-map.svg";
+
 export default function CuratedPage() {
   const { slug } = useParams();
   const { page, err } = useCurated(slug);
@@ -25,8 +27,9 @@ export default function CuratedPage() {
   if (err) return <main style={{maxWidth:960,margin:"40px auto"}}>Not found.</main>;
   if (!page) return <main style={{maxWidth:960,margin:"40px auto"}}>Loading…</main>;
 
-  const fallbackHero = "/Images/northside-map.svg";
-  const heroImageSrc = page.heroImage || fallbackHero;
+  const heroImage =
+    typeof page.heroImage === "string" ? page.heroImage.trim() : page.heroImage;
+  const heroImageSrc = heroImage ? heroImage : HERO_BACKGROUND;
   const site = typeof window !== "undefined" ? window.location.origin : "";
   const ogImage = heroImageSrc.startsWith("/") ? `${site}${heroImageSrc}` : heroImageSrc;
 
