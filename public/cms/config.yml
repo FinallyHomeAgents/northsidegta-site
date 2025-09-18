@@ -37,6 +37,8 @@ collections:
         label: 'Hero Image'
         widget: 'image'
         required: false
+ codex/add-hint-to-heroimage-field-5plgh8
+        hint: 'Upload a 1920×1080 (16:9) JPG/PNG for best results.'
 
       - name: 'highlights'
         label: 'Highlights (optional)'
@@ -57,3 +59,4 @@ collections:
             label: 'Supporting Text'
             widget: 'text'
             required: false
+ main
