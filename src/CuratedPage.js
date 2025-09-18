@@ -30,6 +30,8 @@ export default function CuratedPage() {
   const site = typeof window !== "undefined" ? window.location.origin : "";
   const ogImage = heroImageSrc.startsWith("/") ? `${site}${heroImageSrc}` : heroImageSrc;
 
+  const hasHighlights = Array.isArray(page.highlights) && page.highlights.length > 0;
+
   return (
     <>
       <Helmet>
@@ -59,7 +61,37 @@ export default function CuratedPage() {
       {/* CONTENT */}
       <main style={content.wrap}>
         <div style={content.left}>
-          {/* empty on purpose—single-focus page; if you want bullets, place them here */}
+          {hasHighlights && (
+            <section style={highlights.section} aria-label="Highlights">
+              <div style={highlights.inner}>
+                <h2 style={highlights.heading}>Highlights</h2>
+                <div style={highlights.list}>
+                  {page.highlights.map((item, idx) => {
+                    const icon =
+                      typeof item?.icon === "string" && item.icon.trim() ? item.icon.trim() : "✨";
+                    const title =
+                      typeof item?.headline === "string" && item.headline.trim()
+                        ? item.headline.trim()
+                        : `Highlight ${idx + 1}`;
+                    const copy =
+                      typeof item?.supporting === "string" && item.supporting.trim()
+                        ? item.supporting.trim()
+                        : "";
+                    const divider = idx !== page.highlights.length - 1 ? highlights.divider : null;
+                    return (
+                      <div key={`${title}-${idx}`} style={{ ...highlights.item, ...divider }}>
+                        <div aria-hidden="true" style={highlights.icon}>{icon}</div>
+                        <div style={highlights.textWrap}>
+                          <p style={highlights.title}>{title}</p>
+                          {copy && <p style={highlights.copy}>{copy}</p>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+          )}
         </div>
         <div style={content.right}>
           <LeadForm slug={page.slug} title={page.title} realmLink={page.realmLink} />
@@ -97,11 +129,80 @@ const hero = {
 
 const content = {
   wrap: {
-    maxWidth: 1080, margin: "24px auto 48px", padding: "0 20px",
-    display: "grid", gridTemplateColumns: "1fr 420px", gap: 28,
+    maxWidth: 1080,
+    margin: "32px auto 64px",
+    padding: "0 20px",
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr) 420px",
+    gap: 32,
   },
-  left: { minHeight: 1 },
+  left: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 32,
+  },
   right: { position: "relative" },
+};
+
+const highlights = {
+  section: {
+    position: "relative",
+    borderRadius: 28,
+    background: "linear-gradient(145deg, rgba(252,252,253,0.96), rgba(239,243,249,0.94))",
+    boxShadow: "0 18px 45px rgba(15, 23, 42, 0.08)",
+    border: "1px solid rgba(148, 163, 184, 0.12)",
+    overflow: "hidden",
+  },
+  inner: {
+    padding: "32px 32px 20px",
+  },
+  heading: {
+    margin: 0,
+    fontSize: 22,
+    fontWeight: 600,
+    letterSpacing: "-0.01em",
+    color: "#0f172a",
+  },
+  list: {
+    marginTop: 24,
+    display: "flex",
+    flexDirection: "column",
+  },
+  item: {
+    display: "grid",
+    gridTemplateColumns: "40px 1fr",
+    alignItems: "start",
+    gap: 18,
+    padding: "18px 0",
+  },
+  divider: {
+    borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
+  },
+  icon: {
+    fontSize: 28,
+    lineHeight: "32px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textWrap: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
+  },
+  title: {
+    margin: 0,
+    fontSize: 18,
+    fontWeight: 600,
+    color: "#111827",
+    letterSpacing: "-0.01em",
+  },
+  copy: {
+    margin: 0,
+    fontSize: 15,
+    lineHeight: 1.6,
+    color: "#475569",
+  },
 };
 
 const disclosure = {
@@ -121,5 +222,9 @@ if (typeof window !== "undefined") {
   const mq = window.matchMedia("(max-width: 860px)");
   if (mq.matches) {
     content.wrap.gridTemplateColumns = "1fr";
+    content.wrap.gap = 28;
+    content.left.gap = 24;
+    highlights.inner.padding = "28px 24px 18px";
+    highlights.item.gridTemplateColumns = "32px 1fr";
   }
 }
