@@ -61,7 +61,7 @@ export default function LeadForm({ slug, title, realmLink }) {
     <div style={styles.card}>
       <h3 style={{ marginBottom: 12 }}>Get the listings by email</h3>
       <p style={{ marginTop: -4, marginBottom: 16, fontSize: 14, opacity: 0.8 }}>
-        We’ll send the link to your inbox in minutes.
+        We’ll send the link to your inbox within 10 seconds.
       </p>
 
       <form onSubmit={onSubmit}>
@@ -135,7 +135,7 @@ export default function LeadForm({ slug, title, realmLink }) {
         {status.err && <p style={{ color: "#c0392b", marginTop: 10 }}>{status.err}</p>}
         {status.ok && (
           <p style={{ color: "#2ecc71", marginTop: 10 }}>
-            Success! Check your inbox for the link. Redirecting…
+            Success! Check your inbox—the link should arrive within 10 seconds. Redirecting…
           </p>
         )}
 

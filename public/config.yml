@@ -22,7 +22,20 @@ collections:
           ['^[a-z0-9-]+$', 'Use lowercase letters, numbers, and dashes only']
       - { name: 'intro', label: 'Intro (optional)', required: false }
       - { name: 'realmLink', label: 'Realm Link (the private URL)' }
+ codex/add-hint-to-heroimage-field-5plgh8
       - name: 'heroImage'
         label: 'Hero Image'
         widget: 'image'
         hint: 'Upload a 1920×1080 (16:9) JPG/PNG for best results.'
+
+      - { name: 'heroImage', label: 'Hero Image', widget: 'image' }
+      - name: 'highlights'
+        label: 'Highlights (optional)'
+        widget: 'list'
+        required: false
+        summary: '{{headline}}'
+        fields:
+          - { name: 'icon', label: 'Icon or Emoji', widget: 'string', required: false }
+          - { name: 'headline', label: 'Headline', widget: 'string', required: false }
+          - { name: 'supporting', label: 'Supporting Text', widget: 'text', required: false }
+ main
