@@ -3,17 +3,400 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="Cache-Control" content="no-store" />
     <title>NorthSide GTA CMS</title>
     <style>
-      html,
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
-        height: 100%;
         margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #0f172a;
+      }
+
+      body.cms-loaded {
+        display: block;
+        background: #f8fafc;
+      }
+
+      #login-container {
+        width: min(90%, 380px);
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 18px;
+        padding: 32px 28px;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(12px);
+        transition: opacity 0.3s ease;
+      }
+
+      body.cms-loaded #login-container {
+        display: none;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        color: #0f172a;
+      }
+
+      p.description {
+        margin: 0 0 24px;
+        font-size: 15px;
+        color: #475569;
+        text-align: center;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 16px;
+      }
+
+      label span {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        color: #1e293b;
+      }
+
+      input[type='text'],
+      input[type='password'] {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #cbd5f5;
+        background-color: #f8fafc;
+        font-size: 14px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input[type='text']:focus,
+      input[type='password']:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        background-color: #fff;
+      }
+
+      button[type='submit'] {
+        width: 100%;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 999px;
+        background-color: #2563eb;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+
+      button[type='submit']:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-1px);
+      }
+
+      button[type='submit']:disabled {
+        background-color: #93c5fd;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      #login-status {
+        min-height: 20px;
+        margin-top: 16px;
+        font-size: 13px;
+        text-align: center;
+        color: #dc2626;
+      }
+
+      #cms-controls {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 1000;
+        display: none;
+      }
+
+      #logout-button {
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: none;
+        background-color: rgba(15, 23, 42, 0.85);
+        color: #f8fafc;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.02em;
+      }
+
+      #logout-button:hover {
+        background-color: rgba(15, 23, 42, 1);
+      }
+
+      body.cms-loaded #cms-controls {
+        display: block;
       }
     </style>
   </head>
   <body>
-    <!-- Decap autoloads and looks for /cms/config.yml -->
-    <script src="https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js"></script>
+    <div id="cms-controls">
+      <button id="logout-button" type="button">Log out</button>
+    </div>
+    <div id="login-container">
+      <form id="cms-login-form" autocomplete="on">
+        <h1>Welcome back</h1>
+        <p class="description">Sign in to manage your NorthSide GTA content.</p>
+        <label>
+          <span>Username</span>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            autocomplete="username"
+            required
+          />
+        </label>
+        <label>
+          <span>Password</span>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+        <button type="submit">Sign in</button>
+        <div id="login-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <script>
+      ;(function () {
+        const CMS_SCRIPT_URLS = [
+          'https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js',
+          'https://cdn.jsdelivr.net/npm/decap-cms@3.6.2/dist/decap-cms.js',
+        ]
+        const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
+
+        const form = document.getElementById('cms-login-form')
+        const statusEl = document.getElementById('login-status')
+        const logoutButton = document.getElementById('logout-button')
+
+        const submitButton = form.querySelector("button[type='submit']")
+        const defaultButtonText = submitButton.textContent
+
+        function setStatus(message, isError) {
+          statusEl.textContent = message || ''
+          statusEl.style.color = isError ? '#dc2626' : '#0f172a'
+        }
+
+        function setLoading(isLoading) {
+          submitButton.disabled = isLoading
+          submitButton.textContent = isLoading ? 'Signing in…' : defaultButtonText
+        }
+
+        function clearStoredTokens() {
+          try {
+            STORAGE_KEYS.forEach((key) => localStorage.removeItem(key))
+          } catch (error) {
+            console.warn('[cms-login] failed to clear stored tokens', error)
+          }
+        }
+
+        function storeToken(token, username) {
+          try {
+            const safeName =
+              typeof username === 'string' && username.trim()
+                ? username.trim()
+                : 'CMS User'
+            const payload = JSON.stringify({
+              token,
+              backendName: 'github',
+              login: safeName,
+              name: safeName,
+            })
+            STORAGE_KEYS.forEach((key) => localStorage.setItem(key, payload))
+          } catch (error) {
+            console.warn('[cms-login] failed to store token', error)
+          }
+        }
+
+        function getStoredUser() {
+          try {
+            for (const key of STORAGE_KEYS) {
+              const raw = localStorage.getItem(key)
+              if (!raw) continue
+              try {
+                const value = JSON.parse(raw)
+                if (
+                  value &&
+                  typeof value === 'object' &&
+                  typeof value.token === 'string' &&
+                  value.token.length
+                ) {
+                  return value
+                }
+              } catch (error) {
+                localStorage.removeItem(key)
+              }
+            }
+          } catch (error) {
+            console.warn('[cms-login] failed to access stored token', error)
+          }
+          return null
+        }
+
+        function loadScript(src) {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = src
+            script.async = true
+            script.onload = () => resolve(src)
+            script.onerror = () => {
+              script.remove()
+              reject(new Error(`Failed to load CMS script: ${src}`))
+            }
+            document.body.appendChild(script)
+          })
+        }
+
+        async function loadCMSInterface(fromLogin = false) {
+          if (window.__cmsLoaded) {
+            if (fromLogin) setLoading(false)
+            return true
+          }
+
+          const storedUser = getStoredUser()
+          if (!storedUser) {
+            if (fromLogin) {
+              setStatus('Login response is missing an access token.', true)
+              setLoading(false)
+            }
+            return false
+          }
+
+          window.__cmsLoaded = true
+          document.body.classList.add('cms-loaded')
+          setStatus('', false)
+
+          if (!window.location.hash || window.location.hash === '#') {
+            window.location.replace('#/collections/collections')
+          }
+
+          for (const src of CMS_SCRIPT_URLS) {
+            try {
+              await loadScript(src)
+              if (fromLogin) setLoading(false)
+              return true
+            } catch (error) {
+              console.warn('[cms-login] failed to load script', src, error)
+            }
+          }
+
+          window.__cmsLoaded = false
+          document.body.classList.remove('cms-loaded')
+          setStatus('Failed to load the CMS interface. Please try again.', true)
+          if (fromLogin) setLoading(false)
+          clearStoredTokens()
+          return false
+        }
+
+        async function handleLogin(event) {
+          event.preventDefault()
+
+          const formData = new FormData(form)
+          const username = (formData.get('username') || '').trim()
+          const password = formData.get('password') || ''
+
+          if (!username || !password) {
+            setStatus('Enter both your username and password.', true)
+            return
+          }
+
+          setLoading(true)
+          setStatus('Signing in…', false)
+
+          try {
+            const response = await fetch('/api/cms-login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password }),
+              credentials: 'same-origin',
+            })
+
+            const payload = await response.json().catch(() => ({}))
+
+            if (!response.ok) {
+              const message =
+                typeof payload.error === 'string'
+                  ? payload.error
+                  : 'Login failed. Please check your credentials.'
+              setStatus(message, true)
+              if (response.status === 401) {
+                clearStoredTokens()
+              }
+              setLoading(false)
+              return
+            }
+
+            if (!payload.token || typeof payload.token !== 'string') {
+              clearStoredTokens()
+              setStatus('Login response is missing an access token.', true)
+              setLoading(false)
+              return
+            }
+
+            storeToken(payload.token, username)
+            setStatus('Signed in! Loading the CMS…', false)
+            await loadCMSInterface(true)
+          } catch (error) {
+            console.error('[cms-login] request failed', error)
+            setStatus('We could not reach the server. Please try again.', true)
+            setLoading(false)
+          }
+        }
+
+        function handleLogout() {
+          clearStoredTokens()
+          window.location.replace('/cms/')
+        }
+
+        form.addEventListener('submit', handleLogin)
+        logoutButton.addEventListener('click', handleLogout)
+
+        const existingUser = getStoredUser()
+        if (existingUser) {
+          loadCMSInterface()
+        } else {
+          window.requestAnimationFrame(() => {
+            const usernameInput = document.getElementById('username')
+            if (usernameInput) {
+              try {
+                usernameInput.focus()
+              } catch (error) {
+                console.warn('[cms-login] failed to focus username input', error)
+              }
+            }
+          })
+        }
+      })()
+    </script>
   </body>
 </html>

@@ -5,7 +5,11 @@
     { "source": "/admin/config.yml", "destination": "/admin/config.yml" },
     { "source": "/admin/(.*)", "destination": "/admin/$1" },
 
-    { "source": "/api/oauth", "destination": "/api/oauth/start" },
+    { "source": "/cms", "destination": "/cms/" },
+    { "source": "/cms/", "destination": "/cms/index.html" },
+    { "source": "/cms/config.yml", "destination": "/cms/config.yml" },
+    { "source": "/cms/(.*)", "destination": "/cms/$1" },
+
     { "source": "/api/(.*)", "destination": "/api/$1" }
   ]
 }
