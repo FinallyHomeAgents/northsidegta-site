@@ -4,6 +4,59 @@ import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import LeadForm from "./components/LeadForm";
 
+const HERO_BACKGROUND = "/Images/northside-map.svg";
+const MEDIA_RATIO = "66.6667%"; // 3:2
+
+function useResponsiveColumns(query = "(max-width: 860px)") {
+  const [isSingleColumn, setIsSingleColumn] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(query).matches;
+  });
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const mq = window.matchMedia(query);
+    const handler = (event) => setIsSingleColumn(event.matches);
+
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", handler);
+    } else if (typeof mq.addListener === "function") {
+      mq.addListener(handler);
+    }
+
+    setIsSingleColumn(mq.matches);
+
+    return () => {
+      if (typeof mq.removeEventListener === "function") {
+        mq.removeEventListener("change", handler);
+      } else if (typeof mq.removeListener === "function") {
+        mq.removeListener(handler);
+      }
+    };
+  }, [query]);
+
+  return isSingleColumn;
+}
+
+function MediaCard({ image, title }) {
+  const hasImage = Boolean(image);
+  const alt = title ? `Featured listings preview for ${title}` : "Featured listings preview";
+
+  return (
+    <div style={mediaCard.frame}>
+      <div style={mediaCard.aspectBox}>
+        {hasImage ? (
+          <img src={image} alt={alt} style={mediaCard.image} />
+        ) : (
+          <div style={mediaCard.placeholder} aria-hidden="true">
+            <span style={mediaCard.placeholderLabel}>Curated homes map</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function useCurated(slug) {
   const [page, setPage] = React.useState(null);
   const [err, setErr] = React.useState(null);
@@ -21,13 +74,22 @@ function useCurated(slug) {
 export default function CuratedPage() {
   const { slug } = useParams();
   const { page, err } = useCurated(slug);
+  const isSingleColumn = useResponsiveColumns();
 
-  if (err) return <main style={{maxWidth:960,margin:"40px auto"}}>Not found.</main>;
-  if (!page) return <main style={{maxWidth:960,margin:"40px auto"}}>Loading…</main>;
+  if (err) return <main style={{ maxWidth: 960, margin: "40px auto" }}>Not found.</main>;
+  if (!page) return <main style={{ maxWidth: 960, margin: "40px auto" }}>Loading…</main>;
 
   const site = typeof window !== "undefined" ? window.location.origin : "";
   const ogImage = page.heroImage?.startsWith("/") ? `${site}${page.heroImage}` : page.heroImage || "";
-  const hasHeroImage = Boolean(page.heroImage);
+
+  const contentWrapStyle = React.useMemo(
+    () => ({
+      ...content.wrap,
+      gridTemplateColumns: isSingleColumn ? "minmax(0, 1fr)" : content.wrap.gridTemplateColumns,
+      gap: isSingleColumn ? 20 : content.wrap.gap,
+    }),
+    [isSingleColumn]
+  );
 
   return (
     <>
@@ -49,26 +111,12 @@ export default function CuratedPage() {
       </section>
 
       {/* CONTENT */}
-      <main style={content.wrap}>
+      <main style={contentWrapStyle}>
         <div style={content.left}>
           {/* empty on purpose—single-focus page; if you want bullets, place them here */}
         </div>
         <div style={content.right}>
-          <div style={mediaCard.frame}>
-            <div style={mediaCard.ratioBox}>
-              {hasHeroImage ? (
-                <img
-                  src={page.heroImage}
-                  alt="Featured properties preview"
-                  style={mediaCard.image}
-                />
-              ) : (
-                <div style={mediaCard.placeholder} aria-hidden="true">
-                  <span style={mediaCard.placeholderLabel}>Curated homes map</span>
-                </div>
-              )}
-            </div>
-          </div>
+          <MediaCard image={page.heroImage} title={page.title} />
           <LeadForm slug={page.slug} title={page.title} realmLink={page.realmLink} />
           <div style={disclosure.box}>
             <strong>Matthew Mulhall</strong> — Real Estate Agent — HomeLife Optimum Realty — Finally Home Agents
@@ -86,7 +134,7 @@ const hero = {
     alignItems: "end",
     height: "min(65vh, clamp(280px, 55vw, 520px))",
     overflow: "hidden",
-    backgroundImage: "url(/Images/northside-map.svg)",
+    backgroundImage: `url(${HERO_BACKGROUND})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -100,8 +148,12 @@ const hero = {
 
 const content = {
   wrap: {
-    maxWidth: 1080, margin: "24px auto 48px", padding: "0 20px",
-    display: "grid", gridTemplateColumns: "1fr 420px", gap: 28,
+    maxWidth: 1080,
+    margin: "24px auto 48px",
+    padding: "0 20px",
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr) 420px",
+    gap: 28,
   },
   left: { minHeight: 1 },
   right: { position: "relative" },
@@ -115,10 +167,10 @@ const mediaCard = {
     overflow: "hidden",
     background: "#f8f8f8",
   },
-  ratioBox: {
+  aspectBox: {
     position: "relative",
     width: "100%",
-    paddingBottom: "66.6667%",
+    paddingBottom: MEDIA_RATIO,
     background: "#f0f2f5",
   },
   image: {
@@ -127,6 +179,7 @@ const mediaCard = {
     width: "100%",
     height: "100%",
     objectFit: "cover",
+    objectPosition: "center",
   },
   placeholder: {
     position: "absolute",
@@ -160,11 +213,3 @@ const disclosure = {
     borderRadius: 8,
   },
 };
-
-// Mobile stack
-if (typeof window !== "undefined") {
-  const mq = window.matchMedia("(max-width: 860px)");
-  if (mq.matches) {
-    content.wrap.gridTemplateColumns = "1fr";
-  }
-}
