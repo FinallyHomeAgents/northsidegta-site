@@ -50,7 +50,7 @@ export default function CuratedPage() {
         <div style={hero.inner}>
           <h1 style={hero.title}>{page.title}</h1>
           {page.intro && <p style={hero.sub}>{page.intro}</p>}
-          <p style={hero.trust}>🔒 We’ll email you the private link. No spam.</p>
+          <p style={hero.trust}>🔒 We’ll email you the private link within 10 seconds. No spam.</p>
         </div>
       </section>
 
