@@ -58,6 +58,10 @@ export default function CuratedPage() {
   const showWhatsappFooter = Boolean(page.showWhatsappLink && page.whatsappUrl);
   const whatsappHref = typeof page.whatsappUrl === "string" ? page.whatsappUrl.trim() : "";
 
+  const slugText =
+    typeof slug === "string" ? slug.replace(/[-_]+/g, " ").trim() : "";
+  const heroAltText = `${headline || slugText || "NorthSide GTA"} hero image`;
+
   return (
     <>
       <Helmet>
@@ -69,18 +73,25 @@ export default function CuratedPage() {
 
       <div style={layout.page}>
         <main style={layout.main}>
-          <div style={layout.headingGroup}>
-            <h1 style={layout.headline}>{headline}</h1>
-            {subheadline && <p style={layout.subheadline}>{subheadline}</p>}
-          </div>
-          <div style={layout.formWrap}>
-            <LeadForm
-              slug={(typeof page.slug === "string" && page.slug.trim()) || slug}
-              title={headline}
-              realmLink={page.realmLink}
-              ctaText={ctaText}
-              onSuccessRedirect={redirectUrl}
-            />
+          <div style={layout.mainInner}>
+            <div style={layout.heroMediaWrap}>
+              <img src={heroImageSrc} alt={heroAltText} style={layout.heroImage} />
+            </div>
+            <div style={layout.contentColumn}>
+              <div style={layout.headingGroup}>
+                <h1 style={layout.headline}>{headline}</h1>
+                {subheadline && <p style={layout.subheadline}>{subheadline}</p>}
+              </div>
+              <div style={layout.formWrap}>
+                <LeadForm
+                  slug={(typeof page.slug === "string" && page.slug.trim()) || slug}
+                  title={headline}
+                  realmLink={page.realmLink}
+                  ctaText={ctaText}
+                  onSuccessRedirect={redirectUrl}
+                />
+              </div>
+            </div>
           </div>
         </main>
 
@@ -112,10 +123,40 @@ const layout = {
   main: {
     flex: "1 1 auto",
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: "min(12vh, 120px) 20px 60px",
+  },
+  mainInner: {
+    width: "100%",
+    maxWidth: 1100,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 56,
+  },
+  heroMediaWrap: {
+    flex: "0 1 420px",
+    width: "100%",
+    maxWidth: 480,
+    borderRadius: 32,
+    overflow: "hidden",
+    boxShadow: "0 18px 45px rgba(15, 23, 42, 0.12)",
+    backgroundColor: "#fff",
+  },
+  heroImage: {
+    display: "block",
+    width: "100%",
+    height: "auto",
+    objectFit: "cover",
+  },
+  contentColumn: {
+    flex: "1 1 460px",
+    maxWidth: 520,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   headingGroup: {
     textAlign: "center",
@@ -157,6 +198,13 @@ if (typeof window !== "undefined") {
   const mq = window.matchMedia("(max-width: 640px)");
   if (mq.matches) {
     layout.main.padding = "80px 18px 48px";
+    layout.mainInner.flexDirection = "column";
+    layout.mainInner.maxWidth = "100%";
+    layout.mainInner.gap = 32;
+    layout.heroMediaWrap.maxWidth = 360;
+    layout.heroMediaWrap.borderRadius = 24;
+    layout.contentColumn.alignItems = "center";
+    layout.contentColumn.maxWidth = "100%";
     layout.headingGroup.marginBottom = 28;
     layout.headline.fontSize = 30;
     layout.subheadline.fontSize = 16;
