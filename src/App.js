@@ -12,6 +12,7 @@ import VipPage          from "./vip";
 import SignWithUsPage   from "./SignWithUsPage";
 import HomeAnalysisPage from "./HomeAnalysisPage";
 import TownPage         from "./TownPage";
+import ThankYouPage     from "./ThankYouPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -47,6 +48,7 @@ function App() {
         {/* Core pages */}
         <Route path="/"             element={<HomePage />} />
         <Route path="/collections/:slug" element={<CuratedPage />} />
+        <Route path="/thank-you"     element={<ThankYouPage />} />
         <Route path="/about"        element={<AboutPage />} />
         <Route path="/buyers"       element={<BuyersPage />} />
         <Route path="/sellers"      element={<SellersPage />} />

@@ -19,6 +19,8 @@ function useCurated(slug) {
 }
 
 const HERO_BACKGROUND = "/Images/northside-map.svg";
+const DEFAULT_SUBHEADLINE =
+  "Bigger lots, more value, and less traffic — get the listings now.";
 
 export default function CuratedPage() {
   const { slug } = useParams();
@@ -27,207 +29,136 @@ export default function CuratedPage() {
   if (err) return <main style={{maxWidth:960,margin:"40px auto"}}>Not found.</main>;
   if (!page) return <main style={{maxWidth:960,margin:"40px auto"}}>Loading…</main>;
 
-  const heroImage =
-    typeof page.heroImage === "string" ? page.heroImage.trim() : page.heroImage;
+  const heroImage = typeof page.heroImage === "string" ? page.heroImage.trim() : page.heroImage;
   const heroImageSrc = heroImage ? heroImage : HERO_BACKGROUND;
   const site = typeof window !== "undefined" ? window.location.origin : "";
   const ogImage = heroImageSrc.startsWith("/") ? `${site}${heroImageSrc}` : heroImageSrc;
 
-  const hasHighlights = Array.isArray(page.highlights) && page.highlights.length > 0;
+  const legacyTitle =
+    (typeof page.title === "string" && page.title.trim()) ||
+    (typeof page.legacyTitle === "string" && page.legacyTitle.trim()) ||
+    "";
+  const headline =
+    (typeof page.headline === "string" && page.headline.trim()) ||
+    legacyTitle ||
+    "Curated Listings";
+  const subheadline =
+    (typeof page.subheadline === "string" && page.subheadline.trim()) || DEFAULT_SUBHEADLINE;
+  const ctaText =
+    (typeof page.ctaText === "string" && page.ctaText.trim()) || "Send Me the Listings";
+  const seoDescription =
+    (typeof page.seoDescription === "string" && page.seoDescription.trim()) || subheadline;
+
+  const redirectTopic =
+    (typeof page.slug === "string" && page.slug.trim()) ||
+    (typeof slug === "string" && slug.trim()) ||
+    headline;
+  const redirectUrl = `/thank-you?topic=${encodeURIComponent(redirectTopic)}`;
+
+  const showWhatsappFooter = Boolean(page.showWhatsappLink && page.whatsappUrl);
+  const whatsappHref = typeof page.whatsappUrl === "string" ? page.whatsappUrl.trim() : "";
 
   return (
     <>
       <Helmet>
-        <title>{page.title} • NorthSide GTA</title>
+        <title>{headline} • NorthSide GTA</title>
         {ogImage && <meta property="og:image" content={ogImage} />}
-        <meta name="description" content={page.intro || page.title} />
+        <meta name="description" content={seoDescription} />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
-      {/* HERO */}
-      <section style={hero.wrap}>
-        <div style={hero.media}>
-          <img
-            src={heroImageSrc}
-            alt="Curated collection hero"
-            style={hero.image}
-          />
-        </div>
-        <div style={hero.overlay} />
-        <div style={hero.inner}>
-          <h1 style={hero.title}>{page.title}</h1>
-          {page.intro && <p style={hero.sub}>{page.intro}</p>}
-          <p style={hero.trust}>🔒 We’ll email you the private link within 10 seconds. No spam.</p>
-        </div>
-      </section>
-
-      {/* CONTENT */}
-      <main style={content.wrap}>
-        <div style={content.left}>
-          {hasHighlights && (
-            <section style={highlights.section} aria-label="Highlights">
-              <div style={highlights.inner}>
-                <h2 style={highlights.heading}>Highlights</h2>
-                <div style={highlights.list}>
-                  {page.highlights.map((item, idx) => {
-                    const icon =
-                      typeof item?.icon === "string" && item.icon.trim() ? item.icon.trim() : "✨";
-                    const title =
-                      typeof item?.headline === "string" && item.headline.trim()
-                        ? item.headline.trim()
-                        : `Highlight ${idx + 1}`;
-                    const copy =
-                      typeof item?.supporting === "string" && item.supporting.trim()
-                        ? item.supporting.trim()
-                        : "";
-                    const divider = idx !== page.highlights.length - 1 ? highlights.divider : null;
-                    return (
-                      <div key={`${title}-${idx}`} style={{ ...highlights.item, ...divider }}>
-                        <div aria-hidden="true" style={highlights.icon}>{icon}</div>
-                        <div style={highlights.textWrap}>
-                          <p style={highlights.title}>{title}</p>
-                          {copy && <p style={highlights.copy}>{copy}</p>}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </section>
-          )}
-        </div>
-        <div style={content.right}>
-          <LeadForm slug={page.slug} title={page.title} realmLink={page.realmLink} />
-          <div style={disclosure.box}>
-            <strong>Matthew Mulhall</strong> — Real Estate Agent — HomeLife Optimum Realty — Finally Home Agents
+      <div style={layout.page}>
+        <main style={layout.main}>
+          <div style={layout.headingGroup}>
+            <h1 style={layout.headline}>{headline}</h1>
+            {subheadline && <p style={layout.subheadline}>{subheadline}</p>}
           </div>
-        </div>
-      </main>
+          <div style={layout.formWrap}>
+            <LeadForm
+              slug={(typeof page.slug === "string" && page.slug.trim()) || slug}
+              title={headline}
+              realmLink={page.realmLink}
+              ctaText={ctaText}
+              onSuccessRedirect={redirectUrl}
+            />
+          </div>
+        </main>
+
+        {showWhatsappFooter && whatsappHref && (
+          <footer style={layout.footer}>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={layout.whatsappLink}
+            >
+              Prefer WhatsApp? Message us ↗
+            </a>
+          </footer>
+        )}
+      </div>
     </>
   );
 }
 
-const hero = {
-  wrap: {
-    position: "relative",
-    display: "grid",
-    alignItems: "end",
-    height: "min(65vh, clamp(280px, 55vw, 520px))",
-    overflow: "hidden",
-  },
-  media: { position: "absolute", inset: 0, overflow: "hidden" },
-  image: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center",
-    filter: "saturate(.95)",
-  },
-  overlay: { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55))" },
-  inner: { position: "relative", maxWidth: 1080, margin: "0 auto", padding: "60px 20px" },
-  title: { color: "#fff", fontSize: 36, lineHeight: 1.1, margin: 0 },
-  sub: { color: "rgba(255,255,255,.92)", fontSize: 18, marginTop: 8, maxWidth: 720 },
-  trust: { color: "rgba(255,255,255,.85)", fontSize: 13, marginTop: 14 },
-};
-
-const content = {
-  wrap: {
-    maxWidth: 1080,
-    margin: "32px auto 64px",
-    padding: "0 20px",
-    display: "grid",
-    gridTemplateColumns: "minmax(0, 1fr) 420px",
-    gap: 32,
-  },
-  left: {
+const layout = {
+  page: {
+    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
-    gap: 32,
+    justifyContent: "space-between",
+    background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
   },
-  right: { position: "relative" },
-};
-
-const highlights = {
-  section: {
-    position: "relative",
-    borderRadius: 28,
-    background: "linear-gradient(145deg, rgba(252,252,253,0.96), rgba(239,243,249,0.94))",
-    boxShadow: "0 18px 45px rgba(15, 23, 42, 0.08)",
-    border: "1px solid rgba(148, 163, 184, 0.12)",
-    overflow: "hidden",
-  },
-  inner: {
-    padding: "32px 32px 20px",
-  },
-  heading: {
-    margin: 0,
-    fontSize: 22,
-    fontWeight: 600,
-    letterSpacing: "-0.01em",
-    color: "#0f172a",
-  },
-  list: {
-    marginTop: 24,
+  main: {
+    flex: "1 1 auto",
     display: "flex",
     flexDirection: "column",
-  },
-  item: {
-    display: "grid",
-    gridTemplateColumns: "40px 1fr",
-    alignItems: "start",
-    gap: 18,
-    padding: "18px 0",
-  },
-  divider: {
-    borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
-  },
-  icon: {
-    fontSize: 28,
-    lineHeight: "32px",
-    display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    padding: "min(12vh, 120px) 20px 60px",
   },
-  textWrap: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 6,
+  headingGroup: {
+    textAlign: "center",
+    maxWidth: 720,
+    marginBottom: 32,
   },
-  title: {
+  headline: {
     margin: 0,
-    fontSize: 18,
-    fontWeight: 600,
-    color: "#111827",
+    fontSize: "clamp(32px, 4vw, 46px)",
+    lineHeight: 1.05,
+    color: "#0f172a",
     letterSpacing: "-0.01em",
   },
-  copy: {
-    margin: 0,
-    fontSize: 15,
+  subheadline: {
+    marginTop: 18,
+    marginBottom: 0,
+    fontSize: 18,
     lineHeight: 1.6,
     color: "#475569",
   },
-};
-
-const disclosure = {
-  box: {
-    marginTop: 12,
+  formWrap: {
+    width: "100%",
+    maxWidth: 420,
+  },
+  footer: {
+    padding: "24px 20px",
+    display: "flex",
+    justifyContent: "center",
+  },
+  whatsappLink: {
     fontSize: 12,
-    opacity: 0.8,
-    background: "#f7f7f7",
-    border: "1px solid #eee",
-    padding: "10px 12px",
-    borderRadius: 8,
+    color: "#0f172a",
+    opacity: 0.65,
+    textDecoration: "none",
   },
 };
 
-// Mobile stack
 if (typeof window !== "undefined") {
-  const mq = window.matchMedia("(max-width: 860px)");
+  const mq = window.matchMedia("(max-width: 640px)");
   if (mq.matches) {
-    content.wrap.gridTemplateColumns = "1fr";
-    content.wrap.gap = 28;
-    content.left.gap = 24;
-    highlights.inner.padding = "28px 24px 18px";
-    highlights.item.gridTemplateColumns = "32px 1fr";
+    layout.main.padding = "80px 18px 48px";
+    layout.headingGroup.marginBottom = 28;
+    layout.headline.fontSize = 30;
+    layout.subheadline.fontSize = 16;
   }
 }
