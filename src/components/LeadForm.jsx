@@ -1,7 +1,17 @@
 // src/components/LeadForm.jsx
 import React from "react";
 
-export default function LeadForm({ slug, title, realmLink }) {
+const DEFAULT_HELPER =
+  "Once you submit, the full list will be sent instantly by email. We’ll also share our contact info so you can quickly book a showing or ask questions about any property.";
+
+export default function LeadForm({
+  slug,
+  title,
+  realmLink,
+  ctaText = "Send Me the Listings",
+  helperText = DEFAULT_HELPER,
+  onSuccessRedirect,
+}) {
   const [state, setState] = React.useState({
     name: "",
     email: "",
@@ -48,10 +58,9 @@ export default function LeadForm({ slug, title, realmLink }) {
       if (!res.ok) throw new Error(await res.text());
       setStatus({ loading: false, ok: true, err: "" });
 
-      // small delay, then redirect
-      setTimeout(() => {
-        window.location.href = "/"; // send to a branded page if you like
-      }, 2500);
+      if (onSuccessRedirect) {
+        window.location.href = onSuccessRedirect;
+      }
     } catch (err) {
       setStatus({ loading: false, ok: false, err: "Sorry, something went wrong. Please try again." });
     }
@@ -59,16 +68,12 @@ export default function LeadForm({ slug, title, realmLink }) {
 
   return (
     <div style={styles.card}>
-      <h3 style={{ marginBottom: 12 }}>Get the listings by email</h3>
-      <p style={{ marginTop: -4, marginBottom: 16, fontSize: 14, opacity: 0.8 }}>
-        We’ll send the link to your inbox within 10 seconds.
-      </p>
-
       <form onSubmit={onSubmit}>
         <label style={styles.label}>
           Full Name
           <input
             name="name"
+            autoComplete="name"
             value={state.name}
             onChange={onChange}
             placeholder="Jane Doe"
@@ -82,6 +87,7 @@ export default function LeadForm({ slug, title, realmLink }) {
           <input
             name="email"
             type="email"
+            autoComplete="email"
             value={state.email}
             onChange={onChange}
             placeholder="you@email.com"
@@ -94,6 +100,8 @@ export default function LeadForm({ slug, title, realmLink }) {
           Phone
           <input
             name="phone"
+            type="tel"
+            autoComplete="tel"
             value={state.phone}
             onChange={onChange}
             placeholder="(555) 555-5555"
@@ -129,19 +137,17 @@ export default function LeadForm({ slug, title, realmLink }) {
         </label>
 
         <button type="submit" disabled={status.loading} style={styles.cta}>
-          {status.loading ? "Sending…" : "Email me the listings"}
+          {status.loading ? "Sending…" : ctaText}
         </button>
 
         {status.err && <p style={{ color: "#c0392b", marginTop: 10 }}>{status.err}</p>}
-        {status.ok && (
+        {status.ok && !onSuccessRedirect && (
           <p style={{ color: "#2ecc71", marginTop: 10 }}>
-            Success! Check your inbox—the link should arrive within 10 seconds. Redirecting…
+            Success! Check your inbox—the link should arrive within 10 seconds.
           </p>
         )}
 
-        <p style={styles.finePrint}>
-          We’ll never spam. Unsubscribe anytime.
-        </p>
+        {helperText && <p style={styles.helper}>{helperText}</p>}
       </form>
     </div>
   );
@@ -154,6 +160,7 @@ const styles = {
     padding: 20,
     boxShadow: "0 10px 30px rgba(0,0,0,.08)",
     border: "1px solid rgba(0,0,0,.06)",
+    width: "100%",
   },
   label: { display: "block", fontWeight: 600, fontSize: 14, marginBottom: 10 },
   input: {
@@ -177,5 +184,5 @@ const styles = {
     border: "none",
     cursor: "pointer",
   },
-  finePrint: { marginTop: 10, fontSize: 12, opacity: 0.7 },
+  helper: { marginTop: 16, fontSize: 12.5, lineHeight: 1.6, color: "#475569" },
 };

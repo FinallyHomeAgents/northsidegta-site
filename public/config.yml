@@ -16,40 +16,50 @@ collections:
     identifier_field: 'slug'
     slug: '{{slug}}'
     fields:
-      - name: 'title'
-        label: 'Page Title'
+      - name: 'headline'
+        label: 'Headline'
+      - name: 'subheadline'
+        label: 'Subheadline'
+        widget: 'text'
+        required: false
+        default: 'Bigger lots, more value, and less traffic — get the listings now.'
       - name: 'slug'
         label: 'Slug (URL part)'
         widget: 'string'
         pattern:
           - '^[a-z0-9-]+$'
           - 'Use lowercase letters, numbers, and dashes only'
-      - name: 'intro'
-        label: 'Intro (optional)'
-        required: false
       - name: 'realmLink'
         label: 'Realm Link (the private URL)'
+      - name: 'ctaText'
+        label: 'CTA Button Text'
+        required: false
+        default: 'Send Me the Listings'
+      - name: 'showWhatsappLink'
+        label: 'Show WhatsApp link in footer'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'whatsappUrl'
+        label: 'WhatsApp URL'
+        required: false
+      - name: 'thankYouGuideLabel'
+        label: 'Buyer’s Guide Label (optional)'
+        required: false
+      - name: 'thankYouGuideUrl'
+        label: 'Buyer’s Guide PDF URL (optional)'
+        required: false
+      - name: 'seoDescription'
+        label: 'SEO Description'
+        widget: 'text'
+        required: false
       - name: 'heroImage'
         label: 'Hero Image'
         widget: 'image'
         required: false
         hint: 'Upload a 1920×1080 (16:9) JPG/PNG for best results.'
-      - name: 'highlights'
-        label: 'Highlights (optional)'
-        widget: 'list'
+      - name: 'legacyTitle'
+        label: 'Legacy Page Title'
+        widget: 'string'
         required: false
-        summary: '{{headline}}'
-        fields:
-          - name: 'icon'
-            label: 'Icon or Emoji'
-            widget: 'string'
-            required: false
-            hint: 'Use a single emoji or up to two characters.'
-          - name: 'headline'
-            label: 'Headline'
-            widget: 'string'
-            required: false
-          - name: 'supporting'
-            label: 'Supporting Text'
-            widget: 'text'
-            required: false
+        hint: 'Optional: only needed if older automations depend on the original title field.'
