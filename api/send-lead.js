@@ -156,43 +156,50 @@ export default async function handler(req, res) {
     }
 
     if (FORMSPREE_ENDPOINT) {
-      const payload = {
-        name,
-        email,
-        phone,
-        slug,
-        title,
-        casl,
-        notRepresented,
-        realmLink,
-      }
-
-      try {
-        const fsRes = await fetch(FORMSPREE_ENDPOINT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify(payload),
-        })
-
-        if (!fsRes.ok) {
-          let bodyText = ''
-          try {
-            bodyText = await fsRes.text()
-          } catch (err) {
-            console.error('Formspree response read error:', err)
-          }
-          console.error(
-            'Formspree error:',
-            fsRes.status,
-            fsRes.statusText,
-            bodyText
-          )
+      if (!isHttpUrl(FORMSPREE_ENDPOINT)) {
+        console.warn(
+          'Formspree endpoint ignored (must be http/https):',
+          FORMSPREE_ENDPOINT
+        )
+      } else {
+        const payload = {
+          name,
+          email,
+          phone,
+          slug,
+          title,
+          casl,
+          notRepresented,
+          realmLink,
         }
-      } catch (err) {
-        console.error('Formspree request failed:', err)
+
+        try {
+          const fsRes = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+          })
+
+          if (!fsRes.ok) {
+            let bodyText = ''
+            try {
+              bodyText = await fsRes.text()
+            } catch (err) {
+              console.error('Formspree response read error:', err)
+            }
+            console.error(
+              'Formspree error:',
+              fsRes.status,
+              fsRes.statusText,
+              bodyText
+            )
+          }
+        } catch (err) {
+          console.error('Formspree request failed:', err)
+        }
       }
     }
 
