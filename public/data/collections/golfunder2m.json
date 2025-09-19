@@ -1,4 +1,5 @@
 {
+  "heroImage": "/uploads/northsidegta-map-bg.jpg",
   "thankYouGuideUrl": "https://northsidegta.ca/PDF/Aurora-Guide.pdf",
   "showWhatsappLink": true,
   "realmLink": "https://northsidegta.ca/buyers",
@@ -6,7 +7,7 @@
   "thankYouGuideLabel": "Buyers Guidge Label Text",
   "subheadline": "Bigger lots, more value, and less traffic — get the listings now.",
   "headline": "Golf Course Properties Under $2,000,000",
-  "whatsappUrl": "wa.me/16476684646",
+  "whatsappUrl": "https://wa.me/16476684646",
   "ctaText": "Send Me the Listings",
   "seoDescription": "seo description optional"
 }
