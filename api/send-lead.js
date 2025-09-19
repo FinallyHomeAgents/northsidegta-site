@@ -6,6 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 // --- Config -------------------------------------------------
 const ORIGIN = 'https://northsidegta.ca' // your site; add preview origin if needed
 const FROM_DEFAULT = 'NorthSide GTA <no-reply@northsidegta.ca>' // must be a verified domain in Resend
+const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 
 // --- Utils --------------------------------------------------
 function escapeHtml(str = '') {
@@ -152,6 +153,47 @@ export default async function handler(req, res) {
     if (r?.error) {
       console.error('Resend error:', r.error)
       return res.status(502).json({ ok: false, error: 'Email sending failed.' })
+    }
+
+    if (FORMSPREE_ENDPOINT) {
+      const payload = {
+        name,
+        email,
+        phone,
+        slug,
+        title,
+        casl,
+        notRepresented,
+        realmLink,
+      }
+
+      try {
+        const fsRes = await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+
+        if (!fsRes.ok) {
+          let bodyText = ''
+          try {
+            bodyText = await fsRes.text()
+          } catch (err) {
+            console.error('Formspree response read error:', err)
+          }
+          console.error(
+            'Formspree error:',
+            fsRes.status,
+            fsRes.statusText,
+            bodyText
+          )
+        }
+      } catch (err) {
+        console.error('Formspree request failed:', err)
+      }
     }
 
     return res.status(200).json({ ok: true })
