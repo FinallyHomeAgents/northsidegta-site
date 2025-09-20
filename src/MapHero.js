@@ -246,6 +246,17 @@ function CheckIcon({ className = "" }) {
     </IconBase>
   );
 }
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
+=======
+function TripleChevronIcon({ className = "" }) {
+  return (
+    <IconBase className={className}>
+      <path d="M7 6l5 6-5 6M12 6l5 6-5 6" />
+    </IconBase>
+  );
+}
+
+main
 /* ────────────────────────────────────────────────────────────
    LED-inspired matchup scoreboard overlay
    ──────────────────────────────────────────────────────────── */
@@ -266,6 +277,7 @@ function ComparisonBar({ className = "" }) {
   const cur = items[i];
 
   return (
+codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
     <div className={`relative ${className}`}>
       <div
         className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
@@ -277,23 +289,48 @@ function ComparisonBar({ className = "" }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(74,222,128,0.18),transparent_68%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%,rgba(15,108,110,0.25)_100%)] mix-blend-screen opacity-80" />
 
+    <div className={`pointer-events-none ${className}`}>
+      <div
+        className="pointer-events-auto relative mx-auto w-[min(92vw,520px)] overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
+        style={{
+          background:
+            "linear-gradient(140deg, rgba(7,16,21,0.88) 0%, rgba(6,56,41,0.92) 45%, rgba(6,78,59,0.9) 100%)",
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(74,222,128,0.18),transparent_65%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%,rgba(15,118,110,0.25)_100%)] mix-blend-screen opacity-80" />
+ main
+
         <div className="relative">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-2 md:px-6">
             <div className="flex items-center gap-2">
               <div className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
               <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100/90">
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
                 NorthSide GTA Showdown
               </span>
             </div>
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-emerald-100/70">
               <span>Presented&nbsp;by</span>
               <span className="font-semibold text-emerald-50">FHA</span>
+
+                Live Matchup
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-emerald-100/70">
+              <span>FHA</span>
+              <TripleChevronIcon className="h-4 w-4 text-emerald-200/60" />
+ main
             </div>
           </div>
 
           <div className="flex items-center justify-between px-4 py-3 md:px-6">
             <div className="flex items-center gap-3">
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rose-600/80 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[inset_0_0_12px_rgba(248,113,113,0.45)]">
+
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-600/80 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[inset_0_0_12px_rgba(248,113,113,0.45)]">
+ main
                 TOR
               </span>
               <div className="leading-tight">
@@ -308,6 +345,7 @@ function ComparisonBar({ className = "" }) {
 
             <div className="flex flex-col items-center justify-center px-2 text-emerald-200/80">
               <span className="text-[10px] uppercase tracking-[0.48em]">vs</span>
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
               <span className="mt-1 h-1 w-8 rounded-full bg-emerald-300/80" />
             </div>
 
@@ -322,6 +360,12 @@ function ComparisonBar({ className = "" }) {
                   decoding="async"
                 />
               </div>
+
+              <span className="mt-1 h-1 w-6 rounded-full bg-emerald-300/80" />
+            </div>
+
+            <div className="flex items-center gap-3 text-right">
+ main
               <div className="leading-tight">
                 <span className="block text-[10px] uppercase tracking-[0.32em] text-emerald-100/70">
                   Region
@@ -330,6 +374,9 @@ function ComparisonBar({ className = "" }) {
                   NorthSide GTA
                 </span>
               </div>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-500/40 text-[11px] font-bold uppercase tracking-[0.24em] text-emerald-50 shadow-[inset_0_0_14px_rgba(16,185,129,0.55)]">
+                NSG
+              </span>
             </div>
           </div>
 
@@ -341,6 +388,17 @@ function ComparisonBar({ className = "" }) {
               <p className="text-[11px] md:text-[12px] font-semibold leading-tight text-white/80">
                 {cur.left}
               </p>
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
+=======
+            </div>
+            <div className="flex items-center justify-end gap-3 px-4 py-3 text-right md:px-6">
+              <p className="text-[11px] md:text-[12px] font-bold leading-tight text-emerald-100">
+                {cur.right}
+              </p>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200/70 bg-emerald-500/30">
+                <CheckIcon className="h-4 w-4 text-emerald-100" />
+              </span>
+ main
             </div>
             <div className="flex items-center justify-end gap-3 px-4 py-3 text-right md:px-6">
               <p className="text-[11px] md:text-[12px] font-bold leading-tight text-emerald-100">
@@ -350,6 +408,18 @@ function ComparisonBar({ className = "" }) {
                 <CheckIcon className="h-4 w-4 text-emerald-100" />
               </span>
             </div>
+          </div>
+
+          <div className="relative h-1.5 overflow-hidden border-t border-white/5 bg-white/10">
+            <div
+              className="absolute inset-0 origin-left"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.15) 100%)",
+                animation: "ns-progress 4s linear infinite",
+              }}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-[1px] bg-emerald-200/30" />
           </div>
 
           <div className="relative h-1.5 overflow-hidden border-t border-white/5 bg-white/10">
@@ -414,6 +484,7 @@ export default function MapHero() {
           <Styles />
 
           {/* Map frame */}
+ codex/refactor-comparisonbar-into-scoreboard-overlay-v64182
           <div className="relative rounded-xl overflow-hidden">
             <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-emerald-950/25 via-emerald-900/15 to-transparent" />
             <div className="relative z-20 px-3 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-4">
@@ -429,6 +500,19 @@ export default function MapHero() {
                 alt="NorthSide GTA map with towns"
                 className="block w-full h-auto"
               />
+=======
+          <div
+            className="relative rounded-xl overflow-hidden"
+            onMouseLeave={() => canHover && setHoverId(null)}
+          >
+            <ComparisonBar className="absolute left-1/2 top-3 z-20 w-[min(94vw,520px)] -translate-x-1/2 md:top-5 lg:top-8" />
+            {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
+            <img
+              src="/Images/northside-map.svg?v=2"
+              alt="NorthSide GTA map with towns"
+              className="block w-full h-auto"
+            />
+ main
 
               {/* Pins */}
               {TOWNS.map((t) => (
