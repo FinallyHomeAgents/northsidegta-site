@@ -31,8 +31,18 @@ export default function CuratedPage() {
 
   const heroImage = typeof page.heroImage === "string" ? page.heroImage.trim() : page.heroImage;
   const heroImageSrc = heroImage ? heroImage : HERO_BACKGROUND;
-  const site = typeof window !== "undefined" ? window.location.origin : "";
-  const ogImage = heroImageSrc.startsWith("/") ? `${site}${heroImageSrc}` : heroImageSrc;
+  const defaultOrigin = "https://northsidegta.ca";
+  const site =
+    typeof window !== "undefined" && window.location
+      ? window.location.origin
+      : defaultOrigin;
+  const absoluteUrl = path => {
+    if (!path) return "";
+    if (/^https?:\/\//i.test(path)) return path;
+    const normalized = path.startsWith("/") ? path : `/${path}`;
+    return `${site.replace(/\/$/, "")}${normalized}`;
+  };
+  const ogImage = absoluteUrl(heroImageSrc);
 
   const legacyTitle =
     (typeof page.title === "string" && page.title.trim()) ||
@@ -58,17 +68,35 @@ export default function CuratedPage() {
   const showWhatsappFooter = Boolean(page.showWhatsappLink && page.whatsappUrl);
   const whatsappHref = typeof page.whatsappUrl === "string" ? page.whatsappUrl.trim() : "";
 
-  const slugText =
-    typeof slug === "string" ? slug.replace(/[-_]+/g, " ").trim() : "";
+  const slugValue = typeof slug === "string" ? slug.trim() : "";
+  const slugText = slugValue ? slugValue.replace(/[-_]+/g, " ").trim() : "";
   const heroAltText = `${headline || slugText || "NorthSide GTA"} hero image`;
+  const canonicalUrl =
+    typeof window !== "undefined" && window.location
+      ? window.location.href
+      : absoluteUrl(`/collections/${encodeURIComponent(slugValue)}`);
+  const pageTitle = `${headline} • NorthSide GTA`;
+  const twitterCardType = ogImage ? "summary_large_image" : "summary";
 
   return (
     <>
       <Helmet>
-        <title>{headline} • NorthSide GTA</title>
-        {ogImage && <meta property="og:image" content={ogImage} />}
+        <title>{pageTitle}</title>
         <meta name="description" content={seoDescription} />
         <meta name="robots" content="noindex,nofollow" />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        {ogImage && <meta property="og:image:alt" content={heroAltText} />}
+        <meta name="twitter:card" content={twitterCardType} />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:url" content={canonicalUrl} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
+        {ogImage && <meta name="twitter:image:alt" content={heroAltText} />}
       </Helmet>
 
       <div style={layout.page}>
