@@ -246,26 +246,10 @@ function CheckIcon({ className = "" }) {
     </IconBase>
   );
 }
-function SkylineIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M3 19h18M6 19v-5m3 5V8m3 11v-7m3 7v-9m3 9v-4" />
-      <path d="M12 6l1.5-1.5M12 6l-1.5-1.5" strokeOpacity=".6" />
-    </IconBase>
-  );
-}
-function TripleChevronIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M7 6l5 6-5 6M12 6l5 6-5 6" />
-    </IconBase>
-  );
-}
-
 /* ────────────────────────────────────────────────────────────
-   Premium slim auto-rotating comparison bar
+   LED-inspired matchup scoreboard overlay
    ──────────────────────────────────────────────────────────── */
-function ComparisonBar() {
+function ComparisonBar({ className = "" }) {
   const items = [
     { left: "HIGH HOME PRICES", right: "BETTER VALUE HOMES" },
     { left: "TRAFFIC GRIDLOCK", right: "EASIER COMMUTES" },
@@ -282,96 +266,109 @@ function ComparisonBar() {
   const cur = items[i];
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
-      <div className="rounded-xl overflow-hidden border border-emerald-100 shadow-sm">
-        {/* Headers */}
-        <div className="grid grid-cols-2">
-          {/* Left: Toronto Living */}
-          <div className="bg-gray-100/90 border-b border-gray-200/70">
-            <div className="flex items-center gap-2 px-4 py-2">
-              <SkylineIcon className="h-4 w-4 text-gray-600" />
-              <span className="text-[11px] font-semibold tracking-wider uppercase text-gray-700">
-                Toronto Living
+    <div className={`relative ${className}`}>
+      <div
+        className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
+        style={{
+          background:
+            "linear-gradient(140deg, rgba(5,19,15,0.92) 0%, rgba(6,52,38,0.94) 46%, rgba(5,84,63,0.92) 100%)",
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(74,222,128,0.18),transparent_68%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%,rgba(15,108,110,0.25)_100%)] mix-blend-screen opacity-80" />
+
+        <div className="relative">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2 md:px-6">
+            <div className="flex items-center gap-2">
+              <div className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100/90">
+                NorthSide GTA Showdown
               </span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-emerald-100/70">
+              <span>Presented&nbsp;by</span>
+              <span className="font-semibold text-emerald-50">FHA</span>
             </div>
           </div>
 
-          {/* Right: NorthSide GTA with chevrons + served by FHA */}
-          <div
-            className="text-white border-b border-emerald-700/60"
-            style={{
-              background:
-                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
-            }}
-          >
-            <div className="flex items-center gap-2 px-4 py-2">
-              <span className="text-[11px] font-semibold tracking-wider uppercase">
-                NorthSide GTA
+          <div className="flex items-center justify-between px-4 py-3 md:px-6">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rose-600/80 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[inset_0_0_12px_rgba(248,113,113,0.45)]">
+                TOR
               </span>
-              <TripleChevronIcon className="h-4 w-4 text-white/90" />
-              <span className="text-[10px] uppercase tracking-wide text-white/85">
-                Served by Finally Home Agents
-              </span>
+              <div className="leading-tight">
+                <span className="block text-[10px] uppercase tracking-[0.32em] text-white/45">
+                  City
+                </span>
+                <span className="block text-sm font-semibold uppercase tracking-wide text-white">
+                  Toronto Living
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Rows */}
-        <div className="grid grid-cols-2">
-          {/* Left column */}
-          <div className="relative bg-white">
-            <div className="h-[76px] md:h-[86px] flex items-center">
-              <div className="w-full px-4 md:px-6">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="flex-none rounded-full bg-rose-50 border border-rose-200 p-1.5">
-                    <XIcon className="h-4 w-4 text-rose-600" />
-                  </div>
-                  <p className="text-[13px] md:text-[15px] font-semibold text-gray-800 leading-tight uppercase">
-                    {cur.left}
-                  </p>
-                </div>
+            <div className="flex flex-col items-center justify-center px-2 text-emerald-200/80">
+              <span className="text-[10px] uppercase tracking-[0.48em]">vs</span>
+              <span className="mt-1 h-1 w-8 rounded-full bg-emerald-300/80" />
+            </div>
+
+            <div className="flex items-center gap-3 text-right">
+              <div className="relative flex h-9 w-9 items-center justify-center">
+                <div className="absolute inset-0 rounded-xl border border-emerald-300/70 bg-emerald-500/25 shadow-[0_6px_16px_rgba(13,148,136,0.45)]" />
+                <img
+                  src="/Images/fha-badge.png"
+                  alt="NorthSide GTA logo"
+                  className="relative z-10 h-7 w-7 object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="leading-tight">
+                <span className="block text-[10px] uppercase tracking-[0.32em] text-emerald-100/70">
+                  Region
+                </span>
+                <span className="block text-sm font-bold uppercase tracking-wide text-emerald-50">
+                  NorthSide GTA
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right column */}
-          <div
-            className="relative text-white"
-            style={{
-              background:
-                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
-            }}
-          >
-            <div className="h-[76px] md:h-[86px] flex items-center">
-              <div className="w-full px-4 md:px-6">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="flex-none rounded-full bg-white/15 border border-white/20 p-1.5">
-                    <CheckIcon className="h-4 w-4 text-white" />
-                  </div>
-                  <p className="text-[13px] md:text-[15px] font-bold leading-tight uppercase">
-                    {cur.right}
-                  </p>
-                </div>
-              </div>
+          <div className="grid grid-cols-2 border-t border-white/10 text-[12px] uppercase tracking-wide">
+            <div className="flex items-center gap-3 px-4 py-3 md:px-6">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-rose-300/60 bg-rose-500/25">
+                <XIcon className="h-4 w-4 text-rose-200" />
+              </span>
+              <p className="text-[11px] md:text-[12px] font-semibold leading-tight text-white/80">
+                {cur.left}
+              </p>
             </div>
+            <div className="flex items-center justify-end gap-3 px-4 py-3 text-right md:px-6">
+              <p className="text-[11px] md:text-[12px] font-bold leading-tight text-emerald-100">
+                {cur.right}
+              </p>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200/70 bg-emerald-500/30">
+                <CheckIcon className="h-4 w-4 text-emerald-100" />
+              </span>
+            </div>
+          </div>
 
-            {/* Animated progress bar */}
-            <div className="absolute inset-x-0 bottom-0 h-1.5 bg-white/10 overflow-hidden">
-              <div
-                className="h-full origin-left"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.9), rgba(255,255,255,0.35))",
-                  animation: "ns-progress 4s linear infinite",
-                }}
-              />
-            </div>
+          <div className="relative h-1.5 overflow-hidden border-t border-white/5 bg-white/10">
+            <div
+              className="absolute inset-0 origin-left"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.15) 100%)",
+                animation: "ns-progress 4s linear infinite",
+              }}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-[1px] bg-emerald-200/30" />
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 
 /* ────────────────────────────────────────────────────────────
    MapHero
@@ -412,99 +409,102 @@ export default function MapHero() {
   return (
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
-        {/* Premium slim comparison bar */}
-        <ComparisonBar />
-
         {/* Bordered hero box (map + inline quick-contact) */}
         <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
           <Styles />
 
           {/* Map frame */}
-          <div
-            className="relative rounded-xl overflow-hidden"
-            onMouseLeave={() => canHover && setHoverId(null)}
-          >
-            {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
-            <img
-              src="/Images/northside-map.svg?v=2"
-              alt="NorthSide GTA map with towns"
-              className="block w-full h-auto"
-            />
+          <div className="relative rounded-xl overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-emerald-950/25 via-emerald-900/15 to-transparent" />
+            <div className="relative z-20 px-3 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-4">
+              <ComparisonBar className="w-full" />
+            </div>
+            <div
+              className="relative z-0"
+              onMouseLeave={() => canHover && setHoverId(null)}
+            >
+              {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
+              <img
+                src="/Images/northside-map.svg?v=2"
+                alt="NorthSide GTA map with towns"
+                className="block w-full h-auto"
+              />
 
-            {/* Pins */}
-            {TOWNS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className="pin-wrap"
-                style={{ left: `${t.x}%`, top: `${t.y}%` }}
-                aria-label={t.name}
-                aria-pressed={activeId === t.id}
-                onMouseEnter={() => canHover && setHoverId(t.id)}
-                onClick={() =>
-                  !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                }
-              >
-                <span
-                  className="pin"
-                  style={{ animationPlayState: pulsing ? "running" : "paused" }}
-                />
-                <span className="sr-only">{t.name}</span>
-              </button>
-            ))}
+              {/* Pins */}
+              {TOWNS.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className="pin-wrap"
+                  style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                  aria-label={t.name}
+                  aria-pressed={activeId === t.id}
+                  onMouseEnter={() => canHover && setHoverId(t.id)}
+                  onClick={() =>
+                    !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                  }
+                >
+                  <span
+                    className="pin"
+                    style={{ animationPlayState: pulsing ? "running" : "paused" }}
+                  />
+                  <span className="sr-only">{t.name}</span>
+                </button>
+              ))}
 
-            {/* DESKTOP: right-docked info panel (only when hovering a pin) */}
-            {canHover && activeTown && (
-              <div className="hidden md:block">
-                <div className="panel absolute top-4 right-4 w-[340px] lg:w-[360px] p-4 md:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
-                        {activeTown.name.slice(0, 1)}
+              {/* DESKTOP: right-docked info panel (only when hovering a pin) */}
+              {canHover && activeTown && (
+                <div className="hidden md:block">
+                  <div className="panel absolute top-4 right-4 w-[340px] lg:w-[360px] p-4 md:p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
+                          {activeTown.name.slice(0, 1)}
+                        </div>
+                        <div className="text-[18px] md:text-[20px] font-extrabold tracking-tight">
+                          {activeTown.name}
+                        </div>
                       </div>
-                      <div className="text-[18px] md:text-[20px] font-extrabold tracking-tight">
-                        {activeTown.name}
-                      </div>
-                    </div>
-                    <a
-                      href={activeTown.url}
-                      className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
-                    >
-                      See town
-                    </a>
-                  </div>
-
-                  {/* Blurb */}
-                  {activeTown.blurb && (
-                    <p className="text-[14px] leading-5 text-gray-700 mt-2">
-                      {activeTown.blurb}
-                    </p>
-                  )}
-
-                  {/* Ratings grid — tighter so nothing clips */}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {CATEGORY_ORDER.filter(
-                      (k) =>
-                        activeTown.ratings && activeTown.ratings[k] != null
-                    ).map((k) => (
-                      <div
-                        key={k}
-                        className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
+                      <a
+                        href={activeTown.url}
+                        className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
                       >
-                        <RatingRow
-                          label={CATEGORY_LABELS[k]}
-                          value={activeTown.ratings[k]}
-                        />
-                      </div>
-                    ))}
-                  </div>
+                        See town
+                      </a>
+                    </div>
 
-                  <div className="mt-3 text-xs text-gray-500">
-                    ★★★★★ Google reviews • As seen on Instagram & Facebook
+                    {/* Blurb */}
+                    {activeTown.blurb && (
+                      <p className="text-[14px] leading-5 text-gray-700 mt-2">
+                        {activeTown.blurb}
+                      </p>
+                    )}
+
+                    {/* Ratings grid — tighter so nothing clips */}
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {CATEGORY_ORDER.filter(
+                        (k) =>
+                          activeTown.ratings && activeTown.ratings[k] != null
+                      ).map((k) => (
+                        <div
+                          key={k}
+                          className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
+                        >
+                          <RatingRow
+                            label={CATEGORY_LABELS[k]}
+                            value={activeTown.ratings[k]}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-3 text-xs text-gray-500">
+                      ★★★★★ Google reviews • As seen on Instagram & Facebook
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* MOBILE: panel below the map when a pin is tapped */}
