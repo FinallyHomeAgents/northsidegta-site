@@ -246,14 +246,6 @@ function CheckIcon({ className = "" }) {
     </IconBase>
   );
 }
-function SkylineIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M3 19h18M6 19v-5m3 5V8m3 11v-7m3 7v-9m3 9v-4" />
-      <path d="M12 6l1.5-1.5M12 6l-1.5-1.5" strokeOpacity=".6" />
-    </IconBase>
-  );
-}
 function TripleChevronIcon({ className = "" }) {
   return (
     <IconBase className={className}>
@@ -263,9 +255,9 @@ function TripleChevronIcon({ className = "" }) {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Premium slim auto-rotating comparison bar
+   LED-inspired matchup scoreboard overlay
    ──────────────────────────────────────────────────────────── */
-function ComparisonBar() {
+function ComparisonBar({ className = "" }) {
   const items = [
     { left: "HIGH HOME PRICES", right: "BETTER VALUE HOMES" },
     { left: "TRAFFIC GRIDLOCK", right: "EASIER COMMUTES" },
@@ -282,90 +274,95 @@ function ComparisonBar() {
   const cur = items[i];
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
-      <div className="rounded-xl overflow-hidden border border-emerald-100 shadow-sm">
-        {/* Headers */}
-        <div className="grid grid-cols-2">
-          {/* Left: Toronto Living */}
-          <div className="bg-gray-100/90 border-b border-gray-200/70">
-            <div className="flex items-center gap-2 px-4 py-2">
-              <SkylineIcon className="h-4 w-4 text-gray-600" />
-              <span className="text-[11px] font-semibold tracking-wider uppercase text-gray-700">
-                Toronto Living
+    <div className={`pointer-events-none ${className}`}>
+      <div
+        className="pointer-events-auto relative mx-auto w-[min(92vw,520px)] overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
+        style={{
+          background:
+            "linear-gradient(140deg, rgba(7,16,21,0.88) 0%, rgba(6,56,41,0.92) 45%, rgba(6,78,59,0.9) 100%)",
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(74,222,128,0.18),transparent_65%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%,rgba(15,118,110,0.25)_100%)] mix-blend-screen opacity-80" />
+
+        <div className="relative">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2 md:px-6">
+            <div className="flex items-center gap-2">
+              <div className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100/90">
+                Live Matchup
               </span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-emerald-100/70">
+              <span>FHA</span>
+              <TripleChevronIcon className="h-4 w-4 text-emerald-200/60" />
             </div>
           </div>
 
-          {/* Right: NorthSide GTA with chevrons + served by FHA */}
-          <div
-            className="text-white border-b border-emerald-700/60"
-            style={{
-              background:
-                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
-            }}
-          >
-            <div className="flex items-center gap-2 px-4 py-2">
-              <span className="text-[11px] font-semibold tracking-wider uppercase">
-                NorthSide GTA
+          <div className="flex items-center justify-between px-4 py-3 md:px-6">
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-600/80 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[inset_0_0_12px_rgba(248,113,113,0.45)]">
+                TOR
               </span>
-              <TripleChevronIcon className="h-4 w-4 text-white/90" />
-              <span className="text-[10px] uppercase tracking-wide text-white/85">
-                Served by Finally Home Agents
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Rows */}
-        <div className="grid grid-cols-2">
-          {/* Left column */}
-          <div className="relative bg-white">
-            <div className="h-[76px] md:h-[86px] flex items-center">
-              <div className="w-full px-4 md:px-6">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="flex-none rounded-full bg-rose-50 border border-rose-200 p-1.5">
-                    <XIcon className="h-4 w-4 text-rose-600" />
-                  </div>
-                  <p className="text-[13px] md:text-[15px] font-semibold text-gray-800 leading-tight uppercase">
-                    {cur.left}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right column */}
-          <div
-            className="relative text-white"
-            style={{
-              background:
-                "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
-            }}
-          >
-            <div className="h-[76px] md:h-[86px] flex items-center">
-              <div className="w-full px-4 md:px-6">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="flex-none rounded-full bg-white/15 border border-white/20 p-1.5">
-                    <CheckIcon className="h-4 w-4 text-white" />
-                  </div>
-                  <p className="text-[13px] md:text-[15px] font-bold leading-tight uppercase">
-                    {cur.right}
-                  </p>
-                </div>
+              <div className="leading-tight">
+                <span className="block text-[10px] uppercase tracking-[0.32em] text-white/45">
+                  City
+                </span>
+                <span className="block text-sm font-semibold uppercase tracking-wide text-white">
+                  Toronto Living
+                </span>
               </div>
             </div>
 
-            {/* Animated progress bar */}
-            <div className="absolute inset-x-0 bottom-0 h-1.5 bg-white/10 overflow-hidden">
-              <div
-                className="h-full origin-left"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.9), rgba(255,255,255,0.35))",
-                  animation: "ns-progress 4s linear infinite",
-                }}
-              />
+            <div className="flex flex-col items-center justify-center px-2 text-emerald-200/80">
+              <span className="text-[10px] uppercase tracking-[0.48em]">vs</span>
+              <span className="mt-1 h-1 w-6 rounded-full bg-emerald-300/80" />
             </div>
+
+            <div className="flex items-center gap-3 text-right">
+              <div className="leading-tight">
+                <span className="block text-[10px] uppercase tracking-[0.32em] text-emerald-100/70">
+                  Region
+                </span>
+                <span className="block text-sm font-bold uppercase tracking-wide text-emerald-50">
+                  NorthSide GTA
+                </span>
+              </div>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-500/40 text-[11px] font-bold uppercase tracking-[0.24em] text-emerald-50 shadow-[inset_0_0_14px_rgba(16,185,129,0.55)]">
+                NSG
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 border-t border-white/10 text-[12px] uppercase tracking-wide">
+            <div className="flex items-center gap-3 px-4 py-3 md:px-6">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-rose-300/60 bg-rose-500/25">
+                <XIcon className="h-4 w-4 text-rose-200" />
+              </span>
+              <p className="text-[11px] md:text-[12px] font-semibold leading-tight text-white/80">
+                {cur.left}
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-3 px-4 py-3 text-right md:px-6">
+              <p className="text-[11px] md:text-[12px] font-bold leading-tight text-emerald-100">
+                {cur.right}
+              </p>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200/70 bg-emerald-500/30">
+                <CheckIcon className="h-4 w-4 text-emerald-100" />
+              </span>
+            </div>
+          </div>
+
+          <div className="relative h-1.5 overflow-hidden border-t border-white/5 bg-white/10">
+            <div
+              className="absolute inset-0 origin-left"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.15) 100%)",
+                animation: "ns-progress 4s linear infinite",
+              }}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-[1px] bg-emerald-200/30" />
           </div>
         </div>
       </div>
@@ -412,9 +409,6 @@ export default function MapHero() {
   return (
     <section className="bg-gradient-to-b from-white to-emerald-50/40">
       <div className="mx-auto max-w-6xl px-4 pt-8">
-        {/* Premium slim comparison bar */}
-        <ComparisonBar />
-
         {/* Bordered hero box (map + inline quick-contact) */}
         <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
           <Styles />
@@ -424,6 +418,7 @@ export default function MapHero() {
             className="relative rounded-xl overflow-hidden"
             onMouseLeave={() => canHover && setHoverId(null)}
           >
+            <ComparisonBar className="absolute left-1/2 top-3 z-20 w-[min(94vw,520px)] -translate-x-1/2 md:top-5 lg:top-8" />
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
             <img
               src="/Images/northside-map.svg?v=2"
