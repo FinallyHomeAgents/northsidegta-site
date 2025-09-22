@@ -50,6 +50,20 @@ function WhatsAppIcon({ className = "w-5 h-5" }) {
   );
 }
 
+const CheckIcon = (props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
 // ===== Two-step, in-place Seller form (with map background + gradient buttons) =====
 function SellerLeadCapture() {
   const [form, setForm] = useState({
@@ -103,9 +117,12 @@ function SellerLeadCapture() {
     consent: !!form.consent,
   };
   const requiredOk = Object.values(requiredChecks).every(Boolean);
-  const progressPct = Math.round(
-    (Object.values(requiredChecks).filter(Boolean).length /
-      Object.keys(requiredChecks).length) * 100
+  const progressPct = Math.max(
+    6,
+    Math.round(
+      (Object.values(requiredChecks).filter(Boolean).length /
+        Object.keys(requiredChecks).length) * 100
+    )
   );
 
   function update(e) {
@@ -226,21 +243,32 @@ function SellerLeadCapture() {
   if (done) {
     return (
       <section className="mx-auto max-w-5xl w-full">
-        <div className="rounded-2xl border border-emerald-200 bg-white shadow-sm overflow-hidden">
-          <div className="px-6 py-5 border-b bg-emerald-50/60 border-emerald-100">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-sm font-semibold">
-              ✅ Submitted successfully
-            </div>
-            <h3 className="mt-2 text-2xl font-extrabold tracking-tight">Thanks! You’ve unlocked priority support.</h3>
-            <p className="text-sm text-slate-700">We’re reviewing your home now. For faster back-and-forth, connect with us on WhatsApp:</p>
-          </div>
+        <div className="relative overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6 shadow-xl md:p-8">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
+            style={{
+              backgroundImage: `url('${BG_IMAGE}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            aria-hidden="true"
+          />
 
-          <div className="px-6 py-6 space-y-5">
-            {/* Premium WhatsApp card */}
-            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-white p-5">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="relative z-10 space-y-6">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/90 p-6 shadow-sm backdrop-blur">
+              <div className="flex items-center gap-2 text-emerald-800">
+                <CheckIcon className="h-5 w-5" />
+                <h3 className="text-xl md:text-2xl font-bold">Thanks! You’ve unlocked priority support.</h3>
+              </div>
+              <p className="mt-2 text-sm text-emerald-900/90">
+                We’re reviewing your home now. For faster back-and-forth, connect with us on WhatsApp.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-200 bg-white/80 p-5 shadow-sm backdrop-blur">
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600/10 text-emerald-800 px-3 py-1 text-xs font-semibold">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
                     🔓 Premium perk unlocked
                   </div>
                   <h4 className="mt-2 text-lg font-semibold text-slate-900">
@@ -254,7 +282,7 @@ function SellerLeadCapture() {
                   href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20%E2%80%94%20I%27m%20following%20up%20on%20my%20home%20valuation."
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl px-4 py-3 font-semibold text-white shadow-md hover:shadow-lg transition"
+                  className="inline-flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-white shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                   style={{ background: "linear-gradient(135deg, #25D366 0%, #1ebe57 100%)" }}
                 >
                   <WhatsAppIcon className="w-5 h-5" />
@@ -263,19 +291,19 @@ function SellerLeadCapture() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <Card className="bg-emerald-50/60 border-emerald-100 p-4">
-                <p className="italic text-sm md:text-base">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+                <p className="italic text-sm text-slate-700 md:text-base">
                   “Finally Home Agents exceeded our expectations when selling our home in Holland Landing.
                   Their professionalism and personal attention set them apart.”
                 </p>
-                <p className="mt-2 text-xs text-emerald-800 font-semibold">— Susan Booth</p>
+                <p className="mt-2 text-xs font-semibold text-emerald-800">— Susan Booth</p>
               </Card>
-              <Card className="bg-emerald-50/60 border-emerald-100 p-4">
-                <p className="italic text-sm md:text-base">
+              <Card className="border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+                <p className="italic text-sm text-slate-700 md:text-base">
                   “Matt sold our house above market and negotiated our forever home for less. Highly recommend.”
                 </p>
-                <p className="mt-2 text-xs text-emerald-800 font-semibold">— Arron Breen</p>
+                <p className="mt-2 text-xs font-semibold text-emerald-800">— Arron Breen</p>
               </Card>
             </div>
           </div>
@@ -288,26 +316,28 @@ function SellerLeadCapture() {
 
   return (
     <section className="mx-auto max-w-5xl w-full">
-      <div
-        className="rounded-2xl border border-emerald-200 shadow-sm overflow-hidden relative"
-        style={{
-          backgroundImage: `linear-gradient(rgba(49, 97, 13, 0.65), rgba(35, 71, 10, 0.55)), url('${BG_IMAGE}')`,
+      <div className="relative overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6 shadow-xl md:p-8">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
+          style={{
+            backgroundImage: `url('${BG_IMAGE}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          aria-hidden="true"
+        />
 
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        {/* Header with pills INSIDE the card */}
-        <div className="px-6 py-5 border-b bg-emerald-50/60 border-emerald-100">
-          <p className="text-[12px] font-semibold tracking-wider text-emerald-700 uppercase">
-            Your NorthSide GTA Seller Plan
-          </p>
-          <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">
-            Step 1 · Property Details
+        <div className="relative z-10">
+          <div className="mb-2 flex items-center gap-2 text-emerald-900">
+            <span className="uppercase text-[11px] font-semibold tracking-wider">
+              NorthSide GTA Seller Strategy
+            </span>
+          </div>
+          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+            Unlock Your Personalized Home Sale Plan
           </h3>
-          <p className="text-sm text-slate-600">
-            Start here — we’ll build your pricing roadmap & selling strategy.
+          <p className="mt-1 text-slate-800">
+            Start with your address — we’ll craft your pricing roadmap, prep plan, and marketing strategy.
           </p>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -319,48 +349,42 @@ function SellerLeadCapture() {
             ].map((p) => (
               <span
                 key={p.text}
-                className="inline-flex items-center gap-1 rounded-full bg-white text-emerald-800 border border-emerald-200 px-3 py-1 text-[12px] font-semibold"
+                className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white px-3 py-1 text-[12px] font-semibold text-emerald-900 shadow-sm"
               >
                 <span>{p.icon}</span> {p.text}
               </span>
             ))}
           </div>
-        </div>
 
-        {/* progress bar */}
-        <div className="px-6 pt-3">
-          <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
+          <div className="mt-4">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-emerald-100">
+              <div className="h-full bg-emerald-600 transition-all" style={{ width: `${progressPct}%` }} />
+            </div>
+            <div className="mt-1 text-right text-[11px] font-medium text-emerald-700">
+              {progressPct}% complete
+            </div>
+          </div>
+
+          {error && (
             <div
-              className="h-full transition-all"
-              style={{
-                width: `${Math.max(6, progressPct)}%`,
-                background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)",
-              }}
-              aria-hidden
-            />
-          </div>
-          <div className="mt-1 text-right text-[11px] text-emerald-700 font-medium">{progressPct}% complete</div>
-        </div>
+              ref={errorRef}
+              tabIndex={-1}
+              role="alert"
+              aria-live="assertive"
+              className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+            >
+              {error}
+            </div>
+          )}
 
-        {/* error */}
-        {error && (
-          <div
-            ref={errorRef}
-            tabIndex={-1}
-            role="alert"
-            aria-live="assertive"
-            className="mx-6 mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
-          >
-            {error}
-          </div>
-        )}
-
-        {/* STEP 1 */}
+          {/* STEP 1 */}
         {!expanded && (
-          <form onSubmit={continueToStep2} className="px-6 py-5 grid gap-4">
-            <div className="grid grid-cols-2 gap-3">
+          <form onSubmit={continueToStep2} className="mt-6 grid grid-cols-1 gap-4">
+            <h4 className="text-lg sm:text-xl font-semibold text-slate-900">Step 1 · Property Details</h4>
+
+            <div className="grid gap-3 md:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-medium text-slate-800">Street Number</span>
+                <span className="text-sm font-medium text-slate-900">Street Number</span>
                 <input
                   name="streetNumber"
                   value={form.streetNumber}
@@ -368,112 +392,135 @@ function SellerLeadCapture() {
                   placeholder="123"
                   inputMode="numeric"
                   autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                   required
                 />
               </label>
               <label className="block">
-                <span className="text-sm font-medium text-slate-800">Street Name</span>
+                <span className="text-sm font-medium text-slate-900">Street Name</span>
                 <input
                   name="streetName"
                   value={form.streetName}
                   onChange={update}
                   placeholder="Main St"
                   autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                   required
                 />
               </label>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+
+            <div className="grid gap-3 md:grid-cols-2">
               <label className="block">
-                <span className="text-sm font-medium text-slate-800">Bedrooms</span>
+                <span className="text-sm font-medium text-slate-900">Bedrooms</span>
                 <select
                   name="bedrooms"
                   value={form.bedrooms}
                   onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 >
                   <option value="">Select…</option>
-                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5+</option>
                 </select>
               </label>
               <label className="block">
-                <span className="text-sm font-medium text-slate-800">Bathrooms</span>
+                <span className="text-sm font-medium text-slate-900">Bathrooms</span>
                 <select
                   name="bathrooms"
                   value={form.bathrooms}
                   onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 >
                   <option value="">Select…</option>
-                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5+</option>
                 </select>
               </label>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
-              <button
-                type="submit"
-                className="rounded-lg text-white font-semibold px-5 py-2.5 hover:opacity-95"
-                style={{ background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)" }}
-              >
-                Continue
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="inline-flex items-center justify-center rounded-lg border border-slate-900/70 bg-slate-900 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-slate-900/30 focus:ring-offset-1"
+            >
+              Continue to Step 2
+            </button>
 
-            <p className="text-[11px] text-slate-500">No spam. Unsubscribe anytime.</p>
+            <p className="text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
           </form>
         )}
 
-        {/* STEP 2 (expanded below Step 1) */}
+          {/* STEP 2 (expanded below Step 1) */}
         {expanded && (
-          <form onSubmit={onSubmit} className="px-6 pb-6 pt-3" id="seller-step2">
-            <h3 className="text-lg sm:text-xl font-semibold">Step 2 · Your Details & Timing</h3>
+          <form onSubmit={onSubmit} className="mt-6" id="seller-step2">
+            <h4 className="text-lg sm:text-xl font-semibold text-slate-900">Step 2 · Your Details & Timing</h4>
 
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              {/* Keep Step 1 fields visible & editable */}
-              <div>
-                <label className="block text-sm font-medium">Street Number</label>
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">Street Number</span>
                 <input
-                  name="streetNumber" value={form.streetNumber} onChange={update}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
-                  placeholder="123" inputMode="numeric" autoComplete="address-line1"
+                  name="streetNumber"
+                  value={form.streetNumber}
+                  onChange={update}
+                  placeholder="123"
+                  inputMode="numeric"
+                  autoComplete="address-line1"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Street Name</label>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">Street Name</span>
                 <input
-                  name="streetName" value={form.streetName} onChange={update}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
-                  placeholder="Main St" autoComplete="address-line1"
+                  name="streetName"
+                  value={form.streetName}
+                  onChange={update}
+                  placeholder="Main St"
+                  autoComplete="address-line1"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Bedrooms</label>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">Bedrooms</span>
                 <select
-                  name="bedrooms" value={form.bedrooms} onChange={update}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="bedrooms"
+                  value={form.bedrooms}
+                  onChange={update}
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 >
                   <option value="">Select…</option>
-                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5+</option>
                 </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Bathrooms</label>
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">Bathrooms</span>
                 <select
-                  name="bathrooms" value={form.bathrooms} onChange={update}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="bathrooms"
+                  value={form.bathrooms}
+                  onChange={update}
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 >
                   <option value="">Select…</option>
-                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5+</option>
                 </select>
-              </div>
+              </label>
 
-              {/* Condition */}
               <div className="md:col-span-2">
                 <div className="flex items-end justify-between">
-                  <label className="block text-sm font-medium" id="cond-desc">
+                  <label className="block text-sm font-medium text-slate-900" id="cond-desc">
                     Overall Condition (1–10)
                   </label>
                   <div className="text-sm font-semibold text-emerald-700" aria-live="polite">
@@ -481,144 +528,217 @@ function SellerLeadCapture() {
                   </div>
                 </div>
                 <input
-                  type="range" name="condition" min="1" max="10" value={form.condition}
-                  onChange={update} className="mt-3 w-full" aria-describedby="cond-desc"
+                  type="range"
+                  name="condition"
+                  min="1"
+                  max="10"
+                  value={form.condition}
+                  onChange={update}
+                  className="mt-3 w-full accent-emerald-600"
+                  aria-describedby="cond-desc"
                 />
-                <div className="mt-2 text-xs text-gray-500">1 Very poor · 5 Average · 10 Pristine</div>
+                <div className="mt-2 text-xs text-slate-600">1 Very poor · 5 Average · 10 Pristine</div>
               </div>
 
-              {/* Upgrades */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium" id="up-desc">Level of Upgrades (1–10)</label>
+                <label className="block text-sm font-medium text-slate-900" id="up-desc">
+                  Level of Upgrades (1–10)
+                </label>
                 <input
-                  type="range" name="upgrades" min="1" max="10" value={form.upgrades}
-                  onChange={update} className="mt-3 w-full" aria-describedby="up-desc"
+                  type="range"
+                  name="upgrades"
+                  min="1"
+                  max="10"
+                  value={form.upgrades}
+                  onChange={update}
+                  className="mt-3 w-full accent-emerald-600"
+                  aria-describedby="up-desc"
                 />
-                <div className="mt-3 grid grid-cols-2 md:grid-cols-5 gap-2 text-xs text-gray-600">
-                  <div><span className="font-semibold">1–2</span> Original / mostly original</div>
-                  <div><span className="font-semibold">3–4</span> Minor cosmetic / few rooms</div>
-                  <div><span className="font-semibold">5–6</span> Several rooms updated</div>
-                  <div><span className="font-semibold">7–8</span> Mostly updated, consistent</div>
-                  <div><span className="font-semibold">9–10</span> Fully renovated, high-end</div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 md:grid-cols-5">
+                  <div>
+                    <span className="font-semibold">1–2</span> Original / mostly original
+                  </div>
+                  <div>
+                    <span className="font-semibold">3–4</span> Minor cosmetic / few rooms
+                  </div>
+                  <div>
+                    <span className="font-semibold">5–6</span> Several rooms updated
+                  </div>
+                  <div>
+                    <span className="font-semibold">7–8</span> Mostly updated, consistent
+                  </div>
+                  <div>
+                    <span className="font-semibold">9–10</span> Fully renovated, high-end
+                  </div>
                 </div>
               </div>
 
-              {/* Estimate & notes */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium">
-                  What do you think your home is worth? <span className="text-gray-400">(optional)</span>
+                <label className="block text-sm font-medium text-slate-900">
+                  What do you think your home is worth? <span className="text-slate-400">(optional)</span>
                 </label>
                 <input
-                  name="estimate" value={form.estimate} onChange={update}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
-                  placeholder="$900,000" inputMode="decimal" autoComplete="off"
+                  name="estimate"
+                  value={form.estimate}
+                  onChange={update}
+                  placeholder="$900,000"
+                  inputMode="decimal"
+                  autoComplete="off"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium">
-                  Recent improvements we should know about <span className="text-gray-400">(optional)</span>
+                <label className="block text-sm font-medium text-slate-900">
+                  Recent improvements we should know about <span className="text-slate-400">(optional)</span>
                 </label>
                 <textarea
-                  name="improvements" value={form.improvements} onChange={update} rows={3}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="improvements"
+                  value={form.improvements}
+                  onChange={update}
+                  rows={3}
                   placeholder="Roof 2021, furnace 2020, new flooring main level..."
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium">
-                  Unique features <span className="text-gray-400">(optional)</span>
+                <label className="block text-sm font-medium text-slate-900">
+                  Unique features <span className="text-slate-400">(optional)</span>
                 </label>
                 <textarea
-                  name="features" value={form.features} onChange={update} rows={2}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="features"
+                  value={form.features}
+                  onChange={update}
+                  rows={2}
                   placeholder="Pie lot, backs onto ravine, legal basement apartment..."
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
               </div>
 
-              {/* Contact (First & Last required) */}
-              <div>
-                <label className="block text-sm font-medium">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">
                   First Name <span className="text-red-500">*</span>
-                </label>
+                </span>
                 <input
-                  name="firstName" value={form.firstName} onChange={update} required
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={update}
+                  required
                   autoComplete="given-name"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">
                   Last Name <span className="text-red-500">*</span>
-                </label>
+                </span>
                 <input
-                  name="lastName" value={form.lastName} onChange={update} required
-                  className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600"
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={update}
+                  required
                   autoComplete="family-name"
+                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">
                   Phone Number <span className="text-red-500">*</span>
-                </label>
+                </span>
                 <input
-                  name="phone" value={form.phone} onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
-                    fieldErrors.phone ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
-                  }`} placeholder="(###) ###-####" inputMode="tel" autoComplete="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={update}
+                  placeholder="(###) ###-####"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
+                    fieldErrors.phone
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                      : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
+                  }`}
                 />
-                {fieldErrors.phone && <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium">
+                {fieldErrors.phone && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                )}
+              </label>
+              <label className="block">
+                <span className="text-sm font-medium text-slate-900">
                   Email <span className="text-red-500">*</span>
-                </label>
+                </span>
                 <input
-                  name="email" type="email" value={form.email} onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
-                    fieldErrors.email ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
-                  }`} placeholder="you@example.com" inputMode="email" autoComplete="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={update}
+                  placeholder="you@example.com"
+                  inputMode="email"
+                  autoComplete="email"
+                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
+                    fieldErrors.email
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                      : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
+                  }`}
                 />
-                {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
-              </div>
+                {fieldErrors.email && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+                )}
+              </label>
 
-              {/* Timing */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium">How soon might you consider a move?</label>
-                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-sm">
-                  {["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"].map((label) => (
-                    <label key={label}
-                      className={`flex items-center gap-2 rounded-xl border px-3 py-2 whitespace-normal break-words ${
-                        form.timeline === label ? "ring-2 ring-emerald-600" : "hover:bg-gray-50"
-                      }`}>
-                      <input type="radio" name="timeline" value={label}
-                        checked={form.timeline === label} onChange={update}/>
-                      <span className="leading-snug">{label}</span>
-                    </label>
-                  ))}
+                <label className="block text-sm font-medium text-slate-900">
+                  How soon might you consider a move?
+                </label>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
+                  {timelineOptions.map((label) => {
+                    const checked = form.timeline === label;
+                    return (
+                      <label
+                        key={label}
+                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition ${
+                          checked
+                            ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="timeline"
+                          value={label}
+                          checked={checked}
+                          onChange={update}
+                          className="h-4 w-4 border-slate-300 text-slate-900 focus:ring-slate-900/30"
+                        />
+                        <span className="leading-snug">{label}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Towns */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-slate-900">
                   Which NorthSide GTA towns are you most interested in moving to?
                 </label>
-                <p className="text-xs text-gray-500 mt-1">Select up to 7.</p>
-                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                <p className="mt-1 text-xs text-slate-600">Select up to 7.</p>
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
                   {TOWNS.map((town) => {
                     const checked = form.towns.includes(town);
                     return (
-                      <label key={town}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${
-                          checked ? "ring-2 ring-emerald-600" : "hover:bg-gray-50"
+                      <label
+                        key={town}
+                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+                          checked
+                            ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={checked}
                           onChange={() => toggleTown(town)}
+                          className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
                         />
                         <span>{town}</span>
                       </label>
@@ -626,48 +746,70 @@ function SellerLeadCapture() {
                   })}
                 </div>
               </div>
-
-              {/* Honeypot + tracking */}
-              <input name="nickname" value={form.nickname} onChange={update} className="hidden" tabIndex="-1" autoComplete="off" />
-              <input type="hidden" name="utm_source" value={utm.get("utm_source") || ""} readOnly />
-              <input type="hidden" name="utm_campaign" value={utm.get("utm_campaign") || ""} readOnly />
-              <input type="hidden" name="device" value={device} readOnly />
-
-              {/* Confirmations */}
-              <div className="md:col-span-2 space-y-3 mt-2">
-                <label className="flex items-start gap-3 text-sm">
-                  <input
-                    data-testid="not-under-contract" type="checkbox" name="notUnderContract"
-                    checked={form.notUnderContract} onChange={update} className="mt-1"
-                  />
-                  <span>
-                    <span className="font-medium">
-                      I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
-                    </span>
-                    <span className="block text-gray-500 text-xs mt-1">Required — without this confirmation, we cannot provide a home analysis.</span>
-                  </span>
-                </label>
-                <label className="flex items-start gap-3 text-sm">
-                  <input type="checkbox" name="consent" checked={form.consent} onChange={update} className="mt-1" />
-                  <span>
-                    I agree to be contacted by Finally Home Agents about my home analysis.
-                    <span className="block text-gray-500 text-xs">You can unsubscribe anytime. We respect your privacy.</span>
-                  </span>
-                </label>
-              </div>
-
-              <div className="md:col-span-2 mt-2">
-                <button
-                  disabled={!requiredOk || sending}
-                  className="w-full rounded-xl text-white font-semibold px-4 py-3 disabled:opacity-50 hover:opacity-95"
-                  style={{ background: "linear-gradient(135deg, #31610d 0%, #23470a 100%)" }}
-                >
-                  {sending ? "Sending…" : "Get My Home Value"}
-                </button>
-              </div>
             </div>
+
+            <input
+              name="nickname"
+              value={form.nickname}
+              onChange={update}
+              className="hidden"
+              tabIndex="-1"
+              autoComplete="off"
+            />
+            <input type="hidden" name="utm_source" value={utm.get("utm_source") || ""} readOnly />
+            <input type="hidden" name="utm_campaign" value={utm.get("utm_campaign") || ""} readOnly />
+            <input type="hidden" name="device" value={device} readOnly />
+
+            <div className="mt-4 space-y-3 text-sm text-slate-900">
+              <label className="flex items-start gap-2">
+                <input
+                  data-testid="not-under-contract"
+                  type="checkbox"
+                  name="notUnderContract"
+                  checked={form.notUnderContract}
+                  onChange={update}
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
+                  required
+                />
+                <span>
+                  <span className="font-medium">
+                    I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
+                  </span>
+                  <span className="mt-1 block text-xs text-slate-600">
+                    Required — without this confirmation, we cannot provide a home analysis.
+                  </span>
+                </span>
+              </label>
+              <label className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  name="consent"
+                  checked={form.consent}
+                  onChange={update}
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
+                  required
+                />
+                <span>
+                  I agree to be contacted by Finally Home Agents about my home analysis.
+                  <span className="block text-xs text-slate-600">You can unsubscribe anytime. We respect your privacy.</span>
+                </span>
+              </label>
+            </div>
+
+            <div className="mt-5">
+              <button
+                type="submit"
+                disabled={!requiredOk || sending}
+                className="inline-flex w-full items-center justify-center rounded-lg border border-slate-900/70 bg-slate-900 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-slate-900/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-400 disabled:text-white/80"
+              >
+                {sending ? "Sending…" : "Get My Home Value"}
+              </button>
+            </div>
+
+            <p className="mt-2 text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
           </form>
         )}
+        </div>
       </div>
     </section>
   );
