@@ -343,25 +343,13 @@ function BuyerSignupForm() {
   }
 
   return (
-   <div
-  id="buyers-registration"
-  className="relative rounded-2xl border shadow-sm p-6 md:p-7 overflow-hidden"
-  style={{
-    backgroundImage: `
-      linear-gradient(135deg, rgba(49, 97, 13, 0.12) 0%, rgba(35, 71, 10, 0.12) 100%),
-      url('/Images/northsidegta-map-bg.jpg')
-    `,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-
-      {/* optional overlay if your JPG isn’t already translucent */}
-      
-
+    <div
+      id="buyers-registration"
+      className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 shadow-xl md:p-8"
+    >
       <div className="relative z-10">
         {/* header strip */}
-        <div className="flex items-center gap-2 text-emerald-800 mb-2">
+        <div className="mb-2 flex items-center gap-2 text-slate-900">
           <ShieldIcon className="h-5 w-5" />
           <span className="uppercase tracking-wider text-[11px] font-semibold">
             Exclusive Buyer Access
@@ -384,7 +372,7 @@ function BuyerSignupForm() {
           ].map((p) => (
             <span
               key={p.text}
-              className="inline-flex items-center gap-1 rounded-full bg-white/90 text-emerald-800 border border-emerald-200 px-3 py-1 text-[12px] font-semibold"
+              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-[12px] font-semibold text-slate-900 shadow-sm"
             >
               <span>{p.icon}</span> {p.text}
             </span>
@@ -393,13 +381,13 @@ function BuyerSignupForm() {
 
         {/* progress */}
         <div className="mt-4">
-          <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
             <div
-              className="h-full bg-emerald-600 transition-all"
+              className="h-full bg-slate-900 transition-all"
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <div className="mt-1 text-right text-[11px] text-emerald-700 font-medium">
+          <div className="mt-1 text-right text-[11px] font-medium text-slate-600">
             {progressPct}% complete
           </div>
         </div>
@@ -427,7 +415,7 @@ function BuyerSignupForm() {
                 name="firstName"
                 value={form.firstName}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 border-slate-300"
                 autoComplete="given-name"
                 required
               />
@@ -438,7 +426,7 @@ function BuyerSignupForm() {
                 name="lastName"
                 value={form.lastName}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 border-slate-300"
                 autoComplete="family-name"
                 required
               />
@@ -452,9 +440,11 @@ function BuyerSignupForm() {
                 type="email"
                 value={form.email}
                 onChange={update}
-                className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
-                  fieldErrors.email ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
-                } bg-white/95`}
+                className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
+                  fieldErrors.email
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                    : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
+                }`}
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
@@ -467,9 +457,11 @@ function BuyerSignupForm() {
                 name="phone"
                 value={form.phone}
                 onChange={update}
-                className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 ${
-                  fieldErrors.phone ? "border-red-400 focus:ring-red-500" : "focus:ring-emerald-600"
-                } bg-white/95`}
+                className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
+                  fieldErrors.phone
+                    ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                    : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
+                }`}
                 placeholder="(###) ###-####"
                 inputMode="tel"
                 autoComplete="tel"
@@ -487,7 +479,7 @@ function BuyerSignupForm() {
                 name="budgetMin"
                 value={form.budgetMin}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 placeholder="$800,000"
                 inputMode="decimal"
                 autoComplete="off"
@@ -499,7 +491,7 @@ function BuyerSignupForm() {
                 name="budgetMax"
                 value={form.budgetMax}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 placeholder="$1,200,000"
                 inputMode="decimal"
                 autoComplete="off"
@@ -515,7 +507,7 @@ function BuyerSignupForm() {
                 name="bedrooms"
                 value={form.bedrooms}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
               >
                 <option value="">Select…</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
@@ -527,7 +519,7 @@ function BuyerSignupForm() {
                 name="bathrooms"
                 value={form.bathrooms}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
               >
                 <option value="">Select…</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
@@ -539,7 +531,7 @@ function BuyerSignupForm() {
                 name="propertyType"
                 value={form.propertyType}
                 onChange={update}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
               >
                 <option value="">Any</option>
                 <option>Detached</option>
@@ -554,15 +546,24 @@ function BuyerSignupForm() {
           {/* Timeline */}
           <div>
             <span className="block text-sm font-medium">When are you hoping to buy? <span className="text-red-500">*</span></span>
-            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-sm">
+            <div className="mt-2 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
               {["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"].map((label) => (
                 <label
                   key={label}
-                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 whitespace-normal ${
-                    form.timeline === label ? "ring-2 ring-emerald-600 bg-white/95" : "bg-white/90 hover:bg-white"
+                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 whitespace-normal transition ${
+                    form.timeline === label
+                      ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                      : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
                   }`}
                 >
-                  <input type="radio" name="timeline" value={label} checked={form.timeline === label} onChange={update} />
+                  <input
+                    type="radio"
+                    name="timeline"
+                    value={label}
+                    checked={form.timeline === label}
+                    onChange={update}
+                    className="h-4 w-4 border-slate-300 text-slate-900 focus:ring-slate-900/30"
+                  />
                   <span className="leading-snug">{label}</span>
                 </label>
               ))}
@@ -573,17 +574,24 @@ function BuyerSignupForm() {
           <div>
             <label className="block text-sm font-medium">Which NorthSide GTA towns interest you most?</label>
             <p className="text-xs text-gray-600 mt-1">Select up to 7.</p>
-            <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
               {TOWNS.map((town) => {
                 const checked = form.towns.includes(town);
                 return (
                   <label
                     key={town}
-                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${
-                      checked ? "ring-2 ring-emerald-600 bg-white/95" : "bg-white/90 hover:bg-white"
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+                      checked
+                        ? "border-slate-900 bg-white text-slate-900 shadow-sm"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
                     }`}
                   >
-                    <input type="checkbox" checked={checked} onChange={() => toggleTown(town)} />
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleTown(town)}
+                      className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
+                    />
                     <span>{town}</span>
                   </label>
                 );
@@ -600,7 +608,7 @@ function BuyerSignupForm() {
                 value={form.mustHaves}
                 onChange={update}
                 rows={3}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 placeholder="E.g., garage, yard, quiet street, near GO Station…"
               />
             </label>
@@ -611,7 +619,7 @@ function BuyerSignupForm() {
                 value={form.niceToHaves}
                 onChange={update}
                 rows={3}
-                className="mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-emerald-600 bg-white/95"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
                 placeholder="E.g., finished basement, newer roof, south-facing yard…"
               />
             </label>
@@ -624,7 +632,7 @@ function BuyerSignupForm() {
               name="notUnderContract"
               checked={form.notUnderContract}
               onChange={update}
-              className="mt-1"
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
               required
             />
             <span>
@@ -637,7 +645,7 @@ function BuyerSignupForm() {
               name="consent"
               checked={form.consent}
               onChange={update}
-              className="mt-1"
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
               required
             />
             <span>
@@ -650,10 +658,7 @@ function BuyerSignupForm() {
           <button
             type="submit"
             disabled={!requiredOk || sending}
-            className="mt-1 inline-flex items-center justify-center px-5 py-3 rounded-lg text-white font-semibold
-                       bg-gradient-to-tr from-[#31610d] to-[#23470a]
-                       hover:from-[#2b530c] hover:to-[#1c3a08]
-                       disabled:opacity-50"
+            className="mt-1 inline-flex items-center justify-center rounded-lg border border-slate-900/70 bg-slate-900 px-5 py-3 font-semibold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-slate-900/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-400 disabled:text-white/80 hover:bg-black"
           >
             {sending ? "Submitting…" : "Start Here"}
           </button>
