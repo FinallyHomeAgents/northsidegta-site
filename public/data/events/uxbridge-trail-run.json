@@ -1,0 +1,32 @@
+{
+  "title": "Uxbridge Trails Challenge 10K & Family 5K",
+  "slug": "uxbridge-trails-challenge",
+  "startDate": "2025-09-07T08:00:00-04:00",
+  "endDate": "2025-09-07T12:00:00-04:00",
+  "allDay": false,
+  "recurrence": "",
+  "category": "Sports",
+  "town": "Uxbridge",
+  "locationName": "Elgin Park Trailhead",
+  "address": "180 Main St S, Uxbridge, ON",
+  "lat": 44.1028,
+  "lng": -79.1179,
+  "priceType": "Paid",
+  "priceNote": "Early-bird pricing through August 1; family relay add-on available.",
+  "badges": [
+    "Outdoors",
+    "Seasonal"
+  ],
+  "image": "/Images/towns/uxbridge.jpg",
+  "summary": "Run or hike through the Trail Capital of Canada with chip-timed 10K, relaxed 5K and kids' mud dash plus post-race local roastery coffee and live music.",
+  "description": "Choose the technical 10K single-track loop or the stroller-friendly 5K along gravel paths. Participants receive reusable bibs, finish-line snacks from local farms, and a post-race wellness village featuring physio taping, yoga stretch tents and live folk music. Complimentary bike parking; limited vehicle parking on-site.",
+  "organizerName": "Township of Uxbridge",
+  "organizerUrl": "https://www.uxbridge.ca",
+  "eventUrl": "https://www.uxbridge.ca/en/recreation-and-culture/trails-challenge.aspx",
+  "icsUrl": "",
+  "featured": false,
+  "status": "published",
+  "source": "manual",
+  "sourceRef": "uxbridge-trails-2025",
+  "updatedAt": "2025-04-22T08:45:00-04:00"
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Newmarket Night Market & Patio Alley",
+  "slug": "newmarket-night-market",
+  "startDate": "2025-08-16T17:00:00-04:00",
+  "endDate": "2025-08-16T22:00:00-04:00",
+  "allDay": false,
+  "recurrence": "FREQ=MONTHLY;BYDAY=SA;BYSETPOS=3;COUNT=3",
+  "category": "Markets",
+  "town": "Newmarket",
+  "locationName": "Newmarket Riverwalk Commons",
+  "address": "200 Doug Duncan Dr, Newmarket, ON",
+  "lat": 44.0582,
+  "lng": -79.4629,
+  "priceType": "Free",
+  "priceNote": "Food and beverages available for purchase from local vendors.",
+  "badges": [
+    "Family-friendly",
+    "Outdoors",
+    "Seasonal"
+  ],
+  "image": "/Images/towns/newmarket.jpg",
+  "summary": "Downtown Newmarket glows with string lights, global street food, artisan pop-ups, patio patios and DJ sets stretching from Main Street to the amphitheatre.",
+  "description": "Sip local craft bevies in the licensed patio zone, shop curated makers, and catch roaming performers between Riverwalk Commons and Main Street patios. Family fun includes glow hula hoop jams, lawn games and a quiet sensory tent hosted by 360° Kids. Parking is limited—consider the free YRT shuttle loop.",
+  "organizerName": "Town of Newmarket",
+  "organizerUrl": "https://www.newmarket.ca",
+  "eventUrl": "https://www.newmarket.ca/nightmarket",
+  "icsUrl": "",
+  "featured": false,
+  "status": "published",
+  "source": "manual",
+  "sourceRef": "newmarket-night-market-2025",
+  "updatedAt": "2025-05-04T15:15:00-04:00"
+}
