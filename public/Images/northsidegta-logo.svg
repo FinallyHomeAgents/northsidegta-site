@@ -1,0 +1,42 @@
+<svg width="128" height="40" viewBox="0 0 128 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="40" rx="12" fill="#064E3B" />
+  <rect x="6" y="6" width="28" height="28" rx="9" fill="url(#paint0_linear_1_1)" />
+  <path
+    d="M20.4 25.6L17.08 21.16C16.92 20.96 16.78 20.74 16.66 20.52L14.4 16.64C13.78 15.56 14.54 14.2 15.76 14.2H20.74C21.18 14.2 21.6 14.44 21.82 14.82L23.54 17.8C23.78 18.2 23.78 18.72 23.52 19.12L22.48 20.76C22.32 21 22.32 21.32 22.5 21.56L24.12 23.68C24.72 24.48 24.16 25.6 23.18 25.6H20.4Z"
+    fill="white"
+    opacity="0.95"
+  />
+  <path
+    d="M18.28 26.2H21.72C22.16 26.2 22.58 26.44 22.8 26.82L23.64 28.2C24.12 29 23.54 30 22.6 30H17.56C16.34 30 15.58 28.64 16.2 27.56L17.4 25.48C17.58 25.16 18.04 25.18 18.2 25.5L18.52 26.14C18.6 26.22 18.66 26.2 18.74 26.2H18.28Z"
+    fill="#ECFDF5"
+    opacity="0.95"
+  />
+  <text
+    x="42"
+    y="19"
+    fill="#ECFDF5"
+    font-family="'Blinker', 'Arial', 'sans-serif'"
+    font-size="13"
+    font-weight="700"
+    letter-spacing="0.18em"
+  >
+    NORTHSIDE
+  </text>
+  <text
+    x="42"
+    y="29"
+    fill="#6EE7B7"
+    font-family="'Blinker', 'Arial', 'sans-serif'"
+    font-size="11"
+    font-weight="600"
+    letter-spacing="0.42em"
+  >
+    GTA
+  </text>
+  <defs>
+    <linearGradient id="paint0_linear_1_1" x1="6" y1="6" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#059669" />
+      <stop offset="1" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+</svg>
