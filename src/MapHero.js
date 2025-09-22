@@ -274,9 +274,9 @@ function ComparisonBar({ className = "" }) {
   const cur = items[i];
 
   return (
-    <div className={`pointer-events-none ${className}`}>
+    <div className={`pointer-events-none w-full ${className}`}>
       <div
-        className="pointer-events-auto relative mx-auto w-[min(92vw,520px)] overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
+        className="pointer-events-auto relative w-full overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
         style={{
           background:
             "linear-gradient(140deg, rgba(7,16,21,0.88) 0%, rgba(6,56,41,0.92) 45%, rgba(6,78,59,0.9) 100%)",
@@ -328,9 +328,14 @@ function ComparisonBar({ className = "" }) {
                   NorthSide GTA
                 </span>
               </div>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-500/40 text-[11px] font-bold uppercase tracking-[0.24em] text-emerald-50 shadow-[inset_0_0_14px_rgba(16,185,129,0.55)]">
-                NSG
-              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300/60 bg-emerald-500/30 p-1 shadow-[inset_0_0_14px_rgba(16,185,129,0.45)]">
+                <img
+                  src="/Images/northsidegta-logo.svg"
+                  alt="NorthSide GTA logo"
+                  className="h-full w-auto"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
 
@@ -418,7 +423,6 @@ export default function MapHero() {
             className="relative rounded-xl overflow-hidden"
             onMouseLeave={() => canHover && setHoverId(null)}
           >
-            <ComparisonBar className="absolute left-1/2 top-3 z-20 w-[min(94vw,520px)] -translate-x-1/2 md:top-5 lg:top-8" />
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
             <img
               src="/Images/northside-map.svg?v=2"
@@ -501,6 +505,8 @@ export default function MapHero() {
               </div>
             )}
           </div>
+
+          <ComparisonBar className="mt-4 lg:mt-5" />
 
           {/* MOBILE: panel below the map when a pin is tapped */}
           {!canHover && activeTown && (
