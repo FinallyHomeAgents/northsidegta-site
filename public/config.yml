@@ -43,6 +43,10 @@ collections:
       - name: 'whatsappUrl'
         label: 'WhatsApp URL'
         required: false
+        pattern:
+          - '^https://wa\.me/[0-9]+.*$'
+          - 'Enter a link like https://wa.me/16476684646 with the full phone number.'
+        hint: 'Use https://wa.me/<number> optionally followed by ?text=… for a prefilled message.'
       - name: 'thankYouGuideLabel'
         label: 'Buyer’s Guide Label (optional)'
         required: false
