@@ -6,8 +6,6 @@ import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
 import QuickContactCard from "./QuickContactCard";
 import Footer from "./Footer";
-import TownCard from "./components/TownCard";
-import towns from "./towns.json";
 
 /* ────────────────────────────────────────────────────────────
    Google-style rotating review slider
@@ -92,22 +90,6 @@ function ReviewSlider() {
    Page
    ──────────────────────────────────────────────────────────── */
 export default function HomePage() {
-  const townEntries = Array.isArray(towns)
-    ? towns
-    : Object.values(towns || {});
-  const uxbridgeTown = townEntries.find(
-    (t) => (t.slug || t.name || "").toLowerCase() === "uxbridge"
-  );
-  const uxbridgeName = (uxbridgeTown && uxbridgeTown.name) || "Uxbridge";
-  const uxbridgeHref = uxbridgeTown?.slug
-    ? `/${uxbridgeTown.slug}`
-    : "/uxbridge";
-  const uxbridgeRatings = uxbridgeTown?.ratings || {};
-  const uxbridgeTagline =
-    (uxbridgeTown?.summary && uxbridgeTown.summary.trim()) ||
-    "Trail capital vibes and small-town charm.";
-  const uxbridgeStarRating = 5;
-
   return (
     <div className="bg-white text-gray-900 min-h-screen">
       {/* Navigation */}
@@ -180,17 +162,7 @@ export default function HomePage() {
       {/* Map-first Hero */}
       <MapHero />
 
-      {uxbridgeTown && (
-        <section className="mx-auto mt-10 w-full max-w-5xl px-4 md:mt-14">
-          <TownCard
-            name={uxbridgeName}
-            tagline={uxbridgeTagline}
-            href={uxbridgeHref}
-            ratingValue={uxbridgeStarRating}
-            ratings={uxbridgeRatings}
-          />
-        </section>
-      )}
+  
 
       {/* Town Strip */}
       <section className="mx-auto max-w-6xl px-4 mt-6 md:mt-8">
