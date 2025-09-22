@@ -1,0 +1,35 @@
+[
+  {
+    "id": "aurora-community-events",
+    "enabled": false,
+    "type": "ics",
+    "url": "https://www.aurora.ca/modules/calendar/ICS/Download.aspx?feed=community-events",
+    "town": "Aurora",
+    "category": "Family",
+    "priceType": "Free",
+    "badges": ["Family-friendly"],
+    "organizerName": "Town of Aurora"
+  },
+  {
+    "id": "newmarket-events",
+    "enabled": false,
+    "type": "rss",
+    "url": "https://www.newmarket.ca/TownGovernment/Pages/News-Feed.aspx?rss=events",
+    "town": "Newmarket",
+    "category": "Festivals",
+    "priceType": "Mixed",
+    "badges": ["Seasonal"],
+    "organizerName": "Town of Newmarket"
+  },
+  {
+    "id": "scugog-calendar",
+    "enabled": false,
+    "type": "json",
+    "url": "https://www.scugog.ca/en/exploring-our-community/events-listing.aspx?_mid_=1234&format=json",
+    "town": "Scugog",
+    "category": "Outdoors",
+    "priceType": "Free",
+    "badges": ["Outdoors"],
+    "organizerName": "Township of Scugog"
+  }
+]

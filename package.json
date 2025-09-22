@@ -7,20 +7,26 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "postbuild": "node scripts/generate-curated-html.js && cp build/index.html build/404.html",
-    "generate:curated": "node scripts/generate-curated-html.js"
+    "generate:curated": "node scripts/generate-curated-html.js",
+    "ingest:events": "node scripts/ingest-events.js"
   },
   "dependencies": {
     "classmates": "^1.0.1",
     "classnames": "^2.5.1",
     "emailjs-com": "^3.2.0",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.522.0",
+    "node-ical": "^0.21.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.6.2",
     "react-scripts": "5.0.1",
-    "resend": "^6.0.3"
+    "resend": "^6.0.3",
+    "rrule": "^2.8.1",
+    "rss-parser": "^3.13.0"
   },
   "browserslist": {
     "production": [

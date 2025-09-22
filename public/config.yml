@@ -67,3 +67,131 @@ collections:
         widget: 'string'
         required: false
         hint: 'Optional: only needed if older automations depend on the original title field.'
+
+  - name: 'events'
+    label: 'Community Events'
+    label_singular: 'Event'
+    folder: 'public/data/events'
+    create: true
+    identifier_field: 'slug'
+    slug: '{{slug}}'
+    extension: 'json'
+    format: 'json'
+    summary: '{{title}} — {{startDate}} — {{town}}'
+    sortable_fields: ['startDate', 'status', 'town', 'category', 'featured']
+    fields:
+      - { name: 'title', label: 'Title' }
+      - name: 'slug'
+        label: 'Slug (URL part)'
+        widget: 'string'
+        pattern:
+          - '^[a-z0-9-]+$'
+          - 'Use lowercase letters, numbers, and dashes only.'
+      - name: 'startDate'
+        label: 'Start Date & Time'
+        widget: 'datetime'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+      - name: 'endDate'
+        label: 'End Date & Time'
+        widget: 'datetime'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+        required: false
+        hint: 'Leave blank for single-day events.'
+      - name: 'allDay'
+        label: 'All day event'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'recurrence'
+        label: 'Recurrence (RRULE)'
+        widget: 'string'
+        required: false
+        hint: 'Optional RRULE string for repeating events (e.g., FREQ=WEEKLY;BYDAY=SA).'
+      - name: 'category'
+        label: 'Category'
+        widget: 'select'
+        options: ['Family', 'Festivals', 'Sports', 'Golf', 'Markets', 'Arts & Culture', 'Outdoors', 'Other']
+      - name: 'town'
+        label: 'Town / Area'
+        widget: 'select'
+        options: ['Aurora', 'Uxbridge', 'Georgina', 'Stouffville', 'East Gwillimbury', 'Newmarket', 'Scugog', 'Toronto-adjacent']
+      - { name: 'locationName', label: 'Location Name' }
+      - { name: 'address', label: 'Street Address' }
+      - name: 'lat'
+        label: 'Latitude'
+        widget: 'number'
+        required: false
+      - name: 'lng'
+        label: 'Longitude'
+        widget: 'number'
+        required: false
+      - name: 'priceType'
+        label: 'Price Type'
+        widget: 'select'
+        options: ['Free', 'Paid', 'Mixed']
+        default: 'Free'
+      - name: 'priceNote'
+        label: 'Price Note'
+        widget: 'text'
+        required: false
+      - name: 'badges'
+        label: 'Badges'
+        widget: 'select'
+        multiple: true
+        options: ['Family-friendly', 'Seasonal', 'Outdoors', 'Pets OK', 'Accessible']
+        required: false
+      - name: 'image'
+        label: 'Image'
+        widget: 'image'
+        required: false
+        hint: 'Upload a 3:2 or 16:9 photo. Optional — a neutral placeholder appears if empty.'
+      - name: 'summary'
+        label: 'List Summary (140–180 characters)'
+        widget: 'text'
+        hint: 'Appears in card view. Keep concise and informative.'
+      - name: 'description'
+        label: 'Full Description'
+        widget: 'markdown'
+      - name: 'organizerName'
+        label: 'Organizer Name'
+        required: false
+      - name: 'organizerUrl'
+        label: 'Organizer URL'
+        required: false
+      - name: 'eventUrl'
+        label: 'Event Website'
+        widget: 'string'
+        required: true
+      - name: 'icsUrl'
+        label: 'ICS File URL'
+        widget: 'string'
+        required: false
+        hint: 'Optional external calendar link. Leave blank to auto-generate.'
+      - name: 'featured'
+        label: 'Featured This Week'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'status'
+        label: 'Status'
+        widget: 'select'
+        options: ['draft', 'pending', 'published', 'archived']
+        default: 'pending'
+      - name: 'source'
+        label: 'Source'
+        widget: 'select'
+        options: ['manual', 'feed']
+        default: 'manual'
+      - name: 'sourceRef'
+        label: 'Source Reference'
+        required: false
+        hint: 'Auto-filled for feed items. Leave blank for manual events.'
+      - name: 'updatedAt'
+        label: 'Last Updated'
+        widget: 'datetime'
+        required: false
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+        hint: 'Optional — ingestion fills this automatically.'
