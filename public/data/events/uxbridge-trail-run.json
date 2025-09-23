@@ -7,6 +7,7 @@
   "recurrence": "",
   "category": "Sports",
   "town": "Uxbridge",
+  "subArea": "Elgin Park",
   "locationName": "Elgin Park Trailhead",
   "address": "180 Main St S, Uxbridge, ON",
   "lat": 44.1028,
@@ -27,6 +28,11 @@
   "featured": false,
   "status": "published",
   "source": "manual",
+  "sourceName": "Township of Uxbridge Events",
+  "sourceUrl": "https://calendar.uxbridge.ca/default",
+  "sourceDomain": "uxbridge.ca",
+  "sourcePriority": 5,
+  "qaTags": ["editorial"],
   "sourceRef": "uxbridge-trails-2025",
   "updatedAt": "2025-04-22T08:45:00-04:00"
 }

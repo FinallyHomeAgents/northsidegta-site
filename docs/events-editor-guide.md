@@ -4,7 +4,7 @@ Use this quick reference inside the CMS when reviewing or adding Community event
 
 ## Approving Events from Feeds
 1. Open the **Community Events** collection.
-2. Switch the **Status** filter to **Pending**. Items ingested from municipal feeds appear here.
+2. Switch the **Status** filter to **Pending**. Items ingested from municipal feeds appear here. Use the quick filters (**Pending**, **This Month**, **Featured**, **By Source**) to narrow the review queue fast.
 3. Review the title, date, town and summary. Click the filename to see the full details.
 4. If it looks good, change **Status** to **Published** and hit **Save**. The event goes live instantly on the Community page.
 5. Not relevant? Set **Status** to **Archived** so it doesn’t show again.

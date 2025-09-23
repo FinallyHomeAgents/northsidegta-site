@@ -16,6 +16,7 @@ export const TOWN_OPTIONS = [
   'Uxbridge',
   'Georgina',
   'Stouffville',
+  'Whitchurch-Stouffville',
   'East Gwillimbury',
   'Newmarket',
   'Scugog',
@@ -30,6 +31,7 @@ export const BADGE_LABELS = {
   Outdoors: 'Outdoors',
   'Pets OK': 'Pets OK',
   Accessible: 'Accessible',
+  Ticketed: 'Ticketed',
 }
 
 const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000 // 2 hours
@@ -64,6 +66,14 @@ export function sanitizeEvent(raw) {
   const locationName = typeof raw.locationName === 'string' ? raw.locationName : ''
   const address = typeof raw.address === 'string' ? raw.address : ''
   const town = typeof raw.town === 'string' ? raw.town : ''
+  const subArea = typeof raw.subArea === 'string' ? raw.subArea : ''
+  const sourceName = typeof raw.sourceName === 'string' ? raw.sourceName.trim() : ''
+  const sourceUrl = typeof raw.sourceUrl === 'string' ? raw.sourceUrl.trim() : ''
+  const sourceDomain = typeof raw.sourceDomain === 'string' ? raw.sourceDomain.trim() : ''
+  const sourcePriority = Number.isFinite(raw.sourcePriority) ? raw.sourcePriority : null
+  const qaTags = Array.isArray(raw.qaTags)
+    ? raw.qaTags.map((tag) => String(tag).trim()).filter(Boolean)
+    : []
 
   return {
     ...raw,
@@ -71,6 +81,7 @@ export function sanitizeEvent(raw) {
     slug: String(raw.slug || '').trim(),
     category: String(raw.category || ''),
     town,
+    subArea,
     startDate: raw.startDate,
     endDate: raw.endDate,
     startDateObj,
@@ -92,7 +103,12 @@ export function sanitizeEvent(raw) {
     featured: Boolean(raw.featured),
     status: normalizeStatus(raw.status),
     source: normalizeSource(raw.source),
+    sourceName,
+    sourceUrl,
+    sourceDomain,
+    sourcePriority,
     sourceRef: typeof raw.sourceRef === 'string' ? raw.sourceRef.trim() : '',
+    qaTags,
     updatedAt: typeof raw.updatedAt === 'string' ? raw.updatedAt : '',
     lat: typeof raw.lat === 'number' ? raw.lat : null,
     lng: typeof raw.lng === 'number' ? raw.lng : null,
@@ -143,10 +159,11 @@ function normalizeSource(value) {
 
 function buildSearchText(raw) {
   const parts = []
-  ;['title', 'summary', 'description', 'locationName', 'address', 'town', 'category', 'priceNote'].forEach((key) => {
+  ;['title', 'summary', 'description', 'locationName', 'address', 'town', 'subArea', 'category', 'priceNote', 'sourceName', 'sourceDomain'].forEach((key) => {
     if (typeof raw[key] === 'string') parts.push(raw[key])
   })
   if (Array.isArray(raw.badges)) parts.push(raw.badges.join(' '))
+  if (Array.isArray(raw.qaTags)) parts.push(raw.qaTags.join(' '))
   return parts
     .join(' ')
     .replace(/\s+/g, ' ')
