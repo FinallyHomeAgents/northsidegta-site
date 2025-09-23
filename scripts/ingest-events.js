@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Parser = require('rss-parser')
 const ical = require('node-ical')
+const { RRule } = require('rrule')
 const { getAdapter } = require('../lib/event-source-adapters')
 
 const rootDir = path.resolve(__dirname, '..')
@@ -18,6 +19,36 @@ const parser = new Parser()
 const responseCache = new Map()
 const domainTimers = new Map()
 
+const RUN_TIMESTAMP = new Date()
+const MS_IN_DAY = 24 * 60 * 60 * 1000
+const EXPIRED_GRACE_MS = 6 * 60 * 60 * 1000
+
+const CLASS_KEYWORD_PATTERNS = [
+  /\bclass(es)?\b/i,
+  /\blesson(s)?\b/i,
+  /\bcourse(s)?\b/i,
+  /\bcamp(s)?\b/i,
+  /\bclinic(s)?\b/i,
+  /\bboot\s?camp(s)?\b/i,
+  /\bprogram(s)?\b/i,
+  /\bworkshop\s+series\b/i,
+  /\btraining\b/i,
+  /\bdrop[-\s]?in(s)?\b/i,
+]
+
+const ONGOING_HINT_PATTERNS = [
+  /\bweekly\b/i,
+  /\bdaily\b/i,
+  /\bevery\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i,
+  /\bevery\s+week\b/i,
+  /\bongoing\b/i,
+  /\bper\s+week\b/i,
+  /\b\d+\s*-?week\b/i,
+  /\bmulti[-\s]?week\b/i,
+  /\bsessions\b/i,
+  /\b(mondays|tuesdays|wednesdays|thursdays|fridays|saturdays|sundays)\b/i,
+]
+
 async function main() {
   const feeds = loadConfig(configPath)
   if (!feeds.length) {
@@ -28,7 +59,7 @@ async function main() {
   ensureDir(eventsDir)
 
   const existing = loadExistingEvents(eventsDir)
-  const summary = { created: 0, updated: 0, duplicate: 0, skipped: 0, failed: 0 }
+  const summary = { created: 0, updated: 0, duplicate: 0, skipped: 0, pruned: 0, failed: 0 }
 
   for (const feed of feeds) {
     if (feed.enabled === false) {
@@ -49,6 +80,15 @@ async function main() {
           continue
         }
 
+        const disqualifier = getDisqualifier(normalized, RUN_TIMESTAMP)
+        if (disqualifier) {
+          summary.skipped += 1
+          console.log(
+            `[ingest-events] Skipping "${normalized.title}" (${normalized.slug}): ${disqualifier}`
+          )
+          continue
+        }
+
         const result = await upsertEvent(normalized, existing, eventsDir)
         if (typeof summary[result] !== 'number') {
           summary[result] = 0
@@ -61,8 +101,10 @@ async function main() {
     }
   }
 
+  summary.pruned = pruneExistingEvents(existing, eventsDir, RUN_TIMESTAMP)
+
   console.log(
-    `[ingest-events] Created ${summary.created}, updated ${summary.updated}, duplicates ${summary.duplicate}, skipped ${summary.skipped}, failed ${summary.failed}`
+    `[ingest-events] Created ${summary.created}, updated ${summary.updated}, duplicates ${summary.duplicate}, skipped ${summary.skipped}, pruned ${summary.pruned}, failed ${summary.failed}`
   )
 }
 
@@ -637,6 +679,156 @@ function mergeUnique(initial = [], ...collections) {
     }
   }
   return Array.from(set)
+}
+
+function pruneExistingEvents(registry, dirPath, now = RUN_TIMESTAMP) {
+  if (!registry || !dirPath || !registry.bySlug) return 0
+  let removed = 0
+  const entries = Array.from(registry.bySlug.entries())
+
+  for (const [slug, event] of entries) {
+    const disqualifier = getDisqualifier(event, now)
+    if (!disqualifier) continue
+
+    const filePath = path.join(dirPath, `${slug}.json`)
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+      }
+      registry.bySlug.delete(slug)
+      if (event?.sourceRef) {
+        registry.bySourceRef.delete(event.sourceRef)
+      }
+      const dedupKey = buildDedupKey(event)
+      if (dedupKey) {
+        registry.byDedupKey.delete(dedupKey)
+      }
+      removed += 1
+      console.log(`[ingest-events] Pruned ${slug}: ${disqualifier}`)
+    } catch (error) {
+      console.warn(`[ingest-events] Failed to prune ${slug}: ${error.message}`)
+    }
+  }
+
+  return removed
+}
+
+function getDisqualifier(event, now = RUN_TIMESTAMP, options = {}) {
+  if (!event || typeof event !== 'object') return 'invalid event payload'
+
+  const { gracePeriodMs = EXPIRED_GRACE_MS, respectManual = true } = options
+
+  const tagSet = new Set(
+    Array.isArray(event.qaTags)
+      ? event.qaTags.map((tag) => String(tag).toLowerCase()).filter(Boolean)
+      : []
+  )
+
+  if (respectManual && (isManualEvent(event) || tagSet.has('editorial'))) {
+    return null
+  }
+
+  if (
+    tagSet.has('always-include') ||
+    tagSet.has('allow-recurring') ||
+    tagSet.has('allowrecurring') ||
+    tagSet.has('keep-recurring')
+  ) {
+    return null
+  }
+
+  const start = parseDateValue(event.startDate)
+  if (!start) return 'missing start date'
+  const end = parseDateValue(event.endDate) || start
+  const text = buildEventText(event)
+  const nextRecurrenceStart = getNextRecurrenceStart(event, now)
+  const endWithGrace = new Date(end.getTime() + gracePeriodMs)
+
+  if (!nextRecurrenceStart && endWithGrace.getTime() < now.getTime()) {
+    return 'event has already ended'
+  }
+
+  if (!text || isMarketEvent(event, text)) {
+    return null
+  }
+
+  const hasClass = hasClassKeyword(text)
+  if (!hasClass) {
+    return null
+  }
+
+  const recurrence = typeof event.recurrence === 'string' ? event.recurrence.toUpperCase() : ''
+
+  if (/FREQ=(DAILY|WEEKLY)/.test(recurrence)) {
+    return 'recurring program excluded'
+  }
+
+  if (hasOngoingHint(text)) {
+    return 'ongoing program excluded'
+  }
+
+  if (nextRecurrenceStart && /FREQ=(MONTHLY|YEARLY)/.test(recurrence) && hasOngoingHint(text)) {
+    return 'ongoing program excluded'
+  }
+
+  const durationDays = Math.ceil(Math.max(0, end.getTime() - start.getTime()) / MS_IN_DAY)
+  if (durationDays >= 7) {
+    return 'multi-week program excluded'
+  }
+
+  return null
+}
+
+function parseDateValue(value) {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+function isManualEvent(event) {
+  return event?.source === 'manual'
+}
+
+function isMarketEvent(event, text) {
+  if (event?.category === 'Markets') return true
+  const label = typeof text === 'string' ? text : buildEventText(event)
+  return /market|bazaar/.test(label || '')
+}
+
+function buildEventText(event) {
+  const parts = []
+  if (event?.title) parts.push(String(event.title))
+  if (event?.summary) parts.push(String(event.summary))
+  if (event?.description) parts.push(String(event.description))
+  return parts
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+}
+
+function hasClassKeyword(text) {
+  if (!text) return false
+  return CLASS_KEYWORD_PATTERNS.some((pattern) => pattern.test(text))
+}
+
+function hasOngoingHint(text) {
+  if (!text) return false
+  return ONGOING_HINT_PATTERNS.some((pattern) => pattern.test(text))
+}
+
+function getNextRecurrenceStart(event, now) {
+  if (!event?.recurrence) return null
+  const start = parseDateValue(event.startDate)
+  if (!start) return null
+  try {
+    const options = RRule.parseString(event.recurrence)
+    options.dtstart = start
+    const rule = new RRule(options)
+    return rule.after(now, true)
+  } catch (error) {
+    return null
+  }
 }
 
 function getHostname(url) {
