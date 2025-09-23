@@ -7,6 +7,7 @@
   "recurrence": "FREQ=MONTHLY;BYDAY=SA;BYSETPOS=3;COUNT=3",
   "category": "Markets",
   "town": "Newmarket",
+  "subArea": "Historic Downtown",
   "locationName": "Newmarket Riverwalk Commons",
   "address": "200 Doug Duncan Dr, Newmarket, ON",
   "lat": 44.0582,
@@ -28,6 +29,11 @@
   "featured": false,
   "status": "published",
   "source": "manual",
+  "sourceName": "Town of Newmarket Events",
+  "sourceUrl": "https://www.newmarket.ca/events",
+  "sourceDomain": "newmarket.ca",
+  "sourcePriority": 5,
+  "qaTags": ["editorial"],
   "sourceRef": "newmarket-night-market-2025",
   "updatedAt": "2025-05-04T15:15:00-04:00"
 }

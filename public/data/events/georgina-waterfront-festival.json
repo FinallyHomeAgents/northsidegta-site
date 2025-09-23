@@ -7,6 +7,7 @@
   "recurrence": "",
   "category": "Festivals",
   "town": "Georgina",
+  "subArea": "Jackson's Point",
   "locationName": "Harbourfront Park",
   "address": "57 River St, Sutton, ON",
   "lat": 44.3095,
@@ -28,6 +29,11 @@
   "featured": true,
   "status": "published",
   "source": "manual",
+  "sourceName": "Town of Georgina Events",
+  "sourceUrl": "https://www.georgina.ca/events",
+  "sourceDomain": "georgina.ca",
+  "sourcePriority": 5,
+  "qaTags": ["editorial"],
   "sourceRef": "georgina-waterfront-2025",
   "updatedAt": "2025-04-26T09:00:00-04:00"
 }

@@ -25,6 +25,12 @@ export default function EventModal({ event, onClose }) {
   const modalRoot = getModalRoot()
   const occurrence = event?.nextOccurrence || event?.occurrences?.[0]
   const dateLabel = formatDateRange(occurrence, event?.allDay)
+  const townParts = []
+  if (event?.subArea) townParts.push(event.subArea)
+  if (event?.town) townParts.push(event.town)
+  const townLabel = townParts.join(', ') || 'NorthSide GTA'
+  const sourceLabel = event?.sourceName || event?.sourceDomain || 'Source'
+  const sourceTypeLabel = event?.source === 'feed' ? 'Feed' : 'Manual'
 
   React.useEffect(() => {
     if (typeof document === 'undefined') return undefined
@@ -109,7 +115,7 @@ export default function EventModal({ event, onClose }) {
         <div className="space-y-6 px-6 pb-10 pt-8">
           <header className="space-y-4">
             <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wide text-slate-500">
-              <span>{event.town}</span>
+              <span>{townLabel}</span>
               <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
               <span>{event.category}</span>
             </div>
@@ -123,6 +129,7 @@ export default function EventModal({ event, onClose }) {
                 <span>
                   {event.locationName}
                   {event.address ? ` · ${event.address}` : ''}
+                  {!event.address && townLabel ? ` · ${townLabel}` : ''}
                 </span>
               </p>
             )}
@@ -224,7 +231,24 @@ export default function EventModal({ event, onClose }) {
             )}
             <div>
               <dt className="font-semibold uppercase tracking-wide text-slate-500">Source</dt>
-              <dd className="capitalize">{event.source}</dd>
+              <dd className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                {event.sourceUrl ? (
+                  <a
+                    href={event.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-emerald-700 hover:underline"
+                  >
+                    {sourceLabel}
+                  </a>
+                ) : (
+                  <span className="font-medium text-slate-700">{sourceLabel}</span>
+                )}
+                {event.sourceDomain && !sourceLabel.includes(event.sourceDomain) && (
+                  <span className="text-xs uppercase tracking-wide text-slate-400">{event.sourceDomain}</span>
+                )}
+                <span className="text-xs uppercase tracking-wide text-slate-400">{sourceTypeLabel}</span>
+              </dd>
             </div>
           </dl>
         </div>

@@ -7,6 +7,7 @@
   "recurrence": "FREQ=WEEKLY;BYDAY=TH;COUNT=6",
   "category": "Arts & Culture",
   "town": "Stouffville",
+  "subArea": "Downtown Stouffville",
   "locationName": "Memorial Park Bandshell",
   "address": "2 Park Dr, Whitchurch-Stouffville, ON",
   "lat": 43.9716,
@@ -29,6 +30,11 @@
   "featured": true,
   "status": "published",
   "source": "manual",
+  "sourceName": "Town of Whitchurch-Stouffville Events",
+  "sourceUrl": "https://www.townofws.ca/events",
+  "sourceDomain": "townofws.ca",
+  "sourcePriority": 5,
+  "qaTags": ["editorial"],
   "sourceRef": "stouffville-concerts-2025",
   "updatedAt": "2025-05-02T12:30:00-04:00"
 }

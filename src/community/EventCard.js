@@ -19,6 +19,11 @@ export default function EventCard({ event, onSelect }) {
   const occurrence = event.nextOccurrence || event.occurrences?.[0]
   const dateLabel = formatDateRange(occurrence, event.allDay)
   const isFree = event.priceType === 'Free'
+  const townParts = []
+  if (event.subArea) townParts.push(event.subArea)
+  if (event.town) townParts.push(event.town)
+  const townLabel = townParts.join(', ') || 'NorthSide GTA'
+  const sourceLabel = event.sourceName || event.sourceDomain || 'Source'
 
   const handleAddToCalendar = () => {
     if (event.icsUrl) {
@@ -63,7 +68,7 @@ export default function EventCard({ event, onSelect }) {
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-500">
-            <span>{event.town}</span>
+            <span>{townLabel}</span>
             <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
             <span>{event.category}</span>
           </div>
@@ -76,7 +81,7 @@ export default function EventCard({ event, onSelect }) {
               <MapPin className="h-4 w-4" aria-hidden="true" />
               <span>
                 {event.locationName}
-                {event.town ? ` · ${event.town}` : ''}
+                {townLabel ? ` · ${townLabel}` : ''}
               </span>
             </p>
           )}
@@ -106,6 +111,24 @@ export default function EventCard({ event, onSelect }) {
 
         {event.priceNote && (
           <p className="text-xs text-slate-500">{event.priceNote}</p>
+        )}
+
+        {(event.sourceUrl || event.sourceName || event.sourceDomain) && (
+          <p className="text-xs text-slate-400">
+            Source:{' '}
+            {event.sourceUrl ? (
+              <a
+                href={event.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-slate-500 underline-offset-2 hover:text-slate-700 hover:underline"
+              >
+                {sourceLabel}
+              </a>
+            ) : (
+              <span className="font-medium text-slate-500">{sourceLabel}</span>
+            )}
+          </p>
         )}
 
         <div className="flex flex-wrap gap-3 text-sm font-medium">

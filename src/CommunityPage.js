@@ -261,10 +261,11 @@ export default function CommunityPage() {
         </section>
 
         <section className="bg-white py-6 text-center text-sm text-slate-600">
-          Have an event to share? Email{' '}
-          <a href="mailto:contact@finallyhomeagents.com" className="font-medium text-emerald-700 hover:underline">
-            contact@finallyhomeagents.com
+          Have an event to share?{' '}
+          <a href="/community/submit-event" className="font-medium text-emerald-700 hover:underline">
+            Submit it here
           </a>
+          .
         </section>
       </main>
 
