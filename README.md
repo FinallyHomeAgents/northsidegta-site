@@ -8,3 +8,4 @@
 - `SIGNATURE_IMG_URL` – Optional URL for a signature image embedded in the lead email.
 - `FORMSPREE_ENDPOINT` – Optional Formspree endpoint that receives a copy of each lead submission. If unset, Formspree forwarding is skipped. Configure this to match your Formspree form URL (for example `https://formspree.io/f/xyzdokjk`).
 
+
