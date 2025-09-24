@@ -85,7 +85,7 @@ collections:
     extension: 'json'
     format: 'json'
     # Note: Decap does not support setting a default sort; editors must use the Sort menu.
-    summary: "{{title}} — {{startDate | date('ddd, MMM D h:mm a')}} — {{town}}{{locationName ? (', ' + locationName) : ''}} — Status: {{status | upper}}"
+    summary: "{{title}} — {{startDate | date('ddd, MMM D h:mm a')}} — {{town}}{{locationName ? (', ' + locationName) : ''}} — Status: {{status | upper}}{{hidden ? ' • HIDDEN' : ''}}{{archived ? ' • ARCHIVED' : ''}}"
     sortable_fields: ['startDate', 'status', 'commit_date', 'town', 'category', 'featured']
     view_filters:
       - label: Published
@@ -94,6 +94,18 @@ collections:
       - label: Unpublished
         field: status
         pattern: '^(draft|pending|archived)$'
+      - label: Hidden
+        field: hidden
+        pattern: '^true$'
+      - label: Not Hidden
+        field: hidden
+        pattern: '^(false|)$'
+      - label: Archived
+        field: archived
+        pattern: '^true$'
+      - label: Not Archived
+        field: archived
+        pattern: '^(false|)$'
     view_groups:
       - label: Month
         field: startDate
@@ -190,6 +202,16 @@ collections:
         hint: 'Optional external calendar link. Leave blank to auto-generate.'
       - name: 'featured'
         label: 'Featured This Week'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'hidden'
+        label: 'Hide from public lists & sitemap'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'archived'
+        label: 'Move to Archive page'
         widget: 'boolean'
         required: false
         default: false

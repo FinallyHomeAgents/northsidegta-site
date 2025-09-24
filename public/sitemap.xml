@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Core pages -->
   <url>
     <loc>https://northsidegta.ca/</loc>
     <changefreq>weekly</changefreq>
@@ -37,8 +36,21 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
-
-  <!-- Town pages -->
+  <url>
+    <loc>https://northsidegta.ca/community</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/archive</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
   <url>
     <loc>https://northsidegta.ca/georgina</loc>
     <changefreq>monthly</changefreq>
@@ -73,6 +85,88 @@
     <loc>https://northsidegta.ca/scugog</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/golfunder2m</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/landontest</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/northside-gta-pool-homes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/northsidegta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/slugtest</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/test-collection</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/test2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/test3</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/aurora-cultural-centre-cooo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-09-23T17:24:17.531Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/aurora-cultural-centre-pa-day-ages-4-to-7-september-26</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-09-23T17:24:17.530Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/aurora-cultural-centre-printmaking-trace-monotypes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-09-23T17:24:17.530Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/aurora-farmers-market</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-05-01T14:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/newmarket-night-market</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-05-04T19:15:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/uxbridge-trails-challenge</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-04-22T12:45:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/community/events/york-region-echoes-of-bond-lake-the-lost-hotel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-09-23T17:24:57.390Z</lastmod>
   </url>
 
 </urlset>
