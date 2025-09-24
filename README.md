@@ -28,6 +28,10 @@ Publishing, unpublishing, and hard-delete fallbacks use the GitHub Content API. 
 
 If the GitHub variables are missing, publish/unpublish buttons will be disabled and hard deletes are unavailable.
 
+## Moderating events (zero-config)
+
+Use `/community/events-admin` to review events; click **Open in CMS** to publish or hide entries, and hidden items automatically disappear from public lists and the sitemap.
+
 ## Managing event visibility
 
 - **Hide from public lists & sitemap**: In Decap CMS, open the event entry and toggle the new **Hide from public lists & sitemap** checkbox, then publish. Hidden events stay accessible directly at `/community/events/<slug>` but disappear from the main listings and sitemap.
