@@ -8,6 +8,8 @@ import {
   X,
   ExternalLink,
   AlertTriangle,
+  Check,
+  EyeOff,
 } from 'lucide-react'
 
 const headingFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -163,6 +165,10 @@ function normalizeEvent(raw) {
   const id = cleanString(raw.slug || raw.id || raw.filePath || raw.__filename || '').toLowerCase()
   if (!id) return null
   const title = cleanString(raw.title) || 'Untitled Event'
+  const rawStatus = cleanString(raw.status)
+  const status = rawStatus ? rawStatus.toLowerCase() : 'draft'
+  const statusLabel = formatStatusLabel(rawStatus || status)
+  const isPublished = status === 'published'
   const start = parseDate(raw.startDate || raw.start)
   const end = parseDate(raw.endDate || raw.end)
   const city = cleanString(raw.city) || cleanString(raw.town) || cleanString(raw?.location?.city)
@@ -178,6 +184,7 @@ function normalizeEvent(raw) {
   const isDeleted = Boolean(raw?.meta?.isDeleted)
   return {
     id,
+    slug: id,
     title,
     start,
     end,
@@ -189,9 +196,13 @@ function normalizeEvent(raw) {
     dayKey,
     dayLabel,
     url,
+    cmsUrl: buildCmsUrl(id),
     searchText,
     isDeleted,
     isPast: isPastEvent(start, end),
+    status,
+    statusLabel,
+    isPublished,
     raw,
   }
 }
@@ -236,7 +247,7 @@ function useEventsData({ scope, includeDeleted }) {
   const [rawEvents, setRawEvents] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
-  const [meta, setMeta] = React.useState({ deletionEnabled: false })
+  const [meta, setMeta] = React.useState(DEFAULT_META)
 
   const fetchEvents = React.useCallback(() => {
     const controller = new AbortController()
@@ -261,14 +272,18 @@ function useEventsData({ scope, includeDeleted }) {
       })
       .then((payload) => {
         setRawEvents(Array.isArray(payload.events) ? payload.events : [])
-        setMeta(payload && typeof payload.meta === 'object' ? payload.meta : { deletionEnabled: false })
+        setMeta(
+          payload && typeof payload.meta === 'object'
+            ? { ...DEFAULT_META, ...payload.meta }
+            : DEFAULT_META
+        )
         setLoading(false)
       })
       .catch((err) => {
         if (err.name === 'AbortError') return
         console.error('[events-admin] failed to fetch events', err)
         setError('We couldn\'t load the events list. Try again in a moment.')
-        setMeta({ deletionEnabled: false })
+        setMeta(DEFAULT_META)
         setLoading(false)
       })
     return () => controller.abort()
@@ -333,6 +348,7 @@ function EventsToolbar({
   showDeleted,
   onShowDeletedChange,
   deletionEnabled,
+  softDeleteEnabled,
 }) {
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -429,20 +445,22 @@ function EventsToolbar({
             <option value="past">Past</option>
           </select>
         </div>
-        <label
-          className={`inline-flex items-center gap-2 text-sm font-medium ${
-            deletionEnabled ? 'text-slate-600' : 'text-slate-400'
-          }`}
-        >
-          <input
-            type="checkbox"
-            className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-            checked={showDeleted}
-            onChange={(event) => onShowDeletedChange(event.target.checked)}
-            disabled={!deletionEnabled}
-          />
-          Show deleted
-        </label>
+        {softDeleteEnabled && (
+          <label
+            className={`inline-flex items-center gap-2 text-sm font-medium ${
+              deletionEnabled ? 'text-slate-600' : 'text-slate-400'
+            }`}
+          >
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+              checked={showDeleted}
+              onChange={(event) => onShowDeletedChange(event.target.checked)}
+              disabled={!deletionEnabled}
+            />
+            Show deleted
+          </label>
+        )}
       </div>
     </div>
   )
@@ -457,6 +475,10 @@ function CardsView({
   onRestore,
   disabled,
   deletionEnabled,
+  onPublish,
+  onUnpublish,
+  publishingEnabled,
+  updatingStatusIds,
 }) {
   const groups = React.useMemo(() => groupEvents(events), [events])
   if (!groups.length) {
@@ -477,6 +499,13 @@ function CardsView({
             {group.events.map((event) => {
               const isChecked = selectedIds.has(event.id)
               const actionDisabled = disabled || !deletionEnabled
+              const statusClassName = STATUS_STYLES[event.status] || DEFAULT_STATUS_STYLE
+              const StatusIcon = event.isPublished ? Check : EyeOff
+              const isUpdatingStatus =
+                updatingStatusIds instanceof Set ? updatingStatusIds.has(event.id) : false
+              const publishActionDisabled =
+                !publishingEnabled || event.isDeleted || isUpdatingStatus || disabled
+              const cmsUrl = event.cmsUrl
               return (
                 <article
                   key={event.id}
@@ -496,10 +525,23 @@ function CardsView({
                       />
                     </div>
                   )}
-                  <header className="space-y-1">
-                    <h3 className="truncate text-base font-semibold text-slate-900" title={event.title}>
-                      {event.title}
-                    </h3>
+                  <header className="space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="truncate text-base font-semibold text-slate-900" title={event.title}>
+                        {event.title}
+                      </h3>
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusClassName}`}
+                      >
+                        <StatusIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                        {event.statusLabel}
+                      </span>
+                    </div>
+                    {event.isDeleted && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
+                        Deleted
+                      </span>
+                    )}
                   </header>
                   <dl className="space-y-2 text-sm">
                     <div className="flex gap-3 text-slate-600">
@@ -513,6 +555,17 @@ function CardsView({
                   </dl>
                   <div className="mt-auto flex flex-wrap items-center justify-between gap-3 text-sm">
                     <div className="flex flex-wrap items-center gap-2">
+                      {cmsUrl ? (
+                        <a
+                          href={cmsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 font-semibold text-slate-700 hover:text-slate-900"
+                        >
+                          Open in CMS
+                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                        </a>
+                      ) : null}
                       {event.url ? (
                         <a
                           href={event.url}
@@ -520,19 +573,39 @@ function CardsView({
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-900"
                         >
-                          Details
+                          Public link
                           <ExternalLink className="h-4 w-4" aria-hidden="true" />
                         </a>
                       ) : (
-                        <span className="text-slate-400">No link</span>
+                        <span className="text-slate-400">No public link</span>
                       )}
-                      {event.isDeleted ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
-                          Deleted
-                        </span>
-                      ) : null}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {!event.isDeleted && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            (event.isPublished ? onUnpublish?.(event.id) : onPublish?.(event.id))
+                          }
+                          disabled={publishActionDisabled}
+                          title={
+                            !publishingEnabled
+                              ? 'Publishing controls disabled. Configure GitHub env vars.'
+                              : undefined
+                          }
+                          className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                            event.isPublished
+                              ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
+                              : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
+                          } ${publishActionDisabled ? 'cursor-not-allowed opacity-60' : ''}`}
+                        >
+                          {isUpdatingStatus
+                            ? 'Working…'
+                            : event.isPublished
+                              ? 'Unpublish'
+                              : 'Publish'}
+                        </button>
+                      )}
                       {event.isDeleted ? (
                         <button
                           type="button"
@@ -540,7 +613,7 @@ function CardsView({
                           disabled={actionDisabled}
                           className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                          Undo delete
+                          Restore
                         </button>
                       ) : (
                         <button
@@ -574,6 +647,10 @@ function TableView({
   onRestore,
   disabled,
   deletionEnabled,
+  onPublish,
+  onUnpublish,
+  publishingEnabled,
+  updatingStatusIds,
 }) {
   const visibleIds = React.useMemo(() => events.map((event) => event.id), [events])
   const allSelected =
@@ -624,6 +701,13 @@ function TableView({
           {events.map((event) => {
             const isChecked = selectedIds.has(event.id)
             const actionDisabled = disabled || !deletionEnabled
+            const statusClassName = STATUS_STYLES[event.status] || DEFAULT_STATUS_STYLE
+            const StatusIcon = event.isPublished ? Check : EyeOff
+            const isUpdatingStatus =
+              updatingStatusIds instanceof Set ? updatingStatusIds.has(event.id) : false
+            const publishActionDisabled =
+              !publishingEnabled || event.isDeleted || isUpdatingStatus || disabled
+            const cmsUrl = event.cmsUrl
             return (
               <tr key={event.id} className={`align-top ${event.isDeleted ? 'opacity-60' : ''}`}>
                 <td className="px-4 py-3">
@@ -638,18 +722,52 @@ function TableView({
                     />
                   ) : null}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-900">
-                  {event.title}
+                <td className="px-4 py-3 text-sm text-slate-900">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-start justify-between gap-2">
+                      {cmsUrl ? (
+                        <a
+                          href={cmsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-slate-900 hover:text-emerald-700 hover:underline"
+                        >
+                          {event.title}
+                        </a>
+                      ) : (
+                        <span className="font-semibold text-slate-900">{event.title}</span>
+                      )}
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold ${statusClassName}`}
+                      >
+                        <StatusIcon className="h-3 w-3" aria-hidden="true" />
+                        {event.statusLabel}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                      {cmsUrl ? (
+                        <a
+                          href={cmsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-slate-500 hover:text-emerald-700 hover:underline"
+                        >
+                          Open in CMS
+                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                        </a>
+                      ) : null}
+                      {event.isDeleted && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-700">
+                          Deleted
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-700">{event.when}</td>
                 <td className="px-4 py-3 text-sm text-slate-700">{event.where}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex flex-wrap items-center justify-end gap-2">
-                    {event.isDeleted ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
-                        Deleted
-                      </span>
-                    ) : null}
                     {event.url ? (
                       <a
                         href={event.url}
@@ -657,11 +775,36 @@ function TableView({
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
                       >
-                        Details
+                        Public link
                         <ExternalLink className="h-4 w-4" aria-hidden="true" />
                       </a>
                     ) : (
                       <span className="text-sm text-slate-400">No link</span>
+                    )}
+                    {!event.isDeleted && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          (event.isPublished ? onUnpublish?.(event.id) : onPublish?.(event.id))
+                        }
+                        disabled={publishActionDisabled}
+                        title={
+                          !publishingEnabled
+                            ? 'Publishing controls disabled. Configure GitHub env vars.'
+                            : undefined
+                        }
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                          event.isPublished
+                            ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
+                            : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
+                        } ${publishActionDisabled ? 'cursor-not-allowed opacity-60' : ''}`}
+                      >
+                        {isUpdatingStatus
+                          ? 'Working…'
+                          : event.isPublished
+                            ? 'Unpublish'
+                            : 'Publish'}
+                      </button>
                     )}
                     {event.isDeleted ? (
                       <button
@@ -670,7 +813,7 @@ function TableView({
                         disabled={actionDisabled}
                         className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Undo delete
+                        Restore
                       </button>
                     ) : (
                       <button
@@ -696,7 +839,15 @@ function TableView({
   )
 }
 
-function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting, deletionEnabled }) {
+function BulkActionsBar({
+  count,
+  onCancel,
+  onDelete,
+  disabled,
+  deleting,
+  deletionEnabled,
+  softDeleteEnabled,
+}) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:px-6 md:top-0 md:bottom-auto">
       <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl border border-emerald-200 bg-white/95 p-4 shadow-lg backdrop-blur">
@@ -705,7 +856,11 @@ function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting, deletio
             <p className="text-sm font-semibold text-slate-900">
               {deleting ? `Deleting ${count} event${count === 1 ? '' : 's'}…` : `${count} selected`}
             </p>
-            <p className="text-xs text-slate-500">Selected events will disappear from the listings immediately.</p>
+            <p className="text-xs text-slate-500">
+              {softDeleteEnabled
+                ? 'Selected events will disappear from the listings immediately.'
+                : 'Selected events will be permanently removed from the repository.'}
+            </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -741,6 +896,7 @@ function DeleteConfirmationModal({
   pastCount,
   deleting,
   deletionEnabled,
+  softDeleteEnabled,
 }) {
   const dialogRef = React.useRef(null)
   const previousActiveElement = React.useRef(null)
@@ -824,11 +980,13 @@ function DeleteConfirmationModal({
                 )}
               </ul>
               <p className="mt-3 text-slate-500">
-                Deleted events disappear from Upcoming and Past views. Turn on “Show deleted” to undo later.
+                {softDeleteEnabled
+                  ? 'Deleted events disappear from Upcoming and Past views. Turn on “Show deleted” to undo later.'
+                  : 'Deleting will remove the JSON files from the repository. This cannot be undone.'}
               </p>
               {!deletionEnabled && (
                 <p className="mt-2 text-sm font-semibold text-rose-600">
-                  Deletion is disabled (KV not configured). Contact an admin.
+                  Deletion is disabled. Contact an admin to configure credentials.
                 </p>
               )}
             </div>
@@ -928,16 +1086,21 @@ export default function EventsIndexPage() {
   const [selectedIds, setSelectedIds] = React.useState(() => new Set())
   const [modalOpen, setModalOpen] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
+  const [updatingStatusIds, setUpdatingStatusIds] = React.useState(() => new Set())
   const { toasts, addToast, removeToast } = useToastQueue()
-  const deletionEnabled = Boolean(meta?.deletionEnabled)
+  const deletionMode = typeof meta?.deletionMode === 'string' ? meta.deletionMode : 'disabled'
+  const deletionEnabled = deletionMode !== 'disabled'
+  const softDeleteEnabled = deletionMode === 'soft'
+  const restoreEnabled = Boolean(meta?.restoreEnabled)
+  const publishingEnabled = Boolean(meta?.publishingEnabled)
 
   const events = React.useMemo(() => normalizeEvents(rawEvents), [rawEvents])
 
   React.useEffect(() => {
-    if (!deletionEnabled && includeDeleted) {
+    if (!softDeleteEnabled && includeDeleted) {
       setIncludeDeleted(false)
     }
-  }, [deletionEnabled, includeDeleted])
+  }, [softDeleteEnabled, includeDeleted])
 
   const eventMap = React.useMemo(() => {
     const map = new Map()
@@ -1023,8 +1186,8 @@ export default function EventsIndexPage() {
 
   const performDelete = React.useCallback(
     async (ids) => {
-      if (!deletionEnabled) {
-        return { ok: false, count: 0, error: 'Deletion disabled (KV not configured).' }
+      if (!softDeleteEnabled || !restoreEnabled) {
+        return { ok: false, count: 0, error: 'Restore unavailable in hard-delete mode.' }
       }
       const normalizedIds = Array.from(
         new Set(ids.map((value) => cleanString(value).toLowerCase()).filter(Boolean))
@@ -1045,7 +1208,7 @@ export default function EventsIndexPage() {
         }
         const idSet = new Set(normalizedIds)
         setRawEvents((prev) => {
-          if (!includeDeleted) {
+          if (!softDeleteEnabled || !includeDeleted) {
             return prev.filter((event) => !idSet.has(getRawEventId(event)))
           }
           return prev.map((event) => {
@@ -1068,7 +1231,7 @@ export default function EventsIndexPage() {
         setDeleting(false)
       }
     },
-    [deletionEnabled, includeDeleted, getRawEventId, setRawEvents]
+    [deletionEnabled, includeDeleted, getRawEventId, setRawEvents, softDeleteEnabled]
   )
 
   const performRestore = React.useCallback(
@@ -1122,7 +1285,7 @@ export default function EventsIndexPage() {
         setDeleting(false)
       }
     },
-    [deletionEnabled, getRawEventId, setRawEvents]
+    [softDeleteEnabled, restoreEnabled, getRawEventId, setRawEvents]
   )
 
   const handleCloseModal = React.useCallback(() => {
@@ -1165,7 +1328,11 @@ export default function EventsIndexPage() {
         addToast({
           tone: 'success',
           title: 'Event deleted.',
-          message: includeDeleted ? 'Use “Undo delete” to restore.' : undefined,
+          message: softDeleteEnabled && includeDeleted
+            ? 'Use “Undo delete” to restore.'
+            : !softDeleteEnabled
+              ? 'Removed from the repository immediately.'
+              : undefined,
         })
       } else if (result.error) {
         addToast({
@@ -1174,7 +1341,7 @@ export default function EventsIndexPage() {
         })
       }
     },
-    [performDelete, addToast, deletionEnabled, includeDeleted]
+    [performDelete, addToast, deletionEnabled, includeDeleted, softDeleteEnabled]
   )
 
   const handleRestoreEvent = React.useCallback(
@@ -1197,6 +1364,77 @@ export default function EventsIndexPage() {
     [performRestore, addToast, deletionEnabled]
   )
 
+  const performStatusUpdate = React.useCallback(
+    async (id, action) => {
+      const safeId = cleanString(id).toLowerCase()
+      if (!safeId) return
+      if (!publishingEnabled) {
+        addToast({
+          tone: 'warning',
+          title: 'Publishing disabled (GitHub env missing).',
+        })
+        return
+      }
+      setUpdatingStatusIds((prev) => {
+        const next = new Set(prev)
+        next.add(safeId)
+        return next
+      })
+      try {
+        const response = await fetch(`/api/admin/events/${action}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: safeId }),
+        })
+        const payload = await response.json().catch(() => ({}))
+        if (!response.ok || !payload?.ok) {
+          throw new Error(payload?.error || 'Status update failed')
+        }
+        if (payload?.status && payload.changed !== false) {
+          setRawEvents((prev) =>
+            prev.map((event) => {
+              const eventId = getRawEventId(event)
+              if (eventId !== safeId) return event
+              return { ...event, status: payload.status }
+            })
+          )
+        }
+        if (payload?.changed === false) {
+          addToast({
+            tone: 'info',
+            title: action === 'publish' ? 'Event already published.' : 'Event already unpublished.',
+          })
+        } else {
+          addToast({
+            tone: 'success',
+            title: action === 'publish' ? 'Event published.' : 'Event unpublished.',
+            message: payload?.prUrl ? 'A pull request was opened for review.' : undefined,
+          })
+        }
+      } catch (error) {
+        console.error(`[events-admin] ${action} failed`, error)
+        addToast({
+          tone: 'danger',
+          title: error?.message || 'Status update failed.',
+        })
+      } finally {
+        setUpdatingStatusIds((prev) => {
+          const next = new Set(prev)
+          next.delete(safeId)
+          return next
+        })
+      }
+    },
+    [publishingEnabled, addToast, setRawEvents, getRawEventId]
+  )
+
+  const handlePublishEvent = React.useCallback((id) => performStatusUpdate(id, 'publish'), [performStatusUpdate])
+
+  const handleUnpublishEvent = React.useCallback(
+    (id) => performStatusUpdate(id, 'unpublish'),
+    [performStatusUpdate]
+  )
+
   const handleOpenModal = React.useCallback(() => {
     if (!selectedCount) return
     if (!deletionEnabled) {
@@ -1209,7 +1447,7 @@ export default function EventsIndexPage() {
     setModalOpen(true)
   }, [selectedCount, deletionEnabled, addToast])
 
-  const disableSelectToggle = deleting
+  const disableSelectToggle = deleting || !deletionEnabled
 
   return (
     <div className="min-h-screen bg-slate-50 pb-24">
@@ -1253,14 +1491,35 @@ export default function EventsIndexPage() {
           showDeleted={includeDeleted}
           onShowDeletedChange={setIncludeDeleted}
           deletionEnabled={deletionEnabled}
+          softDeleteEnabled={softDeleteEnabled}
         />
 
         {!deletionEnabled && (
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800" role="alert">
             <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
             <div>
-              <p className="font-semibold">Deletion disabled (KV not configured).</p>
-              <p>Contact an admin to enable soft-delete actions.</p>
+              <p className="font-semibold">Delete actions unavailable.</p>
+              <p>Configure Vercel KV and GitHub credentials to enable deletions.</p>
+            </div>
+          </div>
+        )}
+
+        {deletionMode === 'hard' && (
+          <div className="flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800" role="alert">
+            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
+            <div>
+              <p className="font-semibold">Hard delete mode.</p>
+              <p>Deleting events removes their JSON files via Git commit. There is no undo.</p>
+            </div>
+          </div>
+        )}
+
+        {!publishingEnabled && (
+          <div className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600" role="alert">
+            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-500" aria-hidden="true" />
+            <div>
+              <p className="font-semibold text-slate-800">Publish/Unpublish disabled.</p>
+              <p>Add GITHUB_REPO and GITHUB_TOKEN env vars to enable publishing controls.</p>
             </div>
           </div>
         )}
@@ -1302,6 +1561,10 @@ export default function EventsIndexPage() {
                 onRestore={handleRestoreEvent}
                 disabled={deleting}
                 deletionEnabled={deletionEnabled}
+                onPublish={handlePublishEvent}
+                onUnpublish={handleUnpublishEvent}
+                publishingEnabled={publishingEnabled}
+                updatingStatusIds={updatingStatusIds}
               />
             ) : (
               <TableView
@@ -1314,6 +1577,10 @@ export default function EventsIndexPage() {
                 onRestore={handleRestoreEvent}
                 disabled={deleting}
                 deletionEnabled={deletionEnabled}
+                onPublish={handlePublishEvent}
+                onUnpublish={handleUnpublishEvent}
+                publishingEnabled={publishingEnabled}
+                updatingStatusIds={updatingStatusIds}
               />
             )}
           </>
@@ -1331,6 +1598,7 @@ export default function EventsIndexPage() {
           disabled={deleting}
           deleting={deleting}
           deletionEnabled={deletionEnabled}
+          softDeleteEnabled={softDeleteEnabled}
         />
       )}
 
@@ -1343,9 +1611,37 @@ export default function EventsIndexPage() {
         pastCount={pastSelectedCount}
         deleting={deleting}
         deletionEnabled={deletionEnabled}
+        softDeleteEnabled={softDeleteEnabled}
       />
 
       <ToastStack toasts={toasts} onDismiss={removeToast} />
     </div>
   )
+}
+const STATUS_STYLES = {
+  published: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  draft: 'border-amber-200 bg-amber-50 text-amber-700',
+  pending: 'border-sky-200 bg-sky-50 text-sky-700',
+  archived: 'border-slate-200 bg-slate-100 text-slate-600',
+}
+
+const DEFAULT_STATUS_STYLE = 'border-slate-200 bg-slate-100 text-slate-600'
+
+const DEFAULT_META = {
+  deletionEnabled: false,
+  deletionMode: 'disabled',
+  restoreEnabled: false,
+  publishingEnabled: false,
+}
+
+function formatStatusLabel(status) {
+  if (!status) return 'Draft'
+  const normalized = status.trim().toLowerCase()
+  if (!normalized) return 'Draft'
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+}
+
+function buildCmsUrl(slug) {
+  if (!slug) return ''
+  return `/cms#/collections/events/entry/${slug}`
 }

@@ -84,8 +84,20 @@ collections:
     slug: '{{slug}}'
     extension: 'json'
     format: 'json'
-    summary: '{{title}} — {{startDate}} — {{town}}'
-    sortable_fields: ['startDate', 'status', 'town', 'category', 'featured']
+    # Note: Decap does not support setting a default sort; editors must use the Sort menu.
+    summary: "{{title}} — {{startDate | date('ddd, MMM D h:mm a')}} — {{town}}{{locationName ? (', ' + locationName) : ''}} — Status: {{status | upper}}"
+    sortable_fields: ['startDate', 'status', 'commit_date', 'town', 'category', 'featured']
+    view_filters:
+      - label: Published
+        field: status
+        pattern: '^published$'
+      - label: Unpublished
+        field: status
+        pattern: '^(draft|pending|archived)$'
+    view_groups:
+      - label: Month
+        field: startDate
+        pattern: '^\\d{4}-\\d{2}'
     fields:
       - { name: 'title', label: 'Title' }
       - name: 'slug'

@@ -1,5 +1,12 @@
-import { loadAllEventsFromDisk, filterEventsByScope, sortEventsByStartDate, sanitizeEventId, buildDeletionKey } from '../../../lib/admin-events'
+import {
+  loadAllEventsFromDisk,
+  filterEventsByScope,
+  sortEventsByStartDate,
+  sanitizeEventId,
+  buildDeletionKey,
+} from '../../../lib/admin-events'
 import { getKvClient, isKvConfigured } from '../../../lib/kv-admin'
+import { isGithubConfigured } from '../../../lib/github-admin'
 
 function parseScopeParam(value) {
   if (Array.isArray(value)) {
@@ -49,12 +56,22 @@ export default async function handler(req, res) {
   }
 
   const scope = parseScopeParam(req.query?.scope)
-  const includeDeleted = parseIncludeDeletedParam(req.query?.includeDeleted)
+  let includeDeleted = parseIncludeDeletedParam(req.query?.includeDeleted)
+
+  const kvAvailable = isKvConfigured()
+  const githubAvailable = isGithubConfigured()
+  const deletionMode = kvAvailable ? 'soft' : githubAvailable ? 'hard' : 'disabled'
+  const restoreEnabled = deletionMode === 'soft'
+  const publishingEnabled = githubAvailable
+
+  if (!restoreEnabled) {
+    includeDeleted = false
+  }
 
   let deletionEnabled = false
   let deletedIds = new Set()
 
-  if (isKvConfigured()) {
+  if (kvAvailable) {
     deletionEnabled = true
     try {
       const kv = getKvClient()
@@ -110,7 +127,10 @@ export default async function handler(req, res) {
     meta: {
       scope,
       includeDeleted,
-      deletionEnabled,
+      deletionEnabled: deletionMode !== 'disabled',
+      deletionMode,
+      restoreEnabled,
+      publishingEnabled,
     },
   })
 }
