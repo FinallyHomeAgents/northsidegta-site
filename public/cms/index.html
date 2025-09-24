@@ -133,6 +133,34 @@
         display: none;
       }
 
+      #events-admin-link {
+        margin-right: 12px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background-color: rgba(37, 99, 235, 0.12);
+        color: #1d4ed8;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      #events-admin-link:hover,
+      #events-admin-link:focus {
+        background-color: rgba(37, 99, 235, 0.18);
+        color: #1e3a8a;
+        transform: translateY(-1px);
+      }
+
+      #events-admin-link:focus-visible {
+        outline: 2px solid rgba(37, 99, 235, 0.8);
+        outline-offset: 2px;
+      }
+
       #logout-button {
         padding: 8px 14px;
         border-radius: 999px;
@@ -156,6 +184,14 @@
   </head>
   <body>
     <div id="cms-controls">
+      <a
+        id="events-admin-link"
+        href="/community/events-admin"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Community Events Admin
+      </a>
       <button id="logout-button" type="button">Log out</button>
     </div>
     <div id="login-container">
@@ -194,6 +230,317 @@
           'https://cdn.jsdelivr.net/npm/decap-cms@3.6.2/dist/decap-cms.js',
         ]
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
+        let cmsEnhancementsReady = false
+
+        function setupCMSEnhancements() {
+          if (cmsEnhancementsReady) return true
+          if (!window.CMS || !window.React) return false
+          try {
+            registerEventsPreview(window.CMS, window.React)
+            cmsEnhancementsReady = true
+          } catch (error) {
+            console.warn('[cms-login] failed to register CMS enhancements', error)
+          }
+          return cmsEnhancementsReady
+        }
+
+        function registerEventsPreview(CMS, React) {
+          if (!CMS || typeof CMS.registerPreviewTemplate !== 'function') {
+            return
+          }
+
+          const { createElement } = React || {}
+          if (typeof createElement !== 'function') {
+            return
+          }
+
+          const headingFormatter = new Intl.DateTimeFormat('en-CA', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })
+
+          const weekdayFormatter = new Intl.DateTimeFormat('en-CA', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+          })
+
+          const monthDayFormatter = new Intl.DateTimeFormat('en-CA', {
+            month: 'short',
+            day: 'numeric',
+          })
+
+          const timeFormatter = new Intl.DateTimeFormat('en-CA', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+          })
+
+          function toStringValue(value) {
+            if (typeof value === 'string') return value.trim()
+            if (typeof value === 'number') return String(value)
+            return ''
+          }
+
+          function parseDate(value) {
+            const safeValue = toStringValue(value)
+            if (!safeValue) return null
+            const date = new Date(safeValue)
+            return Number.isNaN(date.getTime()) ? null : date
+          }
+
+          function isSameDay(a, b) {
+            if (!(a instanceof Date) || !(b instanceof Date)) return false
+            if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return false
+            return (
+              a.getFullYear() === b.getFullYear() &&
+              a.getMonth() === b.getMonth() &&
+              a.getDate() === b.getDate()
+            )
+          }
+
+          function startOfDay(date) {
+            if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null
+            const copy = new Date(date.getTime())
+            copy.setHours(0, 0, 0, 0)
+            return copy
+          }
+
+          function formatMonthDay(date) {
+            if (!(date instanceof Date) || Number.isNaN(date.getTime())) return ''
+            const base = monthDayFormatter.format(date)
+            const now = new Date()
+            if (date.getFullYear() !== now.getFullYear()) {
+              return `${base}, ${date.getFullYear()}`
+            }
+            return base
+          }
+
+          function normalizeMeridiem(value) {
+            return value.replace(/\s?(a\.m\.|p\.m\.)/gi, (match) =>
+              match.toLowerCase().includes('a') ? ' AM' : ' PM'
+            )
+          }
+
+          function formatTimeRange(start, end) {
+            const startText = normalizeMeridiem(timeFormatter.format(start))
+            const endText = normalizeMeridiem(timeFormatter.format(end))
+            const startSuffixMatch = startText.match(/\s(AM|PM)$/)
+            const endSuffixMatch = endText.match(/\s(AM|PM)$/)
+            if (startSuffixMatch && endSuffixMatch && startSuffixMatch[0] === endSuffixMatch[0]) {
+              const startWithoutMeridiem = startText.replace(/\s(AM|PM)$/, '')
+              return `${startWithoutMeridiem}–${endText}`
+            }
+            return `${startText}–${endText}`
+          }
+
+          function isAllDayRange(start, end) {
+            if (!(start instanceof Date) || !(end instanceof Date)) return false
+            if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return false
+            const startIsMidnight =
+              start.getHours() === 0 &&
+              start.getMinutes() === 0 &&
+              start.getSeconds() === 0
+            const durationMs = end.getTime() - start.getTime()
+            const oneDayMs = 24 * 60 * 60 * 1000
+            return startIsMidnight && Math.abs(durationMs - oneDayMs) < 1000
+          }
+
+          function formatWhenText(start, end, allDay) {
+            if (!(start instanceof Date) || Number.isNaN(start.getTime())) {
+              return 'Date/Time TBA'
+            }
+            if (allDay) {
+              return 'All day'
+            }
+            if (end instanceof Date && !Number.isNaN(end.getTime()) && isSameDay(start, end)) {
+              return `${weekdayFormatter.format(start)}, ${formatTimeRange(start, end)}`
+            }
+            if (end instanceof Date && !Number.isNaN(end.getTime())) {
+              const startPart = `${formatMonthDay(start)}, ${normalizeMeridiem(timeFormatter.format(start))}`
+              const endPart = `${formatMonthDay(end)}, ${normalizeMeridiem(timeFormatter.format(end))}`
+              return `${startPart} → ${endPart}`
+            }
+            return `${weekdayFormatter.format(start)}, ${normalizeMeridiem(timeFormatter.format(start))}`
+          }
+
+          function buildDayLabel(start) {
+            if (!(start instanceof Date) || Number.isNaN(start.getTime())) return 'Date TBA'
+            const today = startOfDay(new Date())
+            const tomorrow = today ? new Date(today.getTime()) : null
+            if (tomorrow) {
+              tomorrow.setDate(tomorrow.getDate() + 1)
+            }
+            if (today && isSameDay(start, today)) return 'Today'
+            if (tomorrow && isSameDay(start, tomorrow)) return 'Tomorrow'
+            return headingFormatter.format(start)
+          }
+
+          function buildWhere(city, location, address) {
+            const safeCity = toStringValue(city)
+            const safeLocation = toStringValue(location)
+            const safeAddress = toStringValue(address)
+            if (safeCity && safeLocation) return `${safeCity} • ${safeLocation}`
+            if (safeCity && safeAddress) return `${safeCity} • ${safeAddress}`
+            if (safeCity) return safeCity
+            if (safeLocation) return safeLocation
+            if (safeAddress) return safeAddress
+            return 'Location TBA'
+          }
+
+          function parseBoolean(value) {
+            if (value === true || value === false) return value
+            if (typeof value === 'string') {
+              const normalized = value.trim().toLowerCase()
+              return normalized === 'true' || normalized === '1' || normalized === 'yes'
+            }
+            return false
+          }
+
+          const infoRowStyle = {
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px',
+          }
+
+          const infoLabelStyle = {
+            minWidth: '52px',
+            fontSize: '12px',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#64748b',
+          }
+
+          const infoValueStyle = {
+            fontSize: '14px',
+            fontWeight: 500,
+            color: '#0f172a',
+          }
+
+          class EventPreview extends React.Component {
+            render() {
+              const data = this.props.entry && this.props.entry.get ? this.props.entry.get('data') : null
+              const getField = (field) => (data && data.get ? data.get(field) : undefined)
+
+              const title = toStringValue(getField('title')) || 'Untitled Event'
+              const start = parseDate(getField('startDate'))
+              const end = parseDate(getField('endDate'))
+              const explicitAllDay = parseBoolean(getField('allDay'))
+              const derivedAllDay = !explicitAllDay && isAllDayRange(start, end)
+              const whenText = formatWhenText(start, end, explicitAllDay || derivedAllDay)
+              const dayLabel = buildDayLabel(start)
+              const city = getField('town')
+              const locationName = getField('locationName') || getField('location')
+              const address = getField('address')
+              const whereText = buildWhere(city, locationName, address)
+              const summary = toStringValue(getField('summary'))
+              const eventUrl = toStringValue(getField('eventUrl'))
+
+              const rootStyle = {
+                fontFamily: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
+                color: '#0f172a',
+                backgroundColor: '#f8fafc',
+                padding: '32px',
+              }
+
+              const chipStyle = {
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                backgroundColor: '#dbeafe',
+                color: '#1d4ed8',
+                fontSize: '12px',
+                fontWeight: 600,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                marginBottom: '16px',
+              }
+
+              const cardStyle = {
+                backgroundColor: '#ffffff',
+                borderRadius: '18px',
+                boxShadow: '0 20px 40px rgba(15, 23, 42, 0.08)',
+                border: '1px solid #e2e8f0',
+                padding: '24px',
+              }
+
+              const titleStyle = {
+                margin: '0 0 12px',
+                fontSize: '22px',
+                fontWeight: 700,
+                lineHeight: 1.3,
+                color: '#0f172a',
+              }
+
+              const summaryStyle = {
+                marginTop: '16px',
+                fontSize: '15px',
+                lineHeight: 1.6,
+                color: '#334155',
+              }
+
+              const linkStyle = {
+                marginTop: '18px',
+                fontSize: '14px',
+                fontWeight: 600,
+                color: '#2563eb',
+                textDecoration: 'none',
+              }
+
+              return createElement(
+                'div',
+                { style: rootStyle },
+                createElement('div', { style: chipStyle }, dayLabel),
+                createElement(
+                  'div',
+                  { style: cardStyle },
+                  createElement('h2', { style: titleStyle }, title),
+                  createElement(
+                    'div',
+                    { style: { display: 'grid', rowGap: '10px' } },
+                    createElement(
+                      'div',
+                      { style: infoRowStyle },
+                      createElement('span', { style: infoLabelStyle }, 'When'),
+                      createElement('span', { style: infoValueStyle }, whenText)
+                    ),
+                    createElement(
+                      'div',
+                      { style: infoRowStyle },
+                      createElement('span', { style: infoLabelStyle }, 'Where'),
+                      createElement('span', { style: infoValueStyle }, whereText)
+                    )
+                  ),
+                  summary
+                    ? createElement('p', { style: summaryStyle }, summary)
+                    : null,
+                  eventUrl
+                    ? createElement(
+                        'p',
+                        { style: { margin: '18px 0 0' } },
+                        createElement(
+                          'a',
+                          {
+                            href: eventUrl,
+                            target: '_blank',
+                            rel: 'noopener noreferrer',
+                            style: linkStyle,
+                          },
+                          'View details'
+                        )
+                      )
+                    : null
+                )
+              )
+            }
+          }
+
+          CMS.registerPreviewTemplate('events', EventPreview)
+        }
 
         const form = document.getElementById('cms-login-form')
         const statusEl = document.getElementById('login-status')
@@ -279,6 +626,7 @@
 
         async function loadCMSInterface(fromLogin = false) {
           if (window.__cmsLoaded) {
+            setupCMSEnhancements()
             if (fromLogin) setLoading(false)
             return true
           }
@@ -303,6 +651,7 @@
           for (const src of CMS_SCRIPT_URLS) {
             try {
               await loadScript(src)
+              setupCMSEnhancements()
               if (fromLogin) setLoading(false)
               return true
             } catch (error) {
