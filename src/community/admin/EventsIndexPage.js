@@ -160,7 +160,7 @@ function isPastEvent(start, end) {
 
 function normalizeEvent(raw) {
   if (!raw || typeof raw !== 'object') return null
-  const id = cleanString(raw.slug || raw.id || raw.filePath || raw.__filename || '')
+  const id = cleanString(raw.slug || raw.id || raw.filePath || raw.__filename || '').toLowerCase()
   if (!id) return null
   const title = cleanString(raw.title) || 'Untitled Event'
   const start = parseDate(raw.startDate || raw.start)
@@ -584,7 +584,7 @@ function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting }) {
             <p className="text-sm font-semibold text-slate-900">
               {deleting ? `Deleting ${count} event${count === 1 ? '' : 's'}…` : `${count} selected`}
             </p>
-            <p className="text-xs text-slate-500">Bulk actions stay limited to future events.</p>
+            <p className="text-xs text-slate-500">Selected events will disappear from the listings immediately.</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -619,7 +619,7 @@ function DeleteConfirmationModal({
   previewTitles,
   removeExternal,
   onToggleRemoveExternal,
-  hasPastEvents,
+  pastCount,
   deleting,
 }) {
   const dialogRef = React.useRef(null)
@@ -707,10 +707,14 @@ function DeleteConfirmationModal({
                 )}
               </ul>
             </div>
-            {hasPastEvents && (
+            {pastCount > 0 && (
               <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                 <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                <p>Past events can’t be deleted in bulk. Deselect them or delete individually.</p>
+                <p>
+                  {pastCount === 1
+                    ? 'The selected event already happened. Deleting it will remove it from the public listings.'
+                    : `${pastCount} of the selected events have already happened. Deleting them will remove them from the public listings.`}
+                </p>
               </div>
             )}
             <label className="flex items-center gap-2 text-sm text-slate-700">
@@ -737,7 +741,7 @@ function DeleteConfirmationModal({
           <button
             type="button"
             onClick={onConfirm}
-            disabled={hasPastEvents || deleting}
+            disabled={deleting}
             className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {deleting ? 'Deleting…' : `Delete ${count}`}
@@ -847,15 +851,17 @@ export default function EventsIndexPage() {
     () => Array.from(selectedIds).map((id) => eventMap.get(id)).filter(Boolean),
     [selectedIds, eventMap]
   )
-  const hasPastSelected = selectedEvents.some((event) => event.isPast)
+  const pastSelectedCount = selectedEvents.filter((event) => event.isPast).length
 
   const handleToggleSelect = React.useCallback((id, checked) => {
+    const safeId = cleanString(id).toLowerCase()
+    if (!safeId) return
     setSelectedIds((prev) => {
       const next = new Set(prev)
       if (checked) {
-        next.add(id)
+        next.add(safeId)
       } else {
-        next.delete(id)
+        next.delete(safeId)
       }
       return next
     })
@@ -865,9 +871,19 @@ export default function EventsIndexPage() {
     setSelectedIds((prev) => {
       const next = new Set(prev)
       if (checked) {
-        targetEvents.forEach((event) => next.add(event.id))
+        targetEvents.forEach((event) => {
+          const safeId = cleanString(event.id).toLowerCase()
+          if (safeId) {
+            next.add(safeId)
+          }
+        })
       } else {
-        targetEvents.forEach((event) => next.delete(event.id))
+        targetEvents.forEach((event) => {
+          const safeId = cleanString(event.id).toLowerCase()
+          if (safeId) {
+            next.delete(safeId)
+          }
+        })
       }
       return next
     })
@@ -888,10 +904,17 @@ export default function EventsIndexPage() {
       if (!ids.length) return
       setDeleting(true)
       try {
+        const normalizedIds = Array.from(
+          new Set(ids.map((value) => cleanString(value).toLowerCase()).filter(Boolean))
+        )
+        if (!normalizedIds.length) {
+          setDeleting(false)
+          return
+        }
         const response = await fetch('/api/events/bulk-delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ids, removeExternal: Boolean(removeExternalFlag) }),
+          body: JSON.stringify({ ids: normalizedIds, removeExternal: Boolean(removeExternalFlag) }),
         })
         const payload = await response.json().catch(() => ({}))
         if (!response.ok) {
@@ -900,14 +923,17 @@ export default function EventsIndexPage() {
         const results = Array.isArray(payload.results) ? payload.results : []
         const succeeded = results
           .filter((result) => result && result.ok)
-          .map((result) => cleanString(result.id))
+          .map((result) => cleanString(result.id).toLowerCase())
           .filter(Boolean)
         const failed = results.filter((result) => !result?.ok)
 
         if (succeeded.length) {
           const succeededSet = new Set(succeeded)
           setRawEvents((prev) =>
-            prev.filter((event) => !succeededSet.has(cleanString(event.slug || event.id)))
+            prev.filter((event) => {
+              const id = cleanString(event.slug || event.id).toLowerCase()
+              return !succeededSet.has(id)
+            })
           )
           setSelectedIds((prev) => {
             const next = new Set(prev)
@@ -927,7 +953,9 @@ export default function EventsIndexPage() {
             clearSelection()
           }
         } else {
-          const failedIds = failed.map((item) => cleanString(item.id)).filter(Boolean)
+          const failedIds = failed
+            .map((item) => cleanString(item.id).toLowerCase())
+            .filter(Boolean)
           setSelectedIds(new Set(failedIds))
           setModalOpen(false)
           setRemoveExternal(false)
@@ -1080,7 +1108,7 @@ export default function EventsIndexPage() {
         previewTitles={selectedEvents.slice(0, 3).map((event) => event.title)}
         removeExternal={removeExternal}
         onToggleRemoveExternal={setRemoveExternal}
-        hasPastEvents={hasPastSelected}
+        pastCount={pastSelectedCount}
         deleting={deleting}
       />
 
