@@ -41,10 +41,11 @@ async function readRequestBody(req) {
 function sanitizeId(value) {
   const raw = cleanString(value)
   if (!raw) return ''
-  if (!/^[A-Za-z0-9-]+$/.test(raw)) {
+  const normalized = raw.toLowerCase()
+  if (!/^[a-z0-9-]+$/.test(normalized)) {
     return ''
   }
-  return raw
+  return normalized
 }
 
 function getEventFilePath(id) {
@@ -98,10 +99,17 @@ export default async function handler(req, res) {
       results.push({ id: safeId, ok: true })
     } catch (error) {
       if (error && error.code === 'ENOENT') {
-        results.push({ id: safeId, ok: false, message: 'Event not found.' })
+        results.push({ id: safeId, ok: true, message: 'Event already removed.' })
       } else {
         console.error('[events-bulk-delete] failed to delete', safeId, error)
-        results.push({ id: safeId, ok: false, message: 'Failed to delete event.' })
+        results.push({
+          id: safeId,
+          ok: false,
+          message:
+            error && error.code === 'EROFS'
+              ? 'Events storage is read-only in this environment.'
+              : 'Failed to delete event.',
+        })
       }
     }
   }
