@@ -175,6 +175,7 @@ function normalizeEvent(raw) {
   const where = buildWhere(city, locationName)
   const startMs = start instanceof Date && !Number.isNaN(start.getTime()) ? start.getTime() : null
   const searchText = `${title} ${city} ${locationName}`.toLowerCase()
+  const isDeleted = Boolean(raw?.meta?.isDeleted)
   return {
     id,
     title,
@@ -189,6 +190,7 @@ function normalizeEvent(raw) {
     dayLabel,
     url,
     searchText,
+    isDeleted,
     isPast: isPastEvent(start, end),
     raw,
   }
@@ -230,16 +232,27 @@ function compareEvents(a, b, direction) {
   return a.title.localeCompare(b.title)
 }
 
-function useEventsData() {
+function useEventsData({ scope, includeDeleted }) {
   const [rawEvents, setRawEvents] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
+  const [meta, setMeta] = React.useState({ deletionEnabled: false })
 
   const fetchEvents = React.useCallback(() => {
     const controller = new AbortController()
     setLoading(true)
     setError('')
-    fetch('/api/events?status=all', { cache: 'no-store', signal: controller.signal })
+    const params = new URLSearchParams()
+    if (scope && scope !== 'upcoming') {
+      params.set('scope', scope)
+    }
+    if (includeDeleted) {
+      params.set('includeDeleted', 'true')
+    }
+    const query = params.toString()
+    const url = query ? `/api/admin/events?${query}` : '/api/admin/events'
+
+    fetch(url, { cache: 'no-store', signal: controller.signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load events')
@@ -248,16 +261,18 @@ function useEventsData() {
       })
       .then((payload) => {
         setRawEvents(Array.isArray(payload.events) ? payload.events : [])
+        setMeta(payload && typeof payload.meta === 'object' ? payload.meta : { deletionEnabled: false })
         setLoading(false)
       })
       .catch((err) => {
         if (err.name === 'AbortError') return
         console.error('[events-admin] failed to fetch events', err)
         setError('We couldn\'t load the events list. Try again in a moment.')
+        setMeta({ deletionEnabled: false })
         setLoading(false)
       })
     return () => controller.abort()
-  }, [])
+  }, [scope, includeDeleted])
 
   React.useEffect(() => {
     const abort = fetchEvents()
@@ -266,7 +281,7 @@ function useEventsData() {
     }
   }, [fetchEvents])
 
-  return { rawEvents, setRawEvents, loading, error, refetch: fetchEvents }
+  return { rawEvents, setRawEvents, loading, error, refetch: fetchEvents, meta }
 }
 
 function useToastQueue() {
@@ -313,6 +328,11 @@ function EventsToolbar({
   selectMode,
   onToggleSelectMode,
   disableSelectToggle,
+  scope,
+  onScopeChange,
+  showDeleted,
+  onShowDeletedChange,
+  deletionEnabled,
 }) {
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -393,11 +413,51 @@ function EventsToolbar({
           </button>
         </div>
       </div>
+      <div className="flex flex-col gap-3 border-t border-slate-100 pt-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          <label htmlFor="events-scope" className="text-sm font-medium text-slate-600">
+            View
+          </label>
+          <select
+            id="events-scope"
+            value={scope}
+            onChange={(event) => onScopeChange(event.target.value)}
+            className="h-9 rounded-full border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+          >
+            <option value="upcoming">Upcoming</option>
+            <option value="all">All</option>
+            <option value="past">Past</option>
+          </select>
+        </div>
+        <label
+          className={`inline-flex items-center gap-2 text-sm font-medium ${
+            deletionEnabled ? 'text-slate-600' : 'text-slate-400'
+          }`}
+        >
+          <input
+            type="checkbox"
+            className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            checked={showDeleted}
+            onChange={(event) => onShowDeletedChange(event.target.checked)}
+            disabled={!deletionEnabled}
+          />
+          Show deleted
+        </label>
+      </div>
     </div>
   )
 }
 
-function CardsView({ events, selectMode, selectedIds, onToggleSelect, disabled }) {
+function CardsView({
+  events,
+  selectMode,
+  selectedIds,
+  onToggleSelect,
+  onDelete,
+  onRestore,
+  disabled,
+  deletionEnabled,
+}) {
   const groups = React.useMemo(() => groupEvents(events), [events])
   if (!groups.length) {
     return (
@@ -416,12 +476,13 @@ function CardsView({ events, selectMode, selectedIds, onToggleSelect, disabled }
           <div className="grid gap-4 md:grid-cols-2">
             {group.events.map((event) => {
               const isChecked = selectedIds.has(event.id)
+              const actionDisabled = disabled || !deletionEnabled
               return (
                 <article
                   key={event.id}
                   className={`relative flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-200 hover:shadow ${
                     selectMode ? 'pl-12' : ''
-                  }`}
+                  } ${event.isDeleted ? 'opacity-60' : ''}`}
                 >
                   {selectMode && (
                     <div className="absolute left-4 top-5">
@@ -450,19 +511,49 @@ function CardsView({ events, selectMode, selectedIds, onToggleSelect, disabled }
                       <dd className="flex-1 text-slate-700">{event.where}</dd>
                     </div>
                   </dl>
-                  {event.url && (
-                    <div>
-                      <a
-                        href={event.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
-                      >
-                        Details
-                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                      </a>
+                  <div className="mt-auto flex flex-wrap items-center justify-between gap-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {event.url ? (
+                        <a
+                          href={event.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-900"
+                        >
+                          Details
+                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                        </a>
+                      ) : (
+                        <span className="text-slate-400">No link</span>
+                      )}
+                      {event.isDeleted ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
+                          Deleted
+                        </span>
+                      ) : null}
                     </div>
-                  )}
+                    <div className="flex items-center gap-2">
+                      {event.isDeleted ? (
+                        <button
+                          type="button"
+                          onClick={() => onRestore?.(event.id)}
+                          disabled={actionDisabled}
+                          className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          Undo delete
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onDelete?.(event.id)}
+                          disabled={actionDisabled}
+                          className="rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </article>
               )
             })}
@@ -479,7 +570,10 @@ function TableView({
   selectedIds,
   onToggleSelect,
   onToggleSelectAll,
+  onDelete,
+  onRestore,
   disabled,
+  deletionEnabled,
 }) {
   const visibleIds = React.useMemo(() => events.map((event) => event.id), [events])
   const allSelected =
@@ -529,8 +623,9 @@ function TableView({
         <tbody className="divide-y divide-slate-100 text-slate-700">
           {events.map((event) => {
             const isChecked = selectedIds.has(event.id)
+            const actionDisabled = disabled || !deletionEnabled
             return (
-              <tr key={event.id} className="align-top">
+              <tr key={event.id} className={`align-top ${event.isDeleted ? 'opacity-60' : ''}`}>
                 <td className="px-4 py-3">
                   {selectMode ? (
                     <input
@@ -549,19 +644,45 @@ function TableView({
                 <td className="px-4 py-3 text-sm text-slate-700">{event.when}</td>
                 <td className="px-4 py-3 text-sm text-slate-700">{event.where}</td>
                 <td className="px-4 py-3 text-right">
-                  {event.url ? (
-                    <a
-                      href={event.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
-                    >
-                      Details
-                      <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  ) : (
-                    <span className="text-sm text-slate-400">No link</span>
-                  )}
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    {event.isDeleted ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
+                        Deleted
+                      </span>
+                    ) : null}
+                    {event.url ? (
+                      <a
+                        href={event.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+                      >
+                        Details
+                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                      </a>
+                    ) : (
+                      <span className="text-sm text-slate-400">No link</span>
+                    )}
+                    {event.isDeleted ? (
+                      <button
+                        type="button"
+                        onClick={() => onRestore?.(event.id)}
+                        disabled={actionDisabled}
+                        className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        Undo delete
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => onDelete?.(event.id)}
+                        disabled={actionDisabled}
+                        className="rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             )
@@ -575,7 +696,7 @@ function TableView({
   )
 }
 
-function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting }) {
+function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting, deletionEnabled }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:px-6 md:top-0 md:bottom-auto">
       <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl border border-emerald-200 bg-white/95 p-4 shadow-lg backdrop-blur">
@@ -598,7 +719,7 @@ function BulkActionsBar({ count, onCancel, onDelete, disabled, deleting }) {
             <button
               type="button"
               onClick={onDelete}
-              disabled={disabled}
+              disabled={disabled || !deletionEnabled}
               className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
               <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -617,10 +738,9 @@ function DeleteConfirmationModal({
   onConfirm,
   count,
   previewTitles,
-  removeExternal,
-  onToggleRemoveExternal,
   pastCount,
   deleting,
+  deletionEnabled,
 }) {
   const dialogRef = React.useRef(null)
   const previousActiveElement = React.useRef(null)
@@ -684,10 +804,7 @@ function DeleteConfirmationModal({
       aria-modal="true"
       aria-labelledby="bulk-delete-title"
     >
-      <div
-        ref={dialogRef}
-        className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
-      >
+      <div ref={dialogRef} className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
         <div className="flex items-start gap-3">
           <div className="mt-1 rounded-full bg-rose-50 p-2 text-rose-600">
             <Trash2 className="h-5 w-5" aria-hidden="true" />
@@ -697,7 +814,7 @@ function DeleteConfirmationModal({
               Delete {count} event{count === 1 ? '' : 's'}?
             </h2>
             <div className="rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
-              <p className="font-semibold text-slate-800">You\'re removing:</p>
+              <p className="font-semibold text-slate-800">You're removing:</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 {previewTitles.map((title) => (
                   <li key={title}>{title}</li>
@@ -706,27 +823,25 @@ function DeleteConfirmationModal({
                   <li className="text-slate-500">and {count - previewTitles.length} more…</li>
                 )}
               </ul>
+              <p className="mt-3 text-slate-500">
+                Deleted events disappear from Upcoming and Past views. Turn on “Show deleted” to undo later.
+              </p>
+              {!deletionEnabled && (
+                <p className="mt-2 text-sm font-semibold text-rose-600">
+                  Deletion is disabled (KV not configured). Contact an admin.
+                </p>
+              )}
             </div>
             {pastCount > 0 && (
               <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                 <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
                 <p>
                   {pastCount === 1
-                    ? 'The selected event already happened. Deleting it will remove it from the public listings.'
-                    : `${pastCount} of the selected events have already happened. Deleting them will remove them from the public listings.`}
+                    ? 'The selected event already happened. Deleting it will hide it from the main lists until restored.'
+                    : `${pastCount} of the selected events have already happened. Deleting them will hide them from the main lists until restored.`}
                 </p>
               </div>
             )}
-            <label className="flex items-center gap-2 text-sm text-slate-700">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                checked={removeExternal}
-                onChange={(event) => onToggleRemoveExternal(event.target.checked)}
-                disabled={deleting}
-              />
-              Also remove from external sources if applicable
-            </label>
           </div>
         </div>
         <div className="mt-6 flex flex-wrap justify-end gap-3">
@@ -741,7 +856,7 @@ function DeleteConfirmationModal({
           <button
             type="button"
             onClick={onConfirm}
-            disabled={deleting}
+            disabled={deleting || !deletionEnabled}
             className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {deleting ? 'Deleting…' : `Delete ${count}`}
@@ -751,6 +866,7 @@ function DeleteConfirmationModal({
     </div>
   )
 }
+
 
 function ToastStack({ toasts, onDismiss }) {
   return (
@@ -802,18 +918,26 @@ function ToastStack({ toasts, onDismiss }) {
 }
 
 export default function EventsIndexPage() {
-  const { rawEvents, setRawEvents, loading, error, refetch } = useEventsData()
+  const [scope, setScope] = React.useState('upcoming')
+  const [includeDeleted, setIncludeDeleted] = React.useState(false)
+  const { rawEvents, setRawEvents, loading, error, refetch, meta } = useEventsData({ scope, includeDeleted })
   const [viewMode, setViewMode] = React.useState('cards')
   const [sortDirection, setSortDirection] = React.useState('asc')
   const [searchTerm, setSearchTerm] = React.useState('')
   const [selectMode, setSelectMode] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState(() => new Set())
   const [modalOpen, setModalOpen] = React.useState(false)
-  const [removeExternal, setRemoveExternal] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
   const { toasts, addToast, removeToast } = useToastQueue()
+  const deletionEnabled = Boolean(meta?.deletionEnabled)
 
   const events = React.useMemo(() => normalizeEvents(rawEvents), [rawEvents])
+
+  React.useEffect(() => {
+    if (!deletionEnabled && includeDeleted) {
+      setIncludeDeleted(false)
+    }
+  }, [deletionEnabled, includeDeleted])
 
   const eventMap = React.useMemo(() => {
     const map = new Map()
@@ -893,109 +1017,197 @@ export default function EventsIndexPage() {
     setSelectedIds(new Set())
   }, [])
 
-  const handleCloseModal = React.useCallback(() => {
-    if (deleting) return
-    setModalOpen(false)
-    setRemoveExternal(false)
-  }, [deleting])
+  const getRawEventId = React.useCallback((event) => {
+    return cleanString(event?.slug || event?.id || event?.filePath || event?.__filename || '').toLowerCase()
+  }, [])
 
-  const handleBulkDelete = React.useCallback(
-    async (ids, removeExternalFlag) => {
-      if (!ids.length) return
+  const performDelete = React.useCallback(
+    async (ids) => {
+      if (!deletionEnabled) {
+        return { ok: false, count: 0, error: 'Deletion disabled (KV not configured).' }
+      }
+      const normalizedIds = Array.from(
+        new Set(ids.map((value) => cleanString(value).toLowerCase()).filter(Boolean))
+      )
+      if (!normalizedIds.length) {
+        return { ok: false, count: 0, error: 'Provide at least one event id.' }
+      }
       setDeleting(true)
       try {
-        const normalizedIds = Array.from(
-          new Set(ids.map((value) => cleanString(value).toLowerCase()).filter(Boolean))
-        )
-        if (!normalizedIds.length) {
-          setDeleting(false)
-          return
-        }
-        const response = await fetch('/api/events/bulk-delete', {
+        const response = await fetch('/api/admin/events/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ids: normalizedIds, removeExternal: Boolean(removeExternalFlag) }),
+          body: JSON.stringify({ ids: normalizedIds }),
         })
         const payload = await response.json().catch(() => ({}))
-        if (!response.ok) {
-          throw new Error(payload?.error || 'Bulk delete failed')
+        if (!response.ok || !payload?.ok) {
+          throw new Error(payload?.error || 'Delete failed')
         }
-        const results = Array.isArray(payload.results) ? payload.results : []
-        const succeeded = results
-          .filter((result) => result && result.ok)
-          .map((result) => cleanString(result.id).toLowerCase())
-          .filter(Boolean)
-        const failed = results.filter((result) => !result?.ok)
-
-        if (succeeded.length) {
-          const succeededSet = new Set(succeeded)
-          setRawEvents((prev) =>
-            prev.filter((event) => {
-              const id = cleanString(event.slug || event.id).toLowerCase()
-              return !succeededSet.has(id)
-            })
-          )
-          setSelectedIds((prev) => {
-            const next = new Set(prev)
-            succeeded.forEach((id) => next.delete(id))
-            return next
-          })
-        }
-
-        if (!failed.length) {
-          addToast({
-            tone: 'success',
-            title: `Deleted ${succeeded.length} event${succeeded.length === 1 ? '' : 's'}.`,
-          })
-          setModalOpen(false)
-          setRemoveExternal(false)
-          if (!selectMode) {
-            clearSelection()
+        const idSet = new Set(normalizedIds)
+        setRawEvents((prev) => {
+          if (!includeDeleted) {
+            return prev.filter((event) => !idSet.has(getRawEventId(event)))
           }
-        } else {
-          const failedIds = failed
-            .map((item) => cleanString(item.id).toLowerCase())
-            .filter(Boolean)
-          setSelectedIds(new Set(failedIds))
-          setModalOpen(false)
-          setRemoveExternal(false)
-          addToast({
-            tone: 'warning',
-            title: 'Some events could not be deleted.',
-            message: failed
-              .slice(0, 3)
-              .map((item) => item?.message || item?.id)
-              .join(' • '),
-            actionLabel: 'Retry failed',
-            onAction: () => {
-              handleBulkDelete(failedIds, removeExternalFlag)
-            },
+          return prev.map((event) => {
+            const eventId = getRawEventId(event)
+            if (!idSet.has(eventId)) return event
+            const nextMeta = { ...(event.meta || {}), isDeleted: true }
+            return { ...event, meta: nextMeta }
           })
-        }
-      } catch (error) {
-        console.error('[events-admin] bulk delete failed', error)
-        addToast({
-          tone: 'danger',
-          title: 'Delete failed',
-          message: 'We could not remove those events. Please try again.',
         })
+        setSelectedIds((prev) => {
+          const next = new Set(prev)
+          normalizedIds.forEach((id) => next.delete(id))
+          return next
+        })
+        return { ok: true, count: normalizedIds.length }
+      } catch (error) {
+        console.error('[events-admin] delete failed', error)
+        return { ok: false, count: 0, error: error?.message || 'Delete failed' }
       } finally {
         setDeleting(false)
       }
     },
-    [addToast, clearSelection, selectMode, setRawEvents]
+    [deletionEnabled, includeDeleted, getRawEventId, setRawEvents]
+  )
+
+  const performRestore = React.useCallback(
+    async (ids) => {
+      if (!deletionEnabled) {
+        return { ok: false, count: 0, error: 'Deletion disabled (KV not configured).' }
+      }
+      const normalizedIds = Array.from(
+        new Set(ids.map((value) => cleanString(value).toLowerCase()).filter(Boolean))
+      )
+      if (!normalizedIds.length) {
+        return { ok: false, count: 0, error: 'Provide at least one event id.' }
+      }
+      setDeleting(true)
+      try {
+        const response = await fetch('/api/admin/events/restore', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: normalizedIds }),
+        })
+        const payload = await response.json().catch(() => ({}))
+        if (!response.ok || !payload?.ok) {
+          throw new Error(payload?.error || 'Restore failed')
+        }
+        const idSet = new Set(normalizedIds)
+        setRawEvents((prev) =>
+          prev.map((event) => {
+            const eventId = getRawEventId(event)
+            if (!idSet.has(eventId)) return event
+            const nextMeta = { ...(event.meta || {}) }
+            delete nextMeta.isDeleted
+            const base = { ...event }
+            if (Object.keys(nextMeta).length) {
+              base.meta = nextMeta
+            } else {
+              delete base.meta
+            }
+            return base
+          })
+        )
+        setSelectedIds((prev) => {
+          const next = new Set(prev)
+          normalizedIds.forEach((id) => next.delete(id))
+          return next
+        })
+        return { ok: true, count: normalizedIds.length }
+      } catch (error) {
+        console.error('[events-admin] restore failed', error)
+        return { ok: false, count: 0, error: error?.message || 'Restore failed' }
+      } finally {
+        setDeleting(false)
+      }
+    },
+    [deletionEnabled, getRawEventId, setRawEvents]
+  )
+
+  const handleCloseModal = React.useCallback(() => {
+    if (deleting) return
+    setModalOpen(false)
+  }, [deleting])
+
+  const handleBulkDelete = React.useCallback(
+    async (ids) => {
+      if (!ids.length) return
+      const result = await performDelete(ids)
+      if (result.ok) {
+        addToast({
+          tone: 'success',
+          title: result.count === 1 ? 'Event deleted.' : `Deleted ${result.count} events.`,
+        })
+        setModalOpen(false)
+      } else if (result.error) {
+        addToast({
+          tone: deletionEnabled ? 'danger' : 'warning',
+          title: result.error,
+        })
+      }
+    },
+    [performDelete, addToast, deletionEnabled]
   )
 
   const handleConfirmDelete = React.useCallback(() => {
     const ids = Array.from(selectedIds)
     if (!ids.length) return
-    handleBulkDelete(ids, removeExternal)
-  }, [handleBulkDelete, removeExternal, selectedIds])
+    handleBulkDelete(ids)
+  }, [handleBulkDelete, selectedIds])
+
+  const handleDeleteEvent = React.useCallback(
+    async (id) => {
+      const safeId = cleanString(id).toLowerCase()
+      if (!safeId) return
+      const result = await performDelete([safeId])
+      if (result.ok) {
+        addToast({
+          tone: 'success',
+          title: 'Event deleted.',
+          message: includeDeleted ? 'Use “Undo delete” to restore.' : undefined,
+        })
+      } else if (result.error) {
+        addToast({
+          tone: deletionEnabled ? 'danger' : 'warning',
+          title: result.error,
+        })
+      }
+    },
+    [performDelete, addToast, deletionEnabled, includeDeleted]
+  )
+
+  const handleRestoreEvent = React.useCallback(
+    async (id) => {
+      const safeId = cleanString(id).toLowerCase()
+      if (!safeId) return
+      const result = await performRestore([safeId])
+      if (result.ok) {
+        addToast({
+          tone: 'success',
+          title: 'Event restored.',
+        })
+      } else if (result.error) {
+        addToast({
+          tone: deletionEnabled ? 'danger' : 'warning',
+          title: result.error,
+        })
+      }
+    },
+    [performRestore, addToast, deletionEnabled]
+  )
 
   const handleOpenModal = React.useCallback(() => {
     if (!selectedCount) return
+    if (!deletionEnabled) {
+      addToast({
+        tone: 'warning',
+        title: 'Deletion disabled (KV not configured).',
+      })
+      return
+    }
     setModalOpen(true)
-  }, [selectedCount])
+  }, [selectedCount, deletionEnabled, addToast])
 
   const disableSelectToggle = deleting
 
@@ -1036,7 +1248,22 @@ export default function EventsIndexPage() {
             })
           }}
           disableSelectToggle={disableSelectToggle}
+          scope={scope}
+          onScopeChange={setScope}
+          showDeleted={includeDeleted}
+          onShowDeletedChange={setIncludeDeleted}
+          deletionEnabled={deletionEnabled}
         />
+
+        {!deletionEnabled && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800" role="alert">
+            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
+            <div>
+              <p className="font-semibold">Deletion disabled (KV not configured).</p>
+              <p>Contact an admin to enable soft-delete actions.</p>
+            </div>
+          </div>
+        )}
 
         {loading && (
           <div className="rounded-3xl border border-slate-200 bg-white px-6 py-12 text-center text-sm text-slate-600 shadow-sm">
@@ -1071,7 +1298,10 @@ export default function EventsIndexPage() {
                 selectMode={selectMode}
                 selectedIds={selectedIds}
                 onToggleSelect={handleToggleSelect}
+                onDelete={handleDeleteEvent}
+                onRestore={handleRestoreEvent}
                 disabled={deleting}
+                deletionEnabled={deletionEnabled}
               />
             ) : (
               <TableView
@@ -1080,7 +1310,10 @@ export default function EventsIndexPage() {
                 selectedIds={selectedIds}
                 onToggleSelect={handleToggleSelect}
                 onToggleSelectAll={(checked) => handleToggleSelectAll(checked, sortedEvents)}
+                onDelete={handleDeleteEvent}
+                onRestore={handleRestoreEvent}
                 disabled={deleting}
+                deletionEnabled={deletionEnabled}
               />
             )}
           </>
@@ -1097,6 +1330,7 @@ export default function EventsIndexPage() {
           onDelete={handleOpenModal}
           disabled={deleting}
           deleting={deleting}
+          deletionEnabled={deletionEnabled}
         />
       )}
 
@@ -1106,10 +1340,9 @@ export default function EventsIndexPage() {
         onConfirm={handleConfirmDelete}
         count={selectedCount}
         previewTitles={selectedEvents.slice(0, 3).map((event) => event.title)}
-        removeExternal={removeExternal}
-        onToggleRemoveExternal={setRemoveExternal}
         pastCount={pastSelectedCount}
         deleting={deleting}
+        deletionEnabled={deletionEnabled}
       />
 
       <ToastStack toasts={toasts} onDismiss={removeToast} />
