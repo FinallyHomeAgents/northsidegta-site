@@ -36,6 +36,9 @@ const timeFormatter = new Intl.DateTimeFormat('en-CA', {
   hour12: true,
 })
 
+const CMS_HIDE_TOOLTIP = 'In CMS: toggle "Hide from public lists & sitemap" → Publish'
+const CMS_ARCHIVE_TOOLTIP = 'In CMS: toggle "Move to Archive page" → Publish'
+
 function cleanString(value) {
   return typeof value === 'string' ? value.trim() : ''
 }
@@ -169,6 +172,8 @@ function normalizeEvent(raw) {
   const status = rawStatus ? rawStatus.toLowerCase() : 'draft'
   const statusLabel = formatStatusLabel(rawStatus || status)
   const isPublished = status === 'published'
+  const hidden = Boolean(raw.hidden)
+  const archived = Boolean(raw.archived) || status === 'archived'
   const start = parseDate(raw.startDate || raw.start)
   const end = parseDate(raw.endDate || raw.end)
   const city = cleanString(raw.city) || cleanString(raw.town) || cleanString(raw?.location?.city)
@@ -203,6 +208,8 @@ function normalizeEvent(raw) {
     status,
     statusLabel,
     isPublished,
+    hidden,
+    archived,
     raw,
   }
 }
@@ -537,6 +544,20 @@ function CardsView({
                         {event.statusLabel}
                       </span>
                     </div>
+                    {(event.hidden || event.archived) && (
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                        {event.hidden && (
+                          <span className="inline-flex items-center rounded-full bg-rose-100 px-2 py-0.5 text-rose-700">
+                            Hidden
+                          </span>
+                        )}
+                        {event.archived && (
+                          <span className="inline-flex items-center rounded-full bg-slate-200 px-2 py-0.5 text-slate-700">
+                            Archived
+                          </span>
+                        )}
+                      </div>
+                    )}
                     {event.isDeleted && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-700">
                         Deleted
@@ -554,31 +575,53 @@ function CardsView({
                     </div>
                   </dl>
                   <div className="mt-auto flex flex-wrap items-center justify-between gap-3 text-sm">
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-col gap-1">
                       {cmsUrl ? (
-                        <a
-                          href={cmsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 font-semibold text-slate-700 hover:text-slate-900"
-                        >
-                          Open in CMS
-                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                        </a>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 font-semibold text-slate-700 hover:text-slate-900"
+                          >
+                            Open in CMS
+                            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                          </a>
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={CMS_HIDE_TOOLTIP}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 underline-offset-2 hover:text-slate-900 hover:underline"
+                          >
+                            Toggle Hide in CMS
+                          </a>
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={CMS_ARCHIVE_TOOLTIP}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 underline-offset-2 hover:text-slate-900 hover:underline"
+                          >
+                            {event.archived ? 'Update Archive in CMS' : 'Move to Archive in CMS'}
+                          </a>
+                        </div>
                       ) : null}
-                      {event.url ? (
-                        <a
-                          href={event.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-900"
-                        >
-                          Public link
-                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                        </a>
-                      ) : (
-                        <span className="text-slate-400">No public link</span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {event.url ? (
+                          <a
+                            href={event.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-900"
+                          >
+                            Public link
+                            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                          </a>
+                        ) : (
+                          <span className="text-slate-400">No public link</span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       {!event.isDeleted && (
@@ -746,16 +789,46 @@ function TableView({
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                       {cmsUrl ? (
-                        <a
-                          href={cmsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-slate-500 hover:text-emerald-700 hover:underline"
-                        >
-                          Open in CMS
-                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                        </a>
+                        <>
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-medium text-slate-600 hover:text-emerald-700 hover:underline"
+                          >
+                            Open in CMS
+                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                          </a>
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={CMS_HIDE_TOOLTIP}
+                            className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 underline-offset-2 hover:text-slate-900 hover:underline"
+                          >
+                            Toggle Hide in CMS
+                          </a>
+                          <a
+                            href={cmsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={CMS_ARCHIVE_TOOLTIP}
+                            className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 underline-offset-2 hover:text-slate-900 hover:underline"
+                          >
+                            {event.archived ? 'Update Archive in CMS' : 'Move to Archive in CMS'}
+                          </a>
+                        </>
                       ) : null}
+                      {event.hidden && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-700">
+                          Hidden
+                        </span>
+                      )}
+                      {event.archived && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                          Archived
+                        </span>
+                      )}
                       {event.isDeleted && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-700">
                           Deleted

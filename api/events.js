@@ -76,6 +76,7 @@ export default function handler(req, res) {
 
   const filtered = events
     .filter((event) => withinStatuses(event, statusFilter))
+    .filter((event) => !event?.hidden)
     .sort((a, b) => {
       const aDate = new Date(a.startDate || 0).getTime()
       const bDate = new Date(b.startDate || 0).getTime()

@@ -68,14 +68,22 @@ export default function CommunityPage() {
 
   const events = React.useMemo(() => hydrateEvents(rawEvents), [rawEvents])
 
-  const featuredEvents = React.useMemo(
-    () => events.filter((event) => event.featured && event.status === 'published').slice(0, 6),
+  const visibleEvents = React.useMemo(
+    () => events.filter((event) => !event.hidden && !event.archived),
     [events]
   )
 
+  const featuredEvents = React.useMemo(
+    () =>
+      visibleEvents
+        .filter((event) => event.featured && event.status === 'published')
+        .slice(0, 6),
+    [visibleEvents]
+  )
+
   const { events: filteredEvents, rangeStart, rangeEnd } = React.useMemo(
-    () => filterEvents(events, filters),
-    [events, filters]
+    () => filterEvents(visibleEvents, filters),
+    [visibleEvents, filters]
   )
 
   const structuredData = React.useMemo(() => getStructuredData(filteredEvents), [filteredEvents])

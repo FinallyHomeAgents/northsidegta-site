@@ -75,6 +75,11 @@ export function sanitizeEvent(raw) {
     ? raw.qaTags.map((tag) => String(tag).trim()).filter(Boolean)
     : []
 
+  const status = normalizeStatus(raw.status)
+  const hidden = Boolean(raw.hidden)
+  const archivedFlag = Boolean(raw.archived)
+  const archived = archivedFlag || status === 'archived'
+
   return {
     ...raw,
     title: String(raw.title || '').trim(),
@@ -101,7 +106,9 @@ export function sanitizeEvent(raw) {
     organizerUrl: typeof raw.organizerUrl === 'string' ? raw.organizerUrl.trim() : '',
     icsUrl: typeof raw.icsUrl === 'string' ? raw.icsUrl.trim() : '',
     featured: Boolean(raw.featured),
-    status: normalizeStatus(raw.status),
+    status,
+    hidden,
+    archived,
     source: normalizeSource(raw.source),
     sourceName,
     sourceUrl,
