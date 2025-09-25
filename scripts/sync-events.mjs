@@ -623,19 +623,19 @@ async function mergeEvent(event, existingMaps, now) {
   const preservedFirstSeen =
     typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
   const firstSeenAt = preservedFirstSeen || (!isUpdate ? new Date(now).toISOString() : null)
+const merged = {
+  ...preserved,                 // keep curated fields from the existing file
+  ...event,                     // overlay fresh scraped fields
+  status,                       // force curated flags to win over scraped data
+  hidden,
+  archived,
+  notes,
+  ...(firstSeenAt ? { firstSeenAt } : {}), // set on first create; preserve if already present
+  updatedAt: new Date(now).toISOString(),  // always bump last-updated
+}
 
-  const merged = {
-    ...preserved,
-    ...event,
-    status,
-    hidden,
-    archived,
-    notes,
-    ...(firstSeenAt ? { firstSeenAt } : {}),
-    updatedAt: new Date(now).toISOString(),
-  }
+const ordered = orderKeys(merged)          // write with stable key order
 
-  const ordered = orderKeys(merged)
   const filePath = path.join(eventsDir, `${event.slug}.json`)
 
   let existingContent = ''
@@ -647,17 +647,48 @@ async function mergeEvent(event, existingMaps, now) {
     }
   }
 
+  const baseMerged = {
+    ...preserved,
+    ...event,
+    status,
+    hidden,
+    archived,
+    notes,
+    ...(firstSeenAt ? { firstSeenAt } : {}),
+  }
+
+  const previousComparable = JSON.stringify(orderKeys(stripSyncTimestamps(preserved)))
+  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(baseMerged)))
+
+  if (previousComparable === nextComparable && (isUpdate || existingContent)) {
+    const entryFilePath = existingEntry?.filePath || filePath
+    const entry = existingEntry || { data: preserved, filePath: entryFilePath }
+    bySlug.set(event.slug, entry)
+    if (sourceId) bySourceId.set(sourceId, entry)
+    return 'unchanged'
+  }
+
+  const timestamp = new Date(now).toISOString()
+  const merged = {
+    ...baseMerged,
+    lastSyncedAt: timestamp,
+    updatedAt: timestamp,
+  }
+
+  const ordered = orderKeys(merged)
   const serialized = `${JSON.stringify(ordered, null, 2)}\n`
 
   if (existingContent === serialized) {
-    bySlug.set(event.slug, { data: merged, filePath })
-    if (sourceId) bySourceId.set(sourceId, { data: merged, filePath })
+    const entry = { data: merged, filePath }
+    bySlug.set(event.slug, entry)
+    if (sourceId) bySourceId.set(sourceId, entry)
     return 'unchanged'
   }
 
   await fs.writeFile(filePath, serialized, 'utf8')
-  bySlug.set(event.slug, { data: merged, filePath })
-  if (sourceId) bySourceId.set(sourceId, { data: merged, filePath })
+  const entry = { data: merged, filePath }
+  bySlug.set(event.slug, entry)
+  if (sourceId) bySourceId.set(sourceId, entry)
 
   if (isUpdate || existingContent) return 'updated'
   return 'created'
@@ -676,6 +707,14 @@ function orderKeys(event) {
     }
   }
   return ordered
+}
+
+function stripSyncTimestamps(event) {
+  if (!event || typeof event !== 'object') return {}
+  const clone = { ...event }
+  delete clone.lastSyncedAt
+  delete clone.updatedAt
+  return clone
 }
 
 main().catch((error) => {
