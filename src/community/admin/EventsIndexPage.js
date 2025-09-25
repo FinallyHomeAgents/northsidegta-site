@@ -598,11 +598,26 @@ export default function EventsIndexPage() {
     <div className="min-h-screen bg-slate-50 pb-12 text-slate-900">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10">
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">Events Moderation</h1>
-          <p className="mt-2 max-w-3xl text-sm text-slate-600">
-            Review upcoming, past, and archived events without configuring any APIs. Search by title or city, then open entries in
-            Decap CMS to publish, unpublish, hide, or update details.
-          </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-900">Events Moderation</h1>
+              <p className="mt-2 max-w-3xl text-sm text-slate-600">
+                Review upcoming, past, and archived events without configuring any APIs. Search by title or city, then open entries in
+                Decap CMS to publish, unpublish, hide, or update details.
+              </p>
+            </div>
+            {!syncSummary && (
+              <a
+                href={CMS_SYNC_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-900"
+              >
+                Sync now
+                <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            )}
+          </div>
         </div>
       </header>
 
