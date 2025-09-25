@@ -651,7 +651,7 @@ async function mergeEvent(event, existingMaps, now) {
     }
   }
 
-  const baseMerged = {
+  const mergedWithoutTimestamps = {
     ...preserved,
     ...event,
     status,
@@ -662,7 +662,7 @@ async function mergeEvent(event, existingMaps, now) {
   }
 
   const previousComparable = JSON.stringify(orderKeys(stripSyncTimestamps(preserved)))
-  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(baseMerged)))
+  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(mergedWithoutTimestamps)))
 
   if (previousComparable === nextComparable && (isUpdate || existingContent)) {
     const entryFilePath = existingEntry?.filePath || filePath
@@ -674,7 +674,7 @@ async function mergeEvent(event, existingMaps, now) {
 
   const timestamp = new Date(now).toISOString()
   const merged = {
-    ...baseMerged,
+    ...mergedWithoutTimestamps,
     lastSyncedAt: timestamp,
     updatedAt: timestamp,
   }
