@@ -36,6 +36,8 @@ If the GitHub variables are missing, publish/unpublish buttons will be disabled 
 - Preserves `status`, `hidden`, and `archived`; does not delete files.
 - Commits only when changes exist (which triggers a redeploy).
 - To change the time, edit `.github/workflows/daily-events-sync.yml`.
+- When changes occur, the sync writes `public/data/events/_sync-summary.json` so the admin page and commit messages can surface
+  +new/updated counts.
 
 ## Moderating events (zero-config)
 
