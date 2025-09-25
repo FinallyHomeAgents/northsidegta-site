@@ -623,6 +623,18 @@ async function mergeEvent(event, existingMaps, now) {
   const preservedFirstSeen =
     typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
   const firstSeenAt = preservedFirstSeen || (!isUpdate ? new Date(now).toISOString() : null)
+const merged = {
+  ...preserved,                 // keep curated fields from the existing file
+  ...event,                     // overlay fresh scraped fields
+  status,                       // force curated flags to win over scraped data
+  hidden,
+  archived,
+  notes,
+  ...(firstSeenAt ? { firstSeenAt } : {}), // set on first create; preserve if already present
+  updatedAt: new Date(now).toISOString(),  // always bump last-updated
+}
+
+const ordered = orderKeys(merged)          // write with stable key order
 
   const filePath = path.join(eventsDir, `${event.slug}.json`)
 
