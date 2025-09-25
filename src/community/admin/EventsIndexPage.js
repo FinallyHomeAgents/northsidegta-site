@@ -3,6 +3,8 @@ import { DateTime } from 'luxon'
 import { Search, ExternalLink, RefreshCw } from 'lucide-react'
 
 const TORONTO_ZONE = 'America/Toronto'
+const SYNC_SUMMARY_PATH = '/data/events/_sync-summary.json'
+const CMS_SYNC_URL = '/cms#/collections/utilities/entries/sync-now'
 
 const TABS = [
   { key: 'upcoming', label: 'Upcoming' },
@@ -32,6 +34,31 @@ function normalizeStatus(value) {
     return normalized
   }
   return 'draft'
+}
+
+function formatSummaryRelativeTime(value) {
+  if (!value) return ''
+  const dt = DateTime.fromISO(String(value), { zone: TORONTO_ZONE })
+  if (!dt.isValid) return ''
+  const now = DateTime.now().setZone(TORONTO_ZONE)
+  const todayStart = now.startOf('day')
+  const yesterdayStart = todayStart.minus({ days: 1 })
+  const fiveDaysAgo = todayStart.minus({ days: 5 })
+  const timeLabel = dt.toFormat('h:mm a')
+
+  if (dt >= todayStart && dt < todayStart.plus({ days: 1 })) {
+    return `Today ${timeLabel}`
+  }
+
+  if (dt >= yesterdayStart && dt < todayStart) {
+    return `Yesterday ${timeLabel}`
+  }
+
+  if (dt >= fiveDaysAgo) {
+    return `${dt.toFormat('ccc')} ${timeLabel}`
+  }
+
+  return dt.toFormat('MMM d, yyyy h:mm a')
 }
 
 function formatStatusLabel(status) {
@@ -163,6 +190,81 @@ function useEventsData() {
   }, [fetchEvents])
 
   return { events, loading, error, refetch: fetchEvents }
+}
+
+function useSyncSummary() {
+  const [summary, setSummary] = React.useState(null)
+
+  React.useEffect(() => {
+    let cancelled = false
+
+    fetch(SYNC_SUMMARY_PATH, { cache: 'no-store' })
+      .then((response) => {
+        if (response.status === 404) {
+          return null
+        }
+        if (!response.ok) {
+          throw new Error('Failed to load summary')
+        }
+        return response.json()
+      })
+      .then((data) => {
+        if (cancelled) return
+        if (data && typeof data === 'object') {
+          setSummary(data)
+        } else {
+          setSummary(null)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSummary(null)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return summary
+}
+
+function SyncSummaryBanner({ summary }) {
+  if (!summary) return null
+
+  const created = Number(summary.created) || 0
+  const updated = Number(summary.updated) || 0
+  const errors = Number(summary.errors) || 0
+  const relative = formatSummaryRelativeTime(summary.lastChangeAt)
+
+  if (!relative) return null
+
+  const hasChanges = created > 0 || updated > 0
+  const statusText = hasChanges
+    ? `+${created} new, ${updated} updated`
+    : 'no new events'
+  const errorText = errors > 0 ? `, ${errors} errors` : ''
+
+  return (
+    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 shadow-sm">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <p className="font-medium">
+          Last change: {relative} — {statusText}
+          {errorText}
+        </p>
+        <a
+          href={CMS_SYNC_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 transition hover:text-emerald-900"
+        >
+          Sync now
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  )
 }
 
 function sortByStartAsc(a, b) {
@@ -361,6 +463,7 @@ function EventTable({
 
 export default function EventsIndexPage() {
   const { events, loading, error, refetch } = useEventsData()
+  const syncSummary = useSyncSummary()
   const [searchTerm, setSearchTerm] = React.useState('')
   const [activeTab, setActiveTab] = React.useState('upcoming')
   const [showHidden, setShowHidden] = React.useState(false)
@@ -504,6 +607,7 @@ export default function EventsIndexPage() {
       </header>
 
       <main className="mx-auto mt-8 flex max-w-6xl flex-col gap-6 px-4">
+        <SyncSummaryBanner summary={syncSummary} />
         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="relative w-full md:max-w-md">
