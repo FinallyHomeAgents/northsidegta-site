@@ -3,6 +3,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { createRequire } from 'module'
+import { DateTime } from 'luxon'
 
 const require = createRequire(import.meta.url)
 const Parser = require('rss-parser')
@@ -14,6 +15,7 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const configPath = path.join(rootDir, 'config', 'event-feeds.json')
 const eventsDir = path.join(rootDir, 'public', 'data', 'events')
+const summaryPath = path.join(eventsDir, '_sync-summary.json')
 
 const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
@@ -23,6 +25,7 @@ async function main() {
   const feeds = await loadConfig(configPath)
   if (!feeds.length) {
     console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 0')
+    console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=0')
     return
   }
 
@@ -62,7 +65,29 @@ async function main() {
     }
   }
 
-  console.log(`Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`)
+  const totalChanged = summary.created + summary.updated + summary.errors
+
+  if (totalChanged > 0) {
+    const torontoTimestamp = DateTime.fromJSDate(now)
+      .setZone('America/Toronto')
+      .toISO()
+    const payload = {
+      lastChangeAt: torontoTimestamp,
+      created: summary.created,
+      updated: summary.updated,
+      unchanged: summary.unchanged,
+      errors: summary.errors,
+      totalAfter: existing.bySlug.size,
+    }
+    await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
+  }
+
+  console.log(
+    `Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`
+  )
+  console.log(
+    `SYNC_SUMMARY created=${summary.created} updated=${summary.updated} unchanged=${summary.unchanged} errors=${summary.errors}`
+  )
 }
 
 async function loadConfig(filePath) {
@@ -578,6 +603,7 @@ const KEY_ORDER = [
   'sourcePriority',
   'sourceRef',
   'lastSyncedAt',
+  'firstSeenAt',
   'updatedAt',
 ]
 
@@ -594,6 +620,9 @@ async function mergeEvent(event, existingMaps, now) {
   const hidden = Boolean(preserved.hidden)
   const archived = Boolean(preserved.archived)
   const notes = preserved.notes !== undefined ? preserved.notes : ''
+  const preservedFirstSeen =
+    typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
+  const firstSeenAt = preservedFirstSeen || (!isUpdate ? new Date(now).toISOString() : null)
 
   const merged = {
     ...preserved,
@@ -602,6 +631,7 @@ async function mergeEvent(event, existingMaps, now) {
     hidden,
     archived,
     notes,
+    ...(firstSeenAt ? { firstSeenAt } : {}),
     updatedAt: new Date(now).toISOString(),
   }
 
@@ -651,5 +681,6 @@ function orderKeys(event) {
 main().catch((error) => {
   console.error('[sync-events] Fatal error', error)
   console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 1')
+  console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=1')
   process.exitCode = 1
 })
