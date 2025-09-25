@@ -28,6 +28,15 @@ Publishing, unpublishing, and hard-delete fallbacks use the GitHub Content API. 
 
 If the GitHub variables are missing, publish/unpublish buttons will be disabled and hard deletes are unavailable.
 
+## Daily Events Auto-Sync
+
+- Runs at ~06:00 America/Toronto (cron set to 10:00 UTC).
+- Script: `scripts/sync-events.mjs`.
+- Outputs to `public/data/events/`.
+- Preserves `status`, `hidden`, and `archived`; does not delete files.
+- Commits only when changes exist (which triggers a redeploy).
+- To change the time, edit `.github/workflows/daily-events-sync.yml`.
+
 ## Moderating events (zero-config)
 
 Use `/community/events-admin` to review events; click **Open in CMS** to publish or hide entries, and hidden items automatically disappear from public lists and the sitemap.
