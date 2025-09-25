@@ -3,6 +3,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { createRequire } from 'module'
+import { DateTime } from 'luxon'
 
 const require = createRequire(import.meta.url)
 const Parser = require('rss-parser')
@@ -14,6 +15,7 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const configPath = path.join(rootDir, 'config', 'event-feeds.json')
 const eventsDir = path.join(rootDir, 'public', 'data', 'events')
+const summaryPath = path.join(eventsDir, '_sync-summary.json')
 
 const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
@@ -23,6 +25,7 @@ async function main() {
   const feeds = await loadConfig(configPath)
   if (!feeds.length) {
     console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 0')
+    console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=0')
     return
   }
 
@@ -62,7 +65,30 @@ async function main() {
     }
   }
 
-  console.log(`Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`)
+  const totalChanged = summary.created + summary.updated + summary.errors
+
+  if (totalChanged > 0) {
+    const totalAfter = await countEventFiles(eventsDir)
+    const torontoTimestamp = DateTime.fromJSDate(now)
+      .setZone('America/Toronto')
+      .toISO()
+    const payload = {
+      lastChangeAt: torontoTimestamp,
+      created: summary.created,
+      updated: summary.updated,
+      unchanged: summary.unchanged,
+      errors: summary.errors,
+      totalAfter,
+    }
+    await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
+  }
+
+  console.log(
+    `Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`
+  )
+  console.log(
+    `SYNC_SUMMARY created=${summary.created} updated=${summary.updated} unchanged=${summary.unchanged} errors=${summary.errors}`
+  )
 }
 
 async function loadConfig(filePath) {
@@ -108,6 +134,21 @@ async function loadExistingEvents(dirPath) {
   }
 
   return { bySlug, bySourceId }
+}
+
+async function countEventFiles(dirPath) {
+  try {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true })
+    return entries.filter(
+      (entry) =>
+        entry.isFile() && entry.name.endsWith('.json') && entry.name !== '_sync-summary.json'
+    ).length
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.warn('[sync-events] Failed to count event files:', error.message)
+    }
+    return 0
+  }
 }
 
 function getSourceId(event) {
@@ -578,6 +619,7 @@ const KEY_ORDER = [
   'sourcePriority',
   'sourceRef',
   'lastSyncedAt',
+  'firstSeenAt',
   'updatedAt',
 ]
 
@@ -594,18 +636,10 @@ async function mergeEvent(event, existingMaps, now) {
   const hidden = Boolean(preserved.hidden)
   const archived = Boolean(preserved.archived)
   const notes = preserved.notes !== undefined ? preserved.notes : ''
+  const preservedFirstSeen =
+    typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
+  const firstSeenAt = preservedFirstSeen || (!isUpdate ? new Date(now).toISOString() : null)
 
-  const merged = {
-    ...preserved,
-    ...event,
-    status,
-    hidden,
-    archived,
-    notes,
-    updatedAt: new Date(now).toISOString(),
-  }
-
-  const ordered = orderKeys(merged)
   const filePath = path.join(eventsDir, `${event.slug}.json`)
 
   let existingContent = ''
@@ -617,17 +651,48 @@ async function mergeEvent(event, existingMaps, now) {
     }
   }
 
+  const baseMerged = {
+    ...preserved,
+    ...event,
+    status,
+    hidden,
+    archived,
+    notes,
+    ...(firstSeenAt ? { firstSeenAt } : {}),
+  }
+
+  const previousComparable = JSON.stringify(orderKeys(stripSyncTimestamps(preserved)))
+  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(baseMerged)))
+
+  if (previousComparable === nextComparable && (isUpdate || existingContent)) {
+    const entryFilePath = existingEntry?.filePath || filePath
+    const entry = existingEntry || { data: preserved, filePath: entryFilePath }
+    bySlug.set(event.slug, entry)
+    if (sourceId) bySourceId.set(sourceId, entry)
+    return 'unchanged'
+  }
+
+  const timestamp = new Date(now).toISOString()
+  const merged = {
+    ...baseMerged,
+    lastSyncedAt: timestamp,
+    updatedAt: timestamp,
+  }
+
+  const ordered = orderKeys(merged)
   const serialized = `${JSON.stringify(ordered, null, 2)}\n`
 
   if (existingContent === serialized) {
-    bySlug.set(event.slug, { data: merged, filePath })
-    if (sourceId) bySourceId.set(sourceId, { data: merged, filePath })
+    const entry = { data: merged, filePath }
+    bySlug.set(event.slug, entry)
+    if (sourceId) bySourceId.set(sourceId, entry)
     return 'unchanged'
   }
 
   await fs.writeFile(filePath, serialized, 'utf8')
-  bySlug.set(event.slug, { data: merged, filePath })
-  if (sourceId) bySourceId.set(sourceId, { data: merged, filePath })
+  const entry = { data: merged, filePath }
+  bySlug.set(event.slug, entry)
+  if (sourceId) bySourceId.set(sourceId, entry)
 
   if (isUpdate || existingContent) return 'updated'
   return 'created'
@@ -648,8 +713,17 @@ function orderKeys(event) {
   return ordered
 }
 
+function stripSyncTimestamps(event) {
+  if (!event || typeof event !== 'object') return {}
+  const clone = { ...event }
+  delete clone.lastSyncedAt
+  delete clone.updatedAt
+  return clone
+}
+
 main().catch((error) => {
   console.error('[sync-events] Fatal error', error)
   console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 1')
+  console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=1')
   process.exitCode = 1
 })
