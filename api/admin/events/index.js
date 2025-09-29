@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 import {
   loadAllEventsFromDisk,
   filterEventsByScope,
@@ -7,6 +9,32 @@ import {
 } from '../../../lib/admin-events'
 import { getKvClient, isKvConfigured } from '../../../lib/kv-admin'
 import { isGithubConfigured } from '../../../lib/github-admin'
+
+const SYNC_CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
+const SYNC_TOKEN_TTL_SECONDS = 10 * 60
+
+function serializeCookie(name, value, options = {}) {
+  const parts = [`${name}=${encodeURIComponent(value)}`]
+  if (options.maxAge != null) parts.push(`Max-Age=${Math.floor(options.maxAge)}`)
+  if (options.expires) parts.push(`Expires=${options.expires.toUTCString()}`)
+  if (options.path) parts.push(`Path=${options.path}`)
+  if (options.httpOnly) parts.push('HttpOnly')
+  if (options.secure) parts.push('Secure')
+  if (options.sameSite) parts.push(`SameSite=${options.sameSite}`)
+  return parts.join('; ')
+}
+
+function createSyncCsrfToken() {
+  const secret = process.env.SYNC_SECRET
+  if (!secret) {
+    return { token: '', cookie: '', hint: 'Sync is not configured — missing SYNC_SECRET.' }
+  }
+
+  const token = crypto.randomBytes(32).toString('hex')
+  const hmac = crypto.createHmac('sha256', secret).update(token).digest('hex')
+  const cookieValue = `${token}.${hmac}`
+  return { token, cookie: cookieValue, hint: '' }
+}
 
 function parseScopeParam(value) {
   if (Array.isArray(value)) {
@@ -121,6 +149,22 @@ export default async function handler(req, res) {
 
   const sorted = sortEventsByStartDate(filtered, 'asc')
 
+  const syncToken = createSyncCsrfToken() // SYNC WIRING
+  if (syncToken.cookie) {
+    const expires = new Date(Date.now() + SYNC_TOKEN_TTL_SECONDS * 1000)
+    res.setHeader(
+      'Set-Cookie',
+      serializeCookie(SYNC_CSRF_COOKIE, syncToken.cookie, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        path: '/',
+        maxAge: SYNC_TOKEN_TTL_SECONDS,
+        expires,
+      })
+    )
+  }
+
   res.setHeader('Cache-Control', 'no-store')
   res.status(200).json({
     events: sorted,
@@ -131,6 +175,8 @@ export default async function handler(req, res) {
       deletionMode,
       restoreEnabled,
       publishingEnabled,
+      syncCsrfToken: syncToken.token || '', // SYNC WIRING
+      syncHint: syncToken.hint || '', // SYNC WIRING
     },
   })
 }

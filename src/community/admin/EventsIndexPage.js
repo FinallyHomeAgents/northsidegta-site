@@ -35,6 +35,40 @@ function normalizeStatus(value) {
   return 'draft'
 }
 
+function ToastNotice({ toast, onClose }) {
+  // SYNC WIRING
+  React.useEffect(() => {
+    if (!toast?.message) return
+    const id = setTimeout(() => {
+      onClose()
+    }, 5000)
+    return () => clearTimeout(id)
+  }, [toast, onClose])
+
+  if (!toast?.message) return null
+
+  const tone = toast.tone === 'error' ? 'error' : 'success'
+  const baseStyles =
+    tone === 'error'
+      ? 'bg-rose-600 shadow-lg shadow-rose-600/30'
+      : 'bg-emerald-600 shadow-lg shadow-emerald-600/30'
+
+  return (
+    <div className="fixed bottom-6 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 sm:left-auto sm:right-6 sm:translate-x-0">
+      <div className={`flex items-start justify-between gap-4 rounded-2xl px-4 py-3 text-sm font-medium text-white ${baseStyles}`}>
+        <span>{toast.message}</span>
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-white/80 transition hover:text-white"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function formatSummaryRelativeTime(value) {
   if (!value) return ''
   const dt = DateTime.fromISO(String(value), { zone: TORONTO_ZONE })
@@ -162,6 +196,8 @@ function useEventsData() {
   const [events, setEvents] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
+  const [syncCsrfToken, setSyncCsrfToken] = React.useState('') // SYNC WIRING
+  const [syncHint, setSyncHint] = React.useState('') // SYNC WIRING
 
   const fetchEvents = React.useCallback(() => {
     setLoading(true)
@@ -175,11 +211,16 @@ function useEventsData() {
         const rawEvents = Array.isArray(payload?.events) ? payload.events : []
         const normalized = rawEvents.map(normalizeEvent).filter(Boolean)
         setEvents(normalized)
+        const meta = payload?.meta || {} // SYNC WIRING
+        setSyncCsrfToken(typeof meta.syncCsrfToken === 'string' ? meta.syncCsrfToken : '') // SYNC WIRING
+        setSyncHint(typeof meta.syncHint === 'string' ? meta.syncHint : '') // SYNC WIRING
         setLoading(false)
       })
       .catch((err) => {
         console.error('[events-admin] failed to fetch events', err)
         setError('We could not load the events list. Try again in a moment.')
+        setSyncCsrfToken('') // SYNC WIRING
+        setSyncHint('') // SYNC WIRING
         setLoading(false)
       })
   }, [])
@@ -188,7 +229,7 @@ function useEventsData() {
     fetchEvents()
   }, [fetchEvents])
 
-  return { events, loading, error, refetch: fetchEvents }
+  return { events, loading, error, refetch: fetchEvents, syncCsrfToken, syncHint } // SYNC WIRING
 }
 
 function useSyncSummary() {
@@ -229,7 +270,8 @@ function useSyncSummary() {
   return summary
 }
 
-function SyncSummaryBanner({ summary, onSync, syncing }) {
+function SyncSummaryBanner({ summary, onSync, syncing, canSync, disabledReason }) {
+  // SYNC WIRING
   if (!summary) return null
 
   const created = Number(summary.created) || 0
@@ -255,16 +297,19 @@ function SyncSummaryBanner({ summary, onSync, syncing }) {
         <button
           type="button"
           onClick={onSync}
-          disabled={syncing}
+          disabled={syncing || !canSync}
           className={`inline-flex items-center gap-2 text-xs font-semibold transition ${
-            syncing
-              ? 'cursor-not-allowed text-emerald-500'
+            syncing || !canSync
+              ? 'cursor-not-allowed text-emerald-400'
               : 'text-emerald-700 hover:text-emerald-900'
           }`}
         >
           <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} aria-hidden="true" />
           {syncing ? 'Syncing…' : 'Sync now'}
         </button>
+        {!canSync && disabledReason && (
+          <p className="text-xs font-medium text-emerald-700/80">{disabledReason}</p>
+        )}
       </div>
     </div>
   )
@@ -465,36 +510,47 @@ function EventTable({
 }
 
 export default function EventsIndexPage() {
-  const { events, loading, error, refetch } = useEventsData()
+  const { events, loading, error, refetch, syncCsrfToken, syncHint } = useEventsData() // SYNC WIRING
   const syncSummary = useSyncSummary()
   const [searchTerm, setSearchTerm] = React.useState('')
   const [activeTab, setActiveTab] = React.useState('upcoming')
   const [showHidden, setShowHidden] = React.useState(false)
   const { selectedIds, toggle, clear, setAll } = useSelectedSet()
   const [syncing, setSyncing] = React.useState(false)
+  const [toast, setToast] = React.useState({ message: '', tone: 'success' }) // SYNC WIRING
+  const canSync = Boolean(syncCsrfToken) // SYNC WIRING
+  const syncDisabledReason = !canSync ? syncHint : '' // SYNC WIRING
+  const handleToastClose = React.useCallback(() => setToast({ message: '', tone: 'success' }), []) // SYNC WIRING
 
   const handleSyncNow = React.useCallback(async () => {
     if (syncing) return
+    if (!canSync) {
+      setToast({ message: syncHint || 'Sync is not configured.', tone: 'error' })
+      return
+    }
+
     setSyncing(true)
     try {
       const response = await fetch('/api/sync-now', {
         method: 'POST',
-        headers: { 'x-sync-secret': process.env.NEXT_PUBLIC_SYNC_SECRET || '' },
+        headers: { 'x-sync-csrf': syncCsrfToken }, // SYNC WIRING
+        credentials: 'include', // SYNC WIRING
       })
-      if (response.ok) {
-        alert('Sync started! Check GitHub → Actions.')
+      const payload = await response.json().catch(() => ({}))
+      if (response.ok && payload?.ok) {
+        setToast({ message: payload?.hint || 'Sync started — check GitHub → Actions.', tone: 'success' })
       } else {
-        const debugText = await response.text().catch(() => '')
-        console.error('[events-admin] sync failed', response.status, debugText)
-        alert('Sync failed. See console.')
+        const message = payload?.hint || payload?.error || 'Sync failed. See console for details.'
+        setToast({ message, tone: 'error' })
+        console.error('[events-admin] sync failed', response.status, payload)
       }
     } catch (error) {
       console.error('[events-admin] sync failed', error)
-      alert('Sync failed. See console.')
+      setToast({ message: 'Sync failed. See console for details.', tone: 'error' })
     } finally {
       setSyncing(false)
     }
-  }, [syncing])
+  }, [syncing, canSync, syncCsrfToken, syncHint])
 
   const normalizedSearch = searchTerm.trim().toLowerCase()
 
@@ -623,6 +679,8 @@ export default function EventsIndexPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-12 text-slate-900">
+      {/* SYNC WIRING */}
+      <ToastNotice toast={toast} onClose={handleToastClose} />
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -637,9 +695,9 @@ export default function EventsIndexPage() {
               <button
                 type="button"
                 onClick={handleSyncNow}
-                disabled={syncing}
+                disabled={syncing || !canSync}
                 className={`inline-flex items-center gap-2 self-start rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                  syncing
+                  syncing || !canSync
                     ? 'cursor-not-allowed border-emerald-100 bg-emerald-50 text-emerald-400'
                     : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:text-emerald-900'
                 }`}
@@ -648,12 +706,24 @@ export default function EventsIndexPage() {
                 {syncing ? 'Syncing…' : 'Sync now'}
               </button>
             )}
+            {!syncSummary && !syncCsrfToken && syncHint && (
+              <>
+                {/* SYNC WIRING */}
+                <p className="mt-2 max-w-xs text-xs font-medium text-emerald-700/80">{syncHint}</p>
+              </>
+            )}
           </div>
         </div>
       </header>
 
       <main className="mx-auto mt-8 flex max-w-6xl flex-col gap-6 px-4">
-        <SyncSummaryBanner summary={syncSummary} onSync={handleSyncNow} syncing={syncing} />
+        <SyncSummaryBanner
+          summary={syncSummary}
+          onSync={handleSyncNow}
+          syncing={syncing}
+          canSync={canSync}
+          disabledReason={syncDisabledReason}
+        />
         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="relative w-full md:max-w-md">
