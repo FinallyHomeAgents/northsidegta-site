@@ -68,11 +68,12 @@ async function main() {
   const totalChanged = summary.created + summary.updated + summary.errors
 
   if (totalChanged > 0) {
-    const totalAfterDisk = await countEventFiles(eventsDir)
-    const totalAfter = totalAfterDisk || existing.bySlug.size
+    const totalAfter = await countEventFiles(eventsDir)
+
     const torontoTimestamp = DateTime.fromJSDate(now)
       .setZone('America/Toronto')
       .toISO()
+
     const payload = {
       lastChangeAt: torontoTimestamp,
       created: summary.created,
@@ -81,6 +82,7 @@ async function main() {
       errors: summary.errors,
       totalAfter,
     }
+
     await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
   }
 
@@ -652,7 +654,7 @@ async function mergeEvent(event, existingMaps, now) {
     }
   }
 
-  const mergedWithoutTimestamps = {
+  const baseMerged = {
     ...preserved,
     ...event,
     status,
@@ -663,7 +665,7 @@ async function mergeEvent(event, existingMaps, now) {
   }
 
   const previousComparable = JSON.stringify(orderKeys(stripSyncTimestamps(preserved)))
-  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(mergedWithoutTimestamps)))
+  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(baseMerged)))
 
   if (previousComparable === nextComparable && (isUpdate || existingContent)) {
     const entryFilePath = existingEntry?.filePath || filePath
@@ -675,7 +677,7 @@ async function mergeEvent(event, existingMaps, now) {
 
   const timestamp = new Date(now).toISOString()
   const merged = {
-    ...mergedWithoutTimestamps,
+    ...baseMerged,
     lastSyncedAt: timestamp,
     updatedAt: timestamp,
   }
