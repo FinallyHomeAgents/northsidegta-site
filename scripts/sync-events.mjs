@@ -68,7 +68,8 @@ async function main() {
   const totalChanged = summary.created + summary.updated + summary.errors
 
   if (totalChanged > 0) {
-    const totalAfter = await countEventFiles(eventsDir)
+    const totalAfterDisk = await countEventFiles(eventsDir)
+    const totalAfter = totalAfterDisk || existing.bySlug.size
     const torontoTimestamp = DateTime.fromJSDate(now)
       .setZone('America/Toronto')
       .toISO()
