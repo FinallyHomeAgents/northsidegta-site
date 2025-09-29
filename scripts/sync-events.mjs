@@ -68,17 +68,21 @@ async function main() {
   const totalChanged = summary.created + summary.updated + summary.errors
 
   if (totalChanged > 0) {
+    const totalAfter = await countEventFiles(eventsDir)
+
     const torontoTimestamp = DateTime.fromJSDate(now)
       .setZone('America/Toronto')
       .toISO()
+
     const payload = {
       lastChangeAt: torontoTimestamp,
       created: summary.created,
       updated: summary.updated,
       unchanged: summary.unchanged,
       errors: summary.errors,
-      totalAfter: existing.bySlug.size,
+      totalAfter,
     }
+
     await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
   }
 
@@ -133,6 +137,21 @@ async function loadExistingEvents(dirPath) {
   }
 
   return { bySlug, bySourceId }
+}
+
+async function countEventFiles(dirPath) {
+  try {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true })
+    return entries.filter(
+      (entry) =>
+        entry.isFile() && entry.name.endsWith('.json') && entry.name !== '_sync-summary.json'
+    ).length
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.warn('[sync-events] Failed to count event files:', error.message)
+    }
+    return 0
+  }
 }
 
 function getSourceId(event) {
@@ -623,18 +642,6 @@ async function mergeEvent(event, existingMaps, now) {
   const preservedFirstSeen =
     typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
   const firstSeenAt = preservedFirstSeen || (!isUpdate ? new Date(now).toISOString() : null)
-const merged = {
-  ...preserved,                 // keep curated fields from the existing file
-  ...event,                     // overlay fresh scraped fields
-  status,                       // force curated flags to win over scraped data
-  hidden,
-  archived,
-  notes,
-  ...(firstSeenAt ? { firstSeenAt } : {}), // set on first create; preserve if already present
-  updatedAt: new Date(now).toISOString(),  // always bump last-updated
-}
-
-const ordered = orderKeys(merged)          // write with stable key order
 
   const filePath = path.join(eventsDir, `${event.slug}.json`)
 
