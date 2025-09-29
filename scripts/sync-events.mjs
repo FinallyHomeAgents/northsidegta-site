@@ -68,14 +68,17 @@ async function main() {
   const totalChanged = summary.created + summary.updated + summary.errors
 
   if (totalChanged > 0) {
-    const totalAfter = await countEventFiles(eventsDir)
-
-    const torontoTimestamp = DateTime.fromJSDate(now)
-      .setZone('America/Toronto')
-      .toISO()
+    const totalAfter = await fs
+      .readdir(eventsDir)
+      .then((list) =>
+        list.filter((name) => name.endsWith('.json') && name !== '_sync-summary.json').length
+      )
+      .catch(() => 0)
 
     const payload = {
-      lastChangeAt: torontoTimestamp,
+      lastChangeAt: DateTime.fromJSDate(now)
+        .setZone('America/Toronto')
+        .toISO(),
       created: summary.created,
       updated: summary.updated,
       unchanged: summary.unchanged,
@@ -137,21 +140,6 @@ async function loadExistingEvents(dirPath) {
   }
 
   return { bySlug, bySourceId }
-}
-
-async function countEventFiles(dirPath) {
-  try {
-    const entries = await fs.readdir(dirPath, { withFileTypes: true })
-    return entries.filter(
-      (entry) =>
-        entry.isFile() && entry.name.endsWith('.json') && entry.name !== '_sync-summary.json'
-    ).length
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      console.warn('[sync-events] Failed to count event files:', error.message)
-    }
-    return 0
-  }
 }
 
 function getSourceId(event) {

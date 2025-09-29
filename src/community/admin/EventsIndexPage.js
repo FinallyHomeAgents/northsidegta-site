@@ -4,7 +4,6 @@ import { Search, ExternalLink, RefreshCw } from 'lucide-react'
 
 const TORONTO_ZONE = 'America/Toronto'
 const SYNC_SUMMARY_PATH = '/data/events/_sync-summary.json'
-const CMS_SYNC_URL = '/cms#/collections/utilities/entries/sync-now'
 
 const TABS = [
   { key: 'upcoming', label: 'Upcoming' },
@@ -230,7 +229,7 @@ function useSyncSummary() {
   return summary
 }
 
-function SyncSummaryBanner({ summary }) {
+function SyncSummaryBanner({ summary, onSync, syncing }) {
   if (!summary) return null
 
   const created = Number(summary.created) || 0
@@ -253,15 +252,19 @@ function SyncSummaryBanner({ summary }) {
           Last change: {relative} — {statusText}
           {errorText}
         </p>
-        <a
-          href={CMS_SYNC_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 transition hover:text-emerald-900"
+        <button
+          type="button"
+          onClick={onSync}
+          disabled={syncing}
+          className={`inline-flex items-center gap-2 text-xs font-semibold transition ${
+            syncing
+              ? 'cursor-not-allowed text-emerald-500'
+              : 'text-emerald-700 hover:text-emerald-900'
+          }`}
         >
-          Sync now
-          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-        </a>
+          <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+          {syncing ? 'Syncing…' : 'Sync now'}
+        </button>
       </div>
     </div>
   )
@@ -468,6 +471,30 @@ export default function EventsIndexPage() {
   const [activeTab, setActiveTab] = React.useState('upcoming')
   const [showHidden, setShowHidden] = React.useState(false)
   const { selectedIds, toggle, clear, setAll } = useSelectedSet()
+  const [syncing, setSyncing] = React.useState(false)
+
+  const handleSyncNow = React.useCallback(async () => {
+    if (syncing) return
+    setSyncing(true)
+    try {
+      const response = await fetch('/api/sync-now', {
+        method: 'POST',
+        headers: { 'x-sync-secret': process.env.NEXT_PUBLIC_SYNC_SECRET || '' },
+      })
+      if (response.ok) {
+        alert('Sync started! Check GitHub → Actions.')
+      } else {
+        const debugText = await response.text().catch(() => '')
+        console.error('[events-admin] sync failed', response.status, debugText)
+        alert('Sync failed. See console.')
+      }
+    } catch (error) {
+      console.error('[events-admin] sync failed', error)
+      alert('Sync failed. See console.')
+    } finally {
+      setSyncing(false)
+    }
+  }, [syncing])
 
   const normalizedSearch = searchTerm.trim().toLowerCase()
 
@@ -607,22 +634,26 @@ export default function EventsIndexPage() {
               </p>
             </div>
             {!syncSummary && (
-              <a
-                href={CMS_SYNC_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:text-emerald-900"
+              <button
+                type="button"
+                onClick={handleSyncNow}
+                disabled={syncing}
+                className={`inline-flex items-center gap-2 self-start rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  syncing
+                    ? 'cursor-not-allowed border-emerald-100 bg-emerald-50 text-emerald-400'
+                    : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:text-emerald-900'
+                }`}
               >
-                Sync now
-                <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-              </a>
+                <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} aria-hidden="true" />
+                {syncing ? 'Syncing…' : 'Sync now'}
+              </button>
             )}
           </div>
         </div>
       </header>
 
       <main className="mx-auto mt-8 flex max-w-6xl flex-col gap-6 px-4">
-        <SyncSummaryBanner summary={syncSummary} />
+        <SyncSummaryBanner summary={syncSummary} onSync={handleSyncNow} syncing={syncing} />
         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="relative w-full md:max-w-md">
