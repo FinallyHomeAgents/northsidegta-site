@@ -90,7 +90,7 @@ collections:
     view_filters:
       - label: Published
         field: status
-        pattern: '^published$'
+        pattern: '^(published|approved)$'
       - label: Unpublished
         field: status
         pattern: '^(draft|pending|archived)$'
@@ -218,7 +218,7 @@ collections:
       - name: 'status'
         label: 'Status'
         widget: 'select'
-        options: ['draft', 'pending', 'published', 'archived']
+        options: ['draft', 'pending', 'approved', 'published', 'archived']
         default: 'pending'
       - name: 'source'
         label: 'Source'
@@ -236,3 +236,157 @@ collections:
         format: 'YYYY-MM-DDTHH:mm:ssZ'
         time_format: 'HH:mm'
         hint: 'Optional — ingestion fills this automatically.'
+
+  - name: 'pending-events'
+    label: 'User Submitted Events (Pending)'
+    label_singular: 'Pending Event'
+    folder: 'public/data/events-pending'
+    create: false
+    identifier_field: 'slug'
+    slug: '{{slug}}'
+    extension: 'json'
+    format: 'json'
+    summary: "{{title}} — {{startDate | date('ddd, MMM D h:mm a')}} — {{town | default('')}}"
+    fields:
+      - { name: 'title', label: 'Title' }
+      - name: 'slug'
+        label: 'Slug (URL part)'
+        widget: 'string'
+        pattern:
+          - '^[a-z0-9-]+$'
+          - 'Use lowercase letters, numbers, and dashes only.'
+      - name: 'status'
+        label: 'Status'
+        widget: 'select'
+        options: ['pending', 'approved', 'published', 'archived']
+        default: 'pending'
+      - name: 'startDate'
+        label: 'Start Date & Time'
+        widget: 'datetime'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+      - name: 'endDate'
+        label: 'End Date & Time'
+        widget: 'datetime'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+        required: false
+      - name: 'allDay'
+        label: 'All day event'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'userEventType'
+        label: 'Submitted Event Type'
+        widget: 'select'
+        options:
+          [
+            'Community',
+            'Sports',
+            'Family',
+            'Arts & Culture',
+            'Education',
+            'Business/Networking',
+            'Charity',
+            'Other',
+          ]
+      - name: 'categoryTags'
+        label: 'Category Tags'
+        widget: 'select'
+        multiple: true
+        required: false
+        options:
+          [
+            'Community',
+            'Sports',
+            'Family',
+            'Arts & Culture',
+            'Education',
+            'Business/Networking',
+            'Charity',
+            'Other',
+            'Fall',
+            'Winter',
+            'Spring',
+            'Summer',
+            'Holiday',
+          ]
+      - name: 'audienceTags'
+        label: 'Audience Tags'
+        widget: 'select'
+        multiple: true
+        required: false
+        options: ['All ages', 'Kids', 'Teens', 'Adults', 'Seniors', 'Families']
+      - name: 'town'
+        label: 'City / Town'
+        widget: 'select'
+        options:
+          [
+            'Georgina',
+            'East Gwillimbury',
+            'Aurora',
+            'Stouffville',
+            'Uxbridge',
+            'Scugog',
+            'Newmarket',
+            'Nearby/Other (North of Toronto)',
+          ]
+      - { name: 'locationName', label: 'Venue Name' }
+      - { name: 'address', label: 'Street Address' }
+      - name: 'postalCode'
+        label: 'Postal Code'
+        widget: 'string'
+        required: false
+      - name: 'priceType'
+        label: 'Cost'
+        widget: 'select'
+        options: ['Free', 'Paid']
+        default: 'Free'
+      - name: 'priceFrom'
+        label: 'Price From'
+        widget: 'string'
+        required: false
+      - name: 'ticketsUrl'
+        label: 'Tickets URL'
+        widget: 'string'
+        required: false
+      - name: 'registrationUrl'
+        label: 'Registration / Info URL'
+        widget: 'string'
+        required: false
+      - name: 'image'
+        label: 'Image'
+        widget: 'image'
+        required: false
+        hint: 'Optional hero image uploaded by the community member.'
+      - name: 'summary'
+        label: 'Short Description'
+        widget: 'text'
+        hint: '140–200 characters max.'
+      - name: 'description'
+        label: 'Full Description'
+        widget: 'markdown'
+        required: false
+      - name: 'organizerName'
+        label: 'Organizer Name'
+      - name: 'organizerEmail'
+        label: 'Organizer Email (private)'
+        widget: 'string'
+      - name: 'eventUrl'
+        label: 'Public Event Link'
+        widget: 'string'
+        required: false
+      - name: 'source'
+        label: 'Source'
+        widget: 'hidden'
+        default: 'user'
+      - name: 'submittedAt'
+        label: 'Submitted At'
+        widget: 'datetime'
+        required: false
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+        time_format: 'HH:mm'
+      - name: 'contactConsent'
+        label: 'Consent'
+        widget: 'boolean'
+        required: false

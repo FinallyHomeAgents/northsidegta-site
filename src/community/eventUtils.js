@@ -151,6 +151,7 @@ function normalizeStatus(value) {
   switch (raw) {
     case 'draft':
     case 'pending':
+    case 'approved':
     case 'published':
     case 'archived':
       return raw

@@ -16,6 +16,7 @@ import ThankYouPage     from "./ThankYouPage";
 import EventsIndexPage  from "./community/admin/EventsIndexPage";
 import EventsArchivePage from "./community/EventsArchivePage";
 import EventDetailPage  from "./community/EventDetailPage";
+import SubmitEventPage  from "./community/SubmitEventPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -58,6 +59,7 @@ function App() {
         <Route path="/community"    element={<CommunityPage />} />
         <Route path="/community/events/archive" element={<EventsArchivePage />} />
         <Route path="/community/events/:slug" element={<EventDetailPage />} />
+        <Route path="/community/submit-event" element={<SubmitEventPage />} />
         <Route path="/events/archive" element={<EventsArchivePage />} />
         <Route path="/community/events-admin" element={<EventsIndexPage />} />
         <Route path="/contact"      element={<ContactPage />} />
