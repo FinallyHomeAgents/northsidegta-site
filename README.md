@@ -7,6 +7,9 @@
 - `AGENT_EMAIL` – Optional BCC recipient for incoming leads.
 - `SIGNATURE_IMG_URL` – Optional URL for a signature image embedded in the lead email.
 - `FORMSPREE_ENDPOINT` – Optional Formspree endpoint that receives a copy of each lead submission. If unset, Formspree forwarding is skipped. Configure this to match your Formspree form URL (for example `https://formspree.io/f/xyzdokjk`).
+- `BLOB_READ_WRITE_TOKEN` – Required when using the community event uploader. Create a Vercel Blob store and copy the read/write token so community images can be stored safely.
+- `TURNSTILE_SECRET_KEY` / `REACT_APP_TURNSTILE_SITE_KEY` – Cloudflare Turnstile credentials for spam protection on `/community/submit-event`. If you prefer hCaptcha, use `HCAPTCHA_SECRET_KEY` and `REACT_APP_HCAPTCHA_SITE_KEY` instead.
+- `SLACK_WEBHOOK_URL` – Optional incoming webhook to broadcast pending submissions to a Slack channel.
 
 ## Soft-delete setup for events admin
 
@@ -42,6 +45,13 @@ If the GitHub variables are missing, publish/unpublish buttons will be disabled 
 ## Moderating events (zero-config)
 
 Use `/community/events-admin` to review events; click **Open in CMS** to publish or hide entries, and hidden items automatically disappear from public lists and the sitemap.
+
+### Community event submissions
+
+- Public route: `/community/submit-event`
+- Pending submissions are stored as JSON files in `public/data/events-pending/` and listed automatically at the top of `/community/events-admin`.
+- Use the **Approve & Publish** button in the admin panel to move an item into the live `public/data/events/` folder. The API flips the status to `approved`, notifies Slack/email, and deletes the pending entry.
+- Community uploads rely on Vercel Blob; ensure the `BLOB_READ_WRITE_TOKEN` environment variable exists in Vercel before testing uploads.
 
 ## Managing event visibility
 

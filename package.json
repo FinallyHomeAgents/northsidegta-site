@@ -11,6 +11,7 @@
     "ingest:events": "node scripts/ingest-events.js"
   },
   "dependencies": {
+    "@vercel/blob": "^2.0.0",
     "@vercel/kv": "^3.0.0",
     "classmates": "^1.0.1",
     "classnames": "^2.5.1",

@@ -14,6 +14,7 @@ const TABS = [
 
 const STATUS_STYLES = {
   published: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   draft: 'border-amber-200 bg-amber-50 text-amber-700',
   pending: 'border-sky-200 bg-sky-50 text-sky-700',
   archived: 'border-slate-200 bg-slate-100 text-slate-600',
@@ -232,6 +233,38 @@ function useEventsData() {
   return { events, loading, error, refetch: fetchEvents, syncCsrfToken, syncHint } // SYNC WIRING
 }
 
+function usePendingSubmissions() {
+  const [pending, setPending] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState('')
+
+  const fetchPending = React.useCallback(() => {
+    setLoading(true)
+    setError('')
+    fetch('/api/admin/pending-events', { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to load pending submissions')
+        return response.json()
+      })
+      .then((payload) => {
+        const list = Array.isArray(payload?.events) ? payload.events : []
+        setPending(list)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('[pending-events] fetch failed', err)
+        setError('We could not load pending submissions right now.')
+        setLoading(false)
+      })
+  }, [])
+
+  React.useEffect(() => {
+    fetchPending()
+  }, [fetchPending])
+
+  return { pending, loading, error, refetch: fetchPending }
+}
+
 function useSyncSummary() {
   const [summary, setSummary] = React.useState(null)
 
@@ -379,6 +412,130 @@ function useSelectedSet() {
   return { selectedIds, toggle, clear, setAll }
 }
 
+function formatPendingDateRange(startIso, endIso) {
+  const start = startIso ? DateTime.fromISO(startIso, { zone: TORONTO_ZONE }) : null
+  const end = endIso ? DateTime.fromISO(endIso, { zone: TORONTO_ZONE }) : null
+  if (!start?.isValid) return 'Date TBA'
+  if (end?.isValid) {
+    if (end <= start) {
+      return `${start.toFormat('ccc, MMM d • h:mm a')}`
+    }
+    if (end.hasSame(start, 'day')) {
+      return `${start.toFormat('ccc, MMM d • h:mm a')} – ${end.toFormat('h:mm a')}`
+    }
+    return `${start.toFormat('ccc, MMM d h:mm a')} → ${end.toFormat('ccc, MMM d h:mm a')}`
+  }
+  return `${start.toFormat('ccc, MMM d • h:mm a')}`
+}
+
+function PendingSubmissionsPanel({ pending, loading, error, onApprove, approvingId, onRefresh }) {
+  if (loading) {
+    return (
+      <section className="rounded-3xl border border-slate-200 bg-white px-6 py-6 text-sm text-slate-600 shadow-sm">
+        Loading pending submissions…
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section className="rounded-3xl border border-rose-200 bg-rose-50 px-6 py-6 text-sm text-rose-700 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p>{error}</p>
+          <button
+            type="button"
+            onClick={onRefresh}
+            className="inline-flex items-center gap-2 rounded-full border border-rose-300 bg-white px-4 py-2 text-xs font-semibold text-rose-700 hover:border-rose-400 hover:text-rose-900"
+          >
+            Refresh
+          </button>
+        </div>
+      </section>
+    )
+  }
+
+  if (!pending.length) {
+    return (
+      <section className="rounded-3xl border border-dashed border-slate-200 bg-white px-6 py-6 text-sm text-slate-600 shadow-sm">
+        No community submissions are pending right now.
+      </section>
+    )
+  }
+
+  return (
+    <section className="space-y-4">
+      <h2 className="text-lg font-semibold text-slate-900">Pending community submissions</h2>
+      <div className="space-y-4">
+        {pending.map((event) => (
+          <article
+            key={event.slug}
+            className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-slate-900">{event.title}</h3>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600">
+                  <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 ${STATUS_STYLES[event.status] || STATUS_STYLES.pending}`}>
+                    {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                  </span>
+                  {event.town && (
+                    <span className="inline-flex items-center rounded-full border border-slate-200 px-2.5 py-0.5">
+                      {event.town}
+                    </span>
+                  )}
+                  {event.priceType && (
+                    <span className="inline-flex items-center rounded-full border border-slate-200 px-2.5 py-0.5">
+                      {event.priceType === 'Paid'
+                        ? `Paid${event.priceFrom ? ` — from $${event.priceFrom}` : ''}`
+                        : 'Free'}
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-slate-600">{formatPendingDateRange(event.startDate, event.endDate)}</p>
+                <p className="text-sm text-slate-600">
+                  {event.venueName}
+                  {event.town ? ` • ${event.town}` : ''}
+                </p>
+                {event.summary && <p className="text-sm text-slate-700">{event.summary}</p>}
+                <div className="flex flex-wrap gap-2">
+                  {event.categoryTags?.slice(0, 4).map((tag) => (
+                    <span key={tag} className="inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 text-sm">
+                <a
+                  href={`/cms#/collections/pending-events/entry/${event.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
+                >
+                  Open in CMS
+                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => onApprove(event.slug)}
+                  disabled={approvingId === event.slug}
+                  className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-semibold transition ${
+                    approvingId === event.slug
+                      ? 'cursor-wait border border-emerald-200 bg-emerald-200 text-emerald-700'
+                      : 'border border-emerald-400 bg-emerald-50 text-emerald-700 hover:border-emerald-500 hover:text-emerald-900'
+                  }`}
+                >
+                  {approvingId === event.slug ? 'Approving…' : 'Approve & Publish'}
+                </button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function EventTable({
   events,
   selectedIds,
@@ -511,6 +668,7 @@ function EventTable({
 
 export default function EventsIndexPage() {
   const { events, loading, error, refetch, syncCsrfToken, syncHint } = useEventsData() // SYNC WIRING
+  const pendingState = usePendingSubmissions()
   const syncSummary = useSyncSummary()
   const [searchTerm, setSearchTerm] = React.useState('')
   const [activeTab, setActiveTab] = React.useState('upcoming')
@@ -518,9 +676,39 @@ export default function EventsIndexPage() {
   const { selectedIds, toggle, clear, setAll } = useSelectedSet()
   const [syncing, setSyncing] = React.useState(false)
   const [toast, setToast] = React.useState({ message: '', tone: 'success' }) // SYNC WIRING
+  const [approvingPendingId, setApprovingPendingId] = React.useState('')
+  const { pending, loading: pendingLoading, error: pendingError, refetch: refetchPending } = pendingState
   const canSync = Boolean(syncCsrfToken) // SYNC WIRING
   const syncDisabledReason = !canSync ? syncHint : '' // SYNC WIRING
   const handleToastClose = React.useCallback(() => setToast({ message: '', tone: 'success' }), []) // SYNC WIRING
+
+  const handleApprovePending = React.useCallback(
+    async (slug) => {
+      if (!slug || approvingPendingId === slug) return
+      setApprovingPendingId(slug)
+      try {
+        const response = await fetch('/api/admin/pending-events/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug }),
+        })
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}))
+          throw new Error(body?.error || 'Approval failed')
+        }
+        await response.json().catch(() => ({}))
+        setToast({ message: 'Submission approved and moved to live events.', tone: 'success' })
+        refetchPending()
+        refetch()
+      } catch (err) {
+        console.error('[pending-events] approval error', err)
+        setToast({ message: 'Approval failed. Try again.', tone: 'error' })
+      } finally {
+        setApprovingPendingId('')
+      }
+    },
+    [approvingPendingId, refetchPending, refetch]
+  )
 
   const handleSyncNow = React.useCallback(async () => {
     if (syncing) return
@@ -717,6 +905,14 @@ export default function EventsIndexPage() {
       </header>
 
       <main className="mx-auto mt-8 flex max-w-6xl flex-col gap-6 px-4">
+        <PendingSubmissionsPanel
+          pending={pending}
+          loading={pendingLoading}
+          error={pendingError}
+          onApprove={handleApprovePending}
+          approvingId={approvingPendingId}
+          onRefresh={refetchPending}
+        />
         <SyncSummaryBanner
           summary={syncSummary}
           onSync={handleSyncNow}

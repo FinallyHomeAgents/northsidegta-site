@@ -50,8 +50,11 @@ function normalizeStatus(status) {
 function withinStatuses(event, statusFilter) {
   if (!statusFilter.length) return true
   const eventStatus = typeof event.status === 'string' ? event.status.toLowerCase() : 'published'
+  const normalizedStatus = eventStatus === 'approved' ? 'published' : eventStatus
   if (statusFilter.includes('all')) return true
-  return statusFilter.includes(eventStatus)
+  if (statusFilter.includes(normalizedStatus)) return true
+  if (normalizedStatus === 'published' && statusFilter.includes('approved')) return true
+  return false
 }
 
 export default function handler(req, res) {
