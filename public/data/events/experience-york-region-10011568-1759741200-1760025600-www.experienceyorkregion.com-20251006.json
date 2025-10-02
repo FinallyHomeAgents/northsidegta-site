@@ -1,11 +1,11 @@
 {
-  "id": "10008993-1758792600-1759510800@www.experienceyorkregion.com",
-  "slug": "experience-york-region-10008993-1758792600-1759510800-www.experienceyorkregion.com-20250925",
-  "title": "March Break at LEGOLAND® Discovery Centre Toronto",
-  "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
+  "id": "10011568-1759741200-1760025600@www.experienceyorkregion.com",
+  "slug": "experience-york-region-10011568-1759741200-1760025600-www.experienceyorkregion.com-20251006",
+  "title": "2025 Summer Art Camp at Palette Art School",
+  "summary": "2025 Summer Art Camp at Palette Art School",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto Concerts in Richmond Hill Loading view. Today Now Now Select date. Oct 1 May 1 - October 18 Event Series Kate Greenway, Recent Works Oct 1 September 24 @ 9:30 am - October 2 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 25 @ 9:30 am - October 3 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 26 @ 9:30 am - October 4 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 27 @ 9:30 am - October 5 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 28 @ 9:30 am - October 6 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 29 @ 9:00 am - October 2 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 1 September 29 @ 9:30 am - October 7 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 September 30 @ 9:00 am - October 3 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 1 September 30 @ 9:30 am - October 8 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 1 October 1 @ 9:00 am - October 4 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 1 October 1 @ 9:30 am - October 9 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-09-25T13:30:00.000Z",
-  "endDate": "2025-10-03T21:00:00.000Z",
+  "startDate": "2025-10-06T13:00:00.000Z",
+  "endDate": "2025-10-09T20:00:00.000Z",
   "allDay": false,
   "recurrence": "",
   "category": "Festivals",
@@ -13,12 +13,12 @@
   "subArea": "",
   "location": {
     "city": "Toronto-adjacent",
-    "venue": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada"
+    "venue": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2"
   },
-  "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "lat": 43.8256383,
-  "lng": -79.5382147,
+  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "lat": 43.787474,
+  "lng": -79.4727017,
   "priceType": "Mixed",
   "priceNote": "",
   "badges": [],
@@ -26,8 +26,8 @@
   "image": "",
   "organizerName": "[object Object]",
   "organizerUrl": "",
-  "url": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-09-25/",
-  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-09-25/",
+  "url": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-06/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-06/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -35,14 +35,14 @@
   "notes": "",
   "source": {
     "name": "Experience York Region",
-    "id": "10008993-1758792600-1759510800@www.experienceyorkregion.com"
+    "id": "10011568-1759741200-1760025600@www.experienceyorkregion.com"
   },
   "sourceName": "Experience York Region",
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10008993-1758792600-1759510800@www.experienceyorkregion.com",
+  "sourceRef": "10011568-1759741200-1760025600@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-10-02T00:10:18.722Z",
-  "updatedAt": "2025-10-02T00:10:18.722Z",
-  "featured": false
+  "firstSeenAt": "2025-10-02T00:10:18.722Z",
+  "updatedAt": "2025-10-02T00:10:18.722Z"
 }
