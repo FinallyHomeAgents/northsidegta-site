@@ -3,7 +3,8 @@
   "priceType": "Paid",
   "moderation": {
     "ip": "173.35.217.208",
-    "submittedVia": "public-form"
+    "submittedVia": "public-form",
+    "approvedAt": "2025-10-02T00:55:54.635Z"
   },
   "sourceName": "Finally Home Agents",
   "summary": "This will be a scramble-format tournament, bringing together many of our current and past clients, friends, and community members for a great day of golf.",
@@ -16,7 +17,7 @@
   "recurrence": "",
   "startDate": "2025-10-04T14:00:00.000Z",
   "town": "Uxbridge",
-  "status": "published",
+  "status": "approved",
   "priceFrom": "",
   "address": "269 Durham Rd 8",
   "eventUrl": "",
@@ -39,5 +40,6 @@
   "audienceTags": [
     "All ages"
   ],
-  "category": ""
+  "category": "",
+  "approvedAt": "2025-10-02T00:55:54.635Z"
 }
