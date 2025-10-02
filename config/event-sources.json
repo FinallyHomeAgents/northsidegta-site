@@ -1,0 +1,773 @@
+[
+  {
+    "id": "aurora-special-events",
+    "domain": "aurora.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.aurora.ca/default/Download.ics?calendar=Special%20Events"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-special",
+      "town": "Aurora",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of Aurora — Special Events",
+      "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/special-events.aspx",
+      "sourceDomain": "aurora.ca"
+    }
+  },
+  {
+    "id": "aurora-recreation-culture",
+    "domain": "aurora.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.aurora.ca/default/Download.ics?calendar=Recreation%20and%20Culture"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-rec",
+      "town": "Aurora",
+      "category": "Arts & Culture",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of Aurora — Recreation & Culture",
+      "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/events-calendar.aspx",
+      "sourceDomain": "aurora.ca"
+    }
+  },
+  {
+    "id": "east-gwillimbury-community",
+    "domain": "eastgwillimbury.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.eastgwillimbury.ca/default/Download.ics?calendar=Community%20Events"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "eg-community",
+      "town": "East Gwillimbury",
+      "category": "Family",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of East Gwillimbury Events",
+      "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/events.aspx",
+      "sourceDomain": "eastgwillimbury.ca"
+    }
+  },
+  {
+    "id": "east-gwillimbury-recreation",
+    "domain": "eastgwillimbury.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.eastgwillimbury.ca/default/Download.ics?calendar=Recreation%20Programs"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "eg-recreation",
+      "town": "East Gwillimbury",
+      "category": "Sports",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "EG Recreation Programs",
+      "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/recreation-programs.aspx",
+      "sourceDomain": "eastgwillimbury.ca"
+    }
+  },
+  {
+    "id": "georgina-community",
+    "domain": "georgina.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.georgina.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "georgina",
+      "town": "Georgina",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of Georgina Events",
+      "sourceUrl": "https://www.georgina.ca/events",
+      "sourceDomain": "georgina.ca"
+    }
+  },
+  {
+    "id": "newmarket-community",
+    "domain": "newmarket.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.newmarket.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "newmarket",
+      "town": "Newmarket",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of Newmarket Events",
+      "sourceUrl": "https://www.newmarket.ca/events",
+      "sourceDomain": "newmarket.ca"
+    }
+  },
+  {
+    "id": "whitchurch-stouffville-community",
+    "domain": "townofws.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.townofws.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "ws-community",
+      "town": "Stouffville",
+      "category": "Family",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 10,
+      "sourceName": "Town of Whitchurch-Stouffville Events",
+      "sourceUrl": "https://www.townofws.ca/en/explore-and-play/events-calendar.aspx",
+      "sourceDomain": "townofws.ca"
+    }
+  },
+  {
+    "id": "uxbridge-community",
+    "domain": "uxbridge.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.uxbridge.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "uxbridge",
+      "town": "Uxbridge",
+      "category": "Outdoors",
+      "priceType": "Mixed",
+      "badges": [
+        "Outdoors"
+      ],
+      "priority": 10,
+      "sourceName": "Township of Uxbridge Events",
+      "sourceUrl": "https://www.uxbridge.ca/en/explore-and-play/events.aspx",
+      "sourceDomain": "uxbridge.ca"
+    }
+  },
+  {
+    "id": "scugog-community",
+    "domain": "scugog.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.scugog.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "scugog",
+      "town": "Scugog",
+      "category": "Family",
+      "priceType": "Mixed",
+      "badges": [
+        "Outdoors"
+      ],
+      "priority": 10,
+      "sourceName": "Township of Scugog Events",
+      "sourceUrl": "https://www.scugog.ca/en/exploring-our-community/events.aspx",
+      "sourceDomain": "scugog.ca"
+    }
+  },
+  {
+    "id": "explore-georgina",
+    "domain": "exploregeorgina.ca",
+    "enabled": true,
+    "strategy": "wordpressTribe",
+    "start_urls": [],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "baseUrl": "https://www.exploregeorgina.ca",
+      "endpoint": "/wp-json/tribe/events/v1/events",
+      "town": "Georgina",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 30,
+      "sourceName": "Explore Georgina",
+      "sourceUrl": "https://www.exploregeorgina.ca/events",
+      "sourceDomain": "exploregeorgina.ca"
+    }
+  },
+  {
+    "id": "discover-stouffville",
+    "domain": "discoverstouffville.ca",
+    "enabled": true,
+    "strategy": "wordpressTribe",
+    "start_urls": [],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "baseUrl": "https://discoverstouffville.ca",
+      "endpoint": "/wp-json/tribe/events/v1/events",
+      "town": "Stouffville",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 30,
+      "sourceName": "Discover Stouffville",
+      "sourceUrl": "https://discoverstouffville.ca/events",
+      "sourceDomain": "discoverstouffville.ca"
+    }
+  },
+  {
+    "id": "discover-uxbridge",
+    "domain": "discoveruxbridge.ca",
+    "enabled": true,
+    "strategy": "wordpressTribe",
+    "start_urls": [],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "baseUrl": "https://discoveruxbridge.ca",
+      "endpoint": "/wp-json/tribe/events/v1/events",
+      "town": "Uxbridge",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "badges": [
+        "Outdoors"
+      ],
+      "priority": 30,
+      "sourceName": "Discover Uxbridge",
+      "sourceUrl": "https://discoveruxbridge.ca/uxbridge-events",
+      "sourceDomain": "discoveruxbridge.ca"
+    }
+  },
+  {
+    "id": "aurora-town-square",
+    "domain": "auroratownsquare.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://auroratownsquare.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-town-square",
+      "town": "Aurora",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "badges": [
+        "Arts & Culture"
+      ],
+      "priority": 20,
+      "sourceName": "Aurora Town Square",
+      "sourceUrl": "https://auroratownsquare.ca/whats-on",
+      "sourceDomain": "auroratownsquare.ca"
+    }
+  },
+  {
+    "id": "aurora-cultural-centre",
+    "domain": "auroraculturalcentre.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://auroraculturalcentre.ca/events/list/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-cultural-centre",
+      "town": "Aurora",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "badges": [
+        "Arts & Culture"
+      ],
+      "priority": 20,
+      "sourceName": "Aurora Cultural Centre",
+      "sourceUrl": "https://auroraculturalcentre.ca/events/",
+      "sourceDomain": "auroraculturalcentre.ca"
+    }
+  },
+  {
+    "id": "newroads-performing-arts",
+    "domain": "newmarket.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.newmarket.ca/default/Download.ics?calendar=Events%20and%20Culture"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "newroads-theatre",
+      "town": "Newmarket",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "badges": [
+        "Arts & Culture"
+      ],
+      "priority": 20,
+      "sourceName": "NewRoads Performing Arts Centre",
+      "sourceUrl": "https://www.newmarket.ca/newroadspac",
+      "sourceDomain": "newmarket.ca"
+    }
+  },
+  {
+    "id": "georgina-arts-centre",
+    "domain": "theglen.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.theglen.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "georgina-arts",
+      "town": "Georgina",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "badges": [
+        "Arts & Culture"
+      ],
+      "priority": 20,
+      "sourceName": "Georgina Centre for Arts & Culture",
+      "sourceUrl": "https://www.theglen.ca/events/",
+      "sourceDomain": "theglen.ca"
+    }
+  },
+  {
+    "id": "sharon-temple",
+    "domain": "sharontemple.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.sharontemple.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "sharon-temple",
+      "town": "East Gwillimbury",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "priority": 20,
+      "sourceName": "Sharon Temple National Historic Site",
+      "sourceUrl": "https://www.sharontemple.ca/events/",
+      "sourceDomain": "sharontemple.ca"
+    }
+  },
+  {
+    "id": "uxbridge-music-hall",
+    "domain": "uxbridgemusichall.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://uxbridgemusichall.com/events/list/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "uxbridge-music-hall",
+      "town": "Uxbridge",
+      "category": "Arts & Culture",
+      "priceType": "Paid",
+      "priority": 20,
+      "sourceName": "Uxbridge Music Hall",
+      "sourceUrl": "https://uxbridgemusichall.com/events/",
+      "sourceDomain": "uxbridgemusichall.com"
+    }
+  },
+  {
+    "id": "aurora-public-library",
+    "domain": "aurorapl.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.aurorapl.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-library",
+      "town": "Aurora",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Aurora Public Library",
+      "sourceUrl": "https://www.aurorapl.ca/events",
+      "sourceDomain": "aurorapl.ca"
+    }
+  },
+  {
+    "id": "newmarket-public-library",
+    "domain": "newmarketpl.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.newmarketpl.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "newmarket-library",
+      "town": "Newmarket",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Newmarket Public Library",
+      "sourceUrl": "https://www.newmarketpl.ca/programs",
+      "sourceDomain": "newmarketpl.ca"
+    }
+  },
+  {
+    "id": "georgina-public-library",
+    "domain": "georginalibrary.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.georginalibrary.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "georgina-library",
+      "town": "Georgina",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Georgina Public Library",
+      "sourceUrl": "https://www.georginalibrary.ca/en/programs-and-events/events.aspx",
+      "sourceDomain": "georginalibrary.ca"
+    }
+  },
+  {
+    "id": "east-gwillimbury-public-library",
+    "domain": "egpl.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://calendar.egpl.ca/default/Download.ics"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "eg-library",
+      "town": "East Gwillimbury",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "East Gwillimbury Public Library",
+      "sourceUrl": "https://www.egpl.ca/programs-events/",
+      "sourceDomain": "egpl.ca"
+    }
+  },
+  {
+    "id": "uxbridge-public-library",
+    "domain": "uxlib.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://uxlib.com/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "uxbridge-library",
+      "town": "Uxbridge",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Uxbridge Public Library",
+      "sourceUrl": "https://uxlib.com/events/",
+      "sourceDomain": "uxlib.com"
+    }
+  },
+  {
+    "id": "whitchurch-stouffville-public-library",
+    "domain": "wsplibrary.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.wsplibrary.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "ws-library",
+      "town": "Stouffville",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Whitchurch-Stouffville Public Library",
+      "sourceUrl": "https://www.wsplibrary.ca/programs/",
+      "sourceDomain": "wsplibrary.ca"
+    }
+  },
+  {
+    "id": "scugog-memorial-library",
+    "domain": "scugoglibrary.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.scugoglibrary.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "scugog-library",
+      "town": "Scugog",
+      "category": "Family",
+      "priceType": "Free",
+      "badges": [
+        "Family-friendly"
+      ],
+      "priority": 25,
+      "sourceName": "Scugog Memorial Public Library",
+      "sourceUrl": "https://www.scugoglibrary.ca/events/",
+      "sourceDomain": "scugoglibrary.ca"
+    }
+  },
+  {
+    "id": "aurora-chamber",
+    "domain": "aurorachamber.on.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://business.aurorachamber.org/events/ical"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "aurora-chamber",
+      "town": "Aurora",
+      "category": "Other",
+      "priceType": "Paid",
+      "priority": 40,
+      "sourceName": "Aurora Chamber of Commerce",
+      "sourceUrl": "https://business.aurorachamber.org/events",
+      "sourceDomain": "aurorachamber.on.ca"
+    }
+  },
+  {
+    "id": "newmarket-main-street-bia",
+    "domain": "newmarketmainstreet.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://newmarketmainstreet.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "newmarket-bia",
+      "town": "Newmarket",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Newmarket Main Street BIA",
+      "sourceUrl": "https://newmarketmainstreet.ca/events",
+      "sourceDomain": "newmarketmainstreet.ca"
+    }
+  },
+  {
+    "id": "stouffville-main-street-bia",
+    "domain": "stouffvillemainstreet.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://stouffvillemainstreet.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "stouffville-bia",
+      "town": "Stouffville",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Downtown Stouffville BIA",
+      "sourceUrl": "https://stouffvillemainstreet.ca/events",
+      "sourceDomain": "stouffvillemainstreet.ca"
+    }
+  },
+  {
+    "id": "uxbridge-bia",
+    "domain": "uxbridgebia.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://uxbridgebia.com/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "uxbridge-bia",
+      "town": "Uxbridge",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Uxbridge BIA",
+      "sourceUrl": "https://uxbridgebia.com/events",
+      "sourceDomain": "uxbridgebia.com"
+    }
+  },
+  {
+    "id": "sutton-bia",
+    "domain": "suttonbia.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://suttonbia.com/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "sutton-bia",
+      "town": "Georgina",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Sutton BIA",
+      "sourceUrl": "https://suttonbia.com/events",
+      "sourceDomain": "suttonbia.com"
+    }
+  },
+  {
+    "id": "jacksons-point-bia",
+    "domain": "jacksonspointbia.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://jacksonspointbia.com/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "jacksons-point-bia",
+      "town": "Georgina",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Jackson's Point BIA",
+      "sourceUrl": "https://jacksonspointbia.com/events",
+      "sourceDomain": "jacksonspointbia.com"
+    }
+  },
+  {
+    "id": "port-perry-bia",
+    "domain": "discoverportperry.ca",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://discoverportperry.ca/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "port-perry-bia",
+      "town": "Scugog",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 40,
+      "sourceName": "Discover Port Perry",
+      "sourceUrl": "https://discoverportperry.ca/events",
+      "sourceDomain": "discoverportperry.ca"
+    }
+  },
+  {
+    "id": "york-region-tourism",
+    "domain": "experienceyorkregion.com",
+    "enabled": true,
+    "strategy": "ics",
+    "start_urls": [
+      "https://www.experienceyorkregion.com/events/?ical=1"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "york-region",
+      "town": "Toronto-adjacent",
+      "category": "Festivals",
+      "priceType": "Mixed",
+      "priority": 35,
+      "sourceName": "Experience York Region",
+      "sourceUrl": "https://www.experienceyorkregion.com/events",
+      "sourceDomain": "experienceyorkregion.com"
+    }
+  },
+  {
+    "id": "universe-gta",
+    "domain": "universe.com",
+    "enabled": true,
+    "strategy": "universeSearch",
+    "start_urls": [
+      "https://www.universe.com/api/v2/events/search?lat=44.05&lng=-79.45&radius=65&per_page=50&sort=start_at"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "town": "Toronto-adjacent",
+      "category": "Other",
+      "priceType": "Mixed",
+      "priority": 15,
+      "badges": [
+        "Ticketed"
+      ],
+      "sourceName": "Universe",
+      "sourceUrl": "https://www.universe.com",
+      "sourceDomain": "universe.com"
+    }
+  },
+  {
+    "id": "ticketscene-ontario",
+    "domain": "ticketscene.ca",
+    "enabled": true,
+    "strategy": "rss",
+    "start_urls": [
+      "https://www.ticketscene.ca/rss/?region=Ontario"
+    ],
+    "timezone": "America/Toronto",
+    "metadata": {
+      "slugPrefix": "ticketscene",
+      "town": "Toronto-adjacent",
+      "category": "Other",
+      "priceType": "Paid",
+      "priority": 25,
+      "badges": [
+        "Ticketed"
+      ],
+      "sourceName": "TicketScene",
+      "sourceUrl": "https://www.ticketscene.ca",
+      "sourceDomain": "ticketscene.ca"
+    }
+  }
+]

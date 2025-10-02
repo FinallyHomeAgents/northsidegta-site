@@ -42,6 +42,26 @@ If the GitHub variables are missing, publish/unpublish buttons will be disabled 
 - When changes occur, the sync writes `public/data/events/_sync-summary.json` so the admin page and commit messages can surface
   +new/updated counts.
 
+### Event source audit mode
+
+- Inspect configured sources without mutating any output by running `npm run events:audit`.
+- Restrict the audit to a single domain with `npm run events:audit -- --domain=aurora.ca`.
+- Each run writes a JSONL file under `logs/` (for example `logs/audit_20240517_1430.jsonl`). Every line is a structured snapshot
+  containing the fetch diagnostics, robots.txt verdict, detected content features, parse results, and failure categorisation.
+- Use `jq` or any JSONL-friendly tool to filter or summarise findings. A single record looks like:
+  ```json
+  {
+    "domain": "aurora.ca",
+    "strategy": "ics",
+    "audit": {
+      "fetches": [{ "status": 200, "size": 12345 }],
+      "robots": { "allowed": true },
+      "parse": { "events_found": 12, "errors": [] }
+    }
+  }
+  ```
+- The CLI prints a console table at the end of each run so you can quickly scan the overall status.
+
 ## Moderating events (zero-config)
 
 Use `/community/events-admin` to review events; click **Open in CMS** to publish or hide entries, and hidden items automatically disappear from public lists and the sitemap.
