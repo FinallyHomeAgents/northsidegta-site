@@ -19,6 +19,10 @@ const summaryPath = path.join(eventsDir, '_sync-summary.json')
 
 const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
+const DEFAULT_TIMEOUT_MS = 15000
+const DEFAULT_RETRY_ATTEMPTS = 3
+const DEFAULT_RETRY_DELAY_MS = 400
+const MAX_RETRY_DELAY_MS = 5000
 const parser = new Parser()
 
 async function main() {
@@ -170,7 +174,15 @@ async function fetchFeed(feed) {
   if (type === 'rss') {
     const xml = await fetchText(feed.url, feed, {}, 'application/rss+xml, application/xml;q=0.9, */*;q=0.1')
     if (!xml) return []
-    const response = await parser.parseString(xml)
+
+    let response = null
+    try {
+      response = await parser.parseString(xml)
+    } catch (error) {
+      console.warn(`[sync-events] Failed to parse RSS feed ${feed.id || feed.url}:`, error.message)
+      return []
+    }
+
     return Array.isArray(response.items) ? response.items : []
   }
 
@@ -201,8 +213,14 @@ async function fetchFeed(feed) {
 async function fetchIcs(feed) {
   const text = await fetchText(feed.url, feed, {}, 'text/calendar, application/octet-stream;q=0.8, */*;q=0.1')
   if (!text) return []
-  const events = await ical.async.parseICS(text)
-  return Object.values(events).filter((entry) => entry && entry.type === 'VEVENT')
+
+  try {
+    const events = await ical.async.parseICS(text)
+    return Object.values(events).filter((entry) => entry && entry.type === 'VEVENT')
+  } catch (error) {
+    console.warn(`[sync-events] Failed to parse ICS feed ${feed.id || feed.url}:`, error.message)
+    return []
+  }
 }
 
 function createAdapterContext(feed) {
@@ -246,10 +264,7 @@ async function fetchText(url, feed, init = {}, accept) {
     requestInit.headers.Accept = accept
   }
 
-  const response = await fetch(absolute, requestInit)
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
-  }
+  const response = await performFetchWithRetry(absolute, requestInit, feed)
   return response.text()
 }
 
@@ -260,13 +275,17 @@ async function fetchJson(url, feed, init = {}) {
   if (!requestInit.headers.Accept && !requestInit.headers.accept) {
     requestInit.headers.Accept = 'application/json, text/javascript;q=0.9, */*;q=0.1'
   }
-  const response = await fetch(absolute, requestInit)
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
-  }
+
+  const response = await performFetchWithRetry(absolute, requestInit, feed)
   const text = await response.text()
   if (!text) return null
-  return JSON.parse(text)
+
+  try {
+    return JSON.parse(text)
+  } catch (error) {
+    console.warn(`[sync-events] Failed to parse JSON feed ${feed.id || feed.url}:`, error.message)
+    return null
+  }
 }
 
 function buildRequestInit(feed, init = {}) {
@@ -278,6 +297,126 @@ function buildRequestInit(feed, init = {}) {
     headers.Referer = feed.referer
   }
   return { ...init, headers }
+}
+
+async function performFetchWithRetry(url, init, feed) {
+  const attempts = getNumericOption(feed?.retryAttempts, DEFAULT_RETRY_ATTEMPTS)
+  const timeoutMs = getNumericOption(feed?.timeoutMs, DEFAULT_TIMEOUT_MS)
+  const retryDelayMs = getNumericOption(feed?.retryDelayMs, DEFAULT_RETRY_DELAY_MS)
+
+  let lastError = null
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    const attemptInit = applyTimeoutToInit(init, timeoutMs)
+
+    try {
+      const response = await fetch(url, attemptInit.requestInit)
+
+      if (!response.ok) {
+        const error = new Error(`HTTP ${response.status}`)
+        if (attempt < attempts && shouldRetryStatus(response.status)) {
+          lastError = error
+          await waitWithBackoff(attempt, retryDelayMs)
+          continue
+        }
+        throw error
+      }
+
+      return response
+    } catch (error) {
+      lastError = error
+      if (attempt >= attempts || !shouldRetryError(error)) {
+        throw error
+      }
+      await waitWithBackoff(attempt, retryDelayMs)
+    } finally {
+      attemptInit.cleanup()
+    }
+  }
+
+  throw lastError || new Error('Failed to fetch resource')
+}
+
+function applyTimeoutToInit(init = {}, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+    return { requestInit: { ...init }, cleanup: () => {} }
+  }
+
+  if (AbortSignal?.timeout) {
+    const timeoutSignal = AbortSignal.timeout(timeoutMs)
+    const requestSignal = init.signal
+      ? AbortSignal.any([init.signal, timeoutSignal])
+      : timeoutSignal
+
+    return {
+      requestInit: { ...init, signal: requestSignal },
+      cleanup: () => {},
+    }
+  }
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(new Error('Request timed out')), timeoutMs)
+
+  if (init.signal) {
+    if (init.signal.aborted) {
+      controller.abort(init.signal.reason)
+    } else {
+      init.signal.addEventListener('abort', () => controller.abort(init.signal.reason), { once: true })
+    }
+  }
+
+  const requestInit = { ...init, signal: controller.signal }
+
+  return {
+    requestInit,
+    cleanup: () => clearTimeout(timer),
+  }
+}
+
+function shouldRetryStatus(status) {
+  return status === 408 || status === 425 || status === 429 || status >= 500
+}
+
+function shouldRetryError(error) {
+  if (!error) return false
+  if (error.name === 'AbortError') return true
+  if (error.code && RETRYABLE_ERROR_CODES.has(error.code)) return true
+  const message = typeof error.message === 'string' ? error.message.toLowerCase() : ''
+  if (!message) return false
+  return RETRYABLE_ERROR_MESSAGES.some((token) => message.includes(token))
+}
+
+const RETRYABLE_ERROR_CODES = new Set([
+  'ETIMEDOUT',
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'EHOSTUNREACH',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+])
+
+const RETRYABLE_ERROR_MESSAGES = [
+  'timeout',
+  'timed out',
+  'network request failed',
+  'fetch failed',
+  'socket hang up',
+  'connection reset',
+]
+
+function waitWithBackoff(attempt, baseDelayMs) {
+  const effectiveBase = Number.isFinite(baseDelayMs) && baseDelayMs > 0 ? baseDelayMs : DEFAULT_RETRY_DELAY_MS
+  const delay = Math.min(effectiveBase * attempt + Math.random() * effectiveBase * 0.5, MAX_RETRY_DELAY_MS)
+  return wait(delay)
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function getNumericOption(value, fallback) {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) && numeric > 0 ? numeric : fallback
 }
 
 function resolveUrl(value, feed) {
