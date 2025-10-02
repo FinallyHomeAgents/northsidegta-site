@@ -501,6 +501,7 @@ async function attemptAutoDiscoverUrl(feed, failingUrl, error, requestInit, opti
       status: probe.status,
       discoveredAt: new Date().toISOString(),
       hint: candidate.hint || '',
+      protocolFlipped: candidate.hint === 'protocol-flip',
     }
     if (state.urlUpdates) {
       state.urlUpdates.push(updateEntry)
@@ -511,6 +512,12 @@ async function attemptAutoDiscoverUrl(feed, failingUrl, error, requestInit, opti
       feedReport.discoveredUrl = probe.finalUrl
       feedReport.discoveryStatus = probe.status
       feedReport.discoveryHint = candidate.hint || ''
+      const redirectHop = { from: failingUrl, to: probe.finalUrl, status: probe.status }
+      if (Array.isArray(feedReport.redirectChain)) {
+        feedReport.redirectChain.push(redirectHop)
+      } else {
+        feedReport.redirectChain = [redirectHop]
+      }
     }
     return probe.finalUrl
   }
