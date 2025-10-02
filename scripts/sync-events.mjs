@@ -16,6 +16,8 @@ const rootDir = path.resolve(__dirname, '..')
 const configPath = path.join(rootDir, 'config', 'event-feeds.json')
 const eventsDir = path.join(rootDir, 'public', 'data', 'events')
 const summaryPath = path.join(eventsDir, '_sync-summary.json')
+const reportsDir = path.join(rootDir, 'public', 'data', 'sync-reports')
+const urlUpdateLogPath = path.join(rootDir, 'logs', 'events-url-updates.log')
 
 const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
@@ -26,7 +28,7 @@ const MAX_RETRY_DELAY_MS = 5000
 const parser = new Parser()
 
 async function main() {
-  const feeds = await loadConfig(configPath)
+  const { feeds } = await loadConfig(configPath)
   if (!feeds.length) {
     console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 0')
     console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=0')
@@ -34,19 +36,32 @@ async function main() {
   }
 
   await fs.mkdir(eventsDir, { recursive: true })
+  await fs.mkdir(reportsDir, { recursive: true }).catch(() => {})
   const existing = await loadExistingEvents(eventsDir)
   const now = new Date()
   const summary = { created: 0, updated: 0, unchanged: 0, errors: 0 }
+  const feedReports = []
+  const syncState = { configChanged: false, urlUpdates: [] }
 
   for (const feed of feeds) {
     if (!feed || feed.enabled === false) continue
+    const feedReport = createFeedReport(feed)
+    feedReports.push(feedReport)
+    const startedAt = Date.now()
+    feedReport.startedAt = new Date().toISOString()
+
     try {
-      const items = await fetchFeed(feed)
-      if (!Array.isArray(items) || !items.length) continue
+      const items = await fetchFeed(feed, feedReport, syncState)
+      const payload = Array.isArray(items) ? items : []
+      feedReport.itemsFetched = payload.length
+      if (!payload.length) {
+        feedReport.status = feedReport.status === 'error' ? 'error' : 'empty'
+        continue
+      }
 
       const dedupe = new Map()
 
-      for (const item of items) {
+      for (const item of payload) {
         try {
           const normalized = normalizeEvent(item, feed, now)
           if (!normalized) continue
@@ -58,14 +73,37 @@ async function main() {
 
           const result = await mergeEvent(normalized, existing, now)
           summary[result] = (summary[result] || 0) + 1
+          if (result in feedReport) {
+            feedReport[result] += 1
+          }
         } catch (error) {
           summary.errors += 1
-          console.warn(`[sync-events] Failed to normalize entry for feed ${feed.id || feed.url}:`, error.message)
+          feedReport.errors.push(error.message || String(error))
+          feedReport.status = feedReport.status === 'error' ? 'error' : 'warning'
+          console.warn(
+            `[sync-events] Failed to normalize entry for feed ${feed.id || feed.url}:`,
+            error.message
+          )
+        }
+      }
+
+      if (!feedReport.status || feedReport.status === 'pending') {
+        if (feedReport.errors.length) {
+          feedReport.status = feedReport.created + feedReport.updated + feedReport.unchanged > 0 ? 'warning' : 'error'
+        } else if (feedReport.created + feedReport.updated + feedReport.unchanged === 0) {
+          feedReport.status = 'empty'
+        } else {
+          feedReport.status = 'ok'
         }
       }
     } catch (error) {
       summary.errors += 1
+      feedReport.errors.push(error.message || String(error))
+      feedReport.status = 'error'
       console.warn(`[sync-events] Failed to process feed ${feed.id || feed.url}:`, error.message)
+    } finally {
+      feedReport.finishedAt = new Date().toISOString()
+      feedReport.durationMs = Date.now() - startedAt
     }
   }
 
@@ -93,6 +131,13 @@ async function main() {
     await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
   }
 
+  if (syncState.configChanged) {
+    await persistConfigUpdates(configPath, feeds)
+    await writeUrlUpdateLog(syncState.urlUpdates)
+  }
+
+  await writeSyncReports(reportsDir, now, summary, feedReports, syncState.urlUpdates)
+
   console.log(
     `Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`
   )
@@ -105,12 +150,12 @@ async function loadConfig(filePath) {
   try {
     const raw = await fs.readFile(filePath, 'utf8')
     const data = JSON.parse(raw)
-    return Array.isArray(data) ? data : []
+    return { feeds: Array.isArray(data) ? data : [], raw }
   } catch (error) {
     if (error.code !== 'ENOENT') {
       console.warn('[sync-events] Failed to read config:', error.message)
     }
-    return []
+    return { feeds: [], raw: '[]' }
   }
 }
 
@@ -156,83 +201,147 @@ function getSourceId(event) {
   return ''
 }
 
-async function fetchFeed(feed) {
+async function fetchFeed(feed, feedReport, syncState) {
   if (!feed) return []
 
-  if (feed.parser) {
-    const adapter = getAdapter(feed.parser)
-    if (!adapter) {
-      throw new Error(`Unknown adapter ${feed.parser}`)
+  try {
+    if (feed.parser) {
+      const adapter = getAdapter(feed.parser)
+      if (!adapter) {
+        throw new Error(`Unknown adapter ${feed.parser}`)
+      }
+      const context = createAdapterContext(feed, feedReport, syncState)
+      const payload = await adapter(feed, context)
+      return Array.isArray(payload) ? payload : []
     }
-    const context = createAdapterContext(feed)
-    const payload = await adapter(feed, context)
-    return Array.isArray(payload) ? payload : []
-  }
 
-  const type = (feed.type || 'rss').toLowerCase()
+    const type = (feed.type || 'rss').toLowerCase()
 
-  if (type === 'rss') {
-    const xml = await fetchText(feed.url, feed, {}, 'application/rss+xml, application/xml;q=0.9, */*;q=0.1')
-    if (!xml) return []
+    if (type === 'rss') {
+      const xml = await fetchText(
+        feed.url,
+        feed,
+        {},
+        'application/rss+xml, application/xml;q=0.9, */*;q=0.1',
+        { feedReport, state: syncState }
+      )
+      if (!xml) return []
 
-    let response = null
-    try {
-      response = await parser.parseString(xml)
-    } catch (error) {
-      console.warn(`[sync-events] Failed to parse RSS feed ${feed.id || feed.url}:`, error.message)
+      let response = null
+      try {
+        response = await parser.parseString(xml)
+      } catch (error) {
+        feedReport.errors.push(error.message || String(error))
+        console.warn(`[sync-events] Failed to parse RSS feed ${feed.id || feed.url}:`, error.message)
+        return []
+      }
+
+      return Array.isArray(response.items) ? response.items : []
+    }
+
+    if (type === 'json') {
+      const data = await fetchJson(feed.url, feed, {}, { feedReport, state: syncState })
+      if (!data) return []
+      if (Array.isArray(data)) return data
+      if (Array.isArray(data.items)) return data.items
+      if (Array.isArray(data.results)) return data.results
       return []
     }
 
-    return Array.isArray(response.items) ? response.items : []
+    if (type === 'ics') {
+      return fetchIcs(feed, feedReport, syncState)
+    }
+
+    if (type === 'html') {
+      const adapter = getAdapter('simpleHtmlList')
+      if (!adapter) return []
+      const context = createAdapterContext(feed, feedReport, syncState)
+      const payload = await adapter(feed, context)
+      return Array.isArray(payload) ? payload : []
+    }
+  } catch (error) {
+    feedReport.errors.push(error.message || String(error))
+    feedReport.status = 'error'
+    const fallback = await tryHtmlFallback(feed, feedReport, syncState)
+    if (fallback.length) {
+      return fallback
+    }
+    throw error
   }
 
-  if (type === 'json') {
-    const data = await fetchJson(feed.url, feed)
-    if (!data) return []
-    if (Array.isArray(data)) return data
-    if (Array.isArray(data.items)) return data.items
-    if (Array.isArray(data.results)) return data.results
-    return []
-  }
-
-  if (type === 'ics') {
-    return fetchIcs(feed)
-  }
-
-  if (type === 'html') {
-    const adapter = getAdapter('simpleHtmlList')
-    if (!adapter) return []
-    const context = createAdapterContext(feed)
-    const payload = await adapter(feed, context)
-    return Array.isArray(payload) ? payload : []
+  const fallback = await tryHtmlFallback(feed, feedReport, syncState)
+  if (fallback.length) {
+    return fallback
   }
 
   return []
 }
 
-async function fetchIcs(feed) {
-  const text = await fetchText(feed.url, feed, {}, 'text/calendar, application/octet-stream;q=0.8, */*;q=0.1')
+async function fetchIcs(feed, feedReport, syncState) {
+  const text = await fetchText(
+    feed.url,
+    feed,
+    {},
+    'text/calendar, application/octet-stream;q=0.8, */*;q=0.1',
+    { feedReport, state: syncState }
+  )
   if (!text) return []
 
   try {
     const events = await ical.async.parseICS(text)
     return Object.values(events).filter((entry) => entry && entry.type === 'VEVENT')
   } catch (error) {
+    feedReport.errors.push(error.message || String(error))
     console.warn(`[sync-events] Failed to parse ICS feed ${feed.id || feed.url}:`, error.message)
     return []
   }
 }
 
-function createAdapterContext(feed) {
+function createAdapterContext(feed, feedReport, syncState) {
   return {
     now: new Date(),
     resolveUrl: (value) => resolveUrl(value, feed),
-    fetchJson: (url, init = {}) => fetchJson(url, feed, init),
-    fetchText: (url, init = {}, accept) => fetchText(url, feed, init, accept),
+    fetchJson: (url, init = {}) => fetchJson(url, feed, init, { feedReport, state: syncState }),
+    fetchText: (url, init = {}, accept) => fetchText(url, feed, init, accept, { feedReport, state: syncState }),
     jsonHeaders: (localFeed) => buildHeaderObject(localFeed || feed, 'json'),
     htmlHeaders: (localFeed) => buildHeaderObject(localFeed || feed, 'html'),
     cleanText,
   }
+}
+
+async function tryHtmlFallback(feed, feedReport, syncState) {
+  if (!feed || feed.__fallbackAttempted) return []
+  feed.__fallbackAttempted = true
+
+  const candidateUrl = feed.html?.url || feed.sourceUrl || ''
+  if (!candidateUrl || resolveUrl(candidateUrl, feed) === resolveUrl(feed.url, feed)) {
+    return []
+  }
+
+  const adapter = getAdapter('simpleHtmlList')
+  if (!adapter) return []
+
+  const fallbackFeed = {
+    ...feed,
+    type: 'html',
+    url: candidateUrl,
+    html: { ...(feed.html || {}), ...(feed.htmlFallback || {}) },
+  }
+
+  try {
+    const context = createAdapterContext(fallbackFeed, feedReport, syncState)
+    const payload = await adapter(fallbackFeed, context)
+    if (Array.isArray(payload) && payload.length) {
+      feedReport.fallbackUsed = true
+      feedReport.fallbackUrl = resolveUrl(candidateUrl, feed)
+      feedReport.status = feedReport.status === 'error' ? 'warning' : feedReport.status
+      return payload
+    }
+  } catch (error) {
+    feedReport.errors.push(error.message || String(error))
+  }
+
+  return []
 }
 
 function buildHeaderObject(feed, mode) {
@@ -242,6 +351,15 @@ function buildHeaderObject(feed, mode) {
   }
   if (feed?.referer && !('Referer' in headers) && !('referer' in headers)) {
     headers.Referer = feed.referer
+  }
+  if (!('Accept-Language' in headers) && !('accept-language' in headers)) {
+    headers['Accept-Language'] = 'en-CA,en;q=0.9'
+  }
+  if (!('Cache-Control' in headers) && !('cache-control' in headers)) {
+    headers['Cache-Control'] = 'no-cache'
+  }
+  if (!('Pragma' in headers) && !('pragma' in headers)) {
+    headers.Pragma = 'no-cache'
   }
   if (mode === 'json') {
     if (!('Accept' in headers) && !('accept' in headers)) {
@@ -255,7 +373,7 @@ function buildHeaderObject(feed, mode) {
   return headers
 }
 
-async function fetchText(url, feed, init = {}, accept) {
+async function fetchText(url, feed, init = {}, accept, options = {}) {
   const absolute = resolveUrl(url, feed)
   if (!absolute) return ''
 
@@ -264,11 +382,31 @@ async function fetchText(url, feed, init = {}, accept) {
     requestInit.headers.Accept = accept
   }
 
-  const response = await performFetchWithRetry(absolute, requestInit, feed)
-  return response.text()
+  const attempted = new Set()
+  let target = absolute
+
+  while (target) {
+    attempted.add(target)
+    try {
+      const response = await performFetchWithRetry(target, requestInit, feed, options)
+      return response.text()
+    } catch (error) {
+      if (!shouldAttemptDiscovery(error, feed, options)) {
+        throw error
+      }
+      const discovered = await attemptAutoDiscoverUrl(feed, target, error, requestInit, options)
+      if (discovered && !attempted.has(discovered)) {
+        target = discovered
+        continue
+      }
+      throw error
+    }
+  }
+
+  return ''
 }
 
-async function fetchJson(url, feed, init = {}) {
+async function fetchJson(url, feed, init = {}, options = {}) {
   const absolute = resolveUrl(url, feed)
   if (!absolute) return null
   const requestInit = buildRequestInit(feed, init)
@@ -276,16 +414,311 @@ async function fetchJson(url, feed, init = {}) {
     requestInit.headers.Accept = 'application/json, text/javascript;q=0.9, */*;q=0.1'
   }
 
-  const response = await performFetchWithRetry(absolute, requestInit, feed)
-  const text = await response.text()
-  if (!text) return null
+  const attempted = new Set()
+  let target = absolute
 
+  while (target) {
+    attempted.add(target)
+    try {
+      const response = await performFetchWithRetry(target, requestInit, feed, options)
+      const text = await response.text()
+      if (!text) return null
+
+      try {
+        return JSON.parse(text)
+      } catch (error) {
+        console.warn(`[sync-events] Failed to parse JSON feed ${feed.id || feed.url}:`, error.message)
+        return null
+      }
+    } catch (error) {
+      if (!shouldAttemptDiscovery(error, feed, options)) {
+        throw error
+      }
+      const discovered = await attemptAutoDiscoverUrl(feed, target, error, requestInit, options)
+      if (discovered && !attempted.has(discovered)) {
+        target = discovered
+        continue
+      }
+      throw error
+    }
+  }
+
+  return null
+}
+
+function shouldAttemptDiscovery(error, feed, options = {}) {
+  if (!feed || feed.autoDiscover === false) return false
+  if (options && options.allowDiscovery === false) return false
+  const status = Number(error?.status || error?.response?.status)
+  if (status === 404 || status === 410) return true
+  if (status === 301 || status === 302 || status === 307 || status === 308) return true
+  if (!Number.isFinite(status)) {
+    const code = error?.code
+    if (code && (code === 'ENOTFOUND' || code === 'ECONNREFUSED' || code === 'EAI_AGAIN')) {
+      return true
+    }
+  }
+  return false
+}
+
+async function attemptAutoDiscoverUrl(feed, failingUrl, error, requestInit, options = {}) {
+  const state = options.state || { urlUpdates: [] }
+  const feedReport = options.feedReport
+  const candidates = []
+
+  const parsed = safeUrlParse(failingUrl)
+  if (parsed) {
+    const flipped = flipProtocol(parsed)
+    if (flipped) {
+      candidates.push({ url: flipped, hint: 'protocol-flip' })
+    }
+  }
+
+  if (Array.isArray(feed?.alternateUrls)) {
+    for (const candidate of feed.alternateUrls) {
+      const resolved = resolveUrl(candidate, feed)
+      if (resolved) {
+        candidates.push({ url: resolved, hint: 'alternate' })
+      }
+    }
+  }
+
+  const discoveredFromSource = await discoverFromSourcePage(feed)
+  if (discoveredFromSource) {
+    candidates.push({ url: discoveredFromSource, hint: 'source-html' })
+  }
+
+  for (const candidate of candidates) {
+    if (!candidate?.url || candidate.url === failingUrl) continue
+    const probe = await probeCandidateUrl(candidate.url, feed, requestInit)
+    if (!probe) continue
+
+    feed.url = probe.finalUrl
+    const updateEntry = {
+      id: feed.id || '',
+      previousUrl: failingUrl,
+      nextUrl: probe.finalUrl,
+      status: probe.status,
+      discoveredAt: new Date().toISOString(),
+      hint: candidate.hint || '',
+    }
+    if (state.urlUpdates) {
+      state.urlUpdates.push(updateEntry)
+    }
+    state.configChanged = true
+    if (feedReport) {
+      feedReport.url = probe.finalUrl
+      feedReport.discoveredUrl = probe.finalUrl
+      feedReport.discoveryStatus = probe.status
+      feedReport.discoveryHint = candidate.hint || ''
+    }
+    return probe.finalUrl
+  }
+
+  return ''
+}
+
+function safeUrlParse(value) {
+  if (!value) return null
   try {
-    return JSON.parse(text)
+    return new URL(value)
   } catch (error) {
-    console.warn(`[sync-events] Failed to parse JSON feed ${feed.id || feed.url}:`, error.message)
     return null
   }
+}
+
+function flipProtocol(urlObj) {
+  if (!urlObj) return ''
+  if (urlObj.protocol === 'https:') {
+    return `http:${urlObj.href.slice(urlObj.protocol.length)}`
+  }
+  if (urlObj.protocol === 'http:') {
+    return `https:${urlObj.href.slice(urlObj.protocol.length)}`
+  }
+  return ''
+}
+
+async function discoverFromSourcePage(feed) {
+  const sourceUrl = resolveUrl(feed?.sourceUrl || feed?.discoveryUrl, feed)
+  if (!sourceUrl) return ''
+
+  try {
+    const response = await fetch(sourceUrl, {
+      method: 'GET',
+      headers: buildHeaderObject(feed, 'html'),
+    })
+    if (!response.ok) return ''
+    const html = await response.text()
+    const extracted = extractCalendarUrlFromHtml(html)
+    return extracted ? resolveUrl(extracted, feed) : ''
+  } catch (error) {
+    return ''
+  }
+}
+
+function extractCalendarUrlFromHtml(html) {
+  if (!html) return ''
+  const patterns = [
+    /<link[^>]+rel=["']alternate["'][^>]+type=["']text\/calendar["'][^>]+href=["']([^"']+)["']/gi,
+    /href=["']([^"']+Download\.ics[^"']*)["']/gi,
+    /href=["']([^"']+\.ics[^"']*)["']/gi,
+    /href=["']([^"']+ical=1[^"']*)["']/gi,
+  ]
+
+  for (const pattern of patterns) {
+    const match = pattern.exec(html)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+
+  return ''
+}
+
+async function probeCandidateUrl(candidateUrl, feed, requestInit) {
+  try {
+    const init = {
+      ...requestInit,
+      headers: { ...(requestInit.headers || {}) },
+      method: requestInit.method || 'GET',
+      signal: undefined,
+    }
+    const response = await fetch(candidateUrl, init)
+    if (!response.ok) {
+      return null
+    }
+    if (response.body && typeof response.body.cancel === 'function') {
+      try {
+        response.body.cancel()
+      } catch (error) {
+        // ignore
+      }
+    }
+    return { status: response.status, finalUrl: response.url || candidateUrl }
+  } catch (error) {
+    return null
+  }
+}
+
+function captureHeaders(headers) {
+  if (!headers || typeof headers.forEach !== 'function') return {}
+  const result = {}
+  headers.forEach((value, key) => {
+    if (key in result) {
+      const existing = result[key]
+      if (Array.isArray(existing)) {
+        existing.push(value)
+      } else {
+        result[key] = [existing, value]
+      }
+    } else {
+      result[key] = value
+    }
+  })
+  return result
+}
+
+function createFeedReport(feed) {
+  return {
+    id: feed?.id || '',
+    name: feed?.sourceName || '',
+    type: (feed?.type || '').toLowerCase() || (feed?.parser ? `adapter:${feed.parser}` : ''),
+    parser: feed?.parser || '',
+    town: feed?.town || '',
+    category: feed?.category || '',
+    url: feed?.url || '',
+    status: 'pending',
+    created: 0,
+    updated: 0,
+    unchanged: 0,
+    itemsFetched: 0,
+    errors: [],
+    fallbackUsed: false,
+    fallbackUrl: '',
+    discoveredUrl: '',
+    discoveryStatus: 0,
+    discoveryHint: '',
+    redirected: false,
+    lastResolvedUrl: '',
+    lastRequestedUrl: '',
+    lastStatus: 0,
+    lastHeaders: {},
+    lastError: '',
+    durationMs: 0,
+    startedAt: '',
+    finishedAt: '',
+  }
+}
+
+async function persistConfigUpdates(filePath, feeds) {
+  if (!Array.isArray(feeds) || !feeds.length) return
+  const serialized = `${JSON.stringify(feeds, null, 2)}\n`
+  await fs.writeFile(filePath, serialized, 'utf8')
+}
+
+async function writeUrlUpdateLog(updates = []) {
+  if (!Array.isArray(updates) || updates.length === 0) return
+  await fs.mkdir(path.dirname(urlUpdateLogPath), { recursive: true })
+  const lines = updates.map((entry) => JSON.stringify(entry))
+  await fs.appendFile(urlUpdateLogPath, `${lines.join('\n')}\n`, 'utf8')
+}
+
+async function writeSyncReports(dir, now, summary, feedReports, urlUpdates) {
+  await fs.mkdir(dir, { recursive: true })
+  const timestamp = DateTime.fromJSDate(now).setZone('America/Toronto')
+  const stamp = timestamp.toFormat('yyyyLLdd-HHmmss')
+  const payload = {
+    generatedAt: timestamp.toISO(),
+    totals: summary,
+    feeds: feedReports,
+    urlUpdates,
+  }
+  const serialized = `${JSON.stringify(payload, null, 2)}\n`
+  await fs.writeFile(path.join(dir, `${stamp}.json`), serialized, 'utf8')
+  await fs.writeFile(path.join(dir, 'latest.json'), serialized, 'utf8')
+  const markdown = buildMarkdownReport(timestamp, summary, feedReports, urlUpdates)
+  await fs.writeFile(path.join(dir, 'latest.md'), markdown, 'utf8')
+}
+
+function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates) {
+  const header = `# Events Sync Report — ${timestamp.toFormat('yyyy-LL-dd HH:mm ZZZZ')}\n\n`
+  const totals = [
+    `* Created: ${summary.created}`,
+    `* Updated: ${summary.updated}`,
+    `* Unchanged: ${summary.unchanged}`,
+    `* Errors: ${summary.errors}`,
+  ].join('\n')
+
+  const updatesSection =
+    urlUpdates && urlUpdates.length
+      ? `\n\n## URL Updates\n\n${urlUpdates
+          .map(
+            (entry) =>
+              `- **${entry.id || 'unknown'}**: ${entry.previousUrl} → ${entry.nextUrl} (HTTP ${entry.status}${entry.hint ? `, ${entry.hint}` : ''})`
+          )
+          .join('\n')}`
+      : '\n\n## URL Updates\n\n- None'
+
+  const feedTableHeader =
+    '\n\n## Feed Breakdown\n\n| Feed | Created | Updated | Unchanged | Items | Status | Notes |\n| --- | ---: | ---: | ---: | ---: | --- | --- |\n'
+
+  const feedRows = feedReports
+    .map((feed) => {
+      const name = feed.name || feed.id || feed.url || 'Unknown'
+      const status = feed.status || 'pending'
+      const notes = []
+      if (feed.errors.length) notes.push(`${feed.errors.length} error(s)`)
+      if (feed.fallbackUsed) notes.push('HTML fallback')
+      if (feed.discoveredUrl) notes.push('URL updated')
+      if (!feed.itemsFetched) notes.push('No items')
+      const noteText = notes.join(', ') || '\u2014'
+      return `| ${name} | ${feed.created} | ${feed.updated} | ${feed.unchanged} | ${feed.itemsFetched} | ${status} | ${noteText} |`
+    })
+    .join('\n')
+
+  const renderedRows = feedRows || '| _(none)_ | 0 | 0 | 0 | 0 | — | — |'
+
+  return `${header}${totals}${updatesSection}${feedTableHeader}${renderedRows}\n`
 }
 
 function buildRequestInit(feed, init = {}) {
@@ -296,15 +729,25 @@ function buildRequestInit(feed, init = {}) {
   if (feed?.referer && !('Referer' in headers) && !('referer' in headers)) {
     headers.Referer = feed.referer
   }
-  return { ...init, headers }
+  if (!('Accept-Language' in headers) && !('accept-language' in headers)) {
+    headers['Accept-Language'] = 'en-CA,en;q=0.9'
+  }
+  if (!('Cache-Control' in headers) && !('cache-control' in headers)) {
+    headers['Cache-Control'] = 'no-cache'
+  }
+  if (!('Pragma' in headers) && !('pragma' in headers)) {
+    headers.Pragma = 'no-cache'
+  }
+  return { ...init, headers, redirect: init.redirect || 'follow' }
 }
 
-async function performFetchWithRetry(url, init, feed) {
+async function performFetchWithRetry(url, init, feed, options = {}) {
   const attempts = getNumericOption(feed?.retryAttempts, DEFAULT_RETRY_ATTEMPTS)
   const timeoutMs = getNumericOption(feed?.timeoutMs, DEFAULT_TIMEOUT_MS)
   const retryDelayMs = getNumericOption(feed?.retryDelayMs, DEFAULT_RETRY_DELAY_MS)
 
   let lastError = null
+  const feedReport = options.feedReport
 
   for (let attempt = 1; attempt <= attempts; attempt++) {
     const attemptInit = applyTimeoutToInit(init, timeoutMs)
@@ -313,7 +756,17 @@ async function performFetchWithRetry(url, init, feed) {
       const response = await fetch(url, attemptInit.requestInit)
 
       if (!response.ok) {
+        const finalUrl = response.url || url
+        if (feedReport) {
+          feedReport.lastRequestedUrl = url
+          feedReport.lastResolvedUrl = finalUrl
+          feedReport.lastStatus = response.status
+          feedReport.lastHeaders = captureHeaders(response.headers)
+          feedReport.redirected = feedReport.redirected || finalUrl !== url
+        }
         const error = new Error(`HTTP ${response.status}`)
+        error.status = response.status
+        error.url = finalUrl
         if (attempt < attempts && shouldRetryStatus(response.status)) {
           lastError = error
           await waitWithBackoff(attempt, retryDelayMs)
@@ -322,9 +775,21 @@ async function performFetchWithRetry(url, init, feed) {
         throw error
       }
 
+      if (feedReport) {
+        const finalUrl = response.url || url
+        feedReport.lastRequestedUrl = url
+        feedReport.lastResolvedUrl = finalUrl
+        feedReport.lastStatus = response.status
+        feedReport.lastHeaders = captureHeaders(response.headers)
+        feedReport.redirected = feedReport.redirected || finalUrl !== url
+      }
+
       return response
     } catch (error) {
       lastError = error
+      if (feedReport) {
+        feedReport.lastError = error.message || String(error)
+      }
       if (attempt >= attempts || !shouldRetryError(error)) {
         throw error
       }
