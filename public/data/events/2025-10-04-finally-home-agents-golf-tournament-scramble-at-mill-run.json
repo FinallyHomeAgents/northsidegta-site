@@ -11,16 +11,21 @@
   "ticketsUrl": "",
   "userEventType": "Sports",
   "endDate": "2025-10-04T20:00:00.000Z",
+  "approvedAt": "2025-10-02T00:55:54.635Z",
   "slug": "2025-10-04-finally-home-agents-golf-tournament-scramble-at-mill-run",
   "organizerEmail": "matthewglmulhall@gmail.com",
+  "featured": true,
   "submittedAt": "2025-10-02T00:31:25.623Z",
+  "badges": [
+    "Outdoors"
+  ],
   "recurrence": "",
   "startDate": "2025-10-04T14:00:00.000Z",
   "town": "Uxbridge",
   "status": "approved",
   "priceFrom": "",
   "address": "269 Durham Rd 8",
-  "eventUrl": "",
+  "eventUrl": "northsidegta.ca",
   "registrationUrl": "",
   "categoryTags": [
     "Community",
@@ -40,6 +45,5 @@
   "audienceTags": [
     "All ages"
   ],
-  "category": "",
-  "approvedAt": "2025-10-02T00:55:54.635Z"
+  "category": "Sports"
 }
