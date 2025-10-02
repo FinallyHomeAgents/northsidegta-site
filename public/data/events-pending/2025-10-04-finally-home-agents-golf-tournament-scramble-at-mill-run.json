@@ -1,0 +1,43 @@
+{
+  "title": "Finally Home Agents Golf Tournament – Scramble at Mill Run",
+  "slug": "2025-10-04-finally-home-agents-golf-tournament-scramble-at-mill-run",
+  "status": "pending",
+  "startDate": "2025-10-04T14:00:00.000Z",
+  "endDate": "2025-10-04T20:00:00.000Z",
+  "allDay": false,
+  "recurrence": "",
+  "userEventType": "Sports",
+  "category": "",
+  "categoryTags": [
+    "Community",
+    "Sports",
+    "Business/Networking",
+    "Charity"
+  ],
+  "audienceTags": [
+    "All ages"
+  ],
+  "town": "Uxbridge",
+  "locationName": "Mill Run Golf Club",
+  "address": "269 Durham Rd 8",
+  "postalCode": "L9P 1R1",
+  "priceType": "Free",
+  "priceFrom": "",
+  "priceNote": "",
+  "ticketsUrl": "",
+  "registrationUrl": "",
+  "image": "https://www.golfmillrun.com/wp-content/uploads/sites/8013/2020/10/DSC_0106.jpg",
+  "summary": "This will be a scramble-format tournament, bringing together many of our current and past clients, friends, and community members for a great day of golf.",
+  "description": "This will be a scramble-format tournament, bringing together many of our current and past clients, friends, and community members for a great day of golf.\n\nProceeds from this event will support WarriorGirlSloane.com , helping make a difference for an important cause.\n\nEnjoy a fun-filled day with golf, community, and giving back.",
+  "organizerName": "Finally Home Agents",
+  "organizerEmail": "matthewglmulhall@gmail.com",
+  "eventUrl": "",
+  "source": "user",
+  "sourceName": "Finally Home Agents",
+  "submittedAt": "2025-10-02T00:31:25.623Z",
+  "contactConsent": true,
+  "moderation": {
+    "ip": "173.35.217.208",
+    "submittedVia": "public-form"
+  }
+}
