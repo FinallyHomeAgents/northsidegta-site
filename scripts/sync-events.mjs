@@ -223,7 +223,7 @@ async function fetchFeed(feed, feedReport, syncState) {
         feed,
         {},
         'application/rss+xml, application/xml;q=0.9, */*;q=0.1',
-        { feedReport, state: syncState }
+        { feedReport, state: syncState, persistResolvedUrl: true }
       )
       if (!xml) return []
 
@@ -240,7 +240,11 @@ async function fetchFeed(feed, feedReport, syncState) {
     }
 
     if (type === 'json') {
-      const data = await fetchJson(feed.url, feed, {}, { feedReport, state: syncState })
+      const data = await fetchJson(feed.url, feed, {}, {
+        feedReport,
+        state: syncState,
+        persistResolvedUrl: true,
+      })
       if (!data) return []
       if (Array.isArray(data)) return data
       if (Array.isArray(data.items)) return data.items
@@ -283,7 +287,7 @@ async function fetchIcs(feed, feedReport, syncState) {
     feed,
     {},
     'text/calendar, application/octet-stream;q=0.8, */*;q=0.1',
-    { feedReport, state: syncState }
+    { feedReport, state: syncState, persistResolvedUrl: true }
   )
   if (!text) return []
 
@@ -301,8 +305,10 @@ function createAdapterContext(feed, feedReport, syncState) {
   return {
     now: new Date(),
     resolveUrl: (value) => resolveUrl(value, feed),
-    fetchJson: (url, init = {}) => fetchJson(url, feed, init, { feedReport, state: syncState }),
-    fetchText: (url, init = {}, accept) => fetchText(url, feed, init, accept, { feedReport, state: syncState }),
+    fetchJson: (url, init = {}) =>
+      fetchJson(url, feed, init, { feedReport, state: syncState, persistResolvedUrl: false }),
+    fetchText: (url, init = {}, accept) =>
+      fetchText(url, feed, init, accept, { feedReport, state: syncState, persistResolvedUrl: false }),
     jsonHeaders: (localFeed) => buildHeaderObject(localFeed || feed, 'json'),
     htmlHeaders: (localFeed) => buildHeaderObject(localFeed || feed, 'html'),
     cleanText,
@@ -493,32 +499,15 @@ async function attemptAutoDiscoverUrl(feed, failingUrl, error, requestInit, opti
     const probe = await probeCandidateUrl(candidate.url, feed, requestInit)
     if (!probe) continue
 
-    feed.url = probe.finalUrl
-    const updateEntry = {
-      id: feed.id || '',
-      previousUrl: failingUrl,
-      nextUrl: probe.finalUrl,
-      status: probe.status,
-      discoveredAt: new Date().toISOString(),
-      hint: candidate.hint || '',
-      protocolFlipped: candidate.hint === 'protocol-flip',
-    }
-    if (state.urlUpdates) {
-      state.urlUpdates.push(updateEntry)
-    }
-    state.configChanged = true
-    if (feedReport) {
-      feedReport.url = probe.finalUrl
-      feedReport.discoveredUrl = probe.finalUrl
-      feedReport.discoveryStatus = probe.status
-      feedReport.discoveryHint = candidate.hint || ''
-      const redirectHop = { from: failingUrl, to: probe.finalUrl, status: probe.status }
-      if (Array.isArray(feedReport.redirectChain)) {
-        feedReport.redirectChain.push(redirectHop)
-      } else {
-        feedReport.redirectChain = [redirectHop]
-      }
-    }
+    persistUrlUpdate(
+      feed,
+      state,
+      feedReport,
+      failingUrl,
+      probe.finalUrl,
+      probe.status,
+      candidate.hint || ''
+    )
     return probe.finalUrl
   }
 
@@ -573,6 +562,7 @@ function extractCalendarUrlFromHtml(html) {
   ]
 
   for (const pattern of patterns) {
+    pattern.lastIndex = 0
     const match = pattern.exec(html)
     if (match && match[1]) {
       return match[1]
@@ -605,6 +595,82 @@ async function probeCandidateUrl(candidateUrl, feed, requestInit) {
   } catch (error) {
     return null
   }
+}
+
+function persistUrlUpdate(feed, state, feedReport, previousUrl, nextUrl, status, hint) {
+  if (!feed || !state) return false
+
+  const normalizedNext = normalizeComparableUrl(nextUrl)
+  const normalizedPrevious = normalizeComparableUrl(previousUrl || feed.url)
+
+  if (!normalizedNext) return false
+  if (urlsEqual(normalizedNext, normalizedPrevious)) return false
+  if (hint === 'redirect' && feed.autoPersistRedirects === false) return false
+  if (!/^https?:/i.test(normalizedNext)) return false
+
+  const entry = {
+    id: feed.id || '',
+    previousUrl: normalizedPrevious || '',
+    nextUrl: normalizedNext,
+    status: Number.isFinite(status) ? status : 0,
+    discoveredAt: new Date().toISOString(),
+    hint: hint || '',
+    protocolFlipped: hint === 'protocol-flip',
+  }
+
+  if (!Array.isArray(state.urlUpdates)) {
+    state.urlUpdates = []
+  }
+
+  const alreadyRecorded = state.urlUpdates.some(
+    (item) => urlsEqual(item.previousUrl, entry.previousUrl) && urlsEqual(item.nextUrl, entry.nextUrl)
+  )
+  if (!alreadyRecorded) {
+    state.urlUpdates.push(entry)
+  }
+
+  feed.url = normalizedNext
+  state.configChanged = true
+
+  if (feedReport) {
+    feedReport.url = normalizedNext
+    feedReport.discoveredUrl = normalizedNext
+    if (entry.status) {
+      feedReport.discoveryStatus = entry.status
+    }
+    if (entry.hint) {
+      feedReport.discoveryHint = entry.hint
+    }
+    feedReport.redirected = feedReport.redirected || hint === 'redirect'
+    feedReport.lastResolvedUrl = normalizedNext
+    const hop = { from: normalizedPrevious || previousUrl || '', to: normalizedNext, status: entry.status }
+    if (Array.isArray(feedReport.redirectChain)) {
+      feedReport.redirectChain.push(hop)
+    } else {
+      feedReport.redirectChain = [hop]
+    }
+  }
+
+  return true
+}
+
+function normalizeComparableUrl(value) {
+  const trimmed = typeof value === 'string' ? value.trim() : ''
+  if (!trimmed) return ''
+  try {
+    const url = new URL(trimmed)
+    url.hash = ''
+    const normalized = url.toString()
+    return normalized.replace(/\/+$/, '')
+  } catch (error) {
+    return trimmed.replace(/\s+/g, '')
+  }
+}
+
+function urlsEqual(a, b) {
+  if (!a && !b) return true
+  if (!a || !b) return false
+  return normalizeComparableUrl(a) === normalizeComparableUrl(b)
 }
 
 function captureHeaders(headers) {
@@ -645,6 +711,7 @@ function createFeedReport(feed) {
     discoveredUrl: '',
     discoveryStatus: 0,
     discoveryHint: '',
+    redirectChain: [],
     redirected: false,
     lastResolvedUrl: '',
     lastRequestedUrl: '',
@@ -782,13 +849,18 @@ async function performFetchWithRetry(url, init, feed, options = {}) {
         throw error
       }
 
+      const finalUrl = response.url || url
+
       if (feedReport) {
-        const finalUrl = response.url || url
         feedReport.lastRequestedUrl = url
         feedReport.lastResolvedUrl = finalUrl
         feedReport.lastStatus = response.status
         feedReport.lastHeaders = captureHeaders(response.headers)
         feedReport.redirected = feedReport.redirected || finalUrl !== url
+      }
+
+      if (options.persistResolvedUrl !== false && options.state && finalUrl && feed) {
+        persistUrlUpdate(feed, options.state, feedReport, feed.url || url, finalUrl, response.status, 'redirect')
       }
 
       return response
