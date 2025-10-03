@@ -41,7 +41,7 @@ async function main() {
   const now = new Date()
   const summary = { created: 0, updated: 0, unchanged: 0, errors: 0 }
   const feedReports = []
-  const syncState = { configChanged: false, urlUpdates: [] }
+  const syncState = { configChanged: false, urlUpdates: [], fallbacks: [] }
 
   for (const feed of feeds) {
     if (!feed || feed.enabled === false) continue
@@ -136,7 +136,7 @@ async function main() {
     await writeUrlUpdateLog(syncState.urlUpdates)
   }
 
-  await writeSyncReports(reportsDir, now, summary, feedReports, syncState.urlUpdates)
+  await writeSyncReports(reportsDir, now, summary, feedReports, syncState.urlUpdates, syncState.fallbacks)
 
   console.log(
     `Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`
@@ -289,15 +289,21 @@ async function fetchIcs(feed, feedReport, syncState) {
     'text/calendar, application/octet-stream;q=0.8, */*;q=0.1',
     { feedReport, state: syncState, persistResolvedUrl: true }
   )
-  if (!text) return []
+  const normalized = typeof text === 'string' ? text.trim() : ''
+  if (!normalized) {
+    throw new Error('ICS response was empty')
+  }
+  if (!/^BEGIN:VCALENDAR/i.test(normalized)) {
+    throw new Error('ICS response did not contain a VCALENDAR payload')
+  }
 
   try {
-    const events = await ical.async.parseICS(text)
+    const events = await ical.async.parseICS(normalized)
     return Object.values(events).filter((entry) => entry && entry.type === 'VEVENT')
   } catch (error) {
-    feedReport.errors.push(error.message || String(error))
-    console.warn(`[sync-events] Failed to parse ICS feed ${feed.id || feed.url}:`, error.message)
-    return []
+    const parseError = new Error(`ICS parse failed: ${error.message || error}`)
+    parseError.cause = error
+    throw parseError
   }
 }
 
@@ -339,7 +345,10 @@ async function tryHtmlFallback(feed, feedReport, syncState) {
     const payload = await adapter(fallbackFeed, context)
     if (Array.isArray(payload) && payload.length) {
       feedReport.fallbackUsed = true
-      feedReport.fallbackUrl = resolveUrl(candidateUrl, feed)
+      const resolvedFallbackUrl = resolveUrl(candidateUrl, feed)
+      feedReport.fallbackUrl = resolvedFallbackUrl
+      feedReport.fallbackPath = extractUrlPath(resolvedFallbackUrl) || extractUrlPath(candidateUrl)
+      recordFallbackUsage(syncState, feed, resolvedFallbackUrl, feedReport.fallbackPath)
       feedReport.status = feedReport.status === 'error' ? 'warning' : feedReport.status
       return payload
     }
@@ -348,6 +357,47 @@ async function tryHtmlFallback(feed, feedReport, syncState) {
   }
 
   return []
+}
+
+function recordFallbackUsage(state, feed, fallbackUrl, fallbackPath) {
+  if (!state) return
+  if (!Array.isArray(state.fallbacks)) {
+    state.fallbacks = []
+  }
+
+  const entry = {
+    id: feed?.id || '',
+    originalUrl: feed?.url || '',
+    fallbackUrl: fallbackUrl || '',
+    fallbackPath: fallbackPath || '',
+    usedAt: new Date().toISOString(),
+  }
+
+  const alreadyRecorded = state.fallbacks.some(
+    (item) => item.id === entry.id && item.fallbackUrl === entry.fallbackUrl
+  )
+
+  if (!alreadyRecorded) {
+    state.fallbacks.push(entry)
+  }
+}
+
+function extractUrlPath(value) {
+  if (!value) return ''
+  if (typeof value !== 'string') {
+    return ''
+  }
+
+  try {
+    const base = value.startsWith('http://') || value.startsWith('https://') ? undefined : 'https://placeholder.local'
+    const parsed = base ? new URL(value, base) : new URL(value)
+    const path = parsed.pathname || ''
+    const search = parsed.search || ''
+    const combined = `${path}${search}`
+    return combined || parsed.toString()
+  } catch (error) {
+    return value
+  }
 }
 
 function buildHeaderObject(feed, mode) {
@@ -708,6 +758,7 @@ function createFeedReport(feed) {
     errors: [],
     fallbackUsed: false,
     fallbackUrl: '',
+    fallbackPath: '',
     discoveredUrl: '',
     discoveryStatus: 0,
     discoveryHint: '',
@@ -737,7 +788,7 @@ async function writeUrlUpdateLog(updates = []) {
   await fs.appendFile(urlUpdateLogPath, `${lines.join('\n')}\n`, 'utf8')
 }
 
-async function writeSyncReports(dir, now, summary, feedReports, urlUpdates) {
+async function writeSyncReports(dir, now, summary, feedReports, urlUpdates, fallbacks = []) {
   await fs.mkdir(dir, { recursive: true })
   const timestamp = DateTime.fromJSDate(now).setZone('America/Toronto')
   const stamp = timestamp.toFormat('yyyyLLdd-HHmmss')
@@ -746,15 +797,16 @@ async function writeSyncReports(dir, now, summary, feedReports, urlUpdates) {
     totals: summary,
     feeds: feedReports,
     urlUpdates,
+    fallbacks,
   }
   const serialized = `${JSON.stringify(payload, null, 2)}\n`
   await fs.writeFile(path.join(dir, `${stamp}.json`), serialized, 'utf8')
   await fs.writeFile(path.join(dir, 'latest.json'), serialized, 'utf8')
-  const markdown = buildMarkdownReport(timestamp, summary, feedReports, urlUpdates)
+  const markdown = buildMarkdownReport(timestamp, summary, feedReports, urlUpdates, fallbacks)
   await fs.writeFile(path.join(dir, 'latest.md'), markdown, 'utf8')
 }
 
-function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates) {
+function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates, fallbacks = []) {
   const header = `# Events Sync Report — ${timestamp.toFormat('yyyy-LL-dd HH:mm ZZZZ')}\n\n`
   const totals = [
     `* Created: ${summary.created}`,
@@ -764,14 +816,28 @@ function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates) {
   ].join('\n')
 
   const updatesSection =
-    urlUpdates && urlUpdates.length
+    Array.isArray(urlUpdates) && urlUpdates.length
       ? `\n\n## URL Updates\n\n${urlUpdates
           .map(
             (entry) =>
-              `- **${entry.id || 'unknown'}**: ${entry.previousUrl} → ${entry.nextUrl} (HTTP ${entry.status}${entry.hint ? `, ${entry.hint}` : ''})`
+              `- **${entry.id || 'unknown'}**: ${entry.previousUrl} → ${entry.nextUrl} (HTTP ${entry.status}${
+                entry.hint ? `, ${entry.hint}` : ''
+              })`
           )
           .join('\n')}`
       : '\n\n## URL Updates\n\n- None'
+
+  const fallbackSection =
+    Array.isArray(fallbacks) && fallbacks.length
+      ? `\n\n## HTML Fallbacks\n\n${fallbacks
+          .map(
+            (entry) =>
+              `- **${entry.id || 'unknown'}**: ${entry.originalUrl || 'n/a'} ⇢ ${
+                entry.fallbackPath || entry.fallbackUrl || 'n/a'
+              }`
+          )
+          .join('\n')}`
+      : '\n\n## HTML Fallbacks\n\n- None'
 
   const feedTableHeader =
     '\n\n## Feed Breakdown\n\n| Feed | Created | Updated | Unchanged | Items | Status | Notes |\n| --- | ---: | ---: | ---: | ---: | --- | --- |\n'
@@ -782,7 +848,8 @@ function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates) {
       const status = feed.status || 'pending'
       const notes = []
       if (feed.errors.length) notes.push(`${feed.errors.length} error(s)`)
-      if (feed.fallbackUsed) notes.push('HTML fallback')
+      if (feed.fallbackUsed)
+        notes.push(feed.fallbackPath ? `HTML fallback → ${feed.fallbackPath}` : 'HTML fallback')
       if (feed.discoveredUrl) notes.push('URL updated')
       if (!feed.itemsFetched) notes.push('No items')
       const noteText = notes.join(', ') || '\u2014'
@@ -792,7 +859,7 @@ function buildMarkdownReport(timestamp, summary, feedReports, urlUpdates) {
 
   const renderedRows = feedRows || '| _(none)_ | 0 | 0 | 0 | 0 | — | — |'
 
-  return `${header}${totals}${updatesSection}${feedTableHeader}${renderedRows}\n`
+  return `${header}${totals}${updatesSection}${fallbackSection}${feedTableHeader}${renderedRows}\n`
 }
 
 function buildRequestInit(feed, init = {}) {
