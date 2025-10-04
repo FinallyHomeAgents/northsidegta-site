@@ -41,6 +41,9 @@ export default function CommunityPage() {
   const [filters, setFilters] = React.useState(buildFiltersDefaults)
   const [view, setView] = usePersistedView('list')
   const [selectedEvent, setSelectedEvent] = React.useState(null)
+  const [highlightedSlug, setHighlightedSlug] = React.useState('')
+  const [deepLinkSlug, setDeepLinkSlug] = React.useState('')
+  const deepLinkResetRef = React.useRef({ slug: '', attempted: false })
 
   React.useEffect(() => {
     let cancelled = false
@@ -90,6 +93,69 @@ export default function CommunityPage() {
 
   const pageDescription =
     'Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.'
+
+  const parseHashSlug = React.useCallback(() => {
+    if (typeof window === 'undefined') return ''
+    const { hash } = window.location
+    if (!hash) return ''
+    const cleaned = hash.replace(/^#/, '')
+    if (!cleaned.startsWith('event-')) return ''
+    return decodeURIComponent(cleaned.replace('event-', ''))
+  }, [])
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const handleHashChange = () => {
+      const slug = parseHashSlug()
+      setDeepLinkSlug(slug)
+    }
+    handleHashChange()
+    window.addEventListener('hashchange', handleHashChange)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [parseHashSlug])
+
+  React.useEffect(() => {
+    if (!deepLinkSlug) return
+    const targetEvent = events.find((event) => event.slug === deepLinkSlug)
+    if (!targetEvent) return
+
+    if (deepLinkResetRef.current.slug !== deepLinkSlug) {
+      deepLinkResetRef.current = { slug: deepLinkSlug, attempted: false }
+    }
+
+    setView('list')
+
+    const tracker = deepLinkResetRef.current
+
+    if (!filteredEvents.some((event) => event.slug === deepLinkSlug)) {
+      if (!tracker.attempted) {
+        tracker.attempted = true
+        setFilters(buildFiltersDefaults())
+      }
+      return
+    }
+
+    setHighlightedSlug(deepLinkSlug)
+    setSelectedEvent(targetEvent)
+
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        const element = document.getElementById(`event-${deepLinkSlug}`)
+        if (element && typeof element.scrollIntoView === 'function') {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      })
+    }
+  }, [deepLinkSlug, events, filteredEvents, setFilters, setView])
+
+  React.useEffect(() => {
+    if (!highlightedSlug) return undefined
+    if (typeof window === 'undefined') return undefined
+    const timeout = window.setTimeout(() => setHighlightedSlug(''), 6000)
+    return () => window.clearTimeout(timeout)
+  }, [highlightedSlug])
 
   const handleResetFilters = () => {
     setFilters(buildFiltersDefaults())
@@ -212,7 +278,12 @@ export default function CommunityPage() {
                   </div>
                   <div className="grid gap-6 md:grid-cols-2">
                     {featuredEvents.map((event) => (
-                      <EventCard key={event.slug} event={event} onSelect={setSelectedEvent} />
+                      <EventCard
+                        key={event.slug}
+                        event={event}
+                        onSelect={setSelectedEvent}
+                        highlighted={highlightedSlug === event.slug}
+                      />
                     ))}
                   </div>
                 </section>
@@ -222,7 +293,12 @@ export default function CommunityPage() {
                 <section className="space-y-6">
                   <div className="grid gap-6 lg:grid-cols-2">
                     {filteredEvents.map((event) => (
-                      <EventCard key={event.slug} event={event} onSelect={setSelectedEvent} />
+                      <EventCard
+                        key={event.slug}
+                        event={event}
+                        onSelect={setSelectedEvent}
+                        highlighted={highlightedSlug === event.slug}
+                      />
                     ))}
                   </div>
                   {!filteredEvents.length && emptyState}
