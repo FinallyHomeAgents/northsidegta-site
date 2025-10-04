@@ -131,7 +131,7 @@ function main() {
       return publishable && !hidden
     })
     .map((event) => ({
-      path: `/community/events/${event.slug.trim()}`,
+      path: `/events/${event.slug.trim()}`,
       changefreq: 'monthly',
       priority: '0.4',
       lastmod: sanitizeDate(event.updatedAt || event.endDate || event.startDate),

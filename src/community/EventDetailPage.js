@@ -1,10 +1,24 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { ArrowLeft, CalendarPlus, ExternalLink, MapPin } from 'lucide-react'
+import {
+  ArrowLeft,
+  CalendarPlus,
+  ExternalLink,
+  MapPin,
+  Share2,
+  Copy,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Mail,
+} from 'lucide-react'
 import Navigation from '../Navigation'
 import Footer from '../Footer'
 import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils'
+
+const SITE_ORIGIN = 'https://northsidegta.ca'
+const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
 
 function splitParagraphs(text) {
   return text
@@ -13,17 +27,21 @@ function splitParagraphs(text) {
     .filter(Boolean)
 }
 
-function buildEventSchema(event, origin) {
+function toAbsoluteUrl(path, origin = SITE_ORIGIN) {
+  if (!path) return ''
+  if (/^https?:\/\//i.test(path)) return path
+  const base = typeof origin === 'string' && origin ? origin.replace(/\/$/, '') : SITE_ORIGIN
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  return `${base}${normalizedPath}`
+}
+
+function buildEventSchema(event, origin = SITE_ORIGIN) {
   if (!event) return null
-  const baseOrigin = typeof origin === 'string' && origin ? origin : 'https://www.northsidegta.ca'
-  const canonical = `${baseOrigin.replace(/\/$/, '')}/community/events/${encodeURIComponent(event.slug)}`
+  const baseOrigin = typeof origin === 'string' && origin ? origin : SITE_ORIGIN
+  const canonical = `${baseOrigin.replace(/\/$/, '')}/events/${encodeURIComponent(event.slug)}`
   const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
   const end = event.endDateObj || start
-  const image = event.image && /^https?:\/\//i.test(event.image)
-    ? event.image
-    : event.image
-      ? `${baseOrigin.replace(/\/$/, '')}${event.image.startsWith('/') ? event.image : `/${event.image}`}`
-      : undefined
+  const image = event.image ? toAbsoluteUrl(event.image, baseOrigin) : undefined
 
   const location = {
     '@type': 'Place',
@@ -84,12 +102,44 @@ function buildEventSchema(event, origin) {
   return JSON.stringify(schema, null, 2)
 }
 
+async function copyTextToClipboard(text) {
+  if (!text) return false
+  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch (error) {
+      console.warn('Clipboard write failed, falling back', error)
+    }
+  }
+
+  if (typeof document === 'undefined') return false
+
+  try {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.focus()
+    textarea.select()
+    const successful = document.execCommand('copy')
+    document.body.removeChild(textarea)
+    return successful
+  } catch (error) {
+    console.warn('Unable to copy share URL', error)
+    return false
+  }
+}
+
 export default function EventDetailPage() {
   const { slug: routeSlug } = useParams()
   const slug = routeSlug ? decodeURIComponent(routeSlug) : ''
   const [event, setEvent] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
+  const [shareToastVisible, setShareToastVisible] = React.useState(false)
+  const toastTimeoutRef = React.useRef(null)
 
   React.useEffect(() => {
     if (!slug) {
@@ -133,6 +183,14 @@ export default function EventDetailPage() {
     }
   }, [slug])
 
+  React.useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current && typeof window !== 'undefined') {
+        window.clearTimeout(toastTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const occurrence = React.useMemo(() => {
     if (!event) return null
     const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
@@ -144,7 +202,6 @@ export default function EventDetailPage() {
   const dateLabel = occurrence ? formatDateRange(occurrence, event?.allDay) : ''
 
   const descriptionParagraphs = React.useMemo(() => splitParagraphs(event?.description || ''), [event])
-
   const summaryParagraphs = React.useMemo(
     () => (event?.summary ? splitParagraphs(event.summary) : []),
     [event]
@@ -183,8 +240,12 @@ export default function EventDetailPage() {
     (event?.description ? event.description.replace(/\s+/g, ' ').trim().slice(0, 160) : '') ||
     'Explore community events across the NorthSide GTA.'
   const canonicalUrl = event
-    ? `https://www.northsidegta.ca/community/events/${encodeURIComponent(event.slug)}`
-    : 'https://www.northsidegta.ca/community/events'
+    ? `${SITE_ORIGIN}/events/${encodeURIComponent(event.slug)}`
+    : `${SITE_ORIGIN}/events`
+  const ogImage = event?.image ? toAbsoluteUrl(event.image) : toAbsoluteUrl(FALLBACK_IMAGE)
+  const shareUrl = canonicalUrl
+  const shareTitle = event ? event.title : 'NorthSide GTA Event'
+  const shareText = event?.summary || 'Check out this NorthSide GTA event.'
 
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
@@ -206,15 +267,79 @@ export default function EventDetailPage() {
     URL.revokeObjectURL(url)
   }, [event, occurrence])
 
+  const showShareToast = React.useCallback(() => {
+    setShareToastVisible(true)
+    if (toastTimeoutRef.current && typeof window !== 'undefined') {
+      window.clearTimeout(toastTimeoutRef.current)
+    }
+    if (typeof window !== 'undefined') {
+      toastTimeoutRef.current = window.setTimeout(() => setShareToastVisible(false), 2000)
+    }
+  }, [])
+
+  const handleShare = React.useCallback(async () => {
+    const copied = await copyTextToClipboard(shareUrl)
+    if (copied) {
+      showShareToast()
+    }
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        })
+      } catch (error) {
+        if (error?.name !== 'AbortError') {
+          console.warn('Share aborted', error)
+        }
+      }
+    }
+  }, [shareText, shareTitle, shareUrl, showShareToast])
+
+  const shareLinks = React.useMemo(() => {
+    if (!shareUrl || !event) return []
+    return [
+      {
+        href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+        label: 'Facebook',
+        icon: Facebook,
+      },
+      {
+        href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
+        label: 'X (Twitter)',
+        icon: Twitter,
+      },
+      {
+        href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+        label: 'LinkedIn',
+        icon: Linkedin,
+      },
+      {
+        href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}`,
+        label: 'Email',
+        icon: Mail,
+      },
+    ]
+  }, [event, shareTitle, shareUrl])
+
   return (
     <>
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
+        <meta property="og:title" content={shareTitle} />
         <meta property="og:description" content={pageDescription} />
-        {event?.image && <meta property="og:image" content={event.image} />}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonicalUrl} />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        {ogImage && <meta property="og:image:alt" content={shareTitle} />}
+        <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:title" content={shareTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
         {event?.hidden && <meta name="robots" content="noindex" />}
         {schema && <script type="application/ld+json">{schema}</script>}
       </Helmet>
@@ -264,27 +389,6 @@ export default function EventDetailPage() {
                     {event.category && <span>{event.category}</span>}
                   </div>
                   <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{event.title}</h1>
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                    {event.status === 'published' ? (
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                        Published
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                        {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
-                      </span>
-                    )}
-                    {event.hidden && (
-                      <span className="inline-flex items-center rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                        Hidden from listings
-                      </span>
-                    )}
-                    {event.archived && (
-                      <span className="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                        Archived
-                      </span>
-                    )}
-                  </div>
                   {dateLabel && <p className="text-base text-slate-700">{dateLabel}</p>}
                   {event.locationName && (
                     <p className="flex items-center gap-2 text-sm text-slate-600">
@@ -302,6 +406,46 @@ export default function EventDetailPage() {
                       {summaryParagraphs.map((paragraph, index) => (
                         <p key={index}>{paragraph}</p>
                       ))}
+                    </div>
+                  )}
+                  {shareLinks.length > 0 && (
+                    <div className="space-y-3 pt-2">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Share this event
+                      </div>
+                      <div className="flex flex-wrap gap-3 text-sm font-medium">
+                        {shareLinks.map(({ href, label, icon: Icon }) => (
+                          <a
+                            key={label}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                          >
+                            <Icon className="h-4 w-4" aria-hidden="true" />
+                            {label}
+                          </a>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={handleShare}
+                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                        >
+                          Share
+                          <Share2 className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const copied = await copyTextToClipboard(shareUrl)
+                            if (copied) showShareToast()
+                          }}
+                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                        >
+                          Copy link
+                          <Copy className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -406,6 +550,16 @@ export default function EventDetailPage() {
       </main>
 
       <Footer />
+
+      <div className="sr-only" role="status" aria-live="polite">
+        {shareToastVisible ? 'Link copied to clipboard' : ''}
+      </div>
+
+      {shareToastVisible && (
+        <div className="fixed inset-x-4 bottom-6 z-50 mx-auto max-w-sm rounded-full bg-emerald-600 px-4 py-2 text-center text-xs font-semibold text-white shadow-lg">
+          Link copied
+        </div>
+      )}
     </>
   )
 }

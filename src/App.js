@@ -59,6 +59,7 @@ function App() {
         <Route path="/community"    element={<CommunityPage />} />
         <Route path="/community/events/archive" element={<EventsArchivePage />} />
         <Route path="/community/events/:slug" element={<EventDetailPage />} />
+        <Route path="/events/:slug" element={<EventDetailPage />} />
         <Route path="/community/submit-event" element={<SubmitEventPage />} />
         <Route path="/events/archive" element={<EventsArchivePage />} />
         <Route path="/community/events-admin" element={<EventsIndexPage />} />

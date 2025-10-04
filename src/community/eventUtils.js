@@ -1,5 +1,16 @@
 import { RRule } from 'rrule'
 
+function slugify(value) {
+  if (!value) return ''
+  return String(value)
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .trim()
+}
+
 export const CATEGORY_OPTIONS = [
   'Family',
   'Festivals',
@@ -61,6 +72,9 @@ export function sanitizeEvent(raw) {
   const endDateObj = parseDate(raw.endDate) || startDateObj
   const durationMs = getDuration(startDateObj, endDateObj)
 
+  const initialSlug = typeof raw.slug === 'string' ? raw.slug.trim() : ''
+  const slug = initialSlug || slugify(raw.title)
+
   const description = typeof raw.description === 'string' ? raw.description : ''
   const summary = typeof raw.summary === 'string' ? raw.summary : ''
   const locationName = typeof raw.locationName === 'string' ? raw.locationName : ''
@@ -83,7 +97,7 @@ export function sanitizeEvent(raw) {
   return {
     ...raw,
     title: String(raw.title || '').trim(),
-    slug: String(raw.slug || '').trim(),
+    slug,
     category: String(raw.category || ''),
     town,
     subArea,
@@ -436,7 +450,7 @@ function buildEventSchema(event, origin) {
   const start = occurrence?.start || event.startDateObj
   const end = occurrence?.end || event.endDateObj || occurrence?.start
   const image = absoluteUrl(origin, event.image)
-  const url = absoluteUrl(origin, `/community/events/${encodeURIComponent(event.slug)}`)
+  const url = absoluteUrl(origin, `/events/${encodeURIComponent(event.slug)}`)
   const eventUrl = event.eventUrl || url
 
   const location = {
@@ -491,7 +505,7 @@ function getWindowOrigin() {
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin
   }
-  return 'https://www.northsidegta.ca'
+  return 'https://northsidegta.ca'
 }
 
 function absoluteUrl(origin, value) {

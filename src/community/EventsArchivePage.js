@@ -61,7 +61,7 @@ function ArchiveEventCard({ event }) {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-xl font-semibold text-slate-900">
-            <Link to={`/community/events/${event.slug}`} className="hover:text-emerald-700">
+            <Link to={`/events/${event.slug}`} className="hover:text-emerald-700">
               {event.title}
             </Link>
           </h3>
@@ -96,7 +96,7 @@ function ArchiveEventCard({ event }) {
 
       <div className="mt-auto flex flex-wrap gap-3 text-sm font-medium">
         <Link
-          to={`/community/events/${event.slug}`}
+          to={`/events/${event.slug}`}
           className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
         >
           View details
