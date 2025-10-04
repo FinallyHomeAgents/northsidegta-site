@@ -1,11 +1,11 @@
 {
-  "id": "10011565-1759309200-1759593600@www.experienceyorkregion.com",
-  "slug": "experience-york-region-10011565-1759309200-1759593600-www.experienceyorkregion.com-20251001",
-  "title": "2025 Summer Art Camp at Palette Art School",
-  "summary": "2025 Summer Art Camp at Palette Art School",
+  "id": "10010880-1759838400-1759852800@www.experienceyorkregion.com",
+  "slug": "experience-york-region-10010880-1759838400-1759852800-www.experienceyorkregion.com-20251007",
+  "title": "The Heintzman House 2025 Art Show and Sale.",
+  "summary": "The Heintzman House 2025 Art Show and Sale.",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » Afternoon Tea Expanded Collage w/ Julia Mobbs 2025 Summer Art Camp at Palette Art School Loading view. Today Now Now Select date. Oct 4 May 1 - October 18 Event Series Kate Greenway, Recent Works Oct 4 September 26 @ 9:30 am - October 4 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 September 27 @ 9:30 am - October 5 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 September 28 @ 9:30 am - October 6 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 September 29 @ 9:30 am - October 7 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 September 30 @ 9:30 am - October 8 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 October 1 @ 9:00 am - October 4 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 4 October 1 @ 9:30 am - October 9 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 October 2 @ 9:00 am - October 5 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 4 October 2 @ 9:30 am - October 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 4 October 3 @ 9:00 am - October 6 @ 4:00 pm Event Series 2025 Summer Art Camp at Palette Art School Oct 4 October 3 @ 9:30 am - October 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-10-01T13:00:00.000Z",
-  "endDate": "2025-10-04T20:00:00.000Z",
+  "startDate": "2025-10-07T16:00:00.000Z",
+  "endDate": "2025-10-07T20:00:00.000Z",
   "allDay": false,
   "recurrence": "",
   "category": "Festivals",
@@ -13,21 +13,19 @@
   "subArea": "",
   "location": {
     "city": "Toronto-adjacent",
-    "venue": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2"
+    "venue": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1"
   },
-  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
-  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
-  "lat": 43.787474,
-  "lng": -79.4727017,
+  "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
+  "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
   "priceType": "Mixed",
   "priceNote": "",
   "badges": [],
   "qaTags": [],
   "image": "",
-  "organizerName": "[object Object]",
+  "organizerName": "",
   "organizerUrl": "",
-  "url": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-01/",
-  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-01/",
+  "url": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-07/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-07/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -35,14 +33,14 @@
   "notes": "",
   "source": {
     "name": "Experience York Region",
-    "id": "10011565-1759309200-1759593600@www.experienceyorkregion.com"
+    "id": "10010880-1759838400-1759852800@www.experienceyorkregion.com"
   },
   "sourceName": "Experience York Region",
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10011565-1759309200-1759593600@www.experienceyorkregion.com",
+  "sourceRef": "10010880-1759838400-1759852800@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-10-04T10:14:53.999Z",
-  "firstSeenAt": "2025-09-29T18:41:29.880Z",
+  "firstSeenAt": "2025-10-04T10:14:53.999Z",
   "updatedAt": "2025-10-04T10:14:53.999Z"
 }
