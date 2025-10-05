@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { X, MapPin, ExternalLink, CalendarPlus } from 'lucide-react'
+import { X, MapPin, ExternalLink, CalendarPlus, Share2 } from 'lucide-react'
 import { BADGE_LABELS, formatDateRange, generateIcsContent } from './eventUtils'
+import { getCanonicalEventUrl, shareEvent } from './shareUtils'
 
 function getModalRoot() {
   if (typeof document === 'undefined') return null
@@ -31,6 +32,8 @@ export default function EventModal({ event, onClose }) {
   const townLabel = townParts.join(', ') || 'NorthSide GTA'
   const sourceLabel = event?.sourceName || event?.sourceDomain || 'Source'
   const sourceTypeLabel = event?.source === 'feed' ? 'Feed' : 'Manual'
+  const [shareToastVisible, setShareToastVisible] = React.useState(false)
+  const shareToastTimeoutRef = React.useRef(null)
 
   React.useEffect(() => {
     if (typeof document === 'undefined') return undefined
@@ -49,6 +52,14 @@ export default function EventModal({ event, onClose }) {
       document.removeEventListener('keydown', handleKeydown)
     }
   }, [onClose])
+
+  React.useEffect(() => {
+    return () => {
+      if (shareToastTimeoutRef.current) {
+        clearTimeout(shareToastTimeoutRef.current)
+      }
+    }
+  }, [])
 
   if (!modalRoot || !event) return null
 
@@ -85,6 +96,24 @@ export default function EventModal({ event, onClose }) {
     : ''
 
   const descriptionParagraphs = splitParagraphs(event.description || event.summary || '')
+  const shareUrl = event.slug ? getCanonicalEventUrl(event.slug) : event.eventUrl || ''
+  const shareText = event.summary || event.title
+
+  const showShareToast = React.useCallback(() => {
+    setShareToastVisible(true)
+    if (shareToastTimeoutRef.current) {
+      clearTimeout(shareToastTimeoutRef.current)
+    }
+    shareToastTimeoutRef.current = setTimeout(() => setShareToastVisible(false), 2000)
+  }, [])
+
+  const handleShare = React.useCallback(async () => {
+    if (!shareUrl) return
+    const result = await shareEvent({ url: shareUrl, title: event.title, text: shareText })
+    if (result.copied) {
+      showShareToast()
+    }
+  }, [event.title, shareText, shareUrl, showShareToast])
 
   const modal = (
     <div
@@ -94,6 +123,9 @@ export default function EventModal({ event, onClose }) {
       aria-labelledby="event-modal-title"
     >
       <div className="relative w-full max-w-3xl rounded-3xl bg-white shadow-2xl">
+        <div className="sr-only" role="status" aria-live="polite">
+          {shareToastVisible ? 'Link copied to clipboard' : ''}
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -102,6 +134,12 @@ export default function EventModal({ event, onClose }) {
         >
           <X className="h-5 w-5" aria-hidden="true" />
         </button>
+
+        {shareToastVisible && (
+          <div className="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2 rounded-full bg-emerald-600/90 px-4 py-2 text-xs font-medium text-white shadow-lg">
+            Link copied
+          </div>
+        )}
 
         {event.image && (
           <img
@@ -165,36 +203,47 @@ export default function EventModal({ event, onClose }) {
           )}
 
           <div className="flex flex-wrap gap-3 text-sm font-medium">
-            {event.eventUrl && (
-              <a
-                href={event.eventUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900"
-              >
-                Event site
-                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </a>
-            )}
+          {event.eventUrl && (
+            <a
+              href={event.eventUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            >
+              Event site
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={handleAddToCalendar}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+          >
+            Add to calendar
+            <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+          </button>
+          {shareUrl && (
             <button
               type="button"
-              onClick={handleAddToCalendar}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900"
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              aria-label={`Share ${event.title}`}
             >
-              Add to calendar
-              <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+              Share
+              <Share2 className="h-4 w-4" aria-hidden="true" />
             </button>
-            {mapLink && (
-              <a
-                href={mapLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900"
-              >
-                Map & directions
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-              </a>
-            )}
+          )}
+          {mapLink && (
+            <a
+              href={mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-slate-700 hover:border-slate-300 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            >
+              Map & directions
+              <MapPin className="h-4 w-4" aria-hidden="true" />
+            </a>
+          )}
           </div>
 
           {mapEmbedSrc && (

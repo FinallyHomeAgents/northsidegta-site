@@ -413,6 +413,17 @@ function normalizeEvent(item, feed) {
   const subArea =
     subAreaRaw && town && subAreaRaw.toLowerCase() === town.toLowerCase() ? '' : subAreaRaw
 
+  const slugBase = feed.slugPrefix ? `${feed.slugPrefix}-${title}` : title
+  const slugDate = formatDateForSlug(start)
+  const slugParts = [slugDate, feed.slugPrefix ? slugify(feed.slugPrefix) : '', slugify(title), slugify(town)]
+    .filter(Boolean)
+    .join('-')
+  const fallbackSlugParts = [slugify(title), slugify(town), slugDate, slugify(feed.id || '')]
+    .filter(Boolean)
+    .join('-')
+  const slug =
+    slugify(slugParts) || slugify(fallbackSlugParts) || slugify(`${slugBase}-${slugDate}`) || slugify(slugBase)
+
   const sourceInfo = resolveSourceInfo(item, feed, eventUrl)
 
   const badges = mergeUnique(
@@ -641,6 +652,16 @@ function slugify(value) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 60)
+}
+
+function formatDateForSlug(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+  const year = date.getUTCFullYear()
+  const month = `${date.getUTCMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getUTCDate()}`.padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 function cleanText(value) {

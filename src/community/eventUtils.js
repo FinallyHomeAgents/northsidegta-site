@@ -11,6 +11,40 @@ function slugify(value) {
     .trim()
 }
 
+function formatDateForSlug(value) {
+  if (!value) return ''
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) return ''
+  const year = parsed.getFullYear()
+  const month = `${parsed.getMonth() + 1}`.padStart(2, '0')
+  const day = `${parsed.getDate()}`.padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function buildEventSlug(raw = {}) {
+  if (raw && typeof raw.slug === 'string' && raw.slug.trim()) {
+    return raw.slug.trim()
+  }
+
+  const datePart = formatDateForSlug(raw.startDate || raw.start || raw.begin)
+  const titlePart = slugify(raw.title || raw.name || '')
+  const townPart = slugify(raw.town || raw.locationName || '')
+  const primary = [datePart, titlePart, townPart].filter(Boolean).join('-')
+
+  const fallback = [
+    titlePart,
+    slugify(raw.sourceName || ''),
+    slugify(raw.sourceRef || ''),
+    slugify(raw.id || ''),
+  ]
+    .filter(Boolean)
+    .join('-')
+
+  const urlFallback = slugify(raw.eventUrl || raw.url || '')
+
+  return slugify(primary) || slugify(fallback) || urlFallback || ''
+}
+
 export const CATEGORY_OPTIONS = [
   'Family',
   'Festivals',
@@ -72,8 +106,7 @@ export function sanitizeEvent(raw) {
   const endDateObj = parseDate(raw.endDate) || startDateObj
   const durationMs = getDuration(startDateObj, endDateObj)
 
-  const initialSlug = typeof raw.slug === 'string' ? raw.slug.trim() : ''
-  const slug = initialSlug || slugify(raw.title)
+  const slug = buildEventSlug(raw)
 
   const description = typeof raw.description === 'string' ? raw.description : ''
   const summary = typeof raw.summary === 'string' ? raw.summary : ''
@@ -81,6 +114,17 @@ export function sanitizeEvent(raw) {
   const address = typeof raw.address === 'string' ? raw.address : ''
   const town = typeof raw.town === 'string' ? raw.town : ''
   const subArea = typeof raw.subArea === 'string' ? raw.subArea : ''
+  const addressRegion =
+    typeof raw.addressRegion === 'string' && raw.addressRegion.trim()
+      ? raw.addressRegion.trim()
+      : typeof raw.province === 'string' && raw.province.trim()
+        ? raw.province.trim()
+        : ''
+  const addressCountry =
+    typeof raw.addressCountry === 'string' && raw.addressCountry.trim()
+      ? raw.addressCountry.trim()
+      : ''
+  const postalCode = typeof raw.postalCode === 'string' ? raw.postalCode.trim() : ''
   const sourceName = typeof raw.sourceName === 'string' ? raw.sourceName.trim() : ''
   const sourceUrl = typeof raw.sourceUrl === 'string' ? raw.sourceUrl.trim() : ''
   const sourceDomain = typeof raw.sourceDomain === 'string' ? raw.sourceDomain.trim() : ''
@@ -112,6 +156,9 @@ export function sanitizeEvent(raw) {
     description,
     locationName,
     address,
+    addressRegion,
+    addressCountry,
+    postalCode,
     priceType: normalizePriceType(raw.priceType),
     priceNote: typeof raw.priceNote === 'string' ? raw.priceNote.trim() : '',
     badges: Array.isArray(raw.badges) ? raw.badges.filter((badge) => BADGE_LABELS[badge]) : [],

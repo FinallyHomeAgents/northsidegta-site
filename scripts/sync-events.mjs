@@ -1153,8 +1153,13 @@ function normalizeEvent(item, feed, now) {
   const sourceId = sourceRef || `${feed.id || slugify(title)}-${start}`
 
   const slugDate = formatDateForSlug(start)
-  const slugBase = `${sourceName.toLowerCase()}:${sourceId}-${slugDate}`
-  const slug = makeFileSafeSlug(slugBase)
+  const slugParts = [slugDate, slugify(title), slugify(town || locationName || feed.town || '')]
+    .filter(Boolean)
+    .join('-')
+  const fallbackSlugParts = [slugify(title), slugify(sourceName), slugDate, slugify(sourceId)]
+    .filter(Boolean)
+    .join('-')
+  const slug = makeFileSafeSlug(slugParts || fallbackSlugParts || `${sourceName}-${sourceId}`)
 
   return {
     id: sourceId,

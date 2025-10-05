@@ -7,6 +7,7 @@ import {
   Share2,
 } from 'lucide-react'
 import { BADGE_LABELS, formatDateRange, generateIcsContent } from './eventUtils'
+import { getCanonicalEventUrl, shareEvent } from './shareUtils'
 
 function PlaceholderImage() {
   return (
@@ -51,9 +52,8 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
       )}`
     : ''
 
-  const shareUrl = event.slug
-    ? `https://northsidegta.ca/community#event-${encodeURIComponent(event.slug)}`
-    : ''
+  const shareUrl = event.slug ? getCanonicalEventUrl(event.slug) : ''
+  const shareText = event.summary || event.title
 
   const [showToast, setShowToast] = React.useState(false)
   const toastTimeoutRef = React.useRef(null)
@@ -63,36 +63,6 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
       if (toastTimeoutRef.current) {
         clearTimeout(toastTimeoutRef.current)
       }
-    }
-  }, [])
-
-  const copyToClipboard = React.useCallback(async (text) => {
-    if (!text) return false
-    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-      try {
-        await navigator.clipboard.writeText(text)
-        return true
-      } catch (error) {
-        console.warn('Clipboard write failed, falling back', error)
-      }
-    }
-
-    if (typeof document === 'undefined') return false
-
-    try {
-      const textarea = document.createElement('textarea')
-      textarea.value = text
-      textarea.style.position = 'fixed'
-      textarea.style.opacity = '0'
-      document.body.appendChild(textarea)
-      textarea.focus()
-      textarea.select()
-      const successful = document.execCommand('copy')
-      document.body.removeChild(textarea)
-      return successful
-    } catch (fallbackError) {
-      console.warn('Unable to copy share URL', fallbackError)
-      return false
     }
   }, [])
 
@@ -106,25 +76,11 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
 
   const handleShare = React.useCallback(async () => {
     if (!shareUrl) return
-    const copied = await copyToClipboard(shareUrl)
-    if (copied) {
+    const result = await shareEvent({ url: shareUrl, title: event.title, text: shareText })
+    if (result.copied) {
       showCopiedToast()
     }
-
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({
-          title: event.title,
-          text: event.summary || event.title,
-          url: shareUrl,
-        })
-      } catch (err) {
-        if (err?.name !== 'AbortError') {
-          console.warn('Share aborted', err)
-        }
-      }
-    }
-  }, [copyToClipboard, event.summary, event.title, shareUrl, showCopiedToast])
+  }, [event.title, shareText, shareUrl, showCopiedToast])
 
   const hasDetailPage = Boolean(event.slug)
   const eventSiteHref = hasDetailPage ? `/events/${encodeURIComponent(event.slug)}` : event.eventUrl
@@ -258,7 +214,8 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              aria-label={`Share ${event.title}`}
             >
               Share
               <Share2 className="h-4 w-4" aria-hidden="true" />
