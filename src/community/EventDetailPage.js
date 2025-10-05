@@ -16,16 +16,16 @@ import {
 import Navigation from '../Navigation'
 import Footer from '../Footer'
 import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils'
+import {
+  copyTextToClipboard,
+  getCanonicalEventUrl,
+  getSiteOrigin,
+  shareEvent,
+  toAbsoluteUrl,
+} from './shareUtils'
 
 const SITE_ORIGIN = 'https://northsidegta.ca'
 const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
-
-function getSiteOrigin(defaultOrigin = SITE_ORIGIN) {
-  if (typeof window !== 'undefined' && window.location?.origin) {
-    return window.location.origin
-  }
-  return defaultOrigin
-}
 
 function normalizeWhitespace(text) {
   if (typeof text !== 'string') return ''
@@ -54,18 +54,10 @@ function splitParagraphs(text) {
     .filter(Boolean)
 }
 
-function toAbsoluteUrl(path, origin = SITE_ORIGIN) {
-  if (!path) return ''
-  if (/^https?:\/\//i.test(path)) return path
-  const base = typeof origin === 'string' && origin ? origin.replace(/\/$/, '') : SITE_ORIGIN
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${base}${normalizedPath}`
-}
-
 function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '') {
   if (!event) return null
   const baseOrigin = typeof origin === 'string' && origin ? origin : SITE_ORIGIN
-  const canonical = `${baseOrigin.replace(/\/$/, '')}/events/${encodeURIComponent(event.slug)}`
+  const canonical = getCanonicalEventUrl(event.slug, baseOrigin)
   const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
   const end = event.endDateObj || start
   const image = event.image
@@ -78,10 +70,15 @@ function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '')
     name: event.locationName || event.town || 'NorthSide GTA',
   }
 
-  if (event.address) {
-    location.address = event.address
-  } else if (event.town) {
-    location.address = `${event.town}, Ontario`
+  if (event.address || event.town || event.postalCode) {
+    location.address = {
+      '@type': 'PostalAddress',
+      streetAddress: event.address || '',
+      addressLocality: event.town || event.subArea || 'NorthSide GTA',
+      addressRegion: event.addressRegion || 'ON',
+      postalCode: event.postalCode || '',
+      addressCountry: event.addressCountry || 'CA',
+    }
   }
 
   if (event.hasLocation) {
@@ -103,6 +100,10 @@ function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '')
     offers.priceCurrency = 'CAD'
   }
 
+  const attendanceMode = event.hasLocation || event.address || event.locationName
+    ? 'https://schema.org/OfflineEventAttendanceMode'
+    : 'https://schema.org/OnlineEventAttendanceMode'
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -110,7 +111,7 @@ function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '')
     startDate: start ? new Date(start).toISOString() : event.startDate,
     endDate: end ? new Date(end).toISOString() : event.endDate || event.startDate,
     eventStatus: 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventAttendanceMode: attendanceMode,
     description,
     location,
     offers,
@@ -130,36 +131,6 @@ function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '')
   }
 
   return JSON.stringify(schema, null, 2)
-}
-
-async function copyTextToClipboard(text) {
-  if (!text) return false
-  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-    try {
-      await navigator.clipboard.writeText(text)
-      return true
-    } catch (error) {
-      console.warn('Clipboard write failed, falling back', error)
-    }
-  }
-
-  if (typeof document === 'undefined') return false
-
-  try {
-    const textarea = document.createElement('textarea')
-    textarea.value = text
-    textarea.style.position = 'fixed'
-    textarea.style.opacity = '0'
-    document.body.appendChild(textarea)
-    textarea.focus()
-    textarea.select()
-    const successful = document.execCommand('copy')
-    document.body.removeChild(textarea)
-    return successful
-  } catch (error) {
-    console.warn('Unable to copy share URL', error)
-    return false
-  }
 }
 
 export default function EventDetailPage() {
@@ -275,18 +246,16 @@ export default function EventDetailPage() {
     return ''
   }, [event])
 
-  const truncatedDescription = event ? truncateText(eventDescription || '', 200) : ''
+  const truncatedDescription = event ? truncateText(eventDescription || '', 160) : ''
   const schema = React.useMemo(
     () => buildEventSchema(event, normalizedOrigin, truncatedDescription || eventDescription),
     [event, eventDescription, normalizedOrigin, truncatedDescription],
   )
 
-  const pageTitle = event ? `${event.title} • NorthSide GTA Events` : 'Event Details • NorthSide GTA'
+  const pageTitle = event ? `${event.title} | NorthSide GTA` : 'Event Details | NorthSide GTA'
   const defaultDescription = 'Explore community events across the NorthSide GTA.'
   const pageDescription = truncatedDescription || eventDescription || defaultDescription
-  const canonicalUrl = event
-    ? `${normalizedOrigin}/events/${encodeURIComponent(event.slug)}`
-    : `${normalizedOrigin}/events`
+  const canonicalUrl = event ? getCanonicalEventUrl(event.slug, normalizedOrigin) : `${normalizedOrigin}/events`
   const ogImage = event?.image
     ? toAbsoluteUrl(event.image, normalizedOrigin)
     : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
@@ -294,6 +263,7 @@ export default function EventDetailPage() {
   const shareTitle = event ? event.title : 'NorthSide GTA Event'
   const shareText = event ? pageDescription : 'Check out this NorthSide GTA event.'
   const emailBody = shareText ? `${shareText}\n\n${shareUrl}` : shareUrl
+  const publishedTime = event?.startDate ? new Date(event.startDate).toISOString() : ''
 
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
@@ -326,23 +296,9 @@ export default function EventDetailPage() {
   }, [])
 
   const handleShare = React.useCallback(async () => {
-    const copied = await copyTextToClipboard(shareUrl)
-    if (copied) {
+    const result = await shareEvent({ url: shareUrl, title: shareTitle, text: shareText })
+    if (result.copied) {
       showShareToast()
-    }
-
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        })
-      } catch (error) {
-        if (error?.name !== 'AbortError') {
-          console.warn('Share aborted', error)
-        }
-      }
     }
   }, [shareText, shareTitle, shareUrl, showShareToast])
 
@@ -384,10 +340,13 @@ export default function EventDetailPage() {
         <meta property="og:url" content={canonicalUrl} />
         {ogImage && <meta property="og:image" content={ogImage} />}
         {ogImage && <meta property="og:image:alt" content={shareTitle} />}
+        <meta property="og:site_name" content="NorthSide GTA" />
+        {publishedTime && <meta property="article:published_time" content={publishedTime} />}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={shareTitle} />
         <meta name="twitter:description" content={pageDescription} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
+        {ogImage && <meta name="twitter:image:alt" content={shareTitle} />}
         {event?.hidden && <meta name="robots" content="noindex" />}
         {schema && <script type="application/ld+json">{schema}</script>}
       </Helmet>
@@ -468,7 +427,7 @@ export default function EventDetailPage() {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                           >
                             <Icon className="h-4 w-4" aria-hidden="true" />
                             {label}
@@ -477,7 +436,8 @@ export default function EventDetailPage() {
                         <button
                           type="button"
                           onClick={handleShare}
-                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                          aria-label="Share this event"
                         >
                           Share
                           <Share2 className="h-4 w-4" aria-hidden="true" />
@@ -488,7 +448,7 @@ export default function EventDetailPage() {
                             const copied = await copyTextToClipboard(shareUrl)
                             if (copied) showShareToast()
                           }}
-                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                          className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                         >
                           Copy link
                           <Copy className="h-4 w-4" aria-hidden="true" />
@@ -512,7 +472,7 @@ export default function EventDetailPage() {
                       href={event.eventUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                     >
                       Event site
                       <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -521,17 +481,26 @@ export default function EventDetailPage() {
                   <button
                     type="button"
                     onClick={handleAddToCalendar}
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                   >
                     Add to calendar
                     <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                    aria-label="Share this event"
+                  >
+                    Share
+                    <Share2 className="h-4 w-4" aria-hidden="true" />
                   </button>
                   {mapLink && (
                     <a
                       href={mapLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                     >
                       Map & directions
                       <MapPin className="h-4 w-4" aria-hidden="true" />
