@@ -32,6 +32,21 @@ function normalizeWhitespace(text) {
   return text.replace(/\s+/g, ' ').trim()
 }
 
+function truncateText(text, maxLength = 200) {
+  const normalized = normalizeWhitespace(text)
+  if (!normalized) return ''
+  if (normalized.length <= maxLength) return normalized
+
+  const truncated = normalized.slice(0, maxLength)
+  const lastSpaceIndex = truncated.lastIndexOf(' ')
+
+  if (lastSpaceIndex > 0) {
+    return `${truncated.slice(0, lastSpaceIndex)}…`
+  }
+
+  return `${normalized.slice(0, maxLength - 1)}…`
+}
+
 function splitParagraphs(text) {
   return text
     .split(/\n{2,}/)
@@ -47,13 +62,16 @@ function toAbsoluteUrl(path, origin = SITE_ORIGIN) {
   return `${base}${normalizedPath}`
 }
 
-function buildEventSchema(event, origin = SITE_ORIGIN) {
+function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '') {
   if (!event) return null
   const baseOrigin = typeof origin === 'string' && origin ? origin : SITE_ORIGIN
   const canonical = `${baseOrigin.replace(/\/$/, '')}/events/${encodeURIComponent(event.slug)}`
   const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
   const end = event.endDateObj || start
-  const image = event.image ? toAbsoluteUrl(event.image, baseOrigin) : undefined
+  const image = event.image
+    ? toAbsoluteUrl(event.image, baseOrigin)
+    : toAbsoluteUrl(FALLBACK_IMAGE, baseOrigin)
+  const description = truncateText(descriptionOverride || event.summary || event.description || '', 200)
 
   const location = {
     '@type': 'Place',
@@ -93,10 +111,10 @@ function buildEventSchema(event, origin = SITE_ORIGIN) {
     endDate: end ? new Date(end).toISOString() : event.endDate || event.startDate,
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    description: (event.summary || event.description || '').replace(/\s+/g, ' ').trim(),
+    description,
     location,
     offers,
-    url: event.eventUrl || canonical,
+    url: canonical,
   }
 
   if (image) {
@@ -250,8 +268,6 @@ export default function EventDetailPage() {
     [siteOrigin]
   )
 
-  const schema = React.useMemo(() => buildEventSchema(event, normalizedOrigin), [event, normalizedOrigin])
-
   const eventDescription = React.useMemo(() => {
     if (!event) return ''
     if (event.summary) return normalizeWhitespace(event.summary)
@@ -259,9 +275,15 @@ export default function EventDetailPage() {
     return ''
   }, [event])
 
+  const truncatedDescription = event ? truncateText(eventDescription || '', 200) : ''
+  const schema = React.useMemo(
+    () => buildEventSchema(event, normalizedOrigin, truncatedDescription || eventDescription),
+    [event, eventDescription, normalizedOrigin, truncatedDescription],
+  )
+
   const pageTitle = event ? `${event.title} • NorthSide GTA Events` : 'Event Details • NorthSide GTA'
   const defaultDescription = 'Explore community events across the NorthSide GTA.'
-  const pageDescription = eventDescription || defaultDescription
+  const pageDescription = truncatedDescription || eventDescription || defaultDescription
   const canonicalUrl = event
     ? `${normalizedOrigin}/events/${encodeURIComponent(event.slug)}`
     : `${normalizedOrigin}/events`
@@ -270,7 +292,8 @@ export default function EventDetailPage() {
     : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
   const shareUrl = canonicalUrl
   const shareTitle = event ? event.title : 'NorthSide GTA Event'
-  const shareText = eventDescription || 'Check out this NorthSide GTA event.'
+  const shareText = event ? pageDescription : 'Check out this NorthSide GTA event.'
+  const emailBody = shareText ? `${shareText}\n\n${shareUrl}` : shareUrl
 
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
@@ -342,12 +365,12 @@ export default function EventDetailPage() {
         icon: Linkedin,
       },
       {
-        href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
+        href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(emailBody)}`,
         label: 'Email',
         icon: Mail,
       },
     ]
-  }, [event, shareText, shareTitle, shareUrl])
+  }, [emailBody, event, shareTitle, shareUrl])
 
   return (
     <>
@@ -357,11 +380,11 @@ export default function EventDetailPage() {
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={shareTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="event" />
         <meta property="og:url" content={canonicalUrl} />
         {ogImage && <meta property="og:image" content={ogImage} />}
         {ogImage && <meta property="og:image:alt" content={shareTitle} />}
-        <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={shareTitle} />
         <meta name="twitter:description" content={pageDescription} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
