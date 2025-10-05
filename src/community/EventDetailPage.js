@@ -20,6 +20,18 @@ import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils
 const SITE_ORIGIN = 'https://northsidegta.ca'
 const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
 
+function getSiteOrigin(defaultOrigin = SITE_ORIGIN) {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin
+  }
+  return defaultOrigin
+}
+
+function normalizeWhitespace(text) {
+  if (typeof text !== 'string') return ''
+  return text.replace(/\s+/g, ' ').trim()
+}
+
 function splitParagraphs(text) {
   return text
     .split(/\n{2,}/)
@@ -232,20 +244,33 @@ export default function EventDetailPage() {
     return ''
   }, [event])
 
-  const schema = React.useMemo(() => buildEventSchema(event), [event])
+  const siteOrigin = React.useMemo(() => getSiteOrigin(), [])
+  const normalizedOrigin = React.useMemo(
+    () => (typeof siteOrigin === 'string' && siteOrigin ? siteOrigin.replace(/\/$/, '') : SITE_ORIGIN),
+    [siteOrigin]
+  )
+
+  const schema = React.useMemo(() => buildEventSchema(event, normalizedOrigin), [event, normalizedOrigin])
+
+  const eventDescription = React.useMemo(() => {
+    if (!event) return ''
+    if (event.summary) return normalizeWhitespace(event.summary)
+    if (event.description) return normalizeWhitespace(event.description)
+    return ''
+  }, [event])
 
   const pageTitle = event ? `${event.title} • NorthSide GTA Events` : 'Event Details • NorthSide GTA'
-  const pageDescription =
-    event?.summary ||
-    (event?.description ? event.description.replace(/\s+/g, ' ').trim().slice(0, 160) : '') ||
-    'Explore community events across the NorthSide GTA.'
+  const defaultDescription = 'Explore community events across the NorthSide GTA.'
+  const pageDescription = eventDescription || defaultDescription
   const canonicalUrl = event
-    ? `${SITE_ORIGIN}/events/${encodeURIComponent(event.slug)}`
-    : `${SITE_ORIGIN}/events`
-  const ogImage = event?.image ? toAbsoluteUrl(event.image) : toAbsoluteUrl(FALLBACK_IMAGE)
+    ? `${normalizedOrigin}/events/${encodeURIComponent(event.slug)}`
+    : `${normalizedOrigin}/events`
+  const ogImage = event?.image
+    ? toAbsoluteUrl(event.image, normalizedOrigin)
+    : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
   const shareUrl = canonicalUrl
   const shareTitle = event ? event.title : 'NorthSide GTA Event'
-  const shareText = event?.summary || 'Check out this NorthSide GTA event.'
+  const shareText = eventDescription || 'Check out this NorthSide GTA event.'
 
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
@@ -317,12 +342,12 @@ export default function EventDetailPage() {
         icon: Linkedin,
       },
       {
-        href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}`,
+        href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
         label: 'Email',
         icon: Mail,
       },
     ]
-  }, [event, shareTitle, shareUrl])
+  }, [event, shareText, shareTitle, shareUrl])
 
   return (
     <>
