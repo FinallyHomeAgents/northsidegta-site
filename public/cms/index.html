@@ -234,12 +234,25 @@
         let cmsEnhancementsPromise = null
         let cmsEnhancementWaitLogged = false
 
-        function tryRegisterCmsEnhancements() {
+        function findCMSContext() {
+          if (window.CMS && window.React) return window
+          const iframes = Array.from(document.querySelectorAll('iframe'))
+          for (const f of iframes) {
+            try {
+              if (f.contentWindow?.CMS && f.contentWindow?.React) {
+                return f.contentWindow
+              }
+            } catch (e) {}
+          }
+          return null
+        }
+
+        function tryRegisterCmsEnhancements(context) {
           if (cmsEnhancementsReady) return true
-          if (!window.CMS || !window.React) return false
+          if (!context || !context.CMS || !context.React) return false
           try {
-            registerEventsPreview(window.CMS, window.React)
-            registerDailyScheduleWidget(window.CMS, window.React)
+            registerEventsPreview(context.CMS, context.React)
+            registerDailyScheduleWidget(context.CMS, context.React)
             activateLegacyFieldStyling()
             cmsEnhancementsReady = true
             console.info('[cms-login] enhancements ready')
@@ -252,7 +265,8 @@
 
         function ensureCmsEnhancementsReady() {
           if (cmsEnhancementsReady) return Promise.resolve(true)
-          if (tryRegisterCmsEnhancements()) {
+          const existingContext = findCMSContext()
+          if (tryRegisterCmsEnhancements(existingContext)) {
             return Promise.resolve(true)
           }
           if (cmsEnhancementsPromise) {
@@ -270,7 +284,8 @@
             }
 
             const handleSuccess = () => {
-              if (tryRegisterCmsEnhancements()) {
+              const context = findCMSContext()
+              if (tryRegisterCmsEnhancements(context)) {
                 window.clearInterval(timer)
                 cmsEnhancementsPromise = null
                 resolve(true)
