@@ -11,9 +11,13 @@
   "daily_schedule": [
     {
       "date": "2025-10-06",
-      "start_time": "12:00",
-      "end_time": "16:00",
-      "all_day": false
+      "all_day": false,
+      "blocks": [
+        {
+          "start": "12:00",
+          "end": "16:00"
+        }
+      ]
     }
   ],
   "recurrence": "",
@@ -49,7 +53,7 @@
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
   "sourceRef": "10010879-1759752000-1759766400@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
+  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
   "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-06T13:52:42.948Z"
+  "updatedAt": "2025-10-06T16:03:30.503Z"
 }

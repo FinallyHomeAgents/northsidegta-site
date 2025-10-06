@@ -11,9 +11,8 @@
   "daily_schedule": [
     {
       "date": "2025-10-24",
-      "start_time": "",
-      "end_time": "",
-      "all_day": true
+      "all_day": true,
+      "blocks": []
     }
   ],
   "recurrence": "",
@@ -51,7 +50,7 @@
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
   "sourceRef": "10002647-1761264000-1761350399@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
+  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
   "firstSeenAt": "2025-10-04T10:14:53.999Z",
-  "updatedAt": "2025-10-06T13:52:42.948Z"
+  "updatedAt": "2025-10-06T16:03:30.503Z"
 }
