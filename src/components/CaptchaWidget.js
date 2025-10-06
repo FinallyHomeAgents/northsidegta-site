@@ -6,12 +6,45 @@ const PROVIDER_SCRIPTS = {
   hcaptcha: 'https://js.hcaptcha.com/1/api.js?render=explicit',
 }
 
+const PROVIDER_GLOBALS = {
+  turnstile: 'turnstile',
+  hcaptcha: 'hcaptcha',
+}
+
 const TURNSTILE_RENDER_OPTIONS = {
   theme: 'light',
   size: 'normal',
 }
 
 const scriptCache = new Map()
+
+function isProviderReady(provider) {
+  if (typeof window === 'undefined') return false
+  const globalName = PROVIDER_GLOBALS[provider]
+  if (!globalName) return false
+  const globalObj = window[globalName]
+  return Boolean(globalObj && typeof globalObj.render === 'function')
+}
+
+function waitForProvider(provider, attempt = 0) {
+  if (isProviderReady(provider)) {
+    return Promise.resolve()
+  }
+
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('Captcha provider not available'))
+  }
+
+  if (attempt > 50) {
+    return Promise.reject(new Error('Captcha provider did not initialize'))
+  }
+
+  return new Promise((resolve, reject) => {
+    window.setTimeout(() => {
+      waitForProvider(provider, attempt + 1).then(resolve).catch(reject)
+    }, 100)
+  })
+}
 
 function loadScript(provider) {
   const src = PROVIDER_SCRIPTS[provider]
@@ -21,24 +54,39 @@ function loadScript(provider) {
   if (scriptCache.has(provider)) {
     return scriptCache.get(provider)
   }
+
   const promise = new Promise((resolve, reject) => {
+    const handleReady = () => {
+      waitForProvider(provider).then(resolve).catch(reject)
+    }
+
+    if (isProviderReady(provider)) {
+      resolve()
+      return
+    }
+
     const existing = document.querySelector(`script[src="${src}"]`)
     if (existing) {
-      existing.addEventListener('load', resolve)
-      existing.addEventListener('error', reject)
-      if (existing.readyState === 'loaded' || existing.readyState === 'complete') {
-        resolve()
+      existing.addEventListener('load', handleReady, { once: true })
+      existing.addEventListener('error', reject, { once: true })
+      if (existing.getAttribute('data-loaded') === 'true' || existing.readyState === 'loaded' || existing.readyState === 'complete') {
+        handleReady()
       }
       return
     }
+
     const script = document.createElement('script')
     script.src = src
     script.async = true
     script.defer = true
-    script.onload = resolve
+    script.onload = () => {
+      script.setAttribute('data-loaded', 'true')
+      handleReady()
+    }
     script.onerror = reject
     document.head.appendChild(script)
   })
+
   scriptCache.set(provider, promise)
   return promise
 }
