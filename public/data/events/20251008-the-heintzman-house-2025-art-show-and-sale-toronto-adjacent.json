@@ -7,6 +7,15 @@
   "startDate": "2025-10-08T16:00:00.000Z",
   "endDate": "2025-10-08T20:00:00.000Z",
   "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-10-08",
+      "start_time": "12:00",
+      "end_time": "16:00",
+      "all_day": false
+    }
+  ],
   "recurrence": "",
   "category": "Festivals",
   "town": "Toronto-adjacent",
@@ -40,7 +49,7 @@
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
   "sourceRef": "10010881-1759924800-1759939200@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-06T10:18:20.240Z",
+  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
   "firstSeenAt": "2025-10-04T10:14:53.999Z",
-  "updatedAt": "2025-10-06T10:18:20.240Z"
+  "updatedAt": "2025-10-06T13:52:42.948Z"
 }

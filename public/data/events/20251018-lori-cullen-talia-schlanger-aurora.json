@@ -7,6 +7,15 @@
   "startDate": "2025-10-18T23:30:00.000Z",
   "endDate": "2025-10-19T01:30:00.000Z",
   "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-10-18",
+      "start_time": "19:30",
+      "end_time": "21:30",
+      "all_day": false
+    }
+  ],
   "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
@@ -42,7 +51,7 @@
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
   "sourceRef": "10002604-1760815800-1760823000@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-05T10:15:14.815Z",
+  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
   "firstSeenAt": "2025-09-29T18:41:29.880Z",
-  "updatedAt": "2025-10-05T10:15:14.815Z"
+  "updatedAt": "2025-10-06T13:52:42.948Z"
 }
