@@ -135,6 +135,15 @@ collections:
         widget: 'boolean'
         required: false
         default: false
+      - name: 'use_daily_schedule'
+        label: 'Use daily schedule'
+        widget: 'boolean'
+        required: false
+        default: false
+      - name: 'dailySchedule'
+        label: 'Daily schedule'
+        widget: 'dailySchedule'
+        required: false
       - name: 'recurrence'
         label: 'Recurrence (RRULE)'
         widget: 'string'
