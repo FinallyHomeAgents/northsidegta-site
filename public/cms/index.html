@@ -776,21 +776,61 @@
           CMS.registerPreviewTemplate('events', EventPreview)
         }
 
+        const dailyScheduleRegisteredWindows = new WeakSet()
+
         function registerDailyScheduleWidget(CMS, React, contextWindow) {
           if (!CMS || typeof CMS.registerWidget !== 'function' || !React) {
             return
           }
 
-          const { useState, useEffect, useMemo } = React
-          const runtimeWindow = contextWindow && contextWindow.document ? contextWindow : window
+          const { useState, useEffect, useMemo, useRef } = React
+          const targetWindow = contextWindow && contextWindow.document ? contextWindow : window
+
+          if (dailyScheduleRegisteredWindows.has(targetWindow)) {
+            return
+          }
+
+          const cmsInstance =
+            (targetWindow &&
+              targetWindow.CMS &&
+              typeof targetWindow.CMS.registerWidget === 'function'
+              ? targetWindow.CMS
+              : CMS) || CMS
+
+          if (!cmsInstance || typeof cmsInstance.registerWidget !== 'function') {
+            return
+          }
+
+          const runtimeWindow = targetWindow
           const Immutable =
             (runtimeWindow && runtimeWindow.Immutable) ||
-            (CMS && (CMS.Immutable || (CMS.imports && CMS.imports.Immutable))) ||
+            (cmsInstance && (cmsInstance.Immutable || (cmsInstance.imports && cmsInstance.imports.Immutable))) ||
             null
           const promptFn =
             (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
           const alertFn =
             (runtimeWindow && runtimeWindow.alert) || (typeof window !== 'undefined' ? window.alert : null)
+
+          function describeWindow(target) {
+            if (!target) return 'unknown window'
+            if (target === window) return 'top window'
+            try {
+              const frame = target.frameElement
+              if (frame) {
+                const frameId = frame.id ? `#${frame.id}` : ''
+                const title = frame.getAttribute('title')
+                if (frameId || title) {
+                  return `iframe${frameId || ''}${title ? ` (${title})` : ''}`
+                }
+              }
+            } catch (error) {}
+            try {
+              if (target.location && target.location.href) {
+                return target.location.href
+              }
+            } catch (error) {}
+            return 'iframe window'
+          }
 
           const containerStyle = {
             border: '1px solid #e2e8f0',
@@ -992,6 +1032,53 @@
             return true
           }
 
+          function rowsToSchedule(rowsInput) {
+            const grouped = new Map()
+
+            rowsInput.forEach((row) => {
+              if (!row || !row.date) return
+              const key = row.date
+              if (!grouped.has(key)) {
+                grouped.set(key, { date: key, all_day: false, blocks: [] })
+              }
+              const entry = grouped.get(key)
+              if (row.all_day) {
+                entry.all_day = true
+                entry.blocks = []
+                return
+              }
+              if (entry.all_day) {
+                return
+              }
+              const startValue = (row.start_time || '').trim()
+              const endValue = (row.end_time || '').trim()
+              if (startValue && endValue) {
+                entry.blocks.push({ start: startValue, end: endValue })
+              }
+            })
+
+            return Array.from(grouped.values())
+              .map((entry) => {
+                if (entry.all_day) {
+                  return { date: entry.date, all_day: true, blocks: [] }
+                }
+                const blocks = entry.blocks
+                  .filter((block) => block.start && block.end)
+                  .map((block) => ({ start: block.start, end: block.end }))
+                  .sort((a, b) => a.start.localeCompare(b.start))
+                return { date: entry.date, all_day: false, blocks }
+              })
+              .filter((entry) => entry.all_day || entry.blocks.length > 0)
+              .sort((a, b) => a.date.localeCompare(b.date))
+          }
+
+          function countBlocks(schedule) {
+            return schedule.reduce((total, entry) => {
+              if (!entry || !Array.isArray(entry.blocks)) return total
+              return total + entry.blocks.length
+            }, 0)
+          }
+
           function toImmutable(rows) {
             if (Immutable && typeof Immutable.fromJS === 'function') {
               return Immutable.fromJS(rows)
@@ -1019,59 +1106,36 @@
             const { value, onChange, forID, classNameWrapper } = props
             const initialRows = useMemo(() => sortRows(normalizeRows(value)), [value])
             const [rows, setRows] = useState(initialRows.length ? initialRows : [createRow()])
+            const lastLoadedSummaryRef = useRef('')
+            const lastSavedSummaryRef = useRef('')
 
             useEffect(() => {
               const next = sortRows(normalizeRows(value))
+              const schedule = rowsToSchedule(next)
+              const summaryKey = JSON.stringify(schedule)
+              if (summaryKey !== lastLoadedSummaryRef.current) {
+                lastLoadedSummaryRef.current = summaryKey
+                const dayCount = schedule.length
+                const blockCount = countBlocks(schedule)
+                console.info(`[cms] events dailySchedule loaded: ${dayCount} day(s), ${blockCount} block(s)`)
+              }
               if (!rowsEqual(next, rows)) {
                 setRows(next.length ? next : [createRow()])
               }
             }, [value, rows])
 
-            const sanitizedRows = useMemo(() => {
-              const grouped = new Map()
-
-              rows.forEach((row) => {
-                if (!row.date) return
-                const key = row.date
-                if (!grouped.has(key)) {
-                  grouped.set(key, { date: key, all_day: false, blocks: [] })
-                }
-                const entry = grouped.get(key)
-                if (row.all_day) {
-                  entry.all_day = true
-                  entry.blocks = []
-                  return
-                }
-                if (entry.all_day) {
-                  return
-                }
-                entry.blocks.push({
-                  start: (row.start_time || '').trim(),
-                  end: (row.end_time || '').trim(),
-                })
-              })
-
-              const results = Array.from(grouped.values())
-                .map((entry) => {
-                  if (entry.all_day) {
-                    return { date: entry.date, all_day: true, blocks: [] }
-                  }
-                  const blocks = entry.blocks
-                    .filter((block) => block.start && block.end)
-                    .map((block) => ({ start: block.start, end: block.end }))
-                    .sort((a, b) => a.start.localeCompare(b.start))
-                  return { date: entry.date, all_day: false, blocks }
-                })
-                .filter((entry) => entry.all_day || entry.blocks.length > 0)
-                .sort((a, b) => a.date.localeCompare(b.date))
-
-              return results
-            }, [rows])
+            const sanitizedRows = useMemo(() => rowsToSchedule(rows), [rows])
 
             useEffect(() => {
-              if (onChange) {
-                onChange(toImmutable(sanitizedRows))
+              if (!onChange) return
+              const scheduleJson = JSON.stringify(sanitizedRows)
+              if (scheduleJson !== lastSavedSummaryRef.current) {
+                lastSavedSummaryRef.current = scheduleJson
+                const dayCount = sanitizedRows.length
+                const blockCount = countBlocks(sanitizedRows)
+                console.info(`[cms] events dailySchedule saved: ${dayCount} day(s), ${blockCount} block(s)`)
               }
+              onChange(toImmutable(sanitizedRows))
             }, [onChange, sanitizedRows])
 
             function updateRow(index, updates) {
@@ -1261,7 +1325,14 @@
             )
           }
 
-          CMS.registerWidget('dailySchedule', DailyScheduleControl)
+          try {
+            cmsInstance.registerWidget('dailySchedule', DailyScheduleControl)
+            dailyScheduleRegisteredWindows.add(targetWindow)
+            const contextDescription = describeWindow(targetWindow)
+            console.info(`[cms] widget registered: dailySchedule (${contextDescription})`)
+          } catch (error) {
+            console.error('[cms] failed to register dailySchedule widget', error)
+          }
         }
 
         const legacyStylingInitializedFor = new WeakSet()
