@@ -225,6 +225,131 @@ async function validateImageUrl(url) {
   }
 }
 
+function formatScheduleLabel(date) {
+  const parsed = DateTime.fromISO(date || '', { zone: TORONTO_ZONE })
+  return parsed.isValid ? parsed.toFormat('ccc, MMM d') : date
+}
+
+function validateDailyScheduleInput(payload, startDate, endDate) {
+  const wantsSchedule = Boolean(payload.useDailySchedule ?? payload.use_daily_schedule)
+  const rawSchedule = Array.isArray(payload.daily_schedule) ? payload.daily_schedule : []
+  if (!wantsSchedule && !rawSchedule.length) {
+    return { ok: true, schedule: [], derivedStart: startDate, derivedEnd: endDate }
+  }
+
+  if (!startDate?.isValid || !endDate?.isValid || endDate <= startDate) {
+    return { ok: false, error: 'Set valid start and end times before using the daily schedule.' }
+  }
+
+  if (!rawSchedule.length) {
+    return { ok: false, error: 'Provide at least one day in the daily schedule.' }
+  }
+
+  const dates = []
+  let cursor = startDate.startOf('day')
+  const last = endDate.startOf('day')
+  let steps = 0
+  while (cursor <= last && steps <= MAX_DURATION_DAYS) {
+    dates.push(cursor.toISODate())
+    cursor = cursor.plus({ days: 1 })
+    steps += 1
+  }
+
+  if (!dates.length) {
+    return { ok: false, error: 'Unable to derive the daily schedule range.' }
+  }
+
+  const scheduleMap = new Map()
+  rawSchedule.forEach((entry) => {
+    if (!entry || typeof entry !== 'object') return
+    const date = typeof entry.date === 'string' ? entry.date.trim() : ''
+    if (!date) return
+    scheduleMap.set(date, entry)
+  })
+
+  const sanitized = []
+  let earliest = null
+  let latest = null
+
+  for (const date of dates) {
+    const source = scheduleMap.get(date)
+    const label = formatScheduleLabel(date)
+    if (!source) {
+      return { ok: false, error: `Add hours for ${label}.` }
+    }
+
+    const allDay = Boolean(source.all_day ?? source.allDay)
+    if (allDay) {
+      sanitized.push({ date, all_day: true, blocks: [] })
+      const dayStart = DateTime.fromISO(`${date}T00:00`, { zone: TORONTO_ZONE })
+      const dayEnd = DateTime.fromISO(`${date}T23:59`, { zone: TORONTO_ZONE })
+      if (!earliest || dayStart < earliest) earliest = dayStart
+      if (!latest || dayEnd > latest) latest = dayEnd
+      continue
+    }
+
+    let blocks = []
+    if (Array.isArray(source.blocks) && source.blocks.length) {
+      blocks = source.blocks
+    } else if (source.start_time || source.startTime) {
+      blocks = [
+        {
+          start: source.start_time || source.startTime,
+          end: source.end_time || source.endTime,
+        },
+      ]
+    }
+
+    if (!blocks.length) {
+      return { ok: false, error: `Add at least one time range for ${label}.` }
+    }
+
+    const normalizedBlocks = []
+    for (const block of blocks) {
+      const startText = typeof block?.start === 'string' ? block.start.trim() : ''
+      const endText = typeof block?.end === 'string' ? block.end.trim() : ''
+      if (!startText || !endText) {
+        return { ok: false, error: `Complete the time range for ${label}.` }
+      }
+      if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
+        return { ok: false, error: `Use HH:MM format for times on ${label}.` }
+      }
+      const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
+      const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
+      if (!startTime.isValid || !endTime.isValid) {
+        return { ok: false, error: `Enter valid times for ${label}.` }
+      }
+      if (endTime <= startTime) {
+        return { ok: false, error: `End time must be after the start time on ${label}.` }
+      }
+      normalizedBlocks.push({ start: startText, end: endText, startTime, endTime })
+    }
+
+    normalizedBlocks.sort((a, b) => a.startTime.toMillis() - b.startTime.toMillis())
+    for (let index = 1; index < normalizedBlocks.length; index += 1) {
+      if (normalizedBlocks[index].startTime < normalizedBlocks[index - 1].endTime) {
+        return { ok: false, error: `Time ranges overlap on ${label}.` }
+      }
+    }
+
+    const first = normalizedBlocks[0].startTime
+    const lastBlock = normalizedBlocks[normalizedBlocks.length - 1].endTime
+    if (!earliest || first < earliest) earliest = first
+    if (!latest || lastBlock > latest) latest = lastBlock
+
+    sanitized.push({
+      date,
+      all_day: false,
+      blocks: normalizedBlocks.map(({ start, end }) => ({ start, end })),
+    })
+  }
+
+  const derivedStart = earliest ?? startDate
+  const derivedEnd = latest ?? endDate
+
+  return { ok: true, schedule: sanitized, derivedStart, derivedEnd }
+}
+
 function validateSubmission(payload) {
   const errors = {}
   const data = {}
@@ -333,6 +458,23 @@ function validateSubmission(payload) {
 
   const imageUrl = normalizeText(payload.imageUrl)
   data.imageUrl = imageUrl
+
+  data.useDailySchedule = false
+  data.dailySchedule = []
+
+  const scheduleResult = validateDailyScheduleInput(payload, start, end)
+  if (!scheduleResult.ok) {
+    errors.dailySchedule = scheduleResult.error
+  } else {
+    data.useDailySchedule = scheduleResult.schedule.length > 0
+    data.dailySchedule = scheduleResult.schedule
+    if (scheduleResult.derivedStart?.isValid) {
+      data.startDate = scheduleResult.derivedStart
+    }
+    if (scheduleResult.derivedEnd?.isValid) {
+      data.endDate = scheduleResult.derivedEnd
+    }
+  }
 
   const rawAudience = Array.isArray(payload.audienceTags) ? payload.audienceTags : []
   data.audienceTags = rawAudience
@@ -604,6 +746,8 @@ export default async function handler(req, res) {
     sourceName: data.organizerName,
     submittedAt: DateTime.now().setZone(TORONTO_ZONE).toUTC().toISO(),
     contactConsent: data.contactConsent,
+    use_daily_schedule: data.useDailySchedule,
+    daily_schedule: data.useDailySchedule ? data.dailySchedule : [],
     moderation: {
       ip,
       submittedVia: 'public-form',
@@ -641,6 +785,8 @@ export default async function handler(req, res) {
       organizerEmail: pendingEvent.organizerEmail,
       ticketsUrl: pendingEvent.ticketsUrl,
       registrationUrl: pendingEvent.registrationUrl,
+      daily_schedule: pendingEvent.daily_schedule,
+      useDailySchedule: pendingEvent.use_daily_schedule,
     },
   })
 }

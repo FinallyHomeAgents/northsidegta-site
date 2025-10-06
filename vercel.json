@@ -1,10 +1,9 @@
 {
+  "redirects": [
+    { "source": "/admin", "destination": "/cms", "statusCode": 308 },
+    { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
+  ],
   "rewrites": [
-    { "source": "/admin", "destination": "/admin/" },
-    { "source": "/admin/", "destination": "/admin/index.html" },
-    { "source": "/admin/config.yml", "destination": "/admin/config.yml" },
-    { "source": "/admin/(.*)", "destination": "/admin/$1" },
-
     { "source": "/cms", "destination": "/cms/" },
     { "source": "/cms/", "destination": "/cms/index.html" },
     { "source": "/cms/config.yml", "destination": "/cms/config.yml" },

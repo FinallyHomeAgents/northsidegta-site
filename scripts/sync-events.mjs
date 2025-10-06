@@ -1197,12 +1197,34 @@ function normalizeEvent(item, feed, now) {
         ? (item.daily_schedule || item.dailySchedule).length > 0
         : false),
     daily_schedule: Array.isArray(item.daily_schedule || item.dailySchedule)
-      ? (item.daily_schedule || item.dailySchedule).map((entry) => ({
-          date: entry?.date || entry?.day || '',
-          start_time: entry?.start_time || entry?.startTime || '',
-          end_time: entry?.end_time || entry?.endTime || '',
-          all_day: Boolean(entry?.all_day ?? entry?.allDay),
-        }))
+      ? (item.daily_schedule || item.dailySchedule).map((entry) => {
+          const date = entry?.date || entry?.day || ''
+          const allDay = Boolean(entry?.all_day ?? entry?.allDay)
+          const blocks = []
+
+          if (allDay) {
+            return { date, all_day: true, blocks: [] }
+          }
+
+          if (Array.isArray(entry?.blocks) && entry.blocks.length) {
+            entry.blocks.forEach((block) => {
+              if (!block) return
+              const start = block.start || block.start_time || block.startTime || ''
+              const end = block.end || block.end_time || block.endTime || ''
+              if (start && end) {
+                blocks.push({ start, end })
+              }
+            })
+          } else {
+            const start = entry?.start_time || entry?.startTime || ''
+            const end = entry?.end_time || entry?.endTime || ''
+            if (start && end) {
+              blocks.push({ start, end })
+            }
+          }
+
+          return { date, all_day: false, blocks }
+        })
       : undefined,
     source: { name: sourceName, id: sourceId },
     sourceName,
