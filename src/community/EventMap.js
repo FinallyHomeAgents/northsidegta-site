@@ -111,7 +111,11 @@ export default function EventMap({ events, onSelectEvent }) {
                     {cluster.events[0].title}
                   </button>
                   <p className="mt-1 text-xs text-slate-600">
-                    {formatDateRange(cluster.events[0].nextOccurrence || cluster.events[0].occurrences?.[0], cluster.events[0].allDay)}
+                    {formatDateRange(
+                      cluster.events[0].nextOccurrence || cluster.events[0].occurrences?.[0],
+                      (cluster.events[0].nextOccurrence || cluster.events[0].occurrences?.[0])?.allDay ??
+                        cluster.events[0].allDay,
+                    )}
                   </p>
                 </Popup>
               </Marker>
@@ -141,7 +145,9 @@ export default function EventMap({ events, onSelectEvent }) {
                 >
                   <span className="block text-base font-semibold">{event.title}</span>
                   <span className="block text-xs text-slate-600">{event.town}</span>
-                  <span className="block text-xs text-slate-500">{formatDateRange(occurrence, event.allDay)}</span>
+                  <span className="block text-xs text-slate-500">
+                    {formatDateRange(occurrence, occurrence?.allDay ?? event.allDay)}
+                  </span>
                 </button>
               </li>
             )

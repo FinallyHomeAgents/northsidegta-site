@@ -9,6 +9,7 @@ const require = createRequire(import.meta.url)
 const Parser = require('rss-parser')
 const ical = require('node-ical')
 const { getAdapter } = require('../lib/event-source-adapters.js')
+const { expandIcsEvents } = require('../lib/events/ics.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -51,7 +52,7 @@ async function main() {
     feedReport.startedAt = new Date().toISOString()
 
     try {
-      const items = await fetchFeed(feed, feedReport, syncState)
+      const items = await fetchFeed(feed, feedReport, syncState, now)
       const payload = Array.isArray(items) ? items : []
       feedReport.itemsFetched = payload.length
       if (!payload.length) {
@@ -201,7 +202,7 @@ function getSourceId(event) {
   return ''
 }
 
-async function fetchFeed(feed, feedReport, syncState) {
+async function fetchFeed(feed, feedReport, syncState, now) {
   if (!feed) return []
 
   try {
@@ -253,7 +254,8 @@ async function fetchFeed(feed, feedReport, syncState) {
     }
 
     if (type === 'ics') {
-      return fetchIcs(feed, feedReport, syncState)
+      const vevents = await fetchIcs(feed, feedReport, syncState)
+      return expandIcsEvents(vevents, feed, now)
     }
 
     if (type === 'html') {
@@ -1189,6 +1191,19 @@ function normalizeEvent(item, feed, now) {
     url: eventUrl,
     eventUrl,
     icsUrl,
+    use_daily_schedule:
+      Boolean(item.use_daily_schedule ?? item.useDailySchedule) ||
+      (Array.isArray(item.daily_schedule || item.dailySchedule)
+        ? (item.daily_schedule || item.dailySchedule).length > 0
+        : false),
+    daily_schedule: Array.isArray(item.daily_schedule || item.dailySchedule)
+      ? (item.daily_schedule || item.dailySchedule).map((entry) => ({
+          date: entry?.date || entry?.day || '',
+          start_time: entry?.start_time || entry?.startTime || '',
+          end_time: entry?.end_time || entry?.endTime || '',
+          all_day: Boolean(entry?.all_day ?? entry?.allDay),
+        }))
+      : undefined,
     source: { name: sourceName, id: sourceId },
     sourceName,
     sourceUrl: resolveUrl(item.sourceUrl || feed.sourceUrl || eventUrl, feed),
@@ -1335,6 +1350,8 @@ const KEY_ORDER = [
   'startDate',
   'endDate',
   'allDay',
+  'use_daily_schedule',
+  'daily_schedule',
   'recurrence',
   'category',
   'town',

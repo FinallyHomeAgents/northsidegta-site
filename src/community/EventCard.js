@@ -19,7 +19,7 @@ function PlaceholderImage() {
 
 export default function EventCard({ event, onSelect, highlighted = false }) {
   const occurrence = event.nextOccurrence || event.occurrences?.[0]
-  const dateLabel = formatDateRange(occurrence, event.allDay)
+  const dateLabel = formatDateRange(occurrence, occurrence?.allDay ?? event.allDay)
   const isFree = event.priceType === 'Free'
   const townParts = []
   if (event.subArea) townParts.push(event.subArea)
