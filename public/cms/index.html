@@ -237,6 +237,8 @@
           if (!window.CMS || !window.React) return false
           try {
             registerEventsPreview(window.CMS, window.React)
+            registerDailyScheduleWidget(window.CMS, window.React)
+            activateLegacyFieldStyling()
             cmsEnhancementsReady = true
           } catch (error) {
             console.warn('[cms-login] failed to register CMS enhancements', error)
@@ -540,6 +542,463 @@
           }
 
           CMS.registerPreviewTemplate('events', EventPreview)
+        }
+
+        function registerDailyScheduleWidget(CMS, React) {
+          if (!CMS || typeof CMS.registerWidget !== 'function' || !React) {
+            return
+          }
+
+          const { useState, useEffect, useMemo } = React
+          const Immutable = window.Immutable
+
+          const containerStyle = {
+            border: '1px solid #e2e8f0',
+            borderRadius: '14px',
+            padding: '16px',
+            background: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+          }
+
+          const headerStyle = {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '8px',
+          }
+
+          const actionsStyle = {
+            display: 'flex',
+            gap: '8px',
+            flexWrap: 'wrap',
+          }
+
+          const buttonStyle = {
+            borderRadius: '999px',
+            border: '1px solid #cbd5f5',
+            background: '#f8fafc',
+            color: '#1e3a8a',
+            fontSize: '12px',
+            fontWeight: 600,
+            padding: '6px 12px',
+            cursor: 'pointer',
+          }
+
+          const destructiveButtonStyle = {
+            ...buttonStyle,
+            borderColor: '#fecaca',
+            color: '#b91c1c',
+          }
+
+          const rowStyle = {
+            border: '1px solid #e2e8f0',
+            borderRadius: '12px',
+            padding: '12px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: '12px',
+            alignItems: 'flex-end',
+          }
+
+          const fieldStyle = {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          }
+
+          const labelStyle = {
+            fontSize: '12px',
+            fontWeight: 600,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            color: '#475569',
+          }
+
+          const inputStyle = {
+            borderRadius: '10px',
+            border: '1px solid #cbd5f5',
+            padding: '8px 10px',
+            fontSize: '14px',
+            background: '#f8fafc',
+          }
+
+          const checkboxWrapperStyle = {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            paddingTop: '20px',
+          }
+
+          function createRow(overrides = {}) {
+            return {
+              date: '',
+              start_time: '',
+              end_time: '',
+              all_day: false,
+              ...overrides,
+            }
+          }
+
+          function normalizeRows(value) {
+            if (!value) return []
+            if (Immutable && typeof Immutable.List === 'function' && Immutable.List.isList(value)) {
+              return value
+                .toJS()
+                .map((row) =>
+                  createRow({
+                    date: (row?.date || '').trim(),
+                    start_time: row?.start_time || row?.startTime || '',
+                    end_time: row?.end_time || row?.endTime || '',
+                    all_day: Boolean(row?.all_day ?? row?.allDay),
+                  }),
+                )
+            }
+            if (Array.isArray(value)) {
+              return value.map((row) =>
+                createRow({
+                  date: (row?.date || '').trim(),
+                  start_time: row?.start_time || row?.startTime || '',
+                  end_time: row?.end_time || row?.endTime || '',
+                  all_day: Boolean(row?.all_day ?? row?.allDay),
+                }),
+              )
+            }
+            if (value && typeof value === 'object' && typeof value.toJS === 'function') {
+              try {
+                const jsValue = value.toJS()
+                return normalizeRows(jsValue)
+              } catch (error) {
+                return []
+              }
+            }
+            return []
+          }
+
+          function sortRows(rows) {
+            return [...rows].sort((a, b) => {
+              if (!a.date && !b.date) return 0
+              if (!a.date) return 1
+              if (!b.date) return -1
+              const aDate = new Date(a.date)
+              const bDate = new Date(b.date)
+              if (!Number.isNaN(aDate) && !Number.isNaN(bDate)) {
+                return aDate - bDate
+              }
+              return a.date.localeCompare(b.date)
+            })
+          }
+
+          function rowsEqual(a, b) {
+            if (a.length !== b.length) return false
+            for (let index = 0; index < a.length; index += 1) {
+              const first = a[index]
+              const second = b[index]
+              if (
+                first.date !== second.date ||
+                first.start_time !== second.start_time ||
+                first.end_time !== second.end_time ||
+                Boolean(first.all_day) !== Boolean(second.all_day)
+              ) {
+                return false
+              }
+            }
+            return true
+          }
+
+          function toImmutable(rows) {
+            if (Immutable && typeof Immutable.fromJS === 'function') {
+              return Immutable.fromJS(rows)
+            }
+            return rows
+          }
+
+          function parseDateInput(value) {
+            if (!value) return null
+            const trimmed = String(value).trim()
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return null
+            const date = new Date(trimmed)
+            if (Number.isNaN(date.getTime())) return null
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+          }
+
+          function formatIsoDate(date) {
+            const year = date.getFullYear()
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const day = String(date.getDate()).padStart(2, '0')
+            return `${year}-${month}-${day}`
+          }
+
+          function DailyScheduleControl(props) {
+            const { value, onChange, forID, classNameWrapper } = props
+            const initialRows = useMemo(() => sortRows(normalizeRows(value)), [value])
+            const [rows, setRows] = useState(initialRows.length ? initialRows : [createRow()])
+
+            useEffect(() => {
+              const next = sortRows(normalizeRows(value))
+              if (!rowsEqual(next, rows)) {
+                setRows(next.length ? next : [createRow()])
+              }
+            }, [value, rows])
+
+            const sanitizedRows = useMemo(
+              () =>
+                rows
+                  .filter((row) => row.date)
+                  .map((row) => ({
+                    date: row.date,
+                    start_time: row.all_day ? '' : row.start_time,
+                    end_time: row.all_day ? '' : row.end_time,
+                    all_day: Boolean(row.all_day),
+                  })),
+              [rows],
+            )
+
+            useEffect(() => {
+              if (onChange) {
+                onChange(toImmutable(sanitizedRows))
+              }
+            }, [onChange, sanitizedRows])
+
+            function updateRow(index, updates) {
+              const next = rows.map((row, rowIndex) =>
+                rowIndex === index
+                  ? {
+                      ...row,
+                      ...updates,
+                    }
+                  : row,
+              )
+              setRows(sortRows(next))
+            }
+
+            function handleAddRow() {
+              setRows((prev) => sortRows([...prev, createRow()]))
+            }
+
+            function handleRemoveRow(index) {
+              const next = rows.filter((_, rowIndex) => rowIndex !== index)
+              setRows(next.length ? sortRows(next) : [createRow()])
+            }
+
+            function handleDuplicateHours(index) {
+              if (index <= 0) return
+              const source = rows[index - 1]
+              if (!source || source.all_day) return
+              updateRow(index, {
+                start_time: source.start_time,
+                end_time: source.end_time,
+                all_day: false,
+              })
+            }
+
+            function handleAddRange() {
+              const startInput = window.prompt('Start date (YYYY-MM-DD)')
+              if (!startInput) return
+              const endInput = window.prompt('End date (YYYY-MM-DD)', startInput)
+              if (!endInput) return
+              const startDate = parseDateInput(startInput)
+              const endDate = parseDateInput(endInput)
+              if (!startDate || !endDate) {
+                window.alert('Enter dates in YYYY-MM-DD format (e.g., 2025-11-15).')
+                return
+              }
+              if (endDate < startDate) {
+                window.alert('End date must be on or after the start date.')
+                return
+              }
+              const existing = new Set(rows.map((row) => row.date).filter(Boolean))
+              const additions = []
+              for (let cursor = new Date(startDate); cursor <= endDate; cursor.setDate(cursor.getDate() + 1)) {
+                const iso = formatIsoDate(cursor)
+                if (!existing.has(iso)) {
+                  additions.push(createRow({ date: iso }))
+                }
+              }
+              if (!additions.length) {
+                window.alert('All days in that range are already listed.')
+                return
+              }
+              setRows((prev) => sortRows([...prev, ...additions]))
+            }
+
+            return React.createElement(
+              'div',
+              { id: forID, className: classNameWrapper, style: containerStyle },
+              React.createElement(
+                'div',
+                { style: headerStyle },
+                React.createElement('strong', null, 'Daily schedule'),
+                React.createElement(
+                  'div',
+                  { style: actionsStyle },
+                  React.createElement(
+                    'button',
+                    { type: 'button', style: buttonStyle, onClick: handleAddRange },
+                    'Add days from range',
+                  ),
+                  React.createElement(
+                    'button',
+                    { type: 'button', style: buttonStyle, onClick: handleAddRow },
+                    'Add day',
+                  ),
+                ),
+              ),
+              rows.map((row, index) => {
+                const disableTimes = Boolean(row.all_day)
+                return React.createElement(
+                  'div',
+                  { key: row.key || `${row.date || 'row'}-${index}`, style: rowStyle },
+                  React.createElement(
+                    'label',
+                    { style: fieldStyle },
+                    React.createElement('span', { style: labelStyle }, 'Date'),
+                    React.createElement('input', {
+                      type: 'date',
+                      value: row.date,
+                      onChange: (event) => updateRow(index, { date: event.target.value }),
+                      style: inputStyle,
+                    }),
+                  ),
+                  React.createElement(
+                    'label',
+                    { style: fieldStyle },
+                    React.createElement('span', { style: labelStyle }, 'Start time'),
+                    React.createElement('input', {
+                      type: 'time',
+                      value: row.start_time,
+                      disabled: disableTimes,
+                      onChange: (event) => updateRow(index, { start_time: event.target.value }),
+                      style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
+                    }),
+                  ),
+                  React.createElement(
+                    'label',
+                    { style: fieldStyle },
+                    React.createElement('span', { style: labelStyle }, 'End time'),
+                    React.createElement('input', {
+                      type: 'time',
+                      value: row.end_time,
+                      disabled: disableTimes,
+                      onChange: (event) => updateRow(index, { end_time: event.target.value }),
+                      style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
+                    }),
+                  ),
+                  React.createElement(
+                    'div',
+                    { style: checkboxWrapperStyle },
+                    React.createElement('input', {
+                      type: 'checkbox',
+                      checked: Boolean(row.all_day),
+                      onChange: (event) =>
+                        updateRow(index, {
+                          all_day: event.target.checked,
+                          ...(event.target.checked ? { start_time: '', end_time: '' } : {}),
+                        }),
+                    }),
+                    React.createElement('span', { style: { fontSize: '13px', fontWeight: 500, color: '#1e293b' } }, 'All day'),
+                  ),
+                  React.createElement(
+                    'div',
+                    {
+                      style: {
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '8px',
+                        justifyContent: 'flex-end',
+                      },
+                    },
+                    index > 0 && !disableTimes
+                      ? React.createElement(
+                          'button',
+                          {
+                            type: 'button',
+                            style: buttonStyle,
+                            onClick: () => handleDuplicateHours(index),
+                          },
+                          'Duplicate previous hours',
+                        )
+                      : null,
+                    React.createElement(
+                      'button',
+                      {
+                        type: 'button',
+                        style: destructiveButtonStyle,
+                        onClick: () => handleRemoveRow(index),
+                      },
+                      'Remove',
+                    ),
+                  ),
+                )
+              }),
+              sanitizedRows.length === 0
+                ? React.createElement(
+                    'p',
+                    { style: { fontSize: '12px', color: '#64748b', marginTop: '-4px' } },
+                    'Add at least one day when using the daily schedule.',
+                  )
+                : null,
+            )
+          }
+
+          CMS.registerWidget('dailySchedule', DailyScheduleControl)
+        }
+
+        let legacyStylingInitialized = false
+
+        function activateLegacyFieldStyling() {
+          if (legacyStylingInitialized) return
+          if (typeof document === 'undefined') return
+          legacyStylingInitialized = true
+
+          const styleId = 'ns-legacy-schedule-style'
+          if (!document.getElementById(styleId)) {
+            const style = document.createElement('style')
+            style.id = styleId
+            style.textContent = `
+              [data-field-name="startDate"].ns-legacy-muted,
+              [data-field-name="endDate"].ns-legacy-muted {
+                opacity: 0.55;
+                transition: opacity 0.2s ease-in-out;
+              }
+              [data-field-name="startDate"].ns-legacy-muted:hover,
+              [data-field-name="endDate"].ns-legacy-muted:hover {
+                opacity: 0.85;
+              }
+            `
+            document.head.appendChild(style)
+          }
+
+          const update = () => {
+            const flag = document.querySelector('[data-field-name="use_daily_schedule"] input[type="checkbox"]')
+            const startField = document.querySelector('[data-field-name="startDate"]')
+            const endField = document.querySelector('[data-field-name="endDate"]')
+            const muted = Boolean(flag && flag.checked)
+            ;[startField, endField].forEach((node) => {
+              if (!node) return
+              if (muted) {
+                node.classList.add('ns-legacy-muted')
+              } else {
+                node.classList.remove('ns-legacy-muted')
+              }
+            })
+          }
+
+          const observer = new MutationObserver(() => {
+            window.requestAnimationFrame(update)
+          })
+
+          observer.observe(document.body, { childList: true, subtree: true })
+
+          document.addEventListener('change', (event) => {
+            if (event.target && event.target.closest('[data-field-name="use_daily_schedule"]')) {
+              window.requestAnimationFrame(update)
+            }
+          })
+
+          window.requestAnimationFrame(update)
         }
 
         const form = document.getElementById('cms-login-form')

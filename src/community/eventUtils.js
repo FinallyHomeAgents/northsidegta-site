@@ -89,10 +89,257 @@ const dateFormatter = new Intl.DateTimeFormat('en-CA', {
   day: 'numeric',
 })
 
+const scheduleDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  month: 'short',
+  day: 'numeric',
+})
+
 const timeFormatter = new Intl.DateTimeFormat('en-CA', {
   hour: 'numeric',
   minute: '2-digit',
 })
+
+const timeFormatter24 = new Intl.DateTimeFormat('en-CA', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+})
+
+function parseBoolean(value) {
+  if (value === true || value === false) return value
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase()
+    if (!normalized) return false
+    if (['true', '1', 'yes', 'y'].includes(normalized)) return true
+    if (['false', '0', 'no', 'n'].includes(normalized)) return false
+  }
+  if (typeof value === 'number') {
+    return value !== 0
+  }
+  return false
+}
+
+function parseDateOnly(value) {
+  if (!value) return null
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    const copy = new Date(value.getTime())
+    copy.setHours(0, 0, 0, 0)
+    return copy
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return null
+    const isoMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+    if (isoMatch) {
+      const year = Number(isoMatch[1])
+      const month = Number(isoMatch[2]) - 1
+      const day = Number(isoMatch[3])
+      if (
+        Number.isFinite(year) &&
+        Number.isFinite(month) &&
+        Number.isFinite(day)
+      ) {
+        const date = new Date(year, month, day)
+        date.setHours(0, 0, 0, 0)
+        return date
+      }
+    }
+    const parsed = new Date(trimmed)
+    if (!Number.isNaN(parsed.getTime())) {
+      parsed.setHours(0, 0, 0, 0)
+      return parsed
+    }
+  }
+  return null
+}
+
+function parseTimeOfDay(value) {
+  if (!value && value !== 0) return null
+  const text = String(value).trim()
+  if (!text) return null
+  const match = text.match(
+    /^(\d{1,2})(?::(\d{2}))?(?::(\d{2}))?\s*(AM|PM)?$/i,
+  )
+  if (!match) return null
+  let hours = Number(match[1])
+  const minutes = Number(match[2] || '0')
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null
+  if (minutes < 0 || minutes > 59) return null
+  const meridiem = match[4] ? match[4].toUpperCase() : ''
+  if (meridiem === 'AM' && hours === 12) {
+    hours = 0
+  } else if (meridiem === 'PM' && hours < 12) {
+    hours += 12
+  }
+  if (hours < 0 || hours > 23) return null
+  return { hours, minutes }
+}
+
+function applyTimeToDate(date, time) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null
+  if (!time || typeof time.hours !== 'number' || typeof time.minutes !== 'number') {
+    return null
+  }
+  const result = new Date(date.getTime())
+  result.setHours(time.hours, time.minutes, 0, 0)
+  return result
+}
+
+function normalizeDailySchedule(raw = {}) {
+  const schedule = Array.isArray(raw.daily_schedule)
+    ? raw.daily_schedule
+    : Array.isArray(raw.dailySchedule)
+      ? raw.dailySchedule
+      : []
+
+  const entries = []
+  const seenDates = new Set()
+
+  schedule.forEach((row, index) => {
+    if (!row || typeof row !== 'object') return
+    const dateValue = row.date ?? row.day ?? row.start_date
+    const parsedDate = parseDateOnly(dateValue)
+    if (!parsedDate) return
+
+    const isoDate = `${parsedDate.getFullYear()}-${String(
+      parsedDate.getMonth() + 1,
+    ).padStart(2, '0')}-${String(parsedDate.getDate()).padStart(2, '0')}`
+    if (seenDates.has(isoDate)) return
+
+    const allDay = parseBoolean(row.all_day ?? row.allDay)
+    const startTime = parseTimeOfDay(row.start_time ?? row.startTime)
+    const endTime = parseTimeOfDay(row.end_time ?? row.endTime)
+
+    let start = null
+    let end = null
+
+    if (allDay) {
+      start = startOfDay(parsedDate)
+      end = endOfDay(parsedDate)
+    } else if (startTime && endTime) {
+      start = applyTimeToDate(parsedDate, startTime)
+      end = applyTimeToDate(parsedDate, endTime)
+      if (!start || !end || end <= start) {
+        return
+      }
+    } else {
+      return
+    }
+
+    const labelDate = scheduleDateFormatter.format(parsedDate)
+    let label = labelDate
+    if (allDay) {
+      label = `${labelDate}: All day`
+    } else {
+      const startLabel = timeFormatter.format(start)
+      const endLabel = timeFormatter.format(end)
+      label = `${labelDate}: ${startLabel}–${endLabel}`
+    }
+
+    entries.push({
+      date: isoDate,
+      allDay,
+      start,
+      end,
+      startIso: start?.toISOString() || '',
+      endIso: end?.toISOString() || '',
+      startTimeLabel: allDay ? '' : timeFormatter.format(start),
+      endTimeLabel: allDay ? '' : timeFormatter.format(end),
+      startTimeValue: allDay ? '' : timeFormatter24.format(start),
+      endTimeValue: allDay ? '' : timeFormatter24.format(end),
+      label,
+      index,
+    })
+    seenDates.add(isoDate)
+  })
+
+  entries.sort((a, b) => {
+    if (a.start && b.start) return a.start.getTime() - b.start.getTime()
+    if (a.start && !b.start) return -1
+    if (!a.start && b.start) return 1
+    return 0
+  })
+
+  const earliest = entries[0]?.start || null
+  const latest = entries[entries.length - 1]?.end || earliest
+
+  const useDailySchedule = parseBoolean(raw.use_daily_schedule ?? raw.useDailySchedule)
+  const normalizedUse = useDailySchedule && entries.length > 0
+
+  return {
+    entries,
+    useDailySchedule: normalizedUse,
+    startDateObj: earliest || null,
+    endDateObj: latest || null,
+    startDateIso: earliest ? earliest.toISOString() : '',
+    endDateIso: latest ? latest.toISOString() : '',
+  }
+}
+
+function deriveScheduleFromLegacy(raw = {}) {
+  const start = parseDate(raw.startDate)
+  const end = parseDate(raw.endDate) || start
+  if (!(start instanceof Date) || Number.isNaN(start)) {
+    return { entries: [], useDailySchedule: false, startDateObj: null, endDateObj: null, startDateIso: '', endDateIso: '' }
+  }
+
+  const entries = []
+
+  const treatAsAllDay =
+    Boolean(raw.allDay) ||
+    (end instanceof Date &&
+      !Number.isNaN(end) &&
+      end > start &&
+      start.getHours() === 0 &&
+      start.getMinutes() === 0 &&
+      end.getHours() === 0 &&
+      end.getMinutes() === 0)
+
+  if (treatAsAllDay && end instanceof Date && !Number.isNaN(end) && end > start) {
+    const firstDay = startOfDay(start)
+    const lastDay = startOfDay(end)
+    if (firstDay && lastDay && lastDay >= firstDay) {
+      const MAX_DERIVED_DAYS = 90
+      let count = 0
+      for (let cursor = new Date(firstDay); cursor <= lastDay && count < MAX_DERIVED_DAYS; cursor.setDate(cursor.getDate() + 1)) {
+        const dayStart = startOfDay(cursor)
+        const dayEnd = endOfDay(cursor)
+        const isoDate = formatDateForSlug(dayStart)
+        entries.push({
+          date: isoDate,
+          allDay: true,
+          start: dayStart,
+          end: dayEnd,
+          startIso: dayStart.toISOString(),
+          endIso: dayEnd.toISOString(),
+          startTimeLabel: '',
+          endTimeLabel: '',
+          startTimeValue: '',
+          endTimeValue: '',
+          label: `${scheduleDateFormatter.format(dayStart)}: All day`,
+          index: entries.length,
+        })
+        count += 1
+      }
+    }
+  }
+
+  if (!entries.length) {
+    return { entries: [], useDailySchedule: false, startDateObj: null, endDateObj: null, startDateIso: '', endDateIso: '' }
+  }
+
+  const earliest = entries[0]?.start || null
+  const latest = entries[entries.length - 1]?.end || earliest
+
+  return {
+    entries,
+    useDailySchedule: false,
+    startDateObj: earliest,
+    endDateObj: latest,
+    startDateIso: earliest ? earliest.toISOString() : '',
+    endDateIso: latest ? latest.toISOString() : '',
+  }
+}
 
 export function hydrateEvents(rawEvents = []) {
   return rawEvents
@@ -102,9 +349,21 @@ export function hydrateEvents(rawEvents = []) {
 
 export function sanitizeEvent(raw) {
   if (!raw || typeof raw !== 'object') return null
-  const startDateObj = parseDate(raw.startDate)
-  const endDateObj = parseDate(raw.endDate) || startDateObj
-  const durationMs = getDuration(startDateObj, endDateObj)
+  let scheduleInfo = normalizeDailySchedule(raw)
+  if (!scheduleInfo.entries.length) {
+    const derived = deriveScheduleFromLegacy(raw)
+    if (derived.entries.length) {
+      scheduleInfo = derived
+    }
+  }
+  const startDateObj = scheduleInfo.startDateObj || parseDate(raw.startDate)
+  const endDateObj = scheduleInfo.endDateObj || parseDate(raw.endDate) || startDateObj
+  const durationMs = scheduleInfo.entries.length
+    ? Math.max(
+        scheduleInfo.entries[0].end?.getTime() - scheduleInfo.entries[0].start?.getTime() || 0,
+        DEFAULT_DURATION_MS,
+      )
+    : getDuration(startDateObj, endDateObj)
 
   const slug = buildEventSlug(raw)
 
@@ -145,8 +404,8 @@ export function sanitizeEvent(raw) {
     category: String(raw.category || ''),
     town,
     subArea,
-    startDate: raw.startDate,
-    endDate: raw.endDate,
+    startDate: raw.startDate || scheduleInfo.startDateIso || '',
+    endDate: raw.endDate || scheduleInfo.endDateIso || raw.startDate || scheduleInfo.startDateIso || '',
     startDateObj,
     endDateObj,
     durationMs,
@@ -181,6 +440,8 @@ export function sanitizeEvent(raw) {
     lat: typeof raw.lat === 'number' ? raw.lat : null,
     lng: typeof raw.lng === 'number' ? raw.lng : null,
     hasLocation: typeof raw.lat === 'number' && typeof raw.lng === 'number',
+    useDailySchedule: scheduleInfo.useDailySchedule,
+    dailySchedule: scheduleInfo.entries,
     searchText: buildSearchText(raw),
   }
 }
@@ -242,8 +503,10 @@ function buildSearchText(raw) {
 
 export function formatDateRange(occurrence, allDay) {
   if (!occurrence || !occurrence.start) return ''
+  const effectiveAllDay =
+    typeof occurrence.allDay === 'boolean' ? occurrence.allDay : Boolean(allDay)
   const dateLabel = dateFormatter.format(occurrence.start)
-  if (allDay) {
+  if (effectiveAllDay) {
     if (isMultiDay(occurrence)) {
       return `${dateLabel} – ${dateFormatter.format(occurrence.end)}`
     }
@@ -366,6 +629,29 @@ function getWeekendRange(now) {
 }
 
 export function getEventOccurrences(event, rangeStart, rangeEnd) {
+  if (!event) return []
+
+  if (Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
+    const occurrences = []
+    for (const entry of event.dailySchedule) {
+      if (!entry) continue
+      const start = entry.start instanceof Date ? new Date(entry.start) : entry.startIso ? new Date(entry.startIso) : null
+      const endCandidate = entry.end instanceof Date ? new Date(entry.end) : entry.endIso ? new Date(entry.endIso) : null
+      if (!(start instanceof Date) || Number.isNaN(start)) continue
+      const end = endCandidate && endCandidate > start ? endCandidate : new Date(start.getTime() + DEFAULT_DURATION_MS)
+      const dateKey = entry.date || formatDateForSlug(start)
+      occurrences.push({
+        start,
+        end,
+        key: `${event.slug || 'event'}-${dateKey || start.toISOString()}`,
+        allDay: Boolean(entry.allDay),
+        scheduleIndex: typeof entry.index === 'number' ? entry.index : occurrences.length,
+        scheduleDate: entry.date || '',
+      })
+    }
+    return occurrences.sort((a, b) => a.start.getTime() - b.start.getTime())
+  }
+
   if (!event?.startDateObj) return []
   const occurrences = []
   const duration = event.durationMs || DEFAULT_DURATION_MS
@@ -570,10 +856,52 @@ function truncateText(text, length) {
 }
 
 export function generateIcsContent(event, occurrence) {
-  const occ = occurrence || event.nextOccurrence || event.occurrences?.[0]
-  const start = occ?.start || event.startDateObj
-  const end = occ?.end || event.endDateObj || start
-  if (!start) return ''
+  if (!event) return ''
+
+  const occurrences = []
+
+  if (Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
+    if (occurrence && occurrence.start) {
+      occurrences.push({
+        start: occurrence.start,
+        end: occurrence.end,
+        allDay: typeof occurrence.allDay === 'boolean' ? occurrence.allDay : Boolean(event.allDay),
+        dateKey: occurrence.scheduleDate || formatDateForSlug(occurrence.start),
+      })
+    } else {
+      for (const entry of event.dailySchedule) {
+        if (!entry) continue
+        const start = entry.start instanceof Date ? entry.start : entry.startIso ? new Date(entry.startIso) : null
+        const end = entry.end instanceof Date ? entry.end : entry.endIso ? new Date(entry.endIso) : null
+        if (!(start instanceof Date) || Number.isNaN(start)) continue
+        const resolvedEnd = end && end > start ? end : new Date(start.getTime() + DEFAULT_DURATION_MS)
+        occurrences.push({
+          start,
+          end: resolvedEnd,
+          allDay: Boolean(entry.allDay),
+          dateKey: entry.date || formatDateForSlug(start),
+        })
+      }
+    }
+  } else {
+    const occ = occurrence || event.nextOccurrence || event.occurrences?.[0]
+    const start = occ?.start || event.startDateObj
+    const end = occ?.end || event.endDateObj || start
+    if (start) {
+      occurrences.push({
+        start,
+        end,
+        allDay: typeof occ?.allDay === 'boolean' ? occ.allDay : Boolean(event.allDay),
+        dateKey: formatDateForSlug(start),
+      })
+    }
+  }
+
+  const validOccurrences = occurrences.filter((entry) => entry.start instanceof Date && !Number.isNaN(entry.start))
+  if (!validOccurrences.length) return ''
+
+  const timestamp = formatAsUtc(new Date())
+  const baseId = (event.slug && String(event.slug).trim()) || cryptoSafeId()
 
   const lines = [
     'BEGIN:VCALENDAR',
@@ -581,28 +909,39 @@ export function generateIcsContent(event, occurrence) {
     'PRODID:-//NorthSide GTA//Community Events//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${event.slug || cryptoSafeId() }@northsidegta.ca`,
-    `DTSTAMP:${formatAsUtc(new Date())}`,
-    `DTSTART:${formatDateForIcs(start, event.allDay)}`,
-    `DTEND:${formatDateForIcs(end, event.allDay)}`,
-    `SUMMARY:${escapeIcsText(event.title)}`,
   ]
 
-  if (event.locationName || event.address) {
-    const location = [event.locationName, event.address].filter(Boolean).join(', ')
-    lines.push(`LOCATION:${escapeIcsText(location)}`)
-  }
-  if (event.summary) {
-    lines.push(`DESCRIPTION:${escapeIcsText(event.summary)}`)
-  } else if (event.description) {
-    lines.push(`DESCRIPTION:${escapeIcsText(event.description)}`)
-  }
-  if (event.eventUrl) {
-    lines.push(`URL:${escapeIcsText(event.eventUrl)}`)
-  }
+  validOccurrences.forEach((entry, index) => {
+    const start = entry.start instanceof Date ? entry.start : new Date(entry.start)
+    const end = entry.end instanceof Date ? entry.end : new Date(entry.end || entry.start)
+    const allDay = Boolean(entry.allDay)
+    const suffix = entry.dateKey || `${index + 1}`
+    const uidSafe = `${baseId}-${suffix}`.replace(/[^a-zA-Z0-9-]/g, '-').replace(/-+/g, '-').replace(/-$/, '')
 
-  lines.push('END:VEVENT', 'END:VCALENDAR')
+    lines.push('BEGIN:VEVENT')
+    lines.push(`UID:${uidSafe}@northsidegta.ca`)
+    lines.push(`DTSTAMP:${timestamp}`)
+    lines.push(`DTSTART:${formatDateForIcs(start, allDay)}`)
+    lines.push(`DTEND:${formatDateForIcs(end, allDay)}`)
+    lines.push(`SUMMARY:${escapeIcsText(event.title)}`)
+
+    if (event.locationName || event.address) {
+      const location = [event.locationName, event.address].filter(Boolean).join(', ')
+      lines.push(`LOCATION:${escapeIcsText(location)}`)
+    }
+    if (event.summary) {
+      lines.push(`DESCRIPTION:${escapeIcsText(event.summary)}`)
+    } else if (event.description) {
+      lines.push(`DESCRIPTION:${escapeIcsText(event.description)}`)
+    }
+    if (event.eventUrl) {
+      lines.push(`URL:${escapeIcsText(event.eventUrl)}`)
+    }
+
+    lines.push('END:VEVENT')
+  })
+
+  lines.push('END:VCALENDAR')
   return lines.join('\r\n')
 }
 

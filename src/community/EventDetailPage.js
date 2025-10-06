@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import {
   ArrowLeft,
@@ -26,6 +26,20 @@ import {
 
 const SITE_ORIGIN = 'https://northsidegta.ca'
 const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
+
+const scheduleListDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  month: 'short',
+  day: 'numeric',
+})
+
+const scheduleListWeekdayFormatter = new Intl.DateTimeFormat('en-CA', {
+  weekday: 'short',
+})
+
+const scheduleListTimeFormatter = new Intl.DateTimeFormat('en-CA', {
+  hour: 'numeric',
+  minute: '2-digit',
+})
 
 function normalizeWhitespace(text) {
   if (typeof text !== 'string') return ''
@@ -54,12 +68,13 @@ function splitParagraphs(text) {
     .filter(Boolean)
 }
 
-function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '') {
+function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '', occurrenceOverride = null) {
   if (!event) return null
   const baseOrigin = typeof origin === 'string' && origin ? origin : SITE_ORIGIN
   const canonical = getCanonicalEventUrl(event.slug, baseOrigin)
-  const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
-  const end = event.endDateObj || start
+  const start =
+    occurrenceOverride?.start || event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
+  const end = occurrenceOverride?.end || event.endDateObj || start
   const image = event.image
     ? toAbsoluteUrl(event.image, baseOrigin)
     : toAbsoluteUrl(FALLBACK_IMAGE, baseOrigin)
@@ -135,6 +150,7 @@ function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '')
 
 export default function EventDetailPage() {
   const { slug: routeSlug } = useParams()
+  const location = useLocation()
   const slug = routeSlug ? decodeURIComponent(routeSlug) : ''
   const [event, setEvent] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
@@ -192,15 +208,88 @@ export default function EventDetailPage() {
     }
   }, [])
 
+  const selectedDateParam = React.useMemo(() => {
+    if (!location || !location.search) return ''
+    try {
+      const params = new URLSearchParams(location.search)
+      const value = params.get('d') || params.get('date')
+      if (!value) return ''
+      const trimmed = String(value).trim()
+      return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? trimmed : ''
+    } catch (error) {
+      return ''
+    }
+  }, [location?.search])
+
+  const scheduleEntries = React.useMemo(() => {
+    if (!event?.dailySchedule?.length) return []
+    return event.dailySchedule.map((entry, index) => {
+      const start =
+        entry.start instanceof Date
+          ? entry.start
+          : entry.startIso
+            ? new Date(entry.startIso)
+            : null
+      const end =
+        entry.end instanceof Date
+          ? entry.end
+          : entry.endIso
+            ? new Date(entry.endIso)
+            : null
+      const dateLabel = start ? scheduleListDateFormatter.format(start) : entry.date || ''
+      const weekdayLabel = start ? scheduleListWeekdayFormatter.format(start) : ''
+      const timeLabel = entry.allDay
+        ? 'All day'
+        : start && end
+          ? `${scheduleListTimeFormatter.format(start)} – ${scheduleListTimeFormatter.format(end)}`
+          : ''
+      return {
+        ...entry,
+        start,
+        end,
+        dateLabel,
+        weekdayLabel,
+        timeLabel,
+        key: entry.date || `${index}-${entry.startIso || ''}`,
+      }
+    })
+  }, [event])
+
+  const selectedScheduleEntry = React.useMemo(() => {
+    if (!scheduleEntries.length) return null
+    if (selectedDateParam) {
+      const match = scheduleEntries.find((entry) => entry.date === selectedDateParam)
+      if (match) return match
+    }
+    const now = new Date()
+    const upcoming = scheduleEntries.find((entry) => entry.end && entry.end >= now)
+    return upcoming || scheduleEntries[scheduleEntries.length - 1]
+  }, [scheduleEntries, selectedDateParam])
+
   const occurrence = React.useMemo(() => {
     if (!event) return null
+    if (selectedScheduleEntry?.start instanceof Date && !Number.isNaN(selectedScheduleEntry.start)) {
+      const start = selectedScheduleEntry.start
+      const end =
+        selectedScheduleEntry.end && selectedScheduleEntry.end > start
+          ? selectedScheduleEntry.end
+          : start
+      return {
+        start,
+        end,
+        allDay: Boolean(selectedScheduleEntry.allDay),
+        scheduleDate: selectedScheduleEntry.date || '',
+      }
+    }
     const start = event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
     const end = event.endDateObj || start
     if (!start) return null
-    return { start, end }
-  }, [event])
+    return { start, end, allDay: Boolean(event.allDay) }
+  }, [event, selectedScheduleEntry])
 
-  const dateLabel = occurrence ? formatDateRange(occurrence, event?.allDay) : ''
+  const dateLabel = occurrence
+    ? formatDateRange(occurrence, occurrence.allDay ?? event?.allDay)
+    : ''
 
   const descriptionParagraphs = React.useMemo(() => splitParagraphs(event?.description || ''), [event])
   const summaryParagraphs = React.useMemo(
@@ -248,22 +337,42 @@ export default function EventDetailPage() {
 
   const truncatedDescription = event ? truncateText(eventDescription || '', 160) : ''
   const schema = React.useMemo(
-    () => buildEventSchema(event, normalizedOrigin, truncatedDescription || eventDescription),
-    [event, eventDescription, normalizedOrigin, truncatedDescription],
+    () => buildEventSchema(event, normalizedOrigin, truncatedDescription || eventDescription, occurrence),
+    [event, eventDescription, normalizedOrigin, truncatedDescription, occurrence],
   )
 
   const pageTitle = event ? `${event.title} | NorthSide GTA` : 'Event Details | NorthSide GTA'
   const defaultDescription = 'Explore community events across the NorthSide GTA.'
-  const pageDescription = truncatedDescription || eventDescription || defaultDescription
+  const scheduleShareSnippet = selectedScheduleEntry
+    ? [
+        selectedScheduleEntry.weekdayLabel,
+        selectedScheduleEntry.dateLabel,
+        selectedScheduleEntry.timeLabel,
+      ]
+        .filter(Boolean)
+        .join(' • ')
+    : ''
+  const baseDescription = truncatedDescription || eventDescription || defaultDescription
+  const pageDescription = scheduleShareSnippet ? `${scheduleShareSnippet}. ${baseDescription}` : baseDescription
   const canonicalUrl = event ? getCanonicalEventUrl(event.slug, normalizedOrigin) : `${normalizedOrigin}/events`
   const ogImage = event?.image
     ? toAbsoluteUrl(event.image, normalizedOrigin)
     : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
-  const shareUrl = canonicalUrl
-  const shareTitle = event ? event.title : 'NorthSide GTA Event'
+  const shareUrl = React.useMemo(() => {
+    if (!event || !selectedScheduleEntry?.date) return canonicalUrl
+    const separator = canonicalUrl.includes('?') ? '&' : '?'
+    return `${canonicalUrl}${separator}d=${selectedScheduleEntry.date}`
+  }, [canonicalUrl, event, selectedScheduleEntry])
+  const shareTitle = event
+    ? `${event.title}${scheduleShareSnippet ? ` — ${scheduleShareSnippet}` : ''}`
+    : 'NorthSide GTA Event'
   const shareText = event ? pageDescription : 'Check out this NorthSide GTA event.'
   const emailBody = shareText ? `${shareText}\n\n${shareUrl}` : shareUrl
-  const publishedTime = event?.startDate ? new Date(event.startDate).toISOString() : ''
+  const publishedTime = occurrence?.start
+    ? new Date(occurrence.start).toISOString()
+    : event?.startDate
+      ? new Date(event.startDate).toISOString()
+      : ''
 
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
@@ -337,7 +446,7 @@ export default function EventDetailPage() {
         <meta property="og:title" content={shareTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="event" />
-        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:url" content={shareUrl} />
         {ogImage && <meta property="og:image" content={ogImage} />}
         {ogImage && <meta property="og:image:alt" content={shareTitle} />}
         <meta property="og:site_name" content="NorthSide GTA" />
@@ -408,6 +517,30 @@ export default function EventDetailPage() {
                     </p>
                   )}
                   {event.priceNote && <p className="text-xs text-slate-500">{event.priceNote}</p>}
+                  {scheduleEntries.length > 0 && (
+                    <section className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Schedule</h2>
+                      <dl className="mt-2 space-y-2">
+                        {scheduleEntries.map((entry) => {
+                          const isSelected = selectedScheduleEntry?.date === entry.date
+                          return (
+                            <div
+                              key={entry.key}
+                              className={`flex flex-col gap-1 rounded-xl px-3 py-2 transition sm:flex-row sm:items-baseline sm:justify-between ${
+                                isSelected ? 'bg-white shadow-sm ring-1 ring-emerald-100' : ''
+                              }`}
+                              aria-current={isSelected ? 'true' : undefined}
+                            >
+                              <dt className="text-sm font-semibold text-slate-900">
+                                {entry.weekdayLabel ? `${entry.weekdayLabel}, ${entry.dateLabel}` : entry.dateLabel}
+                              </dt>
+                              <dd className="text-sm text-slate-600">{entry.timeLabel || 'Times TBA'}</dd>
+                            </div>
+                          )
+                        })}
+                      </dl>
+                    </section>
+                  )}
                   {summaryParagraphs.length > 0 && (
                     <div className="space-y-3 text-sm text-slate-600">
                       {summaryParagraphs.map((paragraph, index) => (

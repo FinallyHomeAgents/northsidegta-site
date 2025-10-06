@@ -131,7 +131,7 @@ export default function EventCalendar({ events, initialMonth, onSelectEvent }) {
                   >
                     <span className="block truncate">{event.title}</span>
                     <span className="block text-[10px] font-normal text-emerald-700">
-                      {formatDateRange(occurrence, event.allDay)}
+                      {formatDateRange(occurrence, occurrence?.allDay ?? event.allDay)}
                     </span>
                   </button>
                 </li>

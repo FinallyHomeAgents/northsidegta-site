@@ -25,7 +25,7 @@ function splitParagraphs(text) {
 export default function EventModal({ event, onClose }) {
   const modalRoot = getModalRoot()
   const occurrence = event?.nextOccurrence || event?.occurrences?.[0]
-  const dateLabel = formatDateRange(occurrence, event?.allDay)
+  const dateLabel = formatDateRange(occurrence, occurrence?.allDay ?? event?.allDay)
   const townParts = []
   if (event?.subArea) townParts.push(event.subArea)
   if (event?.town) townParts.push(event.town)
