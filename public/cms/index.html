@@ -250,14 +250,71 @@
           console.info('[cms-login] found iframe context, waiting for CMS…')
         }
 
-        function registerCmsEnhancementsInContext(contextWindow) {
+        function resolveCmsContext(candidateWindow) {
+          if (!candidateWindow) return null
+
+          let cmsExport = null
+          try {
+            cmsExport = candidateWindow.CMS
+          } catch (error) {
+            return null
+          }
+
+          if (!cmsExport) {
+            return null
+          }
+
+          const cms =
+            typeof cmsExport.registerWidget === 'function'
+              ? cmsExport
+              : cmsExport.default && typeof cmsExport.default.registerWidget === 'function'
+              ? cmsExport.default
+              : null
+
+          if (!cms) {
+            return null
+          }
+
+          const reactCandidates = [
+            candidateWindow.React,
+            cms.React,
+            cms.react,
+            cms.React && cms.React.default,
+            cms.react && cms.react.default,
+            cmsExport && cmsExport.React,
+            cmsExport && cmsExport.react,
+            cmsExport && cmsExport.React && cmsExport.React.default,
+            cmsExport && cmsExport.react && cmsExport.react.default,
+          ].filter(
+            (react) =>
+              react &&
+              typeof react.createElement === 'function' &&
+              typeof react.useState === 'function',
+          )
+
+          if (!reactCandidates.length) {
+            return null
+          }
+
+          const context = {
+            window: candidateWindow,
+            CMS: cms,
+            React: reactCandidates[0],
+          }
+
+          return context
+        }
+
+        function registerCmsEnhancementsInContext(context) {
           if (cmsEnhancementsReady) return true
-          if (!contextWindow || !contextWindow.CMS || !contextWindow.React) {
+          if (!context || !context.CMS || !context.React) {
             return false
           }
 
-          registerEventsPreview(contextWindow.CMS, contextWindow.React)
-          registerDailyScheduleWidget(contextWindow.CMS, contextWindow.React)
+          const { CMS, React, window: contextWindow } = context
+
+          registerEventsPreview(CMS, React)
+          registerDailyScheduleWidget(CMS, React, contextWindow)
           activateLegacyFieldStyling(contextWindow)
           applyCmsHeaderLayoutFix(contextWindow)
 
@@ -266,14 +323,15 @@
           return true
         }
 
-        function waitForCmsGlobals(contextWindow) {
+        function waitForCmsGlobals(candidateWindow) {
           return new Promise((resolve) => {
             const start = Date.now()
             const timer = window.setInterval(() => {
               try {
-                if (contextWindow.CMS && contextWindow.React) {
+                const context = resolveCmsContext(candidateWindow)
+                if (context) {
                   window.clearInterval(timer)
-                  resolve(contextWindow)
+                  resolve(context)
                   return
                 }
               } catch (error) {
@@ -337,7 +395,8 @@
               }
 
               try {
-                if (registerCmsEnhancementsInContext(candidateWindow)) {
+                const immediateContext = resolveCmsContext(candidateWindow)
+                if (registerCmsEnhancementsInContext(immediateContext)) {
                   succeed()
                   return
                 }
@@ -717,13 +776,21 @@
           CMS.registerPreviewTemplate('events', EventPreview)
         }
 
-        function registerDailyScheduleWidget(CMS, React) {
+        function registerDailyScheduleWidget(CMS, React, contextWindow) {
           if (!CMS || typeof CMS.registerWidget !== 'function' || !React) {
             return
           }
 
           const { useState, useEffect, useMemo } = React
-          const Immutable = window.Immutable
+          const runtimeWindow = contextWindow && contextWindow.document ? contextWindow : window
+          const Immutable =
+            (runtimeWindow && runtimeWindow.Immutable) ||
+            (CMS && (CMS.Immutable || (CMS.imports && CMS.imports.Immutable))) ||
+            null
+          const promptFn =
+            (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
+          const alertFn =
+            (runtimeWindow && runtimeWindow.alert) || (typeof window !== 'undefined' ? window.alert : null)
 
           const containerStyle = {
             border: '1px solid #e2e8f0',
@@ -1040,18 +1107,22 @@
             }
 
             function handleAddRange() {
-              const startInput = window.prompt('Start date (YYYY-MM-DD)')
+              const startInput = promptFn ? promptFn('Start date (YYYY-MM-DD)') : null
               if (!startInput) return
-              const endInput = window.prompt('End date (YYYY-MM-DD)', startInput)
+              const endInput = promptFn ? promptFn('End date (YYYY-MM-DD)', startInput) : null
               if (!endInput) return
               const startDate = parseDateInput(startInput)
               const endDate = parseDateInput(endInput)
               if (!startDate || !endDate) {
-                window.alert('Enter dates in YYYY-MM-DD format (e.g., 2025-11-15).')
+                if (alertFn) {
+                  alertFn('Enter dates in YYYY-MM-DD format (e.g., 2025-11-15).')
+                }
                 return
               }
               if (endDate < startDate) {
-                window.alert('End date must be on or after the start date.')
+                if (alertFn) {
+                  alertFn('End date must be on or after the start date.')
+                }
                 return
               }
               const existing = new Set(rows.map((row) => row.date).filter(Boolean))
@@ -1063,7 +1134,9 @@
                 }
               }
               if (!additions.length) {
-                window.alert('All days in that range are already listed.')
+                if (alertFn) {
+                  alertFn('All days in that range are already listed.')
+                }
                 return
               }
               setRows((prev) => sortRows([...prev, ...additions]))
