@@ -231,8 +231,10 @@
         ]
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
         let cmsEnhancementsReady = false
+        let cmsEnhancementsPromise = null
+        let cmsEnhancementWaitLogged = false
 
-        function setupCMSEnhancements() {
+        function tryRegisterCmsEnhancements() {
           if (cmsEnhancementsReady) return true
           if (!window.CMS || !window.React) return false
           try {
@@ -240,10 +242,58 @@
             registerDailyScheduleWidget(window.CMS, window.React)
             activateLegacyFieldStyling()
             cmsEnhancementsReady = true
+            console.info('[cms-login] enhancements ready')
+            return true
           } catch (error) {
-            console.warn('[cms-login] failed to register CMS enhancements', error)
+            console.error('[cms-login] failed to register CMS enhancements', error)
+            return false
           }
-          return cmsEnhancementsReady
+        }
+
+        function ensureCmsEnhancementsReady() {
+          if (cmsEnhancementsReady) return Promise.resolve(true)
+          if (tryRegisterCmsEnhancements()) {
+            return Promise.resolve(true)
+          }
+          if (cmsEnhancementsPromise) {
+            return cmsEnhancementsPromise
+          }
+
+          cmsEnhancementsPromise = new Promise((resolve) => {
+            const start = Date.now()
+            const maxWaitMs = 5000
+            const intervalMs = 80
+
+            if (!cmsEnhancementWaitLogged) {
+              cmsEnhancementWaitLogged = true
+              console.info('[cms-login] waiting for CMS…')
+            }
+
+            const handleSuccess = () => {
+              if (tryRegisterCmsEnhancements()) {
+                window.clearInterval(timer)
+                cmsEnhancementsPromise = null
+                resolve(true)
+                return true
+              }
+              return false
+            }
+
+            const timer = window.setInterval(() => {
+              if (handleSuccess()) return
+              if (Date.now() - start > maxWaitMs) {
+                window.clearInterval(timer)
+                cmsEnhancementsPromise = null
+                const timeoutError = new Error('Timed out waiting for Decap CMS globals')
+                console.error('[cms-login] failed to register CMS enhancements', timeoutError)
+                resolve(false)
+              }
+            }, intervalMs)
+
+            handleSuccess()
+          })
+
+          return cmsEnhancementsPromise
         }
 
         function registerEventsPreview(CMS, React) {
@@ -632,8 +682,12 @@
             paddingTop: '20px',
           }
 
+          let rowIdCounter = 0
+
           function createRow(overrides = {}) {
+            rowIdCounter += 1
             return {
+              id: overrides.id || `row-${Date.now()}-${rowIdCounter}`,
               date: '',
               start_time: '',
               end_time: '',
@@ -644,50 +698,90 @@
 
           function normalizeRows(value) {
             if (!value) return []
+
+            let raw = []
             if (Immutable && typeof Immutable.List === 'function' && Immutable.List.isList(value)) {
-              return value
-                .toJS()
-                .map((row) =>
-                  createRow({
-                    date: (row?.date || '').trim(),
-                    start_time: row?.start_time || row?.startTime || '',
-                    end_time: row?.end_time || row?.endTime || '',
-                    all_day: Boolean(row?.all_day ?? row?.allDay),
-                  }),
-                )
-            }
-            if (Array.isArray(value)) {
-              return value.map((row) =>
-                createRow({
-                  date: (row?.date || '').trim(),
-                  start_time: row?.start_time || row?.startTime || '',
-                  end_time: row?.end_time || row?.endTime || '',
-                  all_day: Boolean(row?.all_day ?? row?.allDay),
-                }),
-              )
-            }
-            if (value && typeof value === 'object' && typeof value.toJS === 'function') {
+              raw = value.toJS()
+            } else if (Array.isArray(value)) {
+              raw = value
+            } else if (value && typeof value === 'object' && typeof value.toJS === 'function') {
               try {
-                const jsValue = value.toJS()
-                return normalizeRows(jsValue)
+                raw = value.toJS()
               } catch (error) {
-                return []
+                raw = []
               }
             }
-            return []
+
+            if (!Array.isArray(raw)) return []
+
+            const rows = []
+
+            raw.forEach((entry) => {
+              if (!entry || typeof entry !== 'object') return
+              const date = (entry.date || entry.day || '').trim()
+              const allDay = Boolean(entry.all_day ?? entry.allDay)
+              const blocks = Array.isArray(entry.blocks) ? entry.blocks : null
+
+              if (allDay) {
+                rows.push(
+                  createRow({
+                    date,
+                    all_day: true,
+                    start_time: '',
+                    end_time: '',
+                  }),
+                )
+                return
+              }
+
+              if (blocks && blocks.length) {
+                blocks.forEach((block) => {
+                  if (!block || typeof block !== 'object') return
+                  const startValue = block.start || block.start_time || block.startTime || ''
+                  const endValue = block.end || block.end_time || block.endTime || ''
+                  rows.push(
+                    createRow({
+                      date,
+                      start_time: typeof startValue === 'string' ? startValue : '',
+                      end_time: typeof endValue === 'string' ? endValue : '',
+                      all_day: false,
+                    }),
+                  )
+                })
+                return
+              }
+
+              const startValue = entry.start_time || entry.startTime || ''
+              const endValue = entry.end_time || entry.endTime || ''
+              rows.push(
+                createRow({
+                  date,
+                  start_time: typeof startValue === 'string' ? startValue : '',
+                  end_time: typeof endValue === 'string' ? endValue : '',
+                  all_day: false,
+                }),
+              )
+            })
+
+            return rows
           }
 
           function sortRows(rows) {
             return [...rows].sort((a, b) => {
-              if (!a.date && !b.date) return 0
-              if (!a.date) return 1
-              if (!b.date) return -1
-              const aDate = new Date(a.date)
-              const bDate = new Date(b.date)
-              if (!Number.isNaN(aDate) && !Number.isNaN(bDate)) {
-                return aDate - bDate
-              }
-              return a.date.localeCompare(b.date)
+              const dateA = a.date || ''
+              const dateB = b.date || ''
+              if (!dateA && !dateB) return 0
+              if (!dateA) return 1
+              if (!dateB) return -1
+              if (dateA !== dateB) return dateA.localeCompare(dateB)
+              if (a.all_day && !b.all_day) return -1
+              if (!a.all_day && b.all_day) return 1
+              const startA = a.start_time || ''
+              const startB = b.start_time || ''
+              if (startA && startB) return startA.localeCompare(startB)
+              if (startA) return -1
+              if (startB) return 1
+              return 0
             })
           }
 
@@ -743,18 +837,46 @@
               }
             }, [value, rows])
 
-            const sanitizedRows = useMemo(
-              () =>
-                rows
-                  .filter((row) => row.date)
-                  .map((row) => ({
-                    date: row.date,
-                    start_time: row.all_day ? '' : row.start_time,
-                    end_time: row.all_day ? '' : row.end_time,
-                    all_day: Boolean(row.all_day),
-                  })),
-              [rows],
-            )
+            const sanitizedRows = useMemo(() => {
+              const grouped = new Map()
+
+              rows.forEach((row) => {
+                if (!row.date) return
+                const key = row.date
+                if (!grouped.has(key)) {
+                  grouped.set(key, { date: key, all_day: false, blocks: [] })
+                }
+                const entry = grouped.get(key)
+                if (row.all_day) {
+                  entry.all_day = true
+                  entry.blocks = []
+                  return
+                }
+                if (entry.all_day) {
+                  return
+                }
+                entry.blocks.push({
+                  start: (row.start_time || '').trim(),
+                  end: (row.end_time || '').trim(),
+                })
+              })
+
+              const results = Array.from(grouped.values())
+                .map((entry) => {
+                  if (entry.all_day) {
+                    return { date: entry.date, all_day: true, blocks: [] }
+                  }
+                  const blocks = entry.blocks
+                    .filter((block) => block.start && block.end)
+                    .map((block) => ({ start: block.start, end: block.end }))
+                    .sort((a, b) => a.start.localeCompare(b.start))
+                  return { date: entry.date, all_day: false, blocks }
+                })
+                .filter((entry) => entry.all_day || entry.blocks.length > 0)
+                .sort((a, b) => a.date.localeCompare(b.date))
+
+              return results
+            }, [rows])
 
             useEffect(() => {
               if (onChange) {
@@ -850,7 +972,7 @@
                 const disableTimes = Boolean(row.all_day)
                 return React.createElement(
                   'div',
-                  { key: row.key || `${row.date || 'row'}-${index}`, style: rowStyle },
+                  { key: row.id || row.key || `${row.date || 'row'}-${index}`, style: rowStyle },
                   React.createElement(
                     'label',
                     { style: fieldStyle },
@@ -1085,7 +1207,7 @@
 
         async function loadCMSInterface(fromLogin = false) {
           if (window.__cmsLoaded) {
-            setupCMSEnhancements()
+            await ensureCmsEnhancementsReady()
             if (fromLogin) setLoading(false)
             return true
           }
@@ -1110,7 +1232,7 @@
           for (const src of CMS_SCRIPT_URLS) {
             try {
               await loadScript(src)
-              setupCMSEnhancements()
+              await ensureCmsEnhancementsReady()
               if (fromLogin) setLoading(false)
               return true
             } catch (error) {

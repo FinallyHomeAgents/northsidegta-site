@@ -85,7 +85,182 @@ function initialFormState() {
     contactConsent: false,
     honeypot: '',
     captchaToken: '',
+    useDailySchedule: false,
+    dailySchedule: [],
   }
+}
+
+function createScheduleBlock(overrides = {}) {
+  return {
+    id: overrides.id || `block-${Math.random().toString(36).slice(2, 10)}`,
+    start: typeof overrides.start === 'string' ? overrides.start : '',
+    end: typeof overrides.end === 'string' ? overrides.end : '',
+  }
+}
+
+function createScheduleDay(date, overrides = {}) {
+  const normalizedDate = typeof date === 'string' ? date : ''
+  const allDay = Boolean(overrides.allDay)
+  const sourceBlocks = Array.isArray(overrides.blocks) ? overrides.blocks : []
+  const blocks = allDay
+    ? []
+    : sourceBlocks.length
+      ? sourceBlocks.map((block) => createScheduleBlock(block))
+      : [createScheduleBlock()]
+  const preserved = Array.isArray(overrides.preservedBlocks)
+    ? overrides.preservedBlocks.map((block) => createScheduleBlock(block))
+    : []
+  return {
+    id: overrides.id || `day-${Math.random().toString(36).slice(2, 9)}`,
+    date: normalizedDate,
+    allDay,
+    blocks,
+    preservedBlocks: preserved,
+  }
+}
+
+function cloneScheduleBlocks(blocks) {
+  if (!Array.isArray(blocks) || !blocks.length) {
+    return [createScheduleBlock()]
+  }
+  return blocks.map((block) => createScheduleBlock(block))
+}
+
+function computeScheduleDates(startIso, endIso) {
+  const start = DateTime.fromISO(startIso || '', { zone: TORONTO_ZONE })
+  const end = DateTime.fromISO(endIso || '', { zone: TORONTO_ZONE })
+  if (!start.isValid || !end.isValid || end < start) return []
+  const startDay = start.startOf('day')
+  const endDay = end.startOf('day')
+  const dates = []
+  let cursor = startDay
+  let steps = 0
+  while (cursor <= endDay && steps <= MAX_EVENT_DURATION_DAYS) {
+    dates.push(cursor.toISODate())
+    cursor = cursor.plus({ days: 1 })
+    steps += 1
+  }
+  return dates
+}
+
+function hasScheduleDayData(day) {
+  if (!day) return false
+  if (day.allDay) return true
+  if (!Array.isArray(day.blocks)) return false
+  return day.blocks.some((block) => {
+    const start = typeof block?.start === 'string' ? block.start.trim() : ''
+    const end = typeof block?.end === 'string' ? block.end.trim() : ''
+    return Boolean(start && end)
+  })
+}
+
+function syncScheduleDays(existingDays, startIso, endIso) {
+  const targetDates = computeScheduleDates(startIso, endIso)
+  const existingMap = new Map((existingDays || []).map((day) => [day.date, day]))
+  const days = targetDates.map((date) => {
+    const existing = existingMap.get(date)
+    if (existing) {
+      return createScheduleDay(date, existing)
+    }
+    return createScheduleDay(date)
+  })
+  const removed = Array.isArray(existingDays)
+    ? existingDays.filter((day) => day && !targetDates.includes(day.date))
+    : []
+  return { days, removed, targetDates }
+}
+
+function formatScheduleDateLabel(date) {
+  const parsed = DateTime.fromISO(date || '', { zone: TORONTO_ZONE })
+  return parsed.isValid ? parsed.toFormat('ccc, MMM d') : date
+}
+
+function validateDailyScheduleFormState(form) {
+  const result = { schedule: [], error: '', derivedStart: '', derivedEnd: '' }
+  if (!form.useDailySchedule) return result
+
+  const start = DateTime.fromISO(form.startDate || '', { zone: TORONTO_ZONE })
+  const end = DateTime.fromISO(form.endDate || '', { zone: TORONTO_ZONE })
+  if (!start.isValid || !end.isValid || end < start) {
+    return { ...result, error: 'Set valid start and end dates before using the daily schedule.' }
+  }
+
+  const dates = computeScheduleDates(form.startDate, form.endDate)
+  if (!dates.length) {
+    return { ...result, error: 'Choose a valid date range for the daily schedule.' }
+  }
+
+  const dayMap = new Map((form.dailySchedule || []).map((day) => [day.date, day]))
+  const sanitized = []
+  let earliest = null
+  let latest = null
+
+  for (const date of dates) {
+    const day = dayMap.get(date)
+    const readable = formatScheduleDateLabel(date)
+    if (!day) {
+      return { ...result, error: `Add hours for ${readable}.` }
+    }
+
+    if (day.allDay) {
+      sanitized.push({ date, all_day: true, blocks: [] })
+      const dayStart = DateTime.fromISO(`${date}T00:00`, { zone: TORONTO_ZONE })
+      const dayEnd = DateTime.fromISO(`${date}T23:59`, { zone: TORONTO_ZONE })
+      if (!earliest || dayStart < earliest) earliest = dayStart
+      if (!latest || dayEnd > latest) latest = dayEnd
+      continue
+    }
+
+    const blocks = Array.isArray(day.blocks) ? day.blocks : []
+    if (!blocks.length) {
+      return { ...result, error: `Add at least one time range for ${readable}.` }
+    }
+
+    const normalizedBlocks = []
+    for (const block of blocks) {
+      const startText = typeof block?.start === 'string' ? block.start.trim() : ''
+      const endText = typeof block?.end === 'string' ? block.end.trim() : ''
+      if (!startText || !endText) {
+        return { ...result, error: `Complete the time range for ${readable}.` }
+      }
+      if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
+        return { ...result, error: `Use HH:MM format for times on ${readable}.` }
+      }
+      const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
+      const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
+      if (!startTime.isValid || !endTime.isValid) {
+        return { ...result, error: `Enter valid times for ${readable}.` }
+      }
+      if (endTime <= startTime) {
+        return { ...result, error: `End time must be after the start time on ${readable}.` }
+      }
+      normalizedBlocks.push({ start: startText, end: endText, startTime, endTime })
+    }
+
+    normalizedBlocks.sort((a, b) => a.startTime.toMillis() - b.startTime.toMillis())
+    for (let index = 1; index < normalizedBlocks.length; index += 1) {
+      const previous = normalizedBlocks[index - 1]
+      const current = normalizedBlocks[index]
+      if (current.startTime < previous.endTime) {
+        return { ...result, error: `Time ranges overlap on ${readable}.` }
+      }
+    }
+
+    const first = normalizedBlocks[0]
+    const last = normalizedBlocks[normalizedBlocks.length - 1]
+    if (!earliest || first.startTime < earliest) earliest = first.startTime
+    if (!latest || last.endTime > latest) latest = last.endTime
+    sanitized.push({
+      date,
+      all_day: false,
+      blocks: normalizedBlocks.map(({ start, end }) => ({ start, end })),
+    })
+  }
+
+  const derivedStart = earliest ? earliest.setZone(TORONTO_ZONE).toFormat("yyyy-LL-dd'T'HH:mm") : ''
+  const derivedEnd = latest ? latest.setZone(TORONTO_ZONE).toFormat("yyyy-LL-dd'T'HH:mm") : ''
+
+  return { schedule: sanitized, error: '', derivedStart, derivedEnd }
 }
 
 function stripHtml(value) {
@@ -338,9 +513,153 @@ export default function SubmitEventPage() {
 
   const finalImageUrl = form.uploadedImageUrl || form.imageUrl.trim()
 
+  const markScheduleTouched = React.useCallback(() => {
+    setTouched((prev) => ({ ...prev, dailySchedule: true }))
+  }, [setTouched])
+
+  const orderedScheduleDays = React.useMemo(() => {
+    if (!Array.isArray(form.dailySchedule)) return []
+    return [...form.dailySchedule].sort((a, b) => {
+      if (!a?.date && !b?.date) return 0
+      if (!a?.date) return 1
+      if (!b?.date) return -1
+      return a.date.localeCompare(b.date)
+    })
+  }, [form.dailySchedule])
+
   const setField = React.useCallback((name, value) => {
     setForm((prev) => ({ ...prev, [name]: value }))
   }, [])
+
+  const handleUseDailyScheduleChange = React.useCallback(
+    (event) => {
+      const checked = event.target.checked
+      if (checked) {
+        const { days } = syncScheduleDays(form.dailySchedule, form.startDate, form.endDate)
+        setTouched((prev) => ({ ...prev, dailySchedule: true }))
+        setForm((prev) => ({ ...prev, useDailySchedule: true, dailySchedule: days }))
+        console.info(`[submit-event] daily schedule enabled (${days.length} days)`)
+      } else {
+        setForm((prev) => ({ ...prev, useDailySchedule: false }))
+      }
+    },
+    [form.dailySchedule, form.startDate, form.endDate],
+  )
+
+  const handleStartDateChange = React.useCallback(
+    (value) => {
+      if (form.useDailySchedule) {
+        const { days, removed } = syncScheduleDays(form.dailySchedule, value, form.endDate)
+        if (
+          removed.some((day) => hasScheduleDayData(day)) &&
+          typeof window !== 'undefined' &&
+          !window.confirm('Shortening the range will remove daily schedule hours. Continue?')
+        ) {
+          return
+        }
+        setForm((prev) => ({ ...prev, startDate: value, dailySchedule: days }))
+      } else {
+        setForm((prev) => ({ ...prev, startDate: value }))
+      }
+    },
+    [form.dailySchedule, form.endDate, form.useDailySchedule],
+  )
+
+  const handleEndDateChange = React.useCallback(
+    (value) => {
+      if (form.useDailySchedule) {
+        const { days, removed } = syncScheduleDays(form.dailySchedule, form.startDate, value)
+        if (
+          removed.some((day) => hasScheduleDayData(day)) &&
+          typeof window !== 'undefined' &&
+          !window.confirm('Shortening the range will remove daily schedule hours. Continue?')
+        ) {
+          return
+        }
+        setForm((prev) => ({ ...prev, endDate: value, dailySchedule: days }))
+      } else {
+        setForm((prev) => ({ ...prev, endDate: value }))
+      }
+    },
+    [form.dailySchedule, form.startDate, form.useDailySchedule],
+  )
+
+  const updateScheduleBlock = React.useCallback(
+    (dayId, blockId, updates) => {
+      markScheduleTouched()
+      setForm((prev) => ({
+        ...prev,
+        dailySchedule: prev.dailySchedule.map((day) => {
+          if (day.id !== dayId || day.allDay) return day
+          const nextBlocks = day.blocks.map((block) =>
+            block.id === blockId ? { ...block, ...updates } : block,
+          )
+          return { ...day, blocks: nextBlocks }
+        }),
+      }))
+    },
+    [markScheduleTouched],
+  )
+
+  const addScheduleBlock = React.useCallback(
+    (dayId) => {
+      markScheduleTouched()
+      setForm((prev) => ({
+        ...prev,
+        dailySchedule: prev.dailySchedule.map((day) => {
+          if (day.id !== dayId || day.allDay) return day
+          return { ...day, blocks: [...day.blocks, createScheduleBlock()] }
+        }),
+      }))
+    },
+    [markScheduleTouched],
+  )
+
+  const removeScheduleBlock = React.useCallback(
+    (dayId, blockId) => {
+      markScheduleTouched()
+      setForm((prev) => ({
+        ...prev,
+        dailySchedule: prev.dailySchedule.map((day) => {
+          if (day.id !== dayId || day.allDay) return day
+          const nextBlocks = day.blocks.filter((block) => block.id !== blockId)
+          return { ...day, blocks: nextBlocks.length ? nextBlocks : [createScheduleBlock()] }
+        }),
+      }))
+    },
+    [markScheduleTouched],
+  )
+
+  const handleDayAllDayChange = React.useCallback(
+    (dayId, checked) => {
+      markScheduleTouched()
+      setForm((prev) => ({
+        ...prev,
+        dailySchedule: prev.dailySchedule.map((day) => {
+          if (day.id !== dayId) return day
+          if (checked) {
+            const preserved = day.blocks.length ? day.blocks : day.preservedBlocks
+            return {
+              ...day,
+              allDay: true,
+              blocks: [],
+              preservedBlocks: preserved,
+            }
+          }
+          const restored = day.preservedBlocks && day.preservedBlocks.length
+            ? day.preservedBlocks.map((block) => createScheduleBlock(block))
+            : cloneScheduleBlocks(day.blocks)
+          return {
+            ...day,
+            allDay: false,
+            blocks: restored,
+            preservedBlocks: [],
+          }
+        }),
+      }))
+    },
+    [markScheduleTouched],
+  )
 
   const handleBlur = React.useCallback(
     (name) => {
@@ -482,21 +801,39 @@ export default function SubmitEventPage() {
         nextErrors[name] = err
       }
     })
+
+    let scheduleResult = { schedule: [], error: '', derivedStart: '', derivedEnd: '' }
+    if (form.useDailySchedule) {
+      scheduleResult = validateDailyScheduleFormState(form)
+      nextErrors.dailySchedule = scheduleResult.error || ''
+    } else {
+      nextErrors.dailySchedule = ''
+    }
+
     setErrors(nextErrors)
-    return nextErrors
+    return { errors: nextErrors, scheduleResult }
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setSubmitError('')
 
-    const validation = validateAll()
-    if (Object.values(validation).some(Boolean)) {
-      setTouched((prev) => ({ ...prev, submitAttempted: true }))
+    const { errors: validationErrors, scheduleResult } = validateAll()
+    if (Object.values(validationErrors).some(Boolean)) {
+      setTouched((prev) => ({
+        ...prev,
+        submitAttempted: true,
+        dailySchedule: form.useDailySchedule ? true : prev.dailySchedule,
+      }))
       return
     }
 
     setSubmitting(true)
+
+    const startDateForPayload =
+      form.useDailySchedule && scheduleResult.derivedStart ? scheduleResult.derivedStart : form.startDate
+    const endDateForPayload =
+      form.useDailySchedule && scheduleResult.derivedEnd ? scheduleResult.derivedEnd : form.endDate
 
     const payload = {
       title: form.title,
@@ -505,8 +842,8 @@ export default function SubmitEventPage() {
       eventType: form.eventType,
       shortDescription: stripHtml(form.shortDescription).trim(),
       fullDescription: stripHtml(form.fullDescription).trim(),
-      startDate: form.startDate,
-      endDate: form.endDate,
+      startDate: startDateForPayload,
+      endDate: endDateForPayload,
       venueName: form.venueName,
       streetAddress: form.streetAddress,
       city: form.city,
@@ -522,6 +859,8 @@ export default function SubmitEventPage() {
       honeypot: form.honeypot,
       captchaToken: form.captchaToken,
       captchaProvider: CAPTCHA_PROVIDER,
+      useDailySchedule: form.useDailySchedule,
+      daily_schedule: form.useDailySchedule ? scheduleResult.schedule : [],
     }
 
     try {
@@ -552,6 +891,33 @@ export default function SubmitEventPage() {
 
   if (submitResult?.ok) {
     const summary = submitResult.event || {}
+    const summaryScheduleLines = Array.isArray(summary.daily_schedule)
+      ? summary.daily_schedule.map((day, index) => {
+          const label = formatScheduleDateLabel(day?.date || '')
+          if (day?.all_day) {
+            return { key: `${day.date || index}-all-day`, label: `${label}: All day` }
+          }
+          const blocks = Array.isArray(day?.blocks) ? day.blocks : []
+          if (blocks.length) {
+            const times = blocks
+              .map((block, blockIndex) => {
+                if (!block?.start || !block?.end) return null
+                const start = DateTime.fromISO(`${day.date}T${block.start}`, { zone: TORONTO_ZONE })
+                const end = DateTime.fromISO(`${day.date}T${block.end}`, { zone: TORONTO_ZONE })
+                if (start.isValid && end.isValid) {
+                  return `${start.toFormat('h:mm a')} – ${end.toFormat('h:mm a')}`
+                }
+                return `${block.start} – ${block.end}`
+              })
+              .filter(Boolean)
+            return {
+              key: `${day.date || index}-blocks`,
+              label: times.length ? `${label}: ${times.join(', ')}` : `${label}: Times TBA`,
+            }
+          }
+          return { key: `${day.date || index}-empty`, label: `${label}: Times TBA` }
+        })
+      : []
     return (
       <div className="min-h-screen bg-emerald-950/5 py-12">
         <Helmet>
@@ -606,17 +972,27 @@ export default function SubmitEventPage() {
                     <dd className="font-medium text-slate-900">{summary.categoryTags.join(', ')}</dd>
                   </div>
                 ) : null}
+                {summaryScheduleLines.length ? (
+                  <div className="sm:col-span-2">
+                    <dt className="text-xs uppercase tracking-wide text-slate-500">Daily Schedule</dt>
+                    <dd className="mt-1 space-y-1 font-medium text-slate-900">
+                      {summaryScheduleLines.map((entry) => (
+                        <div key={entry.key}>{entry.label}</div>
+                      ))}
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
-            {summary.image ? (
-              <div className="mt-6">
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Image</dt>
-                  <dd className="mt-2">
+              {summary.image ? (
+                <div className="mt-6">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">Image</p>
+                  <div className="mt-2">
                     <img
                       src={summary.image}
                       alt="Submitted event"
                       className="w-full rounded-2xl border border-slate-200 object-cover"
                     />
-                  </dd>
+                  </div>
                 </div>
               ) : null}
             </div>
@@ -857,7 +1233,7 @@ export default function SubmitEventPage() {
                     id="start-date"
                     type="datetime-local"
                     value={form.startDate}
-                    onChange={(event) => setField('startDate', event.target.value)}
+                    onChange={(event) => handleStartDateChange(event.target.value)}
                     onBlur={() => handleBlur('startDate')}
                     className={classNames(
                       'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
@@ -879,7 +1255,7 @@ export default function SubmitEventPage() {
                     id="end-date"
                     type="datetime-local"
                     value={form.endDate}
-                    onChange={(event) => setField('endDate', event.target.value)}
+                    onChange={(event) => handleEndDateChange(event.target.value)}
                     onBlur={() => handleBlur('endDate')}
                     className={classNames(
                       'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
@@ -891,6 +1267,116 @@ export default function SubmitEventPage() {
                   <Hint>End time must be after the start. Duration up to 14 days.</Hint>
                   <FormError message={errors.endDate && (touched.endDate || touched.submitAttempted) ? errors.endDate : ''} />
                 </div>
+              </div>
+              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-emerald-900">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500"
+                      checked={form.useDailySchedule}
+                      onChange={handleUseDailyScheduleChange}
+                    />
+                    Use Daily Schedule (optional)
+                  </label>
+                  {form.useDailySchedule && (
+                    <span className="text-xs font-medium uppercase tracking-wide text-emerald-700">
+                      {orderedScheduleDays.length} day{orderedScheduleDays.length === 1 ? '' : 's'}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  When enabled, set hours for each day between the start and end dates. Adjusting the range updates the list
+                  automatically.
+                </p>
+                {form.useDailySchedule ? (
+                  orderedScheduleDays.length ? (
+                    <div className="mt-4 space-y-4">
+                      {orderedScheduleDays.map((day) => (
+                        <div key={day.id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                              <p className="text-sm font-semibold text-emerald-900">{formatScheduleDateLabel(day.date)}</p>
+                              <p className="text-xs text-slate-500">{day.date || 'Set date'}</p>
+                            </div>
+                            <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                checked={Boolean(day.allDay)}
+                                onChange={(event) => handleDayAllDayChange(day.id, event.target.checked)}
+                              />
+                              All day
+                            </label>
+                          </div>
+                          {day.allDay ? (
+                            <p className="mt-3 text-xs text-slate-600">This day is marked as an all-day event.</p>
+                          ) : (
+                            <div className="mt-4 space-y-3">
+                              {day.blocks.map((block) => (
+                                <div key={block.id} className="flex flex-wrap items-end gap-3">
+                                  <div className="min-w-[140px] flex-1">
+                                    <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                      Start time
+                                    </label>
+                                    <input
+                                      type="time"
+                                      value={block.start}
+                                      onChange={(event) => updateScheduleBlock(day.id, block.id, { start: event.target.value })}
+                                      className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                    />
+                                  </div>
+                                  <div className="min-w-[140px] flex-1">
+                                    <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                      End time
+                                    </label>
+                                    <input
+                                      type="time"
+                                      value={block.end}
+                                      onChange={(event) => updateScheduleBlock(day.id, block.id, { end: event.target.value })}
+                                      className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                    />
+                                  </div>
+                                  {day.blocks.length > 1 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => removeScheduleBlock(day.id, block.id)}
+                                      className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 transition hover:border-rose-300 hover:text-rose-700"
+                                    >
+                                      Remove
+                                    </button>
+                                  )}
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => addScheduleBlock(day.id)}
+                                className="inline-flex items-center gap-2 rounded-full border border-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900"
+                              >
+                                Add another time range
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-sm font-medium text-emerald-800">
+                      Set both the start and end date to generate daily rows for editing.
+                    </p>
+                  )
+                ) : (
+                  <p className="mt-4 text-sm text-slate-500">
+                    Enable the daily schedule if the event spans multiple days or uses different hours each day.
+                  </p>
+                )}
+                <FormError
+                  message={
+                    errors.dailySchedule && (touched.dailySchedule || touched.submitAttempted)
+                      ? errors.dailySchedule
+                      : ''
+                  }
+                />
               </div>
             </section>
 

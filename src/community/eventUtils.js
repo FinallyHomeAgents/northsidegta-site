@@ -192,73 +192,138 @@ function normalizeDailySchedule(raw = {}) {
       ? raw.dailySchedule
       : []
 
-  const entries = []
-  const seenDates = new Set()
+  const grouped = new Map()
 
-  schedule.forEach((row, index) => {
+  schedule.forEach((row) => {
     if (!row || typeof row !== 'object') return
     const dateValue = row.date ?? row.day ?? row.start_date
     const parsedDate = parseDateOnly(dateValue)
     if (!parsedDate) return
 
-    const isoDate = `${parsedDate.getFullYear()}-${String(
-      parsedDate.getMonth() + 1,
-    ).padStart(2, '0')}-${String(parsedDate.getDate()).padStart(2, '0')}`
-    if (seenDates.has(isoDate)) return
+    const isoDate = formatDateForSlug(parsedDate)
+    if (!isoDate) return
 
+    if (!grouped.has(isoDate)) {
+      grouped.set(isoDate, {
+        date: isoDate,
+        dateObj: parsedDate,
+        allDay: false,
+        blocks: [],
+      })
+    }
+
+    const entry = grouped.get(isoDate)
     const allDay = parseBoolean(row.all_day ?? row.allDay)
-    const startTime = parseTimeOfDay(row.start_time ?? row.startTime)
-    const endTime = parseTimeOfDay(row.end_time ?? row.endTime)
-
-    let start = null
-    let end = null
 
     if (allDay) {
-      start = startOfDay(parsedDate)
-      end = endOfDay(parsedDate)
-    } else if (startTime && endTime) {
-      start = applyTimeToDate(parsedDate, startTime)
-      end = applyTimeToDate(parsedDate, endTime)
-      if (!start || !end || end <= start) {
-        return
-      }
-    } else {
+      entry.allDay = true
+      entry.blocks = []
       return
     }
 
-    const labelDate = scheduleDateFormatter.format(parsedDate)
-    let label = labelDate
-    if (allDay) {
-      label = `${labelDate}: All day`
-    } else {
-      const startLabel = timeFormatter.format(start)
-      const endLabel = timeFormatter.format(end)
-      label = `${labelDate}: ${startLabel}–${endLabel}`
+    const blockList = Array.isArray(row.blocks) ? row.blocks : null
+
+    const pushBlock = (block) => {
+      if (!block || typeof block !== 'object') return
+      const rawStart = block.start ?? block.start_time ?? block.startTime
+      const rawEnd = block.end ?? block.end_time ?? block.endTime
+      const startTime = parseTimeOfDay(rawStart)
+      const endTime = parseTimeOfDay(rawEnd)
+      if (!startTime || !endTime) return
+      const start = applyTimeToDate(parsedDate, startTime)
+      const end = applyTimeToDate(parsedDate, endTime)
+      if (!start || !end || end <= start) return
+      entry.blocks.push({ start, end })
     }
 
-    entries.push({
-      date: isoDate,
-      allDay,
-      start,
-      end,
-      startIso: start?.toISOString() || '',
-      endIso: end?.toISOString() || '',
-      startTimeLabel: allDay ? '' : timeFormatter.format(start),
-      endTimeLabel: allDay ? '' : timeFormatter.format(end),
-      startTimeValue: allDay ? '' : timeFormatter24.format(start),
-      endTimeValue: allDay ? '' : timeFormatter24.format(end),
-      label,
-      index,
-    })
-    seenDates.add(isoDate)
+    if (blockList && blockList.length) {
+      blockList.forEach((block) => pushBlock(block))
+    } else {
+      pushBlock({
+        start: row.start_time ?? row.startTime,
+        end: row.end_time ?? row.endTime,
+      })
+    }
   })
 
-  entries.sort((a, b) => {
-    if (a.start && b.start) return a.start.getTime() - b.start.getTime()
-    if (a.start && !b.start) return -1
-    if (!a.start && b.start) return 1
-    return 0
-  })
+  const entries = []
+
+  Array.from(grouped.values())
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .forEach((entry, index) => {
+      if (!entry) return
+      const labelDate = entry.dateObj ? scheduleDateFormatter.format(entry.dateObj) : entry.date
+
+      if (entry.allDay) {
+        const start = startOfDay(entry.dateObj)
+        const end = endOfDay(entry.dateObj)
+        entries.push({
+          date: entry.date,
+          allDay: true,
+          start,
+          end,
+          startIso: start ? start.toISOString() : '',
+          endIso: end ? end.toISOString() : '',
+          startTimeLabel: '',
+          endTimeLabel: '',
+          startTimeValue: '',
+          endTimeValue: '',
+          label: `${labelDate}: All day`,
+          blocks: [],
+          blockCount: 0,
+          index,
+        })
+        return
+      }
+
+      const sortedBlocks = entry.blocks
+        .filter((block) => block?.start instanceof Date && block?.end instanceof Date && block.end > block.start)
+        .sort((a, b) => a.start.getTime() - b.start.getTime())
+
+      if (!sortedBlocks.length) {
+        return
+      }
+
+      const detailedBlocks = sortedBlocks.map((block, blockIndex) => {
+        const startIso = block.start.toISOString()
+        const endIso = block.end.toISOString()
+        const startLabel = timeFormatter.format(block.start)
+        const endLabel = timeFormatter.format(block.end)
+        return {
+          start: block.start,
+          end: block.end,
+          startIso,
+          endIso,
+          startTimeLabel: startLabel,
+          endTimeLabel: endLabel,
+          startTimeValue: timeFormatter24.format(block.start),
+          endTimeValue: timeFormatter24.format(block.end),
+          label: `${startLabel} – ${endLabel}`,
+          blockIndex,
+        }
+      })
+
+      const first = detailedBlocks[0]
+      const last = detailedBlocks[detailedBlocks.length - 1]
+      const timeSummary = detailedBlocks.map((block) => block.label).join(', ')
+
+      entries.push({
+        date: entry.date,
+        allDay: false,
+        start: first.start,
+        end: last.end,
+        startIso: first.startIso,
+        endIso: last.endIso,
+        startTimeLabel: first.startTimeLabel,
+        endTimeLabel: last.endTimeLabel,
+        startTimeValue: first.startTimeValue,
+        endTimeValue: last.endTimeValue,
+        label: `${labelDate}: ${timeSummary}`,
+        blocks: detailedBlocks,
+        blockCount: detailedBlocks.length,
+        index,
+      })
+    })
 
   const earliest = entries[0]?.start || null
   const latest = entries[entries.length - 1]?.end || earliest
@@ -635,6 +700,29 @@ export function getEventOccurrences(event, rangeStart, rangeEnd) {
     const occurrences = []
     for (const entry of event.dailySchedule) {
       if (!entry) continue
+      const hasBlocks = Array.isArray(entry.blocks) && entry.blocks.length > 0
+
+      if (hasBlocks) {
+        entry.blocks.forEach((block) => {
+          if (!block) return
+          const start = block.start instanceof Date ? new Date(block.start) : block.startIso ? new Date(block.startIso) : null
+          const endCandidate = block.end instanceof Date ? new Date(block.end) : block.endIso ? new Date(block.endIso) : null
+          if (!(start instanceof Date) || Number.isNaN(start)) return
+          const end = endCandidate && endCandidate > start ? endCandidate : new Date(start.getTime() + DEFAULT_DURATION_MS)
+          const dateKey = entry.date || formatDateForSlug(start)
+          occurrences.push({
+            start,
+            end,
+            key: `${event.slug || 'event'}-${dateKey}-${block.blockIndex ?? 'block'}`,
+            allDay: Boolean(entry.allDay),
+            scheduleIndex: typeof entry.index === 'number' ? entry.index : occurrences.length,
+            scheduleDate: entry.date || '',
+            scheduleBlockIndex: typeof block.blockIndex === 'number' ? block.blockIndex : undefined,
+          })
+        })
+        continue
+      }
+
       const start = entry.start instanceof Date ? new Date(entry.start) : entry.startIso ? new Date(entry.startIso) : null
       const endCandidate = entry.end instanceof Date ? new Date(entry.end) : entry.endIso ? new Date(entry.endIso) : null
       if (!(start instanceof Date) || Number.isNaN(start)) continue
@@ -871,13 +959,31 @@ export function generateIcsContent(event, occurrence) {
     } else {
       for (const entry of event.dailySchedule) {
         if (!entry) continue
+        const hasBlocks = Array.isArray(entry.blocks) && entry.blocks.length > 0
+        if (hasBlocks) {
+          entry.blocks.forEach((block) => {
+            if (!block) return
+            const start = block.start instanceof Date ? block.start : block.startIso ? new Date(block.startIso) : null
+            const endCandidate = block.end instanceof Date ? block.end : block.endIso ? new Date(block.endIso) : null
+            if (!(start instanceof Date) || Number.isNaN(start)) return
+            const end = endCandidate && endCandidate > start ? endCandidate : new Date(start.getTime() + DEFAULT_DURATION_MS)
+            occurrences.push({
+              start,
+              end,
+              allDay: Boolean(entry.allDay),
+              dateKey: entry.date || formatDateForSlug(start),
+            })
+          })
+          continue
+        }
+
         const start = entry.start instanceof Date ? entry.start : entry.startIso ? new Date(entry.startIso) : null
-        const end = entry.end instanceof Date ? entry.end : entry.endIso ? new Date(entry.endIso) : null
+        const endCandidate = entry.end instanceof Date ? entry.end : entry.endIso ? new Date(entry.endIso) : null
         if (!(start instanceof Date) || Number.isNaN(start)) continue
-        const resolvedEnd = end && end > start ? end : new Date(start.getTime() + DEFAULT_DURATION_MS)
+        const end = endCandidate && endCandidate > start ? endCandidate : new Date(start.getTime() + DEFAULT_DURATION_MS)
         occurrences.push({
           start,
-          end: resolvedEnd,
+          end,
           allDay: Boolean(entry.allDay),
           dateKey: entry.date || formatDateForSlug(start),
         })

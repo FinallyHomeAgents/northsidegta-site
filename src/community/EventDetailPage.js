@@ -224,27 +224,69 @@ export default function EventDetailPage() {
   const scheduleEntries = React.useMemo(() => {
     if (!event?.dailySchedule?.length) return []
     return event.dailySchedule.map((entry, index) => {
-      const start =
-        entry.start instanceof Date
+      const normalizedBlocks = Array.isArray(entry.blocks)
+        ? entry.blocks
+            .map((block) => {
+              if (!block) return null
+              const blockStart =
+                block.start instanceof Date
+                  ? block.start
+                  : block.startIso
+                    ? new Date(block.startIso)
+                    : null
+              const blockEnd =
+                block.end instanceof Date
+                  ? block.end
+                  : block.endIso
+                    ? new Date(block.endIso)
+                    : null
+              if (!(blockStart instanceof Date) || Number.isNaN(blockStart)) return null
+              const resolvedEnd =
+                blockEnd instanceof Date && !Number.isNaN(blockEnd) && blockEnd > blockStart
+                  ? blockEnd
+                  : null
+              const label = resolvedEnd
+                ? `${scheduleListTimeFormatter.format(blockStart)} – ${scheduleListTimeFormatter.format(resolvedEnd)}`
+                : scheduleListTimeFormatter.format(blockStart)
+              return {
+                ...block,
+                start: blockStart,
+                end: resolvedEnd,
+                label,
+              }
+            })
+            .filter(Boolean)
+        : []
+
+      const start = entry.allDay
+        ? entry.start instanceof Date
           ? entry.start
           : entry.startIso
             ? new Date(entry.startIso)
             : null
-      const end =
-        entry.end instanceof Date
+        : normalizedBlocks[0]?.start || (entry.startIso ? new Date(entry.startIso) : null)
+
+      const end = entry.allDay
+        ? entry.end instanceof Date
           ? entry.end
           : entry.endIso
             ? new Date(entry.endIso)
             : null
+        : normalizedBlocks[normalizedBlocks.length - 1]?.end || (entry.endIso ? new Date(entry.endIso) : null)
+
       const dateLabel = start ? scheduleListDateFormatter.format(start) : entry.date || ''
       const weekdayLabel = start ? scheduleListWeekdayFormatter.format(start) : ''
       const timeLabel = entry.allDay
         ? 'All day'
-        : start && end
-          ? `${scheduleListTimeFormatter.format(start)} – ${scheduleListTimeFormatter.format(end)}`
-          : ''
+        : normalizedBlocks.length
+          ? normalizedBlocks.map((block) => block.label).join('; ')
+          : start && end
+            ? `${scheduleListTimeFormatter.format(start)} – ${scheduleListTimeFormatter.format(end)}`
+            : ''
+
       return {
         ...entry,
+        blocks: normalizedBlocks,
         start,
         end,
         dateLabel,
