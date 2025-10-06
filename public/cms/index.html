@@ -233,79 +233,246 @@
         let cmsEnhancementsReady = false
         let cmsEnhancementsPromise = null
         let cmsEnhancementWaitLogged = false
+        let cmsEnhancementIframeLogged = false
 
-        function findCMSContext() {
-          if (window.CMS && window.React) return window
-          const iframes = Array.from(document.querySelectorAll('iframe'))
-          for (const f of iframes) {
-            try {
-              if (f.contentWindow?.CMS && f.contentWindow?.React) {
-                return f.contentWindow
-              }
-            } catch (e) {}
-          }
-          return null
+        const CMS_POLL_INTERVAL = 100
+        const CMS_POLL_TIMEOUT = 30000
+
+        function logWaitingForCms() {
+          if (cmsEnhancementWaitLogged) return
+          cmsEnhancementWaitLogged = true
+          console.info('[cms-login] waiting for CMS…')
         }
 
-        function tryRegisterCmsEnhancements(context) {
-          if (cmsEnhancementsReady) return true
-          if (!context || !context.CMS || !context.React) return false
+        function logIframeContextFound() {
+          if (cmsEnhancementIframeLogged) return
+          cmsEnhancementIframeLogged = true
+          console.info('[cms-login] found iframe context, waiting for CMS…')
+        }
+
+        function resolveCmsContext(candidateWindow) {
+          if (!candidateWindow) return null
+
+          let cmsExport = null
           try {
-            registerEventsPreview(context.CMS, context.React)
-            registerDailyScheduleWidget(context.CMS, context.React)
-            activateLegacyFieldStyling()
-            cmsEnhancementsReady = true
-            console.info('[cms-login] enhancements ready')
-            return true
+            cmsExport = candidateWindow.CMS
           } catch (error) {
-            console.error('[cms-login] failed to register CMS enhancements', error)
+            return null
+          }
+
+          if (!cmsExport) {
+            return null
+          }
+
+          const cms =
+            typeof cmsExport.registerWidget === 'function'
+              ? cmsExport
+              : cmsExport.default && typeof cmsExport.default.registerWidget === 'function'
+              ? cmsExport.default
+              : null
+
+          if (!cms) {
+            return null
+          }
+
+          const reactCandidates = [
+            candidateWindow.React,
+            cms.React,
+            cms.react,
+            cms.React && cms.React.default,
+            cms.react && cms.react.default,
+            cmsExport && cmsExport.React,
+            cmsExport && cmsExport.react,
+            cmsExport && cmsExport.React && cmsExport.React.default,
+            cmsExport && cmsExport.react && cmsExport.react.default,
+          ].filter(
+            (react) =>
+              react &&
+              typeof react.createElement === 'function' &&
+              typeof react.useState === 'function',
+          )
+
+          if (!reactCandidates.length) {
+            return null
+          }
+
+          const context = {
+            window: candidateWindow,
+            CMS: cms,
+            React: reactCandidates[0],
+          }
+
+          return context
+        }
+
+        function registerCmsEnhancementsInContext(context) {
+          if (cmsEnhancementsReady) return true
+          if (!context || !context.CMS || !context.React) {
             return false
           }
+
+          const { CMS, React, window: contextWindow } = context
+
+          registerEventsPreview(CMS, React)
+          registerDailyScheduleWidget(CMS, React, contextWindow)
+          activateLegacyFieldStyling(contextWindow)
+          applyCmsHeaderLayoutFix(contextWindow)
+
+          cmsEnhancementsReady = true
+          console.info('[cms-login] enhancements ready')
+          return true
+        }
+
+        function waitForCmsGlobals(candidateWindow) {
+          return new Promise((resolve) => {
+            const start = Date.now()
+            const timer = window.setInterval(() => {
+              try {
+                const context = resolveCmsContext(candidateWindow)
+                if (context) {
+                  window.clearInterval(timer)
+                  resolve(context)
+                  return
+                }
+              } catch (error) {
+                window.clearInterval(timer)
+                resolve(null)
+                return
+              }
+
+              if (Date.now() - start >= CMS_POLL_TIMEOUT) {
+                window.clearInterval(timer)
+                resolve(null)
+              }
+            }, CMS_POLL_INTERVAL)
+          })
         }
 
         function ensureCmsEnhancementsReady() {
           if (cmsEnhancementsReady) return Promise.resolve(true)
-          const existingContext = findCMSContext()
-          if (tryRegisterCmsEnhancements(existingContext)) {
-            return Promise.resolve(true)
-          }
-          if (cmsEnhancementsPromise) {
-            return cmsEnhancementsPromise
-          }
+          if (cmsEnhancementsPromise) return cmsEnhancementsPromise
 
           cmsEnhancementsPromise = new Promise((resolve) => {
-            const start = Date.now()
-            const maxWaitMs = 5000
-            const intervalMs = 80
+            logWaitingForCms()
 
-            if (!cmsEnhancementWaitLogged) {
-              cmsEnhancementWaitLogged = true
-              console.info('[cms-login] waiting for CMS…')
+            let finished = false
+            const watchedWindows = new WeakSet()
+            let observer = null
+            let timeoutId = null
+            const schedule =
+              typeof window.requestAnimationFrame === 'function'
+                ? window.requestAnimationFrame.bind(window)
+                : (callback) => window.setTimeout(callback, 16)
+
+            const fail = (error) => {
+              if (finished || cmsEnhancementsReady) return
+              finished = true
+              if (observer) observer.disconnect()
+              if (timeoutId) window.clearTimeout(timeoutId)
+              cmsEnhancementsPromise = null
+              console.error('[cms-login] failed to register CMS enhancements', error)
+              resolve(false)
             }
 
-            const handleSuccess = () => {
-              const context = findCMSContext()
-              if (tryRegisterCmsEnhancements(context)) {
-                window.clearInterval(timer)
-                cmsEnhancementsPromise = null
-                resolve(true)
-                return true
-              }
-              return false
+            const succeed = () => {
+              if (finished) return
+              finished = true
+              if (observer) observer.disconnect()
+              if (timeoutId) window.clearTimeout(timeoutId)
+              cmsEnhancementsPromise = null
+              resolve(true)
             }
 
-            const timer = window.setInterval(() => {
-              if (handleSuccess()) return
-              if (Date.now() - start > maxWaitMs) {
-                window.clearInterval(timer)
-                cmsEnhancementsPromise = null
-                const timeoutError = new Error('Timed out waiting for Decap CMS globals')
-                console.error('[cms-login] failed to register CMS enhancements', timeoutError)
-                resolve(false)
+            const watchWindow = (candidateWindow, { fromIframe } = {}) => {
+              if (finished || !candidateWindow || watchedWindows.has(candidateWindow)) {
+                return
               }
-            }, intervalMs)
 
-            handleSuccess()
+              watchedWindows.add(candidateWindow)
+
+              if (fromIframe) {
+                logIframeContextFound()
+              }
+
+              try {
+                const immediateContext = resolveCmsContext(candidateWindow)
+                if (registerCmsEnhancementsInContext(immediateContext)) {
+                  succeed()
+                  return
+                }
+              } catch (error) {
+                fail(error)
+                return
+              }
+
+              waitForCmsGlobals(candidateWindow).then((context) => {
+                if (finished || cmsEnhancementsReady || !context) return
+
+                try {
+                  if (registerCmsEnhancementsInContext(context)) {
+                    succeed()
+                  }
+                } catch (error) {
+                  fail(error)
+                }
+              })
+            }
+
+            const handleIframe = (iframe) => {
+              if (!(iframe instanceof window.HTMLIFrameElement)) return
+              if (finished || cmsEnhancementsReady) return
+
+              const mark = '__nsCmsEnhancerAttached'
+              if (iframe[mark]) return
+              iframe[mark] = true
+
+              const attempt = () => {
+                if (finished || cmsEnhancementsReady) return
+                try {
+                  const candidateWindow = iframe.contentWindow
+                  if (!candidateWindow) return
+                  watchWindow(candidateWindow, { fromIframe: true })
+                } catch (error) {}
+              }
+
+              iframe.addEventListener('load', attempt, { once: false })
+              attempt()
+            }
+
+            const existingIframes = Array.from(document.querySelectorAll('iframe'))
+            existingIframes.forEach((iframe) => handleIframe(iframe))
+
+            watchWindow(window)
+
+            observer = new MutationObserver((mutations) => {
+              for (const mutation of mutations) {
+                mutation.addedNodes.forEach((node) => {
+                  if (node instanceof window.HTMLIFrameElement) {
+                    handleIframe(node)
+                  } else if (node && typeof node.querySelectorAll === 'function') {
+                    const nestedIframes = node.querySelectorAll('iframe')
+                    nestedIframes.forEach((iframe) => handleIframe(iframe))
+                  }
+                })
+              }
+            })
+
+            const attachObserver = () => {
+              if (finished || cmsEnhancementsReady) return
+              if (document.body) {
+                observer.observe(document.body, { childList: true, subtree: true })
+              } else {
+                schedule(attachObserver)
+              }
+            }
+
+            attachObserver()
+
+            timeoutId = window.setTimeout(() => {
+              if (finished || cmsEnhancementsReady) return
+              const timeoutError = new Error('Timed out waiting for Decap CMS globals')
+              fail(timeoutError)
+            }, CMS_POLL_TIMEOUT + 500)
           })
 
           return cmsEnhancementsPromise
@@ -609,13 +776,21 @@
           CMS.registerPreviewTemplate('events', EventPreview)
         }
 
-        function registerDailyScheduleWidget(CMS, React) {
+        function registerDailyScheduleWidget(CMS, React, contextWindow) {
           if (!CMS || typeof CMS.registerWidget !== 'function' || !React) {
             return
           }
 
           const { useState, useEffect, useMemo } = React
-          const Immutable = window.Immutable
+          const runtimeWindow = contextWindow && contextWindow.document ? contextWindow : window
+          const Immutable =
+            (runtimeWindow && runtimeWindow.Immutable) ||
+            (CMS && (CMS.Immutable || (CMS.imports && CMS.imports.Immutable))) ||
+            null
+          const promptFn =
+            (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
+          const alertFn =
+            (runtimeWindow && runtimeWindow.alert) || (typeof window !== 'undefined' ? window.alert : null)
 
           const containerStyle = {
             border: '1px solid #e2e8f0',
@@ -932,18 +1107,22 @@
             }
 
             function handleAddRange() {
-              const startInput = window.prompt('Start date (YYYY-MM-DD)')
+              const startInput = promptFn ? promptFn('Start date (YYYY-MM-DD)') : null
               if (!startInput) return
-              const endInput = window.prompt('End date (YYYY-MM-DD)', startInput)
+              const endInput = promptFn ? promptFn('End date (YYYY-MM-DD)', startInput) : null
               if (!endInput) return
               const startDate = parseDateInput(startInput)
               const endDate = parseDateInput(endInput)
               if (!startDate || !endDate) {
-                window.alert('Enter dates in YYYY-MM-DD format (e.g., 2025-11-15).')
+                if (alertFn) {
+                  alertFn('Enter dates in YYYY-MM-DD format (e.g., 2025-11-15).')
+                }
                 return
               }
               if (endDate < startDate) {
-                window.alert('End date must be on or after the start date.')
+                if (alertFn) {
+                  alertFn('End date must be on or after the start date.')
+                }
                 return
               }
               const existing = new Set(rows.map((row) => row.date).filter(Boolean))
@@ -955,7 +1134,9 @@
                 }
               }
               if (!additions.length) {
-                window.alert('All days in that range are already listed.')
+                if (alertFn) {
+                  alertFn('All days in that range are already listed.')
+                }
                 return
               }
               setRows((prev) => sortRows([...prev, ...additions]))
@@ -1083,16 +1264,31 @@
           CMS.registerWidget('dailySchedule', DailyScheduleControl)
         }
 
-        let legacyStylingInitialized = false
+        const legacyStylingInitializedFor = new WeakSet()
 
-        function activateLegacyFieldStyling() {
-          if (legacyStylingInitialized) return
-          if (typeof document === 'undefined') return
-          legacyStylingInitialized = true
+        function activateLegacyFieldStyling(contextWindow) {
+          const targetWindow = contextWindow && contextWindow.document ? contextWindow : window
+          const targetDocument = targetWindow.document
+          if (!targetDocument) return
+          if (legacyStylingInitializedFor.has(targetWindow)) return
+          legacyStylingInitializedFor.add(targetWindow)
 
-          const styleId = 'ns-legacy-schedule-style'
-          if (!document.getElementById(styleId)) {
-            const style = document.createElement('style')
+          const raf =
+            typeof targetWindow.requestAnimationFrame === 'function'
+              ? targetWindow.requestAnimationFrame.bind(targetWindow)
+              : (callback) => targetWindow.setTimeout(callback, 16)
+
+          const ensureStyleElement = () => {
+            const styleId = 'ns-legacy-schedule-style'
+            if (targetDocument.getElementById(styleId)) return
+
+            const head = targetDocument.head || targetDocument.getElementsByTagName('head')[0]
+            if (!head) {
+              raf(ensureStyleElement)
+              return
+            }
+
+            const style = targetDocument.createElement('style')
             style.id = styleId
             style.textContent = `
               [data-field-name="startDate"].ns-legacy-muted,
@@ -1105,13 +1301,15 @@
                 opacity: 0.85;
               }
             `
-            document.head.appendChild(style)
+            head.appendChild(style)
           }
 
           const update = () => {
-            const flag = document.querySelector('[data-field-name="use_daily_schedule"] input[type="checkbox"]')
-            const startField = document.querySelector('[data-field-name="startDate"]')
-            const endField = document.querySelector('[data-field-name="endDate"]')
+            const flag = targetDocument.querySelector(
+              '[data-field-name="use_daily_schedule"] input[type="checkbox"]',
+            )
+            const startField = targetDocument.querySelector('[data-field-name="startDate"]')
+            const endField = targetDocument.querySelector('[data-field-name="endDate"]')
             const muted = Boolean(flag && flag.checked)
             ;[startField, endField].forEach((node) => {
               if (!node) return
@@ -1123,19 +1321,146 @@
             })
           }
 
-          const observer = new MutationObserver(() => {
-            window.requestAnimationFrame(update)
+          const observer = new targetWindow.MutationObserver(() => {
+            raf(update)
           })
 
-          observer.observe(document.body, { childList: true, subtree: true })
+          const startObserving = () => {
+            if (!targetDocument.body) {
+              raf(startObserving)
+              return
+            }
+            observer.observe(targetDocument.body, { childList: true, subtree: true })
+          }
 
-          document.addEventListener('change', (event) => {
+          ensureStyleElement()
+          startObserving()
+
+          targetDocument.addEventListener('change', (event) => {
             if (event.target && event.target.closest('[data-field-name="use_daily_schedule"]')) {
-              window.requestAnimationFrame(update)
+              raf(update)
             }
           })
 
-          window.requestAnimationFrame(update)
+          raf(update)
+        }
+
+        const headerLayoutFixAppliedFor = new WeakSet()
+
+        function applyCmsHeaderLayoutFix(contextWindow) {
+          const targetWindow = contextWindow && contextWindow.document ? contextWindow : window
+          const targetDocument = targetWindow.document
+          if (!targetDocument) return
+          if (headerLayoutFixAppliedFor.has(targetWindow)) return
+          headerLayoutFixAppliedFor.add(targetWindow)
+
+          const raf =
+            typeof targetWindow.requestAnimationFrame === 'function'
+              ? targetWindow.requestAnimationFrame.bind(targetWindow)
+              : (callback) => targetWindow.setTimeout(callback, 16)
+
+          const ensureStyleElement = () => {
+            const styleId = 'ns-cms-header-layout-fix'
+            if (targetDocument.getElementById(styleId)) return
+
+            const head = targetDocument.head || targetDocument.getElementsByTagName('head')[0]
+            if (!head) {
+              raf(ensureStyleElement)
+              return
+            }
+
+            const style = targetDocument.createElement('style')
+            style.id = styleId
+            style.textContent = `
+              #nc-root [data-testid="collection-top"],
+              #nc-root [class*="CollectionTop_top"] {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+              }
+              #nc-root [data-testid="collection-top"] > *:first-child,
+              #nc-root [class*="CollectionTop_top"] > *:first-child {
+                flex: 1 1 auto;
+                min-width: 200px;
+              }
+              #nc-root [data-testid="collection-top"] [data-testid="collection-actions"],
+              #nc-root [class*="CollectionTop_top"] [data-testid="collection-actions"],
+              #nc-root [class*="CollectionTop_top"] [class*="CollectionTop_actions"],
+              #nc-root [class*="CollectionTop_top"] [class*="CollectionTop_topActions"] {
+                margin-left: auto;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+                justify-content: flex-end;
+              }
+            `
+            head.appendChild(style)
+          }
+
+          const applyInlineLayout = () => {
+            const topContainer =
+              targetDocument.querySelector('#nc-root [data-testid="collection-top"]') ||
+              targetDocument.querySelector('#nc-root [class*="CollectionTop_top"]')
+
+            if (!topContainer) return
+
+            topContainer.style.display = 'flex'
+            topContainer.style.alignItems = 'center'
+            topContainer.style.flexWrap = 'wrap'
+            topContainer.style.gap = '8px'
+
+            const headingContainer = topContainer.firstElementChild
+            if (headingContainer) {
+              headingContainer.style.flex = '1 1 auto'
+              headingContainer.style.minWidth = '200px'
+            }
+
+            const findActionsContainer = () => {
+              const directMatch = topContainer.querySelector('[data-testid="collection-actions"]')
+              if (directMatch) return directMatch
+
+              const classMatch = topContainer.querySelector(
+                '[class*="CollectionTop_actions"], [class*="CollectionTop_topActions"]',
+              )
+              if (classMatch) return classMatch
+
+              const lastChild = topContainer.lastElementChild
+              if (lastChild && lastChild !== headingContainer) {
+                return lastChild
+              }
+              return null
+            }
+
+            const actionsContainer = findActionsContainer()
+            if (actionsContainer) {
+              actionsContainer.style.marginLeft = 'auto'
+              actionsContainer.style.display = 'flex'
+              actionsContainer.style.alignItems = 'center'
+              actionsContainer.style.flexWrap = 'wrap'
+              actionsContainer.style.gap = '8px'
+              actionsContainer.style.justifyContent = 'flex-end'
+              actionsContainer.style.order = '2'
+            }
+          }
+
+          const startObserving = () => {
+            if (!targetDocument.body) {
+              raf(startObserving)
+              return
+            }
+
+            const observer = new targetWindow.MutationObserver(() => {
+              raf(applyInlineLayout)
+            })
+
+            observer.observe(targetDocument.body, { childList: true, subtree: true })
+            raf(applyInlineLayout)
+          }
+
+          ensureStyleElement()
+          startObserving()
         }
 
         const form = document.getElementById('cms-login-form')
