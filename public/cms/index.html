@@ -230,110 +230,63 @@
           'https://cdn.jsdelivr.net/npm/decap-cms@3.6.2/dist/decap-cms.js',
         ]
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
-        let cmsEnhancementsReady = false
-        let cmsEnhancementsPromise = null
-        let reactImportScheduled = false
+        let __nsEnhancementsReady = false
+        let __nsEnhancementsResolvers = []
 
-        const CMS_POLL_INTERVAL = 100
+        function findDecapContext() {
+          const seen = new Set()
+          const frames = []
 
-        function getCmsContext(startWindow) {
-          const visited = new Set()
-          const queue = []
-
-          const pushWindow = (candidate) => {
-            if (!candidate || visited.has(candidate)) {
-              return
-            }
-            visited.add(candidate)
-            queue.push(candidate)
+          const push = (candidate) => {
+            if (!candidate || seen.has(candidate)) return
+            seen.add(candidate)
+            frames.push(candidate)
           }
 
-          const resolveInWindow = (candidate) => {
-            let cmsExport
+          push(window)
+
+          try {
+            if (window.parent && window.parent !== window) {
+              push(window.parent)
+            }
+          } catch (error) {}
+
+          document
+            .querySelectorAll('iframe')
+            .forEach((iframe) => {
+              try {
+                if (iframe?.contentWindow) {
+                  push(iframe.contentWindow)
+                }
+              } catch (error) {}
+            })
+
+          for (const w of frames) {
             try {
-              cmsExport = candidate.CMS
-            } catch (error) {
-              return null
-            }
+              const CMS = w?.CMS
+              if (!CMS || typeof CMS.registerWidget !== 'function') continue
 
-            if (!cmsExport) {
-              return null
-            }
+              const candidates = [
+                w.React,
+                CMS.React,
+                CMS.react,
+                CMS?.imports?.React,
+                CMS?.imports?.react,
+              ].filter(Boolean)
 
-            const cms =
-              typeof cmsExport.registerWidget === 'function'
-                ? cmsExport
-                : cmsExport.default && typeof cmsExport.default.registerWidget === 'function'
-                ? cmsExport.default
-                : null
+              for (const R of candidates) {
+                const resolved =
+                  typeof R?.useMemo === 'function' &&
+                  typeof R?.createElement === 'function'
+                    ? R
+                    : typeof R?.default?.useMemo === 'function' &&
+                      typeof R?.default?.createElement === 'function'
+                    ? R.default
+                    : null
 
-            if (!cms) {
-              return null
-            }
-
-            let react =
-              (cms.imports && (cms.imports.react || cms.imports.React)) ||
-              cms.React ||
-              cms.react ||
-              candidate.React ||
-              null
-
-            if (react && react.default && typeof react.default.createElement === 'function') {
-              react = react.default
-            }
-
-            if (
-              !react ||
-              typeof react.createElement !== 'function' ||
-              typeof react.useState !== 'function'
-            ) {
-              return null
-            }
-
-            return { win: candidate, CMS: cms, React: react }
-          }
-
-          const topWindow = (() => {
-            try {
-              return startWindow && startWindow.top ? startWindow.top : window.top
-            } catch (error) {
-              return startWindow || window
-            }
-          })()
-
-          pushWindow(topWindow)
-          if (startWindow && startWindow !== topWindow) {
-            pushWindow(startWindow)
-          }
-          if (typeof window !== 'undefined' && window !== topWindow && window !== startWindow) {
-            pushWindow(window)
-          }
-
-          while (queue.length) {
-            const candidate = queue.shift()
-            const context = resolveInWindow(candidate)
-            if (context) {
-              return context
-            }
-
-            try {
-              const frames = candidate.frames
-              const frameCount = frames ? frames.length : 0
-              for (let index = 0; index < frameCount; index += 1) {
-                const frameWindow = frames[index]
-                pushWindow(frameWindow)
-              }
-            } catch (error) {}
-
-            try {
-              const doc = candidate.document
-              if (doc && typeof doc.querySelectorAll === 'function') {
-                const iframeNodes = doc.querySelectorAll('iframe')
-                iframeNodes.forEach((iframe) => {
-                  if (iframe && iframe.contentWindow) {
-                    pushWindow(iframe.contentWindow)
-                  }
-                })
+                if (resolved) {
+                  return { win: w, CMS, React: resolved }
+                }
               }
             } catch (error) {}
           }
@@ -341,101 +294,76 @@
           return null
         }
 
-        function ensureCmsEnhancementsReady() {
-          if (cmsEnhancementsReady) return Promise.resolve(true)
-          if (cmsEnhancementsPromise) return cmsEnhancementsPromise
+        function registerEnhancements({ win, CMS, React }) {
+          if (__nsEnhancementsReady) return
+          if (!CMS || !React) return
+          if (
+            typeof React.useMemo !== 'function' ||
+            typeof React.createElement !== 'function'
+          ) {
+            return
+          }
 
-          cmsEnhancementsPromise = new Promise((resolve) => {
-            const scheduleReactImport = () => {
-              if (
-                reactImportScheduled ||
-                (window.React && typeof window.React.createElement === 'function')
-              ) {
-                return
-              }
+          if (!win.React) win.React = React
 
-              if (!window.CMS) {
-                return
-              }
+          registerEventsPreview(CMS, React, win)
+          registerDailyScheduleWidget(CMS, React, win)
+          activateLegacyFieldStyling(win)
+          applyCmsHeaderLayoutFix(win)
 
-              reactImportScheduled = true
-              window.setTimeout(() => {
-                if (window.React && typeof window.React.createElement === 'function') {
-                  return
-                }
-
-                import('https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js')
-                  .then((mod) => {
-                    const imported = mod && (mod.default || mod)
-                    if (imported && typeof imported.createElement === 'function') {
-                      window.React = imported
-                      console.info('[cms] React imported dynamically')
-                    }
-                  })
-                  .catch((err) => console.error('[cms] Failed to import React', err))
-              }, 3000)
-            }
-
-            const attempt = () => {
-              const context = getCmsContext(window)
-
-              if (context && context.CMS && !window.CMS) {
-                window.CMS = context.CMS
-              }
-
-              if (context && context.React && typeof context.React.createElement === 'function') {
-                window.React = context.React
-              }
-
-              if (window.CMS) {
-                window.React =
-                  window.React ||
-                  (window.CMS && (window.CMS.React || window.CMS.react)) ||
-                  null
-
-                const cmsImports = window.CMS.imports || {}
-                if (!window.React) {
-                  window.React = cmsImports.React || cmsImports.react || null
-                }
-              }
-
-              if (
-                window.React &&
-                window.React.default &&
-                typeof window.React.default.createElement === 'function'
-              ) {
-                window.React = window.React.default
-              }
-
-              const cms = window.CMS
-              const react = window.React
-
-              if (
-                cms &&
-                typeof cms.registerWidget === 'function' &&
-                react &&
-                typeof react.createElement === 'function'
-              ) {
-                registerEventsPreview(cms, react, window)
-                registerDailyScheduleWidget(cms, react, window)
-                activateLegacyFieldStyling(window)
-                applyCmsHeaderLayoutFix(window)
-                cmsEnhancementsReady = true
-                cmsEnhancementsPromise = null
-                console.info('[cms] Enhancements registered successfully')
-                resolve(true)
-                return
-              }
-
-              scheduleReactImport()
-              window.setTimeout(attempt, CMS_POLL_INTERVAL)
-            }
-
-            attempt()
-          })
-
-          return cmsEnhancementsPromise
+          __nsEnhancementsReady = true
+          __nsEnhancementsResolvers.forEach((resolve) => resolve(true))
+          __nsEnhancementsResolvers = []
+          console.info('[cms-login] enhancements ready')
         }
+
+        function whenDecapReady(cb, maxMs = 8000, interval = 100) {
+          if (__nsEnhancementsReady) {
+            const ctx = findDecapContext()
+            if (ctx) {
+              cb(ctx)
+              return
+            }
+          }
+
+          const start = Date.now()
+          ;(function tick() {
+            const ctx = findDecapContext()
+            if (ctx) {
+              cb(ctx)
+              return
+            }
+
+            if (Date.now() - start >= maxMs) {
+              console.warn(
+                '[cms-login] Decap not ready yet (no React with hooks). Will try again on DOM changes.'
+              )
+              return
+            }
+
+            setTimeout(tick, interval)
+          })()
+        }
+
+        function ensureCmsEnhancementsReady() {
+          if (__nsEnhancementsReady) {
+            return Promise.resolve(true)
+          }
+
+          return new Promise((resolve) => {
+            __nsEnhancementsResolvers.push(resolve)
+            whenDecapReady(registerEnhancements)
+          })
+        }
+
+        whenDecapReady(registerEnhancements)
+
+        new MutationObserver(() => whenDecapReady(registerEnhancements)).observe(
+          document.documentElement,
+          { childList: true, subtree: true }
+        )
+
+        window.addEventListener('load', () => whenDecapReady(registerEnhancements))
 
         function registerEventsPreview(CMS, React) {
           if (!CMS || typeof CMS.registerPreviewTemplate !== 'function') {
