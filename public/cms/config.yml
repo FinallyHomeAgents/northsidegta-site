@@ -140,7 +140,7 @@ collections:
         widget: 'boolean'
         required: false
         default: false
-      - name: 'dailySchedule'
+      - name: 'daily_schedule'
         label: 'Daily schedule'
         widget: 'dailySchedule'
         required: false

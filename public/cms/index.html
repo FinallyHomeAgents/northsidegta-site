@@ -791,11 +791,11 @@
           }
 
           const cmsInstance =
-            (targetWindow &&
-              targetWindow.CMS &&
-              typeof targetWindow.CMS.registerWidget === 'function'
+            targetWindow &&
+            targetWindow.CMS &&
+            typeof targetWindow.CMS.registerWidget === 'function'
               ? targetWindow.CMS
-              : CMS) || CMS
+              : CMS
 
           if (!cmsInstance || typeof cmsInstance.registerWidget !== 'function') {
             return
@@ -810,27 +810,6 @@
             (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
           const alertFn =
             (runtimeWindow && runtimeWindow.alert) || (typeof window !== 'undefined' ? window.alert : null)
-
-          function describeWindow(target) {
-            if (!target) return 'unknown window'
-            if (target === window) return 'top window'
-            try {
-              const frame = target.frameElement
-              if (frame) {
-                const frameId = frame.id ? `#${frame.id}` : ''
-                const title = frame.getAttribute('title')
-                if (frameId || title) {
-                  return `iframe${frameId || ''}${title ? ` (${title})` : ''}`
-                }
-              }
-            } catch (error) {}
-            try {
-              if (target.location && target.location.href) {
-                return target.location.href
-              }
-            } catch (error) {}
-            return 'iframe window'
-          }
 
           const containerStyle = {
             border: '1px solid #e2e8f0',
@@ -1328,8 +1307,7 @@
           try {
             cmsInstance.registerWidget('dailySchedule', DailyScheduleControl)
             dailyScheduleRegisteredWindows.add(targetWindow)
-            const contextDescription = describeWindow(targetWindow)
-            console.info(`[cms] widget registered: dailySchedule (${contextDescription})`)
+            console.info('[cms] widget registered: dailySchedule')
           } catch (error) {
             console.error('[cms] failed to register dailySchedule widget', error)
           }
