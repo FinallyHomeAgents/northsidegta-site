@@ -232,120 +232,113 @@
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
         let cmsEnhancementsReady = false
         let cmsEnhancementsPromise = null
-        let cmsEnhancementWaitLogged = false
-        let cmsEnhancementIframeLogged = false
 
         const CMS_POLL_INTERVAL = 100
         const CMS_POLL_TIMEOUT = 30000
 
-        function logWaitingForCms() {
-          if (cmsEnhancementWaitLogged) return
-          cmsEnhancementWaitLogged = true
-          console.info('[cms-login] waiting for CMS…')
-        }
+        function getCmsContext(startWindow) {
+          const visited = new Set()
+          const queue = []
 
-        function logIframeContextFound() {
-          if (cmsEnhancementIframeLogged) return
-          cmsEnhancementIframeLogged = true
-          console.info('[cms-login] found iframe context, waiting for CMS…')
-        }
-
-        function resolveCmsContext(candidateWindow) {
-          if (!candidateWindow) return null
-
-          let cmsExport = null
-          try {
-            cmsExport = candidateWindow.CMS
-          } catch (error) {
-            return null
+          const pushWindow = (candidate) => {
+            if (!candidate || visited.has(candidate)) {
+              return
+            }
+            visited.add(candidate)
+            queue.push(candidate)
           }
 
-          if (!cmsExport) {
-            return null
+          const resolveInWindow = (candidate) => {
+            let cmsExport
+            try {
+              cmsExport = candidate.CMS
+            } catch (error) {
+              return null
+            }
+
+            if (!cmsExport) {
+              return null
+            }
+
+            const cms =
+              typeof cmsExport.registerWidget === 'function'
+                ? cmsExport
+                : cmsExport.default && typeof cmsExport.default.registerWidget === 'function'
+                ? cmsExport.default
+                : null
+
+            if (!cms) {
+              return null
+            }
+
+            let react =
+              (cms.imports && (cms.imports.react || cms.imports.React)) ||
+              cms.React ||
+              cms.react ||
+              candidate.React ||
+              null
+
+            if (react && react.default && typeof react.default.createElement === 'function') {
+              react = react.default
+            }
+
+            if (
+              !react ||
+              typeof react.createElement !== 'function' ||
+              typeof react.useState !== 'function'
+            ) {
+              return null
+            }
+
+            return { win: candidate, CMS: cms, React: react }
           }
 
-          const cms =
-            typeof cmsExport.registerWidget === 'function'
-              ? cmsExport
-              : cmsExport.default && typeof cmsExport.default.registerWidget === 'function'
-              ? cmsExport.default
-              : null
+          const topWindow = (() => {
+            try {
+              return startWindow && startWindow.top ? startWindow.top : window.top
+            } catch (error) {
+              return startWindow || window
+            }
+          })()
 
-          if (!cms) {
-            return null
+          pushWindow(topWindow)
+          if (startWindow && startWindow !== topWindow) {
+            pushWindow(startWindow)
+          }
+          if (typeof window !== 'undefined' && window !== topWindow && window !== startWindow) {
+            pushWindow(window)
           }
 
-          const reactCandidates = [
-            candidateWindow.React,
-            cms.React,
-            cms.react,
-            cms.React && cms.React.default,
-            cms.react && cms.react.default,
-            cmsExport && cmsExport.React,
-            cmsExport && cmsExport.react,
-            cmsExport && cmsExport.React && cmsExport.React.default,
-            cmsExport && cmsExport.react && cmsExport.react.default,
-          ].filter(
-            (react) =>
-              react &&
-              typeof react.createElement === 'function' &&
-              typeof react.useState === 'function',
-          )
+          while (queue.length) {
+            const candidate = queue.shift()
+            const context = resolveInWindow(candidate)
+            if (context) {
+              return context
+            }
 
-          if (!reactCandidates.length) {
-            return null
-          }
-
-          const context = {
-            window: candidateWindow,
-            CMS: cms,
-            React: reactCandidates[0],
-          }
-
-          return context
-        }
-
-        function registerCmsEnhancementsInContext(context) {
-          if (cmsEnhancementsReady) return true
-          if (!context || !context.CMS || !context.React) {
-            return false
-          }
-
-          const { CMS, React, window: contextWindow } = context
-
-          registerEventsPreview(CMS, React)
-          registerDailyScheduleWidget(CMS, React, contextWindow)
-          activateLegacyFieldStyling(contextWindow)
-          applyCmsHeaderLayoutFix(contextWindow)
-
-          cmsEnhancementsReady = true
-          console.info('[cms-login] enhancements ready')
-          return true
-        }
-
-        function waitForCmsGlobals(candidateWindow) {
-          return new Promise((resolve) => {
-            const start = Date.now()
-            const timer = window.setInterval(() => {
-              try {
-                const context = resolveCmsContext(candidateWindow)
-                if (context) {
-                  window.clearInterval(timer)
-                  resolve(context)
-                  return
-                }
-              } catch (error) {
-                window.clearInterval(timer)
-                resolve(null)
-                return
+            try {
+              const frames = candidate.frames
+              const frameCount = frames ? frames.length : 0
+              for (let index = 0; index < frameCount; index += 1) {
+                const frameWindow = frames[index]
+                pushWindow(frameWindow)
               }
+            } catch (error) {}
 
-              if (Date.now() - start >= CMS_POLL_TIMEOUT) {
-                window.clearInterval(timer)
-                resolve(null)
+            try {
+              const doc = candidate.document
+              if (doc && typeof doc.querySelectorAll === 'function') {
+                const iframeNodes = doc.querySelectorAll('iframe')
+                iframeNodes.forEach((iframe) => {
+                  if (iframe && iframe.contentWindow) {
+                    pushWindow(iframe.contentWindow)
+                  }
+                })
               }
-            }, CMS_POLL_INTERVAL)
-          })
+            } catch (error) {}
+          }
+
+          return null
         }
 
         function ensureCmsEnhancementsReady() {
@@ -353,126 +346,39 @@
           if (cmsEnhancementsPromise) return cmsEnhancementsPromise
 
           cmsEnhancementsPromise = new Promise((resolve) => {
-            logWaitingForCms()
+            const startTime = Date.now()
 
-            let finished = false
-            const watchedWindows = new WeakSet()
-            let observer = null
-            let timeoutId = null
-            const schedule =
-              typeof window.requestAnimationFrame === 'function'
-                ? window.requestAnimationFrame.bind(window)
-                : (callback) => window.setTimeout(callback, 16)
-
-            const fail = (error) => {
-              if (finished || cmsEnhancementsReady) return
-              finished = true
-              if (observer) observer.disconnect()
-              if (timeoutId) window.clearTimeout(timeoutId)
-              cmsEnhancementsPromise = null
-              console.error('[cms-login] failed to register CMS enhancements', error)
-              resolve(false)
-            }
-
-            const succeed = () => {
-              if (finished) return
-              finished = true
-              if (observer) observer.disconnect()
-              if (timeoutId) window.clearTimeout(timeoutId)
-              cmsEnhancementsPromise = null
-              resolve(true)
-            }
-
-            const watchWindow = (candidateWindow, { fromIframe } = {}) => {
-              if (finished || !candidateWindow || watchedWindows.has(candidateWindow)) {
+            const attempt = () => {
+              const context = getCmsContext(window)
+              if (
+                context &&
+                context.CMS &&
+                typeof context.CMS.registerWidget === 'function' &&
+                context.React
+              ) {
+                const { CMS, React, win: contextWindow } = context
+                registerEventsPreview(CMS, React)
+                registerDailyScheduleWidget(CMS, React, contextWindow)
+                activateLegacyFieldStyling(contextWindow)
+                applyCmsHeaderLayoutFix(contextWindow)
+                cmsEnhancementsReady = true
+                cmsEnhancementsPromise = null
+                console.info('[cms] enhancements ready')
+                resolve(true)
                 return
               }
 
-              watchedWindows.add(candidateWindow)
-
-              if (fromIframe) {
-                logIframeContextFound()
-              }
-
-              try {
-                const immediateContext = resolveCmsContext(candidateWindow)
-                if (registerCmsEnhancementsInContext(immediateContext)) {
-                  succeed()
-                  return
-                }
-              } catch (error) {
-                fail(error)
+              if (Date.now() - startTime >= CMS_POLL_TIMEOUT) {
+                cmsEnhancementsPromise = null
+                console.warn('[cms] CMS unavailable after waiting 30s')
+                resolve(false)
                 return
               }
 
-              waitForCmsGlobals(candidateWindow).then((context) => {
-                if (finished || cmsEnhancementsReady || !context) return
-
-                try {
-                  if (registerCmsEnhancementsInContext(context)) {
-                    succeed()
-                  }
-                } catch (error) {
-                  fail(error)
-                }
-              })
+              window.setTimeout(attempt, CMS_POLL_INTERVAL)
             }
 
-            const handleIframe = (iframe) => {
-              if (!(iframe instanceof window.HTMLIFrameElement)) return
-              if (finished || cmsEnhancementsReady) return
-
-              const mark = '__nsCmsEnhancerAttached'
-              if (iframe[mark]) return
-              iframe[mark] = true
-
-              const attempt = () => {
-                if (finished || cmsEnhancementsReady) return
-                try {
-                  const candidateWindow = iframe.contentWindow
-                  if (!candidateWindow) return
-                  watchWindow(candidateWindow, { fromIframe: true })
-                } catch (error) {}
-              }
-
-              iframe.addEventListener('load', attempt, { once: false })
-              attempt()
-            }
-
-            const existingIframes = Array.from(document.querySelectorAll('iframe'))
-            existingIframes.forEach((iframe) => handleIframe(iframe))
-
-            watchWindow(window)
-
-            observer = new MutationObserver((mutations) => {
-              for (const mutation of mutations) {
-                mutation.addedNodes.forEach((node) => {
-                  if (node instanceof window.HTMLIFrameElement) {
-                    handleIframe(node)
-                  } else if (node && typeof node.querySelectorAll === 'function') {
-                    const nestedIframes = node.querySelectorAll('iframe')
-                    nestedIframes.forEach((iframe) => handleIframe(iframe))
-                  }
-                })
-              }
-            })
-
-            const attachObserver = () => {
-              if (finished || cmsEnhancementsReady) return
-              if (document.body) {
-                observer.observe(document.body, { childList: true, subtree: true })
-              } else {
-                schedule(attachObserver)
-              }
-            }
-
-            attachObserver()
-
-            timeoutId = window.setTimeout(() => {
-              if (finished || cmsEnhancementsReady) return
-              const timeoutError = new Error('Timed out waiting for Decap CMS globals')
-              fail(timeoutError)
-            }, CMS_POLL_TIMEOUT + 500)
+            attempt()
           })
 
           return cmsEnhancementsPromise
@@ -790,21 +696,10 @@
             return
           }
 
-          const cmsInstance =
-            targetWindow &&
-            targetWindow.CMS &&
-            typeof targetWindow.CMS.registerWidget === 'function'
-              ? targetWindow.CMS
-              : CMS
-
-          if (!cmsInstance || typeof cmsInstance.registerWidget !== 'function') {
-            return
-          }
-
           const runtimeWindow = targetWindow
           const Immutable =
             (runtimeWindow && runtimeWindow.Immutable) ||
-            (cmsInstance && (cmsInstance.Immutable || (cmsInstance.imports && cmsInstance.imports.Immutable))) ||
+            (CMS && (CMS.Immutable || (CMS.imports && CMS.imports.Immutable))) ||
             null
           const promptFn =
             (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
@@ -1304,8 +1199,26 @@
             )
           }
 
+          DailyScheduleControl.validate = (
+            value,
+            opts,
+            field,
+            fieldsMeta,
+            currentValue,
+            entry,
+          ) => {
+            const useDaily = entry?.getIn
+              ? entry.getIn(['data', 'use_daily_schedule'])
+              : entry?.data?.use_daily_schedule
+            const rowCount = value?.size ?? value?.length ?? 0
+            const hasRows = Boolean(value) && rowCount > 0
+            return useDaily && !hasRows
+              ? 'Add at least one day (or mark a day as All day).'
+              : true
+          }
+
           try {
-            cmsInstance.registerWidget('dailySchedule', DailyScheduleControl)
+            CMS.registerWidget('dailySchedule', DailyScheduleControl)
             dailyScheduleRegisteredWindows.add(targetWindow)
             console.info('[cms] widget registered: dailySchedule')
           } catch (error) {
@@ -1510,6 +1423,13 @@
 
           ensureStyleElement()
           startObserving()
+        }
+
+        if (typeof window !== 'undefined') {
+          window.registerDailyScheduleWidget = registerDailyScheduleWidget
+          window.registerEventsPreview = registerEventsPreview
+          window.activateLegacyFieldStyling = activateLegacyFieldStyling
+          window.applyCmsHeaderLayoutFix = applyCmsHeaderLayoutFix
         }
 
         const form = document.getElementById('cms-login-form')
