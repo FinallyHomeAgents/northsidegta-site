@@ -231,117 +231,105 @@
         ]
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
         let __nsEnhancementsReady = false
+        let __nsReactLoading = false
         let __nsEnhancementsResolvers = []
 
         function findDecapContext() {
-          const seen = new Set()
-          const frames = []
+          const windows = [
+            window,
+            ...Array.from(document.querySelectorAll('iframe'))
+              .map((frame) => frame.contentWindow)
+              .filter(Boolean),
+          ]
 
-          const push = (candidate) => {
-            if (!candidate || seen.has(candidate)) return
-            seen.add(candidate)
-            frames.push(candidate)
-          }
-
-          push(window)
-
-          try {
-            if (window.parent && window.parent !== window) {
-              push(window.parent)
-            }
-          } catch (error) {}
-
-          document
-            .querySelectorAll('iframe')
-            .forEach((iframe) => {
-              try {
-                if (iframe?.contentWindow) {
-                  push(iframe.contentWindow)
-                }
-              } catch (error) {}
-            })
-
-          for (const w of frames) {
+          for (const w of windows) {
             try {
-              const CMS = w?.CMS
+              const CMS = w?.CMS || w?.netlifyCMS || w?.decapCMS
               if (!CMS || typeof CMS.registerWidget !== 'function') continue
 
-              const candidates = [
+              const ReactCandidate = [
                 w.React,
                 CMS.React,
                 CMS.react,
                 CMS?.imports?.React,
                 CMS?.imports?.react,
-              ].filter(Boolean)
+              ].find(Boolean)
 
-              for (const R of candidates) {
-                const resolved =
-                  typeof R?.useMemo === 'function' &&
-                  typeof R?.createElement === 'function'
-                    ? R
-                    : typeof R?.default?.useMemo === 'function' &&
-                      typeof R?.default?.createElement === 'function'
-                    ? R.default
-                    : null
-
-                if (resolved) {
-                  return { win: w, CMS, React: resolved }
-                }
-              }
+              return { win: w, CMS, React: ReactCandidate || null }
             } catch (error) {}
           }
 
           return null
         }
 
-        function registerEnhancements({ win, CMS, React }) {
-          if (__nsEnhancementsReady) return
-          if (!CMS || !React) return
-          if (
-            typeof React.useMemo !== 'function' ||
-            typeof React.createElement !== 'function'
-          ) {
+        function registerEnhancements(ctx) {
+          if (__nsEnhancementsReady || !ctx || !ctx.CMS) return
+
+          const { win, CMS } = ctx
+          let React = ctx.React
+
+          const hasHooks = (candidate) =>
+            !!candidate &&
+            typeof candidate.useMemo === 'function' &&
+            typeof candidate.createElement === 'function'
+
+          const finalize = (candidate) => {
+            if (!hasHooks(candidate)) return false
+
+            if (!win.React) win.React = candidate
+
+            registerEventsPreview(CMS, candidate, win)
+            registerDailyScheduleWidget(CMS, candidate, win)
+            activateLegacyFieldStyling(win)
+            applyCmsHeaderLayoutFix(win)
+
+            __nsEnhancementsReady = true
+            __nsEnhancementsResolvers.forEach((resolve) => resolve(true))
+            __nsEnhancementsResolvers = []
+            console.info('[cms-login] enhancements ready')
+            return true
+          }
+
+          if (finalize(React)) {
             return
           }
 
-          if (!win.React) win.React = React
-
-          registerEventsPreview(CMS, React, win)
-          registerDailyScheduleWidget(CMS, React, win)
-          activateLegacyFieldStyling(win)
-          applyCmsHeaderLayoutFix(win)
-
-          __nsEnhancementsReady = true
-          __nsEnhancementsResolvers.forEach((resolve) => resolve(true))
-          __nsEnhancementsResolvers = []
-          console.info('[cms-login] enhancements ready')
-        }
-
-        function whenDecapReady(cb, maxMs = 8000, interval = 100) {
-          if (__nsEnhancementsReady) {
-            const ctx = findDecapContext()
-            if (ctx) {
-              cb(ctx)
-              return
-            }
+          if (__nsReactLoading) {
+            return
           }
+          __nsReactLoading = true
 
-          const start = Date.now()
-          ;(function tick() {
-            const ctx = findDecapContext()
-            if (ctx) {
-              cb(ctx)
-              return
-            }
+          const addScript = (src) =>
+            new Promise((resolve, reject) => {
+              try {
+                const script = win.document.createElement('script')
+                script.src = src
+                script.async = true
+                script.onload = () => resolve()
+                script.onerror = () => reject(new Error('Failed to load ' + src))
+                ;(win.document.head || win.document.documentElement).appendChild(
+                  script,
+                )
+              } catch (error) {
+                reject(error)
+              }
+            })
 
-            if (Date.now() - start >= maxMs) {
-              console.warn(
-                '[cms-login] Decap not ready yet (no React with hooks). Will try again on DOM changes.'
+          ;(async () => {
+            try {
+              await addScript(
+                'https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js',
               )
-              return
+              const resolvedReact = win.React || React || null
+              if (!finalize(resolvedReact)) {
+                console.warn(
+                  '[cms-login] React loaded but hooks not detected; widget not registered.',
+                )
+              }
+            } catch (error) {
+              __nsReactLoading = false
+              console.warn('[cms-login] Failed to load React fallback', error)
             }
-
-            setTimeout(tick, interval)
           })()
         }
 
@@ -352,18 +340,49 @@
 
           return new Promise((resolve) => {
             __nsEnhancementsResolvers.push(resolve)
-            whenDecapReady(registerEnhancements)
+            const ctx = findDecapContext()
+            if (ctx) registerEnhancements(ctx)
           })
         }
 
-        whenDecapReady(registerEnhancements)
+        function bootEnhancements() {
+          const started = Date.now()
+          let observer = null
 
-        new MutationObserver(() => whenDecapReady(registerEnhancements)).observe(
-          document.documentElement,
-          { childList: true, subtree: true }
-        )
+          const tryNow = () => {
+            if (__nsEnhancementsReady) {
+              if (observer) {
+                observer.disconnect()
+                observer = null
+              }
+              return
+            }
+            const ctx = findDecapContext()
+            if (ctx && ctx.CMS) {
+              registerEnhancements(ctx)
+            }
+          }
 
-        window.addEventListener('load', () => whenDecapReady(registerEnhancements))
+          const tick = () => {
+            if (__nsEnhancementsReady) return
+            tryNow()
+            if (!__nsEnhancementsReady && Date.now() - started < 6000) {
+              setTimeout(tick, 150)
+            }
+          }
+
+          tick()
+
+          observer = new MutationObserver(() => tryNow())
+          observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true,
+          })
+
+          window.addEventListener('load', tryNow)
+        }
+
+        bootEnhancements()
 
         function registerEventsPreview(CMS, React) {
           if (!CMS || typeof CMS.registerPreviewTemplate !== 'function') {
