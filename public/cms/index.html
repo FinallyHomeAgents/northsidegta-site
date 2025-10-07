@@ -232,9 +232,9 @@
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
         let cmsEnhancementsReady = false
         let cmsEnhancementsPromise = null
+        let reactImportScheduled = false
 
         const CMS_POLL_INTERVAL = 100
-        const CMS_POLL_TIMEOUT = 30000
 
         function getCmsContext(startWindow) {
           const visited = new Set()
@@ -346,35 +346,88 @@
           if (cmsEnhancementsPromise) return cmsEnhancementsPromise
 
           cmsEnhancementsPromise = new Promise((resolve) => {
-            const startTime = Date.now()
+            const scheduleReactImport = () => {
+              if (
+                reactImportScheduled ||
+                (window.React && typeof window.React.createElement === 'function')
+              ) {
+                return
+              }
+
+              if (!window.CMS) {
+                return
+              }
+
+              reactImportScheduled = true
+              window.setTimeout(() => {
+                if (window.React && typeof window.React.createElement === 'function') {
+                  return
+                }
+
+                import('https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js')
+                  .then((mod) => {
+                    const imported = mod && (mod.default || mod)
+                    if (imported && typeof imported.createElement === 'function') {
+                      window.React = imported
+                      console.info('[cms] React imported dynamically')
+                    }
+                  })
+                  .catch((err) => console.error('[cms] Failed to import React', err))
+              }, 3000)
+            }
 
             const attempt = () => {
               const context = getCmsContext(window)
+
+              if (context && context.CMS && !window.CMS) {
+                window.CMS = context.CMS
+              }
+
+              if (context && context.React && typeof context.React.createElement === 'function') {
+                window.React = context.React
+              }
+
+              if (window.CMS) {
+                window.React =
+                  window.React ||
+                  (window.CMS && (window.CMS.React || window.CMS.react)) ||
+                  null
+
+                const cmsImports = window.CMS.imports || {}
+                if (!window.React) {
+                  window.React = cmsImports.React || cmsImports.react || null
+                }
+              }
+
               if (
-                context &&
-                context.CMS &&
-                typeof context.CMS.registerWidget === 'function' &&
-                context.React
+                window.React &&
+                window.React.default &&
+                typeof window.React.default.createElement === 'function'
               ) {
-                const { CMS, React, win: contextWindow } = context
-                registerEventsPreview(CMS, React)
-                registerDailyScheduleWidget(CMS, React, contextWindow)
-                activateLegacyFieldStyling(contextWindow)
-                applyCmsHeaderLayoutFix(contextWindow)
+                window.React = window.React.default
+              }
+
+              const cms = window.CMS
+              const react = window.React
+
+              if (
+                cms &&
+                typeof cms.registerWidget === 'function' &&
+                react &&
+                typeof react.createElement === 'function'
+              ) {
+                registerEventsPreview(cms, react, window)
+                registerDailyScheduleWidget(cms, react, window)
+                activateLegacyFieldStyling(window)
+                applyCmsHeaderLayoutFix(window)
                 cmsEnhancementsReady = true
                 cmsEnhancementsPromise = null
-                console.info('[cms] enhancements ready')
+                console.info('[cms] Enhancements registered successfully')
                 resolve(true)
                 return
               }
 
-              if (Date.now() - startTime >= CMS_POLL_TIMEOUT) {
-                cmsEnhancementsPromise = null
-                console.warn('[cms] CMS unavailable after waiting 30s')
-                resolve(false)
-                return
-              }
-
+              scheduleReactImport()
               window.setTimeout(attempt, CMS_POLL_INTERVAL)
             }
 
