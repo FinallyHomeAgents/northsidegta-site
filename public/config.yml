@@ -132,10 +132,37 @@ collections:
         hint: 'Toggle on to manage per-day hours below. Leave off to fall back to the start/end fields.'
       - name: 'daily_schedule'
         label: 'Daily Schedule'
-        widget: 'dailySchedule'
+        widget: 'list'
         required: false
         collapsed: false
-        hint: 'Add one row per day. Data stays saved even if the toggle is off.'
+        hint: 'Add one row per day with optional start/end times. Data stays saved even if the toggle is off.'
+        summary: "{{date}} — {{ all_day | ternary('All day', (start_time | default(''))) }} {{ end_time | default('') }}"
+        fields:
+          - name: 'date'
+            label: 'Date'
+            widget: 'datetime'
+            date_format: 'YYYY-MM-DD'
+            time_format: false
+            format: 'YYYY-MM-DD'
+          - name: 'all_day'
+            label: 'All day'
+            widget: 'boolean'
+            required: false
+            default: false
+          - name: 'start_time'
+            label: 'Start time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
+          - name: 'end_time'
+            label: 'End time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
       - name: 'recurrence'
         label: 'Recurrence (RRULE)'
         widget: 'string'

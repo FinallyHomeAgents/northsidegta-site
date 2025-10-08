@@ -90,40 +90,46 @@ function initialFormState() {
   }
 }
 
-function createScheduleBlock(overrides = {}) {
-  return {
-    id: overrides.id || `block-${Math.random().toString(36).slice(2, 10)}`,
-    start: typeof overrides.start === 'string' ? overrides.start : '',
-    end: typeof overrides.end === 'string' ? overrides.end : '',
-  }
-}
-
 function createScheduleDay(date, overrides = {}) {
   const normalizedDate = typeof date === 'string' ? date : ''
   const allDay = Boolean(overrides.allDay)
   const sourceBlocks = Array.isArray(overrides.blocks) ? overrides.blocks : []
-  const blocks = allDay
-    ? []
-    : sourceBlocks.length
-      ? sourceBlocks.map((block) => createScheduleBlock(block))
-      : [createScheduleBlock()]
-  const preserved = Array.isArray(overrides.preservedBlocks)
-    ? overrides.preservedBlocks.map((block) => createScheduleBlock(block))
-    : []
+  const primaryBlock = sourceBlocks.length ? sourceBlocks[0] : null
+  const preservedBlocks = Array.isArray(overrides.preservedBlocks) ? overrides.preservedBlocks : []
+  const preservedPrimary = preservedBlocks.length ? preservedBlocks[0] : null
+  const start = typeof overrides.start === 'string'
+    ? overrides.start
+    : typeof overrides.start_time === 'string'
+      ? overrides.start_time
+      : typeof primaryBlock?.start === 'string'
+        ? primaryBlock.start
+        : ''
+  const end = typeof overrides.end === 'string'
+    ? overrides.end
+    : typeof overrides.end_time === 'string'
+      ? overrides.end_time
+      : typeof primaryBlock?.end === 'string'
+        ? primaryBlock.end
+        : ''
+  const preservedStart = typeof overrides.preservedStart === 'string'
+    ? overrides.preservedStart
+    : typeof preservedPrimary?.start === 'string'
+      ? preservedPrimary.start
+      : ''
+  const preservedEnd = typeof overrides.preservedEnd === 'string'
+    ? overrides.preservedEnd
+    : typeof preservedPrimary?.end === 'string'
+      ? preservedPrimary.end
+      : ''
   return {
     id: overrides.id || `day-${Math.random().toString(36).slice(2, 9)}`,
     date: normalizedDate,
     allDay,
-    blocks,
-    preservedBlocks: preserved,
+    start,
+    end,
+    preservedStart,
+    preservedEnd,
   }
-}
-
-function cloneScheduleBlocks(blocks) {
-  if (!Array.isArray(blocks) || !blocks.length) {
-    return [createScheduleBlock()]
-  }
-  return blocks.map((block) => createScheduleBlock(block))
 }
 
 function computeScheduleDates(startIso, endIso) {
@@ -146,12 +152,9 @@ function computeScheduleDates(startIso, endIso) {
 function hasScheduleDayData(day) {
   if (!day) return false
   if (day.allDay) return true
-  if (!Array.isArray(day.blocks)) return false
-  return day.blocks.some((block) => {
-    const start = typeof block?.start === 'string' ? block.start.trim() : ''
-    const end = typeof block?.end === 'string' ? block.end.trim() : ''
-    return Boolean(start && end)
-  })
+  const start = typeof day.start === 'string' ? day.start.trim() : ''
+  const end = typeof day.end === 'string' ? day.end.trim() : ''
+  return Boolean(start || end)
 }
 
 function syncScheduleDays(existingDays, startIso, endIso) {
@@ -203,7 +206,7 @@ function validateDailyScheduleFormState(form) {
     }
 
     if (day.allDay) {
-      sanitized.push({ date, all_day: true, blocks: [] })
+      sanitized.push({ date, all_day: true, start_time: '', end_time: '' })
       const dayStart = DateTime.fromISO(`${date}T00:00`, { zone: TORONTO_ZONE })
       const dayEnd = DateTime.fromISO(`${date}T23:59`, { zone: TORONTO_ZONE })
       if (!earliest || dayStart < earliest) earliest = dayStart
@@ -211,49 +214,31 @@ function validateDailyScheduleFormState(form) {
       continue
     }
 
-    const blocks = Array.isArray(day.blocks) ? day.blocks : []
-    if (!blocks.length) {
-      return { ...result, error: `Add at least one time range for ${readable}.` }
+    const startText = typeof day.start === 'string' ? day.start.trim() : ''
+    const endText = typeof day.end === 'string' ? day.end.trim() : ''
+    if (!startText || !endText) {
+      return { ...result, error: `Complete the time range for ${readable}.` }
+    }
+    if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
+      return { ...result, error: `Use HH:MM format for times on ${readable}.` }
+    }
+    const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
+    const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
+    if (!startTime.isValid || !endTime.isValid) {
+      return { ...result, error: `Enter valid times for ${readable}.` }
+    }
+    if (endTime <= startTime) {
+      return { ...result, error: `End time must be after the start time on ${readable}.` }
     }
 
-    const normalizedBlocks = []
-    for (const block of blocks) {
-      const startText = typeof block?.start === 'string' ? block.start.trim() : ''
-      const endText = typeof block?.end === 'string' ? block.end.trim() : ''
-      if (!startText || !endText) {
-        return { ...result, error: `Complete the time range for ${readable}.` }
-      }
-      if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
-        return { ...result, error: `Use HH:MM format for times on ${readable}.` }
-      }
-      const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
-      const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
-      if (!startTime.isValid || !endTime.isValid) {
-        return { ...result, error: `Enter valid times for ${readable}.` }
-      }
-      if (endTime <= startTime) {
-        return { ...result, error: `End time must be after the start time on ${readable}.` }
-      }
-      normalizedBlocks.push({ start: startText, end: endText, startTime, endTime })
-    }
+    if (!earliest || startTime < earliest) earliest = startTime
+    if (!latest || endTime > latest) latest = endTime
 
-    normalizedBlocks.sort((a, b) => a.startTime.toMillis() - b.startTime.toMillis())
-    for (let index = 1; index < normalizedBlocks.length; index += 1) {
-      const previous = normalizedBlocks[index - 1]
-      const current = normalizedBlocks[index]
-      if (current.startTime < previous.endTime) {
-        return { ...result, error: `Time ranges overlap on ${readable}.` }
-      }
-    }
-
-    const first = normalizedBlocks[0]
-    const last = normalizedBlocks[normalizedBlocks.length - 1]
-    if (!earliest || first.startTime < earliest) earliest = first.startTime
-    if (!latest || last.endTime > latest) latest = last.endTime
     sanitized.push({
       date,
       all_day: false,
-      blocks: normalizedBlocks.map(({ start, end }) => ({ start, end })),
+      start_time: startText,
+      end_time: endText,
     })
   }
 
@@ -584,46 +569,14 @@ export default function SubmitEventPage() {
     [form.dailySchedule, form.startDate, form.useDailySchedule],
   )
 
-  const updateScheduleBlock = React.useCallback(
-    (dayId, blockId, updates) => {
+  const updateScheduleDay = React.useCallback(
+    (dayId, updates) => {
       markScheduleTouched()
       setForm((prev) => ({
         ...prev,
         dailySchedule: prev.dailySchedule.map((day) => {
           if (day.id !== dayId || day.allDay) return day
-          const nextBlocks = day.blocks.map((block) =>
-            block.id === blockId ? { ...block, ...updates } : block,
-          )
-          return { ...day, blocks: nextBlocks }
-        }),
-      }))
-    },
-    [markScheduleTouched],
-  )
-
-  const addScheduleBlock = React.useCallback(
-    (dayId) => {
-      markScheduleTouched()
-      setForm((prev) => ({
-        ...prev,
-        dailySchedule: prev.dailySchedule.map((day) => {
-          if (day.id !== dayId || day.allDay) return day
-          return { ...day, blocks: [...day.blocks, createScheduleBlock()] }
-        }),
-      }))
-    },
-    [markScheduleTouched],
-  )
-
-  const removeScheduleBlock = React.useCallback(
-    (dayId, blockId) => {
-      markScheduleTouched()
-      setForm((prev) => ({
-        ...prev,
-        dailySchedule: prev.dailySchedule.map((day) => {
-          if (day.id !== dayId || day.allDay) return day
-          const nextBlocks = day.blocks.filter((block) => block.id !== blockId)
-          return { ...day, blocks: nextBlocks.length ? nextBlocks : [createScheduleBlock()] }
+          return { ...day, ...updates }
         }),
       }))
     },
@@ -638,22 +591,24 @@ export default function SubmitEventPage() {
         dailySchedule: prev.dailySchedule.map((day) => {
           if (day.id !== dayId) return day
           if (checked) {
-            const preserved = day.blocks.length ? day.blocks : day.preservedBlocks
+            const preservedStart = day.start || day.preservedStart || ''
+            const preservedEnd = day.end || day.preservedEnd || ''
             return {
               ...day,
               allDay: true,
-              blocks: [],
-              preservedBlocks: preserved,
+              start: '',
+              end: '',
+              preservedStart,
+              preservedEnd,
             }
           }
-          const restored = day.preservedBlocks && day.preservedBlocks.length
-            ? day.preservedBlocks.map((block) => createScheduleBlock(block))
-            : cloneScheduleBlocks(day.blocks)
           return {
             ...day,
             allDay: false,
-            blocks: restored,
-            preservedBlocks: [],
+            start: day.preservedStart || day.start || '',
+            end: day.preservedEnd || day.end || '',
+            preservedStart: '',
+            preservedEnd: '',
           }
         }),
       }))
@@ -897,23 +852,18 @@ export default function SubmitEventPage() {
           if (day?.all_day) {
             return { key: `${day.date || index}-all-day`, label: `${label}: All day` }
           }
-          const blocks = Array.isArray(day?.blocks) ? day.blocks : []
-          if (blocks.length) {
-            const times = blocks
-              .map((block, blockIndex) => {
-                if (!block?.start || !block?.end) return null
-                const start = DateTime.fromISO(`${day.date}T${block.start}`, { zone: TORONTO_ZONE })
-                const end = DateTime.fromISO(`${day.date}T${block.end}`, { zone: TORONTO_ZONE })
-                if (start.isValid && end.isValid) {
-                  return `${start.toFormat('h:mm a')} – ${end.toFormat('h:mm a')}`
-                }
-                return `${block.start} – ${block.end}`
-              })
-              .filter(Boolean)
-            return {
-              key: `${day.date || index}-blocks`,
-              label: times.length ? `${label}: ${times.join(', ')}` : `${label}: Times TBA`,
+          const startRaw = typeof day?.start_time === 'string' ? day.start_time : day?.startTime || ''
+          const endRaw = typeof day?.end_time === 'string' ? day.end_time : day?.endTime || ''
+          if (startRaw && endRaw) {
+            const start = DateTime.fromISO(`${day.date}T${startRaw}`, { zone: TORONTO_ZONE })
+            const end = DateTime.fromISO(`${day.date}T${endRaw}`, { zone: TORONTO_ZONE })
+            if (start.isValid && end.isValid) {
+              return {
+                key: `${day.date || index}-time`,
+                label: `${label}: ${start.toFormat('h:mm a')} – ${end.toFormat('h:mm a')}`,
+              }
             }
+            return { key: `${day.date || index}-raw`, label: `${label}: ${startRaw} – ${endRaw}` }
           }
           return { key: `${day.date || index}-empty`, label: `${label}: Times TBA` }
         })
@@ -1312,49 +1262,29 @@ export default function SubmitEventPage() {
                           {day.allDay ? (
                             <p className="mt-3 text-xs text-slate-600">This day is marked as an all-day event.</p>
                           ) : (
-                            <div className="mt-4 space-y-3">
-                              {day.blocks.map((block) => (
-                                <div key={block.id} className="flex flex-wrap items-end gap-3">
-                                  <div className="min-w-[140px] flex-1">
-                                    <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                      Start time
-                                    </label>
-                                    <input
-                                      type="time"
-                                      value={block.start}
-                                      onChange={(event) => updateScheduleBlock(day.id, block.id, { start: event.target.value })}
-                                      className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-                                    />
-                                  </div>
-                                  <div className="min-w-[140px] flex-1">
-                                    <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                      End time
-                                    </label>
-                                    <input
-                                      type="time"
-                                      value={block.end}
-                                      onChange={(event) => updateScheduleBlock(day.id, block.id, { end: event.target.value })}
-                                      className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-                                    />
-                                  </div>
-                                  {day.blocks.length > 1 && (
-                                    <button
-                                      type="button"
-                                      onClick={() => removeScheduleBlock(day.id, block.id)}
-                                      className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 transition hover:border-rose-300 hover:text-rose-700"
-                                    >
-                                      Remove
-                                    </button>
-                                  )}
-                                </div>
-                              ))}
-                              <button
-                                type="button"
-                                onClick={() => addScheduleBlock(day.id)}
-                                className="inline-flex items-center gap-2 rounded-full border border-emerald-300 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900"
-                              >
-                                Add another time range
-                              </button>
+                            <div className="mt-4 grid gap-3 md:grid-cols-2">
+                              <div className="min-w-[140px]">
+                                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                  Start time
+                                </label>
+                                <input
+                                  type="time"
+                                  value={day.start}
+                                  onChange={(event) => updateScheduleDay(day.id, { start: event.target.value })}
+                                  className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                />
+                              </div>
+                              <div className="min-w-[140px]">
+                                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                  End time
+                                </label>
+                                <input
+                                  type="time"
+                                  value={day.end}
+                                  onChange={(event) => updateScheduleDay(day.id, { end: event.target.value })}
+                                  className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                />
+                              </div>
                             </div>
                           )}
                         </div>

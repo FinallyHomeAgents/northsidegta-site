@@ -135,7 +135,8 @@ function deriveDailySchedule(event) {
     results.push({
       date: iso,
       all_day: true,
-      blocks: [],
+      start_time: '',
+      end_time: '',
     })
     cursor = new Date(cursor.getTime() + DAY_MS)
     days += 1
