@@ -41,7 +41,17 @@
       }
       #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
     </style>
+
+    <!-- Tell Decap not to auto-init -->
+    <script>window.CMS_MANUAL_INIT = true;</script>
+
+    <!-- Single, pinned Decap bundle. Init ONCE on load. -->
+    <script
+      src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"
+      onload="(function(){ if (window.CMS && typeof CMS.init==='function' && !window.__nsCmsInitialized) { CMS.init(); window.__nsCmsInitialized=true; console.info('[cms] CMS.init() once'); } })();">
+    </script>
   </head>
+
   <body>
     <div id="cms-controls">
       <a id="events-admin-link" href="/community/events-admin" target="_blank" rel="noopener noreferrer">Community Events Admin</a>
@@ -65,11 +75,9 @@
       </form>
     </div>
 
-    <!-- Single, pinned Decap bundle -->
-    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
-
     <script>
       (function () {
+        // ---------- Auth helpers ----------
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user'];
         const form = document.getElementById('cms-login-form');
         const statusEl = document.getElementById('login-status');
@@ -77,98 +85,102 @@
         const submitButton = form.querySelector("button[type='submit']");
         const defaultButtonText = submitButton.textContent;
 
-        function setStatus(message, isError){ statusEl.textContent = message || ''; statusEl.style.color = isError ? '#dc2626' : '#0f172a'; }
-        function setLoading(isLoading){ submitButton.disabled = isLoading; submitButton.textContent = isLoading ? 'Signing in…' : defaultButtonText; }
-        function clearStoredTokens(){ try{ STORAGE_KEYS.forEach((k)=>localStorage.removeItem(k)); }catch{} }
-        function storeToken(token, username){
-          try{
+        const setStatus = (msg, isError) => { statusEl.textContent = msg || ''; statusEl.style.color = isError ? '#dc2626' : '#0f172a'; };
+        const setLoading = (b) => { submitButton.disabled = b; submitButton.textContent = b ? 'Signing in…' : defaultButtonText; };
+        const clearStoredTokens = () => { try { STORAGE_KEYS.forEach(k => localStorage.removeItem(k)); } catch {} };
+        const storeToken = (token, username) => {
+          try {
             const name = (typeof username==='string' && username.trim()) ? username.trim() : 'CMS User';
             const payload = JSON.stringify({ token, backendName:'github', login:name, name });
-            STORAGE_KEYS.forEach((k)=>localStorage.setItem(k,payload));
-          }catch{}
-        }
-        function getStoredUser(){
-          try{
-            for (const k of STORAGE_KEYS){
-              const raw = localStorage.getItem(k); if(!raw) continue;
-              try{ const v = JSON.parse(raw); if(v && typeof v.token === 'string' && v.token.length) return v; }
-              catch{ localStorage.removeItem(k); }
+            STORAGE_KEYS.forEach(k => localStorage.setItem(k, payload));
+          } catch {}
+        };
+        const getStoredUser = () => {
+          try {
+            for (const k of STORAGE_KEYS) {
+              const raw = localStorage.getItem(k); if (!raw) continue;
+              try { const v = JSON.parse(raw); if (v && typeof v.token === 'string' && v.token.length) return v; }
+              catch { localStorage.removeItem(k); }
             }
-          }catch{}
+          } catch {}
           return null;
-        }
+        };
 
-        // --- Ensure Decap app mounts (creates iframe) ---
-        (function ensureInit(){
-          if (window.CMS && typeof CMS.init === 'function') CMS.init();
-          else setTimeout(ensureInit, 50);
-        })();
-
-        // --- Find the Decap iframe context (don’t over-require React) ---
-        function findDecapContext(){
+        // ---------- “Ready” detection & widget fallback ----------
+        function findDecapIframeContext() {
           const frames = Array.from(document.querySelectorAll('iframe'));
-          const wins = [window, ...frames.map(f=>f && f.contentWindow).filter(Boolean)];
-          for (const w of wins){
-            try{
-              const CMS = w && w.CMS;
-              if (!CMS || typeof CMS.registerWidget !== 'function') continue;
-              const ReactCandidate = w.React || CMS.React || CMS.react || CMS?.imports?.React || CMS?.imports?.react || null;
-              return { win: w, CMS, React: ReactCandidate };
-            }catch{}
+          for (const f of frames) {
+            try {
+              const w = f.contentWindow;
+              if (w?.CMS && typeof w.CMS.registerWidget === 'function') {
+                return { w, CMS: w.CMS, React: w.React || w.CMS.React || w.CMS?.imports?.React || null };
+              }
+            } catch { /* cross-origin safe */ }
+          }
+          // Some Decap builds expose CMS on top iframes aren’t ready yet:
+          if (window.CMS && typeof window.CMS.registerWidget === 'function') {
+            return { w: window, CMS: window.CMS, React: window.React || window.CMS.React || window.CMS?.imports?.React || null };
           }
           return null;
         }
 
-        // --- Register enhancements (widget) once the iframe is live ---
-        (function whenDecapReady(cb, maxMs=10000, interval=100){
-          let done=false, warned=false; const start=Date.now();
-          function tryOnce(){
-            if (done) return;
-            const ctx = findDecapContext();
-            if (ctx){ done=true; cb(ctx); return; }
-            if (!warned && Date.now()-start >= maxMs){ warned=true; console.warn('[cms] Decap context not ready yet; still waiting…'); }
-            setTimeout(tryOnce, interval);
-          }
-          tryOnce();
-        })(function registerEnhancements(ctx){
-          const { win, CMS, React } = ctx;
-
-          // Fallback: make sure the widget name exists even if React isn’t ready yet
-          (function ensureDailyScheduleName(){
-            const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
-            if (base?.control && !CMS.getWidget('dailySchedule')) {
-              CMS.registerWidget('dailySchedule', base.control, base.preview);
-              console.info('[cms] dailySchedule registered (fallback control)');
-            }
+        function whenIframeReady(cb, timeoutMs = 12000) {
+          const start = Date.now();
+          (function tick(){
+            const ctx = findDecapIframeContext();
+            if (ctx) return cb(ctx);
+            if (Date.now() - start > timeoutMs) return console.warn('[cms] iframe/CMS not ready (timed out)');
+            setTimeout(tick, 150);
           })();
+        }
 
-          // Optional: if you later want the rich custom control, you can register it here using React.
+        function registerDailyScheduleFallback(ctx) {
+          const { CMS } = ctx;
+          try {
+            // If your custom control is not yet loaded, expose a safe fallback so the field renders.
+            if (!CMS.getWidget('dailySchedule')) {
+              const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
+              if (base?.control) {
+                CMS.registerWidget('dailySchedule', base.control, base.preview);
+                console.info('[cms] dailySchedule registered as fallback control');
+              }
+            }
+          } catch (e) {
+            console.warn('[cms] dailySchedule fallback registration failed', e);
+          }
+        }
 
-          // Mark logged-in UI
-          document.body.classList.add('cms-loaded');
-          console.info('[cms] enhancements ready');
-        });
-
+        // ---------- Login submit ----------
         async function handleLogin(e){
           e.preventDefault();
           const fd = new FormData(form);
           const username = (fd.get('username') || '').trim();
           const password = fd.get('password') || '';
-          if (!username || !password){ setStatus('Enter both your username and password.', true); return; }
+          if (!username || !password) { setStatus('Enter both your username and password.', true); return; }
           setLoading(true); setStatus('Signing in…', false);
-          try{
+
+          try {
             const res = await fetch('/api/cms-login', {
-              method:'POST', headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({ username, password }), credentials:'same-origin'
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ username, password }),
+              credentials:'same-origin'
             });
             const payload = await res.json().catch(()=>({}));
-            if(!res.ok || !payload.token){ clearStoredTokens(); setStatus(payload.error || 'Login failed. Please check your credentials.', true); setLoading(false); return; }
+            if (!res.ok || !payload.token) {
+              clearStoredTokens();
+              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
+              setLoading(false);
+              return;
+            }
             storeToken(payload.token, username);
             setStatus('Signed in! Loading the CMS…', false);
-            // trigger Decap UI (iframe) now that we have a token
             document.body.classList.add('cms-loaded');
+
+            // Wait for Decap app to mount, then ensure our widget name exists
+            whenIframeReady(registerDailyScheduleFallback);
             setLoading(false);
-          }catch(err){
+          } catch (err) {
             console.error('[cms-login] request failed', err);
             setStatus('We could not reach the server. Please try again.', true);
             setLoading(false);
@@ -180,11 +192,14 @@
         form.addEventListener('submit', handleLogin);
         logoutButton.addEventListener('click', handleLogout);
 
-        // Auto-load UI if already logged in
-        if (getStoredUser()){
+        // ---------- Auto-enter if already logged in ----------
+        if (getStoredUser()) {
           document.body.classList.add('cms-loaded');
+          whenIframeReady(registerDailyScheduleFallback);
+          // Optional: route to collections screen on first load
+          if (!location.hash || location.hash === '#') location.replace('#/collections');
         } else {
-          requestAnimationFrame(()=>{ try{ document.getElementById('username')?.focus(); }catch{} });
+          requestAnimationFrame(() => { try { document.getElementById('username')?.focus(); } catch{} });
         }
       })();
     </script>
