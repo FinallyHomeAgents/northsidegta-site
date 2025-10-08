@@ -40,14 +40,11 @@
         width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
       }
       #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
-      #cms-error{display:none;max-width:760px;margin:24px auto;padding:18px 20px;border-radius:12px;background:#fff1f2;color:#7f1d1d;border:1px solid #fecdd3;position:fixed;left:50%;transform:translateX(-50%);top:74px;z-index:1200}
-      #cms-error code{background:#fee2e2;padding:2px 6px;border-radius:6px}
-      body.show-cms-error #cms-error{display:block}
     </style>
 
-    <!-- IMPORTANT: tell Decap not to auto-init so we can register widgets first -->
+    <!-- Prevent auto-init so we can register safely, then init once -->
     <script>window.CMS_MANUAL_INIT = true;</script>
-    <!-- One and only one Decap bundle -->
+    <!-- Exactly one Decap bundle -->
     <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
   </head>
   <body>
@@ -60,151 +57,113 @@
       <form id="cms-login-form" autocomplete="on">
         <h1>Welcome back</h1>
         <p class="description">Sign in to manage your NorthSide GTA content.</p>
-        <label><span>Username</span><input type="text" name="username" id="username" autocomplete="username" required /></label>
-        <label><span>Password</span><input type="password" name="password" id="password" autocomplete="current-password" required /></label>
+        <label>
+          <span>Username</span>
+          <input type="text" name="username" id="username" autocomplete="username" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" id="password" autocomplete="current-password" required />
+        </label>
         <button type="submit">Sign in</button>
         <div id="login-status" role="status" aria-live="polite"></div>
       </form>
     </div>
 
-    <div id="cms-error"></div>
-
     <script>
       (function () {
-        const STORAGE_KEYS = ['decap-cms-user','netlify-cms-user'];
+        // --- small DOM helpers ---
         const $ = (s)=>document.querySelector(s);
         const setStatus=(m,e)=>{const el=$('#login-status'); if(!el) return; el.textContent=m||''; el.style.color=e?'#dc2626':'#0f172a';};
         const setLoading=(on)=>{const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent=on?'Signing in…':'Sign in';};
-        const showCmsError=(html)=>{const box=$('#cms-error'); if(!box) return; box.innerHTML=html; document.body.classList.add('show-cms-error');};
-        const clearCmsError=()=>document.body.classList.remove('show-cms-error');
-        const clearStoredTokens=()=>{try{STORAGE_KEYS.forEach(k=>localStorage.removeItem(k));}catch{}};
-        const storeToken=(token, username)=>{try{const name=(username||'').trim()||'CMS User'; const payload=JSON.stringify({token,backendName:'github',login:name,name}); STORAGE_KEYS.forEach(k=>localStorage.setItem(k,payload));}catch{}};
-        const getStoredUser=()=>{try{for(const k of STORAGE_KEYS){const raw=localStorage.getItem(k); if(!raw) continue; try{const v=JSON.parse(raw); if(v&&typeof v.token==='string'&&v.token.length){return v;}}catch{localStorage.removeItem(k);}}}catch{} return null;};
 
-        // --- Widget registration: safe fallback first, React control only if available ---
-        function registerDailyScheduleWidgets(CMS){
-          // 1) Fallback control so the CMS never breaks
+        // --- token storage (same keys Decap uses) ---
+        const KEYS = ['decap-cms-user','netlify-cms-user'];
+        const saveToken=(token, name)=>{
+          try{
+            const login = (name||'').trim() || 'CMS User';
+            const payload = JSON.stringify({ token, backendName:'github', login, name:login });
+            KEYS.forEach(k=>localStorage.setItem(k,payload));
+          }catch{}
+        };
+        const getUser=()=>{
+          try{
+            for (const k of KEYS){
+              const raw=localStorage.getItem(k); if(!raw) continue;
+              try{ const v=JSON.parse(raw); if (v && typeof v.token==='string' && v.token.length) return v; }
+              catch{ localStorage.removeItem(k); }
+            }
+          }catch{}
+          return null;
+        };
+        const clearUser=()=>{ try{ KEYS.forEach(k=>localStorage.removeItem(k)); }catch{} };
+
+        // --- safe single init ---
+        function registerSafeWidgets(CMS){
           try{
             const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
             if (base && base.control && !CMS.getWidget('dailySchedule')) {
               CMS.registerWidget('dailySchedule', base.control, base.preview);
               console.info('[cms] dailySchedule fallback registered');
             }
-          }catch(e){ console.warn('[cms] fallback widget register failed', e); }
-
-          // 2) If React exists, replace with the real control
-          try{
-            const React = CMS?.imports?.React || CMS?.React || window.React;
-            if (!React || !React.useState || !React.createElement) {
-              console.info('[cms] React not exposed yet — keeping fallback control');
-              return;
-            }
-            // Real control (minimal for now: disabled view unless toggle is on)
-            const { useState, useMemo } = React;
-            function DailyScheduleControl(props){
-              const useDaily = !!(props.entry && typeof props.entry.getIn==='function' && props.entry.getIn(['data','use_daily_schedule']));
-              const val = props.value && (props.value.toJS ? props.value.toJS() : props.value) || [];
-              const summary = useMemo(()=> (val.length ? val.map(v=> (v.date||'Unspecified day') + (v.all_day?' (All day)':'')))
-                                                 : ['Unspecified day']), [val]);
-              const box = {
-                border:'1px solid #e2e8f0', borderRadius:'12px', padding:'12px', background:'#fff',
-                fontSize:'14px', color:'#0f172a'
-              };
-              if (!useDaily){
-                return React.createElement('div',{id:props.forID, className:props.classNameWrapper, style:box},
-                  React.createElement('div', null, 'Toggle “Enable Daily Schedule” above to edit.'),
-                  React.createElement('ul', {style:{margin:'8px 0 0', paddingLeft:'18px'}},
-                    summary.map((s,i)=>React.createElement('li',{key:i}, s))
-                  )
-                );
-              }
-              // Very light editor: allow manual JSON edit so you’re unblocked today.
-              const [draft,setDraft] = useState(JSON.stringify(val, null, 2));
-              function apply(){
-                try{
-                  const parsed = JSON.parse(draft || '[]');
-                  const next = Array.isArray(parsed) ? parsed : [];
-                  props.onChange(CMS.Immutable ? CMS.Immutable.fromJS(next) : next);
-                }catch(e){}
-              }
-              return React.createElement('div',{id:props.forID, className:props.classNameWrapper, style:box},
-                React.createElement('div',{style:{fontWeight:600, marginBottom:8}},'Daily schedule (JSON)'),
-                React.createElement('textarea',{
-                  value:draft, onChange:(e)=>setDraft(e.target.value),
-                  style:{width:'100%', minHeight:160, border:'1px solid #cbd5f5', borderRadius:10, padding:10, fontFamily:'ui-monospace,monospace'}
-                }),
-                React.createElement('div',{style:{display:'flex', gap:8, marginTop:8}},
-                  React.createElement('button',{type:'button', onClick:apply, style:{padding:'6px 10px', border:'1px solid #1d4ed8', background:'#1d4ed8', color:'#fff', borderRadius:999}},'Apply')
-                )
-              );
-            }
-            CMS.registerWidget('dailySchedule', DailyScheduleControl);
-            console.info('[cms] dailySchedule upgraded to React control');
-          }catch(e){ console.warn('[cms] real widget register failed — using fallback', e); }
+          }catch(e){ console.warn('[cms] fallback widget registration failed', e); }
         }
-
-        function safeInitCMS(){
-          // Avoid double init
-          if (window.__NS_CMS_INITIALIZED) return;
-          if (!window.CMS || typeof CMS.init !== 'function') {
-            showCmsError('Decap failed to load. Check the network tab for the decap bundle.');
+        function initCMSOnce(){
+          if (window.__NS_INIT) return;
+          if (!window.CMS || typeof CMS.init!=='function') {
+            setStatus('Failed to load CMS runtime. Check network for decap-cms.js', true);
             return;
           }
-          // Register widgets BEFORE init
-          registerDailyScheduleWidgets(CMS);
-
-          CMS.init();               // single init
-          window.__NS_CMS_INITIALIZED = true;
-
-          // Small UX: default to collections landing if hash is empty
-          if (!location.hash || location.hash === '#') {
-            try { location.replace('#/collections'); } catch {}
-          }
+          registerSafeWidgets(CMS);
+          CMS.init();
+          window.__NS_INIT = true;
           document.body.classList.add('cms-loaded');
+          if (!location.hash || location.hash === '#') { try{ location.replace('#/collections'); }catch{} }
         }
 
-        // login / logout
-        async function handleLogin(e){
-          e.preventDefault();
+        // --- login / logout handlers ---
+        async function onLogin(e){
+          e.preventDefault();                  // <— prevents address bar navigation
           const fd = new FormData($('#cms-login-form'));
-          const username = (fd.get('username')||'').trim();
-          const password = fd.get('password')||'';
-          if (!username || !password){ setStatus('Enter both your username and password.', true); return; }
+          const username=(fd.get('username')||'').trim();
+          const password=fd.get('password')||'';
+          if(!username || !password){ setStatus('Enter both your username and password.', true); return; }
           setLoading(true); setStatus('Signing in…', false);
           try{
             const res = await fetch('/api/cms-login', {
-              method:'POST', headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({ username, password }), credentials:'same-origin'
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ username, password }),
+              credentials:'same-origin'
             });
             const payload = await res.json().catch(()=>({}));
-            if (!res.ok || !payload.token){ clearStoredTokens(); setStatus(payload.error || 'Login failed. Please check your credentials.', true); setLoading(false); return; }
-            storeToken(payload.token, username);
-            setStatus('Signed in! Loading the CMS…', false);
+            if(!res.ok || !payload.token){
+              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
+              setLoading(false);
+              return;
+            }
+            saveToken(payload.token, username);
+            setStatus('Signed in! Loading CMS…', false);
             setLoading(false);
-            safeInitCMS();
+            initCMSOnce();
           }catch(err){
             console.error('[cms-login] request failed', err);
             setStatus('We could not reach the server. Please try again.', true);
             setLoading(false);
           }
         }
-        function handleLogout(){ clearStoredTokens(); location.replace('/cms/'); }
+        function onLogout(){ clearUser(); location.replace('/cms/'); }
 
-        $('#cms-login-form').addEventListener('submit', handleLogin);
-        $('#logout-button').addEventListener('click', handleLogout);
+        // wire up
+        $('#cms-login-form').addEventListener('submit', onLogin);
+        $('#logout-button').addEventListener('click', onLogout);
 
-        // If token already present, boot immediately (prevents seeing Decap’s built-in login)
-        if (getStoredUser()) {
-          safeInitCMS();
+        // auto-boot if already logged in
+        if (getUser()) {
+          initCMSOnce();
         } else {
           requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
         }
-
-        // Debug helper in console
-        window.__cmsDiag = ()=>{
-          const scripts=[...document.scripts].map(s=>s.src||'inline').filter(x=>/decap/i.test(x));
-          return { scripts, manualInitFlag: !!window.CMS_MANUAL_INIT, hasCMS: !!window.CMS, inited: !!window.__NS_CMS_INITIALIZED };
-        };
       })();
     </script>
   </body>
