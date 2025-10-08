@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <title>NorthSide GTA CMS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
     <meta name="referrer" content="no-referrer" />
     <meta http-equiv="Cache-Control" content="no-store" />
     <style>
@@ -12,21 +12,19 @@
       * { box-sizing: border-box; }
       body {
         margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
+        background: linear-gradient(135deg,#0f172a,#1e293b);
         font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;
         color:#0f172a;
       }
+      /* CMS app visible -> hide login shell, show top controls */
       body.cms-loaded { display:block; background:#f8fafc; }
-
       #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
       body.cms-loaded #cms-controls{display:block}
       #events-admin-link{
         margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
         color:#1d4ed8;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px
       }
-      #events-admin-link:hover{background:rgba(37,99,235,.18);color:#1e3a8a}
       #logout-button{padding:8px 14px;border-radius:999px;border:none;background:#0f172a;color:#f8fafc;font-size:13px;font-weight:600;cursor:pointer}
-
       #login-container{
         width:min(90%,380px);background:rgba(255,255,255,.92);border-radius:18px;padding:32px 28px;
         box-shadow:0 25px 70px rgba(15,23,42,.35);backdrop-filter:blur(12px)
@@ -43,17 +41,12 @@
         width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
       }
       #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
-
-      /* visible error panel if CMS fails to boot */
-      #cms-error {
-        display:none; max-width:760px; margin:24px auto; padding:18px 20px; border-radius:12px;
-        background:#fff1f2; color:#7f1d1d; border:1px solid #fecdd3; line-height:1.55;
-        position:fixed; left:50%; transform:translateX(-50%); top:74px; z-index:1200;
-        box-shadow:0 10px 30px rgba(127,29,29,.15)
-      }
-      #cms-error code{background:#fee2e2;padding:2px 6px;border-radius:6px}
-      body.show-cms-error #cms-error{display:block}
     </style>
+
+    <!-- Tell Decap we will initialize manually -->
+    <script>window.CMS_MANUAL_INIT = true;</script>
+    <!-- Exactly one (1) pinned Decap bundle -->
+    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
   </head>
   <body>
     <div id="cms-controls">
@@ -61,6 +54,7 @@
       <button id="logout-button" type="button">Log out</button>
     </div>
 
+    <!-- Optional username/password shell; your /api/cms-login fills the token -->
     <div id="login-container">
       <form id="cms-login-form" autocomplete="on">
         <h1>Welcome back</h1>
@@ -78,153 +72,164 @@
       </form>
     </div>
 
-    <div id="cms-error"></div>
-
-    <!-- One Decap bundle only -->
-    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
-
     <script>
       (function () {
-        // ----------------- Config -----------------
-        const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user'];
-
-        // ----------------- Helpers ----------------
-        const $ = (sel) => document.querySelector(sel);
-        const setStatus = (msg, isError) => {
-          const el = $('#login-status'); if (!el) return;
-          el.textContent = msg || '';
-          el.style.color = isError ? '#dc2626' : '#0f172a';
-        };
-        const setLoading = (on) => {
-          const b = $("#cms-login-form button[type='submit']"); if (!b) return;
-          b.disabled = on; b.textContent = on ? 'Signing in…' : 'Sign in';
-        };
-        function showCmsError(html){
-          const box = $('#cms-error'); if(!box) return;
-          box.innerHTML = html; document.body.classList.add('show-cms-error');
-        }
-        function clearCmsError(){ document.body.classList.remove('show-cms-error'); }
-
+        // ---------- small helpers ----------
+        const STORAGE_KEYS = ['decap-cms-user','netlify-cms-user'];
+        const $ = (s)=>document.querySelector(s);
+        function setStatus(msg,isErr){ const el=$('#login-status'); if(!el) return; el.textContent=msg||''; el.style.color=isErr?'#dc2626':'#0f172a'; }
+        function setLoading(on){ const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent=on?'Signing in…':'Sign in'; }
         function clearStoredTokens(){ try{ STORAGE_KEYS.forEach(k=>localStorage.removeItem(k)); }catch{} }
         function storeToken(token, username){
           try{
             const name = (typeof username==='string' && username.trim()) ? username.trim() : 'CMS User';
             const payload = JSON.stringify({ token, backendName:'github', login:name, name });
-            STORAGE_KEYS.forEach(k=>localStorage.setItem(k, payload));
+            STORAGE_KEYS.forEach(k=>localStorage.setItem(k,payload));
           }catch{}
         }
         function getStoredUser(){
           try{
-            for (const k of STORAGE_KEYS){
+            for(const k of STORAGE_KEYS){
               const raw = localStorage.getItem(k); if(!raw) continue;
-              try{ const v = JSON.parse(raw); if(v && typeof v.token==='string' && v.token.length) return v; }
+              try{ const v=JSON.parse(raw); if(v && typeof v.token==='string' && v.token.length) return v; }
               catch{ localStorage.removeItem(k); }
             }
           }catch{}
           return null;
         }
 
-        // ----------------- Decap boot ----------------
-        function findDecapContext(){
-          const frames = Array.from(document.querySelectorAll('iframe'));
-          const wins = [window, ...frames.map(f=>f?.contentWindow).filter(Boolean)];
-          for (const w of wins){
-            try{
-              const CMS = w?.CMS;
-              if (!CMS || typeof CMS.registerWidget !== 'function') continue;
-              return { win:w, CMS };
-            }catch{}
-          }
-          return null;
-        }
+        // ---------- dailySchedule React control ----------
+        // Note: runs inside the Decap app (iframe). It uses window.React/hooks at runtime there.
+        function DailyScheduleControl(props){
+          const React = window.React;
+          const {useState,useEffect,useMemo,useRef,useCallback} = React;
+          const Immutable = window.Immutable || (window.CMS && (CMS.Immutable || CMS.imports?.Immutable));
+          const value = props.value;
+          const toJS = (v)=> (Immutable && typeof v?.toJS==='function') ? v.toJS() : v;
+          const fromJS = (v)=> (Immutable && typeof Immutable.fromJS==='function') ? Immutable.fromJS(v) : v;
 
-        function aliasDailySchedule(ctx){
-          try{
-            const { CMS } = ctx;
-            const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
-            if (base?.control && !CMS.getWidget('dailySchedule')) {
-              CMS.registerWidget('dailySchedule', base.control, base.preview);
-              console.info('[cms] dailySchedule registered (fallback to list/object)');
-            }
-          }catch(e){
-            console.warn('[cms] dailySchedule alias failed', e);
-          }
-        }
-
-        function observeIframeReloads(){
-          const target = document.body;
-          if (!target || !window.MutationObserver) return;
-          const mo = new MutationObserver(() => {
-            const ctx = findDecapContext();
-            if (ctx) aliasDailySchedule(ctx);
-          });
-          mo.observe(target, { childList: true, subtree: true });
-        }
-
-        async function bootCMS(){
-          clearCmsError();
-
-          // 1) Config must be reachable, or Decap dies silently
-          try{
-            const r = await fetch('/config.yml', { cache:'no-store' });
-            if (!r.ok){
-              showCmsError(
-                `<strong>CMS couldn’t start</strong><br/>`+
-                `We couldn’t fetch <code>/config.yml</code> (HTTP ${r.status}).<br/>`+
-                `Make sure <code>public/config.yml</code> exists in this deployment.`
-              );
-              return false;
-            }
-          }catch(e){
-            showCmsError(`Network error loading <code>/config.yml</code>. Check preview domain and try again.`);
-            return false;
+          // normalize to [{date:'YYYY-MM-DD', all_day:boolean, blocks:[{start:'HH:MM',end:'HH:MM'}]}]
+          function normalize(v){
+            const raw = Array.isArray(v) ? v : Array.isArray(toJS(v)) ? toJS(v) : [];
+            return raw.map((r)=>({
+              date: (r?.date||'').trim(),
+              all_day: !!(r?.all_day || r?.allDay),
+              blocks: Array.isArray(r?.blocks) ? r.blocks.map(b=>({start:b?.start||b?.start_time||'', end:b?.end||b?.end_time||''})) : []
+            })).filter(r=>r.date);
           }
 
-          // 2) Ensure CMS is initialized (Decap 3.8 sometimes needs a nudge)
-          try { if (window.CMS && typeof CMS.init === 'function') CMS.init(); } catch {}
+          const [rows,setRows] = useState(()=> normalize(value).length ? normalize(value) : [{date:'', all_day:false, blocks:[] }]);
 
-          // 3) Wait for iframe + register alias
-          const deadline = Date.now() + 15000;
-          while (Date.now() < deadline){
-            const ctx = findDecapContext();
-            if (ctx){
-              aliasDailySchedule(ctx);
-              document.body.classList.add('cms-loaded');
-              if (!location.hash || location.hash === '#') location.replace('#/collections');
-              observeIframeReloads();
-              return true;
-            }
-            await new Promise(r=>setTimeout(r,120));
-          }
-          showCmsError('Decap UI did not boot in time. Try a hard refresh (Cmd/Ctrl+Shift+R).');
-          return false;
+          // propagate to CMS whenever rows change
+          const schedule = useMemo(()=>{
+            return rows.map(r=>{
+              if (r.all_day) return { date:r.date, all_day:true, blocks:[] };
+              const blocks = (r.blocks||[]).filter(b=>b.start && b.end).sort((a,b)=>a.start.localeCompare(b.start));
+              return { date:r.date, all_day:false, blocks };
+            }).filter(r=>r.date && (r.all_day || r.blocks.length>0))
+              .sort((a,b)=> a.date.localeCompare(b.date));
+          },[rows]);
+
+          useEffect(()=>{ props.onChange && props.onChange(fromJS(schedule)); },[schedule]);
+
+          // update from external value
+          useEffect(()=>{
+            const next = normalize(value);
+            if (JSON.stringify(next)!==JSON.stringify(rows)) setRows(next.length?next:[{date:'',all_day:false,blocks:[]}]);
+          },[value]);
+
+          const addRow = ()=> setRows(p=>[...p,{date:'',all_day:false,blocks:[]}]);
+          const rmRow = (i)=> setRows(p=> p.filter((_,idx)=>idx!==i));
+          const setRow = (i,patch)=> setRows(p=> p.map((r,idx)=> idx===i? {...r,...patch}:r));
+          const addBlock = (i)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:[...(r.blocks||[]),{start:'',end:''}]}:r));
+          const rmBlock = (i,j)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:r.blocks.filter((_,k)=>k!==j)}:r));
+
+          // simple styles (inline so no external CSS needed)
+          const s={wrap:{border:'1px solid #e2e8f0',borderRadius:'14px',padding:'16px',background:'#fff',display:'flex',flexDirection:'column',gap:'12px'},
+                   row:{border:'1px solid #e2e8f0',borderRadius:'12px',padding:'12px',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:'12px',alignItems:'end'},
+                   fld:{display:'flex',flexDirection:'column',gap:'4px'}, lab:{fontSize:'12px',fontWeight:600,letterSpacing:'.04em',textTransform:'uppercase',color:'#475569'},
+                   input:{borderRadius:'10px',border:'1px solid #cbd5f5',padding:'8px 10px',fontSize:'14px',background:'#f8fafc'},
+                   btn:{borderRadius:'999px',border:'1px solid #cbd5f5',background:'#f8fafc',color:'#1e3a8a',fontSize:'12px',fontWeight:600,padding:'6px 12px',cursor:'pointer'}};
+
+          const enabled = !!(props.entry && (props.entry.getIn?.(['data','use_daily_schedule']) || props.entry.data?.use_daily_schedule));
+
+          return React.createElement('div',{id:props.forID,className:props.classNameWrapper,style:s.wrap},
+            React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:8}},
+              React.createElement('strong',null,'Daily schedule'),
+              enabled ? React.createElement('button',{type:'button',style:s.btn,onClick:addRow},'Add day')
+                      : React.createElement('div',{style:{fontSize:12,color:'#64748b'}},'Toggle “Enable Daily Schedule” above to edit.')
+            ),
+            enabled ? rows.map((r,i)=>React.createElement('div',{key:i,style:s.row},
+              React.createElement('label',{style:s.fld},
+                React.createElement('span',{style:s.lab},'Date'),
+                React.createElement('input',{type:'date',style:s.input,value:r.date,onChange:(e)=>setRow(i,{date:e.target.value})})
+              ),
+              React.createElement('label',{style:s.fld},
+                React.createElement('span',{style:s.lab},'All day'),
+                React.createElement('input',{type:'checkbox',checked:!!r.all_day,onChange:(e)=>setRow(i,{all_day:e.target.checked,blocks:e.target.checked?[]:r.blocks})})
+              ),
+              !r.all_day && React.createElement('div',{style:{gridColumn:'1 / -1'}},
+                (r.blocks||[]).map((b,j)=>React.createElement('div',{key:j,style:{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:12,marginTop:8}},
+                  React.createElement('label',{style:s.fld},
+                    React.createElement('span',{style:s.lab},'Start'),
+                    React.createElement('input',{type:'time',style:s.input,value:b.start,onChange:(e)=>{
+                      const blocks=[...r.blocks]; blocks[j]={...blocks[j],start:e.target.value}; setRow(i,{blocks});
+                    }})
+                  ),
+                  React.createElement('label',{style:s.fld},
+                    React.createElement('span',{style:s.lab},'End'),
+                    React.createElement('input',{type:'time',style:s.input,value:b.end,onChange:(e)=>{
+                      const blocks=[...r.blocks]; blocks[j]={...blocks[j],end:e.target.value}; setRow(i,{blocks});
+                    }})
+                  ),
+                  React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmBlock(i,j)},'Remove')
+                )),
+                React.createElement('button',{type:'button',style:{...s.btn,marginTop:8},onClick:()=>addBlock(i)},'Add time block')
+              ),
+              React.createElement('div',{style:{display:'flex',justifyContent:'flex-end'}},
+                React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmRow(i)},'Remove day')
+              )
+            )) : null
+          );
         }
 
-        // ----------------- Login flow ----------------
+        // ---------- Decap boot ----------
+        function registerEverythingAndInit(){
+          // Register our custom widget before init (Decap recommendation) :contentReference[oaicite:2]{index=2}
+          CMS.registerWidget('dailySchedule', DailyScheduleControl);
+          // Kick the app with explicit config path (manual init) :contentReference[oaicite:3]{index=3}
+          CMS.init({ configPath: '/config.yml' });
+          document.body.classList.add('cms-loaded');
+        }
+
+        async function bootIfTokenPresent(){
+          // If your custom login already stored a token, boot right away.
+          if (getStoredUser()){
+            registerEverythingAndInit();
+          } else {
+            // No custom token yet: still show the CMS (Decap will render its own login)
+            registerEverythingAndInit();
+          }
+        }
+
         async function handleLogin(e){
           e.preventDefault();
           const fd = new FormData($('#cms-login-form'));
-          const username = (fd.get('username') || '').trim();
-          const password = fd.get('password') || '';
-          if (!username || !password){ setStatus('Enter both your username and password.', true); return; }
-          setLoading(true); setStatus('Signing in…', false);
+          const username = (fd.get('username')||'').trim();
+          const password = fd.get('password')||'';
+          if(!username || !password){ setStatus('Enter both your username and password.', true); return; }
+          setLoading(true); setStatus('Signing in…',false);
           try{
-            const res = await fetch('/api/cms-login', {
-              method:'POST', headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({ username, password }), credentials:'same-origin'
-            });
+            const res = await fetch('/api/cms-login',{ method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ username, password }), credentials:'same-origin' });
             const payload = await res.json().catch(()=>({}));
-            if (!res.ok || !payload.token){
-              clearStoredTokens();
-              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
-              setLoading(false);
-              return;
+            if(!res.ok || !payload.token){
+              clearStoredTokens(); setStatus(payload.error || 'Login failed. Please check your credentials.', true); setLoading(false); return;
             }
             storeToken(payload.token, username);
             setStatus('Signed in! Loading the CMS…', false);
-            document.body.classList.add('cms-loaded');
             setLoading(false);
-            bootCMS();
+            registerEverythingAndInit();
           }catch(err){
             console.error('[cms-login] request failed', err);
             setStatus('We could not reach the server. Please try again.', true);
@@ -232,26 +237,13 @@
           }
         }
 
-        function handleLogout(){ clearStoredTokens(); location.replace('/cms/'); }
-
-        // Wire UI
         $('#cms-login-form').addEventListener('submit', handleLogin);
-        $('#logout-button').addEventListener('click', handleLogout);
+        $('#logout-button').addEventListener('click', ()=>{ clearStoredTokens(); location.replace('/cms/'); });
 
-        // Auto-boot if token is present
-        if (getStoredUser()){
-          document.body.classList.add('cms-loaded');
-          bootCMS();
-        } else {
-          requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
-        }
-
-        // quick diag helper in DevTools
-        window.__cmsDiag = async () => {
-          const cfg = await fetch('/config.yml').then(r=>({ok:r.ok,status:r.status,url:r.url})).catch(e=>({ok:false,error:String(e)}));
-          const ctx = findDecapContext();
-          return { cfg, hasCMS: !!window.CMS, iframeFound: !!ctx, canRegister: !!ctx?.CMS?.registerWidget };
-        };
+        // Auto-focus and/or boot
+        if (getStoredUser()){ document.body.classList.add('cms-loaded'); }
+        requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
+        bootIfTokenPresent();
       })();
     </script>
   </body>
