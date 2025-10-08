@@ -17,13 +17,16 @@
         color:#0f172a;
       }
       body.cms-loaded { display:block; background:#f8fafc; }
+
       #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
       body.cms-loaded #cms-controls{display:block}
       #events-admin-link{
         margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
         color:#1d4ed8;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px
       }
+      #events-admin-link:hover{background:rgba(37,99,235,.18);color:#1e3a8a}
       #logout-button{padding:8px 14px;border-radius:999px;border:none;background:#0f172a;color:#f8fafc;font-size:13px;font-weight:600;cursor:pointer}
+
       #login-container{
         width:min(90%,380px);background:rgba(255,255,255,.92);border-radius:18px;padding:32px 28px;
         box-shadow:0 25px 70px rgba(15,23,42,.35);backdrop-filter:blur(12px)
@@ -40,6 +43,7 @@
         width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
       }
       #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
+
       /* visible error panel if CMS fails to boot */
       #cms-error {
         display:none; max-width:760px; margin:24px auto; padding:18px 20px; border-radius:12px;
@@ -76,16 +80,25 @@
 
     <div id="cms-error"></div>
 
+    <!-- One Decap bundle only -->
+    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
+
     <script>
       (function () {
-        // --- Config ---
-        const DECAP_SRC = 'https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js';
+        // ----------------- Config -----------------
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user'];
 
-        // --- Small helpers ---
+        // ----------------- Helpers ----------------
         const $ = (sel) => document.querySelector(sel);
-        function setStatus(msg, isError){ const el=$('#login-status'); if(!el) return; el.textContent=msg||''; el.style.color=isError?'#dc2626':'#0f172a'; }
-        function setLoading(on){ const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent = on?'Signing in…':'Sign in'; }
+        const setStatus = (msg, isError) => {
+          const el = $('#login-status'); if (!el) return;
+          el.textContent = msg || '';
+          el.style.color = isError ? '#dc2626' : '#0f172a';
+        };
+        const setLoading = (on) => {
+          const b = $("#cms-login-form button[type='submit']"); if (!b) return;
+          b.disabled = on; b.textContent = on ? 'Signing in…' : 'Sign in';
+        };
         function showCmsError(html){
           const box = $('#cms-error'); if(!box) return;
           box.innerHTML = html; document.body.classList.add('show-cms-error');
@@ -110,69 +123,8 @@
           }catch{}
           return null;
         }
-        function loadScript(src){
-          return new Promise((resolve, reject)=>{
-            const s=document.createElement('script'); s.src=src; s.async=true;
-            s.onload=()=>resolve(); s.onerror=()=>reject(new Error('failed to load '+src));
-            document.body.appendChild(s);
-          });
-        }
 
-        // --- Core boot sequence ---
-        async function bootCMS(){
-          clearCmsError();
-
-          // 1) Verify config is reachable; Decap silently dies if it’s not.
-          let cfgOK=false, cfgStatus='?';
-          try{
-            const r = await fetch('/config.yml', { cache:'no-store' });
-            cfgStatus = r.status;
-            cfgOK = r.ok;
-            if (!cfgOK){
-              showCmsError(
-                `<strong>CMS couldn’t start</strong><br/>`+
-                `We couldn’t fetch <code>/config.yml</code> (HTTP ${cfgStatus}).<br/>`+
-                `Make sure <code>public/config.yml</code> is present in this deployment.`
-              );
-              return false;
-            }
-          }catch(e){
-            showCmsError(`Network error loading <code>/config.yml</code>. Check preview domain and try again.`);
-            return false;
-          }
-
-          // 2) Load Decap (one bundle only), then init.
-          try {
-            // Guard against duplicate loads across hot reloads
-            if (!window.__decapLoaded){
-              await loadScript(DECAP_SRC);
-              window.__decapLoaded = true;
-            }
-          } catch (e){
-            showCmsError(`Failed to load Decap bundle.<br/><code>${DECAP_SRC}</code>`);
-            return false;
-          }
-
-          // 3) Manual init — always.
-          try { window.CMS && typeof CMS.init === 'function' && CMS.init(); } catch(e){ /* ignore */ }
-
-          // 4) Wait for Decap iframe & context, then register our shim widget and route.
-          const ok = await waitForIframeAndRegister();
-          if (!ok){
-            showCmsError(`Decap UI did not boot in time. Try hard refresh. If it persists, check console.`);
-            return false;
-          }
-
-          // Jump to collections if not already routed
-          try {
-            if (!location.hash || location.hash === '#') {
-              location.replace('#/collections');
-            }
-          } catch {}
-
-          return true;
-        }
-
+        // ----------------- Decap boot ----------------
         function findDecapContext(){
           const frames = Array.from(document.querySelectorAll('iframe'));
           const wins = [window, ...frames.map(f=>f?.contentWindow).filter(Boolean)];
@@ -186,30 +138,69 @@
           return null;
         }
 
-        async function waitForIframeAndRegister(){
-          const deadline = Date.now() + 12000; // 12s
+        function aliasDailySchedule(ctx){
+          try{
+            const { CMS } = ctx;
+            const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
+            if (base?.control && !CMS.getWidget('dailySchedule')) {
+              CMS.registerWidget('dailySchedule', base.control, base.preview);
+              console.info('[cms] dailySchedule registered (fallback to list/object)');
+            }
+          }catch(e){
+            console.warn('[cms] dailySchedule alias failed', e);
+          }
+        }
+
+        function observeIframeReloads(){
+          const target = document.body;
+          if (!target || !window.MutationObserver) return;
+          const mo = new MutationObserver(() => {
+            const ctx = findDecapContext();
+            if (ctx) aliasDailySchedule(ctx);
+          });
+          mo.observe(target, { childList: true, subtree: true });
+        }
+
+        async function bootCMS(){
+          clearCmsError();
+
+          // 1) Config must be reachable, or Decap dies silently
+          try{
+            const r = await fetch('/config.yml', { cache:'no-store' });
+            if (!r.ok){
+              showCmsError(
+                `<strong>CMS couldn’t start</strong><br/>`+
+                `We couldn’t fetch <code>/config.yml</code> (HTTP ${r.status}).<br/>`+
+                `Make sure <code>public/config.yml</code> exists in this deployment.`
+              );
+              return false;
+            }
+          }catch(e){
+            showCmsError(`Network error loading <code>/config.yml</code>. Check preview domain and try again.`);
+            return false;
+          }
+
+          // 2) Ensure CMS is initialized (Decap 3.8 sometimes needs a nudge)
+          try { if (window.CMS && typeof CMS.init === 'function') CMS.init(); } catch {}
+
+          // 3) Wait for iframe + register alias
+          const deadline = Date.now() + 15000;
           while (Date.now() < deadline){
             const ctx = findDecapContext();
             if (ctx){
-              // Safety: make sure 'dailySchedule' resolves to a valid control
-              try{
-                const { CMS } = ctx;
-                const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
-                if (base?.control && !CMS.getWidget('dailySchedule')){
-                  CMS.registerWidget('dailySchedule', base.control, base.preview);
-                  console.info('[cms] dailySchedule registered (fallback control)');
-                }
-              } catch(e) {}
-              // Mark UI visible
+              aliasDailySchedule(ctx);
               document.body.classList.add('cms-loaded');
+              if (!location.hash || location.hash === '#') location.replace('#/collections');
+              observeIframeReloads();
               return true;
             }
             await new Promise(r=>setTimeout(r,120));
           }
+          showCmsError('Decap UI did not boot in time. Try a hard refresh (Cmd/Ctrl+Shift+R).');
           return false;
         }
 
-        // --- Login flow (simple GitHub token proxy you already have) ---
+        // ----------------- Login flow ----------------
         async function handleLogin(e){
           e.preventDefault();
           const fd = new FormData($('#cms-login-form'));
@@ -247,7 +238,7 @@
         $('#cms-login-form').addEventListener('submit', handleLogin);
         $('#logout-button').addEventListener('click', handleLogout);
 
-        // If already logged in (token present), boot immediately
+        // Auto-boot if token is present
         if (getStoredUser()){
           document.body.classList.add('cms-loaded');
           bootCMS();
@@ -255,17 +246,11 @@
           requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
         }
 
-        // Debug hook you can run in DevTools:
+        // quick diag helper in DevTools
         window.__cmsDiag = async () => {
           const cfg = await fetch('/config.yml').then(r=>({ok:r.ok,status:r.status,url:r.url})).catch(e=>({ok:false,error:String(e)}));
-          const scripts = [...document.scripts].map(s=>s.src||'inline').filter(x=>/decap/i.test(x));
           const ctx = findDecapContext();
-          return {
-            cfg, scripts,
-            hasCMS: !!window.CMS,
-            iframeFound: !!ctx,
-            canRegister: !!ctx?.CMS?.registerWidget
-          };
+          return { cfg, hasCMS: !!window.CMS, iframeFound: !!ctx, canRegister: !!ctx?.CMS?.registerWidget };
         };
       })();
     </script>
