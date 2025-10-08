@@ -12,12 +12,8 @@
     {
       "date": "2025-10-19",
       "all_day": false,
-      "blocks": [
-        {
-          "start": "11:00",
-          "end": "13:00"
-        }
-      ]
+      "start_time": "11:00",
+      "end_time": "13:00"
     }
   ],
   "recurrence": "",

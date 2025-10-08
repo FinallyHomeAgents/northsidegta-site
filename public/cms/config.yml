@@ -150,10 +150,31 @@ collections:
         collapsed: false
         summary: "{{date}} — {{ all_day | ternary('All day', (start_time | default(''))) }} {{ end_time | default('') }}"
         fields:
-          - { name: 'date',       label: 'Date',       widget: 'date',    format: 'YYYY-MM-DD' }
-          - { name: 'all_day',    label: 'All day',    widget: 'boolean', required: false, default: false }
-          - { name: 'start_time', label: 'Start',      widget: 'string',  required: false, pattern: ['^\\d{2}:\\d{2}$', 'Use HH:MM (e.g., 09:30)'] }
-          - { name: 'end_time',   label: 'End',        widget: 'string',  required: false, pattern: ['^\\d{2}:\\d{2}$', 'Use HH:MM (e.g., 17:00)'] }
+          - name: 'date'
+            label: 'Date'
+            widget: 'datetime'
+            date_format: 'YYYY-MM-DD'
+            time_format: false
+            format: 'YYYY-MM-DD'
+          - name: 'all_day'
+            label: 'All day'
+            widget: 'boolean'
+            required: false
+            default: false
+          - name: 'start_time'
+            label: 'Start time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
+          - name: 'end_time'
+            label: 'End time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
 
       - name: 'recurrence'
         label: 'Recurrence (RRULE)'
