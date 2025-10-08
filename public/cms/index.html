@@ -43,6 +43,7 @@
       }
     </style>
   </head>
+
   <body>
     <script>
       window.CMS_MANUAL_INIT = true;
@@ -53,32 +54,37 @@
 
       async function loadCMS() {
         await import(CMS_SCRIPT_URL);
-        const CMS = window.CMS;
 
-        // ✅ Safely load React hooks from CMS runtime
-        const React = CMS?.imports?.React || window.React;
-        const { useState, useEffect } = React || {};
+        // ⏳ Wait until Decap CMS + React are actually ready
+        const waitForCMS = async () => {
+          for (let i = 0; i < 60; i++) {
+            const CMS = window.CMS;
+            if (CMS && (CMS.imports?.React || window.React)) return CMS;
+            await new Promise((r) => setTimeout(r, 100));
+          }
+          throw new Error("CMS runtime not ready after waiting");
+        };
 
-        if (!CMS || !React || !useState) {
-          console.warn("[dailySchedule] CMS or React not ready yet.");
-          return;
+        const CMS = await waitForCMS();
+
+        // 🧩 Fallback: if CMS.imports.React missing, import React manually
+        let React = CMS.imports?.React;
+        if (!React) {
+          console.warn("[dailySchedule] CMS.imports.React missing — importing React manually...");
+          await import("https://unpkg.com/react@18.2.0/umd/react.production.min.js");
+          React = window.React;
         }
 
-        // ✅ Register the Daily Schedule widget
-        CMS.registerWidget("dailySchedule", createControl(), createPreview());
+        const { useState } = React;
 
-        console.log("[dailySchedule] Widget registered successfully");
-      }
+        console.log("[dailySchedule] CMS + React ready — registering widget");
 
-      function createControl() {
-        return function DailyScheduleControl({ value = [], onChange }) {
+        // ✅ Daily Schedule Control
+        function DailyScheduleControl({ value = [], onChange }) {
           const [days, setDays] = useState(value || []);
 
           const addDay = () => {
-            const next = [
-              ...days,
-              { date: "", start: "", end: "", allDay: false },
-            ];
+            const next = [...days, { date: "", start: "", end: "", allDay: false }];
             setDays(next);
             onChange(next);
           };
@@ -187,11 +193,10 @@
               ),
             ]
           );
-        };
-      }
+        }
 
-      function createPreview() {
-        return function Preview({ value }) {
+        // ✅ Simple JSON Preview
+        function DailySchedulePreview({ value }) {
           return React.createElement(
             "pre",
             {
@@ -203,10 +208,14 @@
             },
             JSON.stringify(value, null, 2)
           );
-        };
+        }
+
+        // ✅ Register Widget
+        CMS.registerWidget("dailySchedule", DailyScheduleControl, DailySchedulePreview);
+        console.log("[dailySchedule] Widget registered successfully ✅");
       }
 
-      loadCMS();
+      loadCMS().catch((err) => console.error("[dailySchedule] Failed to init:", err));
     </script>
   </body>
 </html>
