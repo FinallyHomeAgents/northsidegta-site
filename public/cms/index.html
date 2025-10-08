@@ -1,170 +1,212 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>NorthSide GTA CMS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="referrer" content="no-referrer" />
-    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community Events Admin</title>
     <style>
-      :root { color-scheme: light; }
-      * { box-sizing: border-box; }
       body {
-        margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: linear-gradient(135deg, #0f172a, #1e293b);
-        font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;
-        color:#0f172a;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif;
+        color: #0f172a;
       }
-      body.cms-loaded { display:block; background:#f8fafc; }
-      #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
-      body.cms-loaded #cms-controls{display:block}
-      #events-admin-link{
-        margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
-        color:#1d4ed8;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px
-      }
-      #logout-button{padding:8px 14px;border-radius:999px;border:none;background:#0f172a;color:#f8fafc;font-size:13px;font-weight:600;cursor:pointer}
-      #login-container{
-        width:min(90%,380px);background:rgba(255,255,255,.92);border-radius:18px;padding:32px 28px;
-        box-shadow:0 25px 70px rgba(15,23,42,.35);backdrop-filter:blur(12px)
-      }
-      body.cms-loaded #login-container{display:none}
-      h1{margin:0 0 16px;font-size:24px;font-weight:600;text-align:center;color:#0f172a}
-      p.description{margin:0 0 24px;font-size:15px;color:#475569;text-align:center}
-      label{display:block;margin-bottom:16px}
-      label span{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#1e293b}
-      input[type='text'],input[type='password']{
-        width:100%;padding:12px 14px;border-radius:10px;border:1px solid #cbd5f5;background:#f8fafc;font-size:14px
-      }
-      button[type='submit']{
-        width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
-      }
-      #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
-    </style>
 
-    <!-- Prevent auto-init so we can register safely, then init once -->
-    <script>window.CMS_MANUAL_INIT = true;</script>
-    <!-- Exactly one Decap bundle -->
-    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
+      .daily-schedule-widget h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .daily-schedule-widget .day-block {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .daily-schedule-widget button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+
+      .daily-schedule-widget button:hover {
+        background: #1d4ed8;
+      }
+    </style>
   </head>
   <body>
-    <div id="cms-controls">
-      <a id="events-admin-link" href="/community/events-admin" target="_blank" rel="noopener noreferrer">Community Events Admin</a>
-      <button id="logout-button" type="button">Log out</button>
-    </div>
-
-    <div id="login-container">
-      <form id="cms-login-form" autocomplete="on">
-        <h1>Welcome back</h1>
-        <p class="description">Sign in to manage your NorthSide GTA content.</p>
-        <label>
-          <span>Username</span>
-          <input type="text" name="username" id="username" autocomplete="username" required />
-        </label>
-        <label>
-          <span>Password</span>
-          <input type="password" name="password" id="password" autocomplete="current-password" required />
-        </label>
-        <button type="submit">Sign in</button>
-        <div id="login-status" role="status" aria-live="polite"></div>
-      </form>
-    </div>
-
     <script>
-      (function () {
-        // --- small DOM helpers ---
-        const $ = (s)=>document.querySelector(s);
-        const setStatus=(m,e)=>{const el=$('#login-status'); if(!el) return; el.textContent=m||''; el.style.color=e?'#dc2626':'#0f172a';};
-        const setLoading=(on)=>{const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent=on?'Signing in…':'Sign in';};
+      window.CMS_MANUAL_INIT = true;
+    </script>
 
-        // --- token storage (same keys Decap uses) ---
-        const KEYS = ['decap-cms-user','netlify-cms-user'];
-        const saveToken=(token, name)=>{
-          try{
-            const login = (name||'').trim() || 'CMS User';
-            const payload = JSON.stringify({ token, backendName:'github', login, name:login });
-            KEYS.forEach(k=>localStorage.setItem(k,payload));
-          }catch{}
+    <script type="module">
+      const CMS_SCRIPT_URL = "https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js";
+
+      async function loadCMS() {
+        await import(CMS_SCRIPT_URL);
+        const CMS = window.CMS;
+
+        // ✅ Safely load React hooks from CMS runtime
+        const React = CMS?.imports?.React || window.React;
+        const { useState, useEffect } = React || {};
+
+        if (!CMS || !React || !useState) {
+          console.warn("[dailySchedule] CMS or React not ready yet.");
+          return;
+        }
+
+        // ✅ Register the Daily Schedule widget
+        CMS.registerWidget("dailySchedule", createControl(), createPreview());
+
+        console.log("[dailySchedule] Widget registered successfully");
+      }
+
+      function createControl() {
+        return function DailyScheduleControl({ value = [], onChange }) {
+          const [days, setDays] = useState(value || []);
+
+          const addDay = () => {
+            const next = [
+              ...days,
+              { date: "", start: "", end: "", allDay: false },
+            ];
+            setDays(next);
+            onChange(next);
+          };
+
+          const updateDay = (index, field, newVal) => {
+            const updated = days.map((d, i) =>
+              i === index ? { ...d, [field]: newVal } : d
+            );
+            setDays(updated);
+            onChange(updated);
+          };
+
+          const removeDay = (index) => {
+            const updated = days.filter((_, i) => i !== index);
+            setDays(updated);
+            onChange(updated);
+          };
+
+          return React.createElement(
+            "div",
+            { className: "daily-schedule-widget" },
+            [
+              React.createElement("h4", { key: "title" }, "Daily Schedule"),
+              ...days.map((day, i) =>
+                React.createElement(
+                  "div",
+                  { key: i, className: "day-block" },
+                  [
+                    React.createElement("input", {
+                      key: "date",
+                      type: "date",
+                      value: day.date,
+                      onChange: (e) => updateDay(i, "date", e.target.value),
+                      style: {
+                        display: "block",
+                        marginBottom: "8px",
+                        width: "100%",
+                      },
+                    }),
+                    React.createElement(
+                      "div",
+                      { key: "time-row", style: { display: "flex", gap: "8px" } },
+                      [
+                        React.createElement("input", {
+                          key: "start",
+                          type: "time",
+                          value: day.start,
+                          onChange: (e) => updateDay(i, "start", e.target.value),
+                          style: { flex: 1 },
+                        }),
+                        React.createElement("input", {
+                          key: "end",
+                          type: "time",
+                          value: day.end,
+                          onChange: (e) => updateDay(i, "end", e.target.value),
+                          style: { flex: 1 },
+                        }),
+                        React.createElement(
+                          "label",
+                          {
+                            key: "allday",
+                            style: {
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              fontSize: "14px",
+                            },
+                          },
+                          [
+                            React.createElement("input", {
+                              type: "checkbox",
+                              checked: day.allDay,
+                              onChange: (e) =>
+                                updateDay(i, "allDay", e.target.checked),
+                            }),
+                            "All Day",
+                          ]
+                        ),
+                      ]
+                    ),
+                    React.createElement(
+                      "button",
+                      {
+                        key: "remove",
+                        type: "button",
+                        onClick: () => removeDay(i),
+                        style: {
+                          background: "#ef4444",
+                          marginTop: "8px",
+                        },
+                      },
+                      "Remove Day"
+                    ),
+                  ]
+                )
+              ),
+              React.createElement(
+                "button",
+                {
+                  key: "add",
+                  type: "button",
+                  onClick: addDay,
+                  style: { marginTop: "10px" },
+                },
+                "Add Another Day"
+              ),
+            ]
+          );
         };
-        const getUser=()=>{
-          try{
-            for (const k of KEYS){
-              const raw=localStorage.getItem(k); if(!raw) continue;
-              try{ const v=JSON.parse(raw); if (v && typeof v.token==='string' && v.token.length) return v; }
-              catch{ localStorage.removeItem(k); }
-            }
-          }catch{}
-          return null;
+      }
+
+      function createPreview() {
+        return function Preview({ value }) {
+          return React.createElement(
+            "pre",
+            {
+              style: {
+                background: "#f1f5f9",
+                padding: "10px",
+                borderRadius: "6px",
+              },
+            },
+            JSON.stringify(value, null, 2)
+          );
         };
-        const clearUser=()=>{ try{ KEYS.forEach(k=>localStorage.removeItem(k)); }catch{} };
+      }
 
-        // --- safe single init ---
-        function registerSafeWidgets(CMS){
-          try{
-            const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
-            if (base && base.control && !CMS.getWidget('dailySchedule')) {
-              CMS.registerWidget('dailySchedule', base.control, base.preview);
-              console.info('[cms] dailySchedule fallback registered');
-            }
-          }catch(e){ console.warn('[cms] fallback widget registration failed', e); }
-        }
-        function initCMSOnce(){
-          if (window.__NS_INIT) return;
-          if (!window.CMS || typeof CMS.init!=='function') {
-            setStatus('Failed to load CMS runtime. Check network for decap-cms.js', true);
-            return;
-          }
-          registerSafeWidgets(CMS);
-          CMS.init();
-          window.__NS_INIT = true;
-          document.body.classList.add('cms-loaded');
-          if (!location.hash || location.hash === '#') { try{ location.replace('#/collections'); }catch{} }
-        }
-
-        // --- login / logout handlers ---
-        async function onLogin(e){
-          e.preventDefault();                  // <— prevents address bar navigation
-          const fd = new FormData($('#cms-login-form'));
-          const username=(fd.get('username')||'').trim();
-          const password=fd.get('password')||'';
-          if(!username || !password){ setStatus('Enter both your username and password.', true); return; }
-          setLoading(true); setStatus('Signing in…', false);
-          try{
-            const res = await fetch('/api/cms-login', {
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({ username, password }),
-              credentials:'same-origin'
-            });
-            const payload = await res.json().catch(()=>({}));
-            if(!res.ok || !payload.token){
-              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
-              setLoading(false);
-              return;
-            }
-            saveToken(payload.token, username);
-            setStatus('Signed in! Loading CMS…', false);
-            setLoading(false);
-            initCMSOnce();
-          }catch(err){
-            console.error('[cms-login] request failed', err);
-            setStatus('We could not reach the server. Please try again.', true);
-            setLoading(false);
-          }
-        }
-        function onLogout(){ clearUser(); location.replace('/cms/'); }
-
-        // wire up
-        $('#cms-login-form').addEventListener('submit', onLogin);
-        $('#logout-button').addEventListener('click', onLogout);
-
-        // auto-boot if already logged in
-        if (getUser()) {
-          initCMSOnce();
-        } else {
-          requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
-        }
-      })();
+      loadCMS();
     </script>
   </body>
 </html>
