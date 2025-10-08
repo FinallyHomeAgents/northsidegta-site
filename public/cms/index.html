@@ -300,27 +300,45 @@
             const { win, CMS, React } = ctx
 
             try {
-              if (win && !win.React) {
+              if (win && !win.React && React) {
                 win.React = React
               }
             } catch (error) {
               // Ignore assignment errors
             }
 
-            if (typeof registerEventsPreview === 'function') {
-              registerEventsPreview(CMS, React, win)
-            }
-            if (typeof registerDailyScheduleWidget === 'function') {
-              registerDailyScheduleWidget(CMS, React, win)
-            }
-            if (typeof activateLegacyFieldStyling === 'function') {
-              activateLegacyFieldStyling(win)
-            }
-            if (typeof applyCmsHeaderLayoutFix === 'function') {
-              applyCmsHeaderLayoutFix(win)
+            const callSafely = (label, fn) => {
+              if (typeof fn !== 'function') return
+              try {
+                fn()
+              } catch (error) {
+                console.error(`[cms-login] ${label} failed`, error)
+              }
             }
 
+            callSafely('events preview registration', () => {
+              if (typeof registerEventsPreview === 'function') {
+                registerEventsPreview(CMS, React, win)
+              }
+            })
+            callSafely('daily schedule widget registration', () => {
+              if (typeof registerDailyScheduleWidget === 'function') {
+                registerDailyScheduleWidget(CMS, React, win)
+              }
+            })
+            callSafely('legacy field styling activation', () => {
+              if (typeof activateLegacyFieldStyling === 'function') {
+                activateLegacyFieldStyling(win)
+              }
+            })
+            callSafely('CMS header layout fix activation', () => {
+              if (typeof applyCmsHeaderLayoutFix === 'function') {
+                applyCmsHeaderLayoutFix(win)
+              }
+            })
+
             registered = true
+
             if (CMS && typeof CMS.init === 'function') {
               try {
                 if (!win.__nsCmsInitialized) {
@@ -334,6 +352,7 @@
             } else {
               console.warn('[cms-login] CMS.init is not available for manual initialization')
             }
+
             notifyCmsEnhancementsReady()
             console.info('[cms-login] enhancements ready')
             return true
