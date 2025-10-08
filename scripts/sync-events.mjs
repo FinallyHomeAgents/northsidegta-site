@@ -1200,30 +1200,29 @@ function normalizeEvent(item, feed, now) {
       ? (item.daily_schedule || item.dailySchedule).map((entry) => {
           const date = entry?.date || entry?.day || ''
           const allDay = Boolean(entry?.all_day ?? entry?.allDay)
-          const blocks = []
-
           if (allDay) {
-            return { date, all_day: true, blocks: [] }
+            return { date, all_day: true, start_time: '', end_time: '' }
           }
-
-          if (Array.isArray(entry?.blocks) && entry.blocks.length) {
-            entry.blocks.forEach((block) => {
-              if (!block) return
-              const start = block.start || block.start_time || block.startTime || ''
-              const end = block.end || block.end_time || block.endTime || ''
-              if (start && end) {
-                blocks.push({ start, end })
-              }
-            })
-          } else {
-            const start = entry?.start_time || entry?.startTime || ''
-            const end = entry?.end_time || entry?.endTime || ''
-            if (start && end) {
-              blocks.push({ start, end })
-            }
+          const start =
+            typeof entry?.start_time === 'string'
+              ? entry.start_time.trim()
+              : typeof entry?.startTime === 'string'
+                ? entry.startTime.trim()
+                : Array.isArray(entry?.blocks) && entry.blocks[0]?.start
+                  ? String(entry.blocks[0].start).trim()
+                  : ''
+          const end =
+            typeof entry?.end_time === 'string'
+              ? entry.end_time.trim()
+              : typeof entry?.endTime === 'string'
+                ? entry.endTime.trim()
+                : Array.isArray(entry?.blocks) && entry.blocks[0]?.end
+                  ? String(entry.blocks[0].end).trim()
+                  : ''
+          if (start && end) {
+            return { date, all_day: false, start_time: start, end_time: end }
           }
-
-          return { date, all_day: false, blocks }
+          return { date, all_day: false, start_time: '', end_time: '' }
         })
       : undefined,
     source: { name: sourceName, id: sourceId },

@@ -6,7 +6,7 @@
   "rewrites": [
     { "source": "/cms", "destination": "/cms/" },
     { "source": "/cms/", "destination": "/cms/index.html" },
-    { "source": "/cms/config.yml", "destination": "/cms/config.yml" },
+    { "source": "/cms/config.yml", "destination": "/config.yml" },
     { "source": "/cms/(.*)", "destination": "/cms/$1" },
 
     { "source": "/api/(.*)", "destination": "/api/$1" }

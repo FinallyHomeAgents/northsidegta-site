@@ -280,7 +280,7 @@ function validateDailyScheduleInput(payload, startDate, endDate) {
 
     const allDay = Boolean(source.all_day ?? source.allDay)
     if (allDay) {
-      sanitized.push({ date, all_day: true, blocks: [] })
+      sanitized.push({ date, all_day: true, start_time: '', end_time: '' })
       const dayStart = DateTime.fromISO(`${date}T00:00`, { zone: TORONTO_ZONE })
       const dayEnd = DateTime.fromISO(`${date}T23:59`, { zone: TORONTO_ZONE })
       if (!earliest || dayStart < earliest) earliest = dayStart
@@ -288,59 +288,47 @@ function validateDailyScheduleInput(payload, startDate, endDate) {
       continue
     }
 
-    let blocks = []
-    if (Array.isArray(source.blocks) && source.blocks.length) {
-      blocks = source.blocks
-    } else if (source.start_time || source.startTime) {
-      blocks = [
-        {
-          start: source.start_time || source.startTime,
-          end: source.end_time || source.endTime,
-        },
-      ]
+    const startText =
+      typeof source.start_time === 'string'
+        ? source.start_time.trim()
+        : typeof source.startTime === 'string'
+          ? source.startTime.trim()
+          : Array.isArray(source.blocks) && source.blocks[0]?.start
+            ? String(source.blocks[0].start).trim()
+            : ''
+    const endText =
+      typeof source.end_time === 'string'
+        ? source.end_time.trim()
+        : typeof source.endTime === 'string'
+          ? source.endTime.trim()
+          : Array.isArray(source.blocks) && source.blocks[0]?.end
+            ? String(source.blocks[0].end).trim()
+            : ''
+
+    if (!startText || !endText) {
+      return { ok: false, error: `Complete the time range for ${label}.` }
+    }
+    if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
+      return { ok: false, error: `Use HH:MM format for times on ${label}.` }
     }
 
-    if (!blocks.length) {
-      return { ok: false, error: `Add at least one time range for ${label}.` }
+    const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
+    const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
+    if (!startTime.isValid || !endTime.isValid) {
+      return { ok: false, error: `Enter valid times for ${label}.` }
+    }
+    if (endTime <= startTime) {
+      return { ok: false, error: `End time must be after the start time on ${label}.` }
     }
 
-    const normalizedBlocks = []
-    for (const block of blocks) {
-      const startText = typeof block?.start === 'string' ? block.start.trim() : ''
-      const endText = typeof block?.end === 'string' ? block.end.trim() : ''
-      if (!startText || !endText) {
-        return { ok: false, error: `Complete the time range for ${label}.` }
-      }
-      if (!/^\d{2}:\d{2}$/.test(startText) || !/^\d{2}:\d{2}$/.test(endText)) {
-        return { ok: false, error: `Use HH:MM format for times on ${label}.` }
-      }
-      const startTime = DateTime.fromISO(`${date}T${startText}`, { zone: TORONTO_ZONE })
-      const endTime = DateTime.fromISO(`${date}T${endText}`, { zone: TORONTO_ZONE })
-      if (!startTime.isValid || !endTime.isValid) {
-        return { ok: false, error: `Enter valid times for ${label}.` }
-      }
-      if (endTime <= startTime) {
-        return { ok: false, error: `End time must be after the start time on ${label}.` }
-      }
-      normalizedBlocks.push({ start: startText, end: endText, startTime, endTime })
-    }
-
-    normalizedBlocks.sort((a, b) => a.startTime.toMillis() - b.startTime.toMillis())
-    for (let index = 1; index < normalizedBlocks.length; index += 1) {
-      if (normalizedBlocks[index].startTime < normalizedBlocks[index - 1].endTime) {
-        return { ok: false, error: `Time ranges overlap on ${label}.` }
-      }
-    }
-
-    const first = normalizedBlocks[0].startTime
-    const lastBlock = normalizedBlocks[normalizedBlocks.length - 1].endTime
-    if (!earliest || first < earliest) earliest = first
-    if (!latest || lastBlock > latest) latest = lastBlock
+    if (!earliest || startTime < earliest) earliest = startTime
+    if (!latest || endTime > latest) latest = endTime
 
     sanitized.push({
       date,
       all_day: false,
-      blocks: normalizedBlocks.map(({ start, end }) => ({ start, end })),
+      start_time: startText,
+      end_time: endText,
     })
   }
 

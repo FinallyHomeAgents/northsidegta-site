@@ -20,7 +20,8 @@ test('expands RRULE occurrences into daily schedule rows', async () => {
   assert.deepEqual(event.daily_schedule[0], {
     date: '2024-05-20',
     all_day: false,
-    blocks: [{ start: '10:00', end: '12:00' }],
+    start_time: '10:00',
+    end_time: '12:00',
   })
   assert.match(event.start, /^2024-05-20T10:00:00/)
   assert.match(event.end, /^2024-05-22T12:00:00/)
@@ -37,12 +38,14 @@ test('splits multi-day timed spans when hours are unambiguous', async () => {
   assert.deepEqual(event.daily_schedule[0], {
     date: '2024-05-10',
     all_day: false,
-    blocks: [{ start: '09:00', end: '17:00' }],
+    start_time: '09:00',
+    end_time: '17:00',
   })
   assert.deepEqual(event.daily_schedule[2], {
     date: '2024-05-12',
     all_day: false,
-    blocks: [{ start: '09:00', end: '17:00' }],
+    start_time: '09:00',
+    end_time: '17:00',
   })
 })
 
@@ -56,12 +59,14 @@ test('derives all-day entries for VALUE=DATE spans', async () => {
   assert.deepEqual(event.daily_schedule[0], {
     date: '2024-05-15',
     all_day: true,
-    blocks: [],
+    start_time: '',
+    end_time: '',
   })
   assert.deepEqual(event.daily_schedule[2], {
     date: '2024-05-17',
     all_day: true,
-    blocks: [],
+    start_time: '',
+    end_time: '',
   })
 })
 

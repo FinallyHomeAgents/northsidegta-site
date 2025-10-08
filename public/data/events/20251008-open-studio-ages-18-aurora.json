@@ -12,7 +12,8 @@
     {
       "date": "2025-10-08",
       "all_day": true,
-      "blocks": []
+      "start_time": "",
+      "end_time": ""
     }
   ],
   "recurrence": "",
