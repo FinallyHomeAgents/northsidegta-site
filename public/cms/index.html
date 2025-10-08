@@ -230,8 +230,8 @@
         }
 
         const CMS_SCRIPT_URLS = [
-          'https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js',
-          'https://cdn.jsdelivr.net/npm/decap-cms@3.6.2/dist/decap-cms.js',
+          'https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js',
+          'https://cdn.jsdelivr.net/npm/decap-cms@3.8.4/dist/decap-cms.js',
         ]
         const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user']
         let __nsEnhancementsReady = false
@@ -729,7 +729,7 @@
             return
           }
 
-          const { useState, useEffect, useMemo, useRef } = React
+          const { useState, useEffect, useMemo, useRef, useCallback } = React
           const targetWindow = contextWindow && contextWindow.document ? contextWindow : window
 
           if (dailyScheduleRegisteredWindows.has(targetWindow)) {
@@ -745,6 +745,36 @@
             (runtimeWindow && runtimeWindow.prompt) || (typeof window !== 'undefined' ? window.prompt : null)
           const alertFn =
             (runtimeWindow && runtimeWindow.alert) || (typeof window !== 'undefined' ? window.alert : null)
+
+          const TRUE_STRINGS = new Set(['true', '1', 'yes', 'on'])
+
+          function parseBooleanValue(value) {
+            if (typeof value === 'string') {
+              const normalized = value.trim().toLowerCase()
+              if (!normalized) return false
+              return TRUE_STRINGS.has(normalized)
+            }
+            return Boolean(value)
+          }
+
+          function readEntryBoolean(entry, fieldName) {
+            if (!entry) return false
+            try {
+              if (typeof entry.getIn === 'function') {
+                return parseBooleanValue(entry.getIn(['data', fieldName]))
+              }
+            } catch (error) {
+              // Ignore immutable access errors
+            }
+            try {
+              if (entry.data && fieldName in entry.data) {
+                return parseBooleanValue(entry.data[fieldName])
+              }
+            } catch (error) {
+              // Ignore plain object lookups
+            }
+            return false
+          }
 
           const containerStyle = {
             border: '1px solid #e2e8f0',
@@ -824,6 +854,98 @@
             alignItems: 'center',
             gap: '8px',
             paddingTop: '20px',
+          }
+
+          const disabledContainerStyle = {
+            border: '1px dashed #cbd5f5',
+            borderRadius: '12px',
+            padding: '16px',
+            background: '#f8fafc',
+            color: '#475569',
+            fontSize: '14px',
+            lineHeight: 1.6,
+          }
+
+          const disabledHintStyle = {
+            margin: 0,
+            fontSize: '14px',
+            color: '#1e293b',
+            fontWeight: 500,
+          }
+
+          const disabledSubtleStyle = {
+            margin: '6px 0 0',
+            fontSize: '13px',
+            color: '#64748b',
+          }
+
+          const summaryListStyle = {
+            margin: '10px 0 0',
+            paddingLeft: '20px',
+          }
+
+          const summaryItemStyle = {
+            margin: '4px 0',
+            fontSize: '13px',
+            color: '#334155',
+          }
+
+          const manualEditorStyle = {
+            borderTop: '1px solid #e2e8f0',
+            marginTop: '16px',
+            paddingTop: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }
+
+          const manualEditorHeadingStyle = {
+            fontSize: '12px',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            color: '#475569',
+          }
+
+          const manualEditorHintStyle = {
+            fontSize: '12px',
+            color: '#64748b',
+            lineHeight: 1.6,
+            margin: 0,
+          }
+
+          const manualTextareaStyle = {
+            borderRadius: '10px',
+            border: '1px solid #cbd5f5',
+            padding: '10px',
+            fontFamily:
+              "ui-monospace, SFMono-Regular, SFMono, Consolas, 'Liberation Mono', 'Menlo', monospace",
+            fontSize: '12px',
+            minHeight: '160px',
+            background: '#f8fafc',
+            resize: 'vertical',
+          }
+
+          const manualButtonsStyle = {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '8px',
+          }
+
+          const manualApplyButtonStyle = {
+            ...buttonStyle,
+            background: '#1d4ed8',
+            color: '#ffffff',
+            borderColor: '#1d4ed8',
+          }
+
+          const manualResetButtonStyle = {
+            ...buttonStyle,
+          }
+
+          const manualErrorStyle = {
+            fontSize: '12px',
+            color: '#b91c1c',
           }
 
           let rowIdCounter = 0
@@ -1031,6 +1153,9 @@
             const [rows, setRows] = useState(initialRows.length ? initialRows : [createRow()])
             const lastLoadedSummaryRef = useRef('')
             const lastSavedSummaryRef = useRef('')
+            const manualDirtyRef = useRef(false)
+            const [manualDraft, setManualDraft] = useState('')
+            const [manualError, setManualError] = useState('')
 
             useEffect(() => {
               const next = sortRows(normalizeRows(value))
@@ -1050,6 +1175,8 @@
             }, [value, rows])
 
             const sanitizedRows = useMemo(() => rowsToSchedule(rows), [rows])
+            const isEnabled = readEntryBoolean(props.entry, 'use_daily_schedule')
+            const hasSavedRows = sanitizedRows.length > 0
 
             useEffect(() => {
               if (!onChange) return
@@ -1064,6 +1191,79 @@
               }
               onChange(toImmutable(sanitizedRows))
             }, [onChange, sanitizedRows])
+
+            useEffect(() => {
+              const json = JSON.stringify(sanitizedRows, null, 2)
+              if (!manualDirtyRef.current) {
+                setManualDraft(json)
+              }
+            }, [sanitizedRows])
+
+            const summaryLines = useMemo(() => {
+              return sanitizedRows.map((entry, index) => {
+                if (!entry) {
+                  return {
+                    key: `entry-${index}`,
+                    label: 'Unspecified day',
+                  }
+                }
+
+                const dateLabel = entry.date || `Day ${index + 1}`
+                if (entry.all_day) {
+                  return {
+                    key: `${dateLabel}-${index}`,
+                    label: `${dateLabel}: All day`,
+                  }
+                }
+
+                if (Array.isArray(entry.blocks) && entry.blocks.length) {
+                  const times = entry.blocks
+                    .map((block) => {
+                      if (!block) return ''
+                      const startValue = typeof block.start === 'string' ? block.start : block.start_time || ''
+                      const endValue = typeof block.end === 'string' ? block.end : block.end_time || ''
+                      if (startValue && endValue) return `${startValue} – ${endValue}`
+                      return startValue || endValue || ''
+                    })
+                    .filter(Boolean)
+                    .join(', ')
+                  return {
+                    key: `${dateLabel}-${index}`,
+                    label: times ? `${dateLabel}: ${times}` : `${dateLabel}: Times TBA`,
+                  }
+                }
+
+                return {
+                  key: `${dateLabel}-${index}`,
+                  label: `${dateLabel}: Times TBA`,
+                }
+              })
+            }, [sanitizedRows])
+
+            const handleManualChange = useCallback((event) => {
+              manualDirtyRef.current = true
+              setManualDraft(event.target.value)
+              setManualError('')
+            }, [])
+
+            const handleManualReset = useCallback(() => {
+              manualDirtyRef.current = false
+              setManualDraft(JSON.stringify(sanitizedRows, null, 2))
+              setManualError('')
+            }, [sanitizedRows])
+
+            const handleManualApply = useCallback(() => {
+              try {
+                const draft = manualDraft && manualDraft.trim() ? manualDraft : '[]'
+                const parsed = JSON.parse(draft)
+                const normalized = sortRows(normalizeRows(parsed))
+                manualDirtyRef.current = false
+                setManualError('')
+                setRows(normalized.length ? normalized : [createRow()])
+              } catch (error) {
+                setManualError(error?.message || 'Invalid schedule JSON.')
+              }
+            }, [manualDraft])
 
             function updateRow(index, updates) {
               const next = rows.map((row, rowIndex) =>
@@ -1133,6 +1333,43 @@
               setRows((prev) => sortRows([...prev, ...additions]))
             }
 
+            const summaryElements = summaryLines.map((entry) =>
+              React.createElement('li', { key: entry.key, style: summaryItemStyle }, entry.label)
+            )
+
+            const manualEditor = React.createElement(
+              'div',
+              { style: manualEditorStyle },
+              React.createElement('span', { style: manualEditorHeadingStyle }, 'Manual JSON fallback'),
+              React.createElement(
+                'p',
+                { style: manualEditorHintStyle },
+                'If the visual editor fails to load, edit the JSON below. Each entry needs a date and either "all_day": true or blocks with start/end times in HH:MM format.',
+              ),
+              React.createElement('textarea', {
+                id: `${sanitizedIdPrefix}-manual-json`,
+                style: manualTextareaStyle,
+                value: manualDraft,
+                onChange: handleManualChange,
+                spellCheck: 'false',
+              }),
+              manualError ? React.createElement('p', { style: manualErrorStyle, role: 'alert' }, manualError) : null,
+              React.createElement(
+                'div',
+                { style: manualButtonsStyle },
+                React.createElement(
+                  'button',
+                  { type: 'button', style: manualApplyButtonStyle, onClick: handleManualApply },
+                  'Apply JSON',
+                ),
+                React.createElement(
+                  'button',
+                  { type: 'button', style: manualResetButtonStyle, onClick: handleManualReset },
+                  'Reset to current',
+                ),
+              ),
+            )
+
             return React.createElement(
               'div',
               { id: forID, className: classNameWrapper, style: containerStyle },
@@ -1140,137 +1377,170 @@
                 'div',
                 { style: headerStyle },
                 React.createElement('strong', null, 'Daily schedule'),
-                React.createElement(
-                  'div',
-                  { style: actionsStyle },
-                  React.createElement(
-                    'button',
-                    { type: 'button', style: buttonStyle, onClick: handleAddRange },
-                    'Add days from range',
-                  ),
-                  React.createElement(
-                    'button',
-                    { type: 'button', style: buttonStyle, onClick: handleAddRow },
-                    'Add day',
-                  ),
-                ),
-              ),
-              rows.map((row, index) => {
-                const disableTimes = Boolean(row.all_day)
-                const rowKey = row.id || row.key || `${index}`
-                const safePrefix = `${sanitizedIdPrefix}-${index}`
-                const dateInputId = `${safePrefix}-date`
-                const startInputId = `${safePrefix}-start`
-                const endInputId = `${safePrefix}-end`
-                const allDayInputId = `${safePrefix}-all-day`
-
-                return React.createElement(
-                  'div',
-                  { key: rowKey, style: rowStyle },
-                  React.createElement(
-                    'label',
-                    { style: fieldStyle, htmlFor: dateInputId },
-                    React.createElement('span', { style: labelStyle }, 'Date'),
-                    React.createElement('input', {
-                      type: 'date',
-                      id: dateInputId,
-                      name: `${sanitizedNameBase}[${index}][date]`,
-                      value: row.date,
-                      onChange: (event) => updateRow(index, { date: event.target.value }),
-                      style: inputStyle,
-                    }),
-                  ),
-                  React.createElement(
-                    'label',
-                    { style: fieldStyle, htmlFor: startInputId },
-                    React.createElement('span', { style: labelStyle }, 'Start time'),
-                    React.createElement('input', {
-                      type: 'time',
-                      id: startInputId,
-                      name: `${sanitizedNameBase}[${index}][start]`,
-                      value: row.start_time,
-                      disabled: disableTimes,
-                      onChange: (event) => updateRow(index, { start_time: event.target.value }),
-                      style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
-                    }),
-                  ),
-                  React.createElement(
-                    'label',
-                    { style: fieldStyle, htmlFor: endInputId },
-                    React.createElement('span', { style: labelStyle }, 'End time'),
-                    React.createElement('input', {
-                      type: 'time',
-                      id: endInputId,
-                      name: `${sanitizedNameBase}[${index}][end]`,
-                      value: row.end_time,
-                      disabled: disableTimes,
-                      onChange: (event) => updateRow(index, { end_time: event.target.value }),
-                      style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
-                    }),
-                  ),
-                  React.createElement(
-                    'div',
-                    { style: checkboxWrapperStyle },
-                    React.createElement('input', {
-                      type: 'checkbox',
-                      id: allDayInputId,
-                      name: `${sanitizedNameBase}[${index}][all_day]`,
-                      checked: Boolean(row.all_day),
-                      onChange: (event) =>
-                        updateRow(index, {
-                          all_day: event.target.checked,
-                          ...(event.target.checked ? { start_time: '', end_time: '' } : {}),
-                        }),
-                    }),
-                    React.createElement(
-                      'label',
+                isEnabled
+                  ? React.createElement(
+                      'div',
+                      { style: actionsStyle },
+                      React.createElement(
+                        'button',
+                        { type: 'button', style: buttonStyle, onClick: handleAddRange },
+                        'Add days from range',
+                      ),
+                      React.createElement(
+                        'button',
+                        { type: 'button', style: buttonStyle, onClick: handleAddRow },
+                        'Add day',
+                      ),
+                    )
+                  : React.createElement(
+                      'div',
                       {
-                        htmlFor: allDayInputId,
-                        style: { fontSize: '13px', fontWeight: 500, color: '#1e293b' },
+                        style: {
+                          ...actionsStyle,
+                          marginLeft: 'auto',
+                          justifyContent: 'flex-end',
+                          color: '#475569',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                        },
                       },
-                      'All day',
+                      'Toggle “Enable Daily Schedule” above to edit.',
                     ),
-                  ),
-                  React.createElement(
-                    'div',
-                    {
-                      style: {
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '8px',
-                        justifyContent: 'flex-end',
-                      },
-                    },
-                    index > 0 && !disableTimes
-                      ? React.createElement(
+              ),
+              isEnabled
+                ? rows.map((row, index) => {
+                    const disableTimes = Boolean(row.all_day)
+                    const rowKey = row.id || row.key || `${index}`
+                    const safePrefix = `${sanitizedIdPrefix}-${index}`
+                    const dateInputId = `${safePrefix}-date`
+                    const startInputId = `${safePrefix}-start`
+                    const endInputId = `${safePrefix}-end`
+                    const allDayInputId = `${safePrefix}-all-day`
+
+                    return React.createElement(
+                      'div',
+                      { key: rowKey, style: rowStyle },
+                      React.createElement(
+                        'label',
+                        { style: fieldStyle, htmlFor: dateInputId },
+                        React.createElement('span', { style: labelStyle }, 'Date'),
+                        React.createElement('input', {
+                          type: 'date',
+                          id: dateInputId,
+                          name: `${sanitizedNameBase}[${index}][date]`,
+                          value: row.date,
+                          onChange: (event) => updateRow(index, { date: event.target.value }),
+                          style: inputStyle,
+                        }),
+                      ),
+                      React.createElement(
+                        'label',
+                        { style: fieldStyle, htmlFor: startInputId },
+                        React.createElement('span', { style: labelStyle }, 'Start time'),
+                        React.createElement('input', {
+                          type: 'time',
+                          id: startInputId,
+                          name: `${sanitizedNameBase}[${index}][start]`,
+                          value: row.start_time,
+                          disabled: disableTimes,
+                          onChange: (event) => updateRow(index, { start_time: event.target.value }),
+                          style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
+                        }),
+                      ),
+                      React.createElement(
+                        'label',
+                        { style: fieldStyle, htmlFor: endInputId },
+                        React.createElement('span', { style: labelStyle }, 'End time'),
+                        React.createElement('input', {
+                          type: 'time',
+                          id: endInputId,
+                          name: `${sanitizedNameBase}[${index}][end]`,
+                          value: row.end_time,
+                          disabled: disableTimes,
+                          onChange: (event) => updateRow(index, { end_time: event.target.value }),
+                          style: { ...inputStyle, background: disableTimes ? '#e2e8f0' : inputStyle.background },
+                        }),
+                      ),
+                      React.createElement(
+                        'div',
+                        { style: checkboxWrapperStyle },
+                        React.createElement('input', {
+                          type: 'checkbox',
+                          id: allDayInputId,
+                          name: `${sanitizedNameBase}[${index}][all_day]`,
+                          checked: Boolean(row.all_day),
+                          onChange: (event) =>
+                            updateRow(index, {
+                              all_day: event.target.checked,
+                              ...(event.target.checked ? { start_time: '', end_time: '' } : {}),
+                            }),
+                        }),
+                        React.createElement(
+                          'label',
+                          {
+                            htmlFor: allDayInputId,
+                            style: { fontSize: '13px', fontWeight: 500, color: '#1e293b' },
+                          },
+                          'All day',
+                        ),
+                      ),
+                      React.createElement(
+                        'div',
+                        {
+                          style: {
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '8px',
+                            justifyContent: 'flex-end',
+                          },
+                        },
+                        index > 0 && !disableTimes
+                          ? React.createElement(
+                              'button',
+                              {
+                                type: 'button',
+                                style: buttonStyle,
+                                onClick: () => handleDuplicateHours(index),
+                              },
+                              'Duplicate previous hours',
+                            )
+                          : null,
+                        React.createElement(
                           'button',
                           {
                             type: 'button',
-                            style: buttonStyle,
-                            onClick: () => handleDuplicateHours(index),
+                            style: destructiveButtonStyle,
+                            onClick: () => handleRemoveRow(index),
                           },
-                          'Duplicate previous hours',
+                          'Remove',
+                        ),
+                      ),
+                    )
+                  })
+                : React.createElement(
+                    'div',
+                    { style: disabledContainerStyle },
+                    React.createElement('p', { style: disabledHintStyle }, 'Daily schedule is disabled.'),
+                    hasSavedRows
+                      ? React.createElement(
+                          'ul',
+                          { style: summaryListStyle },
+                          summaryElements,
                         )
-                      : null,
-                    React.createElement(
-                      'button',
-                      {
-                        type: 'button',
-                        style: destructiveButtonStyle,
-                        onClick: () => handleRemoveRow(index),
-                      },
-                      'Remove',
-                    ),
+                      : React.createElement(
+                          'p',
+                          { style: disabledSubtleStyle },
+                          'No schedule rows saved yet. Your data will stay intact when you re-enable it.',
+                        ),
                   ),
-                )
-              }),
-              sanitizedRows.length === 0
+              isEnabled && !hasSavedRows
                 ? React.createElement(
                     'p',
                     { style: { fontSize: '12px', color: '#64748b', marginTop: '-4px' } },
                     'Add at least one day when using the daily schedule.',
                   )
                 : null,
+              manualEditor,
             )
           }
 
@@ -1282,9 +1552,7 @@
             currentValue,
             entry,
           ) => {
-            const useDaily = entry?.getIn
-              ? entry.getIn(['data', 'use_daily_schedule'])
-              : entry?.data?.use_daily_schedule
+            const useDaily = readEntryBoolean(entry, 'use_daily_schedule')
             const rowCount = value?.size ?? value?.length ?? 0
             const hasRows = Boolean(value) && rowCount > 0
             return useDaily && !hasRows

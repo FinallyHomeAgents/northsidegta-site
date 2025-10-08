@@ -136,14 +136,16 @@ collections:
         required: false
         default: false
       - name: 'use_daily_schedule'
-        label: 'Use daily schedule'
+        label: 'Enable Daily Schedule'
         widget: 'boolean'
         required: false
         default: false
+        hint: 'Toggle on to manage per-day hours. Disable to fall back to the start/end fields.'
       - name: 'daily_schedule'
-        label: 'Daily schedule'
+        label: 'Daily Schedule'
         widget: 'dailySchedule'
         required: false
+        hint: 'Add one row per day. Data stays saved even if the toggle is off.'
       - name: 'recurrence'
         label: 'Recurrence (RRULE)'
         widget: 'string'

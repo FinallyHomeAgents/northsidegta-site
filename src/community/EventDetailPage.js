@@ -222,7 +222,7 @@ export default function EventDetailPage() {
   }, [location?.search])
 
   const scheduleEntries = React.useMemo(() => {
-    if (!event?.dailySchedule?.length) return []
+    if (!event?.useDailySchedule || !event?.dailySchedule?.length) return []
     return event.dailySchedule.map((entry, index) => {
       const normalizedBlocks = Array.isArray(entry.blocks)
         ? entry.blocks

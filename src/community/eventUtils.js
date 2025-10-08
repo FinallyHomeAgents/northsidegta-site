@@ -506,7 +506,7 @@ export function sanitizeEvent(raw) {
     lng: typeof raw.lng === 'number' ? raw.lng : null,
     hasLocation: typeof raw.lat === 'number' && typeof raw.lng === 'number',
     useDailySchedule: scheduleInfo.useDailySchedule,
-    dailySchedule: scheduleInfo.entries,
+    dailySchedule: scheduleInfo.useDailySchedule ? scheduleInfo.entries : [],
     searchText: buildSearchText(raw),
   }
 }
@@ -696,7 +696,7 @@ function getWeekendRange(now) {
 export function getEventOccurrences(event, rangeStart, rangeEnd) {
   if (!event) return []
 
-  if (Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
+  if (event.useDailySchedule && Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
     const occurrences = []
     for (const entry of event.dailySchedule) {
       if (!entry) continue
@@ -948,7 +948,7 @@ export function generateIcsContent(event, occurrence) {
 
   const occurrences = []
 
-  if (Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
+  if (event.useDailySchedule && Array.isArray(event.dailySchedule) && event.dailySchedule.length) {
     if (occurrence && occurrence.start) {
       occurrences.push({
         start: occurrence.start,
