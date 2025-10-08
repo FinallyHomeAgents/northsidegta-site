@@ -149,11 +149,24 @@ collections:
         required: false
         collapsed: false
         summary: "{{date}} — {{ all_day | ternary('All day', (start_time | default(''))) }} {{ end_time | default('') }}"
+        hint: 'Add one row per day with optional start/end times.'
         fields:
           - { name: 'date',       label: 'Date',       widget: 'date',    format: 'YYYY-MM-DD' }
           - { name: 'all_day',    label: 'All day',    widget: 'boolean', required: false, default: false }
-          - { name: 'start_time', label: 'Start',      widget: 'string',  required: false, pattern: ['^\\d{2}:\\d{2}$', 'Use HH:MM (e.g., 09:30)'] }
-          - { name: 'end_time',   label: 'End',        widget: 'string',  required: false, pattern: ['^\\d{2}:\\d{2}$', 'Use HH:MM (e.g., 17:00)'] }
+          - name: 'start_time'
+            label: 'Start time'
+            widget: 'time'
+            required: false
+            format: 'HH:mm'
+            picker_utc: false
+            hint: 'Choose the opening time (24-hour clock).'
+          - name: 'end_time'
+            label: 'End time'
+            widget: 'time'
+            required: false
+            format: 'HH:mm'
+            picker_utc: false
+            hint: 'Choose the closing time (24-hour clock).'
 
       - name: 'recurrence'
         label: 'Recurrence (RRULE)'
