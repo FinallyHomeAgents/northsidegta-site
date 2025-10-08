@@ -40,17 +40,15 @@
         width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
       }
       #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
-
-      /* visible error panel if CMS fails to boot */
-      #cms-error {
-        display:none; max-width:760px; margin:24px auto; padding:18px 20px; border-radius:12px;
-        background:#fff1f2; color:#7f1d1d; border:1px solid #fecdd3; line-height:1.55;
-        position:fixed; left:50%; transform:translateX(-50%); top:74px; z-index:1200;
-        box-shadow:0 10px 30px rgba(127,29,29,.15)
-      }
+      #cms-error{display:none;max-width:760px;margin:24px auto;padding:18px 20px;border-radius:12px;background:#fff1f2;color:#7f1d1d;border:1px solid #fecdd3;position:fixed;left:50%;transform:translateX(-50%);top:74px;z-index:1200}
       #cms-error code{background:#fee2e2;padding:2px 6px;border-radius:6px}
       body.show-cms-error #cms-error{display:block}
     </style>
+
+    <!-- IMPORTANT: tell Decap not to auto-init so we can register widgets first -->
+    <script>window.CMS_MANUAL_INIT = true;</script>
+    <!-- One and only one Decap bundle -->
+    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
   </head>
   <body>
     <div id="cms-controls">
@@ -62,14 +60,8 @@
       <form id="cms-login-form" autocomplete="on">
         <h1>Welcome back</h1>
         <p class="description">Sign in to manage your NorthSide GTA content.</p>
-        <label>
-          <span>Username</span>
-          <input type="text" name="username" id="username" autocomplete="username" required />
-        </label>
-        <label>
-          <span>Password</span>
-          <input type="password" name="password" id="password" autocomplete="current-password" required />
-        </label>
+        <label><span>Username</span><input type="text" name="username" id="username" autocomplete="username" required /></label>
+        <label><span>Password</span><input type="password" name="password" id="password" autocomplete="current-password" required /></label>
         <button type="submit">Sign in</button>
         <div id="login-status" role="status" aria-live="polite"></div>
       </form>
@@ -77,344 +69,106 @@
 
     <div id="cms-error"></div>
 
-    <!-- One pinned Decap bundle only -->
-    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
-
     <script>
       (function () {
-        const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user'];
-        const $ = (sel) => document.querySelector(sel);
+        const STORAGE_KEYS = ['decap-cms-user','netlify-cms-user'];
+        const $ = (s)=>document.querySelector(s);
+        const setStatus=(m,e)=>{const el=$('#login-status'); if(!el) return; el.textContent=m||''; el.style.color=e?'#dc2626':'#0f172a';};
+        const setLoading=(on)=>{const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent=on?'Signing in…':'Sign in';};
+        const showCmsError=(html)=>{const box=$('#cms-error'); if(!box) return; box.innerHTML=html; document.body.classList.add('show-cms-error');};
+        const clearCmsError=()=>document.body.classList.remove('show-cms-error');
+        const clearStoredTokens=()=>{try{STORAGE_KEYS.forEach(k=>localStorage.removeItem(k));}catch{}};
+        const storeToken=(token, username)=>{try{const name=(username||'').trim()||'CMS User'; const payload=JSON.stringify({token,backendName:'github',login:name,name}); STORAGE_KEYS.forEach(k=>localStorage.setItem(k,payload));}catch{}};
+        const getStoredUser=()=>{try{for(const k of STORAGE_KEYS){const raw=localStorage.getItem(k); if(!raw) continue; try{const v=JSON.parse(raw); if(v&&typeof v.token==='string'&&v.token.length){return v;}}catch{localStorage.removeItem(k);}}}catch{} return null;};
 
-        function setStatus(msg, isError){ const el=$('#login-status'); if(!el) return; el.textContent=msg||''; el.style.color=isError?'#dc2626':'#0f172a'; }
-        function setLoading(on){ const b=$("#cms-login-form button[type='submit']"); if(!b) return; b.disabled=on; b.textContent = on?'Signing in…':'Sign in'; }
-        function showCmsError(html){ const box = $('#cms-error'); if(!box) return; box.innerHTML = html; document.body.classList.add('show-cms-error'); }
-        function clearCmsError(){ document.body.classList.remove('show-cms-error'); }
-
-        function clearStoredTokens(){ try{ STORAGE_KEYS.forEach(k=>localStorage.removeItem(k)); }catch{} }
-        function storeToken(token, username){
+        // --- Widget registration: safe fallback first, React control only if available ---
+        function registerDailyScheduleWidgets(CMS){
+          // 1) Fallback control so the CMS never breaks
           try{
-            const name = (typeof username==='string' && username.trim()) ? username.trim() : 'CMS User';
-            const payload = JSON.stringify({ token, backendName:'github', login:name, name });
-            STORAGE_KEYS.forEach(k=>localStorage.setItem(k, payload));
-          }catch{}
-        }
-        function getStoredUser(){
-          try{
-            for (const k of STORAGE_KEYS){
-              const raw = localStorage.getItem(k); if(!raw) continue;
-              try{ const v = JSON.parse(raw); if(v && typeof v.token==='string' && v.token.length) return v; }
-              catch{ localStorage.removeItem(k); }
+            const base = CMS.getWidget('list') || CMS.getWidget('object') || CMS.getWidget('string');
+            if (base && base.control && !CMS.getWidget('dailySchedule')) {
+              CMS.registerWidget('dailySchedule', base.control, base.preview);
+              console.info('[cms] dailySchedule fallback registered');
             }
-          }catch{}
-          return null;
-        }
+          }catch(e){ console.warn('[cms] fallback widget register failed', e); }
 
-        // ------- Daily Schedule widget (React-free) -------
-        function registerDailyScheduleWidget(CMS){
-          if (CMS.getWidget('dailySchedule')) return; // already registered
-
-          const { h, createClass } = CMS; // legacy helpers provided by Decap
-
-          // ---- small utils
-          const toJS = (v) => (v && typeof v.toJS==='function') ? v.toJS() : v;
-          const asArray = (v) => Array.isArray(v) ? v : (v ? [v] : []);
-          const pad2 = (n)=> String(n).padStart(2,'0');
-          const isoDate = (d)=> `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-          const normalizeRows = (raw) => {
-            const v = toJS(raw) || [];
-            if (!Array.isArray(v)) return [];
-            return v.map(item=>{
-              const date = (item?.date || '').trim();
-              const all_day = !!(item?.all_day);
-              const blocks = asArray(item?.blocks).map(b=>({ start: String(b?.start||'').trim(), end: String(b?.end||'').trim() }))
-                .filter(b=>b.start && b.end)
-                .sort((a,b)=>a.start.localeCompare(b.start));
-              return all_day ? { date, all_day:true, blocks: [] } : { date, all_day:false, blocks };
-            }).filter(e=>e.date && (e.all_day || e.blocks.length));
-          };
-
-          const scheduleToRows = (rows)=> rows // canonical form already
-            .map(e => e.all_day ? { date:e.date, all_day:true, blocks:[] } :
-                                  { date:e.date, all_day:false, blocks: e.blocks.map(b=>({start:b.start,end:b.end})) });
-
-          const Control = createClass({
-            getInitialState() {
-              const rows = normalizeRows(this.props.value);
-              return {
-                rows,
-                enabled: false, // bound to the toggle via DOM listener
-                wired: false,
+          // 2) If React exists, replace with the real control
+          try{
+            const React = CMS?.imports?.React || CMS?.React || window.React;
+            if (!React || !React.useState || !React.createElement) {
+              console.info('[cms] React not exposed yet — keeping fallback control');
+              return;
+            }
+            // Real control (minimal for now: disabled view unless toggle is on)
+            const { useState, useMemo } = React;
+            function DailyScheduleControl(props){
+              const useDaily = !!(props.entry && typeof props.entry.getIn==='function' && props.entry.getIn(['data','use_daily_schedule']));
+              const val = props.value && (props.value.toJS ? props.value.toJS() : props.value) || [];
+              const summary = useMemo(()=> (val.length ? val.map(v=> (v.date||'Unspecified day') + (v.all_day?' (All day)':'')))
+                                                 : ['Unspecified day']), [val]);
+              const box = {
+                border:'1px solid #e2e8f0', borderRadius:'12px', padding:'12px', background:'#fff',
+                fontSize:'14px', color:'#0f172a'
               };
-            },
-            componentDidMount(){
-              this._startDomBinding();
-              this._emit(); // ensure value is normalized on first load
-            },
-            componentDidUpdate(prevProps, prevState){
-              // value changed from outside (e.g. load entry)
-              if (prevProps.value !== this.props.value){
-                const rows = normalizeRows(this.props.value);
-                this.setState({ rows }, this._emit);
-              }
-              if (prevState.rows !== this.state.rows){
-                this._emit();
-              }
-              // rewire if Decap re-rendered the pane
-              if (!this.state.wired) this._startDomBinding();
-            },
-            componentWillUnmount(){
-              try { this._observer && this._observer.disconnect(); } catch {}
-              try { this._toggleEl && this._toggleEl.removeEventListener('change', this._onToggleChange); } catch {}
-            },
-
-            // ---- DOM binding to the "Enable Daily Schedule" checkbox
-            _startDomBinding(){
-              const doc = window.document;
-              const el = doc.querySelector('[data-field-name="use_daily_schedule"] input[type="checkbox"]');
-              if (el){
-                this._toggleEl = el;
-                this._onToggleChange = ()=> this.setState({ enabled: !!el.checked, wired:true });
-                el.addEventListener('change', this._onToggleChange);
-                this.setState({ enabled: !!el.checked, wired:true });
-              }
-              // observe field pane for re-renders
-              try{
-                this._observer = new MutationObserver(()=>{
-                  const found = doc.querySelector('[data-field-name="use_daily_schedule"] input[type="checkbox"]');
-                  if (found && found !== this._toggleEl){
-                    if (this._toggleEl) this._toggleEl.removeEventListener('change', this._onToggleChange);
-                    this._toggleEl = found;
-                    this._toggleEl.addEventListener('change', this._onToggleChange);
-                    this.setState({ enabled: !!this._toggleEl.checked, wired:true });
-                  }
-                });
-                this._observer.observe(doc.body, { childList:true, subtree:true });
-              }catch{}
-            },
-
-            _emit(){
-              // push a clean, canonical schedule back to Decap
-              const rows = scheduleToRows(this.state.rows);
-              this.props.onChange(rows);
-            },
-
-            // ---- row helpers
-            _addRow(){
-              const today = isoDate(new Date());
-              const rows = this.state.rows.slice();
-              rows.push({ date: today, all_day:false, blocks: [{start:'09:00', end:'17:00'}] });
-              this.setState({ rows });
-            },
-            _removeRow(i){
-              const rows = this.state.rows.slice();
-              rows.splice(i,1);
-              this.setState({ rows });
-            },
-            _setRow(i, patch){
-              const rows = this.state.rows.slice();
-              rows[i] = Object.assign({}, rows[i], patch);
-              // if toggling all_day on, clear blocks
-              if ('all_day' in patch && patch.all_day) rows[i].blocks = [];
-              this.setState({ rows });
-            },
-            _setBlock(i, bi, patch){
-              const rows = this.state.rows.slice();
-              const blocks = rows[i].blocks.slice();
-              blocks[bi] = Object.assign({}, blocks[bi], patch);
-              rows[i] = Object.assign({}, rows[i], { blocks });
-              this.setState({ rows });
-            },
-            _addBlock(i){
-              const rows = this.state.rows.slice();
-              const blocks = rows[i].blocks.slice();
-              blocks.push({ start:'09:00', end:'17:00' });
-              rows[i].blocks = blocks;
-              this.setState({ rows });
-            },
-            _removeBlock(i, bi){
-              const rows = this.state.rows.slice();
-              const blocks = rows[i].blocks.slice();
-              blocks.splice(bi,1);
-              rows[i].blocks = blocks;
-              this.setState({ rows });
-            },
-
-            // ---- render helpers
-            _renderSummary(){
-              const items = this.state.rows.length ? this.state.rows : [{date:'', all_day:false, blocks:[]}];
-              return h('ul', { style:{ margin:'6px 0 0', padding:'0 0 0 18px', color:'#334155' } },
-                items.map((e,idx)=>{
-                  const label = e.date || 'Unspecified day';
-                  const detail = e.all_day
-                    ? 'All day'
-                    : (e.blocks && e.blocks.length
-                        ? e.blocks.map(b=>`${b.start}–${b.end}`).join(', ')
-                        : 'Times TBA');
-                  return h('li', { key: idx, style:{ margin:'4px 0' } }, `${label}: ${detail}`);
-                })
-              );
-            },
-
-            render(){
-              const { forID, classNameWrapper } = this.props;
-              const { rows, enabled } = this.state;
-
-              const box = (children, extraStyle={}) => h('div', {
-                style: Object.assign({
-                  border:'1px solid #e2e8f0', borderRadius:'12px', padding:'12px', background:'#fff'
-                }, extraStyle)
-              }, children);
-
-              if (!enabled){
-                return h('div', { id: forID, classNameWrapper },
-                  box([
-                    h('div', { style:{ fontWeight:600, marginBottom:'6px' } }, 'Daily schedule'),
-                    h('div', { style:{ fontSize:'12px', color:'#475569' } },
-                      'Toggle “Enable Daily Schedule” above to edit.'
-                    ),
-                    this._renderSummary()
-                  ])
+              if (!useDaily){
+                return React.createElement('div',{id:props.forID, className:props.classNameWrapper, style:box},
+                  React.createElement('div', null, 'Toggle “Enable Daily Schedule” above to edit.'),
+                  React.createElement('ul', {style:{margin:'8px 0 0', paddingLeft:'18px'}},
+                    summary.map((s,i)=>React.createElement('li',{key:i}, s))
+                  )
                 );
               }
-
-              // enabled (fully editable)
-              return h('div', { id: forID, classNameWrapper },
-                h('div', { style:{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px' } },
-                  h('strong', null, 'Daily schedule'),
-                  h('div', null,
-                    h('button', {
-                      type:'button',
-                      onClick: ()=> this._addRow(),
-                      style:{
-                        border:'1px solid #cbd5f5', background:'#f8fafc', borderRadius:'999px',
-                        padding:'6px 12px', fontSize:'12px', fontWeight:600, cursor:'pointer'
-                      }
-                    }, 'Add day')
-                  )
-                ),
-                rows.map((row, i)=> box([
-                  // date
-                  h('label', { style:{ display:'block', marginBottom:'8px' } },
-                    h('span', { style:{ display:'block', fontSize:'12px', fontWeight:600, color:'#475569', textTransform:'uppercase', letterSpacing:'.04em', marginBottom:'4px' } }, 'Date'),
-                    h('input', {
-                      type:'date', value: row.date,
-                      onInput: (e)=> this._setRow(i,{ date: e.target.value }),
-                      style:{ border:'1px solid #cbd5f5', borderRadius:'10px', padding:'8px 10px', background:'#f8fafc' }
-                    })
-                  ),
-
-                  // all day
-                  h('div', { style:{ display:'flex', alignItems:'center', gap:'8px', margin:'6px 0 10px' } },
-                    h('input', {
-                      id:`ds-all-${i}`, type:'checkbox', checked: !!row.all_day,
-                      onChange:(e)=> this._setRow(i,{ all_day: !!e.target.checked })
-                    }),
-                    h('label', { htmlFor:`ds-all-${i}`, style:{ fontSize:'13px', fontWeight:500, color:'#1e293b' } }, 'All day')
-                  ),
-
-                  // time blocks (not for all-day)
-                  !row.all_day && h('div', null,
-                    h('div', { style:{ display:'grid', gap:'8px', gridTemplateColumns:'repeat(auto-fit, minmax(160px, 1fr))' } },
-                      row.blocks.map((b, bi)=> box([
-                        h('label', { style:{ display:'block', marginBottom:'6px' } },
-                          h('span', { style:{ display:'block', fontSize:'12px', fontWeight:600, color:'#475569', textTransform:'uppercase', letterSpacing:'.04em', marginBottom:'4px' } }, 'Start'),
-                          h('input', {
-                            type:'time', value:b.start,
-                            onInput:(e)=> this._setBlock(i,bi,{ start: e.target.value }),
-                            style:{ border:'1px solid #cbd5f5', borderRadius:'10px', padding:'8px 10px', background:'#f8fafc', width:'100%' }
-                          })
-                        ),
-                        h('label', { style:{ display:'block', marginBottom:'6px' } },
-                          h('span', { style:{ display:'block', fontSize:'12px', fontWeight:600, color:'#475569', textTransform:'uppercase', letterSpacing:'.04em', marginBottom:'4px' } }, 'End'),
-                          h('input', {
-                            type:'time', value:b.end,
-                            onInput:(e)=> this._setBlock(i,bi,{ end: e.target.value }),
-                            style:{ border:'1px solid #cbd5f5', borderRadius:'10px', padding:'8px 10px', background:'#f8fafc', width:'100%' }
-                          })
-                        ),
-                        h('div', { style:{ display:'flex', alignItems:'center', justifyContent:'flex-end' } },
-                          h('button', {
-                            type:'button',
-                            onClick: ()=> this._removeBlock(i,bi),
-                            style:{ border:'1px solid #fecaca', background:'#fff', color:'#b91c1c', borderRadius:'999px', padding:'6px 12px', fontSize:'12px', fontWeight:600, cursor:'pointer' }
-                          }, 'Remove range')
-                        )
-                      ], { margin:'0', padding:'10px' }))
-                    ),
-                    h('div', { style:{ marginTop:'8px', display:'flex', justifyContent:'flex-end' } },
-                      h('button', {
-                        type:'button',
-                        onClick: ()=> this._addBlock(i),
-                        style:{ border:'1px solid #cbd5f5', background:'#f8fafc', borderRadius:'999px', padding:'6px 12px', fontSize:'12px', fontWeight:600, cursor:'pointer' }
-                      }, 'Add time range')
-                    )
-                  ),
-
-                  // row actions
-                  h('div', { style:{ display:'flex', justifyContent:'flex-end', gap:'8px', marginTop:'8px' } },
-                    h('button', {
-                      type:'button',
-                      onClick: ()=> this._removeRow(i),
-                      style:{ border:'1px solid #fecaca', background:'#fff', color:'#b91c1c', borderRadius:'999px', padding:'6px 12px', fontSize:'12px', fontWeight:600, cursor:'pointer' }
-                    }, 'Remove day')
-                  )
-                ], { marginBottom:'10px' }))
+              // Very light editor: allow manual JSON edit so you’re unblocked today.
+              const [draft,setDraft] = useState(JSON.stringify(val, null, 2));
+              function apply(){
+                try{
+                  const parsed = JSON.parse(draft || '[]');
+                  const next = Array.isArray(parsed) ? parsed : [];
+                  props.onChange(CMS.Immutable ? CMS.Immutable.fromJS(next) : next);
+                }catch(e){}
+              }
+              return React.createElement('div',{id:props.forID, className:props.classNameWrapper, style:box},
+                React.createElement('div',{style:{fontWeight:600, marginBottom:8}},'Daily schedule (JSON)'),
+                React.createElement('textarea',{
+                  value:draft, onChange:(e)=>setDraft(e.target.value),
+                  style:{width:'100%', minHeight:160, border:'1px solid #cbd5f5', borderRadius:10, padding:10, fontFamily:'ui-monospace,monospace'}
+                }),
+                React.createElement('div',{style:{display:'flex', gap:8, marginTop:8}},
+                  React.createElement('button',{type:'button', onClick:apply, style:{padding:'6px 10px', border:'1px solid #1d4ed8', background:'#1d4ed8', color:'#fff', borderRadius:999}},'Apply')
+                )
               );
             }
-          });
-
-          CMS.registerWidget('dailySchedule', Control);
-          console.info('[cms] dailySchedule widget registered (React-free)');
+            CMS.registerWidget('dailySchedule', DailyScheduleControl);
+            console.info('[cms] dailySchedule upgraded to React control');
+          }catch(e){ console.warn('[cms] real widget register failed — using fallback', e); }
         }
 
-        // ------- Boot CMS (single bundle; manual init) -------
-        async function bootCMS(){
-          clearCmsError();
-
-          // ensure config is reachable
-          try{
-            const r = await fetch('/config.yml', { cache:'no-store' });
-            if (!r.ok){
-              showCmsError(`<strong>CMS couldn’t start</strong><br/>Unable to fetch <code>/config.yml</code> (HTTP ${r.status}).`);
-              return false;
-            }
-          }catch(e){
-            showCmsError(`Network error loading <code>/config.yml</code>. Check preview domain and try again.`);
-            return false;
+        function safeInitCMS(){
+          // Avoid double init
+          if (window.__NS_CMS_INITIALIZED) return;
+          if (!window.CMS || typeof CMS.init !== 'function') {
+            showCmsError('Decap failed to load. Check the network tab for the decap bundle.');
+            return;
           }
+          // Register widgets BEFORE init
+          registerDailyScheduleWidgets(CMS);
 
-          try{
-            if (window.CMS && typeof CMS.init === 'function') {
-              CMS.init();
-            }
-          }catch(e){ /* ignore */ }
+          CMS.init();               // single init
+          window.__NS_CMS_INITIALIZED = true;
 
-          // wait until the editor iframe is alive and CMS API is present
-          const start = Date.now();
-          while (!(window.CMS && CMS.registerWidget) && Date.now() - start < 12000) {
-            await new Promise(r=>setTimeout(r,120));
+          // Small UX: default to collections landing if hash is empty
+          if (!location.hash || location.hash === '#') {
+            try { location.replace('#/collections'); } catch {}
           }
-          if (!(window.CMS && CMS.registerWidget)) {
-            showCmsError('Decap UI did not boot in time. Try a hard refresh.');
-            return false;
-          }
-
-          // register our React-free control
-          registerDailyScheduleWidget(CMS);
-
-          // show UI and land on collections if needed
           document.body.classList.add('cms-loaded');
-          if (!location.hash || location.hash === '#') location.replace('#/collections');
-
-          return true;
         }
 
-        // ------- Login flow -------
+        // login / logout
         async function handleLogin(e){
           e.preventDefault();
           const fd = new FormData($('#cms-login-form'));
-          const username = (fd.get('username') || '').trim();
-          const password = fd.get('password') || '';
+          const username = (fd.get('username')||'').trim();
+          const password = fd.get('password')||'';
           if (!username || !password){ setStatus('Enter both your username and password.', true); return; }
           setLoading(true); setStatus('Signing in…', false);
           try{
@@ -423,17 +177,11 @@
               body: JSON.stringify({ username, password }), credentials:'same-origin'
             });
             const payload = await res.json().catch(()=>({}));
-            if (!res.ok || !payload.token){
-              clearStoredTokens();
-              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
-              setLoading(false);
-              return;
-            }
+            if (!res.ok || !payload.token){ clearStoredTokens(); setStatus(payload.error || 'Login failed. Please check your credentials.', true); setLoading(false); return; }
             storeToken(payload.token, username);
             setStatus('Signed in! Loading the CMS…', false);
-            document.body.classList.add('cms-loaded');
             setLoading(false);
-            bootCMS();
+            safeInitCMS();
           }catch(err){
             console.error('[cms-login] request failed', err);
             setStatus('We could not reach the server. Please try again.', true);
@@ -445,19 +193,17 @@
         $('#cms-login-form').addEventListener('submit', handleLogin);
         $('#logout-button').addEventListener('click', handleLogout);
 
-        // auto boot if already logged in
-        if (getStoredUser()){
-          document.body.classList.add('cms-loaded');
-          bootCMS();
+        // If token already present, boot immediately (prevents seeing Decap’s built-in login)
+        if (getStoredUser()) {
+          safeInitCMS();
         } else {
           requestAnimationFrame(()=>{ try{ $('#username')?.focus(); }catch{} });
         }
 
-        // quick diag helper
-        window.__cmsDiag = async () => {
-          const cfg = await fetch('/config.yml').then(r=>({ok:r.ok,status:r.status,url:r.url})).catch(e=>({ok:false,error:String(e)}));
-          const scripts = [...document.scripts].map(s=>s.src||'inline').filter(x=>/decap/i.test(x));
-          return { cfg, scripts, hasCMS: !!window.CMS };
+        // Debug helper in console
+        window.__cmsDiag = ()=>{
+          const scripts=[...document.scripts].map(s=>s.src||'inline').filter(x=>/decap/i.test(x));
+          return { scripts, manualInitFlag: !!window.CMS_MANUAL_INIT, hasCMS: !!window.CMS, inited: !!window.__NS_CMS_INITIALIZED };
         };
       })();
     </script>
