@@ -225,6 +225,10 @@
 
     <script>
       ;(function () {
+        if (typeof window !== 'undefined') {
+          window.CMS_MANUAL_INIT = true
+        }
+
         const CMS_SCRIPT_URLS = [
           'https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js',
           'https://cdn.jsdelivr.net/npm/decap-cms@3.6.2/dist/decap-cms.js',
@@ -317,6 +321,19 @@
             }
 
             registered = true
+            if (CMS && typeof CMS.init === 'function') {
+              try {
+                if (!win.__nsCmsInitialized) {
+                  CMS.init()
+                  win.__nsCmsInitialized = true
+                  console.info('[cms-login] CMS manually initialized')
+                }
+              } catch (error) {
+                console.error('[cms-login] failed to manually initialize CMS', error)
+              }
+            } else {
+              console.warn('[cms-login] CMS.init is not available for manual initialization')
+            }
             notifyCmsEnhancementsReady()
             console.info('[cms-login] enhancements ready')
             return true
