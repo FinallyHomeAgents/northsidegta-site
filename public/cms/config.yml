@@ -142,12 +142,13 @@ collections:
         default: false
         hint: 'Toggle on to manage per-day hours. Disable to fall back to the start/end fields.'
 
-      # ⬇️ CHANGED: list-of-objects so it renders as a real editor (our index.html aliases the custom widget to this)
+      # Built-in list of objects (no custom widget)
       - name: 'daily_schedule'
         label: 'Daily Schedule'
-        widget: 'dailySchedule'   # alias -> behaves like a list control
+        widget: 'list'
         required: false
-        hint: 'Add one row per day. Data stays saved even if the toggle is off.'
+        collapsed: false
+        summary: "{{date}} — {{all_day | ternary('All day', (start_time | default('') ~ (end_time | ternary('–' ~ end_time, ''))))}}"
         fields:
           - { name: 'date',       label: 'Date',       widget: 'date',    format: 'YYYY-MM-DD' }
           - { name: 'all_day',    label: 'All day',    widget: 'boolean', required: false, default: false }
