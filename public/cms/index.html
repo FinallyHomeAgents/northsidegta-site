@@ -234,36 +234,36 @@
         let __nsEnhancementsResolvers = []
 
         function findDecapContext() {
-          const windows = [
-            window,
-            ...Array.from(document.querySelectorAll('iframe'))
-              .map((frame) => frame.contentWindow)
-              .filter(Boolean),
-          ]
+          const frames = Array.from(document.querySelectorAll('iframe'))
+          const windows = [window, ...frames.map((frame) => frame?.contentWindow).filter(Boolean)]
 
-          for (const w of windows) {
+          for (const candidateWindow of windows) {
             try {
-              const CMS = w?.CMS
-              if (!CMS || typeof CMS.registerWidget !== 'function') continue
+              const CMS = candidateWindow?.CMS
+              if (!CMS || typeof CMS.registerWidget !== 'function') {
+                continue
+              }
 
-              const candidates = [
-                w.React,
+              const reactCandidates = [
+                candidateWindow.React,
                 CMS.React,
                 CMS.react,
                 CMS?.imports?.React,
                 CMS?.imports?.react,
               ].filter(Boolean)
 
-              for (const R of candidates) {
+              for (const ReactCandidate of reactCandidates) {
                 if (
-                  R &&
-                  typeof R.useMemo === 'function' &&
-                  typeof R.createElement === 'function'
+                  ReactCandidate &&
+                  typeof ReactCandidate.useMemo === 'function' &&
+                  typeof ReactCandidate.createElement === 'function'
                 ) {
-                  return { win: w, CMS, React: R }
+                  return { win: candidateWindow, CMS, React: ReactCandidate }
                 }
               }
-            } catch (error) {}
+            } catch (error) {
+              // Ignore cross-origin frames
+            }
           }
 
           return null
@@ -279,41 +279,35 @@
           })
         }
 
-        ;(function bootstrapCmsEnhancements() {
-          let didRegister = false
+        function notifyCmsEnhancementsReady() {
+          if (__nsEnhancementsReady) return
+          __nsEnhancementsReady = true
+          const resolvers = __nsEnhancementsResolvers.slice()
+          __nsEnhancementsResolvers = []
+          resolvers.forEach((resolve) => resolve(true))
+        }
 
-          function notifyReady() {
-            if (__nsEnhancementsReady) return
-            __nsEnhancementsReady = true
-            const resolvers = __nsEnhancementsResolvers.slice()
-            __nsEnhancementsResolvers = []
-            resolvers.forEach((resolve) => resolve(true))
-          }
+        const registerEnhancements = (() => {
+          let registered = false
 
-          function registerIfReady() {
-            if (didRegister) return true
-
-            const ctx = findDecapContext()
-            if (!ctx) return false
+          return (ctx) => {
+            if (registered || !ctx) return registered
 
             const { win, CMS, React } = ctx
-            if (
-              !React ||
-              typeof React.useMemo !== 'function' ||
-              typeof React.createElement !== 'function'
-            ) {
-              return false
-            }
 
             try {
-              if (!win.React) win.React = React
-            } catch (error) {}
-
-            if (typeof registerDailyScheduleWidget === 'function') {
-              registerDailyScheduleWidget(CMS, React, win)
+              if (win && !win.React) {
+                win.React = React
+              }
+            } catch (error) {
+              // Ignore assignment errors
             }
+
             if (typeof registerEventsPreview === 'function') {
               registerEventsPreview(CMS, React, win)
+            }
+            if (typeof registerDailyScheduleWidget === 'function') {
+              registerDailyScheduleWidget(CMS, React, win)
             }
             if (typeof activateLegacyFieldStyling === 'function') {
               activateLegacyFieldStyling(win)
@@ -322,35 +316,79 @@
               applyCmsHeaderLayoutFix(win)
             }
 
-            didRegister = true
-            notifyReady()
-            console.info('[cms-login] enhancements ready (using Decap React)')
+            registered = true
+            notifyCmsEnhancementsReady()
+            console.info('[cms-login] enhancements ready')
             return true
           }
+        })()
 
-          if (registerIfReady()) {
+        function whenDecapReady(callback, maxMs = 8000, interval = 100) {
+          if (typeof callback !== 'function') return
+
+          let warned = false
+          let done = false
+          const startTime = Date.now()
+          let intervalId = null
+          let observer = null
+
+          function cleanup() {
+            if (intervalId) {
+              clearInterval(intervalId)
+              intervalId = null
+            }
+            if (observer) {
+              observer.disconnect()
+              observer = null
+            }
+            window.removeEventListener('load', attemptRegister)
+          }
+
+          function attemptRegister() {
+            if (done) return true
+            const context = findDecapContext()
+            if (context) {
+              done = true
+              cleanup()
+              callback(context)
+              return true
+            }
+            return false
+          }
+
+          if (attemptRegister()) {
             return
           }
 
-          let tries = 0
-          const interval = setInterval(() => {
-            if (tries++ > 60 || registerIfReady()) {
-              clearInterval(interval)
+          intervalId = window.setInterval(() => {
+            if (attemptRegister()) {
+              return
             }
-          }, 100)
+            if (!warned && Date.now() - startTime >= maxMs) {
+              warned = true
+              if (intervalId) {
+                clearInterval(intervalId)
+                intervalId = null
+              }
+              console.warn('[cms-login] Decap context not ready yet; waiting for DOM mutations.')
+            }
+          }, Math.max(25, interval))
 
-          new MutationObserver(registerIfReady).observe(
-            document.documentElement,
-            {
-              childList: true,
-              subtree: true,
-            },
-          )
+          observer = new MutationObserver(() => {
+            attemptRegister()
+          })
 
-          window.addEventListener('load', registerIfReady)
-        })()
+          const targetNode = document.documentElement || document.body || document
+          if (targetNode) {
+            observer.observe(targetNode, { childList: true, subtree: true })
+          }
 
-        function registerEventsPreview(CMS, React) {
+          window.addEventListener('load', attemptRegister)
+        }
+
+        whenDecapReady(registerEnhancements)
+
+        function registerEventsPreview(CMS, React, _contextWindow) {
           if (!CMS || typeof CMS.registerPreviewTemplate !== 'function') {
             return
           }
@@ -944,6 +982,15 @@
 
           function DailyScheduleControl(props) {
             const { value, onChange, forID, classNameWrapper } = props
+            const fieldDefinition = props.field
+            const fieldName =
+              fieldDefinition && typeof fieldDefinition.get === 'function'
+                ? fieldDefinition.get('name')
+                : fieldDefinition?.name
+            const inputNameBase = fieldName ? String(fieldName) : 'dailySchedule'
+            const sanitizedNameBase = String(inputNameBase).replace(/[^A-Za-z0-9_-]/g, '_')
+            const idPrefix = (forID && String(forID)) || sanitizedNameBase
+            const sanitizedIdPrefix = String(idPrefix).replace(/[^A-Za-z0-9_-]/g, '-')
             const initialRows = useMemo(() => sortRows(normalizeRows(value)), [value])
             const [rows, setRows] = useState(initialRows.length ? initialRows : [createRow()])
             const lastLoadedSummaryRef = useRef('')
@@ -1074,15 +1121,24 @@
               ),
               rows.map((row, index) => {
                 const disableTimes = Boolean(row.all_day)
+                const rowKey = row.id || row.key || `${index}`
+                const safePrefix = `${sanitizedIdPrefix}-${index}`
+                const dateInputId = `${safePrefix}-date`
+                const startInputId = `${safePrefix}-start`
+                const endInputId = `${safePrefix}-end`
+                const allDayInputId = `${safePrefix}-all-day`
+
                 return React.createElement(
                   'div',
-                  { key: row.id || row.key || `${row.date || 'row'}-${index}`, style: rowStyle },
+                  { key: rowKey, style: rowStyle },
                   React.createElement(
                     'label',
-                    { style: fieldStyle },
+                    { style: fieldStyle, htmlFor: dateInputId },
                     React.createElement('span', { style: labelStyle }, 'Date'),
                     React.createElement('input', {
                       type: 'date',
+                      id: dateInputId,
+                      name: `${sanitizedNameBase}[${index}][date]`,
                       value: row.date,
                       onChange: (event) => updateRow(index, { date: event.target.value }),
                       style: inputStyle,
@@ -1090,10 +1146,12 @@
                   ),
                   React.createElement(
                     'label',
-                    { style: fieldStyle },
+                    { style: fieldStyle, htmlFor: startInputId },
                     React.createElement('span', { style: labelStyle }, 'Start time'),
                     React.createElement('input', {
                       type: 'time',
+                      id: startInputId,
+                      name: `${sanitizedNameBase}[${index}][start]`,
                       value: row.start_time,
                       disabled: disableTimes,
                       onChange: (event) => updateRow(index, { start_time: event.target.value }),
@@ -1102,10 +1160,12 @@
                   ),
                   React.createElement(
                     'label',
-                    { style: fieldStyle },
+                    { style: fieldStyle, htmlFor: endInputId },
                     React.createElement('span', { style: labelStyle }, 'End time'),
                     React.createElement('input', {
                       type: 'time',
+                      id: endInputId,
+                      name: `${sanitizedNameBase}[${index}][end]`,
                       value: row.end_time,
                       disabled: disableTimes,
                       onChange: (event) => updateRow(index, { end_time: event.target.value }),
@@ -1117,6 +1177,8 @@
                     { style: checkboxWrapperStyle },
                     React.createElement('input', {
                       type: 'checkbox',
+                      id: allDayInputId,
+                      name: `${sanitizedNameBase}[${index}][all_day]`,
                       checked: Boolean(row.all_day),
                       onChange: (event) =>
                         updateRow(index, {
@@ -1124,7 +1186,14 @@
                           ...(event.target.checked ? { start_time: '', end_time: '' } : {}),
                         }),
                     }),
-                    React.createElement('span', { style: { fontSize: '13px', fontWeight: 500, color: '#1e293b' } }, 'All day'),
+                    React.createElement(
+                      'label',
+                      {
+                        htmlFor: allDayInputId,
+                        style: { fontSize: '13px', fontWeight: 500, color: '#1e293b' },
+                      },
+                      'All day',
+                    ),
                   ),
                   React.createElement(
                     'div',
