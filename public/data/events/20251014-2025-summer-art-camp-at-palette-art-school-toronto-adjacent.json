@@ -1,20 +1,50 @@
 {
-  "id": "10010884-1760184000-1760198400@www.experienceyorkregion.com",
-  "slug": "20251011-the-heintzman-house-2025-art-show-and-sale-toronto-adjacent",
-  "title": "The Heintzman House 2025 Art Show and Sale.",
-  "summary": "The Heintzman House 2025 Art Show and Sale.",
+  "id": "10011574-1760432400-1760716800@www.experienceyorkregion.com",
+  "slug": "20251014-2025-summer-art-camp-at-palette-art-school-toronto-adjacent",
+  "title": "2025 Summer Art Camp at Palette Art School",
+  "summary": "2025 Summer Art Camp at Palette Art School",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. 2025 Summer Art Camp at Palette Art School Loading view. Today Now Now Select date. Oct 8 May 1 - October 18 Event Series Kate Greenway, Recent Works Oct 8 September 30 @ 9:30 am - October 8 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 1 @ 9:30 am - October 9 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 2 @ 9:30 am - October 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 3 @ 9:30 am - October 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 4 @ 9:30 am - October 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 5 @ 9:30 am - October 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 6 @ 9:00 am - October 9 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 8 October 6 @ 9:30 am - October 14 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 7 @ 9:00 am - October 10 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 8 October 7 @ 9:30 am - October 15 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 8 October 8 @ 9:00 am - October 11 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-10-11T16:00:00.000Z",
-  "endDate": "2025-10-11T20:00:00.000Z",
+  "startDate": "2025-10-14T13:00:00.000Z",
+  "endDate": "2025-10-17T20:00:00.000Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-10-11",
+      "date": "2025-10-14",
       "all_day": false,
       "blocks": [
         {
-          "start": "12:00",
+          "start": "09:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "date": "2025-10-15",
+      "all_day": false,
+      "blocks": [
+        {
+          "start": "09:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "date": "2025-10-16",
+      "all_day": false,
+      "blocks": [
+        {
+          "start": "09:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "date": "2025-10-17",
+      "all_day": false,
+      "blocks": [
+        {
+          "start": "09:00",
           "end": "16:00"
         }
       ]
@@ -26,19 +56,21 @@
   "subArea": "",
   "location": {
     "city": "Toronto-adjacent",
-    "venue": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1"
+    "venue": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2"
   },
-  "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
-  "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
+  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "lat": 43.787474,
+  "lng": -79.4727017,
   "priceType": "Mixed",
   "priceNote": "",
   "badges": [],
   "qaTags": [],
   "image": "",
-  "organizerName": "",
+  "organizerName": "[object Object]",
   "organizerUrl": "",
-  "url": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-11/",
-  "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-11/",
+  "url": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-14/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-10-14/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -46,14 +78,14 @@
   "notes": "",
   "source": {
     "name": "Experience York Region",
-    "id": "10010884-1760184000-1760198400@www.experienceyorkregion.com"
+    "id": "10011574-1760432400-1760716800@www.experienceyorkregion.com"
   },
   "sourceName": "Experience York Region",
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10010884-1760184000-1760198400@www.experienceyorkregion.com",
+  "sourceRef": "10011574-1760432400-1760716800@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-10-08T10:17:19.246Z",
-  "firstSeenAt": "2025-10-06T10:18:20.240Z",
+  "firstSeenAt": "2025-10-08T10:17:19.246Z",
   "updatedAt": "2025-10-08T10:17:19.246Z"
 }
