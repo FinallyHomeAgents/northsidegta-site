@@ -44,7 +44,7 @@
       .alt-btn{border-radius:999px;border:1px solid #cbd5f5;background:#f8fafc;color:#1e3a8a;font-size:13px;font-weight:600;padding:8px 12px;cursor:pointer}
     </style>
 
-    <!-- We will initialize Decap manually -->
+    <!-- Manual init so we control when the iframe boots -->
     <script>window.CMS_MANUAL_INIT = true;</script>
     <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
   </head>
@@ -54,7 +54,6 @@
       <button id="logout-button" type="button">Log out</button>
     </div>
 
-    <!-- Local login is the default view unless you click “Open CMS with GitHub” -->
     <div id="login-container">
       <form id="cms-login-form" autocomplete="on">
         <h1>Welcome back</h1>
@@ -77,7 +76,7 @@
 
     <script>
       (function () {
-        // ---------- helpers & constants ----------
+        // ---------- helpers ----------
         const STORAGE_KEYS = ['decap-cms-user','netlify-cms-user'];
         const $ = (s)=>document.querySelector(s);
         const params = new URLSearchParams(location.search);
@@ -88,7 +87,6 @@
         function clearStoredTokens(){
           try{
             STORAGE_KEYS.forEach(k=>localStorage.removeItem(k));
-            // Also clear old Git Gateway keys if any
             localStorage.removeItem('git-gateway-user');
             sessionStorage.clear();
           }catch{}
@@ -111,112 +109,120 @@
           return null;
         }
 
-        // ---------- custom dailySchedule widget (React control) ----------
-        function DailyScheduleControl(props){
-          const React = window.React;
-          const {useState,useEffect,useMemo} = React;
-          const Immutable = window.Immutable || (window.CMS && (CMS.Immutable || CMS.imports?.Immutable));
-          const toJS = (v)=> (Immutable && typeof v?.toJS==='function') ? v.toJS() : v;
-          const fromJS = (v)=> (Immutable && typeof Immutable.fromJS==='function') ? Immutable.fromJS(v) : v;
+        // ---------- register & init (React comes from CMS here) ----------
+        function registerAndInit(){
+          // Pull React/Immutable from the CMS runtime (iframe context)
+          const React = CMS.React || CMS.react || CMS.imports?.React;
+          const Immutable = CMS.Immutable || CMS.imports?.Immutable;
 
-          function normalize(v){
-            const raw = Array.isArray(v) ? v : Array.isArray(toJS(v)) ? toJS(v) : [];
-            return raw.map((r)=>({
-              date: (r?.date||'').trim(),
-              all_day: !!(r?.all_day || r?.allDay),
-              blocks: Array.isArray(r?.blocks) ? r.blocks.map(b=>({start:b?.start||b?.start_time||'', end:b?.end||b?.end_time||''})) : []
-            })).filter(r=>r.date);
+          // Guard (shouldn’t happen, but avoids cryptic errors)
+          if (!React) {
+            console.error('[cms] React not exposed by CMS runtime');
           }
 
-          const [rows,setRows] = useState(()=> normalize(props.value).length ? normalize(props.value) : [{date:'', all_day:false, blocks:[] }]);
+          // Define control INSIDE this scope so it closes over React/Immutable
+          function DailyScheduleControl(props){
+            const {useState,useEffect,useMemo} = React;
+            const toJS = (v)=> (Immutable && typeof v?.toJS==='function') ? v.toJS() : v;
+            const fromJS = (v)=> (Immutable && typeof Immutable.fromJS==='function') ? Immutable.fromJS(v) : v;
 
-          const schedule = useMemo(()=>{
-            return rows.map(r=>{
-              if (r.all_day) return { date:r.date, all_day:true, blocks:[] };
-              const blocks = (r.blocks||[]).filter(b=>b.start && b.end).sort((a,b)=>a.start.localeCompare(b.start));
-              return { date:r.date, all_day:false, blocks };
-            }).filter(r=>r.date && (r.all_day || r.blocks.length>0))
-              .sort((a,b)=> a.date.localeCompare(b.date));
-          },[rows]);
+            function normalize(v){
+              const raw0 = Array.isArray(v) ? v : Array.isArray(toJS(v)) ? toJS(v) : [];
+              return raw0.map((r)=>({
+                date: (r?.date||'').trim(),
+                all_day: !!(r?.all_day || r?.allDay),
+                blocks: Array.isArray(r?.blocks) ? r.blocks.map(b=>({start:b?.start||b?.start_time||'', end:b?.end||b?.end_time||''})) : []
+              })).filter(r=>r.date);
+            }
 
-          useEffect(()=>{ props.onChange && props.onChange(fromJS(schedule)); },[schedule]);
-          useEffect(()=>{ const next = normalize(props.value); if (JSON.stringify(next)!==JSON.stringify(rows)) setRows(next.length?next:[{date:'',all_day:false,blocks:[]}]); },[props.value]);
+            const [rows,setRows] = useState(()=> {
+              const n = normalize(props.value);
+              return n.length ? n : [{date:'', all_day:false, blocks:[]}];
+            });
 
-          const s={wrap:{border:'1px solid #e2e8f0',borderRadius:'14px',padding:'16px',background:'#fff',display:'flex',flexDirection:'column',gap:'12px'},
-                   row:{border:'1px solid #e2e8f0',borderRadius:'12px',padding:'12px',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:'12px',alignItems:'end'},
-                   fld:{display:'flex',flexDirection:'column',gap:'4px'}, lab:{fontSize:'12px',fontWeight:600,letterSpacing:'.04em',textTransform:'uppercase',color:'#475569'},
-                   input:{borderRadius:'10px',border:'1px solid #cbd5f5',padding:'8px 10px',fontSize:'14px',background:'#f8fafc'},
-                   btn:{borderRadius:'999px',border:'1px solid #cbd5f5',background:'#f8fafc',color:'#1e3a8a',fontSize:'12px',fontWeight:600,padding:'6px 12px',cursor:'pointer'}};
+            const schedule = useMemo(()=>{
+              return rows.map(r=>{
+                if (r.all_day) return { date:r.date, all_day:true, blocks:[] };
+                const blocks = (r.blocks||[]).filter(b=>b.start && b.end).sort((a,b)=>a.start.localeCompare(b.start));
+                return { date:r.date, all_day:false, blocks };
+              }).filter(r=>r.date && (r.all_day || r.blocks.length>0))
+                .sort((a,b)=> a.date.localeCompare(b.date));
+            },[rows]);
 
-          const enabled = !!(props.entry && (props.entry.getIn?.(['data','use_daily_schedule']) || props.entry.data?.use_daily_schedule));
-          const addRow = ()=> setRows(p=>[...p,{date:'',all_day:false,blocks:[]}]);
-          const rmRow = (i)=> setRows(p=> p.filter((_,idx)=>idx!==i));
-          const setRow = (i,patch)=> setRows(p=> p.map((r,idx)=> idx===i? {...r,...patch}:r));
-          const addBlock = (i)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:[...(r.blocks||[]),{start:'',end:''}]}:r));
-          const rmBlock = (i,j)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:r.blocks.filter((_,k)=>k!==j)}:r));
+            useEffect(()=>{ props.onChange && props.onChange(fromJS(schedule)); },[schedule]);
 
-          return React.createElement('div',{id:props.forID,className:props.classNameWrapper,style:s.wrap},
-            React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:8}},
-              React.createElement('strong',null,'Daily schedule'),
-              enabled ? React.createElement('button',{type:'button',style:s.btn,onClick:addRow},'Add day')
-                      : React.createElement('div',{style:{fontSize:12,color:'#64748b'}},'Toggle “Enable Daily Schedule” above to edit.')
-            ),
-            enabled ? rows.map((r,i)=>React.createElement('div',{key:i,style:s.row},
-              React.createElement('label',{style:s.fld},
-                React.createElement('span',{style:s.lab},'Date'),
-                React.createElement('input',{type:'date',style:s.input,value:r.date,onChange:(e)=>setRow(i,{date:e.target.value})})
+            useEffect(()=>{
+              const next = normalize(props.value);
+              if (JSON.stringify(next)!==JSON.stringify(rows)) {
+                setRows(next.length?next:[{date:'',all_day:false,blocks:[]}]);
+              }
+            },[props.value]);
+
+            const s={wrap:{border:'1px solid #e2e8f0',borderRadius:'14px',padding:'16px',background:'#fff',display:'flex',flexDirection:'column',gap:'12px'},
+                     row:{border:'1px solid #e2e8f0',borderRadius:'12px',padding:'12px',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:'12px',alignItems:'end'},
+                     fld:{display:'flex',flexDirection:'column',gap:'4px'}, lab:{fontSize:'12px',fontWeight:600,letterSpacing:'.04em',textTransform:'uppercase',color:'#475569'},
+                     input:{borderRadius:'10px',border:'1px solid #cbd5f5',padding:'8px 10px',fontSize:'14px',background:'#f8fafc'},
+                     btn:{borderRadius:'999px',border:'1px solid #cbd5f5',background:'#f8fafc',color:'#1e3a8a',fontSize:'12px',fontWeight:600,padding:'6px 12px',cursor:'pointer'}};
+
+            const enabled = !!(props.entry && (props.entry.getIn?.(['data','use_daily_schedule']) || props.entry.data?.use_daily_schedule));
+            const addRow = ()=> setRows(p=>[...p,{date:'',all_day:false,blocks:[]}]);
+            const rmRow = (i)=> setRows(p=> p.filter((_,idx)=>idx!==i));
+            const setRow = (i,patch)=> setRows(p=> p.map((r,idx)=> idx===i? {...r,...patch}:r));
+            const addBlock = (i)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:[...(r.blocks||[]),{start:'',end:''}]}:r));
+            const rmBlock = (i,j)=> setRows(p=> p.map((r,idx)=> idx===i? {...r, blocks:r.blocks.filter((_,k)=>k!==j)}:r));
+
+            return React.createElement('div',{id:props.forID,className:props.classNameWrapper,style:s.wrap},
+              React.createElement('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:8}},
+                React.createElement('strong',null,'Daily schedule'),
+                enabled ? React.createElement('button',{type:'button',style:s.btn,onClick:addRow},'Add day')
+                        : React.createElement('div',{style:{fontSize:12,color:'#64748b'}},'Toggle “Enable Daily Schedule” above to edit.')
               ),
-              React.createElement('label',{style:s.fld},
-                React.createElement('span',{style:s.lab},'All day'),
-                React.createElement('input',{type:'checkbox',checked:!!r.all_day,onChange:(e)=>setRow(i,{all_day:e.target.checked,blocks:e.target.checked?[]:r.blocks})})
-              ),
-              !r.all_day && React.createElement('div',{style:{gridColumn:'1 / -1'}},
-                (r.blocks||[]).map((b,j)=>React.createElement('div',{key:j,style:{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:12,marginTop:8}},
-                  React.createElement('label',{style:s.fld},
-                    React.createElement('span',{style:s.lab},'Start'),
-                    React.createElement('input',{type:'time',style:s.input,value:b.start,onChange:(e)=>{
-                      const blocks=[...r.blocks]; blocks[j]={...blocks[j],start:e.target.value}; setRow(i,{blocks});
-                    }})
-                  ),
-                  React.createElement('label',{style:s.fld},
-                    React.createElement('span',{style:s.lab},'End'),
-                    React.createElement('input',{type:'time',style:s.input,value:b.end,onChange:(e)=>{
-                      const blocks=[...r.blocks]; blocks[j]={...blocks[j],end:e.target.value}; setRow(i,{blocks});
-                    }})
-                  ),
-                  React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmBlock(i,j)},'Remove')
-                )),
-                React.createElement('button',{type:'button',style:{...s.btn,marginTop:8},onClick:()=>addBlock(i)},'Add time block')
-              ),
-              React.createElement('div',{style:{display:'flex',justifyContent:'flex-end'}},
-                React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmRow(i)},'Remove day')
-              )
-            )) : null
-          );
-        }
+              enabled ? rows.map((r,i)=>React.createElement('div',{key:i,style:s.row},
+                React.createElement('label',{style:s.fld},
+                  React.createElement('span',{style:s.lab},'Date'),
+                  React.createElement('input',{type:'date',style:s.input,value:r.date,onChange:(e)=>setRow(i,{date:e.target.value})})
+                ),
+                React.createElement('label',{style:s.fld},
+                  React.createElement('span',{style:s.lab},'All day'),
+                  React.createElement('input',{type:'checkbox',checked:!!r.all_day,onChange:(e)=>setRow(i,{all_day:e.target.checked,blocks:e.target.checked?[]:r.blocks})})
+                ),
+                !r.all_day && React.createElement('div',{style:{gridColumn:'1 / -1'}},
+                  (r.blocks||[]).map((b,j)=>React.createElement('div',{key:j,style:{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:12,marginTop:8}},
+                    React.createElement('label',{style:s.fld},
+                      React.createElement('span',{style:s.lab},'Start'),
+                      React.createElement('input',{type:'time',style:s.input,value:b.start,onChange:(e)=>{
+                        const blocks=[...r.blocks]; blocks[j]={...blocks[j],start:e.target.value}; setRow(i,{blocks});
+                      }})
+                    ),
+                    React.createElement('label',{style:s.fld},
+                      React.createElement('span',{style:s.lab},'End'),
+                      React.createElement('input',{type:'time',style:s.input,value:b.end,onChange:(e)=>{
+                        const blocks=[...r.blocks]; blocks[j]={...blocks[j],end:e.target.value}; setRow(i,{blocks});
+                      }})
+                    ),
+                    React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmBlock(i,j)},'Remove')
+                  )),
+                  React.createElement('button',{type:'button',style:{...s.btn,marginTop:8},onClick:()=>addBlock(i)},'Add time block')
+                ),
+                React.createElement('div',{style:{display:'flex',justifyContent:'flex-end'}},
+                  React.createElement('button',{type:'button',style:{...s.btn,borderColor:'#fecaca',color:'#b91c1c'},onClick:()=>rmRow(i)},'Remove day')
+                )
+              )) : null
+            );
+          }
 
-        function registerAndInit(){
+          // Register and start Decap
           CMS.registerWidget('dailySchedule', DailyScheduleControl);
           CMS.init({ configPath: '/config.yml' });
           document.body.classList.add('cms-loaded');
           document.body.classList.remove('show-login');
         }
 
-        // ---------- startup routing (local vs GitHub) ----------
-        function wantLocalLoginFirst(){
-          // Default to local login unless explicitly told to open GitHub
-          if (has('github')) return false;
-          return true;
-        }
+        // ---------- routing & login ----------
+        function wantLocalLoginFirst(){ if (params.get('github')) return false; return true; }
 
-        // Force logout via query string
-        if (has('logout')) {
-          clearStoredTokens();
-          location.replace('/cms/?local=1');
-          return;
-        }
+        if (params.get('logout')) { clearStoredTokens(); location.replace('/cms/?local=1'); return; }
 
-        // Wire buttons & login
         $('#logout-button')?.addEventListener('click', ()=>{ clearStoredTokens(); location.replace('/cms/?local=1'); });
         $('#open-github')?.addEventListener('click', ()=>{ registerAndInit(); });
 
@@ -245,18 +251,13 @@
           }
         });
 
-        // ---------- choose path ----------
         const hasToken = !!getStoredUser();
-
         if (hasToken) {
-          // Already authenticated: go straight to CMS
           registerAndInit();
         } else if (wantLocalLoginFirst()) {
-          // Show local login shell; Decap will not boot until you login or click “Open with GitHub”
           document.body.classList.add('show-login');
           setTimeout(()=>{ try{ $('#username')?.focus(); }catch{} }, 0);
         } else {
-          // Explicit GitHub mode (?github=1)
           registerAndInit();
         }
       })();
