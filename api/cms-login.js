@@ -27,36 +27,77 @@ function validateEnv() {
   return token
 }
 
+function parseJsonString(raw) {
+  if (typeof raw !== 'string') return null
+  const trimmed = raw.trim()
+  if (!trimmed) return {}
+  try {
+    return JSON.parse(trimmed)
+  } catch (error) {
+    throw new Error('Invalid JSON body')
+  }
+}
+
+function parseJsonBuffer(buffer) {
+  if (!buffer || !buffer.length) return {}
+  const raw = buffer.toString('utf8')
+  return parseJsonString(raw)
+}
+
+function tryParseJsonPayload(payload) {
+  if (payload == null) return null
+
+  if (typeof payload === 'string') {
+    return parseJsonString(payload)
+  }
+
+  if (Buffer.isBuffer(payload)) {
+    return parseJsonBuffer(payload)
+  }
+
+  if (ArrayBuffer.isView(payload)) {
+    const view = payload
+    const buffer = Buffer.from(view.buffer, view.byteOffset, view.byteLength)
+    return parseJsonBuffer(buffer)
+  }
+
+  if (payload instanceof ArrayBuffer) {
+    const buffer = Buffer.from(payload)
+    return parseJsonBuffer(buffer)
+  }
+
+  if (typeof payload === 'object') {
+    return payload
+  }
+
+  return null
+}
+
 async function readRequestBody(req) {
-  if (req.body) {
-    if (typeof req.body === 'string') {
-      if (!req.body.trim()) return {}
-      try {
-        return JSON.parse(req.body)
-      } catch (error) {
-        throw new Error('Invalid JSON body')
-      }
-    }
-    if (typeof req.body === 'object') {
-      return req.body
-    }
+  const parsed = tryParseJsonPayload(req.body)
+  if (parsed !== null) {
+    return parsed
   }
 
   const chunks = []
   for await (const chunk of req) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    if (!chunk) continue
+    if (Buffer.isBuffer(chunk)) {
+      chunks.push(chunk)
+    } else if (typeof chunk === 'string') {
+      if (chunk) chunks.push(Buffer.from(chunk))
+    } else if (ArrayBuffer.isView(chunk)) {
+      const view = chunk
+      chunks.push(Buffer.from(view.buffer, view.byteOffset, view.byteLength))
+    } else if (chunk instanceof ArrayBuffer) {
+      chunks.push(Buffer.from(chunk))
+    }
   }
 
   if (!chunks.length) return {}
 
-  const raw = Buffer.concat(chunks).toString('utf8')
-  if (!raw) return {}
-
-  try {
-    return JSON.parse(raw)
-  } catch (error) {
-    throw new Error('Invalid JSON body')
-  }
+  const raw = Buffer.concat(chunks)
+  return parseJsonBuffer(raw)
 }
 
 export default async function handler(req, res) {
