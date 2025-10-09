@@ -83,6 +83,7 @@ collections:
       - { name: 'coverageLine', label: 'Coverage Line', required: false }
       - { name: 'heroPrimaryCtaLabel', label: 'Primary CTA Label', required: false }
       - { name: 'heroSecondaryCtaLabel', label: 'Secondary CTA Label', required: false }
+      - { name: 'whatsappConciergeLabel', label: 'WhatsApp Concierge Label', required: false }
       - { name: 'contactMicrocopy', label: 'Contact Microcopy', required: false }
       - name: 'trustBullets'
         label: 'Trust Bullets'

@@ -2,9 +2,10 @@
   "heroHeadline": "Glad you found us — let’s talk.",
   "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
   "responsePledge": "We reply within 1 hour, 9am–9pm.",
-  "coverageLine": "Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+  "coverageLine": "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
   "heroPrimaryCtaLabel": "Send a Message",
   "heroSecondaryCtaLabel": "Chat on WhatsApp",
+  "whatsappConciergeLabel": "Priority concierge replies for buyers & sellers.",
   "contactMicrocopy": "We usually reply in minutes.",
   "trustBullets": [
     "Local experts: we don’t just work here — we live here.",
@@ -48,18 +49,19 @@
   "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
   "schedulingUrl": "",
   "footerBrokerageCopy": "Real Broker Ontario Ltd., Brokerage — Finally Home Agents, REALTORS®",
-  "footerAreas": "Serving Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
+  "footerAreas": "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
   "footerSecondaryLinks": [
     { "label": "Community Events", "href": "/community" },
     { "label": "Buyer’s Guide", "href": "/buyers" }
   ],
   "formThankYouMessage": "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
   "seoTitle": "Contact Finally Home Agents | NorthSide GTA Real Estate Experts",
-  "seoDescription": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",
+  "seoDescription": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",
   "seoImage": "/Images/northsidegta-map-bg.jpg",
   "jsonLd": {
     "sameAs": [],
     "areaServed": [
+      "Aurora",
       "Uxbridge",
       "Georgina",
       "Scugog",

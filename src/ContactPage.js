@@ -26,7 +26,7 @@ export default function ContactPage() {
 
 function ContactPageV2() {
   const config = useContactConfig();
-  const channels = useContactChannels();
+  const channels = useContactChannels(config);
   const formRef = useRef(null);
   const formSectionRef = useRef(null);
   const [reviewsReady, setReviewsReady] = useState(false);

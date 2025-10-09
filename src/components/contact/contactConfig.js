@@ -6,9 +6,11 @@ const DEFAULT_CONFIG = {
   heroHeadline: "Glad you found us — let’s talk.",
   heroSubhead: "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
   responsePledge: "We reply within 1 hour, 9am–9pm.",
-  coverageLine: "Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+  coverageLine:
+    "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
   heroPrimaryCtaLabel: "Send a Message",
   heroSecondaryCtaLabel: "Chat on WhatsApp",
+  whatsappConciergeLabel: "Concierge on WhatsApp — priority replies",
   contactMicrocopy: "We usually reply in minutes.",
   trustBullets: [
     "Local experts: we don’t just work here — we live here.",
@@ -26,7 +28,7 @@ const DEFAULT_CONFIG = {
   footerBrokerageCopy:
     "Real Broker Ontario Ltd., Brokerage — Finally Home Agents, REALTORS®",
   footerAreas:
-    "Serving Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
+    "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
   footerSecondaryLinks: [
     { label: "Community Events", href: "/community" },
     { label: "Buyer’s Guide", href: "/buyers" },
@@ -40,6 +42,7 @@ const DEFAULT_CONFIG = {
   jsonLd: {
     sameAs: [],
     areaServed: [
+      "Aurora",
       "Uxbridge",
       "Georgina",
       "Scugog",
@@ -91,6 +94,9 @@ function normalizeConfig(raw = {}) {
   if (!merged.heroSecondaryCtaLabel) {
     merged.heroSecondaryCtaLabel = DEFAULT_CONFIG.heroSecondaryCtaLabel;
   }
+  if (!merged.whatsappConciergeLabel) {
+    merged.whatsappConciergeLabel = DEFAULT_CONFIG.whatsappConciergeLabel;
+  }
   if (!merged.reviewsDisclaimer) {
     merged.reviewsDisclaimer = DEFAULT_CONFIG.reviewsDisclaimer;
   }
@@ -127,13 +133,14 @@ export function useContactConfig() {
   return config;
 }
 
-export function useContactChannels() {
+export function useContactChannels(config) {
   return useMemo(() => {
     const phone = envValue("PUBLIC_PHONE");
     const sms = envValue("PUBLIC_SMS") || phone;
     const whatsappNumber = envValue("PUBLIC_WHATSAPP_NUMBER");
     const instagramUrl = envValue("PUBLIC_INSTAGRAM_URL");
     const facebookUrl = envValue("PUBLIC_FACEBOOK_URL");
+    const conciergeLabel = config?.whatsappConciergeLabel;
 
     const baseMessage =
       "Hi Finally Home Agents! I’d love concierge help with my move in the NorthSide GTA.";
@@ -158,6 +165,8 @@ export function useContactChannels() {
         key: "whatsapp",
         label: "WhatsApp",
         href: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(baseMessage)}`,
+        highlight: true,
+        badge: conciergeLabel,
       },
       instagramUrl && {
         key: "instagram",
@@ -172,7 +181,7 @@ export function useContactChannels() {
     ].filter(Boolean);
 
     return items;
-  }, []);
+  }, [config?.whatsappConciergeLabel]);
 }
 
 export function getFormEndpoint() {
