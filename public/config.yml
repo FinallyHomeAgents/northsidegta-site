@@ -159,11 +159,15 @@ collections:
         label: 'Form Thank-you Message'
         widget: 'text'
         required: false
-      - { name: 'seoTitle', label: 'SEO Title' }
+      - name: 'seoTitle'
+        label: 'SEO Title'
       - name: 'seoDescription'
         label: 'SEO Description'
         widget: 'text'
-      - { name: 'seoImage', label: 'SEO Image', widget: 'image', required: false }
+      - name: 'seoImage'
+        label: 'SEO Image'
+        widget: 'image'
+        required: false
       - name: 'jsonLd'
         label: 'Advanced JSON-LD Overrides'
         widget: 'object'
