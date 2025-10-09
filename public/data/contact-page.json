@@ -1,0 +1,71 @@
+{
+  "heroHeadline": "Glad you found us — let’s talk.",
+  "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
+  "responsePledge": "We reply within 1 hour, 9am–9pm.",
+  "coverageLine": "Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+  "heroPrimaryCtaLabel": "Send a Message",
+  "heroSecondaryCtaLabel": "Chat on WhatsApp",
+  "contactMicrocopy": "We usually reply in minutes.",
+  "trustBullets": [
+    "Local experts: we don’t just work here — we live here.",
+    "Concierge-level guidance from first chat to closing.",
+    "Fast, human replies (9am–9pm).",
+    "Neighborhood intel you won’t find on portals."
+  ],
+  "trustBadges": [
+    {
+      "label": "5.0 ★ on Google",
+      "image": "/Images/google-logo.png",
+      "alt": "Google reviews"
+    }
+  ],
+  "reviewsDisclaimer": "Real reviews from real clients.",
+  "reviews": [
+    {
+      "id": "susan-booth",
+      "name": "Susan B.",
+      "rating": 5,
+      "quote": "“Finally Home Agents exceeded our expectations selling in Holland Landing — concierge service from start to sold.”",
+      "date": "April 2023"
+    },
+    {
+      "id": "logan-a",
+      "name": "Logan A.",
+      "rating": 5,
+      "quote": "“First-time buyer jitters gone. Friendly, fast replies and local insight that helped me win.”",
+      "date": "June 2023"
+    },
+    {
+      "id": "jessica-l",
+      "name": "Jessica L.",
+      "rating": 5,
+      "quote": "“They made moving to the NorthSide GTA feel easy. True concierge experience.”",
+      "date": "February 2024"
+    }
+  ],
+  "showSchedulingCard": false,
+  "schedulingLabel": "Book a Call",
+  "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
+  "schedulingUrl": "",
+  "footerBrokerageCopy": "Real Broker Ontario Ltd., Brokerage — Finally Home Agents, REALTORS®",
+  "footerAreas": "Serving Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
+  "footerSecondaryLinks": [
+    { "label": "Community Events", "href": "/community" },
+    { "label": "Buyer’s Guide", "href": "/buyers" }
+  ],
+  "formThankYouMessage": "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
+  "seoTitle": "Contact Finally Home Agents | NorthSide GTA Real Estate Experts",
+  "seoDescription": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",
+  "seoImage": "/Images/northsidegta-map-bg.jpg",
+  "jsonLd": {
+    "sameAs": [],
+    "areaServed": [
+      "Uxbridge",
+      "Georgina",
+      "Scugog",
+      "Whitchurch-Stouffville",
+      "East Gwillimbury",
+      "Newmarket"
+    ]
+  }
+}

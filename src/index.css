@@ -10,6 +10,15 @@ body {
     'Noto Color Emoji';
 }
 
+.bottom-safe-bar {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+.reviews-carousel button:focus-visible {
+  outline: 3px solid #10b981;
+  outline-offset: 2px;
+}
+
 /* Map box sizing fix for mobile */
 #ns-map {
   min-height: 420px;   /* Always at least this tall */
