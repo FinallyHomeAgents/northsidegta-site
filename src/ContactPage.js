@@ -8,19 +8,17 @@ import TrustPanel from "./components/contact/TrustPanel";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
 import BookCallCard from "./components/contact/BookCallCard";
 import ContactFooterBand from "./components/contact/ContactFooterBand";
-import LegacyContactPage from "./components/contact/LegacyContactPage";
+// ⬇️ remove the Legacy import and the feature flag
+// import LegacyContactPage from "./components/contact/LegacyContactPage";
 import {
   useContactConfig,
   useContactChannels,
-  getContactFeatureEnabled,
+  // getContactFeatureEnabled, // remove this
   getJsonLd,
 } from "./components/contact/contactConfig";
 
 export default function ContactPage() {
-  const featureEnabled = getContactFeatureEnabled();
-  if (!featureEnabled) {
-    return <LegacyContactPage />;
-  }
+  // Always render the new version
   return <ContactPageV2 />;
 }
 
