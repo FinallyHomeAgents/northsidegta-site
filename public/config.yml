@@ -139,6 +139,11 @@ collections:
         fields:
           - { name: 'name', label: 'Name' }
           - { name: 'title', label: 'Title', required: false }
+          - { name: 'descriptor', label: 'Descriptor', required: false }
+          - { name: 'brokerage', label: 'Brokerage', required: false }
+          - { name: 'email', label: 'Email Link', required: false }
+          - { name: 'emailLabel', label: 'Email Label', required: false }
+          - { name: 'phoneLabel', label: 'Phone Label', required: false }
       - name: 'footerBrokerageCopy'
         label: 'Brokerage Copy'
         widget: 'text'

@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
   heroSubhead: "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
   responsePledge: "We reply within 1 hour, 9am–9pm.",
   coverageLine:
-    "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+    "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket • NorthSide GTA & beyond",
   heroBackgroundImage: "/Images/northsidegta-map-bg.jpg",
   heroBackgroundBlendMode: "multiply",
   heroBackgroundOpacity: 0.28,
@@ -39,12 +39,28 @@ const DEFAULT_CONFIG = {
   schedulingSubcopy: "Pick a time that works for you and we’ll confirm within the hour.",
   schedulingUrl: "",
   footerAgents: [
-    { name: "Matthew Mulhall", title: "Real Estate Agent" },
-    { name: "Landon Mulhall", title: "Real Estate Agent" },
+    {
+      name: "Matthew Mulhall",
+      title: "Real Estate Agent",
+      descriptor: "Finally Home Agents",
+      brokerage: "HomeLife Optimum Realty Brokerage",
+      email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
+      emailLabel: "contact@finallyhomeagents.com",
+      phoneLabel: "647-668-4646",
+    },
+    {
+      name: "Landon Mulhall",
+      title: "Real Estate Agent",
+      descriptor: "Finally Home Agents",
+      brokerage: "HomeLife Optimum Realty Brokerage",
+      email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
+      emailLabel: "contact@finallyhomeagents.com",
+      phoneLabel: "647-668-4646",
+    },
   ],
   footerBrokerageCopy: "Finally Home Agents • HomeLife Optimum Realty Brokerage",
   footerAreas:
-    "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
+    "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket — and the broader NorthSide GTA",
   footerSecondaryLinks: [
     { label: "Community Events", href: "/community" },
     { label: "Buyer’s Guide", href: "/buyers" },
@@ -95,9 +111,19 @@ function normalizeConfig(raw = {}) {
     ? raw.reviews.filter((item) => item && (item.quote || item.text))
     : DEFAULT_CONFIG.reviews;
 
-  merged.footerAgents = Array.isArray(raw.footerAgents)
+  merged.footerAgents = (Array.isArray(raw.footerAgents)
     ? raw.footerAgents.filter((agent) => agent && agent.name)
-    : DEFAULT_CONFIG.footerAgents;
+    : DEFAULT_CONFIG.footerAgents
+  ).map((agent) => ({
+    ...agent,
+    title: agent.title || "Real Estate Agent",
+    descriptor: agent.descriptor || "Finally Home Agents",
+    brokerage:
+      agent.brokerage || merged.footerBrokerageCopy || DEFAULT_CONFIG.footerBrokerageCopy,
+    email: agent.email || "mailto:contact@finallyhomeagents.com",
+    emailLabel: agent.emailLabel || "contact@finallyhomeagents.com",
+    phoneLabel: agent.phoneLabel || DEFAULT_CONFIG.footerAgents[0].phoneLabel,
+  }));
 
   merged.footerSecondaryLinks = Array.isArray(raw.footerSecondaryLinks)
     ? raw.footerSecondaryLinks.filter((link) => link && link.href && link.label)

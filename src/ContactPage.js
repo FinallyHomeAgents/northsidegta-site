@@ -76,7 +76,11 @@ function ContactPageV2() {
             <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]">
               <div className="space-y-6">
                 <div className="rounded-3xl bg-white p-6 shadow-lg shadow-emerald-50 ring-1 ring-slate-100">
-                  <SmartContactForm config={config} formRef={formRef} />
+                  <SmartContactForm
+                    config={config}
+                    formRef={formRef}
+                    whatsappChannel={whatsappChannel}
+                  />
                 </div>
               </div>
               <div className="space-y-6">

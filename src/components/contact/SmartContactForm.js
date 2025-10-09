@@ -11,7 +11,7 @@ const INTENT_OPTIONS = [
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function SmartContactForm({ config, formRef }) {
+export default function SmartContactForm({ config, formRef, whatsappChannel }) {
   const [intent, setIntent] = useState("buy");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,6 +31,13 @@ export default function SmartContactForm({ config, formRef }) {
   }, []);
 
   const formEndpoint = useMemo(() => getFormEndpoint(), []);
+
+  const conciergeWhatsApp = whatsappChannel?.href || null;
+  const whatsappBadge = whatsappChannel?.badge || config.whatsappConciergeLabel;
+  const primaryPhoneLabel = config?.footerAgents?.[0]?.phoneLabel || "647-668-4646";
+  const primaryPhoneHref = primaryPhoneLabel
+    ? `tel:${primaryPhoneLabel.replace(/[^0-9]/g, "")}`
+    : "";
 
   const validations = useMemo(() => {
     const errs = {};
@@ -136,15 +143,53 @@ export default function SmartContactForm({ config, formRef }) {
   if (success) {
     return (
       <div
-        className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6"
+        className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6"
         role="status"
         aria-live="polite"
       >
         <h3 className="text-xl font-semibold text-emerald-900">We received your message!</h3>
         <p className="mt-2 text-emerald-800">{config.formThankYouMessage}</p>
-        <p className="mt-4 text-sm text-emerald-700">
-          Prefer instant answers? Message us on WhatsApp or call — we usually reply in minutes.
-        </p>
+
+        <div className="mt-6 space-y-4">
+          {conciergeWhatsApp && (
+            <a
+              href={conciergeWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("click_whatsapp", { route: "/contact", source: "form_success" })
+              }
+              className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#25D366] to-[#128C7E] px-4 py-3 text-white shadow-lg shadow-emerald-900/20 transition hover:brightness-105"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 shadow-inner">
+                <WhatsAppGlyph className="h-5 w-5 text-white" />
+              </span>
+              <span className="flex flex-col text-left text-sm leading-tight">
+                <span className="text-base font-semibold">Talk to us on WhatsApp</span>
+                {whatsappBadge && (
+                  <span className="text-xs text-emerald-50/90">{whatsappBadge}</span>
+                )}
+              </span>
+              <span className="ml-auto flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/80">
+                <LightningIcon className="h-4 w-4" />
+                Instant
+              </span>
+            </a>
+          )}
+
+          {primaryPhoneHref && (
+            <p className="flex items-center gap-2 text-sm text-emerald-800">
+              <LightningIcon className="h-4 w-4 text-emerald-500" aria-hidden />
+              Prefer voice?{' '}
+              <a
+                href={primaryPhoneHref}
+                className="font-semibold text-emerald-900 underline underline-offset-4"
+              >
+                Call or text {primaryPhoneLabel}
+              </a>
+            </p>
+          )}
+        </div>
       </div>
     );
   }
@@ -342,5 +387,29 @@ function ToggleField({ id, checked, onChange, label }) {
       />
       <span>{label}</span>
     </label>
+  );
+}
+
+function WhatsAppGlyph({ className = "h-4 w-4 text-[#25D366]" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 24 24"
+      className={className}
+    >
+      <path
+        fill="currentColor"
+        d="M12 2.25c-5.37 0-9.75 4.38-9.75 9.75 0 1.72.45 3.39 1.31 4.88L2 22l5.29-1.51A9.7 9.7 0 0 0 12 21.75c5.37 0 9.75-4.38 9.75-9.75S17.37 2.25 12 2.25Zm0 17.5c-1.55 0-3.07-.41-4.42-1.2l-.32-.19-3.13.9.9-3.06-.2-.34A7.32 7.32 0 0 1 4.5 12C4.5 7.87 7.87 4.5 12 4.5s7.5 3.37 7.5 7.5-3.37 7.75-7.5 7.75Zm4.15-5.8c-.23-.12-1.35-.67-1.56-.75-.21-.08-.36-.12-.5.12-.15.23-.58.75-.71.91-.13.16-.26.18-.49.06-.23-.12-.98-.36-1.86-1.11-.69-.61-1.15-1.37-1.29-1.6-.13-.23-.01-.35.1-.47.1-.1.23-.26.34-.39.11-.13.15-.23.23-.39.08-.16.04-.3-.02-.42-.06-.12-.5-1.2-.69-1.64-.18-.44-.37-.38-.5-.39h-.43c-.15 0-.4.06-.61.3-.21.23-.8.78-.8 1.9 0 1.12.82 2.2.94 2.35.12.16 1.6 2.45 3.88 3.33.54.23.97.36 1.3.46.55.18 1.05.16 1.45.1.44-.07 1.35-.55 1.55-1.09.19-.54.19-1 .13-1.09-.06-.09-.21-.15-.44-.27Z"
+      />
+    </svg>
+  );
+}
+
+function LightningIcon({ className = "h-4 w-4 text-white" }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden>
+      <path d="M11.3 1.3a1 1 0 0 1 1.8.7l-.4 5h4.3a1 1 0 0 1 .8 1.6l-7.5 10.5a1 1 0 0 1-1.8-.7l.4-5H4a1 1 0 0 1-.8-1.6Z" />
+    </svg>
   );
 }

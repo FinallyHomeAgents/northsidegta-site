@@ -53,4 +53,49 @@ export const CANONICAL_TESTIMONIALS = [
     rating: 5,
     date: "May 2022",
   },
+  {
+    id: "alicia-darnell",
+    name: "Alicia & Darnell",
+    shortName: "Alicia & D.",
+    quote:
+      "“Finally Home Agents helped us land our dream home in East Gwillimbury. No pressure — just honest advice and expert support.”",
+    rating: 5,
+    date: "February 2024",
+  },
+  {
+    id: "tariq-steph",
+    name: "Tariq & Steph",
+    shortName: "Tariq & S.",
+    quote:
+      "“We moved up from Toronto and they made everything easy — from area advice to offer negotiation. Highly recommend.”",
+    rating: 5,
+    date: "August 2023",
+  },
+  {
+    id: "melissa-grant",
+    name: "Melissa Grant",
+    shortName: "Melissa G.",
+    quote:
+      "“Matthew and Landon guided us through selling and buying in the same week. Their calm strategy and constant communication were unmatched.”",
+    rating: 5,
+    date: "November 2023",
+  },
+  {
+    id: "brandon-li",
+    name: "Brandon Li",
+    shortName: "Brandon L.",
+    quote:
+      "“Concierge-style service is real — daily WhatsApp updates, video walkthroughs, and smart negotiation. We always felt ahead of the market.”",
+    rating: 5,
+    date: "March 2024",
+  },
+  {
+    id: "emily-chris-martin",
+    name: "Emily & Chris Martin",
+    shortName: "Emily & C.",
+    quote:
+      "“From the first consult to the keys in our hand, Finally Home Agents treated us like VIP athletes. Fast replies, hyper-local intel, and genuine care.”",
+    rating: 5,
+    date: "July 2024",
+  },
 ];

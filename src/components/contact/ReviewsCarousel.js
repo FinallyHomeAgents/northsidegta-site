@@ -73,7 +73,7 @@ export default function ReviewsCarousel({ reviews = [], disclaimer }) {
           {normalized.map((review, index) => (
             <article
               key={review.id}
-              className={`transition-all duration-700 ${
+              className={`transition-all duration-700 px-2 sm:px-6 lg:px-10 ${
                 index === active
                   ? "relative opacity-100"
                   : "pointer-events-none absolute inset-0 opacity-0"
@@ -90,7 +90,7 @@ export default function ReviewsCarousel({ reviews = [], disclaimer }) {
                   />
                   Google Verified
                 </div>
-                <span className="text-xs text-emerald-500">NorthSide GTA clients</span>
+                <span className="text-xs text-emerald-500">Finally Home Agents clients</span>
               </header>
               <p className="mt-6 text-lg leading-relaxed text-emerald-950 sm:text-xl">
                 {review.quote}
@@ -113,7 +113,7 @@ export default function ReviewsCarousel({ reviews = [], disclaimer }) {
           ))}
 
           {showControls && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
+            <div className="pointer-events-none absolute left-0 right-0 top-1/2 flex -translate-y-1/2 items-center justify-between px-2">
               <button
                 type="button"
                 onClick={() => handleMove("prev")}

@@ -42,21 +42,25 @@ export default function ContactChannelBar({ channels, microcopy }) {
   return (
     <aside className="relative z-30 -mt-12 mb-6 md:mb-10">
       <div className="mx-auto hidden max-w-6xl px-4 md:block">
-        <div className="rounded-3xl bg-white/90 shadow-xl shadow-emerald-900/5 backdrop-blur ring-1 ring-emerald-100">
-          <div className="flex flex-col gap-5 px-5 py-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-emerald-700">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shadow-inner">
-                  ●
-                </span>
-                {microcopy || "We usually reply in minutes."}
+        <div className="rounded-3xl bg-white/95 shadow-xl shadow-emerald-900/5 backdrop-blur ring-1 ring-emerald-100">
+          <div className="flex flex-col gap-6 px-6 py-7 lg:px-9">
+            <div className="flex flex-wrap items-start justify-between gap-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-600">
+                  Concierge desk
+                </p>
+                <p className="mt-2 text-sm font-medium text-emerald-800">
+                  {microcopy || "We usually reply in minutes."}
+                </p>
               </div>
               <div className="flex items-center gap-2 text-xs text-emerald-600">
-                <span className="rounded-full bg-emerald-100 px-3 py-1 font-semibold uppercase tracking-[0.25em]">Concierge</span>
+                <span className="rounded-full bg-emerald-100 px-3 py-1 font-semibold uppercase tracking-[0.25em]">
+                  Premium access
+                </span>
                 <span>Call · Text · Email · WhatsApp · Social</span>
               </div>
             </div>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {channels.map((item) => (
                 <ChannelButton key={item.key} item={item} onClick={() => handleClick(item.key)} />
               ))}
@@ -66,12 +70,18 @@ export default function ContactChannelBar({ channels, microcopy }) {
       </div>
 
       <div className="md:hidden fixed inset-x-4 bottom-safe-bar">
-        <div className="rounded-3xl bg-emerald-900/95 p-3 shadow-2xl shadow-emerald-950/40 ring-1 ring-emerald-500/30 backdrop-blur">
-          {(microcopy || "We usually reply in minutes.") && (
-            <div className="mb-2 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100">
+        <div className="rounded-3xl bg-emerald-900/95 p-4 shadow-2xl shadow-emerald-950/40 ring-1 ring-emerald-500/30 backdrop-blur">
+          <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100">
+            <span className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" aria-hidden />
+              Concierge desk
+            </span>
+            <span className="text-emerald-200/80">Always on</span>
+          </div>
+          {(microcopy || "We usually reply in minutes.") && (
+            <p className="mt-2 text-[11px] font-medium text-emerald-100/90">
               {microcopy || "We usually reply in minutes."}
-            </div>
+            </p>
           )}
           <div className="flex divide-x divide-white/10">
             {channels.map((item) => (
