@@ -81,9 +81,18 @@ collections:
         widget: 'text'
       - { name: 'responsePledge', label: 'Response-time Pledge', required: false }
       - { name: 'coverageLine', label: 'Coverage Line', required: false }
+      - { name: 'heroBackgroundImage', label: 'Hero Background Image', widget: 'image', required: false }
+      - { name: 'heroBackgroundBlendMode', label: 'Hero Background Blend Mode', required: false }
+      - name: 'heroBackgroundOpacity'
+        label: 'Hero Background Opacity (0-1)'
+        widget: 'number'
+        min: 0
+        max: 1
+        step: 0.05
       - { name: 'heroPrimaryCtaLabel', label: 'Primary CTA Label', required: false }
       - { name: 'heroSecondaryCtaLabel', label: 'Secondary CTA Label', required: false }
       - { name: 'whatsappConciergeLabel', label: 'WhatsApp Concierge Label', required: false }
+      - { name: 'defaultWhatsAppNumber', label: 'WhatsApp Number Fallback (digits only)', required: false }
       - { name: 'contactMicrocopy', label: 'Contact Microcopy', required: false }
       - name: 'trustBullets'
         label: 'Trust Bullets'
@@ -123,6 +132,13 @@ collections:
         widget: 'text'
         required: false
       - { name: 'schedulingUrl', label: 'Scheduling URL', required: false }
+      - name: 'footerAgents'
+        label: 'Footer Agents'
+        widget: 'list'
+        required: false
+        fields:
+          - { name: 'name', label: 'Name' }
+          - { name: 'title', label: 'Title', required: false }
       - name: 'footerBrokerageCopy'
         label: 'Brokerage Copy'
         widget: 'text'

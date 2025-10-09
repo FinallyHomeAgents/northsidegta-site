@@ -3,12 +3,14 @@ import { trackEvent } from "../../utils/analytics";
 
 function normalizeReview(review, index) {
   if (!review) return null;
+  const displayName = review.shortName || review.name || review.reviewer || "Client";
   return {
     id: review.id || `${index}`,
-    name: review.name || review.reviewer || "Client",
+    name: displayName,
     rating: Number(review.rating || 5),
     quote: review.quote || review.text || "",
     date: review.date || "",
+    fullName: review.name || review.reviewer || displayName,
   };
 }
 
@@ -63,73 +65,91 @@ export default function ReviewsCarousel({ reviews = [], disclaimer }) {
     return null;
   }
 
-  const renderStars = (rating) => {
-    const rounded = Math.round(rating || 5);
-    return Array.from({ length: rounded }).map((_, idx) => (
-      <span key={idx}>★</span>
-    ));
-  };
-
   return (
-    <section className="space-y-4 reviews-carousel" aria-live="polite">
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600" />
-        <div className="grid gap-4 p-6 sm:p-8">
+    <section className="space-y-6 reviews-carousel" aria-live="polite">
+      <div className="relative overflow-hidden rounded-[32px] border border-emerald-100 bg-white/80 p-1 shadow-xl shadow-emerald-900/5 backdrop-blur">
+        <div className="absolute inset-x-8 top-0 h-[2px] bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600" aria-hidden />
+        <div className="relative rounded-[28px] bg-white p-6 sm:p-10">
           {normalized.map((review, index) => (
             <article
               key={review.id}
-              className={`transition-opacity duration-700 ${index === active ? "opacity-100" : "opacity-0 pointer-events-none absolute"}`}
+              className={`transition-all duration-700 ${
+                index === active
+                  ? "relative opacity-100"
+                  : "pointer-events-none absolute inset-0 opacity-0"
+              }`}
               aria-hidden={index !== active}
             >
-              <header className="flex items-center gap-3 text-slate-700">
-                <img
-                  src="/Images/google-logo.png"
-                  alt="Google"
-                  className="h-6 w-6 object-contain"
-                  loading="lazy"
-                />
-                <p className="text-sm font-semibold tracking-wide uppercase text-slate-400">
-                  Real clients
-                </p>
+              <header className="flex flex-wrap items-center gap-3 text-emerald-700">
+                <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">
+                  <img
+                    src="/Images/google-logo.png"
+                    alt="Google reviews"
+                    className="h-4 w-4 object-contain"
+                    loading="lazy"
+                  />
+                  Google Verified
+                </div>
+                <span className="text-xs text-emerald-500">NorthSide GTA clients</span>
               </header>
-              <p className="mt-4 text-lg text-slate-900 italic">{review.quote}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                <strong className="text-base text-slate-900">
-                  {review.name}
-                </strong>
-                <span aria-hidden="true">•</span>
-                <span className="flex items-center gap-1 text-amber-500" aria-label={`${review.rating || 5} star review`}>
-                  {renderStars(review.rating)}
-                </span>
-                {review.date && <time className="text-xs text-slate-400">{review.date}</time>}
+              <p className="mt-6 text-lg leading-relaxed text-emerald-950 sm:text-xl">
+                {review.quote}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-emerald-700">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-emerald-800">
+                  <Stars rating={review.rating} />
+                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700/80">
+                    5.0 rating
+                  </span>
+                </div>
+                <span className="font-semibold text-emerald-900">{review.name}</span>
+                {review.date && (
+                  <time className="text-xs uppercase tracking-[0.2em] text-emerald-500/80">
+                    {review.date}
+                  </time>
+                )}
               </div>
             </article>
           ))}
+
+          {showControls && (
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2">
+              <button
+                type="button"
+                onClick={() => handleMove("prev")}
+                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                aria-label="Previous review"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={() => handleMove("next")}
+                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                aria-label="Next review"
+              >
+                ›
+              </button>
+            </div>
+          )}
         </div>
-        {showControls && (
-          <div className="absolute inset-0 flex items-center justify-between px-2">
-            <button
-              type="button"
-              onClick={() => handleMove("prev")}
-              className="rounded-full bg-white/90 px-3 py-2 shadow focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              aria-label="Previous review"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={() => handleMove("next")}
-              className="rounded-full bg-white/90 px-3 py-2 shadow focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              aria-label="Next review"
-            >
-              ›
-            </button>
-          </div>
-        )}
       </div>
       {disclaimer && (
-        <p className="text-xs text-slate-400 text-center">{disclaimer}</p>
+        <p className="text-xs text-center uppercase tracking-[0.3em] text-emerald-500/80">
+          {disclaimer}
+        </p>
       )}
     </section>
+  );
+}
+
+function Stars({ rating }) {
+  const rounded = Math.round(rating || 5);
+  return (
+    <span className="flex items-center gap-0.5 text-[#FBBC05]">
+      {Array.from({ length: rounded }).map((_, idx) => (
+        <span key={idx}>★</span>
+      ))}
+    </span>
   );
 }

@@ -3,9 +3,13 @@
   "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
   "responsePledge": "We reply within 1 hour, 9am–9pm.",
   "coverageLine": "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+  "heroBackgroundImage": "/Images/northsidegta-map-bg.jpg",
+  "heroBackgroundBlendMode": "multiply",
+  "heroBackgroundOpacity": 0.22,
   "heroPrimaryCtaLabel": "Send a Message",
   "heroSecondaryCtaLabel": "Chat on WhatsApp",
   "whatsappConciergeLabel": "Priority concierge replies for buyers & sellers.",
+  "defaultWhatsAppNumber": "16476684646",
   "contactMicrocopy": "We usually reply in minutes.",
   "trustBullets": [
     "Local experts: we don’t just work here — we live here.",
@@ -21,34 +25,16 @@
     }
   ],
   "reviewsDisclaimer": "Real reviews from real clients.",
-  "reviews": [
-    {
-      "id": "susan-booth",
-      "name": "Susan B.",
-      "rating": 5,
-      "quote": "“Finally Home Agents exceeded our expectations selling in Holland Landing — concierge service from start to sold.”",
-      "date": "April 2023"
-    },
-    {
-      "id": "logan-a",
-      "name": "Logan A.",
-      "rating": 5,
-      "quote": "“First-time buyer jitters gone. Friendly, fast replies and local insight that helped me win.”",
-      "date": "June 2023"
-    },
-    {
-      "id": "jessica-l",
-      "name": "Jessica L.",
-      "rating": 5,
-      "quote": "“They made moving to the NorthSide GTA feel easy. True concierge experience.”",
-      "date": "February 2024"
-    }
-  ],
+  "reviews": [],
   "showSchedulingCard": false,
   "schedulingLabel": "Book a Call",
   "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
   "schedulingUrl": "",
-  "footerBrokerageCopy": "Real Broker Ontario Ltd., Brokerage — Finally Home Agents, REALTORS®",
+  "footerAgents": [
+    { "name": "Matthew Mulhall", "title": "Real Estate Agent" },
+    { "name": "Landon Mulhall", "title": "Real Estate Agent" }
+  ],
+  "footerBrokerageCopy": "Finally Home Agents • HomeLife Optimum Realty Brokerage",
   "footerAreas": "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
   "footerSecondaryLinks": [
     { "label": "Community Events", "href": "/community" },

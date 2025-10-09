@@ -4,9 +4,9 @@ import { getFormEndpoint } from "./contactConfig";
 import { trackEvent } from "../../utils/analytics";
 
 const INTENT_OPTIONS = [
-  { value: "buy", label: "Buy" },
-  { value: "sell", label: "Sell" },
-  { value: "browse", label: "Just browsing" },
+  { value: "buy", label: "Buy", description: "I want help finding the right home." },
+  { value: "sell", label: "Sell", description: "I’m ready to list or curious about value." },
+  { value: "browse", label: "Just browsing", description: "Gathering intel for a future move." },
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -150,98 +150,102 @@ export default function SmartContactForm({ config, formRef }) {
   }
 
   return (
-    <form ref={formRef || null} onSubmit={onSubmit} className="space-y-5" aria-live="assertive">
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold text-slate-700">Tell us about your move</legend>
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">I’m looking to</p>
-        <div className="flex flex-wrap gap-2">
-          {INTENT_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              className={
-                "px-4 py-2 rounded-full border text-sm font-medium transition " +
-                (intent === option.value
-                  ? "bg-emerald-600 border-emerald-600 text-white"
-                  : "bg-white border-slate-200 text-slate-700 hover:border-emerald-400 hover:text-emerald-600")
-              }
-              onClick={() => setIntent(option.value)}
-            >
-              {option.label}
-            </button>
-          ))}
+    <form
+      ref={formRef || null}
+      onSubmit={onSubmit}
+      className="space-y-7"
+      aria-live="assertive"
+    >
+      <fieldset className="rounded-3xl border border-emerald-100 bg-emerald-50/40 px-5 py-5">
+        <legend className="px-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+          Tell us about your move
+        </legend>
+        <p id="contact-intent-helper" className="mt-2 text-sm font-medium text-emerald-900">
+          I’m looking to…
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3" role="radiogroup" aria-labelledby="contact-intent-helper">
+          {INTENT_OPTIONS.map((option) => {
+            const checked = intent === option.value;
+            return (
+              <label
+                key={option.value}
+                htmlFor={`intent-${option.value}`}
+                className={`group flex cursor-pointer flex-col gap-2 rounded-2xl border px-4 py-3 transition focus-within:ring-2 focus-within:ring-emerald-500 ${
+                  checked
+                    ? "border-emerald-500 bg-white shadow shadow-emerald-100"
+                    : "border-emerald-100 bg-white/60 hover:border-emerald-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-emerald-900">{option.label}</span>
+                  <span
+                    aria-hidden
+                    className={`h-5 w-5 rounded-full border-2 transition ${
+                      checked
+                        ? "border-emerald-500 bg-emerald-500"
+                        : "border-emerald-200 bg-white"
+                    }`}
+                  >
+                    <span className="sr-only">{checked ? "Selected" : ""}</span>
+                  </span>
+                </div>
+                <span className="text-xs text-emerald-700/80">{option.description}</span>
+                <input
+                  id={`intent-${option.value}`}
+                  type="radio"
+                  name="intent"
+                  value={option.value}
+                  checked={checked}
+                  onChange={() => setIntent(option.value)}
+                  className="sr-only"
+                />
+              </label>
+            );
+          })}
         </div>
       </fieldset>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="contact-name" className="text-sm font-medium text-slate-700">
-            Name
-          </label>
-          <input
-            id="contact-name"
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="rounded-lg border border-slate-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="Your name"
-            aria-invalid={Boolean(visibleErrors.name)}
-          />
-          {visibleErrors.name && (
-            <p className="text-sm text-rose-600">{visibleErrors.name}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="contact-email" className="text-sm font-medium text-slate-700">
-            Email
-          </label>
-          <input
-            id="contact-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-slate-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="you@example.com"
-            aria-invalid={Boolean(visibleErrors.email)}
-          />
-          {visibleErrors.email && (
-            <p className="text-sm text-rose-600">{visibleErrors.email}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <FormField
+          id="contact-name"
+          label="Name"
+          required
+          value={name}
+          onChange={setName}
+          placeholder="Your name"
+          error={visibleErrors.name}
+        />
+        <FormField
+          id="contact-email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={setEmail}
+          placeholder="you@example.com"
+          error={visibleErrors.email}
+        />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="contact-phone" className="text-sm font-medium text-slate-700">
-            Phone
-          </label>
-          <input
-            id="contact-phone"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="rounded-lg border border-slate-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="(xxx) xxx-xxxx"
-            aria-invalid={Boolean(visibleErrors.phone)}
-          />
-          {visibleErrors.phone && (
-            <p className="text-sm text-rose-600">{visibleErrors.phone}</p>
-          )}
-          {visibleErrors.contact && (
-            <p className="text-sm text-rose-600">{visibleErrors.contact}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="contact-message" className="text-sm font-medium text-slate-700">
-            Message (optional)
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <FormField
+          id="contact-phone"
+          label="Phone"
+          type="tel"
+          value={phone}
+          onChange={setPhone}
+          placeholder="(xxx) xxx-xxxx"
+          error={visibleErrors.phone || visibleErrors.contact}
+        />
+        <div className="flex flex-col gap-2">
+          <label htmlFor="contact-message" className="text-sm font-semibold text-emerald-900">
+            Message <span className="text-emerald-700/60">(optional)</span>
           </label>
           <textarea
             id="contact-message"
-            rows={intent === "browse" ? 2 : 4}
+            rows={intent === "browse" ? 3 : 4}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="rounded-lg border border-slate-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="min-h-[110px] rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-base text-emerald-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             placeholder={
               intent === "sell"
                 ? "Share your property address or timing"
@@ -253,29 +257,24 @@ export default function SmartContactForm({ config, formRef }) {
         </div>
       </div>
 
-      {intent === "sell" && (
-        <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-          <input
-            type="checkbox"
+      <div className="grid gap-3 sm:grid-cols-2">
+        {intent === "sell" && (
+          <ToggleField
+            id="intent-sell-opt"
             checked={sellerOptIn}
-            onChange={(e) => setSellerOptIn(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            onChange={setSellerOptIn}
+            label="Want a free home value estimate?"
           />
-          <span>Want a free home value estimate?</span>
-        </label>
-      )}
-
-      {intent === "buy" && (
-        <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-          <input
-            type="checkbox"
+        )}
+        {intent === "buy" && (
+          <ToggleField
+            id="intent-buy-opt"
             checked={buyerOptIn}
-            onChange={(e) => setBuyerOptIn(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            onChange={setBuyerOptIn}
+            label="Want listings emailed daily?"
           />
-          <span>Want listings emailed daily?</span>
-        </label>
-      )}
+        )}
+      </div>
 
       <div className="hidden" aria-hidden="true">
         <label htmlFor="company">Company</label>
@@ -292,12 +291,56 @@ export default function SmartContactForm({ config, formRef }) {
       {error && <p className="text-sm text-rose-600">{error}</p>}
 
       {showAllGood && (
-        <p className="text-sm text-emerald-600">Your message looks great — send it when you’re ready.</p>
+        <p className="text-sm font-medium text-emerald-700">
+          Your message looks great — send it when you’re ready.
+        </p>
       )}
 
       <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
         {submitting ? "Sending…" : "Send Message"}
       </Button>
     </form>
+  );
+}
+
+function FormField({ id, label, value, onChange, type = "text", required, placeholder, error }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-sm font-semibold text-emerald-900">
+        {label}
+        {required && <span className="ml-1 text-emerald-700/60">*</span>}
+      </label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        required={required}
+        onChange={(e) => onChange(e.target.value)}
+        className={`rounded-2xl border px-4 py-3 text-base text-emerald-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-200 ${
+          error ? "border-rose-400" : "border-emerald-100 bg-white"
+        }`}
+        placeholder={placeholder}
+        aria-invalid={Boolean(error)}
+      />
+      {error && <p className="text-sm text-rose-600">{error}</p>}
+    </div>
+  );
+}
+
+function ToggleField({ id, checked, onChange, label }) {
+  return (
+    <label
+      htmlFor={id}
+      className="flex cursor-pointer items-center gap-3 rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm text-emerald-800 shadow-sm transition hover:border-emerald-300"
+    >
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-4 w-4 rounded border-emerald-200 text-emerald-600 focus:ring-emerald-500"
+      />
+      <span>{label}</span>
+    </label>
   );
 }

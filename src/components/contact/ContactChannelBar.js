@@ -40,37 +40,48 @@ export default function ContactChannelBar({ channels, microcopy }) {
   };
 
   return (
-    <aside className="relative z-30">
-      <div className="hidden md:flex flex-wrap items-center justify-center gap-3 py-5">
-        {microcopy && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100/60 bg-emerald-50/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-700 shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden />
-            {microcopy}
+    <aside className="relative z-30 -mt-12 mb-6 md:mb-10">
+      <div className="mx-auto hidden max-w-6xl px-4 md:block">
+        <div className="rounded-3xl bg-white/90 shadow-xl shadow-emerald-900/5 backdrop-blur ring-1 ring-emerald-100">
+          <div className="flex flex-col gap-5 px-5 py-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.25em] text-emerald-700">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shadow-inner">
+                  ●
+                </span>
+                {microcopy || "We usually reply in minutes."}
+              </div>
+              <div className="flex items-center gap-2 text-xs text-emerald-600">
+                <span className="rounded-full bg-emerald-100 px-3 py-1 font-semibold uppercase tracking-[0.25em]">Concierge</span>
+                <span>Call · Text · Email · WhatsApp · Social</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              {channels.map((item) => (
+                <ChannelButton key={item.key} item={item} onClick={() => handleClick(item.key)} />
+              ))}
+            </div>
           </div>
-        )}
-        {channels.map((item) => (
-          <ChannelButton key={item.key} item={item} onClick={() => handleClick(item.key)} />
-        ))}
+        </div>
       </div>
 
       <div className="md:hidden fixed inset-x-4 bottom-safe-bar">
-        <div className="flex flex-col items-center gap-2">
-          {microcopy && (
-            <div className="rounded-full bg-white/90 backdrop-blur text-emerald-700 text-xs font-medium px-4 py-1 shadow">
-              {microcopy}
+        <div className="rounded-3xl bg-emerald-900/95 p-3 shadow-2xl shadow-emerald-950/40 ring-1 ring-emerald-500/30 backdrop-blur">
+          {(microcopy || "We usually reply in minutes.") && (
+            <div className="mb-2 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100">
+              <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" aria-hidden />
+              {microcopy || "We usually reply in minutes."}
             </div>
           )}
-          <div className="w-full rounded-2xl bg-slate-900/95 text-white shadow-lg shadow-slate-900/20 ring-1 ring-black/10">
-            <div className="flex divide-x divide-white/10">
-              {channels.map((item) => (
-                <ChannelButton
-                  key={item.key}
-                  item={item}
-                  compact
-                  onClick={() => handleClick(item.key)}
-                />
-              ))}
-            </div>
+          <div className="flex divide-x divide-white/10">
+            {channels.map((item) => (
+              <ChannelButton
+                key={item.key}
+                item={item}
+                compact
+                onClick={() => handleClick(item.key)}
+              />
+            ))}
           </div>
         </div>
       </div>

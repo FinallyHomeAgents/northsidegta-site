@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { CANONICAL_TESTIMONIALS } from "../../data/testimonials";
 
 const CONTACT_JSON_PATH = "/data/contact-page.json";
+
+const DEFAULT_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
+  id: review.id,
+  name: review.shortName || review.name,
+  rating: review.rating || 5,
+  quote: review.quote,
+  date: review.date,
+}));
 
 const DEFAULT_CONFIG = {
   heroHeadline: "Glad you found us — let’s talk.",
@@ -8,9 +17,13 @@ const DEFAULT_CONFIG = {
   responsePledge: "We reply within 1 hour, 9am–9pm.",
   coverageLine:
     "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket",
+  heroBackgroundImage: "/Images/northsidegta-map-bg.jpg",
+  heroBackgroundBlendMode: "multiply",
+  heroBackgroundOpacity: 0.28,
   heroPrimaryCtaLabel: "Send a Message",
   heroSecondaryCtaLabel: "Chat on WhatsApp",
   whatsappConciergeLabel: "Concierge on WhatsApp — priority replies",
+  defaultWhatsAppNumber: "16476684646",
   contactMicrocopy: "We usually reply in minutes.",
   trustBullets: [
     "Local experts: we don’t just work here — we live here.",
@@ -19,14 +32,17 @@ const DEFAULT_CONFIG = {
     "Neighborhood intel you won’t find on portals.",
   ],
   trustBadges: [],
-  reviews: [],
+  reviews: DEFAULT_REVIEWS,
   reviewsDisclaimer: "Real reviews from real clients.",
   showSchedulingCard: false,
   schedulingLabel: "Book a Call",
   schedulingSubcopy: "Pick a time that works for you and we’ll confirm within the hour.",
   schedulingUrl: "",
-  footerBrokerageCopy:
-    "Real Broker Ontario Ltd., Brokerage — Finally Home Agents, REALTORS®",
+  footerAgents: [
+    { name: "Matthew Mulhall", title: "Real Estate Agent" },
+    { name: "Landon Mulhall", title: "Real Estate Agent" },
+  ],
+  footerBrokerageCopy: "Finally Home Agents • HomeLife Optimum Realty Brokerage",
   footerAreas:
     "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket",
   footerSecondaryLinks: [
@@ -75,9 +91,13 @@ function normalizeConfig(raw = {}) {
     ? raw.trustBadges.filter((item) => item && (item.image || item.label))
     : DEFAULT_CONFIG.trustBadges;
 
-  merged.reviews = Array.isArray(raw.reviews)
+  merged.reviews = Array.isArray(raw.reviews) && raw.reviews.length > 0
     ? raw.reviews.filter((item) => item && (item.quote || item.text))
     : DEFAULT_CONFIG.reviews;
+
+  merged.footerAgents = Array.isArray(raw.footerAgents)
+    ? raw.footerAgents.filter((agent) => agent && agent.name)
+    : DEFAULT_CONFIG.footerAgents;
 
   merged.footerSecondaryLinks = Array.isArray(raw.footerSecondaryLinks)
     ? raw.footerSecondaryLinks.filter((link) => link && link.href && link.label)
@@ -96,6 +116,29 @@ function normalizeConfig(raw = {}) {
   }
   if (!merged.whatsappConciergeLabel) {
     merged.whatsappConciergeLabel = DEFAULT_CONFIG.whatsappConciergeLabel;
+  }
+  if (!merged.defaultWhatsAppNumber) {
+    merged.defaultWhatsAppNumber = DEFAULT_CONFIG.defaultWhatsAppNumber;
+  }
+  merged.defaultWhatsAppNumber = (merged.defaultWhatsAppNumber || "")
+    .toString()
+    .replace(/[^0-9]/g, "");
+  if (!merged.heroBackgroundImage) {
+    merged.heroBackgroundImage = DEFAULT_CONFIG.heroBackgroundImage;
+  }
+  if (!merged.heroBackgroundBlendMode) {
+    merged.heroBackgroundBlendMode = DEFAULT_CONFIG.heroBackgroundBlendMode;
+  }
+  if (typeof merged.heroBackgroundOpacity !== "number") {
+    const parsed = Number.parseFloat(merged.heroBackgroundOpacity);
+    merged.heroBackgroundOpacity = Number.isFinite(parsed)
+      ? parsed
+      : DEFAULT_CONFIG.heroBackgroundOpacity;
+  }
+  if (merged.heroBackgroundOpacity < 0) {
+    merged.heroBackgroundOpacity = 0;
+  } else if (merged.heroBackgroundOpacity > 1) {
+    merged.heroBackgroundOpacity = 1;
   }
   if (!merged.reviewsDisclaimer) {
     merged.reviewsDisclaimer = DEFAULT_CONFIG.reviewsDisclaimer;
@@ -137,7 +180,7 @@ export function useContactChannels(config) {
   return useMemo(() => {
     const phone = envValue("PUBLIC_PHONE");
     const sms = envValue("PUBLIC_SMS") || phone;
-    const whatsappNumber = envValue("PUBLIC_WHATSAPP_NUMBER");
+    const whatsappNumber = envValue("PUBLIC_WHATSAPP_NUMBER") || config?.defaultWhatsAppNumber;
     const instagramUrl = envValue("PUBLIC_INSTAGRAM_URL");
     const facebookUrl = envValue("PUBLIC_FACEBOOK_URL");
     const conciergeLabel = config?.whatsappConciergeLabel;
@@ -181,7 +224,7 @@ export function useContactChannels(config) {
     ].filter(Boolean);
 
     return items;
-  }, [config?.whatsappConciergeLabel]);
+  }, [config?.whatsappConciergeLabel, config?.defaultWhatsAppNumber]);
 }
 
 export function getFormEndpoint() {
