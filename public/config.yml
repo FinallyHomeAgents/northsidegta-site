@@ -70,95 +70,97 @@ collections:
 
   - name: 'contact-page'
     label: 'Contact Page'
-    delete: false
-    file: 'public/data/contact-page.json'
-    extension: 'json'
-    format: 'json'
-    fields:
-      - { name: 'heroHeadline', label: 'Hero Headline' }
-      - name: 'heroSubhead'
-        label: 'Hero Subhead'
-        widget: 'text'
-      - { name: 'responsePledge', label: 'Response-time Pledge', required: false }
-      - { name: 'coverageLine', label: 'Coverage Line', required: false }
-      - { name: 'heroBackgroundImage', label: 'Hero Background Image', widget: 'image', required: false }
-      - { name: 'heroBackgroundBlendMode', label: 'Hero Background Blend Mode', required: false }
-      - name: 'heroBackgroundOpacity'
-        label: 'Hero Background Opacity (0-1)'
-        widget: 'number'
-        min: 0
-        max: 1
-        step: 0.05
-      - { name: 'heroPrimaryCtaLabel', label: 'Primary CTA Label', required: false }
-      - { name: 'heroSecondaryCtaLabel', label: 'Secondary CTA Label', required: false }
-      - { name: 'whatsappConciergeLabel', label: 'WhatsApp Concierge Label', required: false }
-      - { name: 'defaultWhatsAppNumber', label: 'WhatsApp Number Fallback (digits only)', required: false }
-      - { name: 'contactMicrocopy', label: 'Contact Microcopy', required: false }
-      - name: 'trustBullets'
-        label: 'Trust Bullets'
-        widget: 'list'
-        field:
-          name: 'bullet'
-          label: 'Bullet'
-      - name: 'trustBadges'
-        label: 'Trust Badges'
-        widget: 'list'
-        required: false
+    files:
+      - name: 'contact-page'
+        label: 'Contact Page'
+        file: 'public/data/contact-page.json'
+        delete: false
+        extension: 'json'
+        format: 'json'
         fields:
-          - { name: 'label', label: 'Label', required: false }
-          - { name: 'image', label: 'Image', widget: 'image', required: false }
-          - { name: 'alt', label: 'Alt Text', required: false }
-      - { name: 'reviewsDisclaimer', label: 'Reviews Disclaimer', required: false }
-      - name: 'reviews'
-        label: 'Reviews'
-        widget: 'list'
-        required: false
-        fields:
-          - { name: 'name', label: 'Reviewer Name' }
-          - name: 'rating'
-            label: 'Rating'
-            widget: 'number'
-            min: 1
-            max: 5
-            default: 5
-          - name: 'quote'
-            label: 'Quote'
+          - { name: 'heroHeadline', label: 'Hero Headline' }
+          - name: 'heroSubhead'
+            label: 'Hero Subhead'
             widget: 'text'
-          - { name: 'date', label: 'Date', required: false }
-      - { name: 'showSchedulingCard', label: 'Show Scheduling Card', widget: 'boolean', required: false, default: false }
-      - { name: 'schedulingLabel', label: 'Scheduling CTA Label', required: false }
-      - name: 'schedulingSubcopy'
-        label: 'Scheduling Subcopy'
-        widget: 'text'
-        required: false
-      - { name: 'schedulingUrl', label: 'Scheduling URL', required: false }
-      - name: 'footerAgents'
-        label: 'Footer Agents'
-        widget: 'list'
-        required: false
-        fields:
-          - { name: 'name', label: 'Name' }
-          - { name: 'title', label: 'Title', required: false }
-          - { name: 'descriptor', label: 'Descriptor', required: false }
-          - { name: 'brokerage', label: 'Brokerage', required: false }
-          - { name: 'email', label: 'Email Link', required: false }
-          - { name: 'emailLabel', label: 'Email Label', required: false }
-          - { name: 'phoneLabel', label: 'Phone Label', required: false }
-      - name: 'footerBrokerageCopy'
-        label: 'Brokerage Copy'
-        widget: 'text'
-      - { name: 'footerAreas', label: 'Service Areas', required: false }
-      - name: 'footerSecondaryLinks'
-        label: 'Footer Secondary Links'
-        widget: 'list'
-        required: false
-        fields:
-          - { name: 'label', label: 'Label' }
-          - { name: 'href', label: 'URL' }
-      - name: 'formThankYouMessage'
-        label: 'Form Thank-you Message'
-        widget: 'text'
-        required: false
+          - { name: 'responsePledge', label: 'Response-time Pledge', required: false }
+          - { name: 'coverageLine', label: 'Coverage Line', required: false }
+          - { name: 'heroBackgroundImage', label: 'Hero Background Image', widget: 'image', required: false }
+          - { name: 'heroBackgroundBlendMode', label: 'Hero Background Blend Mode', required: false }
+          - name: 'heroBackgroundOpacity'
+            label: 'Hero Background Opacity (0-1)'
+            widget: 'number'
+            min: 0
+            max: 1
+            step: 0.05
+          - { name: 'heroPrimaryCtaLabel', label: 'Primary CTA Label', required: false }
+          - { name: 'heroSecondaryCtaLabel', label: 'Secondary CTA Label', required: false }
+          - { name: 'whatsappConciergeLabel', label: 'WhatsApp Concierge Label', required: false }
+          - { name: 'defaultWhatsAppNumber', label: 'WhatsApp Number Fallback (digits only)', required: false }
+          - { name: 'contactMicrocopy', label: 'Contact Microcopy', required: false }
+          - name: 'trustBullets'
+            label: 'Trust Bullets'
+            widget: 'list'
+            field:
+              name: 'bullet'
+              label: 'Bullet'
+          - name: 'trustBadges'
+            label: 'Trust Badges'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'label', label: 'Label', required: false }
+              - { name: 'image', label: 'Image', widget: 'image', required: false }
+              - { name: 'alt', label: 'Alt Text', required: false }
+          - { name: 'reviewsDisclaimer', label: 'Reviews Disclaimer', required: false }
+          - name: 'reviews'
+            label: 'Reviews'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'name', label: 'Reviewer Name' }
+              - name: 'rating'
+                label: 'Rating'
+                widget: 'number'
+                min: 1
+                max: 5
+                default: 5
+              - name: 'quote'
+                label: 'Quote'
+                widget: 'text'
+              - { name: 'date', label: 'Date', required: false }
+          - { name: 'showSchedulingCard', label: 'Show Scheduling Card', widget: 'boolean', required: false, default: false }
+          - { name: 'schedulingLabel', label: 'Scheduling CTA Label', required: false }
+          - name: 'schedulingSubcopy'
+            label: 'Scheduling Subcopy'
+            widget: 'text'
+            required: false
+          - { name: 'schedulingUrl', label: 'Scheduling URL', required: false }
+          - name: 'footerAgents'
+            label: 'Footer Agents'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'name', label: 'Name' }
+              - { name: 'title', label: 'Title', required: false }
+              - { name: 'descriptor', label: 'Descriptor', required: false }
+              - { name: 'brokerage', label: 'Brokerage', required: false }
+              - { name: 'email', label: 'Email Link', required: false }
+              - { name: 'emailLabel', label: 'Email Label', required: false }
+              - { name: 'phoneLabel', label: 'Phone Label', required: false }
+          - name: 'footerBrokerageCopy'
+            label: 'Brokerage Copy'
+            widget: 'text'
+          - { name: 'footerAreas', label: 'Service Areas', required: false }
+          - name: 'footerSecondaryLinks'
+            label: 'Footer Secondary Links'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'label', label: 'Label' }
+              - { name: 'href', label: 'URL' }
+          - name: 'formThankYouMessage'
+            label: 'Form Thank-you Message'
+            widget: 'text'
       - { name: 'seoTitle', label: 'SEO Title' }
       - name: 'seoDescription'
         label: 'SEO Description'
