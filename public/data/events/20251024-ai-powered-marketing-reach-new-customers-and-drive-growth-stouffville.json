@@ -1,28 +1,49 @@
 {
+  "id": "https://discoverstouffville.ca/event/ai-powered-marketing/",
   "slug": "20251024-ai-powered-marketing-reach-new-customers-and-drive-growth-stouffville",
   "title": "AI-Powered Marketing: Reach New Customers and Drive Growth",
   "summary": "Discover simple AI tools to overcome common marketing hurdles, especially in reaching new audiences. Designed for small and medium-sized business owners, this workshop delivers step-by-step demos, and ready-to-use strategies, and interactive exercises to help you put AI into action with confidence.",
-  "description": "About workshop: Discover simple AI tools to overcome common marketing hurdles, especially in reaching new audiences. Designed for small and medium-sized business owners, this workshop delivers step-by-step demos, and ready-to-use strategies, and interactive exercises to help you put AI into action with confidence. You’ll learn how to: Use AI tools to tailor your marketing messages to different customer segments automatically Generate compelling ad copy, social media posts, and email headlines in seconds Connect with fellow business owners through engaging, hands-on activities About Diem Le: Diem is a Regional Advisor at ventureLAB and Fund Lead at Bloom Impact Capital. She began her career in the highlighted regulated pharmaceutical sector, building expertise in compliance and market entry before pivoting into e-commerce and tech after earning her Ivey MBA. Since then, she has worked as a startup consultant, VC analyst, and became an angel investor. About ventureLAB: ventureLAB is a leading Canadian innovation hub that empowers technology startups, especially in hardware, semiconductors, and enterprise software to scale globally competitive ventures and drive Canada’s knowledge-based economy. Their programs connect founders with expert advisors, strategic investors, and resources to raise capital, build talent, commercialize IP, and acquire customers in the York Region.",
-  "startDate": "2025-10-24T14:00:00Z",
-  "endDate": "2025-10-24T15:30:00Z",
+  "description": "About workshop: Discover simple AI tools to overcome common marketing hurdles, especially in reaching new audiences. Designed for small and medium-sized business owners, this workshop delivers step-by-step demos, and ready-to-use strategies, and interactive exercises to help you put AI into action with confidence. You&#8217;ll learn how to: Use AI tools to tailor your marketing messages to different customer segments automatically Generate compelling ad copy, social media posts, and email headlines in seconds Connect with fellow business owners through engaging, hands-on activities About Diem Le: Diem is a Regional Advisor at ventureLAB and Fund Lead at Bloom Impact Capital. She began her career in the highlighted regulated pharmaceutical sector, building expertise in compliance and market entry before pivoting into e-commerce and tech after earning her Ivey MBA. Since then, she has worked as a startup consultant, VC analyst, and became an angel investor. About ventureLAB: ventureLAB is a leading Canadian innovation hub that empowers technology startups, especially in hardware, semiconductors, and enterprise software to scale globally competitive ventures and drive Canada&#8217;s knowledge-based economy. Their programs connect founders with expert advisors, strategic investors, and resources to raise capital, build talent, commercialize IP, and acquire customers in the York Region.",
+  "startDate": "2025-10-24T14:00:00.000Z",
+  "endDate": "2025-10-24T15:30:00.000Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "category": "Other",
+  "recurrence": "",
+  "category": "Business &amp; Networking",
   "town": "Stouffville",
-  "locationName": "Whitchurch-Stouffville Municipal Offices – 111 Sandiford Drive",
+  "subArea": "",
+  "location": {
+    "city": "Stouffville",
+    "venue": "Whitchurch-Stouffville Municipal Offices &#8211; 111 Sandiford Drive"
+  },
+  "locationName": "Whitchurch-Stouffville Municipal Offices &#8211; 111 Sandiford Drive",
   "address": "111 Sandiford Drive, Stouffville, L4A 0Z8",
   "priceType": "Free",
   "priceNote": "Free",
   "badges": [
     "Family-friendly"
   ],
+  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Tech-Startup-Masterclass.jpg",
+  "organizerName": "",
+  "organizerUrl": "",
+  "url": "https://discoverstouffville.ca/event/ai-powered-marketing/",
   "eventUrl": "https://discoverstouffville.ca/event/ai-powered-marketing/",
-  "featured": false,
+  "icsUrl": "",
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
-  "source": "feed",
+  "notes": "",
+  "source": {
+    "name": "Discover Stouffville",
+    "id": "https://discoverstouffville.ca/event/ai-powered-marketing/"
+  },
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/ai-powered-marketing/",
-  "updatedAt": "2025-10-07T10:17:24Z"
+  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
+  "updatedAt": "2025-10-10T17:07:55.032Z",
+  "featured": false
 }

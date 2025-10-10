@@ -1,10 +1,11 @@
 {
+  "id": "10002656-1758931200-1763855999@auroraculturalcentre.ca",
   "slug": "20250927-children-s-visual-art-1-aurora",
   "title": "Children's Visual Art 1",
   "summary": "Children's Visual Art 1",
   "description": "Register Here Starting August 11! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. September 27 – November 22, 2025 [SKIP October 11] Saturdays | 10:00 – 11:30 am | Ages 4-7 Aurora Town Square – Shining Hill Visual Arts Studio B 50 Victoria Street, Aurora In this engaging visual arts program for children aged 4 to 7, young artists meet a new artist in every session, exploring their unique styles and perspectives while discovering how creativity can be inspired by the world around them. Each fun-filled class builds artistic skills and encourages self-expression through age-appropriate projects, resulting in completed artworks by the end of the term.",
-  "startDate": "2025-09-27T04:00:00Z",
-  "endDate": "2025-11-23T04:59:59Z",
+  "startDate": "2025-09-27T04:00:00.000Z",
+  "endDate": "2025-11-23T04:59:59.999Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -351,18 +352,42 @@
       "end_time": ""
     }
   ],
+  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
+  "subArea": "",
+  "location": {
+    "city": "Aurora",
+    "venue": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
+  },
   "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
+  "priceNote": "",
+  "badges": [
+    "Arts & Culture"
+  ],
+  "qaTags": [],
+  "image": "",
+  "organizerName": "",
+  "organizerUrl": "",
+  "url": "https://auroraculturalcentre.ca/event/childrens-visual-art-1-fall25/",
   "eventUrl": "https://auroraculturalcentre.ca/event/childrens-visual-art-1-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
-  "source": "feed",
+  "notes": "",
+  "source": {
+    "name": "Aurora Cultural Centre",
+    "id": "10002656-1758931200-1763855999@auroraculturalcentre.ca"
+  },
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002656-1758931200-1763855999@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-06T16:03:30Z"
+  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
+  "updatedAt": "2025-10-10T17:07:55.032Z",
+  "featured": false
 }

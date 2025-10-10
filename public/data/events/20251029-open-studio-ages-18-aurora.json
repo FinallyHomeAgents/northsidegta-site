@@ -1,10 +1,11 @@
 {
+  "id": "10002590-1761696000-1761782399@auroraculturalcentre.ca",
   "slug": "20251029-open-studio-ages-18-aurora",
   "title": "Open Studio (Ages 18+)",
   "summary": "Open Studio (Ages 18+)",
   "description": "Open Studio (Ages 18+) Wednesdays | 10 am – 4 pm Art Activity Room (Level B1), 50 Victoria Street Open Studio is an unguided program that provides free studio access for creators to work on their visual art projects. Program participants are provided access to the basement studio of the Cultural Centre and its basic equipment which includes tables, chairs, easels (while quantities last), and running water. Please note that all art materials are the responsibility of the artist. Spray paint and aerosol media, turpentine, and other toxic solvents / spirits are not permitted. A free, self-run program, we ask participants to be mindful of others and clean up when they are finished using the space. Storage is not provided. Open Studio occurs from 10:00 am – 4:00 pm every Wednesday (holidays exempt). It is in the Art Activity Room, on Level B1 of the Cultural Centre, Aurora Town Square. Pre-registration is not required; however, all attendees must sign in to the “Open Studio Attendance Binder” upon their arrival to the program.",
-  "startDate": "2025-10-29T04:00:00Z",
-  "endDate": "2025-10-30T03:59:59Z",
+  "startDate": "2025-10-29T04:00:00.000Z",
+  "endDate": "2025-10-30T03:59:59.999Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -15,18 +16,42 @@
       "end_time": ""
     }
   ],
+  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
+  "subArea": "",
+  "location": {
+    "city": "Aurora",
+    "venue": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
+  },
   "locationName": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
+  "priceNote": "",
+  "badges": [
+    "Arts & Culture"
+  ],
+  "qaTags": [],
+  "image": "",
+  "organizerName": "",
+  "organizerUrl": "",
+  "url": "https://auroraculturalcentre.ca/event/open-studio-2025b/2025-10-29/",
   "eventUrl": "https://auroraculturalcentre.ca/event/open-studio-2025b/2025-10-29/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
-  "source": "feed",
+  "notes": "",
+  "source": {
+    "name": "Aurora Cultural Centre",
+    "id": "10002590-1761696000-1761782399@auroraculturalcentre.ca"
+  },
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002590-1761696000-1761782399@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-10T10:18:18Z"
+  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
+  "updatedAt": "2025-10-10T17:07:55.032Z",
+  "featured": false
 }

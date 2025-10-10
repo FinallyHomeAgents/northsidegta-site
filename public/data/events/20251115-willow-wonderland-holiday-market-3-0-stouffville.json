@@ -1,14 +1,21 @@
 {
+  "id": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
   "slug": "20251115-willow-wonderland-holiday-market-3-0-stouffville",
   "title": "Willow Wonderland: Holiday Market 3.0",
   "summary": "With over 4,000 guests in attendance last year, this dog-friendly holiday event will have even more tails and toasts than last year!",
-  "description": "💜🎄• Willow Wonderland: Holiday Market 3.0 is coming back to Willow Springs Winery so save the dates and grab your tickets online because prices will go up at the door when the event starts! With over 4,000 guests in attendance last year, this dog-friendly holiday event will have even more tails and toasts than last year! This is your chance to get a picture with the Grinch, drink wine with friends/family, and get all of your holiday shopping at this one-stop-shop holiday experience. With big giveaways, discounts, and tons of activities to do – this is the holiday event you cannot miss! We will be collecting non-perishable food and toys for humans and dogs alike and will be donating them to: Markham Food Bank, Whitchurch Stouffville Food Bank, and Ontario SPCA. 10% of ticket sales will also be donated! Ticket Includes: 🥂 • 20% off wine and retail at Willow Springs Winery 🍷 • Wine Tasting Card (Worth: $18) to be used on a future date 📸 • Free Photobooths 🗺️ • Access to Event Space 💜 • Over 5 Free Activations to take part in, inside the event-space For full event details and what’s included visit: https://www.markhamdogalliance.com/willowwonderland",
-  "startDate": "2025-11-15T16:00:00Z",
-  "endDate": "2025-11-16T22:00:00Z",
+  "description": "💜🎄• Willow Wonderland: Holiday Market 3.0 is coming back to Willow Springs Winery so save the dates and grab your tickets online because prices will go up at the door when the event starts! With over 4,000 guests in attendance last year, this dog-friendly holiday event will have even more tails and toasts than last year! This is your chance to get a picture with the Grinch, drink wine with friends/family, and get all of your holiday shopping at this one-stop-shop holiday experience. With big giveaways, discounts, and tons of activities to do &#8211; this is the holiday event you cannot miss! We will be collecting non-perishable food and toys for humans and dogs alike and will be donating them to: Markham Food Bank, Whitchurch Stouffville Food Bank, and Ontario SPCA. 10% of ticket sales will also be donated! Ticket Includes: 🥂 • 20% off wine and retail at Willow Springs Winery 🍷 • Wine Tasting Card (Worth: $18) to be used on a future date 📸 • Free Photobooths 🗺️ • Access to Event Space 💜 • Over 5 Free Activations to take part in, inside the event-space For full event details and what&#8217;s included visit: https://www.markhamdogalliance.com/willowwonderland",
+  "startDate": "2025-11-15T16:00:00.000Z",
+  "endDate": "2025-11-16T22:00:00.000Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "category": "Outdoors",
+  "recurrence": "",
+  "category": "Agritourism &amp; Rural Experiences",
   "town": "Stouffville",
+  "subArea": "",
+  "location": {
+    "city": "Stouffville",
+    "venue": "Willow Springs Winery"
+  },
   "locationName": "Willow Springs Winery",
   "address": "5572 Bethesda Rd, Stouffville, ON, MT, L4A 3A2",
   "priceType": "Mixed",
@@ -16,13 +23,27 @@
   "badges": [
     "Family-friendly"
   ],
+  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/08/willow-wonderland.jpg",
+  "organizerName": "",
+  "organizerUrl": "",
+  "url": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
   "eventUrl": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
-  "featured": true,
+  "icsUrl": "",
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
-  "source": "feed",
+  "notes": "",
+  "source": {
+    "name": "Discover Stouffville",
+    "id": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/"
+  },
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
-  "updatedAt": "2025-10-09T10:18:06Z"
+  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
+  "updatedAt": "2025-10-10T17:07:55.032Z",
+  "featured": true
 }

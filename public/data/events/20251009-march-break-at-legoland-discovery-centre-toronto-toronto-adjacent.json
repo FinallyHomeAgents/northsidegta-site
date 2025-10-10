@@ -1,10 +1,11 @@
 {
+  "id": "10009007-1760002200-1760720400@www.experienceyorkregion.com",
   "slug": "20251009-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
   "title": "March Break at LEGOLAND® Discovery Centre Toronto",
   "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. Loading view. Today Now Now Select date. Oct 10 May 1 - October 18 Event Series Kate Greenway, Recent Works Oct 10 October 2 @ 9:30 am - October 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 3 @ 9:30 am - October 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 4 @ 9:30 am - October 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 5 @ 9:30 am - October 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 6 @ 9:30 am - October 14 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 7 @ 9:00 am - October 10 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 7 @ 9:30 am - October 15 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 8 @ 9:00 am - October 11 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 8 @ 9:30 am - October 16 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 9 @ 9:00 am - October 12 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 9 @ 9:30 am - October 17 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-10-09T13:30:00Z",
-  "endDate": "2025-10-17T21:00:00Z",
+  "startDate": "2025-10-09T13:30:00.000Z",
+  "endDate": "2025-10-17T21:00:00.000Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -63,20 +64,42 @@
       "end_time": "17:00"
     }
   ],
+  "recurrence": "",
   "category": "Festivals",
   "town": "Toronto-adjacent",
+  "subArea": "",
+  "location": {
+    "city": "Toronto-adjacent",
+    "venue": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada"
+  },
   "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
   "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
   "lat": 43.8256383,
   "lng": -79.5382147,
   "priceType": "Mixed",
+  "priceNote": "",
+  "badges": [],
+  "qaTags": [],
+  "image": "",
+  "organizerName": "[object Object]",
+  "organizerUrl": "",
+  "url": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-10-09/",
   "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-10-09/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
-  "source": "feed",
+  "notes": "",
+  "source": {
+    "name": "Experience York Region",
+    "id": "10009007-1760002200-1760720400@www.experienceyorkregion.com"
+  },
+  "sourceName": "Experience York Region",
+  "sourceUrl": "https://www.experienceyorkregion.com/events",
+  "sourceDomain": "experienceyorkregion.com",
+  "sourcePriority": 35,
   "sourceRef": "10009007-1760002200-1760720400@www.experienceyorkregion.com",
-  "updatedAt": "2025-10-10T10:18:18Z"
+  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
+  "updatedAt": "2025-10-10T17:07:55.032Z",
+  "featured": false
 }
