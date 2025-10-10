@@ -1,48 +1,24 @@
 {
-  "id": "37131-1760815800-1760823000@auroraculturalcentre.ca",
-  "slug": "aurora-cultural-centre-37131-1760815800-1760823000-auroraculturalcentre.ca-20251018",
+  "slug": "aurora-cultural-centre-37131-1760815800-1760823000-auroraculturalcentre-ca-20251018",
   "title": "Lori Cullen + Talia Schlanger",
   "summary": "Lori Cullen + Talia Schlanger",
   "description": "Pricing Regular: $40.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Cultural Centre Presents Lori Cullen Supported by Talia Schlanger Aurora Town Square Performance Hall 50 Victoria Street, Aurora 6:45 pm Doors Open 7:30 pm Show Start Back by popular demand after her stunning tribute to Joni Mitchell, acclaimed Toronto singer-songwriter Lori Cullen returns to the Aurora Cultural Centre with her signature warmth and genre-blending artistry. Known for seamlessly weaving jazz, folk, bossa nova, and orchestral pop into a uniquely personal sound, Lori performs songs from her new album The Thunder and The Bay—a bold, atmospheric work shaped by poetic songwriting and electronic textures. Joined by long-time collaborator Kurt Swinghammer and a stellar band, she’ll also revisit acoustic favourites and fan-loved covers from her diverse nine-album catalogue. Opening the evening is Talia Schlanger, an unforgettable voice in Canada’s music landscape. Known to many as the former host of NPR’s World Cafe and CBC’s Q, Talia brings her soulful songwriting and powerhouse band—featuring Davide Di Renzo, Brian Kobayakawa and Joel Schwartz—to the stage. Her debut album Grace for the Going has drawn critical acclaim for its emotional resonance, vulnerability, and lyrical brilliance. This presentation is made possible with the support of Season Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
-  "startDate": "2025-10-18T23:30:00.000Z",
-  "endDate": "2025-10-19T01:30:00.000Z",
+  "startDate": "2025-10-18T23:30:00Z",
+  "endDate": "2025-10-19T01:30:00Z",
   "allDay": false,
-  "recurrence": "",
+  "use_daily_schedule": false,
   "category": "Arts & Culture",
   "town": "Aurora",
-  "subArea": "",
-  "location": {
-    "city": "Aurora",
-    "venue": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
-  },
   "locationName": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "priceNote": "",
-  "badges": [
-    "Arts & Culture"
-  ],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://auroraculturalcentre.ca/event/lori-cullen-talia-schlanger-2526/",
   "eventUrl": "https://auroraculturalcentre.ca/event/lori-cullen-talia-schlanger-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Aurora Cultural Centre",
-    "id": "37131-1760815800-1760823000@auroraculturalcentre.ca"
-  },
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "37131-1760815800-1760823000@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-01T10:17:42.652Z",
-  "firstSeenAt": "2025-10-01T10:17:42.652Z",
-  "updatedAt": "2025-10-01T10:17:42.652Z"
+  "updatedAt": "2025-10-01T10:17:42Z"
 }

@@ -1,11 +1,10 @@
 {
-  "id": "10002650-1761264000-1761350399@auroraculturalcentre.ca",
   "slug": "20251024-pa-day-ages-7-to-12-october-24-aurora",
   "title": "PA Day (Ages 7 to 12) - October 24",
   "summary": "PA Day (Ages 7 to 12) - October 24",
   "description": "Register Here Starting August 11! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. Friday, October 24, 2025 9:00 – 4:30 pm | Ages 7-12 Aurora Town Square – Shining Hill Visual Arts Studio B 50 Victoria Street, Aurora A full day of artistic adventures awaits! Unleash your creativity using a variety of tools and materials and meet new friends in a fun and encouraging environment. Materials will be provided for this fun-filled creative day! Visual arts classes for children include: – All tools and materials – Free Aurora Cultural Centre Artist T-Shirt for messy fun!",
-  "startDate": "2025-10-24T04:00:00.000Z",
-  "endDate": "2025-10-25T03:59:59.999Z",
+  "startDate": "2025-10-24T04:00:00Z",
+  "endDate": "2025-10-25T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -16,42 +15,18 @@
       "end_time": ""
     }
   ],
-  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
-  "subArea": "",
-  "location": {
-    "city": "Aurora",
-    "venue": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
-  },
   "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "priceNote": "",
-  "badges": [
-    "Arts & Culture"
-  ],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://auroraculturalcentre.ca/event/paday-ages-7-12-oct24-fall25/",
   "eventUrl": "https://auroraculturalcentre.ca/event/paday-ages-7-12-oct24-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Aurora Cultural Centre",
-    "id": "10002650-1761264000-1761350399@auroraculturalcentre.ca"
-  },
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "10002650-1761264000-1761350399@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
-  "firstSeenAt": "2025-10-05T10:15:14.815Z",
-  "updatedAt": "2025-10-06T16:03:30.503Z"
+  "updatedAt": "2025-10-06T16:03:30Z"
 }

@@ -1,21 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/stouffvillestudiotour/",
   "slug": "20251018-stouffville-studio-tour-whitchurch-stoufville",
   "title": "Stouffville Studio Tour",
   "summary": "The Annual Whitchurch-Stouffville Studio Tour has transformed into an event with over twenty venues showcasing more than thirty artists. Many years ago, a small group of like-minded people looked for a way to showcase their artistic talent to the local community.",
   "description": "The Annual Whitchurch-Stouffville Studio Tour has transformed into an event with over twenty venues showcasing more than thirty artists. Many years ago, a small group of like-minded people looked for a way to showcase their artistic talent to the local community. Time: 10 am to 5 pm Before the revitalized Nineteen On the Park , the old Stouffville Municipal Offices were occupied by local artists. The Clocktower Potters rented space for their kiln and three local painters turned former clerk offices into studios. During the Christmas season in 2000, those artists held a exhibition and sale of their work . The curious came out, the feedback was positive, and a Stouffville tradition began. The Studio Tour is a reciprocal relationship about access to the arts; local artists are able to share their work with the community, and visitors are able to not only experience local art, but form relationships with the artists.",
-  "startDate": "2025-10-18T04:00:00.000Z",
-  "endDate": "2025-10-20T03:59:59.000Z",
+  "startDate": "2025-10-18T04:00:00Z",
+  "endDate": "2025-10-20T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "recurrence": "",
-  "category": "Cultural &amp; Heritage Events",
-  "town": "Whitchurch Stoufville",
-  "subArea": "",
-  "location": {
-    "city": "Whitchurch Stoufville",
-    "venue": "Various Studio Locations"
-  },
+  "category": "Arts & Culture",
+  "town": "Stouffville",
   "locationName": "Various Studio Locations",
   "address": "none, Whitchurch Stoufville, MT, L4A 4T5",
   "priceType": "Free",
@@ -23,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/07/Screenshot-2025-07-17-120524.jpg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/stouffvillestudiotour/",
   "eventUrl": "https://discoverstouffville.ca/event/stouffvillestudiotour/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/stouffvillestudiotour/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/stouffvillestudiotour/",
-  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
-  "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-06T13:52:42.948Z"
+  "updatedAt": "2025-10-06T13:52:42Z"
 }

@@ -1,20 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/the-stouffville-market-oktoberfest/",
-  "slug": "discover-stouffville-https-discoverstouffville.ca-event-the-stouffville-market-oktoberfest--20251011",
+  "slug": "discover-stouffville-https-discoverstouffville-ca-event-the-stouffville-market-oktoberfest-20251011",
   "title": "The Stouffville Market Oktoberfest",
   "summary": "THE STOUFFVILLE MARKET OKTOBERFEST BEER GARDEN – Saturday, Oct. 11th From 11am–2pm, we’re bringing Oktoberfest to Stouffville downtown! Expect cold beer, games, music, prizes and a special beer + sausage combo with the crew from @link_haus sausages.",
   "description": "THE STOUFFVILLE MARKET OKTOBERFEST BEER GARDEN – Saturday, Oct. 11th From 11am–2pm, we’re bringing Oktoberfest to Stouffville downtown! Expect cold beer, games, music, prizes and a special beer + sausage combo with the crew from @link_haus sausages.",
-  "startDate": "2025-10-11T15:00:00.000Z",
-  "endDate": "2025-10-11T18:00:00.000Z",
+  "startDate": "2025-10-11T15:00:00Z",
+  "endDate": "2025-10-11T18:00:00Z",
   "allDay": false,
-  "recurrence": "",
-  "category": "Cultural &amp; Heritage Events",
-  "town": "Stouffville, ON",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville, ON",
-    "venue": "6240 Main St."
-  },
+  "use_daily_schedule": false,
+  "category": "Arts & Culture",
+  "town": "Stouffville",
   "locationName": "6240 Main St.",
   "address": "6240 Main St., Stouffville, ON, L4A 7Z3",
   "priceType": "Free",
@@ -22,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Blue-Cream-Modern-Celebrate-Oktoberfest-Festival-Instagram-Post-1080-x-1080-px.jpeg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/the-stouffville-market-oktoberfest/",
   "eventUrl": "https://discoverstouffville.ca/event/the-stouffville-market-oktoberfest/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/the-stouffville-market-oktoberfest/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/the-stouffville-market-oktoberfest/",
-  "lastSyncedAt": "2025-10-03T10:16:54.493Z",
-  "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-03T10:16:54.493Z"
+  "updatedAt": "2025-10-03T10:16:54Z"
 }
