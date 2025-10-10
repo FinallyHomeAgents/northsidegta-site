@@ -1,22 +1,32 @@
 {
-  "heroHeadline": "Glad you found us — let’s talk.",
-  "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
-  "responsePledge": "We reply within 1 hour, 9am–9pm.",
-  "coverageLine": "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket • NorthSide GTA & beyond",
-  "heroBackgroundImage": "/Images/northsidegta-map-bg.jpg",
-  "heroBackgroundBlendMode": "multiply",
-  "heroBackgroundOpacity": 0.22,
-  "heroPrimaryCtaLabel": "Send a Message",
-  "heroSecondaryCtaLabel": "Chat on WhatsApp",
-  "whatsappConciergeLabel": "Priority concierge replies for buyers & sellers.",
-  "defaultWhatsAppNumber": "16476684646",
-  "contactMicrocopy": "We usually reply in minutes.",
-  "trustBullets": [
-    "Local experts: we don’t just work here — we live here.",
-    "Concierge-level guidance from first chat to closing.",
-    "Fast, human replies (9am–9pm).",
-    "Neighborhood intel you won’t find on portals."
+  "jsonLd": {
+    "sameAs": [],
+    "areaServed": [
+      "Aurora",
+      "Uxbridge",
+      "Georgina",
+      "Scugog",
+      "Whitchurch-Stouffville",
+      "East Gwillimbury",
+      "Newmarket"
+    ]
+  },
+  "footerSecondaryLinks": [
+    {
+      "label": "Community Events",
+      "href": "/community"
+    },
+    {
+      "label": "Buyer’s Guide",
+      "href": "/buyers"
+    }
   ],
+  "footerBrokerageCopy": "Finally Home Agents • HomeLife Optimum Realty Brokerage",
+  "schedulingLabel": "Book a Call",
+  "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
+  "showSchedulingCard": false,
+  "heroBackgroundOpacity": 0.22,
+  "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
   "trustBadges": [
     {
       "label": "5.0 ★ on Google",
@@ -24,7 +34,42 @@
       "alt": "Google reviews"
     }
   ],
+  "footerAgents": [
+    {
+      "name": "Matthew Mulhall",
+      "title": "Real Estate Agent",
+      "descriptor": "Finally Home Agents",
+      "brokerage": "HomeLife Optimum Realty Brokerage",
+      "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
+      "emailLabel": "contact@finallyhomeagents.com",
+      "phoneLabel": "647-668-4646"
+    },
+    {
+      "name": "Landon Mulhall",
+      "title": "Real Estate Agent",
+      "descriptor": "Finally Home Agents",
+      "brokerage": "HomeLife Optimum Realty Brokerage",
+      "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
+      "emailLabel": "contact@finallyhomeagents.com",
+      "phoneLabel": "647-668-4646"
+    }
+  ],
+  "footerAreas": "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket — and the broader NorthSide GTA",
+  "heroBackgroundBlendMode": "multiply",
+  "heroPrimaryCtaLabel": "Send a Message",
+  "formThankYouMessage": "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
+  "heroHeadline": "Glad you found us — let’s talk.",
+  "whatsappConciergeLabel": "Priority concierge replies for buyers & sellers.",
+  "heroBackgroundImage": "/Images/northsidegta-map-bg.jpg",
   "reviewsDisclaimer": "Real reviews from real clients.",
+  "trustBullets": [
+    "Local experts: we don’t just work here — we live here.",
+    "Concierge-level guidance from first chat to closing.",
+    "Fast, human replies (9am–9pm).",
+    "Neighborhood intel you won’t find on portals."
+  ],
+  "contactMicrocopy": "We usually reply in minutes.",
+  "responsePledge": "We usually reply within 1 hour, 9am–9pm.",
   "reviews": [
     {
       "id": "susan-booth",
@@ -70,84 +115,31 @@
     },
     {
       "id": "alicia-darnell",
-      "name": "Alicia & Darnell",
+      "name": "Kevin Hickey",
       "rating": 5,
-      "quote": "“Finally Home Agents helped us land our dream home in East Gwillimbury. No pressure — just honest advice and expert support.”",
-      "date": "February 2024"
+      "quote": "“Landon was absolutely fantastic to work with. He took me through 25+ homes that worked within my budget and geographic area. He was able to accommodate my schedule every time. Landon was available whenever I needed him. 10/10 experience working with Landon and I would recommend him to anyone! Don’t hesitate to use Finally Home Agents!”",
+      "date": "July 2025"
     },
     {
       "id": "tariq-steph",
-      "name": "Tariq & Steph",
+      "name": "Glenn Tappenden",
       "rating": 5,
-      "quote": "“We moved up from Toronto and they made everything easy — from area advice to offer negotiation. Highly recommend.”",
-      "date": "August 2023"
+      "quote": "“I have employed the services of both Matthew and Landon for multiple transactions and have always been impressed with their professionalism, availability and insight. I Highly recommend using their services.”",
+      "date": "July 2025"
     },
     {
       "id": "melissa-grant",
-      "name": "Melissa Grant",
+      "name": "Ryan Porter",
       "rating": 5,
-      "quote": "“Matthew and Landon guided us through selling and buying in the same week. Their calm strategy and constant communication were unmatched.”",
-      "date": "November 2023"
-    },
-    {
-      "id": "brandon-li",
-      "name": "Brandon Li",
-      "rating": 5,
-      "quote": "“Concierge-style service is real — daily WhatsApp updates, video walkthroughs, and smart negotiation. We always felt ahead of the market.”",
-      "date": "March 2024"
-    },
-    {
-      "id": "emily-chris-martin",
-      "name": "Emily & Chris Martin",
-      "rating": 5,
-      "quote": "“From the first consult to the keys in our hand, Finally Home Agents treated us like VIP athletes. Fast replies, hyper-local intel, and genuine care.”",
-      "date": "July 2024"
+      "quote": "“Matt Mulhall was always available when we needed him. We are now at our new place and very happy with the house and process. Thanks!”",
+      "date": "July 2025"
     }
   ],
-  "showSchedulingCard": false,
-  "schedulingLabel": "Book a Call",
-  "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
   "schedulingUrl": "",
-  "footerAgents": [
-    {
-      "name": "Matthew Mulhall",
-      "title": "Real Estate Agent",
-      "descriptor": "Finally Home Agents",
-      "brokerage": "HomeLife Optimum Realty Brokerage",
-      "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
-      "emailLabel": "contact@finallyhomeagents.com",
-      "phoneLabel": "647-668-4646"
-    },
-    {
-      "name": "Landon Mulhall",
-      "title": "Real Estate Agent",
-      "descriptor": "Finally Home Agents",
-      "brokerage": "HomeLife Optimum Realty Brokerage",
-      "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
-      "emailLabel": "contact@finallyhomeagents.com",
-      "phoneLabel": "647-668-4646"
-    }
-  ],
-  "footerBrokerageCopy": "Finally Home Agents • HomeLife Optimum Realty Brokerage",
-  "footerAreas": "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket — and the broader NorthSide GTA",
-  "footerSecondaryLinks": [
-    { "label": "Community Events", "href": "/community" },
-    { "label": "Buyer’s Guide", "href": "/buyers" }
-  ],
-  "formThankYouMessage": "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
   "seoTitle": "Contact Finally Home Agents | NorthSide GTA Real Estate Experts",
-  "seoDescription": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",
+  "coverageLine": "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket • NorthSide GTA & beyond",
+  "defaultWhatsAppNumber": "16476684646",
   "seoImage": "/Images/northsidegta-map-bg.jpg",
-  "jsonLd": {
-    "sameAs": [],
-    "areaServed": [
-      "Aurora",
-      "Uxbridge",
-      "Georgina",
-      "Scugog",
-      "Whitchurch-Stouffville",
-      "East Gwillimbury",
-      "Newmarket"
-    ]
-  }
+  "heroSecondaryCtaLabel": "Chat on WhatsApp",
+  "seoDescription": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket."
 }
