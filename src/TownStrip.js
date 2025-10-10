@@ -60,7 +60,7 @@ export default function TownStrip() {
     <section aria-label="Closest to Toronto → Furthest">
       {/* Ribbon (text tweak requested) */}
       <div className="flex items-center justify-between mb-2 md:mb-3">
-        <div className="relative inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 text-white shadow">
+        <div className="relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 px-3 py-1 text-white shadow-lg shadow-emerald-900/30">
           <span className="text-[10px] font-semibold tracking-wide uppercase opacity-90">
             Closest to Toronto → Furthest
           </span>
@@ -74,7 +74,7 @@ export default function TownStrip() {
           <button
             type="button"
             onClick={() => scrollByAmount(-360)}
-            className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
+            className="h-9 w-9 rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-sm transition hover:border-emerald-200 hover:text-emerald-900 flex items-center justify-center"
             aria-label="Scroll left"
             title="Scroll left"
           >
@@ -83,7 +83,7 @@ export default function TownStrip() {
           <button
             type="button"
             onClick={() => scrollByAmount(360)}
-            className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
+            className="h-9 w-9 rounded-full border border-emerald-100 bg-white/90 text-emerald-700 shadow-sm transition hover:border-emerald-200 hover:text-emerald-900 flex items-center justify-center"
             aria-label="Scroll right"
             title="Scroll right"
           >
@@ -95,8 +95,8 @@ export default function TownStrip() {
       {/* Scroll container — smaller cards + padding guards so nothing is clipped */}
       <div className="relative">
         {/* Subtle fades on edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white to-transparent rounded-l-2xl" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent rounded-r-2xl" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 rounded-l-2xl bg-gradient-to-r from-white/95 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 rounded-r-2xl bg-gradient-to-l from-white/95 to-transparent" />
 
         <div
           ref={railRef}
@@ -117,10 +117,9 @@ export default function TownStrip() {
               className="snap-start shrink-0 w-[210px] md:w-[230px] group"
               aria-label={`Explore ${t.name}`}
             >
-              <div className="h-full rounded-2xl border bg-white/85 backdrop-blur-sm shadow-sm ring-1 ring-black/5 overflow-hidden transition
-                              group-hover:shadow-lg group-hover:-translate-y-0.5">
+              <div className="h-full rounded-3xl border border-emerald-100/60 bg-white/95 backdrop-blur-sm shadow-lg shadow-emerald-900/5 overflow-hidden transition group-hover:-translate-y-1 group-hover:shadow-xl">
                 {/* Image area (smaller heights) */}
-                <div className="aspect-[4/3] bg-emerald-50/40 flex items-center justify-center">
+                <div className="aspect-[4/3] bg-emerald-50/60 flex items-center justify-center">
                   <img
                     src={t.img}
                     alt={t.name}
@@ -133,12 +132,12 @@ export default function TownStrip() {
                 {/* Body */}
                 <div className="p-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-[13px] font-semibold text-gray-900">{t.name}</h3>
+                    <h3 className="text-[13px] font-semibold text-slate-900">{t.name}</h3>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold tracking-wide">
                       {ordinal(idx + 1)}
                     </span>
                   </div>
-                  <p className="mt-1 text-[11px] text-gray-600 leading-5">{t.blurb}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-slate-600">{t.blurb}</p>
                 </div>
               </div>
             </a>
