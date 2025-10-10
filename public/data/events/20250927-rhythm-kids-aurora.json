@@ -1,11 +1,10 @@
 {
-  "id": "10002653-1758931200-1763855999@auroraculturalcentre.ca",
   "slug": "20250927-rhythm-kids-aurora",
   "title": "Rhythm Kids",
   "summary": "Rhythm Kids",
   "description": "Register Here Starting August 11! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. September 27 – November 22, 2025 [SKIP October 11] Saturdays | 11:00 – 11:45 am| Ages 3-6 Aurora Town Square – Program Room A 50 Victoria Street, Aurora The Rhythm Kids program is geared towards children 3-6 years of age and parents are asked to wait outside of the classroom. The focus of this class is on developing foundational music knowledge while allowing children the opportunity to build self esteem and independence. Children will be guided through expressive music making and movement as they explore musical concepts such as rhythm, pitch and dynamics. Instrument exploration, expressive movement as well as learning to play simple patterns in a group while keeping a steady beat will all be part of our musical journey together.",
-  "startDate": "2025-09-27T04:00:00.000Z",
-  "endDate": "2025-11-23T04:59:59.999Z",
+  "startDate": "2025-09-27T04:00:00Z",
+  "endDate": "2025-11-23T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -352,42 +351,18 @@
       "end_time": ""
     }
   ],
-  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
-  "subArea": "",
-  "location": {
-    "city": "Aurora",
-    "venue": "Aurora Town Square – Program Room A, 50 Victoria Street, Aurora, Ontario, Canada"
-  },
   "locationName": "Aurora Town Square – Program Room A, 50 Victoria Street, Aurora, Ontario, Canada",
   "address": "Aurora Town Square – Program Room A, 50 Victoria Street, Aurora, Ontario, Canada",
   "priceType": "Paid",
-  "priceNote": "",
-  "badges": [
-    "Arts & Culture"
-  ],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://auroraculturalcentre.ca/event/rhythm-kids-fall25/",
   "eventUrl": "https://auroraculturalcentre.ca/event/rhythm-kids-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Aurora Cultural Centre",
-    "id": "10002653-1758931200-1763855999@auroraculturalcentre.ca"
-  },
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "10002653-1758931200-1763855999@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
-  "firstSeenAt": "2025-09-29T18:41:29.880Z",
-  "updatedAt": "2025-10-06T16:03:30.503Z"
+  "updatedAt": "2025-10-06T16:03:30Z"
 }

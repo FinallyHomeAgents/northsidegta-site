@@ -1,20 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "slug": "discover-stouffville-https-discoverstouffville.ca-event-trail-of-treasures-at-bruces-mill--20251129",
+  "slug": "discover-stouffville-https-discoverstouffville-ca-event-trail-of-treasures-at-bruces-mill-20251129",
   "title": "Trail of Treasures at Bruce&#8217;s Mill",
   "summary": "Join us for a family treasure hunt like no other at Bruce&#8217;s Mill. Explore the beautiful trails and work together to search for the hidden treasure using a map, riddles, and clues. Our treasure hunt will take you on a journey through the outdoors where you&#8217;ll discover unique natural wonders, and maybe even some beautiful birds. Bring your hiking shoes (or winter boots) and a sense of adventure!",
   "description": "Join us for a family treasure hunt like no other at Bruce&#8217;s Mill. Explore the beautiful trails and work together to search for the hidden treasure using a map, riddles, and clues. Our treasure hunt will take you on a journey through the outdoors where you&#8217;ll discover unique natural wonders, and maybe even some beautiful birds. Bring your hiking shoes (or winter boots) and a sense of adventure! Timeslots: 10:00 a.m. to 12:00 p.m. 2:00 p.m. to 4:00 p.m. Price: $75 per family (2-4 individuals) $15 extra per additional person REGISTER FOR THE EVENT! *All ticket sales are final. In the event of extreme weather, participants will be contacted with a notice of cancellation and issued a full refund. TRCA is committed to creating an accessible experience for all participants. If you require accommodation, please email simone.granieri@trca.ca at least 7 days prior to the event.",
-  "startDate": "2025-11-29T15:00:00.000Z",
-  "endDate": "2025-11-29T17:00:00.000Z",
+  "startDate": "2025-11-29T15:00:00Z",
+  "endDate": "2025-11-29T17:00:00Z",
   "allDay": false,
-  "recurrence": "",
-  "category": "Family-Friendly Events",
+  "use_daily_schedule": false,
+  "category": "Family",
   "town": "Stouffville",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville",
-    "venue": "Bruce&#8217;s Mill"
-  },
   "locationName": "Bruce&#8217;s Mill",
   "address": "3291 Stouffville Rd, Stouffville, Ontario, L4A 3W9",
   "priceType": "Mixed",
@@ -22,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/Trail-of-treasures-Nov-29_6iyD.jpg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
   "eventUrl": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "lastSyncedAt": "2025-10-03T10:16:54.493Z",
-  "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-03T10:16:54.493Z"
+  "updatedAt": "2025-10-03T10:16:54Z"
 }

@@ -1,20 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
-  "slug": "discover-stouffville-https-discoverstouffville.ca-event-future-ready-leadership-for-an-uncertain-world--20251021",
+  "slug": "discover-stouffville-https-discoverstouffville-ca-event-future-ready-leadership-for-an-uncertain-world-20251021",
   "title": "Future-Ready Leadership for an Uncertain World",
   "summary": "This high-impact program blends Psychological Safety, Adaptive Leadership and Design Thinking, giving leaders the mindset and tools to thrive in disruption, not just survive it.",
   "description": "Event Summary This high-impact program blends Psychological Safety, Adaptive Leadership and Design Thinking, giving leaders the mindset and tools to thrive in disruption, not just survive it. Participants will learn to: Lead with Creative Resilience – Build trust, inspire innovation, and navigate uncertainty with confidence. Harness Design Thinking – Apply empathy, rapid prototyping, and problem-solving frameworks to generate adaptable solutions. Develop an Adaptive Mindset – Cultivate agility, experimentation, and continuous learning across teams and organizations. Who Should Attend Founders, leaders and professionals ready to turn ambiguity into opportunity and guide their organizations through complexity with clarity and vision. Prepare to leave with actionable strategies, practical tools, and a renewed capacity to lead in a VUCA world. Kelly Parke CHC Consulting",
-  "startDate": "2025-10-21T14:00:00.000Z",
-  "endDate": "2025-10-21T14:00:00.000Z",
+  "startDate": "2025-10-21T14:00:00Z",
+  "endDate": "2025-10-21T14:00:00Z",
   "allDay": false,
-  "recurrence": "",
-  "category": "Business &amp; Networking",
-  "town": "Stouffville, ON",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville, ON",
-    "venue": "19 on the Park &#8211; 19 Civic Ave, Stouffville, ON"
-  },
+  "use_daily_schedule": false,
+  "category": "Other",
+  "town": "Stouffville",
   "locationName": "19 on the Park &#8211; 19 Civic Ave, Stouffville, ON",
   "address": "19 on the Park - 19 Civic Ave, Stouffville, ON",
   "priceType": "Free",
@@ -22,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Future-Ready.jpg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
   "eventUrl": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
-  "lastSyncedAt": "2025-10-03T10:16:54.493Z",
-  "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-03T10:16:54.493Z"
+  "updatedAt": "2025-10-03T10:16:54Z"
 }

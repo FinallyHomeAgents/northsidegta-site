@@ -1,11 +1,10 @@
 {
-  "id": "10002666-1757894400-1762819199@auroraculturalcentre.ca",
   "slug": "20250915-acrylic-pouring-and-mediums-aurora",
   "title": "Acrylic Pouring and Mediums",
   "summary": "Acrylic Pouring and Mediums",
   "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. September 15 – November 10, 2025 [SKIP October 13] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora Start your journey in paint pouring, a contemporary art form perfect for beginners! You will explore various paints, pastels, pigments and more to create beautiful marbled art. Every week you will build on prior lessons and master colour mixing, selection, tool use, and mixing mediums to create art that is beautiful and unique. Materials Fee: $50 payable in cash to the instructor, along with supplemental materials below Materials List",
-  "startDate": "2025-09-15T04:00:00.000Z",
-  "endDate": "2025-11-11T04:59:59.999Z",
+  "startDate": "2025-09-15T04:00:00Z",
+  "endDate": "2025-11-11T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -352,42 +351,18 @@
       "end_time": ""
     }
   ],
-  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
-  "subArea": "",
-  "location": {
-    "city": "Aurora",
-    "venue": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
-  },
   "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "priceNote": "",
-  "badges": [
-    "Arts & Culture"
-  ],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-fall25/",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Aurora Cultural Centre",
-    "id": "10002666-1757894400-1762819199@auroraculturalcentre.ca"
-  },
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "10002666-1757894400-1762819199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
-  "firstSeenAt": "2025-09-29T18:41:29.880Z",
-  "updatedAt": "2025-10-06T16:03:30.503Z"
+  "updatedAt": "2025-10-06T16:03:30Z"
 }

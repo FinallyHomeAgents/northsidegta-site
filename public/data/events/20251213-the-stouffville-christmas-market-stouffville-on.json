@@ -1,21 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
   "slug": "20251213-the-stouffville-christmas-market-stouffville-on",
   "title": "The Stouffville Christmas Market",
   "summary": "Our first indoor market to kick off the holiday season. Come join us inside at 6240 Main St. as we bring the holiday spirit to you. Wander the aisles filled with our creative artisans and foodies as they bring their best to share with all of us.",
   "description": "Our first indoor market to kick off the holiday season. Come join us inside at 6240 Main St. as we bring the holiday spirit to you. Wander the aisles filled with our creative artisans and foodies as they bring their best to share with all of us. 9:00 am &#8211; 2:00 pm and come hungry!",
-  "startDate": "2025-12-13T14:00:00.000Z",
-  "endDate": "2025-12-13T19:00:00.000Z",
+  "startDate": "2025-12-13T14:00:00Z",
+  "endDate": "2025-12-13T19:00:00Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "recurrence": "",
-  "category": "Entertainment",
-  "town": "Stouffville, ON",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville, ON",
-    "venue": "6240 Main St."
-  },
+  "category": "Other",
+  "town": "Stouffville",
   "locationName": "6240 Main St.",
   "address": "6240 Main St., Stouffville, ON, L4A 7Z3",
   "priceType": "Free",
@@ -23,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/christmas-logo.jpg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
   "eventUrl": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
-  "lastSyncedAt": "2025-10-06T13:52:42.948Z",
-  "firstSeenAt": "2025-10-03T10:16:54.493Z",
-  "updatedAt": "2025-10-06T13:52:42.948Z"
+  "updatedAt": "2025-10-06T13:52:42Z"
 }

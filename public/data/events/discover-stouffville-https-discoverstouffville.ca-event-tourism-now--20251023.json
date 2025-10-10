@@ -1,20 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/tourism-now/",
-  "slug": "discover-stouffville-https-discoverstouffville.ca-event-tourism-now--20251023",
+  "slug": "discover-stouffville-https-discoverstouffville-ca-event-tourism-now-20251023",
   "title": "Tourism Now! presented by Central Counties Tourism",
   "summary": "Tourism is big business in Canada, one of the few truly national industries that generates economic activity in every region, province, territory, town, and community. Although most tourism businesses are small to medium-sized enterprises, the industry provides more jobs than agriculture, forestry, fishing, mining, quarrying, oil, and gas combined.",
   "description": "This workshop is presented by Central Counties Tourism and the Town of Stouffville. Course Overview Tourism is big business in Canada, one of the few truly national industries that generates economic activity in every region, province, territory, town, and community. Although most tourism businesses are small to medium-sized enterprises, the industry provides more jobs than agriculture, forestry, fishing, mining, quarrying, oil, and gas combined. In this interactive course, you&#8217;ll learn how Central Counties Tourism and its partners can help you build a stronger, more resilient business by tapping into tourism opportunities and programs available in your region. BONUS: Receive a Certificate of Completion from Central Counties Tourism What You’ll Learn By the end of the session, you’ll have the knowledge and confidence to: Describe the Ontario tourism landscape and its economic impact Explain the role of Central Counties Tourism in supporting local businesses Summarize the services, programs, and support available to help you grow Whether you&#8217;re a business owner, entrepreneur, or community stakeholder, this course will help you understand how tourism can be a powerful driver of growth and visibility for your business. About Central Counties Tourism Central Counties Tourism is a provincially funded, not-for-profit organization dedicated to developing, supporting, and promoting tourism within York, Durham, and Headwaters. Through strategic marketing, research, product development, and collaboration, Central Counties helps businesses and communities thrive in the tourism economy. Location in Town Hall The event will take place inside Stouffville Town Hall in the Ringwood Room. Signage will be posted to help guide you upon arrival. Parking Information Parking is available at the front of the Town Hall building. Additional free street parking is located nearby, with larger lots within a short walking distance. Accessibility Stouffville Townhall Ringwood Room is accessible.",
-  "startDate": "2025-10-23T14:00:00.000Z",
-  "endDate": "2025-10-23T15:30:00.000Z",
+  "startDate": "2025-10-23T14:00:00Z",
+  "endDate": "2025-10-23T15:30:00Z",
   "allDay": false,
-  "recurrence": "",
-  "category": "Business &amp; Networking",
+  "use_daily_schedule": false,
+  "category": "Other",
   "town": "Stouffville",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville",
-    "venue": "Whitchurch-Stouffville Municipal Offices &#8211; 111 Sandiford Drive"
-  },
   "locationName": "Whitchurch-Stouffville Municipal Offices &#8211; 111 Sandiford Drive",
   "address": "111 Sandiford Drive, Stouffville, L4A 0Z8",
   "priceType": "Free",
@@ -22,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Learning-Lab-Tourism-Now-Eventbrite-banner-2160-x-1080-px.jpg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/tourism-now/",
   "eventUrl": "https://discoverstouffville.ca/event/tourism-now/",
-  "icsUrl": "",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/tourism-now/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/tourism-now/",
-  "lastSyncedAt": "2025-10-03T19:53:43.428Z",
-  "firstSeenAt": "2025-10-03T19:53:43.428Z",
-  "updatedAt": "2025-10-03T19:53:43.428Z"
+  "updatedAt": "2025-10-03T19:53:43Z"
 }

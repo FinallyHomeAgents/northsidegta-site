@@ -11,6 +11,7 @@
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
     "events:audit": "node scripts/events-cli.mjs --audit",
+    "events:normalize": "node scripts/events-normalize.mjs",
     "test": "node --test"
   },
   "dependencies": {
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2"
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "ajv": "^8.17.1"
   }
 }

@@ -1,11 +1,10 @@
 {
-  "id": "10002667-1757894400-1762819199@auroraculturalcentre.ca",
   "slug": "20250915-wood-carving-aurora",
   "title": "Wood Carving",
   "summary": "Wood Carving",
   "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. September 15 – November 10, 2025 [SKIP October 13] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – ATS Art Activity Room 50 Victoria Street, Aurora Unlock the artistry within wood, whether you are a beginner or a seasoned wood turner. Learn to create intricate reliefs to dynamic sculptural pieces in the round. All materials are provided by the instructor for $80 plus $120 refundable deposit for the borrowed tools. Please note the breakdown of those materials below Materials List",
-  "startDate": "2025-09-15T04:00:00.000Z",
-  "endDate": "2025-11-11T04:59:59.999Z",
+  "startDate": "2025-09-15T04:00:00Z",
+  "endDate": "2025-11-11T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -352,42 +351,18 @@
       "end_time": ""
     }
   ],
-  "recurrence": "",
   "category": "Arts & Culture",
   "town": "Aurora",
-  "subArea": "",
-  "location": {
-    "city": "Aurora",
-    "venue": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada"
-  },
   "locationName": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Art Activity Room, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "priceNote": "",
-  "badges": [
-    "Arts & Culture"
-  ],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://auroraculturalcentre.ca/event/wood-carving-fall25/",
   "eventUrl": "https://auroraculturalcentre.ca/event/wood-carving-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Aurora Cultural Centre",
-    "id": "10002667-1757894400-1762819199@auroraculturalcentre.ca"
-  },
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "10002667-1757894400-1762819199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-06T16:03:30.503Z",
-  "firstSeenAt": "2025-09-29T18:41:29.880Z",
-  "updatedAt": "2025-10-06T16:03:30.503Z"
+  "updatedAt": "2025-10-06T16:03:30Z"
 }
