@@ -5,6 +5,12 @@ import { Search, ExternalLink, RefreshCw } from 'lucide-react'
 const TORONTO_ZONE = 'America/Toronto'
 const SYNC_SUMMARY_PATH = '/data/events/_sync-summary.json'
 
+const RAW_CMS_BASE_PATH =
+  (typeof process !== 'undefined' && process.env.REACT_APP_CMS_BASE_PATH) || '/cms'
+const CMS_BASE_PATH = RAW_CMS_BASE_PATH.endsWith('/')
+  ? RAW_CMS_BASE_PATH.slice(0, -1)
+  : RAW_CMS_BASE_PATH
+
 const TABS = [
   { key: 'upcoming', label: 'Upcoming' },
   { key: 'all', label: 'All' },
@@ -25,6 +31,15 @@ const ARCHIVED_STYLE = 'border-slate-300 bg-slate-100 text-slate-600'
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : ''
+}
+
+function extractEntryId(value) {
+  const trimmed = clean(value)
+  if (!trimmed) return ''
+  const withoutExt = trimmed.replace(/\.json$/i, '')
+  const segments = withoutExt.split(/[\\/]/).filter(Boolean)
+  if (!segments.length) return ''
+  return segments[segments.length - 1]
 }
 
 function normalizeStatus(value) {
@@ -136,13 +151,18 @@ function formatWhere(city, venue) {
 }
 
 function buildCmsUrl(slug) {
-  if (!slug) return ''
-  return `/cms#/collections/events/entry/${slug}`
+  const entryId = extractEntryId(slug)
+  if (!entryId) return ''
+  return `${CMS_BASE_PATH}#/collections/events/entries/${encodeURIComponent(entryId)}`
 }
 
 function normalizeEvent(raw) {
   if (!raw || typeof raw !== 'object') return null
-  const slug = clean(raw.slug || raw.id || raw.filePath || raw.__filename)
+  const slug =
+    extractEntryId(raw.__filename) ||
+    extractEntryId(raw.filePath) ||
+    extractEntryId(raw.id) ||
+    extractEntryId(raw.slug)
   if (!slug) return null
 
   const startDateTime = parseDateTime(raw.startDate || raw.start)
