@@ -1,21 +1,14 @@
 {
-  "id": "https://discoverstouffville.ca/event/pizza-paint-and-pints/",
   "slug": "20251023-pizza-paint-and-pints-stouffville",
   "title": "Pizza, Paint and Pints",
-  "summary": "Come join us at Muddy York Brewing Co. for a fun-filled evening of creativity and deliciousness! Grab Christina Cooks&#8217; classic pizza, pick up a paintbrush, and sip on some ice-cold pints as you unleash your inner artist. Whether you&#8217;re a seasoned painter or a total newbie, this event is perfect for anyone looking to unwind this fall season and get those creative juices flowing. Ticket includes all materials and guided painting instruction. Don&#8217;t miss out on this unique experience &#8211; reserve your spot now!",
-  "description": "Join us for a fun night of pizza, painting, and pints &#8211; let&#8217;s eat, get creative, and have a great time together! Step-by-step painting session guided by a local artist All painting supplies included Includes a pour from our taps You can add pizza to your ticket Come join us at Muddy York Brewing Co. for a fun-filled evening of creativity and deliciousness! Grab Christina Cooks&#8217; classic pizza, pick up a paintbrush, and sip on some ice-cold pints as you unleash your inner artist. Whether you&#8217;re a seasoned painter or a total newbie, this event is perfect for anyone looking to unwind this fall season and get those creative juices flowing. Ticket includes all materials and guided painting instruction. Don&#8217;t miss out on this unique experience &#8211; reserve your spot now!",
-  "startDate": "2025-10-23T23:00:00.000Z",
-  "endDate": "2025-10-24T01:00:00.000Z",
+  "summary": "Come join us at Muddy York Brewing Co. for a fun-filled evening of creativity and deliciousness! Grab Christina Cooks’ classic pizza, pick up a paintbrush, and sip on some ice-cold pints as you unleash your inner artist. Whether you’re a seasoned painter or a total newbie, this event is perfect for anyone looking to unwind this fall season and get those creative juices flowing. Ticket includes all materials and guided painting instruction. Don’t miss out on this unique experience – reserve your spot now!",
+  "description": "Join us for a fun night of pizza, painting, and pints – let’s eat, get creative, and have a great time together! Step-by-step painting session guided by a local artist All painting supplies included Includes a pour from our taps You can add pizza to your ticket Come join us at Muddy York Brewing Co. for a fun-filled evening of creativity and deliciousness! Grab Christina Cooks’ classic pizza, pick up a paintbrush, and sip on some ice-cold pints as you unleash your inner artist. Whether you’re a seasoned painter or a total newbie, this event is perfect for anyone looking to unwind this fall season and get those creative juices flowing. Ticket includes all materials and guided painting instruction. Don’t miss out on this unique experience – reserve your spot now!",
+  "startDate": "2025-10-23T23:00:00Z",
+  "endDate": "2025-10-24T01:00:00Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "recurrence": "",
-  "category": "Agritourism &amp; Rural Experiences",
+  "category": "Outdoors",
   "town": "Stouffville",
-  "subArea": "",
-  "location": {
-    "city": "Stouffville",
-    "venue": "Muddy York Brewing Co"
-  },
   "locationName": "Muddy York Brewing Co",
   "address": "50 Innovator Ave Unit #1, Stouffville, L4A 0Y2",
   "priceType": "Mixed",
@@ -23,27 +16,13 @@
   "badges": [
     "Family-friendly"
   ],
-  "qaTags": [],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/PizzaPaintPints1080-x-1080-px.jpeg",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://discoverstouffville.ca/event/pizza-paint-and-pints/",
   "eventUrl": "https://discoverstouffville.ca/event/pizza-paint-and-pints/",
-  "icsUrl": "",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Discover Stouffville",
-    "id": "https://discoverstouffville.ca/event/pizza-paint-and-pints/"
-  },
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
+  "status": "approved",
+  "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/pizza-paint-and-pints/",
-  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
-  "updatedAt": "2025-10-10T17:07:55.032Z",
-  "featured": false
+  "updatedAt": "2025-10-10T17:07:55Z"
 }

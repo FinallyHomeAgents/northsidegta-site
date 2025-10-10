@@ -1,11 +1,10 @@
 {
-  "id": "10010885-1760270400-1760284800@www.experienceyorkregion.com",
   "slug": "20251012-the-heintzman-house-2025-art-show-and-sale-toronto-adjacent",
   "title": "The Heintzman House 2025 Art Show and Sale.",
   "summary": "The Heintzman House 2025 Art Show and Sale.",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. Loading view. Today Now Now Select date. Oct 10 May 1 - October 18 Event Series Kate Greenway, Recent Works Oct 10 October 2 @ 9:30 am - October 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 3 @ 9:30 am - October 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 4 @ 9:30 am - October 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 5 @ 9:30 am - October 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 6 @ 9:30 am - October 14 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 7 @ 9:00 am - October 10 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 7 @ 9:30 am - October 15 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 8 @ 9:00 am - October 11 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 8 @ 9:30 am - October 16 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Oct 10 October 9 @ 9:00 am - October 12 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Oct 10 October 9 @ 9:30 am - October 17 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-10-12T16:00:00.000Z",
-  "endDate": "2025-10-12T20:00:00.000Z",
+  "startDate": "2025-10-12T16:00:00Z",
+  "endDate": "2025-10-12T20:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
@@ -16,40 +15,18 @@
       "end_time": "16:00"
     }
   ],
-  "recurrence": "",
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "subArea": "",
-  "location": {
-    "city": "Toronto-adjacent",
-    "venue": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1"
-  },
   "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
   "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
   "priceType": "Mixed",
-  "priceNote": "",
-  "badges": [],
-  "qaTags": [],
-  "image": "",
-  "organizerName": "",
-  "organizerUrl": "",
-  "url": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-12/",
   "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-12/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
-  "notes": "",
-  "source": {
-    "name": "Experience York Region",
-    "id": "10010885-1760270400-1760284800@www.experienceyorkregion.com"
-  },
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
+  "status": "pending",
+  "source": "feed",
   "sourceRef": "10010885-1760270400-1760284800@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-10T17:07:55.032Z",
-  "updatedAt": "2025-10-10T17:07:55.032Z",
-  "featured": false
+  "updatedAt": "2025-10-10T17:07:55Z"
 }
