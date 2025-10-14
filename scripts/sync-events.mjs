@@ -10,6 +10,7 @@ const Parser = require('rss-parser')
 const ical = require('node-ical')
 const { getAdapter } = require('../lib/event-source-adapters.js')
 const { expandIcsEvents } = require('../lib/events/ics.js')
+const { normalizeCmsEvent } = require('../lib/events/cms-normalizer.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -1458,18 +1459,46 @@ async function mergeEvent(event, existingMaps, now) {
     }
   }
 
+  const mergedBadges = sanitizeTagList(mergeUnique([], preserved.badges, event.badges))
+  const mergedQaTags = sanitizeTagList(mergeUnique([], preserved.qaTags, event.qaTags))
+
   const baseMerged = {
     ...preserved,
     ...event,
+    badges: mergedBadges,
+    qaTags: mergedQaTags,
     status,
     hidden,
     archived,
     notes,
+    source: typeof preserved.source === 'string' ? preserved.source : 'feed',
+    sourceName: cleanText(event.sourceName || preserved.sourceName || ''),
+    sourceUrl: cleanText(event.sourceUrl || preserved.sourceUrl || ''),
+    sourceDomain: cleanText(event.sourceDomain || preserved.sourceDomain || ''),
+    sourcePriority: resolvePriority(event.sourcePriority, preserved.sourcePriority),
+    ...(firstSeenAt ? { firstSeenAt } : {}),
+  }
+
+  let normalizedEvent
+  try {
+    const normalization = normalizeCmsEvent(baseMerged)
+    normalizedEvent = normalization.event
+  } catch (error) {
+    const message = error && error.message ? error.message : 'unknown normalization error'
+    const failure = new Error(`CMS normalization failed for ${event.slug}: ${message}`)
+    failure.cause = error
+    throw failure
+  }
+
+  const metadata = buildMetadata(baseMerged)
+  const comparableNext = {
+    ...normalizedEvent,
+    ...metadata,
     ...(firstSeenAt ? { firstSeenAt } : {}),
   }
 
   const previousComparable = JSON.stringify(orderKeys(stripSyncTimestamps(preserved)))
-  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(baseMerged)))
+  const nextComparable = JSON.stringify(orderKeys(stripSyncTimestamps(comparableNext)))
 
   if (previousComparable === nextComparable && (isUpdate || existingContent)) {
     const entryFilePath = existingEntry?.filePath || filePath
@@ -1481,7 +1510,7 @@ async function mergeEvent(event, existingMaps, now) {
 
   const timestamp = new Date(now).toISOString()
   const merged = {
-    ...baseMerged,
+    ...comparableNext,
     lastSyncedAt: timestamp,
     updatedAt: timestamp,
   }
@@ -1528,6 +1557,54 @@ function stripSyncTimestamps(event) {
   delete clone.lastSyncedAt
   delete clone.updatedAt
   return clone
+}
+
+function resolvePriority(incoming, fallback) {
+  if (Number.isFinite(incoming)) return Number(incoming)
+  if (Number.isFinite(fallback)) return Number(fallback)
+  return DEFAULT_PRIORITY
+}
+
+function sanitizeTagList(values) {
+  if (!Array.isArray(values) || values.length === 0) return []
+  const seen = new Set()
+  const normalized = []
+  for (const value of values) {
+    const text = cleanText(value)
+    if (!text) continue
+    if (seen.has(text)) continue
+    seen.add(text)
+    normalized.push(text)
+  }
+  return normalized
+}
+
+function buildMetadata(event) {
+  const metadata = {}
+  if (typeof event.notes === 'string' && event.notes.trim()) {
+    metadata.notes = event.notes.trim()
+  }
+
+  if (event.sourceName) {
+    metadata.sourceName = event.sourceName
+  }
+  if (event.sourceUrl) {
+    metadata.sourceUrl = event.sourceUrl
+  }
+  if (event.sourceDomain) {
+    metadata.sourceDomain = event.sourceDomain
+  }
+
+  if (Number.isFinite(event.sourcePriority) && event.sourcePriority !== DEFAULT_PRIORITY) {
+    metadata.sourcePriority = Number(event.sourcePriority)
+  }
+
+  const qaTags = sanitizeTagList(event.qaTags)
+  if (qaTags.length) {
+    metadata.qaTags = qaTags
+  }
+
+  return metadata
 }
 
 main().catch((error) => {
