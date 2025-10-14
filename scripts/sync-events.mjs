@@ -27,6 +27,7 @@ const DEFAULT_RETRY_ATTEMPTS = 3
 const DEFAULT_RETRY_DELAY_MS = 400
 const MAX_RETRY_DELAY_MS = 5000
 const parser = new Parser()
+const WRITE_MODE = process.env.EVENTS_SYNC_WRITE === 'true'
 
 async function main() {
   const { feeds } = await loadConfig(configPath)
@@ -36,8 +37,10 @@ async function main() {
     return
   }
 
-  await fs.mkdir(eventsDir, { recursive: true })
-  await fs.mkdir(reportsDir, { recursive: true }).catch(() => {})
+  if (WRITE_MODE) {
+    await fs.mkdir(eventsDir, { recursive: true })
+    await fs.mkdir(reportsDir, { recursive: true }).catch(() => {})
+  }
   const existing = await loadExistingEvents(eventsDir)
   const now = new Date()
   const summary = { created: 0, updated: 0, unchanged: 0, errors: 0 }
@@ -110,7 +113,7 @@ async function main() {
 
   const totalChanged = summary.created + summary.updated + summary.errors
 
-  if (totalChanged > 0) {
+  if (totalChanged > 0 && WRITE_MODE) {
     const totalAfter = await fs
       .readdir(eventsDir)
       .then((list) =>
@@ -132,12 +135,21 @@ async function main() {
     await fs.writeFile(summaryPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
   }
 
-  if (syncState.configChanged) {
+  if (WRITE_MODE && syncState.configChanged) {
     await persistConfigUpdates(configPath, feeds)
     await writeUrlUpdateLog(syncState.urlUpdates)
   }
 
-  await writeSyncReports(reportsDir, now, summary, feedReports, syncState.urlUpdates, syncState.fallbacks)
+  if (WRITE_MODE) {
+    await writeSyncReports(
+      reportsDir,
+      now,
+      summary,
+      feedReports,
+      syncState.urlUpdates,
+      syncState.fallbacks
+    )
+  }
 
   console.log(
     `Created: ${summary.created}, Updated: ${summary.updated}, Unchanged: ${summary.unchanged}, Errors: ${summary.errors}`
@@ -778,12 +790,14 @@ function createFeedReport(feed) {
 }
 
 async function persistConfigUpdates(filePath, feeds) {
+  if (!WRITE_MODE) return
   if (!Array.isArray(feeds) || !feeds.length) return
   const serialized = `${JSON.stringify(feeds, null, 2)}\n`
   await fs.writeFile(filePath, serialized, 'utf8')
 }
 
 async function writeUrlUpdateLog(updates = []) {
+  if (!WRITE_MODE) return
   if (!Array.isArray(updates) || updates.length === 0) return
   await fs.mkdir(path.dirname(urlUpdateLogPath), { recursive: true })
   const lines = updates.map((entry) => JSON.stringify(entry))
@@ -791,6 +805,7 @@ async function writeUrlUpdateLog(updates = []) {
 }
 
 async function writeSyncReports(dir, now, summary, feedReports, urlUpdates, fallbacks = []) {
+  if (!WRITE_MODE) return
   await fs.mkdir(dir, { recursive: true })
   const timestamp = DateTime.fromJSDate(now).setZone('America/Toronto')
   const stamp = timestamp.toFormat('yyyyLLdd-HHmmss')
@@ -1473,7 +1488,9 @@ async function mergeEvent(event, existingMaps, now) {
     return 'unchanged'
   }
 
-  await fs.writeFile(filePath, serialized, 'utf8')
+  if (WRITE_MODE) {
+    await fs.writeFile(filePath, serialized, 'utf8')
+  }
   const entry = { data: merged, filePath }
   bySlug.set(event.slug, entry)
   if (sourceId) bySourceId.set(sourceId, entry)

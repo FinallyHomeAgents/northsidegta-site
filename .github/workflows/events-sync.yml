@@ -49,23 +49,27 @@ jobs:
           set -euo pipefail
           git fetch origin
           git checkout -B ci/events-sync origin/main
-      - name: Run sync script
+      - name: Run events sync (force write mode)
+        env:
+          EVENTS_SYNC_WRITE: "true"
         run: node scripts/sync-events.mjs
+
+      - name: Debug: show repo status after sync
+        run: |
+          echo "=== git status (porcelain) ==="
+          git status --porcelain || true
+          echo "=== changed or new under public/data/events ==="
+          git ls-files -m -o --exclude-standard public/data/events | sed 's/^/• /' || true
+
       - name: Commit generated artifacts
-        shell: bash
         run: |
           set -euo pipefail
-
           git config user.name  "northside-ci-bot"
           git config user.email "ci@northsidegta.local"
-
-          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
-
+          git add -A public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No generated changes to commit"
-            exit 0
+            echo "No generated changes to commit"; exit 0
           fi
-
           MSG="chore(events-sync): update events"
           if [ -f public/data/events/_sync-summary.json ]; then
             CREATED=$(node -e "console.log(require('./public/data/events/_sync-summary.json').created ?? 0)")
@@ -73,8 +77,21 @@ jobs:
             ERRORS=$(node -e "console.log(require('./public/data/events/_sync-summary.json').errors ?? 0)")
             MSG="chore(events-sync): +${CREATED} new, ${UPDATED} updated, ${ERRORS} errors"
           fi
-
           git commit -m "$MSG"
+
+      - name: Sanity check: summary vs commit
+        run: |
+          set -euo pipefail
+          S=public/data/events/_sync-summary.json
+          if [ -f "$S" ]; then
+            CREATED=$(node -e "console.log(require('./'$S'').created ?? 0)")
+            UPDATED=$(node -e "console.log(require('./'$S'').updated ?? 0)")
+            if [ $((CREATED+UPDATED)) -gt 0 ] && git diff --quiet HEAD^ HEAD 2>/dev/null; then
+              echo "::error::Sync reported $CREATED created and $UPDATED updated, but no diffs were committed."
+              echo "::error::Likely cause: dry-run or writing outside public/data/events."
+              exit 1
+            fi
+          fi
       - name: Push branch & open/update PR
         if: steps.mode.outputs.mode == 'pr'
         env:
