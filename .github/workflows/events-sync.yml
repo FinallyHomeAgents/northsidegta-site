@@ -49,24 +49,57 @@ jobs:
         with: { node-version: 18 }
       - name: Install deps
         run: npm ci || npm i
-      - name: Select publish mode
-        id: mode
+      - name: Resolve run options
+        id: options
+        env:
+          INPUT_WRITE: ${{ github.event.inputs.write }}
+          PAYLOAD_WRITE: ${{ github.event.client_payload.write }}
+          INPUT_MODE: ${{ github.event.inputs.mode }}
+          PAYLOAD_MODE: ${{ github.event.client_payload.mode }}
+          INPUT_FEED: ${{ github.event.inputs.feed }}
+          PAYLOAD_FEED: ${{ github.event.client_payload.feed }}
+          ENV_DIRECT: ${{ env.EVENTS_ADMIN_DIRECT_COMMIT }}
         run: |
-          MODE="${EVENTS_ADMIN_DIRECT_COMMIT:-false}"
-          if [ "$MODE" = "true" ]; then
-            echo "mode=direct" >> "$GITHUB_OUTPUT"
-          else
-            echo "mode=pr" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+
+          WRITE_FLAG="${INPUT_WRITE:-}"
+          if [ -z "$WRITE_FLAG" ]; then
+            WRITE_FLAG="${PAYLOAD_WRITE:-}"
           fi
+          if [ -z "$WRITE_FLAG" ]; then
+            WRITE_FLAG="true"
+          fi
+
+          MODE_CHOICE="${INPUT_MODE:-}"
+          if [ -z "$MODE_CHOICE" ]; then
+            MODE_CHOICE="${PAYLOAD_MODE:-}"
+          fi
+          if [ -z "$MODE_CHOICE" ]; then
+            if [ "${ENV_DIRECT:-false}" = "true" ]; then
+              MODE_CHOICE="direct"
+            else
+              MODE_CHOICE="pr"
+            fi
+          fi
+
+          FEED_CHOICE="${INPUT_FEED:-}"
+          if [ -z "$FEED_CHOICE" ]; then
+            FEED_CHOICE="${PAYLOAD_FEED:-}"
+          fi
+
+          echo "EVENTS_SYNC_WRITE=$WRITE_FLAG" >> "$GITHUB_ENV"
+          echo "EVENTS_SYNC_FEED=$FEED_CHOICE" >> "$GITHUB_ENV"
+          echo "mode=$MODE_CHOICE" >> "$GITHUB_OUTPUT"
+          echo "write_flag=$WRITE_FLAG" >> "$GITHUB_OUTPUT"
       - name: Prepare PR branch from origin/main
-        if: steps.mode.outputs.mode == 'pr'
+        if: steps.options.outputs.mode == 'pr'
         run: |
           set -euo pipefail
           git fetch origin
           git checkout -B ci/events-sync origin/main
       - name: Run events sync (force write mode)
         env:
-          EVENTS_SYNC_WRITE: "true"
+          EVENTS_SYNC_WRITE: ${{ steps.options.outputs.write_flag }}
         run: node scripts/sync-events.mjs
 
       - name: Debug: show repo status after sync
@@ -77,13 +110,16 @@ jobs:
           git ls-files -m -o --exclude-standard public/data/events | sed 's/^/- /' || true
 
       - name: Commit generated artifacts
+        id: commit
         run: |
           set -euo pipefail
           git config user.name  "northside-ci-bot"
           git config user.email "ci@northsidegta.local"
-          git add -A public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
+          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No generated changes to commit"; exit 0
+            echo "No generated changes to commit"
+            echo "did_commit=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           MSG="chore(events-sync): update events"
           if [ -f public/data/events/_sync-summary.json ]; then
@@ -93,7 +129,9 @@ jobs:
             MSG="chore(events-sync): +${CREATED} new, ${UPDATED} updated, ${ERRORS} errors"
           fi
           git commit -m "$MSG"
-
+          echo "did_commit=true" >> "$GITHUB_OUTPUT"
+        shell: bash
+      
       - name: Sanity check: summary vs commit
         run: |
           set -euo pipefail
@@ -101,23 +139,18 @@ jobs:
           if [ -f "$S" ]; then
             CREATED=$(node -e "console.log(require('./'$S'').created ?? 0)")
             UPDATED=$(node -e "console.log(require('./'$S'').updated ?? 0)")
-            if [ $((CREATED+UPDATED)) -gt 0 ] && git diff --quiet HEAD^ HEAD 2>/dev/null; then
-              echo "::error::Sync reported $CREATED created and $UPDATED updated, but no diffs were committed."
-              echo "::error::Likely cause: dry-run or writing outside public/data/events."
+            if [ $((CREATED+UPDATED)) -gt 0 ] && [ "${{ steps.commit.outputs.did_commit }}" != "true" ]; then
+              echo "::error::Sync reported $CREATED created and $UPDATED updated, but no commit was created."
+              echo "::error::Check whether EVENTS_SYNC_WRITE=true and paths under public/data/events are writable."
               exit 1
             fi
           fi
       - name: Push branch & open/update PR
-        if: steps.mode.outputs.mode == 'pr'
+        if: steps.options.outputs.mode == 'pr' && steps.commit.outputs.did_commit == 'true'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           set -euo pipefail
-
-          if git diff --quiet HEAD origin/main; then
-            echo "No changes to push (PR mode)."
-            exit 0
-          fi
 
           git push --force-with-lease=refs/heads/ci/events-sync -u origin ci/events-sync
 
@@ -129,28 +162,28 @@ jobs:
             --label automation \
             || gh pr edit --head ci/events-sync --add-label automation --title "Automated events sync"
       - name: Guard dirty tree for rebase (generated paths only)
-        if: steps.mode.outputs.mode == 'direct'
+        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
-          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
+          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           git stash push -m "pre-rebase (generated)" || echo "Nothing to stash"
       - name: Rebase safely with autostash
-        if: steps.mode.outputs.mode == 'direct'
+        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
           git pull --rebase --autostash origin main
       - name: Re-stage & commit after rebase
-        if: steps.mode.outputs.mode == 'direct'
+        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
 
           git config user.name  "northside-ci-bot"
           git config user.email "ci@northsidegta.local"
 
-          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
+          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           git commit -m "chore(events): sync & normalize" || echo "No changes to commit"
       - name: Push to main with retry and lease
-        if: steps.mode.outputs.mode == 'direct'
+        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
           for i in 1 2 3; do
