@@ -30,7 +30,17 @@ const parser = new Parser()
 const WRITE_MODE = process.env.EVENTS_SYNC_WRITE === 'true'
 
 async function main() {
-  const { feeds } = await loadConfig(configPath)
+  const { feeds: loadedFeeds } = await loadConfig(configPath)
+  const allFeeds = Array.isArray(loadedFeeds) ? [...loadedFeeds] : []
+  const singleFeed = (process.env.EVENTS_SYNC_FEED || '').trim()
+  const feeds = singleFeed
+    ? allFeeds.filter((feed) => {
+        if (!feed) return false
+        if (typeof feed.id === 'string' && feed.id === singleFeed) return true
+        if (typeof feed.url === 'string' && feed.url === singleFeed) return true
+        return false
+      })
+    : allFeeds
   if (!feeds.length) {
     console.log('Created: 0, Updated: 0, Unchanged: 0, Errors: 0')
     console.log('SYNC_SUMMARY created=0 updated=0 unchanged=0 errors=0')
@@ -111,9 +121,7 @@ async function main() {
     }
   }
 
-  const totalChanged = summary.created + summary.updated + summary.errors
-
-  if (totalChanged > 0 && WRITE_MODE) {
+  if (WRITE_MODE) {
     const totalAfter = await fs
       .readdir(eventsDir)
       .then((list) =>
@@ -136,7 +144,7 @@ async function main() {
   }
 
   if (WRITE_MODE && syncState.configChanged) {
-    await persistConfigUpdates(configPath, feeds)
+    await persistConfigUpdates(configPath, allFeeds)
     await writeUrlUpdateLog(syncState.urlUpdates)
   }
 
