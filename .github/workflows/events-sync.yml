@@ -34,20 +34,35 @@ jobs:
         with: { node-version: 18 }
       - name: Install deps
         run: npm ci || npm i
+      - name: Select publish mode
+        id: mode
+        run: |
+          MODE="${EVENTS_ADMIN_DIRECT_COMMIT:-false}"
+          if [ "$MODE" = "true" ]; then
+            echo "mode=direct" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=pr" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Prepare PR branch from origin/main
+        if: steps.mode.outputs.mode == 'pr'
+        run: |
+          set -euo pipefail
+          git fetch origin
+          git checkout -B ci/events-sync origin/main
       - name: Run sync script
         run: node scripts/sync-events.mjs
-      - name: Commit & push changes
+      - name: Commit generated artifacts
         shell: bash
         run: |
           set -euo pipefail
 
-          git config user.name "events-sync-bot"
-          git config user.email "actions@github.com"
+          git config user.name  "northside-ci-bot"
+          git config user.email "ci@northsidegta.local"
 
-          git add public/data/events || true
+          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
 
           if git diff --cached --quiet; then
-            echo "No event changes"
+            echo "No generated changes to commit"
             exit 0
           fi
 
@@ -60,23 +75,57 @@ jobs:
           fi
 
           git commit -m "$MSG"
+      - name: Push branch & open/update PR
+        if: steps.mode.outputs.mode == 'pr'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          set -euo pipefail
 
+          if git diff --quiet HEAD origin/main; then
+            echo "No changes to push (PR mode)."
+            exit 0
+          fi
+
+          git push -u origin ci/events-sync
+
+          gh pr create \
+            --title "Automated events sync" \
+            --body "Automated updates from the scheduled events sync." \
+            --base main \
+            --head ci/events-sync \
+            --label automation \
+            || gh pr edit --head ci/events-sync --add-label automation --title "Automated events sync"
+      - name: Guard dirty tree for rebase (generated paths only)
+        if: steps.mode.outputs.mode == 'direct'
+        run: |
+          set -euo pipefail
+          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
+          git stash push -m "pre-rebase (generated)" || echo "Nothing to stash"
+      - name: Rebase safely with autostash
+        if: steps.mode.outputs.mode == 'direct'
+        run: |
+          set -euo pipefail
+          git pull --rebase --autostash origin main
+      - name: Re-stage & commit after rebase
+        if: steps.mode.outputs.mode == 'direct'
+        run: |
+          set -euo pipefail
+
+          git config user.name  "northside-ci-bot"
+          git config user.email "ci@northsidegta.local"
+
+          git add public/data/events public/sitemap.xml scripts/generated 2>/dev/null || true
+          git commit -m "chore(events): sync & normalize" || echo "No changes to commit"
+      - name: Push to main with retry and lease
+        if: steps.mode.outputs.mode == 'direct'
+        run: |
+          set -euo pipefail
           for i in 1 2 3; do
-            git fetch origin main
-
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              continue
-            fi
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
+            if git push --force-with-lease origin HEAD:main; then
               exit 0
             fi
-
-            echo "Push failed (attempt $i). Retrying…"
-            sleep 3
+            sleep $((i*5))
+            git pull --rebase --autostash origin main
           done
-
-          echo "Push failed after 3 attempts."
-          exit 1
+          echo "Push failed after retries" && exit 1
