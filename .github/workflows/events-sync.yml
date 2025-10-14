@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: events-sync-main
@@ -69,11 +70,11 @@ jobs:
         run: node scripts/sync-events.mjs
 
       - name: Debug: show repo status after sync
-        run: |
-          echo "=== git status (porcelain) ==="
-          git status --porcelain || true
-          echo "=== changed or new under public/data/events ==="
-          git ls-files -m -o --exclude-standard public/data/events | sed 's/^/• /' || true
+  run: |
+    echo "=== git status (porcelain) ==="
+    git status --porcelain || true
+    echo "=== changed or new under public/data/events ==="
+    git ls-files -m -o --exclude-standard public/data/events | sed 's/^/- /' || true
 
       - name: Commit generated artifacts
         run: |
