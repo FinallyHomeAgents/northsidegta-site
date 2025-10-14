@@ -87,7 +87,7 @@ jobs:
             exit 0
           fi
 
-          git push -u origin ci/events-sync
+          git push --force-with-lease=refs/heads/ci/events-sync -u origin ci/events-sync
 
           gh pr create \
             --title "Automated events sync" \
