@@ -1,12 +1,61 @@
 // /api/sync-now.js
-import crypto from 'crypto'
+const crypto = require('crypto')
 
-const OWNER = process.env.GITHUB_REPO_OWNER || process.env.VERCEL_GIT_REPO_OWNER
-const REPO = process.env.GITHUB_REPO_NAME || process.env.VERCEL_GIT_REPO_SLUG
 const WORKFLOW_FILE = 'events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
-const DEFAULT_REF =
-  process.env.GITHUB_REF_NAME || process.env.VERCEL_GIT_COMMIT_REF || 'main' // SYNC WIRING
+const SUCCESS_STATUSES = new Set([200, 201, 202, 204])
+
+function resolveRepoInfo() {
+  const directOwner = process.env.GITHUB_REPO_OWNER || process.env.VERCEL_GIT_REPO_OWNER
+  const directRepo = process.env.GITHUB_REPO_NAME || process.env.VERCEL_GIT_REPO_SLUG
+
+  if (directOwner && directRepo) {
+    return { owner: directOwner, repo: directRepo }
+  }
+
+  const combined =
+    process.env.GITHUB_REPO || process.env.GITHUB_REPOSITORY || process.env.VERCEL_GIT_REPO_SLUG
+
+  if (combined && typeof combined === 'string') {
+    const [owner, repo] = combined.split('/')
+    if (owner && repo) {
+      return { owner, repo }
+    }
+  }
+
+  return { owner: directOwner || '', repo: directRepo || '' }
+}
+
+function resolveRef() {
+  const refCandidates = [
+    process.env.GITHUB_REF_NAME,
+    process.env.GITHUB_HEAD_REF,
+    process.env.VERCEL_GIT_COMMIT_REF,
+    process.env.GITHUB_REF,
+  ]
+
+  for (const candidate of refCandidates) {
+    if (!candidate || typeof candidate !== 'string') continue
+    if (candidate.startsWith('refs/heads/')) {
+      return candidate.slice('refs/heads/'.length)
+    }
+    if (candidate.trim()) {
+      return candidate.trim()
+    }
+  }
+
+  return 'main'
+}
+
+function resolveGithubToken() {
+  const token =
+    process.env.GH_TOKEN ||
+    process.env.GITHUB_TOKEN ||
+    process.env.PERSONAL_GITHUB_TOKEN ||
+    process.env.GITHUB_PERSONAL_TOKEN
+
+  return typeof token === 'string' && token.trim() ? token.trim() : ''
+}
 
 // SYNC WIRING
 function parseCookies(header = '') {
@@ -83,7 +132,7 @@ function isSameOrigin(req) {
 // SYNC WIRING
 function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
   if (workflowStatus === 403 || repoDispatchStatus === 403) {
-    return 'GitHub rejected the sync — ensure GH_TOKEN has Actions: write and repo Actions permissions allow workflow_dispatch.'
+    return 'GitHub rejected the sync — ensure GH_TOKEN/GITHUB_TOKEN has Actions: write and repo Actions permissions allow workflow_dispatch.'
   }
   if (workflowStatus === 404) {
     return 'Workflow not found. Confirm events-sync.yml exists on the default branch.'
@@ -93,15 +142,22 @@ function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
 
 // SYNC WIRING
 async function triggerSync() {
-  const token = process.env.GH_TOKEN
+  const token = resolveGithubToken()
+  const ref = resolveRef()
+  const { owner, repo } = resolveRepoInfo()
+
   if (!token) {
     return {
       status: 500,
-      body: { ok: false, error: 'Missing GH_TOKEN environment variable.', hint: 'Set GH_TOKEN with Actions: Read & Write access.' },
+      body: {
+        ok: false,
+        error: 'Missing GH_TOKEN environment variable.',
+        hint: 'Set GH_TOKEN or GITHUB_TOKEN with Actions: Read & Write access.',
+      },
     }
   }
 
-  if (!OWNER || !REPO) {
+  if (!owner || !repo) {
     return {
       status: 500,
       body: { ok: false, error: 'Missing repository metadata.', hint: 'Ensure repository owner/name env vars are available.' },
@@ -115,15 +171,15 @@ async function triggerSync() {
     'Content-Type': 'application/json',
   }
 
-  const workflowUrl = `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`
-  const dispatchUrl = `https://api.github.com/repos/${OWNER}/${REPO}/dispatches`
+  const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
+  const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
 
   try {
     const [workflowResponse, repoDispatchResponse] = await Promise.all([
       fetch(workflowUrl, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ ref: DEFAULT_REF }),
+        body: JSON.stringify({ ref }),
       }),
       fetch(dispatchUrl, {
         method: 'POST',
@@ -135,8 +191,8 @@ async function triggerSync() {
     const workflowStatus = workflowResponse.status
     const repoDispatchStatus = repoDispatchResponse.status
 
-    const successStatuses = new Set([200, 201, 202, 204])
-    const ok = successStatuses.has(workflowStatus) || successStatuses.has(repoDispatchStatus)
+    const ok =
+      SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
 
     const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
 
@@ -157,9 +213,9 @@ async function triggerSync() {
           hint,
           workflowStatus,
           repoDispatchStatus,
-          owner: OWNER,
-          repo: REPO,
-          ref: DEFAULT_REF,
+          owner,
+          repo,
+          ref,
         },
       }
     }
@@ -170,9 +226,9 @@ async function triggerSync() {
         ok: true,
         workflowStatus,
         repoDispatchStatus,
-        owner: OWNER,
-        repo: REPO,
-        ref: DEFAULT_REF,
+        owner,
+        repo,
+        ref,
         hint,
       },
     }
@@ -189,7 +245,7 @@ async function triggerSync() {
   }
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     res.setHeader('Cache-Control', 'no-store') // SYNC WIRING
@@ -215,4 +271,18 @@ export default async function handler(req, res) {
 
   const result = await triggerSync()
   res.status(result.status).json(result.body)
+}
+
+module.exports = handler
+module.exports.default = handler
+module.exports.triggerSync = triggerSync
+module.exports.__internals = {
+  parseCookies,
+  timingSafeEqual,
+  verifyCsrfToken,
+  isSameOrigin,
+  buildHintFromStatus,
+  resolveRepoInfo,
+  resolveRef,
+  resolveGithubToken,
 }

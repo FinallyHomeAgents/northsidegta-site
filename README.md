@@ -26,10 +26,19 @@ With KV available, deletions from Events Admin are reversible and the “Show de
 Publishing, unpublishing, and hard-delete fallbacks use the GitHub Content API. Provide these environment variables so the API routes can commit directly to the default branch (or raise a PR when requested):
 
 - `GITHUB_REPO` – target repository in `owner/name` format.
-- `GITHUB_TOKEN` – personal access token with `contents:write` on the repo.
+- `GITHUB_TOKEN` (or `GH_TOKEN`) – personal access token with `contents:write` on the repo.
 - `EVENTS_ADMIN_USE_PR` – optional. Set to `true` to open a pull request instead of committing straight to the default branch.
 
 If the GitHub variables are missing, publish/unpublish buttons will be disabled and hard deletes are unavailable.
+
+### Manual “Sync now” button
+
+The sync button on `/community/events-admin` triggers the `events-sync.yml` GitHub Action. Make sure these are present before testing:
+
+- `GITHUB_REPO` and `GITHUB_TOKEN`/`GH_TOKEN` as listed above. The API accepts either variable name for the token.
+- `SYNC_SECRET` – used to sign the anti-CSRF cookie that the admin page sends back with the sync request. Without it, the button is disabled and the API rejects requests.
+
+When the API receives a sync request it calls both `workflow_dispatch` on `events-sync.yml` and a generic repository dispatch (`event_type: sync_now`). Check the API response toast for quick hints when GitHub rejects either request.
 
 ## Daily Events Auto-Sync
 
