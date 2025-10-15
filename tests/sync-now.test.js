@@ -1,5 +1,5 @@
-import test from 'node:test'
-import assert from 'node:assert/strict'
+const test = require('node:test')
+const assert = require('node:assert/strict')
 
 const ORIGINAL_ENV = { ...process.env }
 const ORIGINAL_FETCH = global.fetch
@@ -18,6 +18,8 @@ test.afterEach(() => {
   restoreEnv('GH_TOKEN')
   restoreEnv('GITHUB_REF_NAME')
   restoreEnv('VERCEL_GIT_COMMIT_REF')
+  restoreEnv('EVENTS_SYNC_MODE')
+  restoreEnv('EVENTS_SYNC_FEED')
 
   if (ORIGINAL_FETCH) {
     global.fetch = ORIGINAL_FETCH
