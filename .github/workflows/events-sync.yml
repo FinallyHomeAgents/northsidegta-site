@@ -71,6 +71,12 @@ jobs:
             WRITE_FLAG="true"
           fi
 
+          if [ "$WRITE_FLAG" != "true" ]; then
+            echo "::error::events-sync requires write=true; manual dispatches must set write: true."
+            echo "Resolved write flag: '$WRITE_FLAG'. Aborting before sync."
+            exit 1
+          fi
+
           MODE_CHOICE="${INPUT_MODE:-}"
           if [ -z "$MODE_CHOICE" ]; then
             MODE_CHOICE="${PAYLOAD_MODE:-}"
