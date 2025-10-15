@@ -27,8 +27,8 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: events-sync-${{ github.ref || github.run_id }}-${{ github.event.inputs.feed || github.event.client_payload.feed || 'all' }}
-  cancel-in-progress: true
+  group: events-sync-main
+  cancel-in-progress: false
 
 jobs:
   sync:
@@ -76,13 +76,11 @@ jobs:
             fi
           fi
 
-          case "$WRITE_FLAG" in
-            true|false) ;;
-            *)
-              echo "::error::Write flag must be either 'true' or 'false' (received: $WRITE_FLAG)"
-              exit 1
-              ;;
-          esac
+          if [ "$WRITE_FLAG" != "true" ]; then
+            echo "::error::events-sync requires write=true; manual dispatches must set write: true."
+            echo "Resolved write flag: '$WRITE_FLAG'. Aborting before sync."
+            exit 1
+          fi
 
           MODE_CHOICE="${INPUT_MODE:-}"
           if [ -z "$MODE_CHOICE" ]; then
@@ -262,3 +260,29 @@ NODE
             git pull --rebase --autostash origin main
           done
           echo "Push failed after retries" && exit 1
+      - name: Publish summary
+        run: |
+          set -euo pipefail
+
+          SUMMARY_FILE="public/data/events/_sync-summary.json"
+          CREATED=0
+          UPDATED=0
+          ERRORS=0
+          if [ -f "$SUMMARY_FILE" ]; then
+            CREATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').created ?? 0))")
+            UPDATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').updated ?? 0))")
+            ERRORS=$(node -e "console.log((require('./public/data/events/_sync-summary.json').errors ?? 0))")
+          fi
+
+          DID_COMMIT="${{ steps.commit.outputs.did_commit }}"
+          MODE="${{ steps.options.outputs.mode }}"
+          STATUS="No changes to publish"
+          if [ "$DID_COMMIT" = "true" ]; then
+            if [ "$MODE" = "pr" ]; then
+              STATUS="Committed and updated PR"
+            else
+              STATUS="Committed and pushed to main"
+            fi
+          fi
+
+          echo "Summary: created=$CREATED updated=$UPDATED errors=$ERRORS | did_commit=$DID_COMMIT | mode=$MODE | $STATUS"
