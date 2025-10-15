@@ -1,8 +1,8 @@
 // /api/sync-now.js
 import crypto from 'crypto'
 
-const OWNER = process.env.GITHUB_REPO_OWNER || process.env.VERCEL_GIT_REPO_OWNER
-const REPO = process.env.GITHUB_REPO_NAME || process.env.VERCEL_GIT_REPO_SLUG
+import { getGithubEnvConfig } from '../lib/github-admin'
+
 const WORKFLOW_FILE = 'events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const DEFAULT_REF =
@@ -83,7 +83,7 @@ function isSameOrigin(req) {
 // SYNC WIRING
 function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
   if (workflowStatus === 403 || repoDispatchStatus === 403) {
-    return 'GitHub rejected the sync — ensure GH_TOKEN has Actions: write and repo Actions permissions allow workflow_dispatch.'
+    return 'GitHub rejected the sync — ensure GITHUB_TOKEN (or GH_TOKEN fallback) has Actions: write and workflow_dispatch is allowed.'
   }
   if (workflowStatus === 404) {
     return 'Workflow not found. Confirm events-sync.yml exists on the default branch.'
@@ -93,18 +93,32 @@ function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
 
 // SYNC WIRING
 async function triggerSync() {
-  const token = process.env.GH_TOKEN
-  if (!token) {
-    return {
-      status: 500,
-      body: { ok: false, error: 'Missing GH_TOKEN environment variable.', hint: 'Set GH_TOKEN with Actions: Read & Write access.' },
-    }
-  }
+  const config = getGithubEnvConfig()
+  const repoValue = process.env.GITHUB_REPO || ''
+  const [fallbackOwner, fallbackRepo] = repoValue.split('/')
+  const OWNER = config?.owner || (fallbackOwner ? fallbackOwner.trim() : '')
+  const REPO = config?.repo || (fallbackRepo ? fallbackRepo.trim() : '')
+  const token = config?.token || process.env.GH_TOKEN
 
   if (!OWNER || !REPO) {
     return {
       status: 500,
-      body: { ok: false, error: 'Missing repository metadata.', hint: 'Ensure repository owner/name env vars are available.' },
+      body: {
+        ok: false,
+        error: 'GitHub automation is not configured.',
+        hint: 'Set GITHUB_REPO (owner/repo) and GITHUB_TOKEN (or GH_TOKEN) before using Sync now.',
+      },
+    }
+  }
+
+  if (!token) {
+    return {
+      status: 500,
+      body: {
+        ok: false,
+        error: 'Missing GitHub token.',
+        hint: 'Set GITHUB_TOKEN with Actions: Read & Write access (or GH_TOKEN for backward compatibility).',
+      },
     }
   }
 
