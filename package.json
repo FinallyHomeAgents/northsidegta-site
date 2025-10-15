@@ -12,7 +12,7 @@
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
     "events:audit": "node scripts/events-cli.mjs --audit",
     "events:normalize": "node scripts/events-normalize.mjs",
-    "test": "node --test"
+    "test": "node --test --experimental-vm-modules"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
