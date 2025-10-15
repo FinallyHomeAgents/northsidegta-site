@@ -195,3 +195,29 @@ jobs:
             git pull --rebase --autostash origin main
           done
           echo "Push failed after retries" && exit 1
+      - name: Publish summary
+        run: |
+          set -euo pipefail
+
+          SUMMARY_FILE="public/data/events/_sync-summary.json"
+          CREATED=0
+          UPDATED=0
+          ERRORS=0
+          if [ -f "$SUMMARY_FILE" ]; then
+            CREATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').created ?? 0))")
+            UPDATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').updated ?? 0))")
+            ERRORS=$(node -e "console.log((require('./public/data/events/_sync-summary.json').errors ?? 0))")
+          fi
+
+          DID_COMMIT="${{ steps.commit.outputs.did_commit }}"
+          MODE="${{ steps.options.outputs.mode }}"
+          STATUS="No changes to publish"
+          if [ "$DID_COMMIT" = "true" ]; then
+            if [ "$MODE" = "pr" ]; then
+              STATUS="Committed and updated PR"
+            else
+              STATUS="Committed and pushed to main"
+            fi
+          fi
+
+          echo "Summary: created=$CREATED updated=$UPDATED errors=$ERRORS | did_commit=$DID_COMMIT | mode=$MODE | $STATUS"
