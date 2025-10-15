@@ -138,8 +138,8 @@ jobs:
           set -euo pipefail
           S=public/data/events/_sync-summary.json
           if [ -f "$S" ]; then
-            CREATED=$(node -e "console.log(require('./'$S'').created ?? 0)")
-            UPDATED=$(node -e "console.log(require('./'$S'').updated ?? 0)")
+            CREATED=$(node -e "console.log(require('./${S}').created ?? 0)")
+            UPDATED=$(node -e "console.log(require('./${S}').updated ?? 0)")
             if [ $((CREATED+UPDATED)) -gt 0 ] && [ "${{ steps.commit.outputs.did_commit }}" != "true" ]; then
               echo "::error::Sync reported $CREATED created and $UPDATED updated, but no commit was created."
               echo "::error::Check whether EVENTS_SYNC_WRITE=true and paths under public/data/events are writable."
