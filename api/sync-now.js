@@ -1,12 +1,13 @@
 // /api/sync-now.js
 import crypto from 'crypto'
 
-import { getGithubEnvConfig } from '../lib/github-admin'
+import { getGithubEnvConfig } from '../lib/github-admin.js'
 
 const WORKFLOW_FILE = 'events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const DEFAULT_REF =
   process.env.GITHUB_REF_NAME || process.env.VERCEL_GIT_COMMIT_REF || 'main' // SYNC WIRING
+const WRITE_INPUT = 'true'
 
 // SYNC WIRING
 function parseCookies(header = '') {
@@ -85,13 +86,48 @@ function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
   if (workflowStatus === 403 || repoDispatchStatus === 403) {
     return 'GitHub rejected the sync — ensure GITHUB_TOKEN (or GH_TOKEN fallback) has Actions: write and workflow_dispatch is allowed.'
   }
+  if (workflowStatus === 422 || repoDispatchStatus === 422) {
+    return 'GitHub rejected the sync — workflow inputs were invalid. Ensure write=true is provided and try again.'
+  }
   if (workflowStatus === 404) {
     return 'Workflow not found. Confirm events-sync.yml exists on the default branch.'
   }
   return 'Sync started — check GitHub → Actions.'
 }
 
+async function readErrorPayload(response) {
+  if (!response) return ''
+  try {
+    const text = await response.text()
+    if (!text) return ''
+    try {
+      const data = JSON.parse(text)
+      if (data && typeof data.message === 'string') {
+        return data.message
+      }
+      return text
+    } catch (_) {
+      return text
+    }
+  } catch (_) {
+    return ''
+  }
+}
+
 // SYNC WIRING
+function collectWorkflowInputs() {
+  const inputs = { write: WRITE_INPUT }
+  const mode = (process.env.EVENTS_SYNC_MODE || '').trim()
+  if (mode) {
+    inputs.mode = mode
+  }
+  const feed = (process.env.EVENTS_SYNC_FEED || '').trim()
+  if (feed) {
+    inputs.feed = feed
+  }
+  return inputs
+}
+
 async function triggerSync() {
   const config = getGithubEnvConfig()
   const repoValue = process.env.GITHUB_REPO || ''
@@ -137,7 +173,10 @@ async function triggerSync() {
       fetch(workflowUrl, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ ref: DEFAULT_REF }),
+        body: JSON.stringify({
+          ref: DEFAULT_REF,
+          inputs: collectWorkflowInputs(),
+        }),
       }),
       fetch(dispatchUrl, {
         method: 'POST',
@@ -150,13 +189,15 @@ async function triggerSync() {
     const repoDispatchStatus = repoDispatchResponse.status
 
     const successStatuses = new Set([200, 201, 202, 204])
-    const ok = successStatuses.has(workflowStatus) || successStatuses.has(repoDispatchStatus)
+    const workflowOk = successStatuses.has(workflowStatus)
+    const repoDispatchOk = successStatuses.has(repoDispatchStatus)
+    const ok = workflowOk && repoDispatchOk
 
     const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
 
     if (!ok) {
-      const workflowError = await workflowResponse.text().catch(() => '')
-      const dispatchError = await repoDispatchResponse.text().catch(() => '')
+      const workflowError = workflowOk ? '' : await readErrorPayload(workflowResponse)
+      const dispatchError = repoDispatchOk ? '' : await readErrorPayload(repoDispatchResponse)
       console.warn('[sync-now] GitHub dispatch failed', {
         workflowStatus,
         repoDispatchStatus,
@@ -171,6 +212,8 @@ async function triggerSync() {
           hint,
           workflowStatus,
           repoDispatchStatus,
+          workflowError,
+          dispatchError,
           owner: OWNER,
           repo: REPO,
           ref: DEFAULT_REF,
@@ -230,3 +273,5 @@ export default async function handler(req, res) {
   const result = await triggerSync()
   res.status(result.status).json(result.body)
 }
+
+export { triggerSync }
