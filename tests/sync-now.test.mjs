@@ -1,21 +1,8 @@
-const test = require('node:test')
-const assert = require('node:assert/strict')
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 const ORIGINAL_ENV = { ...process.env }
 const ORIGINAL_FETCH = global.fetch
-
-test.afterEach(() => {
-  restoreEnv('GITHUB_TOKEN')
-  restoreEnv('GITHUB_REPO')
-  restoreEnv('GH_TOKEN')
-  restoreEnv('GITHUB_REF_NAME')
-  restoreEnv('VERCEL_GIT_COMMIT_REF')
-  if (ORIGINAL_FETCH) {
-    global.fetch = ORIGINAL_FETCH
-  } else {
-    delete global.fetch
-  }
-})
 
 function restoreEnv(key) {
   if (Object.prototype.hasOwnProperty.call(ORIGINAL_ENV, key)) {
@@ -24,6 +11,20 @@ function restoreEnv(key) {
     delete process.env[key]
   }
 }
+
+test.afterEach(() => {
+  restoreEnv('GITHUB_TOKEN')
+  restoreEnv('GITHUB_REPO')
+  restoreEnv('GH_TOKEN')
+  restoreEnv('GITHUB_REF_NAME')
+  restoreEnv('VERCEL_GIT_COMMIT_REF')
+
+  if (ORIGINAL_FETCH) {
+    global.fetch = ORIGINAL_FETCH
+  } else {
+    delete global.fetch
+  }
+})
 
 test('triggerSync sends write=true input and requires both dispatches succeed', async () => {
   process.env.GITHUB_TOKEN = 'token'
@@ -41,8 +42,8 @@ test('triggerSync sends write=true input and requires both dispatches succeed', 
   assert.equal(result.status, 200)
   assert.equal(result.body.ok, true)
 
-  const workflowRequest = requests.find((request) =>
-    request.url.includes('/actions/workflows/') && request.url.endsWith('/dispatches')
+  const workflowRequest = requests.find(
+    (request) => request.url.includes('/actions/workflows/') && request.url.endsWith('/dispatches')
   )
   assert.ok(workflowRequest, 'workflow dispatch request was sent')
   const parsedBody = JSON.parse(workflowRequest.init.body)
@@ -51,8 +52,7 @@ test('triggerSync sends write=true input and requires both dispatches succeed', 
 
   const repoDispatchRequest = requests.find(
     (request) =>
-      request.url.includes('/repos/acme/repo/dispatches') &&
-      !request.url.includes('/actions/workflows/')
+      request.url.includes('/repos/acme/repo/dispatches') && !request.url.includes('/actions/workflows/')
   )
   assert.ok(repoDispatchRequest, 'repository dispatch request was sent')
   const repoBody = JSON.parse(repoDispatchRequest.init.body)
