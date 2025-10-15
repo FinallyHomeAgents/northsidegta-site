@@ -37,9 +37,10 @@ jobs:
       SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
       NEXT_PUBLIC_SYNC_SECRET: ${{ secrets.NEXT_PUBLIC_SYNC_SECRET }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
-      GITHUB_REPO_OWNER: ${{ secrets.GITHUB_REPO_OWNER }}
-      GITHUB_REPO_NAME: ${{ secrets.GITHUB_REPO_NAME }}
+      GITHUB_REPO: ${{ github.repository }}
+      GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+      GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+
     steps:
       - uses: actions/checkout@v4
         with:
