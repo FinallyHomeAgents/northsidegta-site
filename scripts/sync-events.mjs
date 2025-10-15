@@ -11,6 +11,10 @@ const ical = require('node-ical')
 const { getAdapter } = require('../lib/event-source-adapters.js')
 const { expandIcsEvents } = require('../lib/events/ics.js')
 const { normalizeCmsEvent } = require('../lib/events/cms-normalizer.js')
+const {
+  resolveStatusForSync,
+  resolveSourceType,
+} = require('../lib/events/status-utils.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -158,6 +162,20 @@ async function main() {
       syncState.urlUpdates,
       syncState.fallbacks
     )
+  }
+
+  const feedsWithResults = feedReports.filter(
+    (report) => (report.created || 0) + (report.updated || 0) + (report.unchanged || 0) > 0
+  )
+  const feedsWithErrors = feedReports.filter(
+    (report) => report.status === 'error' || (Array.isArray(report.errors) && report.errors.length > 0)
+  )
+
+  if (!feedsWithResults.length && feedsWithErrors.length && feedReports.length) {
+    console.error(
+      '[sync-events] No feeds produced any events and one or more feeds failed. Marking sync as failed.'
+    )
+    process.exitCode = 1
   }
 
   console.log(
@@ -531,6 +549,7 @@ function shouldAttemptDiscovery(error, feed, options = {}) {
   const status = Number(error?.status || error?.response?.status)
   if (status === 404 || status === 410) return true
   if (status === 301 || status === 302 || status === 307 || status === 308) return true
+  if (status === 401 || status === 403) return true
   if (!Number.isFinite(status)) {
     const code = error?.code
     if (code && (code === 'ENOTFOUND' || code === 'ECONNREFUSED' || code === 'EAI_AGAIN')) {
@@ -1440,9 +1459,14 @@ async function mergeEvent(event, existingMaps, now) {
 
   const preserved = existingEntry?.data || {}
   const isUpdate = Boolean(existingEntry)
-  const status = typeof preserved.status === 'string' ? preserved.status : 'pending'
   const hidden = Boolean(preserved.hidden)
   const archived = Boolean(preserved.archived)
+  const sourceType = resolveSourceType(preserved, event)
+  const status = resolveStatusForSync({
+    preservedEvent: preserved,
+    incomingEvent: event,
+    archived,
+  })
   const notes = preserved.notes !== undefined ? preserved.notes : ''
   const preservedFirstSeen =
     typeof preserved.firstSeenAt === 'string' && preserved.firstSeenAt ? preserved.firstSeenAt : null
@@ -1471,7 +1495,7 @@ async function mergeEvent(event, existingMaps, now) {
     hidden,
     archived,
     notes,
-    source: typeof preserved.source === 'string' ? preserved.source : 'feed',
+    source: sourceType,
     sourceName: cleanText(event.sourceName || preserved.sourceName || ''),
     sourceUrl: cleanText(event.sourceUrl || preserved.sourceUrl || ''),
     sourceDomain: cleanText(event.sourceDomain || preserved.sourceDomain || ''),
