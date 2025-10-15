@@ -103,7 +103,7 @@ jobs:
           EVENTS_SYNC_WRITE: ${{ steps.options.outputs.write_flag }}
         run: node scripts/sync-events.mjs
 
-      - name: Debug: show repo status after sync
+      - name: "Debug: show repo status after sync"
         run: |
           echo "=== git status (porcelain) ==="
           git status --porcelain || true
@@ -133,7 +133,7 @@ jobs:
           echo "did_commit=true" >> "$GITHUB_OUTPUT"
         shell: bash
       
-      - name: Sanity check: summary vs commit
+      - name: "Sanity check: summary vs commit"
         run: |
           set -euo pipefail
           S=public/data/events/_sync-summary.json
