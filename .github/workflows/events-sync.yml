@@ -68,7 +68,12 @@ jobs:
             WRITE_FLAG="${PAYLOAD_WRITE:-}"
           fi
           if [ -z "$WRITE_FLAG" ]; then
-            WRITE_FLAG="true"
+            if [ "${GITHUB_EVENT_NAME}" = "schedule" ] || [ "${GITHUB_EVENT_NAME}" = "repository_dispatch" ]; then
+              WRITE_FLAG="true"
+            else
+              echo "::error::You must explicitly set the write flag when running this workflow manually."
+              exit 1
+            fi
           fi
 
           if [ "$WRITE_FLAG" != "true" ]; then
@@ -87,6 +92,11 @@ jobs:
             else
               MODE_CHOICE="pr"
             fi
+          fi
+
+          if [ "$MODE_CHOICE" = "direct" ] && [ "$WRITE_FLAG" != "true" ]; then
+            echo "::error::Direct mode requires write=true."
+            exit 1
           fi
 
           FEED_CHOICE="${INPUT_FEED:-}"
@@ -109,6 +119,54 @@ jobs:
           EVENTS_SYNC_WRITE: ${{ steps.options.outputs.write_flag }}
         run: node scripts/sync-events.mjs
 
+      - name: Publish sync summary
+        if: always()
+        run: |
+          set -euo pipefail
+
+          SUMMARY="public/data/events/_sync-summary.json"
+          if [ ! -f "$SUMMARY" ]; then
+            echo "No sync summary file generated."
+            if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+              echo "No sync summary file generated." >> "$GITHUB_STEP_SUMMARY"
+            fi
+            exit 0
+          fi
+
+          node <<'NODE' "$SUMMARY"
+const fs = require('fs')
+const summaryPath = process.argv[1]
+const summaryTarget = process.env.GITHUB_STEP_SUMMARY
+
+try {
+  const raw = fs.readFileSync(summaryPath, 'utf8')
+  const data = JSON.parse(raw)
+  const lines = [
+    '### Events sync summary',
+    '',
+    `- Last change at: ${data.lastChangeAt ?? 'n/a'}`,
+    `- Created: ${data.created ?? 0}`,
+    `- Updated: ${data.updated ?? 0}`,
+    `- Unchanged: ${data.unchanged ?? 0}`,
+    `- Errors: ${data.errors ?? 0}`,
+    `- Total after: ${data.totalAfter ?? 0}`,
+  ]
+
+  const payload = `${lines.join('\n')}\n`
+  if (summaryTarget) {
+    fs.appendFileSync(summaryTarget, payload, 'utf8')
+  }
+  process.stdout.write(payload)
+} catch (error) {
+  const message = `Failed to publish sync summary: ${error.message}`
+  if (summaryTarget) {
+    fs.appendFileSync(summaryTarget, `${message}\n`, 'utf8')
+  }
+  process.stderr.write(`${message}\n`)
+  process.exitCode = 1
+}
+NODE
+
       - name: "Debug: show repo status after sync"
         run: |
           echo "=== git status (porcelain) ==="
@@ -117,6 +175,7 @@ jobs:
           git ls-files -m -o --exclude-standard public/data/events | sed 's/^/- /' || true
 
       - name: Commit generated artifacts
+        if: steps.options.outputs.write_flag == 'true'
         id: commit
         run: |
           set -euo pipefail
@@ -144,8 +203,8 @@ jobs:
           set -euo pipefail
           S=public/data/events/_sync-summary.json
           if [ -f "$S" ]; then
-            CREATED=$(node -e "console.log(require('./'$S'').created ?? 0)")
-            UPDATED=$(node -e "console.log(require('./'$S'').updated ?? 0)")
+            CREATED=$(node -e "console.log(require('./${S}').created ?? 0)")
+            UPDATED=$(node -e "console.log(require('./${S}').updated ?? 0)")
             if [ $((CREATED+UPDATED)) -gt 0 ] && [ "${{ steps.commit.outputs.did_commit }}" != "true" ]; then
               echo "::error::Sync reported $CREATED created and $UPDATED updated, but no commit was created."
               echo "::error::Check whether EVENTS_SYNC_WRITE=true and paths under public/data/events are writable."
@@ -153,7 +212,7 @@ jobs:
             fi
           fi
       - name: Push branch & open/update PR
-        if: steps.options.outputs.mode == 'pr' && steps.commit.outputs.did_commit == 'true'
+        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'pr' && steps.commit.outputs.did_commit == 'true'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
@@ -169,18 +228,18 @@ jobs:
             --label automation \
             || gh pr edit --head ci/events-sync --add-label automation --title "Automated events sync"
       - name: Guard dirty tree for rebase (generated paths only)
-        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
+        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
           git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           git stash push -m "pre-rebase (generated)" || echo "Nothing to stash"
       - name: Rebase safely with autostash
-        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
+        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
           git pull --rebase --autostash origin main
       - name: Re-stage & commit after rebase
-        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
+        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
 
@@ -190,7 +249,7 @@ jobs:
           git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           git commit -m "chore(events): sync & normalize" || echo "No changes to commit"
       - name: Push to main with retry and lease
-        if: steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
+        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
         run: |
           set -euo pipefail
           for i in 1 2 3; do
