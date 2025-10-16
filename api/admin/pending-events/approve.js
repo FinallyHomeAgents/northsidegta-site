@@ -1,6 +1,6 @@
 import { sanitizeEventId } from '../../../lib/admin-events'
 import { readJsonBody } from '../../../lib/api-helpers'
-import { approvePendingEvent, isGithubConfigured } from '../../../lib/github-admin'
+import { approvePendingEvent, isGithubConfigured } from '../../../lib/github-admin.js'
 
 function resolveId(body) {
   if (!body) return ''

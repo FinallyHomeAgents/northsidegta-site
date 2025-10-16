@@ -2,287 +2,124 @@ name: Daily Events Sync
 
 on:
   schedule:
-    # keep your existing cron; if none exists, this runs daily at 7:05am Toronto time
-    - cron: '0 10 * * *'
+    - cron: '0 7 * * *'
   workflow_dispatch:
-    inputs:
-      write:
-        description: 'Write changes to public/data/events (recommended: true)'
-        type: boolean
-        default: true
-      mode:
-        description: 'Publish mode'
-        type: choice
-        options: [pr, direct]
-        default: pr
-      feed:
-        description: 'Optional: run a single feed id'
-        required: false
-        type: string
   repository_dispatch:
-    types: [sync_now]
 
 permissions:
   contents: write
+  actions: write
   pull-requests: write
-
-concurrency:
-  group: events-sync-main
-  cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
-      NEXT_PUBLIC_SYNC_SECRET: ${{ secrets.NEXT_PUBLIC_SYNC_SECRET }}
+      EVENTS_SYNC_WRITE: 'true'
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GITHUB_REPO: ${{ github.repository }}
-      GITHUB_REPO_OWNER: ${{ github.repository_owner }}
-      GITHUB_REPO_NAME: ${{ github.event.repository.name }}
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
-      - uses: actions/setup-node@v4
-        with: { node-version: 18 }
-      - name: Install deps
-        run: npm ci || npm i
-      - name: Resolve run options
-        id: options
+
+      - name: Configure git
+        run: |
+          set -euo pipefail
+          git config --global user.name "northside-ci-bot"
+          git config --global user.email "ci@northsidegta.local"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Determine sync mode
+        id: mode
         env:
-          INPUT_WRITE: ${{ github.event.inputs.write }}
-          PAYLOAD_WRITE: ${{ github.event.client_payload.write }}
-          INPUT_MODE: ${{ github.event.inputs.mode }}
-          PAYLOAD_MODE: ${{ github.event.client_payload.mode }}
-          INPUT_FEED: ${{ github.event.inputs.feed }}
-          PAYLOAD_FEED: ${{ github.event.client_payload.feed }}
-          ENV_DIRECT: ${{ env.EVENTS_ADMIN_DIRECT_COMMIT }}
+          SECRET_MODE: ${{ secrets.EVENTS_ADMIN_USE_PR }}
+          VAR_MODE: ${{ vars.EVENTS_ADMIN_USE_PR }}
         run: |
           set -euo pipefail
-
-          WRITE_FLAG="${INPUT_WRITE:-}"
-          if [ -z "$WRITE_FLAG" ]; then
-            WRITE_FLAG="${PAYLOAD_WRITE:-}"
-          fi
-          if [ -z "$WRITE_FLAG" ]; then
-            if [ "${GITHUB_EVENT_NAME}" = "schedule" ] || [ "${GITHUB_EVENT_NAME}" = "repository_dispatch" ]; then
-              WRITE_FLAG="true"
-            else
-              echo "::error::You must explicitly set the write flag when running this workflow manually."
-              exit 1
-            fi
+          INPUT="${SECRET_MODE:-${VAR_MODE:-}}"
+          NORMALIZED=$(printf '%s' "$INPUT" | tr '[:upper:]' '[:lower:]')
+          if [ "$NORMALIZED" = "true" ]; then
+            echo "mode=pr" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=direct" >> "$GITHUB_OUTPUT"
           fi
 
-          if [ "$WRITE_FLAG" != "true" ]; then
-            echo "::error::events-sync requires write=true; manual dispatches must set write: true."
-            echo "Resolved write flag: '$WRITE_FLAG'. Aborting before sync."
-            exit 1
-          fi
-
-          MODE_CHOICE="${INPUT_MODE:-}"
-          if [ -z "$MODE_CHOICE" ]; then
-            MODE_CHOICE="${PAYLOAD_MODE:-}"
-          fi
-          if [ -z "$MODE_CHOICE" ]; then
-            if [ "${ENV_DIRECT:-false}" = "true" ]; then
-              MODE_CHOICE="direct"
-            else
-              MODE_CHOICE="pr"
-            fi
-          fi
-
-          if [ "$MODE_CHOICE" = "direct" ] && [ "$WRITE_FLAG" != "true" ]; then
-            echo "::error::Direct mode requires write=true."
-            exit 1
-          fi
-
-          FEED_CHOICE="${INPUT_FEED:-}"
-          if [ -z "$FEED_CHOICE" ]; then
-            FEED_CHOICE="${PAYLOAD_FEED:-}"
-          fi
-
-          echo "EVENTS_SYNC_WRITE=$WRITE_FLAG" >> "$GITHUB_ENV"
-          echo "EVENTS_SYNC_FEED=$FEED_CHOICE" >> "$GITHUB_ENV"
-          echo "mode=$MODE_CHOICE" >> "$GITHUB_OUTPUT"
-          echo "write_flag=$WRITE_FLAG" >> "$GITHUB_OUTPUT"
-      - name: Prepare PR branch from origin/main
-        if: steps.options.outputs.mode == 'pr'
+      - name: Prepare branch for PR mode
+        if: steps.mode.outputs.mode == 'pr'
         run: |
           set -euo pipefail
-          git fetch origin
+          git fetch origin main
           git checkout -B ci/events-sync origin/main
-      - name: Run events sync (force write mode)
-        env:
-          EVENTS_SYNC_WRITE: ${{ steps.options.outputs.write_flag }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run events sync
         run: node scripts/sync-events.mjs
 
-      - name: Publish sync summary
-        if: always()
+      - name: Stage generated files
         run: |
           set -euo pipefail
+          git add public/data/events public/sitemap.xml 2>/dev/null || true
 
-          SUMMARY="public/data/events/_sync-summary.json"
-          if [ ! -f "$SUMMARY" ]; then
-            echo "No sync summary file generated."
-            if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
-              echo "No sync summary file generated." >> "$GITHUB_STEP_SUMMARY"
-            fi
-            exit 0
-          fi
-
-          node <<'NODE' "$SUMMARY"
-const fs = require('fs')
-const summaryPath = process.argv[1]
-const summaryTarget = process.env.GITHUB_STEP_SUMMARY
-
-try {
-  const raw = fs.readFileSync(summaryPath, 'utf8')
-  const data = JSON.parse(raw)
-  const lines = [
-    '### Events sync summary',
-    '',
-    `- Last change at: ${data.lastChangeAt ?? 'n/a'}`,
-    `- Created: ${data.created ?? 0}`,
-    `- Updated: ${data.updated ?? 0}`,
-    `- Unchanged: ${data.unchanged ?? 0}`,
-    `- Errors: ${data.errors ?? 0}`,
-    `- Total after: ${data.totalAfter ?? 0}`,
-  ]
-
-  const payload = `${lines.join('\n')}\n`
-  if (summaryTarget) {
-    fs.appendFileSync(summaryTarget, payload, 'utf8')
-  }
-  process.stdout.write(payload)
-} catch (error) {
-  const message = `Failed to publish sync summary: ${error.message}`
-  if (summaryTarget) {
-    fs.appendFileSync(summaryTarget, `${message}\n`, 'utf8')
-  }
-  process.stderr.write(`${message}\n`)
-  process.exitCode = 1
-}
-NODE
-
-      - name: "Debug: show repo status after sync"
-        run: |
-          echo "=== git status (porcelain) ==="
-          git status --porcelain || true
-          echo "=== changed or new under public/data/events ==="
-          git ls-files -m -o --exclude-standard public/data/events | sed 's/^/- /' || true
-
-      - name: Commit generated artifacts
-        if: steps.options.outputs.write_flag == 'true'
+      - name: Create commit with generated data
         id: commit
         run: |
           set -euo pipefail
-          git config user.name  "northside-ci-bot"
-          git config user.email "ci@northsidegta.local"
-          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No generated changes to commit"
-            echo "did_commit=false" >> "$GITHUB_OUTPUT"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          MSG="chore(events-sync): update events"
-          if [ -f public/data/events/_sync-summary.json ]; then
-            CREATED=$(node -e "console.log(require('./public/data/events/_sync-summary.json').created ?? 0)")
-            UPDATED=$(node -e "console.log(require('./public/data/events/_sync-summary.json').updated ?? 0)")
-            ERRORS=$(node -e "console.log(require('./public/data/events/_sync-summary.json').errors ?? 0)")
-            MSG="chore(events-sync): +${CREATED} new, ${UPDATED} updated, ${ERRORS} errors"
+
+          SUMMARY="public/data/events/_sync-summary.json"
+          MESSAGE="chore(events-sync): update events"
+          if [ -f "$SUMMARY" ]; then
+            CREATED=$(node -e "console.log((require('./${SUMMARY}').created ?? 0))")
+            UPDATED=$(node -e "console.log((require('./${SUMMARY}').updated ?? 0))")
+            ERRORS=$(node -e "console.log((require('./${SUMMARY}').errors ?? 0))")
+            MESSAGE="chore(events-sync): +${CREATED} new, ${UPDATED} updated, ${ERRORS} errors"
           fi
-          git commit -m "$MSG"
-          echo "did_commit=true" >> "$GITHUB_OUTPUT"
+
+          git commit -m "$MESSAGE"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
         shell: bash
-      
-      - name: "Sanity check: summary vs commit"
+
+      - name: Push commit to main
+        if: steps.mode.outputs.mode == 'direct' && steps.commit.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          S=public/data/events/_sync-summary.json
-          if [ -f "$S" ]; then
-            CREATED=$(node -e "console.log(require('./${S}').created ?? 0)")
-            UPDATED=$(node -e "console.log(require('./${S}').updated ?? 0)")
-            if [ $((CREATED+UPDATED)) -gt 0 ] && [ "${{ steps.commit.outputs.did_commit }}" != "true" ]; then
-              echo "::error::Sync reported $CREATED created and $UPDATED updated, but no commit was created."
-              echo "::error::Check whether EVENTS_SYNC_WRITE=true and paths under public/data/events are writable."
-              exit 1
-            fi
-          fi
-      - name: Push branch & open/update PR
-        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'pr' && steps.commit.outputs.did_commit == 'true'
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Push branch for PR
+        if: steps.mode.outputs.mode == 'pr' && steps.commit.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git push --force-with-lease origin ci/events-sync
+
+      - name: Open or update pull request
+        if: steps.mode.outputs.mode == 'pr' && steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           set -euo pipefail
-
-          git push --force-with-lease=refs/heads/ci/events-sync -u origin ci/events-sync
-
-          gh pr create \
-            --title "Automated events sync" \
-            --body "Automated updates from the scheduled events sync." \
-            --base main \
-            --head ci/events-sync \
-            --label automation \
-            || gh pr edit --head ci/events-sync --add-label automation --title "Automated events sync"
-      - name: Guard dirty tree for rebase (generated paths only)
-        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
-        run: |
-          set -euo pipefail
-          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
-          git stash push -m "pre-rebase (generated)" || echo "Nothing to stash"
-      - name: Rebase safely with autostash
-        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
-        run: |
-          set -euo pipefail
-          git pull --rebase --autostash origin main
-      - name: Re-stage & commit after rebase
-        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
-        run: |
-          set -euo pipefail
-
-          git config user.name  "northside-ci-bot"
-          git config user.email "ci@northsidegta.local"
-
-          git add -A public/data/events public/sitemap.xml 2>/dev/null || true
-          git commit -m "chore(events): sync & normalize" || echo "No changes to commit"
-      - name: Push to main with retry and lease
-        if: steps.options.outputs.write_flag == 'true' && steps.options.outputs.mode == 'direct' && steps.commit.outputs.did_commit == 'true'
-        run: |
-          set -euo pipefail
-          for i in 1 2 3; do
-            if git push --force-with-lease origin HEAD:main; then
-              exit 0
-            fi
-            sleep $((i*5))
-            git pull --rebase --autostash origin main
-          done
-          echo "Push failed after retries" && exit 1
-      - name: Publish summary
-        run: |
-          set -euo pipefail
-
-          SUMMARY_FILE="public/data/events/_sync-summary.json"
-          CREATED=0
-          UPDATED=0
-          ERRORS=0
-          if [ -f "$SUMMARY_FILE" ]; then
-            CREATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').created ?? 0))")
-            UPDATED=$(node -e "console.log((require('./public/data/events/_sync-summary.json').updated ?? 0))")
-            ERRORS=$(node -e "console.log((require('./public/data/events/_sync-summary.json').errors ?? 0))")
+          if gh pr view ci/events-sync >/dev/null 2>&1; then
+            gh pr edit ci/events-sync \
+              --title "Automated events sync" \
+              --body "Automated updates from the scheduled events sync." \
+              --add-label automation
+          else
+            gh pr create \
+              --title "Automated events sync" \
+              --body "Automated updates from the scheduled events sync." \
+              --base main \
+              --head ci/events-sync \
+              --label automation
           fi
-
-          DID_COMMIT="${{ steps.commit.outputs.did_commit }}"
-          MODE="${{ steps.options.outputs.mode }}"
-          STATUS="No changes to publish"
-          if [ "$DID_COMMIT" = "true" ]; then
-            if [ "$MODE" = "pr" ]; then
-              STATUS="Committed and updated PR"
-            else
-              STATUS="Committed and pushed to main"
-            fi
-          fi
-
-          echo "Summary: created=$CREATED updated=$UPDATED errors=$ERRORS | did_commit=$DID_COMMIT | mode=$MODE | $STATUS"

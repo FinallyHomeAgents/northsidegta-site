@@ -10,7 +10,7 @@ import { getKvClient, isKvConfigured } from '../../lib/kv-admin'
 import {
   createPendingEventFile,
   isGithubConfigured,
-} from '../../lib/github-admin'
+} from '../../lib/github-admin.js'
 
 const TORONTO_ZONE = 'America/Toronto'
 const MAX_DURATION_DAYS = 14

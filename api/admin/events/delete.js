@@ -1,7 +1,7 @@
 import { buildDeletionKey, sanitizeEventId } from '../../../lib/admin-events'
 import { readJsonBody } from '../../../lib/api-helpers'
 import { getKvClient, isKvConfigured } from '../../../lib/kv-admin'
-import { deleteEventsFromGithub, isGithubConfigured } from '../../../lib/github-admin'
+import { deleteEventsFromGithub, isGithubConfigured } from '../../../lib/github-admin.js'
 
 function normalizeIds(ids) {
   const incoming = Array.isArray(ids) ? ids : []

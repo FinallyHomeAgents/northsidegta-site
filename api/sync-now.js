@@ -1,12 +1,14 @@
 // /api/sync-now.js
-import crypto from 'crypto'
+const crypto = require('node:crypto')
 
-import { getGithubEnvConfig } from '../lib/github-admin'
+const {
+  getGithubEnvConfig,
+  getGithubSyncCapability,
+} = require('../lib/github-admin.js')
 
-const WORKFLOW_FILE = 'events-sync.yml'
+const WORKFLOW_FILE = '.github/workflows/events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
-const DEFAULT_REF =
-  process.env.GITHUB_REF_NAME || process.env.VERCEL_GIT_COMMIT_REF || 'main' // SYNC WIRING
+const SUCCESS_STATUSES = new Set([200, 201, 202, 204])
 
 // SYNC WIRING
 function parseCookies(header = '') {
@@ -82,42 +84,57 @@ function isSameOrigin(req) {
 
 // SYNC WIRING
 function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
-  if (workflowStatus === 403 || repoDispatchStatus === 403) {
-    return 'GitHub rejected the sync — ensure GITHUB_TOKEN (or GH_TOKEN fallback) has Actions: write and workflow_dispatch is allowed.'
+  const statuses = [workflowStatus, repoDispatchStatus].filter((status) => typeof status === 'number' && status > 0)
+
+  if (statuses.some((status) => status === 401 || status === 403)) {
+    return 'GitHub rejected the sync — check GH_TOKEN/GITHUB_TOKEN scopes, authorize SSO, and ensure Actions: write is enabled.'
   }
-  if (workflowStatus === 404) {
-    return 'Workflow not found. Confirm events-sync.yml exists on the default branch.'
+
+  if (statuses.includes(404)) {
+    return 'Workflow not found for that ref — confirm .github/workflows/events-sync.yml exists on the target branch.'
   }
+
+  if (statuses.includes(422)) {
+    return 'Workflow dispatch was rejected — ensure events-sync.yml listens for workflow_dispatch and repository_dispatch on that ref.'
+  }
+
   return 'Sync started — check GitHub → Actions.'
 }
 
 // SYNC WIRING
 async function triggerSync() {
-  const config = getGithubEnvConfig()
-  const repoValue = process.env.GITHUB_REPO || ''
-  const [fallbackOwner, fallbackRepo] = repoValue.split('/')
-  const OWNER = config?.owner || (fallbackOwner ? fallbackOwner.trim() : '')
-  const REPO = config?.repo || (fallbackRepo ? fallbackRepo.trim() : '')
-  const token = config?.token || process.env.GH_TOKEN
+  const envConfig = getGithubEnvConfig()
+  const capability = getGithubSyncCapability()
 
-  if (!OWNER || !REPO) {
+  const owner = capability.owner || envConfig?.owner || ''
+  const repo = capability.repo || envConfig?.repo || ''
+  const ref = capability.ref || 'main'
+  const token = envConfig?.token || capability.token || ''
+
+  if (!capability.hasRepoMetadata && !(envConfig?.owner && envConfig?.repo)) {
     return {
       status: 500,
       body: {
         ok: false,
-        error: 'GitHub automation is not configured.',
-        hint: 'Set GITHUB_REPO (owner/repo) and GITHUB_TOKEN (or GH_TOKEN) before using Sync now.',
+        error: 'missing repository metadata',
+        hint: 'Set GITHUB_REPO (owner/repo) or configure VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG before running Sync now.',
+        owner,
+        repo,
+        ref,
       },
     }
   }
 
   if (!token) {
     return {
-      status: 500,
+      status: 502,
       body: {
         ok: false,
-        error: 'Missing GitHub token.',
-        hint: 'Set GITHUB_TOKEN with Actions: Read & Write access (or GH_TOKEN for backward compatibility).',
+        error: 'missing GH_TOKEN/GITHUB_TOKEN',
+        hint: 'Provide a GitHub token with repo + workflow scopes via GH_TOKEN or GITHUB_TOKEN.',
+        owner,
+        repo,
+        ref,
       },
     }
   }
@@ -129,15 +146,15 @@ async function triggerSync() {
     'Content-Type': 'application/json',
   }
 
-  const workflowUrl = `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`
-  const dispatchUrl = `https://api.github.com/repos/${OWNER}/${REPO}/dispatches`
+  const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
+  const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
 
   try {
     const [workflowResponse, repoDispatchResponse] = await Promise.all([
       fetch(workflowUrl, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ ref: DEFAULT_REF }),
+        body: JSON.stringify({ ref }),
       }),
       fetch(dispatchUrl, {
         method: 'POST',
@@ -148,10 +165,7 @@ async function triggerSync() {
 
     const workflowStatus = workflowResponse.status
     const repoDispatchStatus = repoDispatchResponse.status
-
-    const successStatuses = new Set([200, 201, 202, 204])
-    const ok = successStatuses.has(workflowStatus) || successStatuses.has(repoDispatchStatus)
-
+    const ok = SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
     const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
 
     if (!ok) {
@@ -171,9 +185,9 @@ async function triggerSync() {
           hint,
           workflowStatus,
           repoDispatchStatus,
-          owner: OWNER,
-          repo: REPO,
-          ref: DEFAULT_REF,
+          owner,
+          repo,
+          ref,
         },
       }
     }
@@ -184,9 +198,9 @@ async function triggerSync() {
         ok: true,
         workflowStatus,
         repoDispatchStatus,
-        owner: OWNER,
-        repo: REPO,
-        ref: DEFAULT_REF,
+        owner,
+        repo,
+        ref,
         hint,
       },
     }
@@ -198,12 +212,15 @@ async function triggerSync() {
         ok: false,
         error: 'Failed to reach GitHub.',
         hint: 'Network error while contacting GitHub. Try again in a moment.',
+        owner,
+        repo,
+        ref,
       },
     }
   }
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     res.setHeader('Cache-Control', 'no-store') // SYNC WIRING
@@ -230,3 +247,6 @@ export default async function handler(req, res) {
   const result = await triggerSync()
   res.status(result.status).json(result.body)
 }
+
+module.exports = handler
+module.exports.default = module.exports

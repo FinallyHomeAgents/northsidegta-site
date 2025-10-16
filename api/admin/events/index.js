@@ -8,7 +8,7 @@ import {
   buildDeletionKey,
 } from '../../../lib/admin-events'
 import { getKvClient, isKvConfigured } from '../../../lib/kv-admin'
-import { isGithubConfigured } from '../../../lib/github-admin'
+import { getGithubSyncCapability, isGithubConfigured } from '../../../lib/github-admin.js'
 
 const SYNC_CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const SYNC_TOKEN_TTL_SECONDS = 10 * 60
@@ -150,6 +150,17 @@ export default async function handler(req, res) {
   const sorted = sortEventsByStartDate(filtered, 'asc')
 
   const syncToken = createSyncCsrfToken() // SYNC WIRING
+  let syncHint = syncToken.hint || ''
+
+  if (!syncHint) {
+    const syncCapability = getGithubSyncCapability()
+    if (!syncCapability.hasRepoMetadata) {
+      syncHint = 'Sync is not configured — missing repository metadata (set GITHUB_REPO or VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG).'
+    } else if (!syncCapability.hasToken) {
+      syncHint = 'Sync is not configured — provide GH_TOKEN or GITHUB_TOKEN with workflow scope.'
+    }
+  }
+
   if (syncToken.cookie) {
     const expires = new Date(Date.now() + SYNC_TOKEN_TTL_SECONDS * 1000)
     res.setHeader(
@@ -176,7 +187,7 @@ export default async function handler(req, res) {
       restoreEnabled,
       publishingEnabled,
       syncCsrfToken: syncToken.token || '', // SYNC WIRING
-      syncHint: syncToken.hint || '', // SYNC WIRING
+      syncHint: syncHint, // SYNC WIRING
     },
   })
 }
