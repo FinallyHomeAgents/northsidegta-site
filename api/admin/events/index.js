@@ -8,7 +8,7 @@ import {
   buildDeletionKey,
 } from '../../../lib/admin-events'
 import { getKvClient, isKvConfigured } from '../../../lib/kv-admin'
-import { isGithubConfigured } from '../../../lib/github-admin'
+import { getGithubSyncCapability, isGithubConfigured } from '../../../lib/github-admin'
 
 const SYNC_CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const SYNC_TOKEN_TTL_SECONDS = 10 * 60
@@ -28,6 +28,11 @@ function createSyncCsrfToken() {
   const secret = process.env.SYNC_SECRET
   if (!secret) {
     return { token: '', cookie: '', hint: 'Sync is not configured — missing SYNC_SECRET.' }
+  }
+
+  const githubStatus = getGithubSyncCapability()
+  if (!githubStatus.ok) {
+    return { token: '', cookie: '', hint: githubStatus.hint || 'Sync is not configured.' }
   }
 
   const token = crypto.randomBytes(32).toString('hex')

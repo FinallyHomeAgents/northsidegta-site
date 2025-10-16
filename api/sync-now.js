@@ -1,7 +1,7 @@
 // /api/sync-now.js
 import crypto from 'crypto'
 
-import { getGithubEnvConfig } from '../lib/github-admin'
+import { getGithubEnvConfig, getGithubSyncCapability } from '../lib/github-admin'
 
 const WORKFLOW_FILE = 'events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
@@ -94,11 +94,26 @@ function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
 // SYNC WIRING
 async function triggerSync() {
   const config = getGithubEnvConfig()
+  const capability = getGithubSyncCapability()
+
+  if (!config || !capability.ok) {
+    return {
+      status: 500,
+      body: {
+        ok: false,
+        error: 'GitHub automation is not configured.',
+        hint:
+          capability.hint ||
+          'Set GITHUB_REPO (owner/repo) and GITHUB_TOKEN (or GH_TOKEN) before using Sync now.',
+      },
+    }
+  }
+
   const repoValue = process.env.GITHUB_REPO || ''
   const [fallbackOwner, fallbackRepo] = repoValue.split('/')
-  const OWNER = config?.owner || (fallbackOwner ? fallbackOwner.trim() : '')
-  const REPO = config?.repo || (fallbackRepo ? fallbackRepo.trim() : '')
-  const token = config?.token || process.env.GH_TOKEN
+  const OWNER = config.owner || (fallbackOwner ? fallbackOwner.trim() : '')
+  const REPO = config.repo || (fallbackRepo ? fallbackRepo.trim() : '')
+  const token = config.token || capability.token
 
   if (!OWNER || !REPO) {
     return {
@@ -106,7 +121,8 @@ async function triggerSync() {
       body: {
         ok: false,
         error: 'GitHub automation is not configured.',
-        hint: 'Set GITHUB_REPO (owner/repo) and GITHUB_TOKEN (or GH_TOKEN) before using Sync now.',
+        hint:
+          'Set GITHUB_REPO (owner/repo) or supply owner/name environment variables before using Sync now.',
       },
     }
   }
