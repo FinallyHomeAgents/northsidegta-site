@@ -56,17 +56,10 @@ async function loadSyncHandler() {
   const modulePath = require.resolve('../api/sync-now.js')
   delete require.cache[modulePath]
 
-  try {
-    return require(modulePath)
-  } catch (error) {
-    if (error && error.code === 'ERR_REQUIRE_ESM') {
-      const { pathToFileURL } = require('node:url')
-      const moduleUrl = pathToFileURL(modulePath).href
-      const namespace = await import(moduleUrl)
-      return namespace.default || namespace
-    }
-    throw error
-  }
+  const { pathToFileURL } = require('node:url')
+  const moduleUrl = pathToFileURL(modulePath).href
+  const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
+  return namespace.default || namespace
 }
 
 test('POST /api/sync-now fails fast when repository metadata is missing', async () => {
