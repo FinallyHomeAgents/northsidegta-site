@@ -1,7 +1,10 @@
 // /api/sync-now.js
-import crypto from 'crypto'
+const crypto = require('node:crypto')
 
-import { getGithubEnvConfig, getGithubSyncCapability } from '../lib/github-admin.js'
+const {
+  getGithubEnvConfig,
+  getGithubSyncCapability,
+} = require('../lib/github-admin.js')
 
 const WORKFLOW_FILE = '.github/workflows/events-sync.yml'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
@@ -217,7 +220,7 @@ async function triggerSync() {
   }
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     res.setHeader('Cache-Control', 'no-store') // SYNC WIRING
@@ -244,3 +247,6 @@ export default async function handler(req, res) {
   const result = await triggerSync()
   res.status(result.status).json(result.body)
 }
+
+module.exports = handler
+module.exports.default = module.exports
