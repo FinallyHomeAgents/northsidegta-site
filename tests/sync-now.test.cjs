@@ -63,6 +63,29 @@ function createMockRes() {
   }
 }
 
+function createMockResponse(status, body) {
+  return {
+    status,
+    ok: status >= 200 && status < 300,
+    async text() {
+      if (body === undefined) return ''
+      if (typeof body === 'string') return body
+      return JSON.stringify(body)
+    },
+    async json() {
+      if (body === undefined) return undefined
+      if (typeof body === 'string') {
+        try {
+          return JSON.parse(body)
+        } catch (error) {
+          return undefined
+        }
+      }
+      return body
+    },
+  }
+}
+
 test('sync-now handler exists and is a function', async () => {
   const handler = await loadSyncHandler()
   assert.equal(typeof handler, 'function')
@@ -125,4 +148,77 @@ test('POST /api/sync-now fails fast when repository metadata is missing', async 
       assert.match(res.body?.hint || '', /owner|repo|token/i)
     }
   )
+})
+
+test('POST /api/sync-now retries using the default branch when workflow is missing on ref', async () => {
+  const secret = 'sync-secret'
+  const originalFetch = global.fetch
+
+  try {
+    await withEnv(
+      {
+        SYNC_SECRET: secret,
+        GITHUB_REPO: 'FinallyHomeAgents/northsidegta-site',
+        GITHUB_TOKEN: 'gh-token',
+        VERCEL_GIT_COMMIT_REF: 'preview-branch',
+      },
+      async () => {
+        let workflowDispatchCalls = 0
+        let repoDispatchCalls = 0
+        let repoInfoCalls = 0
+
+        global.fetch = async (url, options = {}) => {
+          if (
+            url ===
+            'https://api.github.com/repos/FinallyHomeAgents/northsidegta-site/actions/workflows/.github/workflows/events-sync.yml/dispatches'
+          ) {
+            workflowDispatchCalls += 1
+            if (workflowDispatchCalls === 1) {
+              return createMockResponse(404, { message: 'Not Found' })
+            }
+            return createMockResponse(204)
+          }
+
+          if (url === 'https://api.github.com/repos/FinallyHomeAgents/northsidegta-site/dispatches') {
+            repoDispatchCalls += 1
+            return createMockResponse(204)
+          }
+
+          if (url === 'https://api.github.com/repos/FinallyHomeAgents/northsidegta-site') {
+            repoInfoCalls += 1
+            return createMockResponse(200, { default_branch: 'main' })
+          }
+
+          throw new Error(`Unexpected fetch call to ${url}`)
+        }
+
+        const handler = await loadSyncHandler()
+
+        const csrfToken = 'csrf-token'
+        const signature = crypto.createHmac('sha256', secret).update(csrfToken).digest('hex')
+
+        const req = {
+          method: 'POST',
+          headers: {
+            host: 'admin.local',
+            origin: 'https://admin.local',
+            'x-sync-csrf': csrfToken,
+            cookie: `sync_now_csrf=${csrfToken}.${signature}`,
+          },
+        }
+
+        const res = createMockRes()
+        await handler(req, res)
+
+        assert.equal(res.statusCode, 200)
+        assert.equal(res.body?.ok, true)
+        assert.equal(res.body?.ref, 'main')
+        assert.equal(workflowDispatchCalls, 2)
+        assert.equal(repoDispatchCalls, 2)
+        assert.equal(repoInfoCalls, 1)
+      }
+    )
+  } finally {
+    global.fetch = originalFetch
+  }
 })
