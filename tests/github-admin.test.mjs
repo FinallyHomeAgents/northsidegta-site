@@ -63,6 +63,22 @@ test('getGithubEnvConfig prefers GH_TOKEN fallback', () => {
   )
 })
 
+test('getGithubEnvConfig trims surrounding whitespace from config', () => {
+  withEnv(
+    {
+      GITHUB_TOKEN: '  personal-token  ',
+      GITHUB_REPO: '  finallyhome / northsidegta-site  ',
+    },
+    () => {
+      const config = getGithubEnvConfig()
+      assert.ok(config)
+      assert.equal(config.owner, 'finallyhome')
+      assert.equal(config.repo, 'northsidegta-site')
+      assert.equal(config.token, 'personal-token')
+    }
+  )
+})
+
 test('getGithubSyncCapability derives metadata from Vercel environment', () => {
   withEnv(
     {
