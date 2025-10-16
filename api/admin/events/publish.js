@@ -1,6 +1,6 @@
 import { sanitizeEventId } from '../../../lib/admin-events'
 import { readJsonBody } from '../../../lib/api-helpers'
-import { isGithubConfigured, updateEventStatus } from '../../../lib/github-admin'
+import { isGithubConfigured, updateEventStatus } from '../../../lib/github-admin.js'
 
 function resolveId(payload) {
   if (!payload) return ''
