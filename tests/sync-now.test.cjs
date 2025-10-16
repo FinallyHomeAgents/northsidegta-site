@@ -1,6 +1,17 @@
+'use strict'
 const test = require('node:test')
 const assert = require('node:assert/strict')
 const crypto = require('node:crypto')
+const { pathToFileURL } = require('node:url')
+const { createRequire } = require('node:module')
+const require_ = createRequire(__filename)
+
+async function loadSyncHandler() {
+  // Always resolve to a file URL and use dynamic import so ESM works under CJS tests.
+  const moduleUrl = pathToFileURL(require_.resolve('../api/sync-now.js')).href
+  const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
+  return namespace.default || namespace
+}
 
 async function withEnv(overrides, fn) {
   const keys = Object.keys(overrides)
@@ -52,15 +63,27 @@ function createMockRes() {
   }
 }
 
-async function loadSyncHandler() {
-  const modulePath = require.resolve('../api/sync-now.js')
-  delete require.cache[modulePath]
+test('sync-now handler exists and is a function', async () => {
+  const handler = await loadSyncHandler()
+  assert.equal(typeof handler, 'function')
+})
 
-  const { pathToFileURL } = require('node:url')
-  const moduleUrl = pathToFileURL(modulePath).href
-  const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
-  return namespace.default || namespace
-}
+test('sync-now rejects without CSRF', async () => {
+  await withEnv({ SYNC_SECRET: 'sync-secret' }, async () => {
+    const handler = await loadSyncHandler()
+    const req = {
+      method: 'POST',
+      headers: {
+        host: 'admin.local',
+        origin: 'https://admin.local',
+      },
+    }
+    const res = createMockRes()
+    await handler(req, res)
+    assert.equal(res.statusCode, 401)
+    assert.match(res.body?.hint || '', /sync token/i)
+  })
+})
 
 test('POST /api/sync-now fails fast when repository metadata is missing', async () => {
   const secret = 'sync-secret'
@@ -99,6 +122,7 @@ test('POST /api/sync-now fails fast when repository metadata is missing', async 
       assert.equal(res.statusCode, 500)
       assert.equal(res.body?.ok, false)
       assert.equal(res.body?.error, 'missing repository metadata')
+      assert.match(res.body?.hint || '', /owner|repo|token/i)
     }
   )
 })

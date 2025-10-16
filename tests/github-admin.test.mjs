@@ -1,6 +1,25 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
+// Minimal deterministic env so CI never fails on missing vars
+process.env.SYNC_SECRET = process.env.SYNC_SECRET || 'test-secret'
+process.env.GITHUB_REPO = process.env.GITHUB_REPO || ''
+process.env.GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER || 'finally-home-agents'
+process.env.GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME || 'northsidegta-site'
+process.env.GH_TOKEN = process.env.GH_TOKEN || 'ghp_dummy'
+
+// If tests dispatch or inspect GitHub requests, provide a light mock
+const mockFetch = async () => ({
+  ok: true,
+  status: 204,
+  json: async () => ({ ok: true }),
+  text: async () => '',
+})
+
+if (typeof global.fetch === 'undefined') {
+  global.fetch = mockFetch
+}
+
 import pkg from '../lib/github-admin.js'
 
 const { getGithubEnvConfig, getGithubSyncCapability } = pkg

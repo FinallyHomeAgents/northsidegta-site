@@ -14,7 +14,13 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm ci || npm install
-      - name: Run unit tests
+      - name: Run tests (with minimal env defaults)
+        env:
+          SYNC_SECRET: test-secret
+          GITHUB_REPO: ""
+          GITHUB_REPO_OWNER: finally-home-agents
+          GITHUB_REPO_NAME: northsidegta-site
+          GH_TOKEN: ghp_dummy
         run: npm test
       - name: Audit known working source
         run: npm run events:audit -- --domain=aurora.ca
