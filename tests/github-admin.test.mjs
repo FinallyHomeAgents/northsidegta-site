@@ -1,7 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { getGithubEnvConfig, getGithubSyncCapability } from '../lib/github-admin.js'
+import pkg from '../lib/github-admin.js';
+const { getGithubEnvConfig, getGithubSyncCapability } = pkg;
 
 const TOKEN_KEYS = ['GITHUB_TOKEN', 'GH_TOKEN', 'GITHUB_ADMIN_TOKEN']
 const REPO_KEYS = [
