@@ -2,11 +2,13 @@
 const crypto = require('node:crypto')
 
 const {
+  DEFAULT_SYNC_REF,
   getGithubEnvConfig,
   getGithubSyncCapability,
 } = require('../lib/github-admin.js')
 
 const WORKFLOW_FILE = '.github/workflows/events-sync.yml'
+const DEFAULT_DISPATCH_REF = DEFAULT_SYNC_REF || 'main'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const SUCCESS_STATUSES = new Set([200, 201, 202, 204])
 
@@ -102,6 +104,56 @@ function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
 }
 
 // SYNC WIRING
+async function fetchDefaultBranch(owner, repo, headers) {
+  try {
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      method: 'GET',
+      headers: { ...headers },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    const data = await response.json().catch(() => null)
+    const branch = typeof data?.default_branch === 'string' ? data.default_branch.trim() : ''
+    return branch || null
+  } catch (error) {
+    console.warn('[sync-now] failed to resolve repository default branch', error)
+    return null
+  }
+}
+
+function summarizeDispatch(workflowResponse, repoDispatchResponse) {
+  const workflowStatus = workflowResponse.status
+  const repoDispatchStatus = repoDispatchResponse.status
+  const ok =
+    SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
+  const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
+
+  return { workflowStatus, repoDispatchStatus, ok, hint }
+}
+
+async function performDispatch({ owner, repo, ref, headers }) {
+  const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
+  const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
+
+  const [workflowResponse, repoDispatchResponse] = await Promise.all([
+    fetch(workflowUrl, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref }),
+    }),
+    fetch(dispatchUrl, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event_type: 'sync_now' }),
+    }),
+  ])
+
+  return { workflowResponse, repoDispatchResponse }
+}
+
 async function triggerSync() {
   const envConfig = getGithubEnvConfig()
   const capability = getGithubSyncCapability()
@@ -139,34 +191,47 @@ async function triggerSync() {
     }
   }
 
-  const headers = {
+  const authHeaders = {
     Authorization: `Bearer ${token}`,
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
-    'Content-Type': 'application/json',
   }
 
-  const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
-  const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
+  let activeRef = ref
 
   try {
-    const [workflowResponse, repoDispatchResponse] = await Promise.all([
-      fetch(workflowUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ ref }),
-      }),
-      fetch(dispatchUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ event_type: 'sync_now' }),
-      }),
-    ])
+    let { workflowResponse, repoDispatchResponse } = await performDispatch({
+      owner,
+      repo,
+      ref: activeRef,
+      headers: authHeaders,
+    })
 
-    const workflowStatus = workflowResponse.status
-    const repoDispatchStatus = repoDispatchResponse.status
-    const ok = SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
-    const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
+    let { workflowStatus, repoDispatchStatus, ok, hint } = summarizeDispatch(
+      workflowResponse,
+      repoDispatchResponse
+    )
+
+    if (workflowStatus === 404) {
+      const repoDefaultBranch =
+        (await fetchDefaultBranch(owner, repo, authHeaders)) || DEFAULT_DISPATCH_REF
+      if (repoDefaultBranch && repoDefaultBranch !== activeRef) {
+        console.info(
+          `[sync-now] workflow not found on ${activeRef}, retrying with ${repoDefaultBranch}`
+        )
+        activeRef = repoDefaultBranch
+        ;({ workflowResponse, repoDispatchResponse } = await performDispatch({
+          owner,
+          repo,
+          ref: activeRef,
+          headers: authHeaders,
+        }))
+        ;({ workflowStatus, repoDispatchStatus, ok, hint } = summarizeDispatch(
+          workflowResponse,
+          repoDispatchResponse
+        ))
+      }
+    }
 
     if (!ok) {
       const workflowError = await workflowResponse.text().catch(() => '')
@@ -187,7 +252,7 @@ async function triggerSync() {
           repoDispatchStatus,
           owner,
           repo,
-          ref,
+          ref: activeRef,
         },
       }
     }
@@ -200,7 +265,7 @@ async function triggerSync() {
         repoDispatchStatus,
         owner,
         repo,
-        ref,
+        ref: activeRef,
         hint,
       },
     }
@@ -214,7 +279,7 @@ async function triggerSync() {
         hint: 'Network error while contacting GitHub. Try again in a moment.',
         owner,
         repo,
-        ref,
+        ref: activeRef,
       },
     }
   }
