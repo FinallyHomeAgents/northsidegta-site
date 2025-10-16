@@ -10,7 +10,9 @@
     "generate:curated": "node scripts/generate-curated-html.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
+    "events:connectivity": "node scripts/events-connectivity.mjs",
     "events:audit": "node scripts/events-cli.mjs --audit",
+    "events:recover": "node scripts/events-recover.mjs",
     "events:normalize": "node scripts/events-normalize.mjs",
     "test": "node --test"
   },

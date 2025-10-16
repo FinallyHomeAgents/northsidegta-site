@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import '../lib/events/runtime.js'
+
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'

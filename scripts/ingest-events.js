@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('../lib/events/runtime')
+
 const fs = require('fs')
 const path = require('path')
 const Parser = require('rss-parser')
