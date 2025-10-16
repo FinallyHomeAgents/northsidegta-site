@@ -68,7 +68,9 @@ test('POST /api/sync-now fails fast when repository metadata is missing', async 
       GH_TOKEN: undefined,
     },
     async () => {
-      const { default: handler } = await import('../api/sync-now.js')
+      const modulePath = require.resolve('../api/sync-now.js')
+      delete require.cache[modulePath]
+      const handler = require(modulePath)
 
       const csrfToken = 'csrf-token'
       const signature = crypto.createHmac('sha256', secret).update(csrfToken).digest('hex')
