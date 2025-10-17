@@ -8,11 +8,14 @@
     "town": "Aurora",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of Aurora — Special Events",
     "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/special-events.aspx",
-    "sourceDomain": "aurora.ca"
+    "sourceDomain": "aurora.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "aurora-recreation-culture",
@@ -23,11 +26,14 @@
     "town": "Aurora",
     "category": "Arts & Culture",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of Aurora — Recreation & Culture",
     "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/events-calendar.aspx",
-    "sourceDomain": "aurora.ca"
+    "sourceDomain": "aurora.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "east-gwillimbury-community",
@@ -38,11 +44,14 @@
     "town": "East Gwillimbury",
     "category": "Family",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of East Gwillimbury Events",
     "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/events.aspx",
-    "sourceDomain": "eastgwillimbury.ca"
+    "sourceDomain": "eastgwillimbury.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "east-gwillimbury-recreation",
@@ -53,11 +62,14 @@
     "town": "East Gwillimbury",
     "category": "Sports",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "EG Recreation Programs",
     "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/recreation-programs.aspx",
-    "sourceDomain": "eastgwillimbury.ca"
+    "sourceDomain": "eastgwillimbury.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "georgina-community",
@@ -68,11 +80,14 @@
     "town": "Georgina",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of Georgina Events",
     "sourceUrl": "https://www.georgina.ca/events",
-    "sourceDomain": "georgina.ca"
+    "sourceDomain": "georgina.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "newmarket-community",
@@ -83,11 +98,14 @@
     "town": "Newmarket",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of Newmarket Events",
     "sourceUrl": "https://www.newmarket.ca/events",
-    "sourceDomain": "newmarket.ca"
+    "sourceDomain": "newmarket.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "whitchurch-stouffville-community",
@@ -98,11 +116,14 @@
     "town": "Stouffville",
     "category": "Family",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 10,
     "sourceName": "Town of Whitchurch-Stouffville Events",
     "sourceUrl": "https://www.townofws.ca/en/explore-and-play/events-calendar.aspx",
-    "sourceDomain": "townofws.ca"
+    "sourceDomain": "townofws.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "uxbridge-community",
@@ -113,11 +134,14 @@
     "town": "Uxbridge",
     "category": "Outdoors",
     "priceType": "Mixed",
-    "badges": ["Outdoors"],
+    "badges": [
+      "Outdoors"
+    ],
     "priority": 10,
     "sourceName": "Township of Uxbridge Events",
     "sourceUrl": "https://www.uxbridge.ca/en/explore-and-play/events.aspx",
-    "sourceDomain": "uxbridge.ca"
+    "sourceDomain": "uxbridge.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "scugog-community",
@@ -128,11 +152,14 @@
     "town": "Scugog",
     "category": "Family",
     "priceType": "Mixed",
-    "badges": ["Outdoors"],
+    "badges": [
+      "Outdoors"
+    ],
     "priority": 10,
     "sourceName": "Township of Scugog Events",
     "sourceUrl": "https://www.scugog.ca/en/exploring-our-community/events.aspx",
-    "sourceDomain": "scugog.ca"
+    "sourceDomain": "scugog.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "explore-georgina",
@@ -145,11 +172,14 @@
     "town": "Georgina",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 30,
     "sourceName": "Explore Georgina",
     "sourceUrl": "https://www.exploregeorgina.ca/events",
-    "sourceDomain": "exploregeorgina.ca"
+    "sourceDomain": "exploregeorgina.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "discover-stouffville",
@@ -162,7 +192,9 @@
     "town": "Stouffville",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 30,
     "sourceName": "Discover Stouffville",
     "sourceUrl": "https://discoverstouffville.ca/events",
@@ -177,11 +209,14 @@
     "town": "Uxbridge",
     "category": "Festivals",
     "priceType": "Mixed",
-    "badges": ["Outdoors"],
+    "badges": [
+      "Outdoors"
+    ],
     "priority": 30,
     "sourceName": "Discover Uxbridge",
     "sourceUrl": "https://discoveruxbridge.ca/uxbridge-events",
-    "sourceDomain": "discoveruxbridge.ca"
+    "sourceDomain": "discoveruxbridge.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "aurora-town-square",
@@ -192,11 +227,14 @@
     "town": "Aurora",
     "category": "Arts & Culture",
     "priceType": "Paid",
-    "badges": ["Arts & Culture"],
+    "badges": [
+      "Arts & Culture"
+    ],
     "priority": 20,
     "sourceName": "Aurora Town Square",
     "sourceUrl": "https://auroratownsquare.ca/whats-on",
-    "sourceDomain": "auroratownsquare.ca"
+    "sourceDomain": "auroratownsquare.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "aurora-cultural-centre",
@@ -207,7 +245,9 @@
     "town": "Aurora",
     "category": "Arts & Culture",
     "priceType": "Paid",
-    "badges": ["Arts & Culture"],
+    "badges": [
+      "Arts & Culture"
+    ],
     "priority": 20,
     "sourceName": "Aurora Cultural Centre",
     "sourceUrl": "https://auroraculturalcentre.ca/events/",
@@ -222,11 +262,14 @@
     "town": "Newmarket",
     "category": "Arts & Culture",
     "priceType": "Paid",
-    "badges": ["Arts & Culture"],
+    "badges": [
+      "Arts & Culture"
+    ],
     "priority": 20,
     "sourceName": "NewRoads Performing Arts Centre",
     "sourceUrl": "https://www.newmarket.ca/newroadspac",
-    "sourceDomain": "newmarket.ca"
+    "sourceDomain": "newmarket.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "georgina-arts-centre",
@@ -237,17 +280,20 @@
     "town": "Georgina",
     "category": "Arts & Culture",
     "priceType": "Paid",
-    "badges": ["Arts & Culture"],
+    "badges": [
+      "Arts & Culture"
+    ],
     "priority": 20,
     "sourceName": "Georgina Centre for Arts & Culture",
     "sourceUrl": "https://www.theglen.ca/events/",
-    "sourceDomain": "theglen.ca"
+    "sourceDomain": "theglen.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "sharon-temple",
     "enabled": true,
     "type": "ics",
-    "url": "https://www.sharontemple.ca/events/?ical=1",
+    "url": "https://www.sharonmuseumandgardens.ca/events?ical=1",
     "slugPrefix": "sharon-temple",
     "town": "East Gwillimbury",
     "category": "Arts & Culture",
@@ -255,7 +301,8 @@
     "priority": 20,
     "sourceName": "Sharon Temple National Historic Site",
     "sourceUrl": "https://www.sharontemple.ca/events/",
-    "sourceDomain": "sharontemple.ca"
+    "sourceDomain": "sharontemple.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "uxbridge-music-hall",
@@ -269,7 +316,8 @@
     "priority": 20,
     "sourceName": "Uxbridge Music Hall",
     "sourceUrl": "https://uxbridgemusichall.com/events/",
-    "sourceDomain": "uxbridgemusichall.com"
+    "sourceDomain": "uxbridgemusichall.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "aurora-public-library",
@@ -280,26 +328,32 @@
     "town": "Aurora",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Aurora Public Library",
     "sourceUrl": "https://www.aurorapl.ca/events",
-    "sourceDomain": "aurorapl.ca"
+    "sourceDomain": "aurorapl.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "newmarket-public-library",
     "enabled": true,
     "type": "ics",
-    "url": "https://www.newmarketpl.ca/events/?ical=1",
+    "url": "https://calendar.newmarketpl.ca/default/Month?ical=1",
     "slugPrefix": "newmarket-library",
     "town": "Newmarket",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Newmarket Public Library",
     "sourceUrl": "https://www.newmarketpl.ca/programs",
-    "sourceDomain": "newmarketpl.ca"
+    "sourceDomain": "newmarketpl.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "georgina-public-library",
@@ -310,11 +364,14 @@
     "town": "Georgina",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Georgina Public Library",
     "sourceUrl": "https://www.georginalibrary.ca/en/programs-and-events/events.aspx",
-    "sourceDomain": "georginalibrary.ca"
+    "sourceDomain": "georginalibrary.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "east-gwillimbury-public-library",
@@ -325,41 +382,50 @@
     "town": "East Gwillimbury",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "East Gwillimbury Public Library",
     "sourceUrl": "https://www.egpl.ca/programs-events/",
-    "sourceDomain": "egpl.ca"
+    "sourceDomain": "egpl.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "uxbridge-public-library",
     "enabled": true,
     "type": "ics",
-    "url": "https://uxlib.com/events/?ical=1",
+    "url": "https://uxlib.com/programs/events/?ical=1",
     "slugPrefix": "uxbridge-library",
     "town": "Uxbridge",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Uxbridge Public Library",
     "sourceUrl": "https://uxlib.com/events/",
-    "sourceDomain": "uxlib.com"
+    "sourceDomain": "uxlib.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "whitchurch-stouffville-public-library",
     "enabled": true,
     "type": "ics",
-    "url": "https://www.wsplibrary.ca/events/?ical=1",
+    "url": "https://wsplibrary.bibliocommons.com/v2/events?ical=1",
     "slugPrefix": "ws-library",
     "town": "Stouffville",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Whitchurch-Stouffville Public Library",
     "sourceUrl": "https://www.wsplibrary.ca/programs/",
-    "sourceDomain": "wsplibrary.ca"
+    "sourceDomain": "wsplibrary.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "scugog-memorial-library",
@@ -370,11 +436,14 @@
     "town": "Scugog",
     "category": "Family",
     "priceType": "Free",
-    "badges": ["Family-friendly"],
+    "badges": [
+      "Family-friendly"
+    ],
     "priority": 25,
     "sourceName": "Scugog Memorial Public Library",
     "sourceUrl": "https://www.scugoglibrary.ca/events/",
-    "sourceDomain": "scugoglibrary.ca"
+    "sourceDomain": "scugoglibrary.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "aurora-chamber",
@@ -388,7 +457,8 @@
     "priority": 40,
     "sourceName": "Aurora Chamber of Commerce",
     "sourceUrl": "https://business.aurorachamber.org/events",
-    "sourceDomain": "aurorachamber.on.ca"
+    "sourceDomain": "aurorachamber.on.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "newmarket-main-street-bia",
@@ -402,7 +472,8 @@
     "priority": 40,
     "sourceName": "Newmarket Main Street BIA",
     "sourceUrl": "https://newmarketmainstreet.ca/events",
-    "sourceDomain": "newmarketmainstreet.ca"
+    "sourceDomain": "newmarketmainstreet.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "stouffville-main-street-bia",
@@ -416,13 +487,14 @@
     "priority": 40,
     "sourceName": "Downtown Stouffville BIA",
     "sourceUrl": "https://stouffvillemainstreet.ca/events",
-    "sourceDomain": "stouffvillemainstreet.ca"
+    "sourceDomain": "stouffvillemainstreet.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "uxbridge-bia",
     "enabled": true,
     "type": "ics",
-    "url": "https://uxbridgebia.com/events/?ical=1",
+    "url": "https://www.uxbridge.ca/en/bia/?ical=1",
     "slugPrefix": "uxbridge-bia",
     "town": "Uxbridge",
     "category": "Festivals",
@@ -430,7 +502,8 @@
     "priority": 40,
     "sourceName": "Uxbridge BIA",
     "sourceUrl": "https://uxbridgebia.com/events",
-    "sourceDomain": "uxbridgebia.com"
+    "sourceDomain": "uxbridgebia.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "sutton-bia",
@@ -444,7 +517,8 @@
     "priority": 40,
     "sourceName": "Sutton BIA",
     "sourceUrl": "https://suttonbia.com/events",
-    "sourceDomain": "suttonbia.com"
+    "sourceDomain": "suttonbia.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "jacksons-point-bia",
@@ -458,13 +532,14 @@
     "priority": 40,
     "sourceName": "Jackson's Point BIA",
     "sourceUrl": "https://jacksonspointbia.com/events",
-    "sourceDomain": "jacksonspointbia.com"
+    "sourceDomain": "jacksonspointbia.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "port-perry-bia",
     "enabled": true,
     "type": "ics",
-    "url": "https://discoverportperry.ca/events/?ical=1",
+    "url": "https://portperrybia.ca",
     "slugPrefix": "port-perry-bia",
     "town": "Scugog",
     "category": "Festivals",
@@ -472,7 +547,8 @@
     "priority": 40,
     "sourceName": "Discover Port Perry",
     "sourceUrl": "https://discoverportperry.ca/events",
-    "sourceDomain": "discoverportperry.ca"
+    "sourceDomain": "discoverportperry.ca",
+    "__fallbackAttempted": true
   },
   {
     "id": "york-region-tourism",
@@ -497,10 +573,13 @@
     "category": "Other",
     "priceType": "Mixed",
     "priority": 15,
-    "badges": ["Ticketed"],
+    "badges": [
+      "Ticketed"
+    ],
     "sourceName": "Universe",
     "sourceUrl": "https://www.universe.com",
-    "sourceDomain": "universe.com"
+    "sourceDomain": "universe.com",
+    "__fallbackAttempted": true
   },
   {
     "id": "ticketscene-ontario",
@@ -512,9 +591,12 @@
     "category": "Other",
     "priceType": "Paid",
     "priority": 25,
-    "badges": ["Ticketed"],
+    "badges": [
+      "Ticketed"
+    ],
     "sourceName": "TicketScene",
     "sourceUrl": "https://www.ticketscene.ca",
-    "sourceDomain": "ticketscene.ca"
+    "sourceDomain": "ticketscene.ca",
+    "__fallbackAttempted": true
   }
 ]

@@ -316,11 +316,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/watercolours-intermediate-advanced-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002673-1758067200-1762387199@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-10T17:07:55Z"
+  "lastSyncedAt": "2025-10-17T14:02:42.830Z",
+  "updatedAt": "2025-10-17T14:02:42.830Z",
+  "featured": false
 }

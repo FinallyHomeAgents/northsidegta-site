@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/open-studio-2025b/2025-10-22/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002589-1761091200-1761177599@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-10T17:07:55Z"
+  "lastSyncedAt": "2025-10-17T14:02:42.830Z",
+  "updatedAt": "2025-10-17T14:02:42.830Z",
+  "featured": false
 }

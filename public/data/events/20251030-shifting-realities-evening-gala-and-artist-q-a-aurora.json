@@ -1,0 +1,38 @@
+{
+  "slug": "20251030-shifting-realities-evening-gala-and-artist-q-a-aurora",
+  "title": "Shifting Realities: Evening Gala and Artist Q&A",
+  "summary": "Shifting Realities: Evening Gala and Artist Q&A",
+  "description": "Image Caption: Eva Folks Shifting Realities Evening Gala and Artist Q&A Thursday, October 30 6:00 – 8:00 PM Homeroom Galleries | 50 Victoria Street, Aurora Celebrate the opening of Shifting Realities: Adventures in Portraiture on October 30 from 6-8pm in our exciting, pre-Halloween Evening Gala: An exhibition like no other is coming your way, Featuring an array of portraits that all have their say. With a shift in reality from a place like our own, We’re absolutely positive your mind will be blown! We invite you to join us on opening night, When costumed attire will be a welcoming sight. This evening’s gala will open the show, An invitation for you and yours we bestow. All are welcome to attend, and costumed attire encouraged! Refreshments provided, and remarks commence at 6:30pm. Learn more about Shifting Realities: Adventures in Portraiture",
+  "startDate": "2025-10-30T22:00:00Z",
+  "endDate": "2025-10-31T00:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-10-30",
+      "all_day": false,
+      "start_time": "18:00",
+      "end_time": "20:00"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/shifting-realities-evening-gala/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "status": "approved",
+  "hidden": false,
+  "archived": false,
+  "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
+  "sourceRef": "10002705-1761847200-1761854400@auroraculturalcentre.ca",
+  "lastSyncedAt": "2025-10-17T14:02:42.830Z",
+  "firstSeenAt": "2025-10-17T14:02:42.830Z",
+  "updatedAt": "2025-10-17T14:02:42.830Z",
+  "featured": false
+}
