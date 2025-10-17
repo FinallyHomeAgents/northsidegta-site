@@ -2,9 +2,11 @@ name: Daily Events Sync
 
 on:
   schedule:
-    - cron: '0 7 * * *'
-  workflow_dispatch:
+    - cron: '0 8 * * *'    # once daily at 8AM
+  workflow_dispatch: {}     # manual trigger from the Actions tab
   repository_dispatch:
+    types: [sync-now]       # only run when /api/sync-now triggers it
+
 
 permissions:
   contents: write
