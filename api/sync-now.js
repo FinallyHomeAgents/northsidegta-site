@@ -7,12 +7,10 @@ const {
   getGithubSyncCapability,
 } = require('../lib/github-admin.js')
 
-const WORKFLOW_FILE = '.github/workflows/events-sync.yml'
 const DEFAULT_DISPATCH_REF = DEFAULT_SYNC_REF || 'main'
-const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
+const CSRF_COOKIE = 'sync_now_csrf'
 const SUCCESS_STATUSES = new Set([200, 201, 202, 204])
 
-// ---------------------- cookie / csrf helpers ----------------------
 function parseCookies(header = '') {
   return header
     .split(';')
@@ -22,31 +20,25 @@ function parseCookies(header = '') {
       const [name, ...rest] = entry.split('=')
       if (!name) return acc
       const value = rest.join('=')
-      try {
-        acc[name] = decodeURIComponent(value || '')
-      } catch (_) {
-        acc[name] = value || ''
-      }
+      try { acc[name] = decodeURIComponent(value || '') } catch { acc[name] = value || '' }
       return acc
     }, {})
 }
 
 function timingSafeEqual(expected, received) {
-  const expectedBuffer = Buffer.from(expected)
-  const receivedBuffer = Buffer.from(received)
-  if (expectedBuffer.length !== receivedBuffer.length) return false
-  return crypto.timingSafeEqual(expectedBuffer, receivedBuffer)
+  const eb = Buffer.from(expected || '')
+  const rb = Buffer.from(received || '')
+  if (eb.length !== rb.length) return false
+  return crypto.timingSafeEqual(eb, rb)
 }
 
 function verifyCsrfToken(csrfToken, cookieValue) {
   if (!csrfToken || !cookieValue) return false
   const secret = process.env.SYNC_SECRET
   if (!secret) return false
-
   const [cookieToken, cookieSignature] = cookieValue.split('.')
   if (!cookieToken || !cookieSignature) return false
   if (cookieToken !== csrfToken) return false
-
   const expectedSignature = crypto.createHmac('sha256', secret).update(cookieToken).digest('hex')
   return timingSafeEqual(expectedSignature, cookieSignature)
 }
@@ -56,218 +48,82 @@ function isSameOrigin(req) {
   if (!host) return false
   const origin = req.headers.origin
   const referer = req.headers.referer
-
-  const matchesHost = (value) => {
-    try {
-      const url = new URL(value)
-      return url.host === host
-    } catch (_) {
-      return false
-    }
-  }
-
+  const matchesHost = (v) => { try { return new URL(v).host === host } catch { return false } }
   if (origin && !matchesHost(origin)) return false
   if (!origin && referer && !matchesHost(referer)) return false
   if (!origin && !referer) return false
-
   return true
 }
 
-// ---------------------- diagnostics / hints ----------------------
-function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
-  const statuses = [workflowStatus, repoDispatchStatus].filter((s) => typeof s === 'number' && s > 0)
-
-  if (statuses.some((s) => s === 401 || s === 403)) {
+function buildHintFromStatus(repoDispatchStatus) {
+  if (repoDispatchStatus === 401 || repoDispatchStatus === 403) {
     return 'GitHub rejected the sync — check GH_TOKEN/GITHUB_TOKEN scopes, authorize SSO, and ensure Actions: write is enabled.'
   }
-  if (statuses.includes(404)) {
-    return 'Workflow not found for that ref — confirm .github/workflows/events-sync.yml exists on the target branch.'
+  if (repoDispatchStatus === 404) {
+    return 'Repository dispatch failed — confirm events-sync.yml listens for repository_dispatch: types: [sync-now].'
   }
-  if (statuses.includes(422)) {
-    return 'Workflow dispatch was rejected — ensure events-sync.yml listens for workflow_dispatch and repository_dispatch on that ref.'
+  if (repoDispatchStatus === 422) {
+    return 'Dispatch was rejected — ensure the workflow is on the default branch and repository_dispatch is enabled.'
   }
   return 'Sync started — check GitHub → Actions.'
 }
 
-async function fetchDefaultBranch(owner, repo, headers) {
-  try {
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-      method: 'GET',
-      headers: { ...headers },
-    })
-    if (!response.ok) return null
-    const data = await response.json().catch(() => null)
-    const branch = typeof data?.default_branch === 'string' ? data.default_branch.trim() : ''
-    return branch || null
-  } catch (error) {
-    console.warn('[sync-now] failed to resolve repository default branch', error)
-    return null
-  }
-}
-
-function summarizeDispatch(workflowResponse, repoDispatchResponse) {
-  const workflowStatus = workflowResponse.status
-  const repoDispatchStatus = repoDispatchResponse.status
-  const ok =
-    SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
-  const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
-  return { workflowStatus, repoDispatchStatus, ok, hint }
-}
-
-// ---------------------- GitHub dispatch ----------------------
-async function performDispatch({ owner, repo, ref, headers }) {
-  const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
-  const repoDispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
-
-  const [workflowResponse, repoDispatchResponse] = await Promise.all([
-    // Run the workflow file (workflow_dispatch) *on ref* (we choose main)
-    fetch(workflowUrl, {
-      method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref }), // ref = 'main'
-    }),
-    // Also send repository_dispatch with **event_type: 'sync-now'**
-    fetch(repoDispatchUrl, {
-      method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event_type: 'sync-now', client_payload: { ref } }),
-    }),
-  ])
-
-  return { workflowResponse, repoDispatchResponse }
+async function dispatchSyncNow({ owner, repo, ref, headers }) {
+  const url = `https://api.github.com/repos/${owner}/${repo}/dispatches`
+  // Only repository_dispatch; avoids ref-specific 404s.
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ event_type: 'sync-now', client_payload: { ref } }),
+  })
+  return response
 }
 
 async function triggerSync() {
-  const envConfig = getGithubEnvConfig()
-  const capability = getGithubSyncCapability()
+  const env = getGithubEnvConfig()
+  const cap = getGithubSyncCapability()
 
-  const owner = capability.owner || envConfig?.owner || ''
-  const repo  = capability.repo  || envConfig?.repo  || ''
-  const ref   = DEFAULT_DISPATCH_REF // always start with 'main' (or DEFAULT_SYNC_REF)
-  const token = envConfig?.token || capability.token || ''
+  const owner = cap.owner || env?.owner || ''
+  const repo  = cap.repo  || env?.repo  || ''
+  const ref   = DEFAULT_DISPATCH_REF // always target main (or your override)
+  const token = env?.token || cap.token || ''
 
-  if (!capability.hasRepoMetadata && !(envConfig?.owner && envConfig?.repo)) {
-    return {
-      status: 500,
-      body: {
-        ok: false,
-        error: 'missing repository metadata',
-        hint: 'Set GITHUB_REPO (owner/repo) or configure VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG before running Sync now.',
-        owner,
-        repo,
-        ref,
-      },
-    }
+  if (!cap.hasRepoMetadata && !(env?.owner && env?.repo)) {
+    return { status: 500, body: { ok: false, error: 'missing repository metadata',
+      hint: 'Set GITHUB_REPO (owner/repo) or VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG.', owner, repo, ref } }
   }
 
   if (!token) {
-    return {
-      status: 502,
-      body: {
-        ok: false,
-        error: 'missing GH_TOKEN/GITHUB_TOKEN',
-        hint: 'Provide a GitHub token with repo + workflow scopes via GH_TOKEN or GITHUB_TOKEN.',
-        owner,
-        repo,
-        ref,
-      },
-    }
+    return { status: 502, body: { ok: false, error: 'missing GH_TOKEN/GITHUB_TOKEN',
+      hint: 'Provide a GitHub token with repo + workflow scopes via GH_TOKEN or GITHUB_TOKEN.', owner, repo, ref } }
   }
 
-  const authHeaders = {
+  const headers = {
     Authorization: `Bearer ${token}`,
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
   }
 
-  let activeRef = ref
-
   try {
-    let { workflowResponse, repoDispatchResponse } = await performDispatch({
-      owner,
-      repo,
-      ref: activeRef,
-      headers: authHeaders,
-    })
-
-    let { workflowStatus, repoDispatchStatus, ok, hint } = summarizeDispatch(
-      workflowResponse,
-      repoDispatchResponse
-    )
-
-    // If workflow_dispatch 404s (file missing on that ref), retry using repo default branch.
-    if (workflowStatus === 404) {
-      const repoDefaultBranch =
-        (await fetchDefaultBranch(owner, repo, authHeaders)) || DEFAULT_DISPATCH_REF
-      if (repoDefaultBranch && repoDefaultBranch !== activeRef) {
-        console.info(`[sync-now] workflow not found on ${activeRef}, retrying with ${repoDefaultBranch}`)
-        activeRef = repoDefaultBranch
-        ;({ workflowResponse, repoDispatchResponse } = await performDispatch({
-          owner,
-          repo,
-          ref: activeRef,
-          headers: authHeaders,
-        }))
-        ;({ workflowStatus, repoDispatchStatus, ok, hint } = summarizeDispatch(
-          workflowResponse,
-          repoDispatchResponse
-        ))
-      }
-    }
+    const resp = await dispatchSyncNow({ owner, repo, ref, headers })
+    const repoDispatchStatus = resp.status
+    const ok = SUCCESS_STATUSES.has(repoDispatchStatus)
+    const hint = buildHintFromStatus(repoDispatchStatus)
 
     if (!ok) {
-      const workflowError = await workflowResponse.text().catch(() => '')
-      const dispatchError = await repoDispatchResponse.text().catch(() => '')
-      console.warn('[sync-now] GitHub dispatch failed', {
-        workflowStatus,
-        repoDispatchStatus,
-        workflowError,
-        dispatchError,
-      })
-      return {
-        status: 502,
-        body: {
-          ok: false,
-          error: 'GitHub refused the sync request.',
-          hint,
-          workflowStatus,
-          repoDispatchStatus,
-          owner,
-          repo,
-          ref: activeRef,
-        },
-      }
+      const body = await resp.text().catch(() => '')
+      console.warn('[sync-now] repository_dispatch failed', { repoDispatchStatus, body })
+      return { status: 502, body: { ok: false, error: 'GitHub refused the sync request.', hint, repoDispatchStatus, owner, repo, ref } }
     }
 
-    return {
-      status: 200,
-      body: {
-        ok: true,
-        workflowStatus,
-        repoDispatchStatus,
-        owner,
-        repo,
-        ref: activeRef,
-        hint,
-      },
-    }
+    return { status: 200, body: { ok: true, repoDispatchStatus, owner, repo, ref, hint } }
   } catch (error) {
     console.error('[sync-now] unexpected error contacting GitHub', error)
-    return {
-      status: 502,
-      body: {
-        ok: false,
-        error: 'Failed to reach GitHub.',
-        hint: 'Network error while contacting GitHub. Try again in a moment.',
-        owner,
-        repo,
-        ref: activeRef,
-      },
-    }
+    return { status: 502, body: { ok: false, error: 'Failed to reach GitHub.',
+      hint: 'Network error while contacting GitHub. Try again in a moment.', owner, repo, ref } }
   }
 }
 
-// ---------------------- API handler ----------------------
 async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -279,13 +135,8 @@ async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store')
 
   if (!isSameOrigin(req)) {
-    res
-      .status(401)
-      .json({
-        ok: false,
-        error: 'Cross-origin request rejected.',
-        hint: 'Reload the admin page and try again from the official site.',
-      })
+    res.status(401).json({ ok: false, error: 'Cross-origin request rejected.',
+      hint: 'Reload the admin page and try again from the official site.' })
     return
   }
 
@@ -294,13 +145,8 @@ async function handler(req, res) {
   const csrfCookie = cookies[CSRF_COOKIE]
 
   if (!verifyCsrfToken(csrfHeader, csrfCookie)) {
-    res
-      .status(401)
-      .json({
-        ok: false,
-        error: 'Invalid or missing sync token.',
-        hint: 'Refresh the admin page to obtain a new sync token.',
-      })
+    res.status(401).json({ ok: false, error: 'Invalid or missing sync token.',
+      hint: 'Refresh the admin page to obtain a new sync token.' })
     return
   }
 
