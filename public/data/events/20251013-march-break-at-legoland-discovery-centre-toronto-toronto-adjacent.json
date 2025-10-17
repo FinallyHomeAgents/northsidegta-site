@@ -78,5 +78,7 @@
   "status": "approved",
   "source": "feed",
   "sourceRef": "10009011-1760347800-1761066000@www.experienceyorkregion.com",
-  "updatedAt": "2025-10-17T15:44:24Z"
+  "updatedAt": "2025-10-17T15:44:24Z",
+  "published": false,
+  "moderation": "pending"
 }

@@ -24,5 +24,7 @@
   "status": "approved",
   "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "updatedAt": "2025-10-17T15:44:24Z"
+  "updatedAt": "2025-10-17T15:44:24Z",
+  "published": false,
+  "moderation": "pending"
 }

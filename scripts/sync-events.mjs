@@ -1398,6 +1398,19 @@ function makeFileSafeSlug(value) {
     .replace(/^-+|-+$/g, '')
 }
 
+// --- moderation helper (review-first default) ---
+function resolveModeration(preserved = {}, incoming = {}) {
+  // If we've already decided before, keep it
+  if (typeof preserved.published === 'boolean') {
+    return {
+      published: preserved.published,
+      moderation: preserved.moderation || (preserved.published ? 'approved' : 'pending'),
+    }
+  }
+  // New/unknown items default to "pending" (not published)
+  return { published: false, moderation: 'pending' }
+}
+
 function buildDedupKey(event) {
   if (!event) return ''
   const title = cleanText(event.title)
@@ -1438,6 +1451,8 @@ const KEY_ORDER = [
   'eventUrl',
   'icsUrl',
   'status',
+  'published',
+  'moderation',
   'hidden',
   'archived',
   'notes',
@@ -1505,6 +1520,7 @@ async function mergeEvent(event, existingMaps, now) {
     ...(firstSeenAt ? { firstSeenAt } : {}),
   }
 
+  // Normalize event (existing behavior)
   let normalizedEvent
   try {
     const normalization = normalizeCmsEvent(baseMerged)
@@ -1516,10 +1532,13 @@ async function mergeEvent(event, existingMaps, now) {
     throw failure
   }
 
+  // Build metadata (existing) and inject moderation (new)
   const metadata = buildMetadata(baseMerged)
+  const moderation = resolveModeration(preserved, normalizedEvent)
   const comparableNext = {
     ...normalizedEvent,
     ...metadata,
+    ...moderation, // <- ensure published/moderation present
     ...(firstSeenAt ? { firstSeenAt } : {}),
   }
 

@@ -23,5 +23,7 @@
   "archived": false,
   "status": "approved",
   "source": "manual",
-  "updatedAt": "2025-10-02T00:55:54Z"
+  "updatedAt": "2025-10-02T00:55:54Z",
+  "published": false,
+  "moderation": "pending"
 }

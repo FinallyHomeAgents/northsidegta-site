@@ -20,5 +20,7 @@
   "status": "pending",
   "source": "feed",
   "sourceRef": "10011957-1759431600-1759438800@www.experienceyorkregion.com",
-  "updatedAt": "2025-10-02T10:16:19Z"
+  "updatedAt": "2025-10-02T10:16:19Z",
+  "published": false,
+  "moderation": "pending"
 }

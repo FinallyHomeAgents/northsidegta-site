@@ -29,5 +29,7 @@
   "status": "published",
   "source": "manual",
   "sourceRef": "uxbridge-trails-2025",
-  "updatedAt": "2025-04-22T12:45:00Z"
+  "updatedAt": "2025-04-22T12:45:00Z",
+  "published": false,
+  "moderation": "pending"
 }

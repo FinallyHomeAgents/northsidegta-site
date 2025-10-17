@@ -20,5 +20,7 @@
   "status": "pending",
   "source": "feed",
   "sourceRef": "36988-1756857600-1756943999@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-01T10:17:42Z"
+  "updatedAt": "2025-10-01T10:17:42Z",
+  "published": false,
+  "moderation": "pending"
 }

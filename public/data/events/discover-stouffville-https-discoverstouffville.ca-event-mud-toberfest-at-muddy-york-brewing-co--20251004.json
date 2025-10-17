@@ -24,5 +24,7 @@
   "status": "pending",
   "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/mud-toberfest-at-muddy-york-brewing-co/",
-  "updatedAt": "2025-10-03T10:16:54Z"
+  "updatedAt": "2025-10-03T10:16:54Z",
+  "published": false,
+  "moderation": "pending"
 }

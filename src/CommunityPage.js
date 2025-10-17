@@ -19,6 +19,19 @@ import {
 
 const VIEW_STORAGE_KEY = 'northside-community-view'
 
+function isApproved(event) {
+  // Prefer explicit moderation/published if present
+  if (typeof event.published === 'boolean' || typeof event.moderation === 'string') {
+    return event.published === true || String(event.moderation).toLowerCase() === 'approved'
+  }
+  // Fallback to old behavior (if the page historically used status)
+  if (typeof event.status === 'string') {
+    const s = event.status.toLowerCase()
+    return s === 'approved' || s === 'published'
+  }
+  return false
+}
+
 function usePersistedView(initialValue) {
   const [view, setView] = React.useState(() => {
     if (typeof window === 'undefined') return initialValue
@@ -72,7 +85,7 @@ export default function CommunityPage() {
   const events = React.useMemo(() => hydrateEvents(rawEvents), [rawEvents])
 
   const visibleEvents = React.useMemo(
-    () => events.filter((event) => !event.hidden && !event.archived),
+    () => events.filter((event) => !event.hidden && !event.archived && isApproved(event)),
     [events]
   )
 

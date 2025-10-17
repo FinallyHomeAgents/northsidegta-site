@@ -24,5 +24,7 @@
   "status": "pending",
   "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/tourism-now/",
-  "updatedAt": "2025-10-03T19:53:43Z"
+  "updatedAt": "2025-10-03T19:53:43Z",
+  "published": false,
+  "moderation": "pending"
 }

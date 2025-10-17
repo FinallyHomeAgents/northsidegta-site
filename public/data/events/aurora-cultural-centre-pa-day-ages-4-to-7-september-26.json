@@ -20,5 +20,7 @@
   "status": "published",
   "source": "feed",
   "sourceRef": "https://auroraculturalcentre.ca/event/paday-ages-4-7-sept26-fall25/",
-  "updatedAt": "2025-09-23T17:24:17Z"
+  "updatedAt": "2025-09-23T17:24:17Z",
+  "published": false,
+  "moderation": "pending"
 }

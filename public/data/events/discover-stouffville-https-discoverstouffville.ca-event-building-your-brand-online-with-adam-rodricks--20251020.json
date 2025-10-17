@@ -24,5 +24,7 @@
   "status": "pending",
   "source": "feed",
   "sourceRef": "https://discoverstouffville.ca/event/building-your-brand-online-with-adam-rodricks/",
-  "updatedAt": "2025-10-03T10:16:54Z"
+  "updatedAt": "2025-10-03T10:16:54Z",
+  "published": false,
+  "moderation": "pending"
 }
