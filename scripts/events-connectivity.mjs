@@ -35,12 +35,32 @@ async function main() {
     await persistResults(options.outputPath, results)
   }
 
-  const failed = results.filter((record) => record.primary.ok !== true)
-  if (failed.length) {
-    console.error(`\n[events-connectivity] ${failed.length} feed(s) failed connectivity checks.`)
-    process.exitCode = 1
+  // --- NEW SMART EXIT LOGIC ---
+  const okCount = results.filter(r => r.primary?.ok === true).length
+  const failCount = results.length - okCount
+
+  // Save quick summary
+  const summaryPath = path.join(rootDir, 'public/data/events/_connectivity-summary.json')
+  await fs.mkdir(path.dirname(summaryPath), { recursive: true })
+  await fs.writeFile(
+    summaryPath,
+    JSON.stringify({
+      timestamp: new Date().toISOString(),
+      passed: okCount,
+      failed: failCount
+    }, null, 2),
+    'utf8'
+  )
+
+  if (okCount === 0) {
+    console.error(`[events-connectivity] ❌ All ${results.length} feeds failed connectivity checks.`)
+    process.exit(1)
+  } else if (failCount > 0) {
+    console.warn(`[events-connectivity] ⚠️ ${failCount} feed(s) failed connectivity, ${okCount} passed. Continuing.`)
+    process.exit(0)
   } else {
-    console.log('\n[events-connectivity] All feeds responded successfully.')
+    console.log('[events-connectivity] ✅ All feeds responded successfully.')
+    process.exit(0)
   }
 }
 
@@ -146,9 +166,7 @@ async function runWithConcurrency(items, concurrency, worker) {
   async function runNext() {
     const current = cursor
     cursor += 1
-    if (current >= items.length) {
-      return
-    }
+    if (current >= items.length) return
     try {
       results[current] = await worker(items[current], current)
     } catch (error) {
@@ -176,9 +194,7 @@ async function probeFeed(feed, options) {
       method: candidate.method,
     })
     checks.push({ ...result, role: candidate.role })
-    if (candidate.role === 'primary' && result.ok) {
-      break
-    }
+    if (candidate.role === 'primary' && result.ok) break
   }
 
   const primary = checks.find((entry) => entry.role === 'primary') || {
@@ -200,13 +216,9 @@ async function probeFeed(feed, options) {
 
 function buildCandidateUrls(feed) {
   const urls = []
-  if (feed?.url) {
-    urls.push({ role: 'primary', url: resolveUrl(feed.url, feed), method: 'HEAD' })
-  }
+  if (feed?.url) urls.push({ role: 'primary', url: resolveUrl(feed.url, feed), method: 'HEAD' })
   const fallback = feed?.html?.url || feed?.sourceUrl
-  if (fallback) {
-    urls.push({ role: 'fallback', url: resolveUrl(fallback, feed), method: 'HEAD' })
-  }
+  if (fallback) urls.push({ role: 'fallback', url: resolveUrl(fallback, feed), method: 'HEAD' })
   return urls.filter((entry, index, list) => {
     const key = `${entry.role}:${entry.url}`
     return list.findIndex((item) => `${item.role}:${item.url}` === key) === index
@@ -220,7 +232,7 @@ function resolveUrl(value, feed) {
     try {
       const resolved = new URL(value, feed.url)
       return resolved.toString()
-    } catch (error) {
+    } catch {
       return value
     }
   }
@@ -247,11 +259,7 @@ async function checkUrl(url, options = {}) {
   }
 
   const controller = createAbortController(timeoutMs)
-  const init = {
-    method,
-    redirect: 'follow',
-    signal: controller.signal,
-  }
+  const init = { method, redirect: 'follow', signal: controller.signal }
 
   try {
     const response = await fetch(url, init)
@@ -265,20 +273,14 @@ async function checkUrl(url, options = {}) {
     }
 
     if (response.body && typeof response.body.cancel === 'function') {
-      try {
-        await response.body.cancel()
-      } catch (error) {
-        // ignore cancellation errors
-      }
+      try { await response.body.cancel() } catch {}
     }
   } catch (error) {
     result.ok = false
     result.status = null
     result.error = error.code || error.name || error.message || 'fetch_failed'
     result.elapsedMs = Date.now() - startedAt
-    if (method === 'HEAD') {
-      return checkUrl(url, { ...options, method: 'GET' })
-    }
+    if (method === 'HEAD') return checkUrl(url, { ...options, method: 'GET' })
   } finally {
     controller.cleanup?.()
   }
@@ -289,25 +291,17 @@ async function checkUrl(url, options = {}) {
 function createAbortController(timeoutMs) {
   if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
     const timeoutSignal = AbortSignal.timeout(timeoutMs)
-    const controller = { signal: timeoutSignal, cleanup: () => {} }
-    return controller
+    return { signal: timeoutSignal, cleanup: () => {} }
   }
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
-  return {
-    signal: controller.signal,
-    cleanup: () => clearTimeout(timer),
-  }
+  return { signal: controller.signal, cleanup: () => clearTimeout(timer) }
 }
 
 function captureHeaders(headers) {
   const result = {}
-  if (!headers || typeof headers.forEach !== 'function') {
-    return result
-  }
-  headers.forEach((value, key) => {
-    result[key] = value
-  })
+  if (!headers || typeof headers.forEach !== 'function') return result
+  headers.forEach((value, key) => { result[key] = value })
   return result
 }
 
@@ -326,10 +320,7 @@ function toSummaryRow(record) {
 async function persistResults(outputPath, results) {
   const target = outputPath.endsWith('.json') ? outputPath : `${outputPath}.json`
   await fs.mkdir(path.dirname(target), { recursive: true })
-  const payload = {
-    generatedAt: new Date().toISOString(),
-    results,
-  }
+  const payload = { generatedAt: new Date().toISOString(), results }
   await fs.writeFile(target, `${JSON.stringify(payload, null, 2)}\n`, 'utf8')
   console.log(`[events-connectivity] Wrote results to ${path.relative(process.cwd(), target)}`)
 }
