@@ -1,6 +1,7 @@
 // src/MapHero.js
 import React, { useEffect, useState } from "react";
 import QuickContactCard from "./QuickContactCard";
+import LiveTicker from "./components/LiveTicker";
 
 /* ────────────────────────────────────────────────────────────
    Category labels + display order
@@ -15,6 +16,7 @@ const CATEGORY_LABELS = {
   restaurants: "Restaurants",
   localEvents: "Local Events",
 };
+
 const CATEGORY_ORDER = [
   "housePrices",
   "commuterAccess",
@@ -27,7 +29,7 @@ const CATEGORY_ORDER = [
 ];
 
 /* ────────────────────────────────────────────────────────────
-   Town pins (percent positions for your SVG map) — unchanged
+   Town pins (percent positions for your SVG map)
    ──────────────────────────────────────────────────────────── */
 const TOWNS = [
   {
@@ -159,7 +161,7 @@ const TOWNS = [
 ];
 
 /* ────────────────────────────────────────────────────────────
-   Local styles
+   Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
 const Styles = () => (
   <style>{`
@@ -182,15 +184,11 @@ const Styles = () => (
     border-radius: 16px;
     box-shadow: 0 12px 28px rgba(2,44,34,.18);
   }
-  @keyframes ns-progress {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
   `}</style>
 );
 
 /* ────────────────────────────────────────────────────────────
-   Compact rating row so labels + dots always fit
+   Compact rating row
    ──────────────────────────────────────────────────────────── */
 function RatingRow({ label, value }) {
   const v = Math.round(value || 0);
@@ -214,174 +212,12 @@ function RatingRow({ label, value }) {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Premium inline SVG icons
-   ──────────────────────────────────────────────────────────── */
-function IconBase({ children, className = "" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {children}
-    </svg>
-  );
-}
-function XIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M6 6l12 12M18 6L6 18" />
-    </IconBase>
-  );
-}
-function CheckIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M20 6L9 17l-5-5" />
-    </IconBase>
-  );
-}
-function TripleChevronIcon({ className = "" }) {
-  return (
-    <IconBase className={className}>
-      <path d="M7 6l5 6-5 6M12 6l5 6-5 6" />
-    </IconBase>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────
-   LED-inspired matchup scoreboard overlay
-   ──────────────────────────────────────────────────────────── */
-function ComparisonBar({ className = "" }) {
-  const items = [
-    { left: "HIGH HOME PRICES", right: "BETTER VALUE HOMES" },
-    { left: "TRAFFIC GRIDLOCK", right: "EASIER COMMUTES" },
-    { left: "LIMITED SPACE", right: "MORE GREEN SPACE" },
-    { left: "TIGHT LOTS", right: "ROOM TO BREATHE" },
-  ];
-  const [i, setI] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => setI((x) => (x + 1) % items.length), 4000);
-    return () => clearInterval(id);
-  }, [items.length]);
-
-  const cur = items[i];
-
-  return (
-    <div className={`pointer-events-none w-full ${className}`}>
-      <div
-        className="pointer-events-auto relative w-full overflow-hidden rounded-2xl border border-emerald-400/60 shadow-[0_22px_48px_-24px_rgba(16,185,129,0.85)] backdrop-blur-md"
-        style={{
-          background:
-            "linear-gradient(140deg, rgba(7,16,21,0.88) 0%, rgba(6,56,41,0.92) 45%, rgba(6,78,59,0.9) 100%)",
-        }}
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(74,222,128,0.18),transparent_65%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0)_55%,rgba(15,118,110,0.25)_100%)] mix-blend-screen opacity-80" />
-
-        <div className="relative">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2 md:px-6">
-            <div className="flex items-center gap-2">
-              <div className="flex h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100/90">
-                Live Matchup
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-emerald-100/70">
-              <span>FHA</span>
-              <TripleChevronIcon className="h-4 w-4 text-emerald-200/60" />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between px-4 py-3 md:px-6">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-600/80 text-[11px] font-bold uppercase tracking-[0.24em] text-white shadow-[inset_0_0_12px_rgba(248,113,113,0.45)]">
-                TOR
-              </span>
-              <div className="leading-tight">
-                <span className="block text-[10px] uppercase tracking-[0.32em] text-white/45">
-                  City
-                </span>
-                <span className="block text-sm font-semibold uppercase tracking-wide text-white">
-                  Toronto Living
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center justify-center px-2 text-emerald-200/80">
-              <span className="text-[10px] uppercase tracking-[0.48em]">vs</span>
-              <span className="mt-1 h-1 w-6 rounded-full bg-emerald-300/80" />
-            </div>
-
-            <div className="flex items-center gap-3 text-right">
-              <div className="leading-tight">
-                <span className="block text-[10px] uppercase tracking-[0.32em] text-emerald-100/70">
-                  Region
-                </span>
-                <span className="block text-sm font-bold uppercase tracking-wide text-emerald-50">
-                  NorthSide GTA
-                </span>
-              </div>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300/60 bg-emerald-500/30 p-1 shadow-[inset_0_0_14px_rgba(16,185,129,0.45)]">
-                <img
-                  src="/Images/northsidegta-logo.svg"
-                  alt="NorthSide GTA logo"
-                  className="h-full w-auto"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 border-t border-white/10 text-[12px] uppercase tracking-wide">
-            <div className="flex items-center gap-3 px-4 py-3 md:px-6">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-rose-300/60 bg-rose-500/25">
-                <XIcon className="h-4 w-4 text-rose-200" />
-              </span>
-              <p className="text-[11px] md:text-[12px] font-semibold leading-tight text-white/80">
-                {cur.left}
-              </p>
-            </div>
-            <div className="flex items-center justify-end gap-3 px-4 py-3 text-right md:px-6">
-              <p className="text-[11px] md:text-[12px] font-bold leading-tight text-emerald-100">
-                {cur.right}
-              </p>
-              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200/70 bg-emerald-500/30">
-                <CheckIcon className="h-4 w-4 text-emerald-100" />
-              </span>
-            </div>
-          </div>
-
-          <div className="relative h-1.5 overflow-hidden border-t border-white/5 bg-white/10">
-            <div
-              className="absolute inset-0 origin-left"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.75) 50%, rgba(255,255,255,0.15) 100%)",
-                animation: "ns-progress 4s linear infinite",
-              }}
-            />
-            <div className="absolute inset-x-0 bottom-0 h-[1px] bg-emerald-200/30" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────
    MapHero
    ──────────────────────────────────────────────────────────── */
 export default function MapHero() {
   const [pulsing, setPulsing] = useState(true);
-  const [openId, setOpenId] = useState(null);   // tap state for touch devices
-  const [hoverId, setHoverId] = useState(null); // hover state for pointer devices
+  const [openId, setOpenId] = useState(null);   // touch devices
+  const [hoverId, setHoverId] = useState(null); // pointer devices
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -420,7 +256,7 @@ export default function MapHero() {
 
           {/* Map frame */}
           <div
-            className="relative rounded-xl overflow-hidden"
+            className="relative rounded-xl overflow-hidden map-hero"
             onMouseLeave={() => canHover && setHoverId(null)}
           >
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
@@ -504,9 +340,10 @@ export default function MapHero() {
                 </div>
               </div>
             )}
-          </div>
 
-          <ComparisonBar className="mt-4 lg:mt-5" />
+            {/* NEW: ticker attached to bottom */}
+            <LiveTicker />
+          </div>
 
           {/* MOBILE: panel below the map when a pin is tapped */}
           {!canHover && activeTown && (
@@ -565,7 +402,7 @@ export default function MapHero() {
             </div>
           )}
 
-          {/* Divider + Inline Quick Contact (unchanged) */}
+          {/* Divider + Inline Quick Contact */}
           <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
             <QuickContactCard
               heading="Find Where You Truly Belong in the NorthSide GTA"
