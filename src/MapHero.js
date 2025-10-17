@@ -16,6 +16,7 @@ const CATEGORY_LABELS = {
   restaurants: "Restaurants",
   localEvents: "Local Events",
 };
+
 const CATEGORY_ORDER = [
   "housePrices",
   "commuterAccess",
@@ -28,7 +29,7 @@ const CATEGORY_ORDER = [
 ];
 
 /* ────────────────────────────────────────────────────────────
-   Town pins (percent positions for your SVG map) — unchanged
+   Town pins (percent positions for your SVG map)
    ──────────────────────────────────────────────────────────── */
 const TOWNS = [
   {
@@ -160,7 +161,7 @@ const TOWNS = [
 ];
 
 /* ────────────────────────────────────────────────────────────
-   Local styles
+   Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
 const Styles = () => (
   <style>{`
@@ -187,7 +188,7 @@ const Styles = () => (
 );
 
 /* ────────────────────────────────────────────────────────────
-   Compact rating row so labels + dots always fit
+   Compact rating row
    ──────────────────────────────────────────────────────────── */
 function RatingRow({ label, value }) {
   const v = Math.round(value || 0);
@@ -215,8 +216,8 @@ function RatingRow({ label, value }) {
    ──────────────────────────────────────────────────────────── */
 export default function MapHero() {
   const [pulsing, setPulsing] = useState(true);
-  const [openId, setOpenId] = useState(null);   // tap state for touch devices
-  const [hoverId, setHoverId] = useState(null); // hover state for pointer devices
+  const [openId, setOpenId] = useState(null);   // touch devices
+  const [hoverId, setHoverId] = useState(null); // pointer devices
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -340,6 +341,7 @@ export default function MapHero() {
               </div>
             )}
 
+            {/* NEW: ticker attached to bottom */}
             <LiveTicker />
           </div>
 
@@ -400,7 +402,7 @@ export default function MapHero() {
             </div>
           )}
 
-          {/* Divider + Inline Quick Contact (unchanged) */}
+          {/* Divider + Inline Quick Contact */}
           <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
             <QuickContactCard
               heading="Find Where You Truly Belong in the NorthSide GTA"
