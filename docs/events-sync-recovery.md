@@ -48,8 +48,9 @@ The sync, ingest, and HTTP helper modules now share a runtime shim (`lib/events/
 
 - Forces Node’s resolver to prefer IPv4 addresses (`dns.setDefaultResultOrder('ipv4first')`) to avoid `ENETUNREACH` failures on environments that expose IPv6 without routing.
 - Installs a global Undici agent pinned to IPv4 with keep-alive enabled so repeated fetches reuse sockets.
+- Detects standard proxy variables (`HTTPS_PROXY`, `HTTP_PROXY`, or `ALL_PROXY`) and automatically routes requests through the configured proxy. Supply `NO_PROXY` to list domains that should continue to bypass the proxy.
 
-This configuration is loaded automatically by the long-running scripts (`sync-events.mjs`, `ingest-events.js`, `lib/events/http-client.js`, and transitively anything using the HTTP client), so no manual action is required before running the recovery workflow.
+This configuration is loaded automatically by the long-running scripts (`sync-events.mjs`, `ingest-events.js`, `lib/events/http-client.js`, and transitively anything using the HTTP client), so no manual action is required beyond exporting the desired proxy variables before running the recovery workflow.
 
 ## Environment checks before syncing
 
