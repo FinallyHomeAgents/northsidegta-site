@@ -1,9 +1,9 @@
-# Events Sync Report — 2025-10-17 10:05 EDT
+# Events Sync Report — 2025-10-17 10:09 EDT
 
 * Created: 0
 * Updated: 0
-* Unchanged: 76
-* Errors: 32
+* Unchanged: 46
+* Errors: 33
 
 ## URL Updates
 
@@ -49,6 +49,6 @@
 | Sutton BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Jackson's Point BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Discover Port Perry | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Experience York Region | 0 | 0 | 30 | 30 | ok | — |
+| Experience York Region | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Universe | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | TicketScene | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
