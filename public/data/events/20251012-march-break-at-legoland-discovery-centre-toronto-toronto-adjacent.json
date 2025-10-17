@@ -72,11 +72,16 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-10-12/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Experience York Region",
+  "sourceUrl": "https://www.experienceyorkregion.com/events",
+  "sourceDomain": "experienceyorkregion.com",
+  "sourcePriority": 35,
   "sourceRef": "10009010-1760261400-1760979600@www.experienceyorkregion.com",
-  "updatedAt": "2025-10-17T14:02:42Z"
+  "lastSyncedAt": "2025-10-17T15:44:24.968Z",
+  "updatedAt": "2025-10-17T15:44:24.968Z",
+  "featured": false
 }

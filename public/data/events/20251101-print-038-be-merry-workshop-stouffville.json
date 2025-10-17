@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/Print-and-Be-Merry-at-Bruces-Mill_nVRY.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/print-be-merry-workshop/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/print-be-merry-workshop/",
-  "updatedAt": "2025-10-17T14:02:42Z"
+  "lastSyncedAt": "2025-10-17T15:44:24.968Z",
+  "updatedAt": "2025-10-17T15:44:24.968Z",
+  "featured": false
 }
