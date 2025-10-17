@@ -1,3 +1,4 @@
+// src/data/tickerItems.js
 export const TICKER_ITEMS = [
   "🛣️ 404 access puts most NorthSide towns within 45 minutes of Toronto",
   "🌲 Uxbridge — the Trail Capital of Canada with over 300 km of paths",
