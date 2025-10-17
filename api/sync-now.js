@@ -12,7 +12,7 @@ const DEFAULT_DISPATCH_REF = DEFAULT_SYNC_REF || 'main'
 const CSRF_COOKIE = 'sync_now_csrf' // SYNC WIRING
 const SUCCESS_STATUSES = new Set([200, 201, 202, 204])
 
-// SYNC WIRING
+// ---------------------- cookie / csrf helpers ----------------------
 function parseCookies(header = '') {
   return header
     .split(';')
@@ -31,7 +31,6 @@ function parseCookies(header = '') {
     }, {})
 }
 
-// SYNC WIRING
 function timingSafeEqual(expected, received) {
   const expectedBuffer = Buffer.from(expected)
   const receivedBuffer = Buffer.from(received)
@@ -39,7 +38,6 @@ function timingSafeEqual(expected, received) {
   return crypto.timingSafeEqual(expectedBuffer, receivedBuffer)
 }
 
-// SYNC WIRING
 function verifyCsrfToken(csrfToken, cookieValue) {
   if (!csrfToken || !cookieValue) return false
   const secret = process.env.SYNC_SECRET
@@ -53,7 +51,6 @@ function verifyCsrfToken(csrfToken, cookieValue) {
   return timingSafeEqual(expectedSignature, cookieSignature)
 }
 
-// SYNC WIRING
 function isSameOrigin(req) {
   const host = req.headers.host
   if (!host) return false
@@ -69,52 +66,36 @@ function isSameOrigin(req) {
     }
   }
 
-  if (origin && !matchesHost(origin)) {
-    return false
-  }
-
-  if (!origin && referer && !matchesHost(referer)) {
-    return false
-  }
-
-  if (!origin && !referer) {
-    return false
-  }
+  if (origin && !matchesHost(origin)) return false
+  if (!origin && referer && !matchesHost(referer)) return false
+  if (!origin && !referer) return false
 
   return true
 }
 
-// SYNC WIRING
+// ---------------------- diagnostics / hints ----------------------
 function buildHintFromStatus(workflowStatus, repoDispatchStatus) {
-  const statuses = [workflowStatus, repoDispatchStatus].filter((status) => typeof status === 'number' && status > 0)
+  const statuses = [workflowStatus, repoDispatchStatus].filter((s) => typeof s === 'number' && s > 0)
 
-  if (statuses.some((status) => status === 401 || status === 403)) {
+  if (statuses.some((s) => s === 401 || s === 403)) {
     return 'GitHub rejected the sync — check GH_TOKEN/GITHUB_TOKEN scopes, authorize SSO, and ensure Actions: write is enabled.'
   }
-
   if (statuses.includes(404)) {
     return 'Workflow not found for that ref — confirm .github/workflows/events-sync.yml exists on the target branch.'
   }
-
   if (statuses.includes(422)) {
     return 'Workflow dispatch was rejected — ensure events-sync.yml listens for workflow_dispatch and repository_dispatch on that ref.'
   }
-
   return 'Sync started — check GitHub → Actions.'
 }
 
-// SYNC WIRING
 async function fetchDefaultBranch(owner, repo, headers) {
   try {
     const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
       method: 'GET',
       headers: { ...headers },
     })
-
-    if (!response.ok) {
-      return null
-    }
-
+    if (!response.ok) return null
     const data = await response.json().catch(() => null)
     const branch = typeof data?.default_branch === 'string' ? data.default_branch.trim() : ''
     return branch || null
@@ -130,24 +111,26 @@ function summarizeDispatch(workflowResponse, repoDispatchResponse) {
   const ok =
     SUCCESS_STATUSES.has(workflowStatus) || SUCCESS_STATUSES.has(repoDispatchStatus)
   const hint = buildHintFromStatus(workflowStatus, repoDispatchStatus)
-
   return { workflowStatus, repoDispatchStatus, ok, hint }
 }
 
+// ---------------------- GitHub dispatch ----------------------
 async function performDispatch({ owner, repo, ref, headers }) {
   const workflowUrl = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`
-  const dispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
+  const repoDispatchUrl = `https://api.github.com/repos/${owner}/${repo}/dispatches`
 
   const [workflowResponse, repoDispatchResponse] = await Promise.all([
+    // Run the workflow file (workflow_dispatch) *on ref* (we choose main)
     fetch(workflowUrl, {
       method: 'POST',
       headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref }),
+      body: JSON.stringify({ ref }), // ref = 'main'
     }),
-    fetch(dispatchUrl, {
+    // Also send repository_dispatch with **event_type: 'sync-now'**
+    fetch(repoDispatchUrl, {
       method: 'POST',
       headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event_type: 'sync_now' }),
+      body: JSON.stringify({ event_type: 'sync-now', client_payload: { ref } }),
     }),
   ])
 
@@ -159,8 +142,8 @@ async function triggerSync() {
   const capability = getGithubSyncCapability()
 
   const owner = capability.owner || envConfig?.owner || ''
-  const repo = capability.repo || envConfig?.repo || ''
-  const ref = capability.ref || 'main'
+  const repo  = capability.repo  || envConfig?.repo  || ''
+  const ref   = DEFAULT_DISPATCH_REF // always start with 'main' (or DEFAULT_SYNC_REF)
   const token = envConfig?.token || capability.token || ''
 
   if (!capability.hasRepoMetadata && !(envConfig?.owner && envConfig?.repo)) {
@@ -212,13 +195,12 @@ async function triggerSync() {
       repoDispatchResponse
     )
 
+    // If workflow_dispatch 404s (file missing on that ref), retry using repo default branch.
     if (workflowStatus === 404) {
       const repoDefaultBranch =
         (await fetchDefaultBranch(owner, repo, authHeaders)) || DEFAULT_DISPATCH_REF
       if (repoDefaultBranch && repoDefaultBranch !== activeRef) {
-        console.info(
-          `[sync-now] workflow not found on ${activeRef}, retrying with ${repoDefaultBranch}`
-        )
+        console.info(`[sync-now] workflow not found on ${activeRef}, retrying with ${repoDefaultBranch}`)
         activeRef = repoDefaultBranch
         ;({ workflowResponse, repoDispatchResponse } = await performDispatch({
           owner,
@@ -285,18 +267,25 @@ async function triggerSync() {
   }
 }
 
+// ---------------------- API handler ----------------------
 async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
-    res.setHeader('Cache-Control', 'no-store') // SYNC WIRING
+    res.setHeader('Cache-Control', 'no-store')
     res.status(405).json({ error: 'Method Not Allowed' })
     return
   }
 
-  res.setHeader('Cache-Control', 'no-store') // SYNC WIRING
+  res.setHeader('Cache-Control', 'no-store')
 
   if (!isSameOrigin(req)) {
-    res.status(401).json({ ok: false, error: 'Cross-origin request rejected.', hint: 'Reload the admin page and try again from the official site.' })
+    res
+      .status(401)
+      .json({
+        ok: false,
+        error: 'Cross-origin request rejected.',
+        hint: 'Reload the admin page and try again from the official site.',
+      })
     return
   }
 
@@ -305,7 +294,13 @@ async function handler(req, res) {
   const csrfCookie = cookies[CSRF_COOKIE]
 
   if (!verifyCsrfToken(csrfHeader, csrfCookie)) {
-    res.status(401).json({ ok: false, error: 'Invalid or missing sync token.', hint: 'Refresh the admin page to obtain a new sync token.' })
+    res
+      .status(401)
+      .json({
+        ok: false,
+        error: 'Invalid or missing sync token.',
+        hint: 'Refresh the admin page to obtain a new sync token.',
+      })
     return
   }
 
