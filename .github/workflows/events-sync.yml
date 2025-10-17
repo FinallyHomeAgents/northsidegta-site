@@ -67,7 +67,11 @@ jobs:
       - name: Stage generated files
         run: |
           set -euo pipefail
-          git add public/data/events public/sitemap.xml 2>/dev/null || true
+          git add public/data/events \
+            public/data/sync-reports \
+            public/sitemap.xml \
+            config/event-feeds.json \
+            logs/events-url-updates.log 2>/dev/null || true
 
       - name: Create commit with generated data
         id: commit
@@ -95,6 +99,11 @@ jobs:
         if: steps.mode.outputs.mode == 'direct' && steps.commit.outputs.changed == 'true'
         run: |
           set -euo pipefail
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Working tree is dirty before attempting to rebase; refusing to pull." >&2
+            git status
+            exit 1
+          fi
           git pull --rebase origin main
           git push origin HEAD:main
 
