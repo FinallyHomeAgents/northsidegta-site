@@ -5,7 +5,7 @@ import ContactHero from "./components/contact/ContactHero";
 import ContactChannelBar from "./components/contact/ContactChannelBar";
 import SmartContactForm from "./components/contact/SmartContactForm";
 import TrustPanel from "./components/contact/TrustPanel";
-import ReviewsCarousel from "./components/contact/ReviewsCarousel";
+import ReviewCarousel from "./components/reviews/ReviewCarousel";
 import BookCallCard from "./components/contact/BookCallCard";
 import ContactFooterBand from "./components/contact/ContactFooterBand";
 // ⬇️ remove the Legacy import and the feature flag
@@ -90,9 +90,10 @@ function ContactPageV2() {
 
           {reviewsReady && config.reviews.length > 0 && (
             <section className="mx-auto mt-14 max-w-4xl">
-              <ReviewsCarousel
+              <ReviewCarousel
                 reviews={config.reviews}
                 disclaimer={config.reviewsDisclaimer}
+                route="/contact"
               />
             </section>
           )}

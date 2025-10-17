@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./styles/theme.css";
+
 /* Custom styles */
 body {
   margin: 0;
@@ -15,7 +17,7 @@ body {
 }
 
 .reviews-carousel button:focus-visible {
-  outline: 3px solid #10b981;
+  outline: 3px solid var(--nsg-primary);
   outline-offset: 2px;
 }
 

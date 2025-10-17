@@ -248,8 +248,8 @@ export default function MapHero() {
   }, [canHover]);
 
   return (
-    <section className="bg-gradient-to-b from-white to-emerald-50/40">
-      <div className="mx-auto max-w-6xl px-4 pt-8">
+    <section className="map-hero-section">
+      <div className="px-4 pt-8">
         {/* Bordered hero box (map + inline quick-contact) */}
         <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
           <Styles />
