@@ -2,11 +2,10 @@ name: Daily Events Sync
 
 on:
   schedule:
-    - cron: '0 8 * * *'    # once daily at 8AM
-  workflow_dispatch: {}     # manual trigger from the Actions tab
+    - cron: '0 8 * * *'    # once daily at 8AM Toronto time (runner UTC; adjust as needed)
+  workflow_dispatch: {}     # manual trigger from Actions tab
   repository_dispatch:
-    types: [sync-now]       # only run when /api/sync-now triggers it
-
+    types: [sync-now]       # only run when /api/sync-now triggers this specific type
 
 permissions:
   contents: write
@@ -16,10 +15,23 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+
+    # prevent overlapping runs (e.g., if multiple triggers happen close together)
+    concurrency:
+      group: events-sync
+      cancel-in-progress: true
+
     env:
+      # write artifacts to repo
       EVENTS_SYNC_WRITE: 'true'
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      # tokens (use your repo secret GH_TOKEN if you have one; otherwise GITHUB_TOKEN works)
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+      # optional proxy support if you add these secrets later
+      HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
+      HTTP_PROXY:  ${{ secrets.HTTP_PROXY }}
+      NO_PROXY:    ${{ secrets.NO_PROXY }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +45,7 @@ jobs:
           git config --global user.email "ci@northsidegta.local"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Determine sync mode
+      - name: Determine sync mode (direct vs PR)
         id: mode
         env:
           SECRET_MODE: ${{ secrets.EVENTS_ADMIN_USE_PR }}
@@ -58,10 +70,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Quick egress probe
+        run: |
+          curl -I https://www.google.com
+          node -e "fetch('https://example.com').then(r=>console.log('fetch ok', r.status)).catch(e=>{console.error('fetch failed', e);process.exit(1)})"
+
+      - name: Connectivity preflight
+        run: npm run events:connectivity
 
       - name: Run events sync
         run: node scripts/sync-events.mjs
@@ -69,7 +89,8 @@ jobs:
       - name: Stage generated files
         run: |
           set -euo pipefail
-          git add public/data/events \
+          git add -A \
+            public/data/events \
             public/data/sync-reports \
             public/sitemap.xml \
             config/event-feeds.json \
@@ -77,6 +98,7 @@ jobs:
 
       - name: Create commit with generated data
         id: commit
+        shell: bash
         run: |
           set -euo pipefail
           if git diff --cached --quiet; then
@@ -95,30 +117,36 @@ jobs:
 
           git commit -m "$MESSAGE"
           echo "changed=true" >> "$GITHUB_OUTPUT"
-        shell: bash
 
-      - name: Push commit to main
+      # --- Safe push blocks ---
+
+      - name: Commit and push safely (direct mode)
         if: steps.mode.outputs.mode == 'direct' && steps.commit.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Working tree is dirty before attempting to rebase; refusing to pull." >&2
-            git status
-            exit 1
-          fi
-          git pull --rebase origin main
-          git push origin HEAD:main
+          # ensure nothing is left unstaged
+          git add -A public/data/events _sync-summary.json || true
+          # commit only if anything new got staged
+          git diff --cached --quiet || git commit -m "chore(events): auto-sync"
+          # push; if it races with another run, retry safely
+          git push origin HEAD:main || {
+            echo "Retrying push after rebase…"
+            git pull --rebase --autostash || true
+            git push --force-with-lease origin HEAD:main
+          }
 
-      - name: Push branch for PR
+      - name: Commit and push PR branch (PR mode)
         if: steps.mode.outputs.mode == 'pr' && steps.commit.outputs.changed == 'true'
         run: |
           set -euo pipefail
+          git add -A public/data/events _sync-summary.json || true
+          git diff --cached --quiet || git commit -m "chore(events): auto-sync"
           git push --force-with-lease origin ci/events-sync
 
-      - name: Open or update pull request
+      - name: Open or update pull request (PR mode)
         if: steps.mode.outputs.mode == 'pr' && steps.commit.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
         run: |
           set -euo pipefail
           if gh pr view ci/events-sync >/dev/null 2>&1; then
@@ -134,3 +162,4 @@ jobs:
               --head ci/events-sync \
               --label automation
           fi
+
