@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/eventbrite-when-construction-comes-calling.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/when-construction-comes-calling/",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/when-construction-comes-calling/",
-  "lastSyncedAt": "2025-10-17T15:44:24.968Z",
-  "updatedAt": "2025-10-17T15:44:24.968Z",
-  "featured": false
+  "updatedAt": "2025-10-17T15:44:24Z"
 }

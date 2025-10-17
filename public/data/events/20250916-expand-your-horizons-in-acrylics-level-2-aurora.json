@@ -358,16 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/expand-your-horizons-acrylics-level2-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002670-1757980800-1762905599@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-17T15:44:24.968Z",
-  "updatedAt": "2025-10-17T15:44:24.968Z",
-  "featured": false
+  "updatedAt": "2025-10-17T15:44:24Z"
 }
