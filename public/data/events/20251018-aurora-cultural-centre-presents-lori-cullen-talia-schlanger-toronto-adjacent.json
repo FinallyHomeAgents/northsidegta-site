@@ -24,17 +24,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/aurora-cultural-centre-presents-lori-cullen-talia-schlanger/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014046-1760815800-1760823000@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-17T14:02:42.830Z",
-  "firstSeenAt": "2025-10-17T14:02:42.830Z",
-  "updatedAt": "2025-10-17T14:02:42.830Z",
-  "featured": false
+  "updatedAt": "2025-10-17T14:02:42Z"
 }

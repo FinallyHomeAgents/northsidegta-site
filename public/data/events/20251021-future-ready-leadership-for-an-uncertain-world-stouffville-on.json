@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Future-Ready.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/future-ready-leadership-for-an-uncertain-world/",
-  "lastSyncedAt": "2025-10-17T14:02:42.830Z",
-  "updatedAt": "2025-10-17T14:02:42.830Z",
-  "featured": false
+  "updatedAt": "2025-10-17T14:02:42Z"
 }
