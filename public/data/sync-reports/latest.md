@@ -1,8 +1,8 @@
-# Events Sync Report — 2025-10-18 04:30 EDT
+# Events Sync Report — 2025-10-19 04:29 EDT
 
-* Created: 3
-* Updated: 73
-* Unchanged: 0
+* Created: 7
+* Updated: 24
+* Unchanged: 44
 * Errors: 32
 
 ## URL Updates
@@ -27,10 +27,10 @@
 | Township of Uxbridge Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Township of Scugog Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Explore Georgina | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Discover Stouffville | 0 | 16 | 0 | 36 | ok | — |
+| Discover Stouffville | 0 | 0 | 15 | 34 | ok | — |
 | Discover Uxbridge | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Town Square | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Aurora Cultural Centre | 0 | 30 | 0 | 30 | ok | — |
+| Aurora Cultural Centre | 1 | 0 | 29 | 30 | ok | — |
 | NewRoads Performing Arts Centre | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Georgina Centre for Arts & Culture | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Sharon Temple National Historic Site | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
@@ -49,6 +49,6 @@
 | Sutton BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Jackson's Point BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Discover Port Perry | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Experience York Region | 3 | 27 | 0 | 30 | ok | — |
+| Experience York Region | 6 | 24 | 0 | 30 | ok | — |
 | Universe | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | TicketScene | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
