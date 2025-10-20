@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import MapHero from "./MapHero";
+import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import Footer from "./Footer";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
@@ -143,7 +144,6 @@ export default function HomePage() {
 
       <main>
         <HomeHero />
-        <TownHighlight />
         <SmartToolsSection />
         <ConciergeSection />
         <ReviewsSection />
@@ -162,17 +162,25 @@ function HomeHero() {
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-12 sm:px-6 sm:pt-14">
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-6 sm:px-6 sm:pt-8 lg:pt-9">
         <div className="relative">
           <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
             <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
               <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
                 <div className="relative overflow-hidden rounded-[36px] border border-white/10">
-                  <MapHero variant="immersive" />
+                  <MapHero variant="immersive" showQuickContact={false} />
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="-mt-8 sm:-mt-10">
+          <TownBridge />
+        </div>
+
+        <div className="mx-auto mt-5 w-full max-w-[860px]">
+          <QuickContactCard />
         </div>
 
         <div className="mx-auto mt-10 max-w-3xl text-center">
@@ -226,25 +234,25 @@ function HomeHero() {
   );
 }
 
-function TownHighlight() {
+function TownBridge() {
   return (
-    <section className="relative z-10 -mt-12 pb-14">
-      <div className="mx-auto w-full max-w-[1900px] px-3 sm:px-6">
-        <div className="rounded-[28px] border border-emerald-100/70 bg-white/95 px-4 py-5 shadow-[0_30px_60px_rgba(15,118,110,0.15)] backdrop-blur-sm sm:px-8 sm:py-6">
-          <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-xl font-semibold text-emerald-900 sm:text-2xl">
+    <div className="mx-auto w-full max-w-[1900px] px-3 sm:px-6">
+      <div className="rounded-[28px] border border-emerald-100/80 bg-white/95 px-4 py-3.5 shadow-[0_22px_45px_rgba(15,118,110,0.18)] backdrop-blur-sm sm:px-6 sm:py-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-2xl">
+            <h2 className="text-lg font-semibold text-emerald-900 sm:text-xl">
               Jump straight into the towns we serve every day.
             </h2>
-            <p className="mt-2 text-sm text-slate-600 sm:text-base">
-              Tap the strip to move between Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog snapshots.
+            <p className="mt-1 text-sm text-slate-600">
+              Slide through Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog spotlights without leaving the map.
             </p>
           </div>
-          <div className="mt-6">
+          <div className="lg:flex-1">
             <TownStrip />
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

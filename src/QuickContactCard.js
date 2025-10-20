@@ -106,8 +106,8 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
   const containerClasses = [
     "rounded-2xl shadow-sm transition-all duration-300",
     open
-      ? "border border-emerald-200 bg-white/95 p-5 md:p-6"
-      : "border border-white/25 bg-white/5 p-5 md:p-6 backdrop-blur-sm",
+      ? "border border-emerald-200 bg-white/95 p-4 md:p-5"
+      : "border border-white/25 bg-white/5 p-4 md:p-5 backdrop-blur-sm",
   ].join(" ");
 
   if (done) {
@@ -139,24 +139,24 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
     <div className={containerClasses}>
       {/* Collapsed = premium “Match” block */}
       {!open && (
-        <div className="space-y-4 text-center text-white">
-          <div className="space-y-2">
-            <h3 className="text-2xl md:text-[28px] font-extrabold tracking-tight text-white">
+        <div className="space-y-3 text-center text-white">
+          <div className="space-y-1.5">
+            <h3 className="text-[22px] md:text-[26px] font-extrabold tracking-tight text-white">
               Your NorthSide GTA Match
             </h3>
-            <p className="text-sm text-emerald-100/80 md:text-base">
+            <p className="text-[13px] text-emerald-100/80 md:text-sm">
               Compare the towns we move clients through every week — with pricing, commute, and
               school context curated for your inbox.
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="flex flex-col items-center justify-center gap-2.5 sm:flex-row">
             {/* START HERE (primary) */}
             <button
               type="button"
               onClick={() => setOpen(true)}
               className="
-                px-5 py-3 rounded-xl font-bold tracking-wide
+                px-5 py-2.5 rounded-xl font-bold tracking-wide
                 bg-emerald-700 text-white hover:bg-emerald-800
                 shadow-[0_4px_12px_rgba(16,185,129,0.35)]
                 transition
@@ -171,7 +171,7 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                inline-flex items-center gap-2 px-5 py-3 rounded-xl
+                inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
                 border border-white/40 bg-white/10 text-white
                 hover:border-white/70 hover:bg-white/20
                 font-semibold transition
@@ -183,20 +183,20 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
             </a>
 
             {/* small time badge */}
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white/10 text-emerald-100">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-white/10 text-emerald-100">
               2 min
             </span>
           </div>
 
           {/* Value bullets */}
-          <ul className="space-y-1 text-sm text-emerald-100/85">
+          <ul className="space-y-1 text-[13px] leading-relaxed text-emerald-100/85">
             {[
               "Top-3 towns matched to your lifestyle & budget",
               "Scorecard: prices, commute, schools, vibe",
               "VIP alerts for good-fit listings & off-market talk",
             ].map((line) => (
               <li key={line} className="flex items-start gap-2 text-left">
-                <span className="mt-1 inline-block h-4 w-4 flex-none rounded-full bg-white/15 text-[10px] font-semibold leading-4 text-center text-emerald-100">
+                <span className="mt-1 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-white/15 text-[10px] font-semibold leading-4 text-emerald-100">
                   ✓
                 </span>
                 <span>{line}</span>
@@ -205,10 +205,10 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
           </ul>
 
           {/* Trust & footnote */}
-          <div className="text-xs uppercase tracking-[0.32em] text-emerald-100/70">
+          <div className="text-[11px] uppercase tracking-[0.28em] text-emerald-100/70">
             Finally Home Agents • NorthSide GTA
           </div>
-          <div className="text-xs text-emerald-100/60">No spam. Unsubscribe anytime.</div>
+          <div className="text-[11px] text-emerald-100/60">No spam. Unsubscribe anytime.</div>
         </div>
       )}
 

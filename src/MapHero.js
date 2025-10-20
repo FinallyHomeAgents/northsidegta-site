@@ -214,7 +214,11 @@ function RatingRow({ label, value }) {
 /* ────────────────────────────────────────────────────────────
    MapHero
    ──────────────────────────────────────────────────────────── */
-export default function MapHero({ variant = "standalone", className = "" }) {
+export default function MapHero({
+  variant = "standalone",
+  className = "",
+  showQuickContact = true,
+}) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
@@ -286,7 +290,7 @@ export default function MapHero({ variant = "standalone", className = "" }) {
             <img
               src="/Images/northside-map.svg?v=2"
               alt="NorthSide GTA map with towns"
-              className="block h-auto w-full min-h-[300px] sm:min-h-[420px] md:min-h-[500px] lg:min-h-[520px]"
+              className="block h-auto w-full min-h-[280px] sm:min-h-[380px] md:min-h-[440px] lg:min-h-[470px]"
             />
 
             {/* Pins */}
@@ -426,13 +430,15 @@ export default function MapHero({ variant = "standalone", className = "" }) {
           )}
 
           {/* Divider + Inline Quick Contact */}
-          <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
-            <QuickContactCard
-              heading="Find Where You Truly Belong in the NorthSide GTA"
-              subheading="Finally Home Agents will guide you beyond the listings — helping you compare communities and uncover the right fit."
-              primaryLabel="START HERE"
-            />
-          </div>
+          {showQuickContact && (
+            <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
+              <QuickContactCard
+                heading="Find Where You Truly Belong in the NorthSide GTA"
+                subheading="Finally Home Agents will guide you beyond the listings — helping you compare communities and uncover the right fit."
+                primaryLabel="START HERE"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>
