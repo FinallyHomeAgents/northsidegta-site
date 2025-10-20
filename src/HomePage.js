@@ -97,16 +97,6 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="nsg-card nsg-card--surface home-hero__map">
-                <img src="/Images/northside-map.svg?v=2" alt="NorthSide GTA towns map" loading="lazy" />
-                <div className="home-hero__map-copy">
-                  <h2>See where you fit best</h2>
-                  <p>
-                    Compare commute times, school zones, lake access, and lifestyle for every NorthSide community.
-                  </p>
-                  <a href="#home-towns" className="nsg-btn nsg-btn--ghost">Browse Towns</a>
-                </div>
-              </div>
             </div>
           </div>
         </section>
