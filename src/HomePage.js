@@ -162,7 +162,7 @@ function HomeHero() {
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-6 sm:px-6 sm:pt-8 lg:pt-9">
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-3 sm:px-5 sm:pt-4 lg:pt-5">
         <div className="relative">
           <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
             <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
@@ -175,12 +175,17 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="-mt-8 sm:-mt-10">
-          <TownBridge />
-        </div>
-
-        <div className="mx-auto mt-5 w-full max-w-[860px]">
-          <QuickContactCard />
+        <div className="-mt-6 sm:-mt-8 lg:-mt-10">
+          <div className="mx-auto w-full max-w-[1900px] px-2 sm:px-4">
+            <div className="rounded-[32px] border border-white/12 bg-white/10 px-4 py-4 shadow-[0_30px_70px_rgba(4,47,35,0.45)] backdrop-blur-md sm:px-6 lg:px-7">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
+                <TownBridge className="flex-1" />
+                <div className="w-full lg:max-w-[320px] xl:max-w-[360px]">
+                  <QuickContactCard />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mx-auto mt-10 max-w-3xl text-center">
@@ -195,7 +200,7 @@ function HomeHero() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        <div className="mt-9 grid gap-4 sm:grid-cols-3">
           {HERO_STATS.map((stat) => (
             <div
               key={stat.label}
@@ -234,23 +239,19 @@ function HomeHero() {
   );
 }
 
-function TownBridge() {
+function TownBridge({ className = "" }) {
   return (
-    <div className="mx-auto w-full max-w-[1900px] px-3 sm:px-6">
-      <div className="rounded-[28px] border border-emerald-100/80 bg-white/95 px-4 py-3.5 shadow-[0_22px_45px_rgba(15,118,110,0.18)] backdrop-blur-sm sm:px-6 sm:py-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-lg font-semibold text-emerald-900 sm:text-xl">
-              Jump straight into the towns we serve every day.
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Slide through Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog spotlights without leaving the map.
-            </p>
-          </div>
-          <div className="lg:flex-1">
-            <TownStrip />
-          </div>
-        </div>
+    <div className={`flex flex-col gap-4 text-white ${className}`}>
+      <div className="max-w-2xl space-y-1.5">
+        <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+          Jump straight into the towns we serve every day.
+        </h2>
+        <p className="text-sm text-emerald-100/85">
+          Slide through Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog spotlights without leaving the map.
+        </p>
+      </div>
+      <div className="w-full lg:max-w-[520px] xl:max-w-[560px]">
+        <TownStrip />
       </div>
     </div>
   );

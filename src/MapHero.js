@@ -290,7 +290,7 @@ export default function MapHero({
             <img
               src="/Images/northside-map.svg?v=2"
               alt="NorthSide GTA map with towns"
-              className="block h-auto w-full min-h-[280px] sm:min-h-[380px] md:min-h-[440px] lg:min-h-[470px]"
+              className="block h-auto w-full min-h-[240px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] xl:min-h-[420px] xl:max-h-[480px]"
             />
 
             {/* Pins */}
