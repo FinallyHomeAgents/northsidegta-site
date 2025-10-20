@@ -15,52 +15,49 @@ const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
   date: review.date,
 }));
 
-const HERO_PILLARS = [
-  "Predictive pricing & offer strategy updated daily",
-  "Concierge WhatsApp command centre with live agent + AI",
-  "NorthSide GTA coverage from Aurora to Scugog",
+const HERO_STATS = [
+  {
+    label: "Match Score",
+    value: "92",
+    suffix: "/100",
+    description: "Aurora vs. Stouffville for your wish list",
+  },
+  {
+    label: "Buyer Heat",
+    value: "+18%",
+    description: "Active shoppers week-over-week across Georgina",
+  },
+  {
+    label: "Next Opening",
+    value: "3:30 PM",
+    description: "Live WhatsApp concierge slot available today",
+  },
 ];
 
-const AI_FEATURES = [
+const SMART_TOOLS = [
   {
-    title: "Predictive Seller Strategy Engine",
-    description:
-      "We feed NorthSide GTA sold data, live buyer sentiment, and neighbourhood velocity into an AI model that stress tests thousands of list-price and timing combinations before you ever hit the market.",
-    bullets: [
-      "Discover the pricing window that maximizes demand in your street grid.",
-      "Generate AI staging briefs and photography shot lists tuned to buyer behaviour.",
-      "Deploy smart remarketing to keep warm buyers circling your property.",
-    ],
+    title: "Smart Listing Radar",
+    stat: "12",
+    statSuffix: " matches",
+    description: "Fresh homes that align with your saved commute, school, and lifestyle filters updated every hour.",
   },
   {
-    title: "Buyer DNA Matching",
-    description:
-      "Share your wish list once. Our platform translates it into lifestyle signals, commute tolerances, and school priorities — then our agents curate listings and off-market intel that match the profile in real-time.",
-    bullets: [
-      "Instantly see the top 3 towns that fit budget, vibe, and travel rhythm.",
-      "Tap into private seller conversations surfaced by our agent+AI duo.",
-      "Get narrated walkthroughs and risk flags inside a single mobile feed.",
-    ],
+    title: "Offer Playbook",
+    stat: "4",
+    statSuffix: " scenarios",
+    description: "Side-by-side offer strategies with projected outcomes so you can move with confidence in any market beat.",
   },
   {
-    title: "Market Pulse Dashboards",
-    description:
-      "From Holland Landing to Port Perry, track micro-trends as they happen. We blend MLS velocity, Google search lift, and school enrolment data so you can move before the headlines do.",
-    bullets: [
-      "Weekly AI briefs that forecast inventory five weeks out.",
-      "Heatmaps showing where upgrade buyers are shifting next.",
-      "Offer playbooks that adjust automatically as conditions change.",
-    ],
+    title: "Equity Pulse",
+    stat: "+6.2%",
+    statSuffix: " YoY",
+    description: "See how your street has trended this month and which buyers are ready to move in.",
   },
   {
-    title: "Concierge Collaboration",
-    description:
-      "Every conversation lives in a secure workspace that blends human expertise with AI co-pilots. Think of it as your own NorthSide GTA mission control.",
-    bullets: [
-      "Voice-note translations into actionable task lists within minutes.",
-      "Document autofill and compliance checks handled before you sign.",
-      "Real-time milestone tracking for financing, inspections, and closes.",
-    ],
+    title: "Deal Desk",
+    stat: "<10",
+    statSuffix: " min",
+    description: "Average response time from the human + AI concierge for document checks or next steps.",
   },
 ];
 
@@ -145,7 +142,7 @@ export default function HomePage() {
       <main>
         <HomeHero />
         <TownHighlight />
-        <AiFeatureSection />
+        <SmartToolsSection />
         <ConciergeSection />
         <ReviewsSection />
       </main>
@@ -157,72 +154,95 @@ export default function HomePage() {
 
 function HomeHero() {
   return (
-    <section className="relative overflow-hidden text-white">
-      <div className="absolute inset-0 bg-[#06110d]" aria-hidden />
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(20,83,45,0.5),_transparent_60%)]"
-        aria-hidden
-      />
-      <div className="pointer-events-none absolute -top-24 left-[-12%] h-96 w-96 rounded-full bg-emerald-400/25 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-[-30%] right-[-15%] h-[28rem] w-[28rem] rounded-full bg-emerald-300/20 blur-3xl" />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-emerald-900/20 to-transparent"
-        aria-hidden
-      />
+    <section className="relative overflow-hidden bg-[#04110c] text-white">
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_65%)]" aria-hidden />
+      <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:py-20">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.95fr)] lg:items-center">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.35em] text-emerald-100">
-              Finally Home Agents
-            </div>
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.8rem]">
-              NorthSide GTA real estate, powered by human expertise and predictive AI.
-            </h1>
-            <p className="mt-5 text-base text-emerald-100 sm:text-lg md:text-xl">
-              Your hero image is our interactive command centre — a live map experience that pairs concierge agents with machine intelligence so you can see where to buy, sell, or invest before the market catches up.
-            </p>
-            <div className="mt-6 space-y-3 text-sm text-emerald-100/90 sm:text-base">
-              {HERO_PILLARS.map((item) => (
-                <div key={item} className="flex items-start gap-3">
-                  <span className="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-400/80 text-xs font-extrabold text-emerald-950">
-                    ✓
-                  </span>
-                  <span>{item}</span>
+      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-4 pb-16 pt-24 sm:pt-28">
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+            NorthSide GTA • Finally Home Agents
+          </span>
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem]">
+            Explore the NorthSide GTA through our live command centre.
+          </h1>
+          <p className="mt-4 text-base text-emerald-100/90 sm:text-lg">
+            Tap into the same interactive map we use every day to guide moves from Aurora to Scugog.
+          </p>
+        </div>
+
+        <div className="relative mt-10">
+          <div className="rounded-[46px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1px] shadow-[0_45px_90px_rgba(2,26,20,0.55)]">
+            <div className="rounded-[44px] border border-white/15 bg-black/40 p-3 shadow-[0_25px_65px_rgba(4,47,35,0.55)] backdrop-blur">
+              <div className="rounded-[36px] border border-white/5 bg-black/20 p-2">
+                <div className="relative overflow-hidden rounded-[28px] border border-white/10">
+                  <MapHero variant="immersive" />
+                  <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-3 sm:left-6 sm:top-6 sm:flex-row">
+                    <div className="rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-left shadow-lg shadow-emerald-900/50">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
+                        Live Filters
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-white">
+                        Commute • Schools • Lifestyle
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-left shadow-lg shadow-emerald-900/50">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
+                        AI Alerts
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-white">
+                        3 off-market matches ready
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pointer-events-none absolute bottom-4 right-4 hidden rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-right shadow-lg shadow-emerald-900/50 sm:block">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
+                      Next Tour Window
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-white">Today • 5:30 PM</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-2xl bg-white px-7 py-3 text-lg font-semibold text-emerald-900 shadow-xl shadow-emerald-900/30 transition hover:bg-emerald-50"
-              >
-                Book a Strategy Session
-              </a>
-              <a
-                href="/homeanalysis"
-                className="inline-flex items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-7 py-3 text-lg font-semibold text-white shadow-lg shadow-black/20 transition hover:border-white/60 hover:bg-white/20"
-              >
-                Unlock Your AI Home Report
-              </a>
-            </div>
-            <p className="mt-8 text-sm font-medium uppercase tracking-[0.3em] text-emerald-100/70">
-              Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket
-            </p>
-          </div>
-          <div className="relative">
-            <div className="rounded-[40px] border border-white/15 bg-white/5 p-4 shadow-[0_40px_80px_rgba(2,26,20,0.55)] backdrop-blur">
-              <MapHero variant="immersive" />
-            </div>
-            <div className="pointer-events-none absolute -bottom-12 left-1/2 hidden w-[72%] -translate-x-1/2 rounded-3xl border border-emerald-200/20 bg-white/80 px-5 py-3 text-center text-sm font-semibold text-emerald-900 shadow-xl shadow-emerald-900/20 md:block">
-              Interactive NorthSide GTA intelligence updated live for buyers &amp; sellers.
+              </div>
             </div>
           </div>
         </div>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {HERO_STATS.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-left shadow-lg shadow-black/20 backdrop-blur"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/80">{stat.label}</p>
+              <div className="mt-2 flex items-baseline gap-1 text-2xl font-semibold text-white">
+                <span>{stat.value}</span>
+                {stat.suffix ? <span className="text-base text-emerald-100/90">{stat.suffix}</span> : null}
+              </div>
+              <p className="mt-2 text-xs text-emerald-100/80">{stat.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="/contact"
+            className="inline-flex min-w-[220px] items-center justify-center rounded-2xl bg-white px-7 py-3 text-base font-semibold text-emerald-900 shadow-xl shadow-emerald-900/30 transition hover:bg-emerald-50"
+          >
+            Book a Strategy Session
+          </a>
+          <a
+            href="/homeanalysis"
+            className="inline-flex min-w-[220px] items-center justify-center rounded-2xl border border-white/40 bg-white/10 px-7 py-3 text-base font-semibold text-white shadow-lg shadow-black/30 transition hover:border-white/70 hover:bg-white/20"
+          >
+            Open the Home Analysis
+          </a>
+        </div>
+
+        <p className="mt-6 text-center text-xs font-medium uppercase tracking-[0.3em] text-emerald-100/70">
+          Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket
+        </p>
       </div>
     </section>
   );
@@ -235,10 +255,10 @@ function TownHighlight() {
         <div className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-10">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-semibold text-emerald-900 sm:text-3xl">
-              See every NorthSide GTA community through an agent + AI lens.
+              Jump straight into the towns we serve every day.
             </h2>
-            <p className="mt-4 text-base text-slate-700 sm:text-lg">
-              Compare commute times, vibe scores, school stories, and lifestyle perks directly on the hero map above. When you are ready to go deeper, jump into the community strip below to explore hyperlocal guides.
+            <p className="mt-3 text-sm text-slate-600 sm:text-base">
+              Use the strip below to open neighbourhood spotlights, recent wins, and quick market notes.
             </p>
           </div>
           <div className="mt-8">
@@ -250,37 +270,31 @@ function TownHighlight() {
   );
 }
 
-function AiFeatureSection() {
+function SmartToolsSection() {
   return (
     <section className="relative overflow-hidden py-20 text-white">
       <div className="absolute inset-0 bg-[#06110d]" aria-hidden />
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700"
-        aria-hidden
-      />
-      <div className="pointer-events-none absolute left-[-20%] top-[-10%] h-[22rem] w-[22rem] rounded-full bg-emerald-400/25 blur-3xl" />
-      <div className="pointer-events-none absolute right-[-10%] bottom-[-20%] h-[28rem] w-[28rem] rounded-full bg-emerald-300/20 blur-3xl" />
-      <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.15),_transparent_70%)]"
-        aria-hidden
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700" aria-hidden />
+      <div className="pointer-events-none absolute left-[-18%] top-[-18%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-12%] bottom-[-24%] h-[30rem] w-[30rem] rounded-full bg-emerald-300/25 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.15),_transparent_70%)]" aria-hidden />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100">
-            AI-Augmented Command
+            Built-In Tools
           </span>
           <h2 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Revolutionary service for NorthSide GTA buyers, sellers, and investors.
+            Real utilities that sit behind the hero map.
           </h2>
-          <p className="mt-4 text-base text-emerald-100 sm:text-lg">
-            We pair concierge agents with an intelligent co-pilot so you move faster, negotiate smarter, and feel confident at every milestone.
+          <p className="mt-4 text-base text-emerald-100/90 sm:text-lg">
+            Every card below pulls from the same datasets we monitor live for clients across the NorthSide GTA.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {AI_FEATURES.map((feature) => (
-            <FeatureCard key={feature.title} feature={feature} />
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {SMART_TOOLS.map((tool) => (
+            <ToolCard key={tool.title} tool={tool} />
           ))}
         </div>
       </div>
@@ -288,23 +302,21 @@ function AiFeatureSection() {
   );
 }
 
-function FeatureCard({ feature }) {
+function ToolCard({ tool }) {
   return (
-    <div className="flex h-full flex-col justify-between rounded-3xl border border-white/15 bg-white/10 p-6 shadow-xl shadow-black/20 backdrop-blur">
+    <div className="flex h-full flex-col justify-between rounded-3xl border border-white/15 bg-white/10 p-6 shadow-xl shadow-black/25 backdrop-blur">
       <div>
-        <h3 className="text-xl font-semibold text-white sm:text-2xl">{feature.title}</h3>
-        <p className="mt-3 text-sm text-emerald-100 sm:text-base">{feature.description}</p>
+        <div className="flex items-baseline gap-1 text-3xl font-semibold text-white">
+          <span>{tool.stat}</span>
+          <span className="text-base text-emerald-100/90">{tool.statSuffix}</span>
+        </div>
+        <h3 className="mt-3 text-xl font-semibold text-white sm:text-2xl">{tool.title}</h3>
+        <p className="mt-3 text-sm text-emerald-100/85 sm:text-base">{tool.description}</p>
       </div>
-      <ul className="mt-6 space-y-2 text-sm text-emerald-50 sm:text-base">
-        {feature.bullets.map((bullet) => (
-          <li key={bullet} className="flex items-start gap-3">
-            <span className="mt-1 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-emerald-300/70 text-[10px] font-bold text-emerald-950">
-              ★
-            </span>
-            <span>{bullet}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/70">
+        <span className="inline-flex h-2 w-2 rounded-full bg-emerald-300" aria-hidden />
+        Live Feed
+      </div>
     </div>
   );
 }
@@ -317,13 +329,13 @@ function ConciergeSection() {
         <div className="grid gap-10 rounded-[32px] border border-emerald-200 bg-white/80 p-6 shadow-2xl shadow-emerald-100/70 backdrop-blur-sm md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:p-12">
           <div className="flex flex-col justify-center">
             <h2 className="text-2xl font-semibold text-emerald-900 sm:text-3xl">
-              Concierge collaboration that feels like having a pro sports team in your corner.
+              Humans + automation ready the moment you reach out.
             </h2>
             <p className="mt-4 text-base text-slate-700 sm:text-lg">
-              Every conversation syncs between human agents and our AI command centre. Drop a voice note, upload a document, or send a late-night question — you will get context-aware replies with next steps faster than any portal can deliver.
+              Drop a note from the map, text us, or upload paperwork — our concierge stitches it together and keeps you moving.
             </p>
             <div className="mt-6 grid gap-3 text-sm text-slate-700 sm:grid-cols-2 sm:text-base">
-              {["Live WhatsApp concierge from 9am–9pm", "Smart checklists tuned to your transaction", "Priority alerts for pre-market listings", "Closing team aligned with your lender & lawyer"].map((item) => (
+              {["WhatsApp desk 9am–9pm", "Checklists that adjust as you progress", "Pre-market pings for your saved towns", "Closing team synced with lender + lawyer"].map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 px-4 py-3 shadow-sm">
                   <span className="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">
                     ✓
@@ -335,11 +347,9 @@ function ConciergeSection() {
           </div>
           <div className="rounded-[28px] border border-emerald-200 bg-white/90 p-4 shadow-xl shadow-emerald-200/60">
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-6 text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                Need answers right now?
-              </p>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600">Need answers right now?</p>
               <p className="mt-4 text-xl font-semibold text-emerald-900">
-                Message us and an agent will respond within the hour (9am–9pm).
+                Message us and an agent will respond inside the hour.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <a
@@ -377,10 +387,10 @@ function ReviewsSection() {
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-4xl px-4">
         <h2 className="text-center text-2xl font-semibold text-emerald-900 sm:text-3xl">
-          Loved by NorthSide GTA buyers, sellers, and renters.
+          What NorthSide GTA movers say about working with us.
         </h2>
         <p className="mt-3 text-center text-sm text-slate-600 sm:text-base">
-          Real Google reviews from clients who used our human + AI approach to move smarter across the NorthSide GTA.
+          Direct Google reviews from buyers, sellers, and renters we’ve guided across the region.
         </p>
         <div className="mt-10">
           <ReviewsCarousel
