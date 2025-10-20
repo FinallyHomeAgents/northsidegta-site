@@ -214,7 +214,7 @@ function RatingRow({ label, value }) {
 /* ────────────────────────────────────────────────────────────
    MapHero
    ──────────────────────────────────────────────────────────── */
-export default function MapHero() {
+export default function MapHero({ variant = "standalone", className = "" }) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
@@ -247,11 +247,33 @@ export default function MapHero() {
     return () => window.removeEventListener("keydown", onEsc);
   }, [canHover]);
 
+  const embedded = variant !== "standalone";
+
+  const sectionClasses = [
+    embedded
+      ? "relative"
+      : "bg-gradient-to-b from-white to-emerald-50/40",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const containerClasses = [
+    "mx-auto max-w-6xl px-4",
+    embedded ? "" : "pt-8",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const frameClasses = embedded
+    ? "relative mx-auto rounded-[32px] border border-white/20 bg-white/10 p-3 shadow-[0_35px_80px_rgba(6,17,13,0.45)] backdrop-blur"
+    : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
+
   return (
-    <section className="bg-gradient-to-b from-white to-emerald-50/40">
-      <div className="mx-auto max-w-6xl px-4 pt-8">
+    <section className={sectionClasses}>
+      <div className={containerClasses}>
         {/* Bordered hero box (map + inline quick-contact) */}
-        <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
+        <div className={frameClasses}>
           <Styles />
 
           {/* Map frame */}
