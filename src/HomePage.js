@@ -160,43 +160,13 @@ function HomeHero() {
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-4 pb-16 pt-24 sm:pt-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-            NorthSide GTA • Finally Home Agents
-          </span>
-          <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem]">
-            Explore the NorthSide GTA through our live command centre.
-          </h1>
-          <p className="mt-4 text-base text-emerald-100/90 sm:text-lg">
-            Tap into the same interactive map we use every day to guide moves from Aurora to Scugog.
-          </p>
-        </div>
-
-        <div className="relative mt-10">
-          <div className="rounded-[46px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1px] shadow-[0_45px_90px_rgba(2,26,20,0.55)]">
-            <div className="rounded-[44px] border border-white/15 bg-black/40 p-3 shadow-[0_25px_65px_rgba(4,47,35,0.55)] backdrop-blur">
-              <div className="rounded-[36px] border border-white/5 bg-black/20 p-2">
-                <div className="relative overflow-hidden rounded-[28px] border border-white/10">
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-16 pt-20 sm:px-6 sm:pt-24">
+        <div className="relative">
+          <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
+            <div className="rounded-[52px] border border-white/15 bg-black/45 p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
+              <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
+                <div className="relative overflow-hidden rounded-[36px] border border-white/10">
                   <MapHero variant="immersive" />
-                  <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-3 sm:left-6 sm:top-6 sm:flex-row">
-                    <div className="rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-left shadow-lg shadow-emerald-900/50">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
-                        Live Filters
-                      </p>
-                      <p className="mt-1 text-sm font-semibold text-white">
-                        Commute • Schools • Lifestyle
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-left shadow-lg shadow-emerald-900/50">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
-                        AI Alerts
-                      </p>
-                      <p className="mt-1 text-sm font-semibold text-white">
-                        3 off-market matches ready
-                      </p>
-                    </div>
-                  </div>
                   <div className="pointer-events-none absolute bottom-4 right-4 hidden rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-right shadow-lg shadow-emerald-900/50 sm:block">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
                       Next Tour Window
@@ -209,7 +179,19 @@ function HomeHero() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        <div className="mx-auto mt-12 max-w-3xl text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+            NorthSide GTA • Finally Home Agents
+          </span>
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem]">
+            Explore the NorthSide GTA through our live command centre.
+          </h1>
+          <p className="mt-4 text-base text-emerald-100/90 sm:text-lg">
+            Tap into the same interactive map we use every day to guide moves from Aurora to Scugog.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {HERO_STATS.map((stat) => (
             <div
               key={stat.label}

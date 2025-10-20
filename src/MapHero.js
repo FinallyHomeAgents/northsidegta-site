@@ -259,14 +259,15 @@ export default function MapHero({ variant = "standalone", className = "" }) {
     .join(" ");
 
   const containerClasses = [
-    "mx-auto max-w-6xl px-4",
+    "mx-auto w-full",
+    embedded ? "max-w-[1900px] px-0" : "max-w-6xl px-4",
     embedded ? "" : "pt-8",
   ]
     .filter(Boolean)
     .join(" ");
 
   const frameClasses = embedded
-    ? "relative mx-auto rounded-[32px] border border-white/20 bg-white/10 p-3 shadow-[0_35px_80px_rgba(6,17,13,0.45)] backdrop-blur"
+    ? "relative mx-auto w-full rounded-[36px]"
     : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
 
   return (
@@ -278,14 +279,14 @@ export default function MapHero({ variant = "standalone", className = "" }) {
 
           {/* Map frame */}
           <div
-            className="relative rounded-xl overflow-hidden map-hero"
+            className="relative overflow-hidden rounded-[32px] map-hero"
             onMouseLeave={() => canHover && setHoverId(null)}
           >
             {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
             <img
               src="/Images/northside-map.svg?v=2"
               alt="NorthSide GTA map with towns"
-              className="block w-full h-auto"
+              className="block h-auto w-full min-h-[320px] sm:min-h-[420px] md:min-h-[520px]"
             />
 
             {/* Pins */}
