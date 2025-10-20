@@ -103,9 +103,16 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
     return `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`;
   }, [towns]);
 
+  const containerClasses = [
+    "rounded-2xl shadow-sm transition-all duration-300",
+    open
+      ? "border border-emerald-200 bg-white/95 p-5 md:p-6"
+      : "border border-white/25 bg-white/5 p-5 md:p-6 backdrop-blur-sm",
+  ].join(" ");
+
   if (done) {
     return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 shadow-sm p-5 md:p-6">
+      <div className="rounded-2xl border border-emerald-200 bg-white/95 shadow-sm p-5 md:p-6">
         <h3 className="text-xl font-semibold">Thanks — you’re one step closer.</h3>
         <p className="mt-1 text-gray-700">
           We’ll send hand-picked insights for{" "}
@@ -129,27 +136,21 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
   }
 
   return (
-    <div
-      className={[
-        "rounded-2xl border border-emerald-200 bg-emerald-50/70",
-        "shadow-sm transition-all duration-300",
-        open ? "p-5 md:p-6" : "p-4 md:p-5",
-      ].join(" ")}
-    >
+    <div className={containerClasses}>
       {/* Collapsed = premium “Match” block */}
       {!open && (
-        <div className="space-y-3">
-          <div>
-            <h3 className="text-2xl md:text-[28px] font-extrabold tracking-tight text-slate-900">
+        <div className="space-y-4 text-center text-white">
+          <div className="space-y-2">
+            <h3 className="text-2xl md:text-[28px] font-extrabold tracking-tight text-white">
               Your NorthSide GTA Match
             </h3>
-            <p className="text-slate-700">
-              Get a personalized shortlist of towns with insider notes, commute times, and
-              price ranges — built by Finally Home Agents.
+            <p className="text-sm text-emerald-100/80 md:text-base">
+              Compare the towns we move clients through every week — with pricing, commute, and
+              school context curated for your inbox.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             {/* START HERE (primary) */}
             <button
               type="button"
@@ -171,8 +172,8 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
               rel="noopener noreferrer"
               className="
                 inline-flex items-center gap-2 px-5 py-3 rounded-xl
-                border-2 text-emerald-700 border-emerald-300 bg-white
-                hover:border-emerald-400 hover:bg-emerald-50
+                border border-white/40 bg-white/10 text-white
+                hover:border-white/70 hover:bg-white/20
                 font-semibold transition
               "
               title="WhatsApp (fast)"
@@ -182,30 +183,32 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
             </a>
 
             {/* small time badge */}
-            <span className="inline-flex items-center self-start sm:self-auto px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white/10 text-emerald-100">
               2 min
             </span>
           </div>
 
           {/* Value bullets */}
-          <ul className="text-sm text-gray-800 space-y-1">
+          <ul className="space-y-1 text-sm text-emerald-100/85">
             {[
               "Top-3 towns matched to your lifestyle & budget",
               "Scorecard: prices, commute, schools, vibe",
               "VIP alerts for good-fit listings & off-market talk",
             ].map((line) => (
-              <li key={line} className="flex items-start gap-2">
-                <span className="mt-1 inline-block h-4 w-4 rounded-full bg-emerald-600 text-white text-[10px] leading-4 text-center">✓</span>
+              <li key={line} className="flex items-start gap-2 text-left">
+                <span className="mt-1 inline-block h-4 w-4 flex-none rounded-full bg-white/15 text-[10px] font-semibold leading-4 text-center text-emerald-100">
+                  ✓
+                </span>
                 <span>{line}</span>
               </li>
             ))}
           </ul>
 
           {/* Trust & footnote */}
-          <div className="text-xs text-gray-600">
-            ★★★★★ Google reviews • As seen on Instagram & Facebook
+          <div className="text-xs uppercase tracking-[0.32em] text-emerald-100/70">
+            Finally Home Agents • NorthSide GTA
           </div>
-          <div className="text-xs text-gray-500">No spam. Unsubscribe anytime.</div>
+          <div className="text-xs text-emerald-100/60">No spam. Unsubscribe anytime.</div>
         </div>
       )}
 

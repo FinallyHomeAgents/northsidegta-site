@@ -286,7 +286,7 @@ export default function MapHero({ variant = "standalone", className = "" }) {
             <img
               src="/Images/northside-map.svg?v=2"
               alt="NorthSide GTA map with towns"
-              className="block h-auto w-full min-h-[320px] sm:min-h-[420px] md:min-h-[520px]"
+              className="block h-auto w-full min-h-[300px] sm:min-h-[420px] md:min-h-[500px] lg:min-h-[520px]"
             />
 
             {/* Pins */}

@@ -17,47 +17,49 @@ const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
 
 const HERO_STATS = [
   {
-    label: "Match Score",
-    value: "92",
-    suffix: "/100",
-    description: "Aurora vs. Stouffville for your wish list",
+    label: "Aurora Avg. Sale Price",
+    value: "$1.29",
+    suffix: "M",
+    description: "TRREB Oct 2023 detached average across Aurora.",
   },
   {
-    label: "Buyer Heat",
-    value: "+18%",
-    description: "Active shoppers week-over-week across Georgina",
+    label: "North District DOM",
+    value: "21",
+    suffix: "days",
+    description: "Median time on market over the past 30 days (MLS®).",
   },
   {
-    label: "Next Opening",
-    value: "3:30 PM",
-    description: "Live WhatsApp concierge slot available today",
+    label: "Union Station Commute",
+    value: "38",
+    suffix: "min",
+    description: "GO Express from Newmarket to Union Station at 7:10 a.m.",
   },
 ];
 
 const SMART_TOOLS = [
   {
-    title: "Smart Listing Radar",
-    stat: "12",
-    statSuffix: " matches",
-    description: "Fresh homes that align with your saved commute, school, and lifestyle filters updated every hour.",
+    title: "Market Watch North",
+    stat: "412",
+    statSuffix: " active",
+    description: "MLS® listings we monitor nightly across Georgina, East Gwillimbury, Newmarket, and Aurora.",
   },
   {
-    title: "Offer Playbook",
+    title: "School Catchment Lens",
+    stat: "37",
+    statSuffix: " schools",
+    description: "Public & Catholic catchments with boundary notes, EQAO history, and bus zones on file.",
+  },
+  {
+    title: "GO Commute Optimizer",
     stat: "4",
-    statSuffix: " scenarios",
-    description: "Side-by-side offer strategies with projected outcomes so you can move with confidence in any market beat.",
+    statSuffix: " lines",
+    description: "Live service data for Barrie, Stouffville, Richmond Hill, and Lakeshore East every weekday morning.",
   },
   {
-    title: "Equity Pulse",
-    stat: "+6.2%",
-    statSuffix: " YoY",
-    description: "See how your street has trended this month and which buyers are ready to move in.",
-  },
-  {
-    title: "Deal Desk",
-    stat: "<10",
-    statSuffix: " min",
-    description: "Average response time from the human + AI concierge for document checks or next steps.",
+    title: "Lake Effect Monitor",
+    stat: "5",
+    statSuffix: " towns",
+    description: "Keswick, Sutton, Pefferlaw, Port Perry, and Udora waterfront updates with wind + water alerts.",
   },
 ];
 
@@ -160,26 +162,20 @@ function HomeHero() {
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-16 pt-20 sm:px-6 sm:pt-24">
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-12 sm:px-6 sm:pt-14">
         <div className="relative">
           <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
-            <div className="rounded-[52px] border border-white/15 bg-black/45 p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
+            <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
               <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
                 <div className="relative overflow-hidden rounded-[36px] border border-white/10">
                   <MapHero variant="immersive" />
-                  <div className="pointer-events-none absolute bottom-4 right-4 hidden rounded-2xl border border-emerald-300/40 bg-black/60 px-4 py-3 text-right shadow-lg shadow-emerald-900/50 sm:block">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-200/80">
-                      Next Tour Window
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-white">Today • 5:30 PM</p>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto mt-12 max-w-3xl text-center">
+        <div className="mx-auto mt-10 max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
             NorthSide GTA • Finally Home Agents
           </span>
@@ -191,7 +187,7 @@ function HomeHero() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
           {HERO_STATS.map((stat) => (
             <div
               key={stat.label}
@@ -232,18 +228,18 @@ function HomeHero() {
 
 function TownHighlight() {
   return (
-    <section className="relative z-10 -mt-16 pb-16">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-10">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-semibold text-emerald-900 sm:text-3xl">
+    <section className="relative z-10 -mt-12 pb-14">
+      <div className="mx-auto w-full max-w-[1900px] px-3 sm:px-6">
+        <div className="rounded-[28px] border border-emerald-100/70 bg-white/95 px-4 py-5 shadow-[0_30px_60px_rgba(15,118,110,0.15)] backdrop-blur-sm sm:px-8 sm:py-6">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="text-xl font-semibold text-emerald-900 sm:text-2xl">
               Jump straight into the towns we serve every day.
             </h2>
-            <p className="mt-3 text-sm text-slate-600 sm:text-base">
-              Use the strip below to open neighbourhood spotlights, recent wins, and quick market notes.
+            <p className="mt-2 text-sm text-slate-600 sm:text-base">
+              Tap the strip to move between Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog snapshots.
             </p>
           </div>
-          <div className="mt-8">
+          <div className="mt-6">
             <TownStrip />
           </div>
         </div>
