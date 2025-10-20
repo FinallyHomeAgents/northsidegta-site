@@ -1,0 +1,38 @@
+{
+  "slug": "20251108-fall-artist-poet-gathering-aurora",
+  "title": "Fall Artist-Poet Gathering",
+  "summary": "Fall Artist-Poet Gathering",
+  "description": "Image caption: WCYR Member Erika MacNeil reading her poems at the January 18, 2025, Winter Artist-Poet Gathering Fall Artist-Poet Gathering Saturday, November 8, 11:00 – 1:00 pm Homeroom Galleries (Level 1) | 50 Victoria Street, Aurora Join us for our Fall Artist-Poet Gathering! Gatherings are dependent on the exhibitions on-view at Aurora Cultural Centre’s public galleries. In this gathering, current exhibitions include: Shifting Realities: Adventures in Portaiture by Eva Folks and Judy Sherman What Does a Winter’s Night Hold? featuring ACC Artist Instructors Stories Woven Through Fabric by Sharon Rigby About: Artist-Poet Gatherings are a quarterly meetup between artists and poets in Aurora Cultural Centre’s public galleries. Participants are invited to create spontaneous written or visual responses to the artworks on display. Each gathering begins with 1.5 hours of viewing, social, and creation time, followed by a 30-minute session with the option to present created responses. Registration required at: AuroraCulturalCentre.ca/events-for-artists",
+  "startDate": "2025-11-08T16:00:00Z",
+  "endDate": "2025-11-08T18:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-11-08",
+      "all_day": false,
+      "start_time": "11:00",
+      "end_time": "13:00"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/november-8-artist-poet-gathering/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "status": "approved",
+  "hidden": false,
+  "archived": false,
+  "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
+  "sourceRef": "10002699-1762599600-1762606800@auroraculturalcentre.ca",
+  "lastSyncedAt": "2025-10-20T08:41:30.450Z",
+  "firstSeenAt": "2025-10-20T08:41:30.450Z",
+  "updatedAt": "2025-10-20T08:41:30.450Z",
+  "featured": false
+}
