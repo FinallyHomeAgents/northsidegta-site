@@ -15,7 +15,10 @@ const TOWNS = [
 const WHATSAPP_NUMBER_E164 = "16476684646"; // no '+' for wa.me
 const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER_E164}`;
 
-export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
+export default function QuickContactCard({
+  formspreeId = "xanbzajw",
+  variant = "default",
+}) {
   // collapsed/expanded
   const [open, setOpen] = useState(false);
 
@@ -103,11 +106,19 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
     return `${WHATSAPP_BASE}?text=${encodeURIComponent(msg)}`;
   }, [towns]);
 
+  const overlay = variant === "overlay";
+
+  const baseContainer = "rounded-2xl transition-all duration-300";
+
   const containerClasses = [
-    "rounded-2xl shadow-sm transition-all duration-300",
-    open
-      ? "border border-emerald-200 bg-white/95 p-4 md:p-5"
-      : "border border-white/25 bg-white/5 p-4 md:p-5 backdrop-blur-sm",
+    baseContainer,
+    overlay
+      ? open
+        ? "border border-emerald-200/80 bg-white/96 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,33,24,0.25)]"
+        : "border border-white/35 bg-emerald-950/65 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,20,15,0.55)] backdrop-blur-xl"
+      : open
+      ? "border border-emerald-200 bg-white/95 p-4 md:p-5 shadow-sm"
+      : "border border-white/25 bg-white/5 p-4 md:p-5 shadow-sm backdrop-blur-sm",
   ].join(" ");
 
   if (done) {
@@ -139,18 +150,47 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
     <div className={containerClasses}>
       {/* Collapsed = premium “Match” block */}
       {!open && (
-        <div className="space-y-3 text-center text-white">
-          <div className="space-y-1.5">
-            <h3 className="text-[22px] md:text-[26px] font-extrabold tracking-tight text-white">
+        <div
+          className={`text-center text-white ${
+            overlay ? "space-y-2.5" : "space-y-3"
+          }`}
+        >
+          <div className={overlay ? "space-y-1" : "space-y-1.5"}>
+            <span
+              className={`inline-flex items-center justify-center rounded-full border ${
+                overlay
+                  ? "border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100"
+                  : "hidden"
+              }`}
+            >
+              Match Concierge
+            </span>
+            <h3
+              className={`${
+                overlay
+                  ? "text-[20px] md:text-[24px] font-black tracking-tight text-white"
+                  : "text-[22px] md:text-[26px] font-extrabold tracking-tight text-white"
+              }`}
+            >
               Your NorthSide GTA Match
             </h3>
-            <p className="text-[13px] text-emerald-100/80 md:text-sm">
+            <p
+              className={`${
+                overlay
+                  ? "text-[12px] leading-relaxed text-emerald-100/85 md:text-[13px]"
+                  : "text-[13px] text-emerald-100/80 md:text-sm"
+              }`}
+            >
               Compare the towns we move clients through every week — with pricing, commute, and
               school context curated for your inbox.
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-2.5 sm:flex-row">
+          <div
+            className={`flex flex-col items-center justify-center ${
+              overlay ? "gap-2 md:flex-row" : "gap-2.5 sm:flex-row"
+            }`}
+          >
             {/* START HERE (primary) */}
             <button
               type="button"
@@ -170,12 +210,13 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="
+              className={`
                 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
                 border border-white/40 bg-white/10 text-white
                 hover:border-white/70 hover:bg-white/20
                 font-semibold transition
-              "
+                ${overlay ? "w-full justify-center md:w-auto" : ""}
+              `}
               title="WhatsApp (fast)"
             >
               <FaWhatsapp className="h-5 w-5" style={{ color: "#25D366" }} />
@@ -189,7 +230,13 @@ export default function QuickContactCard({ formspreeId = "xanbzajw" }) {
           </div>
 
           {/* Value bullets */}
-          <ul className="space-y-1 text-[13px] leading-relaxed text-emerald-100/85">
+          <ul
+            className={`${
+              overlay
+                ? "space-y-1 text-[12px] leading-relaxed text-emerald-100/80"
+                : "space-y-1 text-[13px] leading-relaxed text-emerald-100/85"
+            }`}
+          >
             {[
               "Top-3 towns matched to your lifestyle & budget",
               "Scorecard: prices, commute, schools, vibe",

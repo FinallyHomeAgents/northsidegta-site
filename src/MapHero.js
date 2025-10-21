@@ -192,20 +192,35 @@ const Styles = () => (
    ──────────────────────────────────────────────────────────── */
 function RatingRow({ label, value }) {
   const v = Math.round(value || 0);
+  const percent = Math.max(0, Math.min(100, (v / 5) * 100));
+
   return (
-    <div className="flex items-center justify-between gap-2">
-      <span className="min-w-0 pr-1 text-[12px] md:text-[13px] text-gray-800 truncate">
-        {label}
-      </span>
-      <div className="flex-none flex items-center gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <span
-            key={i}
-            className={`h-[6px] w-[6px] md:h-[7px] md:w-[7px] rounded-full ${
-              i < v ? "bg-emerald-600" : "bg-gray-300"
-            }`}
-          />
-        ))}
+    <div className="space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="min-w-0 pr-1 text-[12px] font-semibold text-emerald-900 md:text-[13px]">
+          {label}
+        </span>
+        <div className="flex flex-none items-center gap-1.5">
+          <div className="flex items-center gap-[3px]">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span
+                key={i}
+                className={`h-[7px] w-[7px] rounded-full md:h-[8px] md:w-[8px] ${
+                  i < v
+                    ? "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
+                    : "bg-emerald-100"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[11px] font-semibold text-emerald-600">{v}/5</span>
+        </div>
+      </div>
+      <div className="h-[6px] w-full rounded-full bg-emerald-100/80">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
+          style={{ width: `${percent}%` }}
+        />
       </div>
     </div>
   );
@@ -294,6 +309,15 @@ export default function MapHero({
               className="block h-auto w-full min-h-[240px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] xl:min-h-[420px] xl:max-h-[480px]"
             />
 
+            {/* Inline quick contact (desktop+) */}
+            {embedded && showQuickContact && (
+              <div className="pointer-events-none absolute top-1/2 left-3 hidden w-[260px] -translate-y-1/2 md:block md:left-5 md:w-[280px] lg:left-6 lg:w-[300px] xl:left-7 xl:w-[320px] z-30">
+                <div className="pointer-events-auto">
+                  <QuickContactCard variant="overlay" />
+                </div>
+              </div>
+            )}
+
             {/* Pins */}
             {TOWNS.map((t) => (
               <button
@@ -316,56 +340,10 @@ export default function MapHero({
               </button>
             ))}
 
-            {/* DESKTOP: right-docked info panel (only when hovering a pin) */}
-            {canHover && activeTown && (
-              <div className="hidden md:block">
-                <div className="panel absolute top-4 right-4 w-[340px] lg:w-[360px] p-4 md:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
-                        {activeTown.name.slice(0, 1)}
-                      </div>
-                      <div className="text-[18px] md:text-[20px] font-extrabold tracking-tight">
-                        {activeTown.name}
-                      </div>
-                    </div>
-                    <a
-                      href={activeTown.url}
-                      className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
-                    >
-                      See town
-                    </a>
-                  </div>
-
-                  {/* Blurb */}
-                  {activeTown.blurb && (
-                    <p className="text-[14px] leading-5 text-gray-700 mt-2">
-                      {activeTown.blurb}
-                    </p>
-                  )}
-
-                  {/* Ratings grid — tighter so nothing clips */}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {CATEGORY_ORDER.filter(
-                      (k) =>
-                        activeTown.ratings && activeTown.ratings[k] != null
-                    ).map((k) => (
-                      <div
-                        key={k}
-                        className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
-                      >
-                        <RatingRow
-                          label={CATEGORY_LABELS[k]}
-                          value={activeTown.ratings[k]}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-3 text-xs text-gray-500">
-                    ★★★★★ Google reviews • As seen on Instagram & Facebook
-                  </div>
-                </div>
+            {/* DESKTOP: right-docked info panel */}
+            {canHover && (
+              <div className="pointer-events-none absolute top-1/2 right-3 hidden w-[290px] -translate-y-1/2 md:block md:right-4 md:w-[310px] lg:right-5 lg:w-[330px] xl:right-6 xl:w-[350px] z-30">
+                <TownInsightCard town={activeTown} />
               </div>
             )}
 
@@ -373,77 +351,152 @@ export default function MapHero({
             <LiveTicker />
           </div>
 
-          {/* MOBILE: panel below the map when a pin is tapped */}
-          {!canHover && activeTown && (
-            <div className="mt-3 panel p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
-                    {activeTown.name.slice(0, 1)}
-                  </div>
-                  <div className="text-[18px] font-extrabold tracking-tight">
-                    {activeTown.name}
-                  </div>
-                </div>
-                <button
-                  onClick={() => setOpenId(null)}
-                  aria-label="Close"
-                  className="rounded-md px-2 py-1 text-gray-600 hover:bg-gray-100"
-                >
-                  ×
-                </button>
-              </div>
-
-              {activeTown.blurb && (
-                <p className="text-[14px] leading-5 text-gray-700 mt-2">
-                  {activeTown.blurb}
-                </p>
-              )}
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {CATEGORY_ORDER.filter(
-                  (k) => activeTown.ratings && activeTown.ratings[k] != null
-                ).map((k) => (
-                  <div
-                    key={k}
-                    className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
-                  >
-                    <RatingRow
-                      label={CATEGORY_LABELS[k]}
-                      value={activeTown.ratings[k]}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 flex items-center justify-between">
-                <a
-                  href={activeTown.url}
-                  className="inline-flex items-center justify-center px-3 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
-                >
-                  See town
-                </a>
-                <span className="text-xs text-gray-500">
-                  ★★★★★ Google reviews
-                </span>
-              </div>
+          {/* MOBILE: panel below the map with tap instructions */}
+          {!canHover && (
+            <div className="mt-3 md:hidden">
+              <TownInsightCard town={activeTown} mode="mobile" onDismiss={() => setOpenId(null)} />
             </div>
           )}
 
-          {(afterTicker || showQuickContact) && (
+          {/* MOBILE: quick contact below the map */}
+          {embedded && showQuickContact && !canHover && (
+            <div className="mt-4 md:hidden">
+              <QuickContactCard variant="overlay" />
+            </div>
+          )}
+
+          {afterTicker && (
             <div className="border-t border-white/12 bg-white/5 backdrop-blur-sm">
-              <div className="flex flex-col gap-4 px-3 py-4 sm:px-4 sm:py-5 lg:flex-row lg:items-stretch lg:gap-6">
-                {afterTicker && <div className="flex-1">{afterTicker}</div>}
-                {showQuickContact && (
-                  <div className="w-full lg:max-w-[320px] xl:max-w-[360px] lg:self-stretch">
-                    <QuickContactCard />
-                  </div>
-                )}
+              <div className="px-3 py-4 sm:px-4 sm:py-5">
+                {afterTicker}
               </div>
             </div>
           )}
         </div>
       </div>
     </section>
+  );
+}
+
+function TownInsightCard({ town, mode = "desktop", onDismiss }) {
+  const isMobile = mode === "mobile";
+  const hasTown = Boolean(town);
+
+  const containerClasses = [
+    isMobile
+      ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
+      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
+  ].join(" ");
+
+  const headerClasses = [
+    "bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 text-white",
+    isMobile ? "rounded-t-[26px] px-4 py-3" : "rounded-t-[30px] px-5 py-4",
+  ].join(" ");
+
+  const bodyClasses = isMobile ? "space-y-4 px-4 py-4" : "space-y-5 px-5 py-5";
+
+  if (!hasTown) {
+    return (
+      <div className={containerClasses}>
+        <div className={headerClasses}>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg">
+              🧭
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.32em] text-emerald-100/80">
+                Town insights
+              </p>
+              <p className="text-lg font-semibold leading-tight md:text-xl">
+                Hover a town to unlock live intel.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className={bodyClasses}>
+          <p className="text-sm leading-relaxed text-emerald-900/80">
+            Explore the map to preview pricing, commute notes, and lifestyle scores across the
+            NorthSide GTA.
+          </p>
+          <div className="grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85">
+            {TOWNS.map((t) => (
+              <div
+                key={t.id}
+                className="rounded-xl border border-emerald-100/70 bg-emerald-50/70 px-3 py-2 text-center shadow-sm"
+              >
+                {t.name}
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] uppercase tracking-[0.28em] text-emerald-500/80">
+            NorthSide GTA • Finally Home Agents
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={containerClasses}>
+      <div className={headerClasses}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
+              {town.name.slice(0, 1)}
+            </div>
+            <div className="text-left">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-emerald-100/80">
+                NorthSide GTA
+              </p>
+              <p className="text-lg font-semibold leading-tight md:text-xl">
+                {town.name}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {isMobile && onDismiss ? (
+              <button
+                type="button"
+                onClick={onDismiss}
+                aria-label="Close town panel"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-base text-white transition hover:bg-white/25"
+              >
+                ×
+              </button>
+            ) : null}
+            <a
+              href={town.url}
+              className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-white/25"
+            >
+              See town
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className={bodyClasses}>
+        {town.blurb && (
+          <p className="text-sm leading-relaxed text-emerald-900/85 md:text-[15px]">
+            {town.blurb}
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {CATEGORY_ORDER.filter(
+            (k) => town.ratings && town.ratings[k] != null
+          ).map((k) => (
+            <div
+              key={k}
+              className="rounded-2xl border border-emerald-100/70 bg-white/70 p-3 shadow-sm shadow-emerald-900/10"
+            >
+              <RatingRow label={CATEGORY_LABELS[k]} value={town.ratings[k]} />
+            </div>
+          ))}
+        </div>
+
+        <div className="text-[11px] uppercase tracking-[0.28em] text-emerald-500/80">
+          ★★★★★ Google reviews • Local data refreshed nightly
+        </div>
+      </div>
+    </div>
   );
 }
