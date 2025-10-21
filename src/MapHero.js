@@ -1,5 +1,5 @@
 // src/MapHero.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState, useId } from "react";
 import QuickContactCard from "./QuickContactCard";
 import LiveTicker from "./components/LiveTicker";
 
@@ -160,6 +160,13 @@ const TOWNS = [
   },
 ];
 
+const PANEL_CHIPS = [
+  "Pricing snapshot",
+  "Commute notes",
+  "School scorecards",
+  "Lifestyle vibe",
+];
+
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
@@ -170,19 +177,262 @@ const Styles = () => (
     70%  { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 0 14px rgba(16,185,129,0.00); }
     100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
   }
-  .pin-wrap { position:absolute; transform:translate(-50%, -50%); }
+  .pin-wrap {
+    position:absolute;
+    left: calc(var(--map-offset-x, 0px) + var(--map-width, 0px) * var(--pin-x, 0));
+    top: calc(var(--map-offset-y, 0px) + var(--map-height, 0px) * var(--pin-y, 0));
+    transform:translate(-50%, -50%);
+  }
   .pin {
     position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
     width:14px; height:14px; border-radius:999px; border:2px solid #fff;
     background: radial-gradient(65% 65% at 35% 35%, #34d399 0%, #059669 60%, #047857 100%);
     animation: pinPulse 2s ease-out infinite;
   }
+  /* ===== Desktop Hero Layout — 20 | 60 | 20 ===== */
+  .hero-shell {
+    --heroH: clamp(640px, 66vh, 820px);
+
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: var(--heroH);
+    width: 100%;
+  }
+
+  /* handle layouts where one or both panels are hidden */
+  .hero-shell.no-left {
+    grid-template-columns: 60% 20%;
+  }
+  .hero-shell.no-left .hero-core {
+    grid-column: 1;
+  }
+  .hero-shell.no-left .panel-right {
+    grid-column: 2;
+  }
+  .hero-shell.no-right {
+    grid-template-columns: 20% 60%;
+  }
+  .hero-shell.no-right .hero-core {
+    grid-column: 2;
+  }
+  .hero-shell.no-right .panel-left {
+    grid-column: 1;
+  }
+  .hero-shell.no-panels {
+    grid-template-columns: 1fr;
+  }
+  .hero-shell.no-panels .hero-core {
+    grid-column: 1;
+  }
+
+  /* column placement */
+  .panel-left  { grid-column: 1; }
+  .hero-core   { grid-column: 2; }
+  .panel-right { grid-column: 3; }
+
+  /* ===== Hero (center) ===== */
+  .hero-core {
+    height: var(--heroH);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-core-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-map-frame {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Whatever renders the map/image */
+  .hero-core img,
+  .hero-core canvas,
+  .hero-core video,
+  .hero-core .map-root {
+    max-height: 100%;         /* fill the available height */
+    max-width: 100%;          /* but never overflow width */
+    width: auto;              /* keeps aspect ratio */
+    height: auto;             /* keeps aspect ratio */
+    object-fit: contain;      /* no cropping */
+    display: block;
+  }
+
+  /* ===== Panels ===== */
   .panel {
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,.97);
-    border: 1px solid rgba(16,185,129,.18);
-    border-radius: 16px;
-    box-shadow: 0 12px 28px rgba(2,44,34,.18);
+    height: var(--heroH);
+    margin: 0;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: linear-gradient(180deg, rgba(6,34,16,0.86) 0%, rgba(6,34,16,0.76) 100%);
+    color: #F4FFF1;
+    box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
+  }
+  .panel > * {
+    width: 100%;
+  }
+
+  /* Typography (compact & legible) */
+  .panel h1, .panel h2 {
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    color: #F4FFF1;
+  }
+  .panel h3, .panel h4,
+  .panel p, .panel li, .panel small,
+  .panel label {
+    color: #F4FFF1;
+  }
+  .panel p {
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: 38ch;
+    margin: 0 0 12px 0;
+  }
+  .panel ul {
+    margin: 12px 0 0;
+  }
+  .panel li {
+    margin: 6px 0;
+  }
+
+  /* Compact insights grid */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .insights-grid .chip {
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #F4FFF1;
+    text-align: center;
+  }
+
+  /* Prevent external padding/margins */
+  .hero-shell,
+  .hero-core,
+  .panel,
+  .panel > * {
+    box-sizing: border-box;
+  }
+
+  /* ===== TICKER: flush to bottom of hero ===== */
+  .hero-ticker {
+    grid-column: 1 / -1;
+    align-self: end;
+    margin-top: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .hero-shell + .hero-ticker {
+    margin-top: 0;            /* no gap between hero and ticker */
+  }
+
+  /* Ensure overlay pieces stay above */
+  .hero-shell * { z-index: 0; }
+  .panel, .hero-core { z-index: 1; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1200px) {
+    .hero-shell {
+      --heroH: clamp(560px, 60vh, 760px);
+      grid-template-columns: 24% 52% 24%;
+    }
+    .hero-shell.no-left {
+      grid-template-columns: 52% 24%;
+    }
+    .hero-shell.no-right {
+      grid-template-columns: 24% 52%;
+    }
+    .panel {
+      padding: 22px 20px;
+    }
+  }
+  @media (max-width: 980px) {
+    .hero-shell {
+      grid-template-columns: 1fr;
+      --heroH: clamp(420px, 52vh, 600px);
+      display: grid;
+      grid-auto-rows: auto;
+      row-gap: 16px;
+    }
+    .hero-core,
+    .panel-left,
+    .panel-right {
+      grid-column: 1;
+    }
+    .hero-core { order: 1; }
+    .panel-left { order: 2; }
+    .panel-right { order: 3; }
+    .panel {
+      height: auto;
+      max-height: var(--heroH);
+      padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .panel-left {
+      overflow: visible;
+      max-height: none;
+    }
+    .panel-right {
+      overflow-y: auto;
+    }
+    .hero-core {
+      height: var(--heroH);
+    }
+    .mobile-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mobile-accordion-region {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease;
+    }
+    .mobile-accordion-region.open {
+      max-height: 70vh;
+    }
+    .mobile-accordion-content {
+      max-height: 70vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .panel-right .panel-summary {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
   `}</style>
 );
@@ -190,22 +440,60 @@ const Styles = () => (
 /* ────────────────────────────────────────────────────────────
    Compact rating row
    ──────────────────────────────────────────────────────────── */
-function RatingRow({ label, value }) {
+function RatingRow({ label, value, tone = "emerald" }) {
   const v = Math.round(value || 0);
+  const percent = Math.max(0, Math.min(100, (v / 5) * 100));
+  const isPanel = tone === "panel";
+
   return (
-    <div className="flex items-center justify-between gap-2">
-      <span className="min-w-0 pr-1 text-[12px] md:text-[13px] text-gray-800 truncate">
-        {label}
-      </span>
-      <div className="flex-none flex items-center gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${
+            isPanel ? "text-emerald-50" : "text-emerald-900"
+          }`}
+        >
+          {label}
+        </span>
+        <div className="flex flex-none items-center gap-1.5">
+          <div className="flex items-center gap-[3px]">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span
+                key={i}
+                className={`h-[7px] w-[7px] rounded-full md:h-[8px] md:w-[8px] ${
+                  i < v
+                    ? isPanel
+                      ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
+                      : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
+                    : isPanel
+                    ? "bg-white/18"
+                    : "bg-emerald-100"
+                }`}
+              />
+            ))}
+          </div>
           <span
-            key={i}
-            className={`h-[6px] w-[6px] md:h-[7px] md:w-[7px] rounded-full ${
-              i < v ? "bg-emerald-600" : "bg-gray-300"
+            className={`text-[11px] font-semibold ${
+              isPanel ? "text-emerald-100" : "text-emerald-600"
             }`}
-          />
-        ))}
+          >
+            {v}/5
+          </span>
+        </div>
+      </div>
+      <div
+        className={`h-[6px] w-full rounded-full ${
+          isPanel ? "bg-white/12" : "bg-emerald-100/80"
+        }`}
+      >
+        <div
+          className={`h-full rounded-full ${
+            isPanel
+              ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
+              : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
+          }`}
+          style={{ width: `${percent}%` }}
+        />
       </div>
     </div>
   );
@@ -214,10 +502,26 @@ function RatingRow({ label, value }) {
 /* ────────────────────────────────────────────────────────────
    MapHero
    ──────────────────────────────────────────────────────────── */
-export default function MapHero() {
+export default function MapHero({
+  variant = "standalone",
+  className = "",
+  showQuickContact = true,
+  afterTicker = null,
+}) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
+  const frameRef = useRef(null);
+  const imageRef = useRef(null);
+  const [mapMetrics, setMapMetrics] = useState({
+    offsetX: 0,
+    offsetY: 0,
+    width: 0,
+    height: 0,
+  });
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [mobileMatchOpen, setMobileMatchOpen] = useState(false);
+  const accordionRegionId = `${useId()}-match-panel`;
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -228,6 +532,122 @@ export default function MapHero() {
   useEffect(() => {
     window.__mapboxRef = { resize: () => {} };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const frameEl = frameRef.current;
+    const imageEl = imageRef.current;
+
+    if (!frameEl || !imageEl) {
+      return undefined;
+    }
+
+    let animationFrame = null;
+
+    const updateMetrics = () => {
+      if (!frameRef.current || !imageRef.current) {
+        return;
+      }
+
+      const frameRect = frameRef.current.getBoundingClientRect();
+      const imageRect = imageRef.current.getBoundingClientRect();
+
+      if (!imageRect.width || !imageRect.height) {
+        return;
+      }
+
+      const next = {
+        offsetX: imageRect.left - frameRect.left,
+        offsetY: imageRect.top - frameRect.top,
+        width: imageRect.width,
+        height: imageRect.height,
+      };
+
+      setMapMetrics((prev) => {
+        const delta =
+          Math.abs(prev.offsetX - next.offsetX) +
+          Math.abs(prev.offsetY - next.offsetY) +
+          Math.abs(prev.width - next.width) +
+          Math.abs(prev.height - next.height);
+
+        if (delta < 0.5) {
+          return prev;
+        }
+
+        return next;
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+      animationFrame = requestAnimationFrame(updateMetrics);
+    };
+
+    const handleResize = () => scheduleUpdate();
+
+    const handleLoad = () => scheduleUpdate();
+
+    if (imageEl.complete) {
+      scheduleUpdate();
+    } else {
+      imageEl.addEventListener("load", handleLoad, { once: false });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    let resizeObserver = null;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(scheduleUpdate);
+      resizeObserver.observe(frameEl);
+      resizeObserver.observe(imageEl);
+    }
+
+    scheduleUpdate();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      imageEl.removeEventListener("load", handleLoad);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+
+    const mq = window.matchMedia("(max-width: 980px)");
+
+    const handleChange = (event) => {
+      setIsMobileViewport(event.matches);
+    };
+
+    setIsMobileViewport(mq.matches);
+
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", handleChange);
+      return () => mq.removeEventListener("change", handleChange);
+    }
+
+    mq.addListener(handleChange);
+    return () => mq.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileViewport) {
+      setMobileMatchOpen(false);
+    }
+  }, [isMobileViewport]);
 
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
@@ -247,171 +667,421 @@ export default function MapHero() {
     return () => window.removeEventListener("keydown", onEsc);
   }, [canHover]);
 
+  const handleMobileAccordionToggle = () => {
+    setMobileMatchOpen((prev) => !prev);
+  };
+
+  const handleMobileAccordionChange = (next) => {
+    if (isMobileViewport) {
+      setMobileMatchOpen(Boolean(next));
+    }
+  };
+
+  const embedded = variant !== "standalone";
+
+  const sectionClasses = [
+    embedded
+      ? "relative"
+      : "bg-gradient-to-b from-white to-emerald-50/40",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const containerClasses = [
+    "mx-auto w-full",
+    embedded ? "max-w-[1900px] px-0" : "max-w-6xl px-4",
+    embedded ? "" : "pt-8",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const frameClasses = embedded
+    ? "relative mx-auto w-full rounded-[36px]"
+    : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
+
+  const heroShellClasses = [
+    "hero-shell",
+    !embedded ? "no-panels" : "",
+    embedded && !showQuickContact ? "no-left" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const insightMode = canHover ? "desktop" : "mobile";
+
   return (
-    <section className="bg-gradient-to-b from-white to-emerald-50/40">
-      <div className="mx-auto max-w-6xl px-4 pt-8">
+    <section className={sectionClasses}>
+      <div className={containerClasses}>
         {/* Bordered hero box (map + inline quick-contact) */}
-        <div className="relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border">
+        <div className={frameClasses}>
           <Styles />
-
-          {/* Map frame */}
-          <div
-            className="relative rounded-xl overflow-hidden map-hero"
-            onMouseLeave={() => canHover && setHoverId(null)}
-          >
-            {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
-            <img
-              src="/Images/northside-map.svg?v=2"
-              alt="NorthSide GTA map with towns"
-              className="block w-full h-auto"
-            />
-
-            {/* Pins */}
-            {TOWNS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className="pin-wrap"
-                style={{ left: `${t.x}%`, top: `${t.y}%` }}
-                aria-label={t.name}
-                aria-pressed={activeId === t.id}
-                onMouseEnter={() => canHover && setHoverId(t.id)}
-                onClick={() =>
-                  !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                }
-              >
-                <span
-                  className="pin"
-                  style={{ animationPlayState: pulsing ? "running" : "paused" }}
-                />
-                <span className="sr-only">{t.name}</span>
-              </button>
-            ))}
-
-            {/* DESKTOP: right-docked info panel (only when hovering a pin) */}
-            {canHover && activeTown && (
-              <div className="hidden md:block">
-                <div className="panel absolute top-4 right-4 w-[340px] lg:w-[360px] p-4 md:p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
-                        {activeTown.name.slice(0, 1)}
+          {embedded ? (
+            <div className={heroShellClasses}>
+              {showQuickContact ? (
+                <aside
+                  className={`panel panel-left${
+                    isMobileViewport ? " mobile-accordion-panel" : ""
+                  }`}
+                >
+                  {isMobileViewport ? (
+                    <div className="mobile-accordion">
+                      <div className="flex flex-col gap-3 text-left text-white">
+                        <span className="text-[11px] uppercase tracking-[0.28em] text-white/70">
+                          Match Concierge
+                        </span>
+                        <h3 className="text-[20px] font-semibold leading-tight">
+                          Your NorthSide GTA Match
+                        </h3>
+                        <button
+                          type="button"
+                          className="mobile-accordion-trigger inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_4px_12px_rgba(16,185,129,0.35)] transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-emerald-950"
+                          aria-expanded={mobileMatchOpen}
+                          aria-controls={accordionRegionId}
+                          onClick={handleMobileAccordionToggle}
+                        >
+                          {mobileMatchOpen ? "Hide form" : "Start"}
+                        </button>
                       </div>
-                      <div className="text-[18px] md:text-[20px] font-extrabold tracking-tight">
-                        {activeTown.name}
+                      <div
+                        id={accordionRegionId}
+                        className={`mobile-accordion-region${mobileMatchOpen ? " open" : ""}`}
+                        aria-hidden={!mobileMatchOpen}
+                      >
+                        <div className="mobile-accordion-content pt-3">
+                          <QuickContactCard
+                            variant="overlay"
+                            className="h-full"
+                            controlledOpen={mobileMatchOpen}
+                            onOpenChange={handleMobileAccordionChange}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <a
-                      href={activeTown.url}
-                      className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
-                    >
-                      See town
-                    </a>
-                  </div>
-
-                  {/* Blurb */}
-                  {activeTown.blurb && (
-                    <p className="text-[14px] leading-5 text-gray-700 mt-2">
-                      {activeTown.blurb}
-                    </p>
+                  ) : (
+                    <QuickContactCard
+                      variant="overlay"
+                      className="h-full"
+                    />
                   )}
+                </aside>
+              ) : null}
 
-                  {/* Ratings grid — tighter so nothing clips */}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {CATEGORY_ORDER.filter(
-                      (k) =>
-                        activeTown.ratings && activeTown.ratings[k] != null
-                    ).map((k) => (
-                      <div
-                        key={k}
-                        className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
+              <div className="hero-core">
+                <div className="hero-core-inner">
+                  <div
+                    ref={frameRef}
+                    className="hero-map-frame map-hero"
+                    style={{
+                      "--map-offset-x": `${mapMetrics.offsetX}px`,
+                      "--map-offset-y": `${mapMetrics.offsetY}px`,
+                      "--map-width": `${mapMetrics.width}px`,
+                      "--map-height": `${mapMetrics.height}px`,
+                    }}
+                    onMouseLeave={() => canHover && setHoverId(null)}
+                  >
+                    <img
+                      ref={imageRef}
+                      src="/Images/northside-map.svg?v=2"
+                      alt="NorthSide GTA map with towns"
+                      className="block"
+                    />
+
+                    {(mapMetrics.width > 0 && mapMetrics.height > 0
+                      ? TOWNS
+                      : []
+                    ).map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        className="pin-wrap"
+                        style={{ "--pin-x": t.x / 100, "--pin-y": t.y / 100 }}
+                        aria-label={t.name}
+                        aria-pressed={activeId === t.id}
+                        onMouseEnter={() => canHover && setHoverId(t.id)}
+                        onClick={() =>
+                          !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                        }
                       >
-                        <RatingRow
-                          label={CATEGORY_LABELS[k]}
-                          value={activeTown.ratings[k]}
+                        <span
+                          className="pin"
+                          style={{ animationPlayState: pulsing ? "running" : "paused" }}
                         />
-                      </div>
+                        <span className="sr-only">{t.name}</span>
+                      </button>
                     ))}
                   </div>
 
-                  <div className="mt-3 text-xs text-gray-500">
-                    ★★★★★ Google reviews • As seen on Instagram & Facebook
-                  </div>
+                  <LiveTicker />
                 </div>
               </div>
-            )}
 
-            {/* NEW: ticker attached to bottom */}
-            <LiveTicker />
-          </div>
+              <aside className="panel panel-right">
+                <TownInsightCard
+                  town={activeTown}
+                  mode={insightMode}
+                  onDismiss={() => setOpenId(null)}
+                  className="flex h-full flex-col"
+                  appearance="panel"
+                />
+              </aside>
+            </div>
+          ) : (
+            <div
+              className="relative overflow-hidden rounded-[32px] map-hero"
+              onMouseLeave={() => canHover && setHoverId(null)}
+            >
+              <img
+                src="/Images/northside-map.svg?v=2"
+                alt="NorthSide GTA map with towns"
+                className="block h-auto w-full"
+              />
 
-          {/* MOBILE: panel below the map when a pin is tapped */}
-          {!canHover && activeTown && (
-            <div className="mt-3 panel p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-bold">
-                    {activeTown.name.slice(0, 1)}
-                  </div>
-                  <div className="text-[18px] font-extrabold tracking-tight">
-                    {activeTown.name}
-                  </div>
-                </div>
+              {TOWNS.map((t) => (
                 <button
-                  onClick={() => setOpenId(null)}
-                  aria-label="Close"
-                  className="rounded-md px-2 py-1 text-gray-600 hover:bg-gray-100"
+                  key={t.id}
+                  type="button"
+                  className="pin-wrap"
+                  style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                  aria-label={t.name}
+                  aria-pressed={activeId === t.id}
+                  onMouseEnter={() => canHover && setHoverId(t.id)}
+                  onClick={() =>
+                    !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                  }
                 >
-                  ×
+                  <span
+                    className="pin"
+                    style={{ animationPlayState: pulsing ? "running" : "paused" }}
+                  />
+                  <span className="sr-only">{t.name}</span>
                 </button>
-              </div>
+              ))}
 
-              {activeTown.blurb && (
-                <p className="text-[14px] leading-5 text-gray-700 mt-2">
-                  {activeTown.blurb}
-                </p>
-              )}
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {CATEGORY_ORDER.filter(
-                  (k) => activeTown.ratings && activeTown.ratings[k] != null
-                ).map((k) => (
-                  <div
-                    key={k}
-                    className="rounded-lg border border-emerald-100/60 px-2.5 py-1.5"
-                  >
-                    <RatingRow
-                      label={CATEGORY_LABELS[k]}
-                      value={activeTown.ratings[k]}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 flex items-center justify-between">
-                <a
-                  href={activeTown.url}
-                  className="inline-flex items-center justify-center px-3 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition"
-                >
-                  See town
-                </a>
-                <span className="text-xs text-gray-500">
-                  ★★★★★ Google reviews
-                </span>
-              </div>
+              <LiveTicker />
             </div>
           )}
 
-          {/* Divider + Inline Quick Contact */}
-          <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
-            <QuickContactCard
-              heading="Find Where You Truly Belong in the NorthSide GTA"
-              subheading="Finally Home Agents will guide you beyond the listings — helping you compare communities and uncover the right fit."
-              primaryLabel="START HERE"
-            />
-          </div>
+          {afterTicker && (
+            <div className="border-t border-white/12 bg-white/5 backdrop-blur-sm">
+              <div className="px-3 py-4 sm:px-4 sm:py-5">
+                {afterTicker}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
+  );
+}
+
+function TownInsightCard({
+  town,
+  mode = "desktop",
+  onDismiss,
+  className = "",
+  appearance = "default",
+}) {
+  const isMobile = mode === "mobile";
+  const isPanel = appearance === "panel";
+  const hasTown = Boolean(town);
+
+  const containerClasses = [
+    className,
+    isPanel
+      ? isMobile
+        ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
+        : "pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border border-white/12 bg-emerald-950/65 shadow-[0_32px_90px_rgba(2,15,10,0.5)] backdrop-blur-xl"
+      : isMobile
+      ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
+      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const headerClasses = [
+    isPanel
+      ? isMobile
+        ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
+        : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
+      : isMobile
+      ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
+      : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white",
+  ].join(" ");
+
+  const bodyClasses = [
+    isPanel
+      ? isMobile
+        ? "space-y-4 px-4 py-4 text-emerald-50/90"
+        : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
+      : isMobile
+      ? "space-y-4 px-4 py-4"
+      : "flex-1 space-y-5 overflow-y-auto px-5 py-5",
+  ].join(" ");
+
+  if (!hasTown) {
+    return (
+      <div className={containerClasses}>
+        <div className={headerClasses}>
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg ${
+                isPanel ? "bg-white/15" : "bg-white/20"
+              }`}
+            >
+              🧭
+            </div>
+            <div>
+              <p
+                className={`text-[11px] uppercase tracking-[0.32em] ${
+                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
+                }`}
+              >
+                Town insights
+              </p>
+              <p className="text-lg font-semibold leading-tight md:text-xl">
+                Preview prices, commute, schools, and lifestyle.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className={bodyClasses}>
+          <p
+            className={`text-sm ${
+              isPanel
+                ? "panel-summary md:truncate text-emerald-50/85"
+                : "truncate text-emerald-900/80"
+            }`}
+          >
+            Hover a town to unlock nightly intel.
+          </p>
+          <div
+            className={
+              isPanel
+                ? "insights-grid text-sm font-semibold text-emerald-50/95"
+                : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85"
+            }
+          >
+            {PANEL_CHIPS.map((label) => (
+              <div
+                key={label}
+                className={
+                  isPanel
+                    ? "chip"
+                    : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70"
+                }
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+          <p
+            className={`text-[11px] uppercase tracking-[0.28em] ${
+              isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
+            }`}
+          >
+            NorthSide GTA • Insights refreshed nightly
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={containerClasses}>
+      <div className={headerClasses}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
+                isPanel ? "bg-white/15" : "bg-white/20"
+              }`}
+            >
+              {town.name.slice(0, 1)}
+            </div>
+            <div className="text-left">
+              <p
+                className={`text-[11px] uppercase tracking-[0.32em] ${
+                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
+                }`}
+              >
+                NorthSide GTA
+              </p>
+              <p className="text-lg font-semibold leading-tight md:text-xl">
+                {town.name}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {isMobile && onDismiss ? (
+              <button
+                type="button"
+                onClick={onDismiss}
+                aria-label="Close town panel"
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-base transition ${
+                  isPanel
+                    ? "bg-white/20 text-white hover:bg-white/30"
+                    : "bg-white/15 text-white hover:bg-white/25"
+                }`}
+              >
+                ×
+              </button>
+            ) : null}
+            <a
+              href={town.url}
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
+                isPanel
+                  ? "bg-white/15 text-white hover:bg-white/25"
+                  : "bg-white/15 text-white hover:bg-white/25"
+              }`}
+            >
+              See town
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className={bodyClasses}>
+        {town.blurb && (
+          <p
+            className={`${
+              isPanel
+                ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+                : "truncate text-sm md:text-[15px] text-emerald-900/85"
+            }`}
+          >
+            {town.blurb}
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {CATEGORY_ORDER.filter(
+            (k) => town.ratings && town.ratings[k] != null
+          ).map((k) => (
+            <div
+              key={k}
+              className={`rounded-2xl p-3 shadow-sm ${
+                isPanel
+                  ? "border border-white/14 bg-white/8 shadow-black/30"
+                  : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10"
+              }`}
+            >
+              <RatingRow
+                label={CATEGORY_LABELS[k]}
+                value={town.ratings[k]}
+                tone={isPanel ? "panel" : "emerald"}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div
+          className={`text-[11px] uppercase tracking-[0.28em] ${
+            isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
+          }`}
+        >
+          ★★★★★ Google reviews • Local data refreshed nightly
+        </div>
+      </div>
+    </div>
   );
 }

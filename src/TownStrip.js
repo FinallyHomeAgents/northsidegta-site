@@ -73,7 +73,7 @@ export default function TownStrip() {
         <div className="hidden md:flex items-center gap-2">
           <button
             type="button"
-            onClick={() => scrollByAmount(-360)}
+            onClick={() => scrollByAmount(-240)}
             className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
             aria-label="Scroll left"
             title="Scroll left"
@@ -82,7 +82,7 @@ export default function TownStrip() {
           </button>
           <button
             type="button"
-            onClick={() => scrollByAmount(360)}
+            onClick={() => scrollByAmount(240)}
             className="h-8 w-8 rounded-full border bg-white/90 hover:bg-white shadow-sm hover:shadow transition flex items-center justify-center"
             aria-label="Scroll right"
             title="Scroll right"
@@ -95,12 +95,12 @@ export default function TownStrip() {
       {/* Scroll container — smaller cards + padding guards so nothing is clipped */}
       <div className="relative">
         {/* Subtle fades on edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white to-transparent rounded-l-2xl" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent rounded-r-2xl" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white/90 to-transparent rounded-l-2xl" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white/90 to-transparent rounded-r-2xl" />
 
         <div
           ref={railRef}
-          className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory scroll-smooth no-scrollbar px-2"
+          className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory scroll-smooth no-scrollbar px-2"
           style={{
             WebkitOverflowScrolling: "touch",
             scrollPaddingLeft: "12px",
@@ -114,31 +114,30 @@ export default function TownStrip() {
             <a
               key={t.id}
               href={t.href}
-              className="snap-start shrink-0 w-[210px] md:w-[230px] group"
+              className="snap-start shrink-0 w-[130px] md:w-[150px] group"
               aria-label={`Explore ${t.name}`}
             >
-              <div className="h-full rounded-2xl border bg-white/85 backdrop-blur-sm shadow-sm ring-1 ring-black/5 overflow-hidden transition
-                              group-hover:shadow-lg group-hover:-translate-y-0.5">
+              <div className="h-full rounded-2xl border border-white/60 bg-white/90 backdrop-blur-sm shadow-sm ring-1 ring-black/5 overflow-hidden transition group-hover:shadow-lg group-hover:-translate-y-0.5">
                 {/* Image area (smaller heights) */}
-                <div className="aspect-[4/3] bg-emerald-50/40 flex items-center justify-center">
+                <div className="aspect-[4/3] bg-emerald-50/50 flex items-center justify-center">
                   <img
                     src={t.img}
                     alt={t.name}
-                    className="h-24 md:h-28 object-contain drop-shadow-sm transition-transform group-hover:scale-[1.02]"
+                    className="h-16 md:h-20 object-contain drop-shadow-sm transition-transform group-hover:scale-[1.02]"
                     loading="lazy"
                     onError={(e) => onImgError(e, t.id)}
                   />
                 </div>
 
                 {/* Body */}
-                <div className="p-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-[13px] font-semibold text-gray-900">{t.name}</h3>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold tracking-wide">
+                <div className="p-2.5">
+                  <div className="flex items-center justify-between gap-1">
+                    <h3 className="text-[12px] font-semibold text-gray-900">{t.name}</h3>
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold tracking-wide">
                       {ordinal(idx + 1)}
                     </span>
                   </div>
-                  <p className="mt-1 text-[11px] text-gray-600 leading-5">{t.blurb}</p>
+                  <p className="mt-1 text-[10px] text-gray-600 leading-4">{t.blurb}</p>
                 </div>
               </div>
             </a>
