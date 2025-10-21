@@ -182,16 +182,22 @@ const Styles = () => (
     background: radial-gradient(65% 65% at 35% 35%, #34d399 0%, #059669 60%, #047857 100%);
     animation: pinPulse 2s ease-out infinite;
   }
+  /* ===== LAYOUT: exact 18% | 64% | 18%, no gaps ===== */
   .hero-shell {
+    /* one height variable for hero + panels */
+    --heroH: clamp(520px, 58vh, 680px);
+
     display: grid;
     grid-template-columns: 18% 64% 18%;
-    align-items: stretch;
+    align-items: stretch;     /* panels match hero height */
+    gap: 0;                   /* no gap between columns */
     position: relative;
     border-radius: 28px;
-    overflow: hidden;
-    max-width: 100%;
-    gap: 0;
+    overflow: hidden;         /* keeps everything inside rounded frame */
+    min-height: var(--heroH);
   }
+
+  /* handle layouts where one or both panels are hidden */
   .hero-shell.no-left {
     grid-template-columns: 64% 18%;
   }
@@ -213,13 +219,20 @@ const Styles = () => (
   .hero-shell.no-panels .hero-core {
     grid-column: 1;
   }
+
+  /* columns */
+  .panel-left  { grid-column: 1; }
+  .hero-core   { grid-column: 2; }
+  .panel-right { grid-column: 3; }
+
+  /* ===== HERO (center) must not crop and must be centered ===== */
   .hero-core {
-    grid-column: 2;
-    position: relative;
-    height: clamp(420px, 52vh, 620px);
+    height: var(--heroH);
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
+    margin: 0;                /* kill any default margins */
+    padding: 0;               /* flush against panels */
     overflow: hidden;
   }
   .hero-core-inner {
@@ -239,70 +252,64 @@ const Styles = () => (
     width: 100%;
     overflow: hidden;
   }
-  .hero-map-frame img,
-  .hero-map-frame canvas,
-  .hero-map-frame video,
-  .hero-map-frame .map-root,
+
+  /* Whatever renders the map/image */
   .hero-core img,
   .hero-core canvas,
   .hero-core video,
   .hero-core .map-root {
-    width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
+    max-height: 100%;         /* fill the available height */
+    max-width: 100%;          /* but never overflow width */
+    width: auto;              /* keeps aspect ratio */
+    height: auto;             /* keeps aspect ratio */
+    object-fit: contain;      /* no cropping */
     display: block;
   }
+
+  /* ===== PANELS (same height as hero, no outer gaps) ===== */
   .panel {
+    height: var(--heroH);
+    margin: 0;                /* ensure no external margins */
+    padding: 24px 22px;       /* internal breathing room is fine */
     display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-    padding: 24px;
-    background: linear-gradient(180deg, rgba(6, 34, 16, 0.80) 0%, rgba(6, 34, 16, 0.72) 100%);
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(6,34,16,.84) 0%, rgba(6,34,16,.74) 100%);
     color: #F4FFF1;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
     overflow: auto;
   }
-  .panel-left  { grid-column: 1; }
-  .panel-right { grid-column: 3; }
-  .panel > * { width: 100%; }
-  .panel h1, .panel h2, .panel h3, .panel h4,
-  .panel p, .panel li, .panel label, .panel small {
-    color: #F4FFF1;
+  .panel > * {
+    width: 100%;
   }
-  .panel .muted, .panel .helper-text {
-    color: rgba(244, 255, 241, 0.80);
+
+  /* Text legibility + brevity */
+  .panel h1, .panel h2, .panel h3,
+  .panel p, .panel li, .panel small,
+  .panel label { color: #F4FFF1; }
+  .panel p { max-width: 36ch; line-height: 1.45; }
+  .panel ul { margin: 12px 0 0; }
+  .panel li { margin: 6px 0; }
+
+  /* ===== TICKER: flush to bottom of hero ===== */
+  .hero-ticker {
+    grid-column: 1 / -1;
+    align-self: end;
+    margin-top: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
-  .panel a, .panel button {
-    color: #E2FFD9;
+  .hero-shell + .hero-ticker {
+    margin-top: 0;            /* no gap between hero and ticker */
   }
-  .panel .badge, .panel .chip, .panel .tag {
-    background: rgba(255,255,255,0.10);
-    color: #F4FFF1;
-    border: 1px solid rgba(255,255,255,0.14);
-  }
-  .panel input,
-  .panel select,
-  .panel textarea {
-    background: rgba(4, 17, 12, 0.65);
-    border: 1px solid rgba(244,255,241,0.22);
-    color: #F4FFF1;
-  }
-  .panel input::placeholder,
-  .panel textarea::placeholder {
-    color: rgba(244,255,241,0.60);
-  }
-  .panel input:focus,
-  .panel select:focus,
-  .panel textarea:focus {
-    border-color: rgba(120, 255, 199, 0.65);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(120, 255, 199, 0.25);
-  }
+
+  /* Ensure overlay pieces stay above */
   .hero-shell * { z-index: 0; }
   .panel, .hero-core { z-index: 1; }
+
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 1200px) {
     .hero-shell {
+      --heroH: clamp(480px, 54vh, 640px);
       grid-template-columns: 22% 56% 22%;
     }
     .hero-shell.no-left {
@@ -311,9 +318,6 @@ const Styles = () => (
     .hero-shell.no-right {
       grid-template-columns: 22% 56%;
     }
-    .hero-core {
-      height: clamp(380px, 48vh, 560px);
-    }
     .panel {
       padding: 20px;
     }
@@ -321,16 +325,17 @@ const Styles = () => (
   @media (max-width: 980px) {
     .hero-shell {
       grid-template-columns: 1fr;
+      --heroH: clamp(420px, 52vh, 580px);
     }
     .panel-left, .hero-core, .panel-right {
       grid-column: 1;
     }
     .panel {
+      height: auto;
       padding: 20px;
     }
     .hero-core {
-      height: auto;
-      min-height: 380px;
+      height: var(--heroH);
     }
   }
   `}</style>
