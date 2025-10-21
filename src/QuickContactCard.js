@@ -18,6 +18,7 @@ const WHATSAPP_BASE = `https://wa.me/${WHATSAPP_NUMBER_E164}`;
 export default function QuickContactCard({
   formspreeId = "xanbzajw",
   variant = "default",
+  className = "",
 }) {
   // collapsed/expanded
   const [open, setOpen] = useState(false);
@@ -114,12 +115,15 @@ export default function QuickContactCard({
     baseContainer,
     overlay
       ? open
-        ? "border border-emerald-200/80 bg-white/96 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,33,24,0.25)]"
-        : "border border-white/35 bg-emerald-950/65 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,20,15,0.55)] backdrop-blur-xl"
+        ? "flex h-full flex-col overflow-hidden overflow-y-auto border border-emerald-200/80 bg-white/96 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,33,24,0.25)]"
+        : "flex h-full flex-col justify-between border border-white/40 bg-emerald-950/80 p-5 md:p-6 shadow-[0_24px_60px_rgba(2,20,15,0.55)] backdrop-blur-xl"
       : open
       ? "border border-emerald-200 bg-white/95 p-4 md:p-5 shadow-sm"
       : "border border-white/25 bg-white/5 p-4 md:p-5 shadow-sm backdrop-blur-sm",
-  ].join(" ");
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (done) {
     return (
@@ -152,14 +156,14 @@ export default function QuickContactCard({
       {!open && (
         <div
           className={`text-center text-white ${
-            overlay ? "space-y-2.5" : "space-y-3"
+            overlay ? "flex h-full flex-col gap-4" : "space-y-3"
           }`}
         >
           <div className={overlay ? "space-y-1" : "space-y-1.5"}>
             <span
               className={`inline-flex items-center justify-center rounded-full border ${
                 overlay
-                  ? "border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100"
+                  ? "border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-white/80"
                   : "hidden"
               }`}
             >
@@ -177,7 +181,7 @@ export default function QuickContactCard({
             <p
               className={`${
                 overlay
-                  ? "text-[12px] leading-relaxed text-emerald-100/85 md:text-[13px]"
+                  ? "text-[12px] leading-relaxed text-white/90 md:text-[13px]"
                   : "text-[13px] text-emerald-100/80 md:text-sm"
               }`}
             >
@@ -224,38 +228,54 @@ export default function QuickContactCard({
             </a>
 
             {/* small time badge */}
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-white/10 text-emerald-100">
+            <span className="inline-flex items-center rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white">
               2 min
             </span>
           </div>
 
           {/* Value bullets */}
-          <ul
-            className={`${
-              overlay
-                ? "space-y-1 text-[12px] leading-relaxed text-emerald-100/80"
-                : "space-y-1 text-[13px] leading-relaxed text-emerald-100/85"
-            }`}
-          >
-            {[
-              "Top-3 towns matched to your lifestyle & budget",
-              "Scorecard: prices, commute, schools, vibe",
-              "VIP alerts for good-fit listings & off-market talk",
-            ].map((line) => (
-              <li key={line} className="flex items-start gap-2 text-left">
-                <span className="mt-1 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-white/15 text-[10px] font-semibold leading-4 text-emerald-100">
-                  ✓
-                </span>
-                <span>{line}</span>
-              </li>
-            ))}
-          </ul>
+          <div className={overlay ? "flex-1" : ""}>
+            <ul
+              className={`${
+                overlay
+                  ? "space-y-1 text-[12px] leading-relaxed text-white/85"
+                  : "space-y-1 text-[13px] leading-relaxed text-emerald-100/85"
+              }`}
+            >
+              {[
+                "Top-3 towns matched to your lifestyle & budget",
+                "Scorecard: prices, commute, schools, vibe",
+                "VIP alerts for good-fit listings & off-market talk",
+              ].map((line) => (
+                <li key={line} className="flex items-start gap-2 text-left">
+                  <span
+                    className={`mt-1 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full text-[10px] font-semibold leading-4 ${
+                      overlay
+                        ? "bg-white/15 text-white"
+                        : "bg-emerald-100 text-emerald-700"
+                    }`}
+                  >
+                    ✓
+                  </span>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* Trust & footnote */}
-          <div className="text-[11px] uppercase tracking-[0.28em] text-emerald-100/70">
-            Finally Home Agents • NorthSide GTA
+          <div className={`space-y-1 text-[11px] ${overlay ? "" : "text-emerald-100/70"}`}>
+            <div
+              className={`uppercase tracking-[0.28em] ${
+                overlay ? "text-white/70" : "text-emerald-100/70"
+              }`}
+            >
+              Finally Home Agents • NorthSide GTA
+            </div>
+            <div className={overlay ? "text-white/60" : "text-emerald-100/60"}>
+              No spam. Unsubscribe anytime.
+            </div>
           </div>
-          <div className="text-[11px] text-emerald-100/60">No spam. Unsubscribe anytime.</div>
         </div>
       )}
 

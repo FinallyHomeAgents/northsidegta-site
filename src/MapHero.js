@@ -309,15 +309,6 @@ export default function MapHero({
               className="block h-auto w-full min-h-[240px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] xl:min-h-[420px] xl:max-h-[480px]"
             />
 
-            {/* Inline quick contact (desktop+) */}
-            {embedded && showQuickContact && (
-              <div className="pointer-events-none absolute top-1/2 left-3 hidden w-[260px] -translate-y-1/2 md:block md:left-5 md:w-[280px] lg:left-6 lg:w-[300px] xl:left-7 xl:w-[320px] z-30">
-                <div className="pointer-events-auto">
-                  <QuickContactCard variant="overlay" />
-                </div>
-              </div>
-            )}
-
             {/* Pins */}
             {TOWNS.map((t) => (
               <button
@@ -340,12 +331,26 @@ export default function MapHero({
               </button>
             ))}
 
-            {/* DESKTOP: right-docked info panel */}
-            {canHover && (
-              <div className="pointer-events-none absolute top-1/2 right-3 hidden w-[290px] -translate-y-1/2 md:block md:right-4 md:w-[310px] lg:right-5 lg:w-[330px] xl:right-6 xl:w-[350px] z-30">
-                <TownInsightCard town={activeTown} />
+            {/* Desktop overlays anchored inside the green rails */}
+            {embedded && (showQuickContact || canHover) ? (
+              <div className="pointer-events-none absolute inset-x-0 top-4 bottom-[80px] hidden md:flex z-30">
+                <div className="flex w-full items-stretch justify-between gap-4 px-4 sm:px-5 md:px-6 lg:px-7">
+                  {showQuickContact ? (
+                    <div className="pointer-events-auto flex w-[min(26vw,300px)] min-w-[220px] max-w-[300px]">
+                      <QuickContactCard variant="overlay" className="h-full w-full" />
+                    </div>
+                  ) : null}
+
+                  <div className="flex-1" />
+
+                  {canHover ? (
+                    <div className="pointer-events-auto flex w-[min(28vw,320px)] min-w-[230px] max-w-[320px]">
+                      <TownInsightCard town={activeTown} className="flex h-full w-full flex-col" />
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            )}
+            ) : null}
 
             {/* NEW: ticker attached to bottom */}
             <LiveTicker />
@@ -378,22 +383,27 @@ export default function MapHero({
   );
 }
 
-function TownInsightCard({ town, mode = "desktop", onDismiss }) {
+function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) {
   const isMobile = mode === "mobile";
   const hasTown = Boolean(town);
 
   const containerClasses = [
+    className,
     isMobile
       ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
       : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
-  ].join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const headerClasses = [
     "bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 text-white",
-    isMobile ? "rounded-t-[26px] px-4 py-3" : "rounded-t-[30px] px-5 py-4",
+    isMobile ? "flex-none rounded-t-[26px] px-4 py-3" : "flex-none rounded-t-[30px] px-5 py-4",
   ].join(" ");
 
-  const bodyClasses = isMobile ? "space-y-4 px-4 py-4" : "space-y-5 px-5 py-5";
+  const bodyClasses = isMobile
+    ? "space-y-4 px-4 py-4"
+    : "flex-1 space-y-5 overflow-y-auto px-5 py-5";
 
   if (!hasTown) {
     return (
