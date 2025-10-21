@@ -163,10 +163,8 @@ const TOWNS = [
 const PANEL_CHIPS = [
   "Pricing snapshot",
   "Commute notes",
-  "Lifestyle vibe",
   "School scorecards",
-  "Local events",
-  "Weekend escapes",
+  "Lifestyle vibe",
 ];
 
 /* ────────────────────────────────────────────────────────────
@@ -288,7 +286,8 @@ const Styles = () => (
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: linear-gradient(180deg, rgba(6,34,16,0.86) 0%, rgba(6,34,16,0.76) 100%);
     color: #F4FFF1;
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
@@ -818,19 +817,18 @@ function TownInsightCard({
                 Town insights
               </p>
               <p className="text-lg font-semibold leading-tight md:text-xl">
-                Preview prices, commute, and lifestyle.
+                Preview prices, commute, schools, and lifestyle.
               </p>
             </div>
           </div>
         </div>
         <div className={bodyClasses}>
           <p
-            className={`text-sm leading-relaxed ${
+            className={`truncate text-sm ${
               isPanel ? "text-emerald-50/85" : "text-emerald-900/80"
             }`}
           >
-            Hover a town on the map to see live pricing, commute expectations, and neighbourhood
-            vibe before you plan a tour.
+            Hover a town to unlock nightly intel.
           </p>
           <div
             className={
@@ -920,7 +918,7 @@ function TownInsightCard({
       <div className={bodyClasses}>
         {town.blurb && (
           <p
-            className={`text-sm leading-relaxed md:text-[15px] ${
+            className={`truncate text-sm md:text-[15px] ${
               isPanel ? "text-emerald-50/90" : "text-emerald-900/85"
             }`}
           >

@@ -200,20 +200,23 @@ export default function QuickContactCard({
           </div>
 
           <div
-            className={`flex flex-col items-center justify-center ${
-              overlay ? "gap-2 md:flex-row" : "gap-2.5 sm:flex-row"
+            className={`flex w-full justify-start ${
+              overlay
+                ? "flex-col items-stretch gap-2"
+                : "flex-col items-stretch gap-2.5 sm:flex-row sm:items-center"
             }`}
           >
             {/* START HERE (primary) */}
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="
+              className={`
                 px-5 py-2.5 rounded-xl font-bold tracking-wide
                 bg-emerald-700 text-white hover:bg-emerald-800
                 shadow-[0_4px_12px_rgba(16,185,129,0.35)]
                 transition
-              "
+                w-full ${overlay ? "" : "sm:w-auto"}
+              `}
             >
               START HERE
             </button>
@@ -228,7 +231,7 @@ export default function QuickContactCard({
                 border border-white/40 bg-white/10 text-white
                 hover:border-white/70 hover:bg-white/20
                 font-semibold transition
-                ${overlay ? "w-full justify-center md:w-auto" : ""}
+                ${overlay ? "w-full justify-center" : "sm:w-auto"}
               `}
               title="WhatsApp (fast)"
             >
@@ -237,7 +240,7 @@ export default function QuickContactCard({
             </a>
 
             {/* small time badge */}
-            <span className="inline-flex items-center rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white">
+            <span className="inline-flex items-center rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white self-start">
               2 min
             </span>
           </div>
@@ -326,119 +329,117 @@ export default function QuickContactCard({
             </a>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="md:col-span-1 space-y-3">
-              {/* Email with live validation message */}
-              <label className="block">
-                <span
-                  className={`text-sm font-medium ${
-                    overlay ? "text-emerald-50" : ""
-                  }`}
-                >
-                  Email
-                  <span className={overlay ? "text-rose-300" : "text-rose-600"}> *</span>
-                </span>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={[
-                    overlay ? overlayInputBase : defaultInputBase,
-                    overlay
-                      ? email && !emailValid
-                        ? overlayInputInvalid
-                        : overlayInputValid
-                      : email && !emailValid
-                      ? defaultInputInvalid
-                      : defaultInputValid,
-                  ].join(" ")}
-                  placeholder="you@example.com"
-                />
-                {email && !emailValid && (
-                  <p className={`mt-1 text-sm ${overlay ? "text-rose-300" : "text-rose-600"}`}>
-                    Please enter a valid email address (e.g. name@example.com).
-                  </p>
-                )}
-              </label>
+          <div className="space-y-4">
+            {/* Email with live validation message */}
+            <label className="block">
+              <span
+                className={`text-sm font-medium ${
+                  overlay ? "text-emerald-50" : ""
+                }`}
+              >
+                Email
+                <span className={overlay ? "text-rose-300" : "text-rose-600"}> *</span>
+              </span>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={[
+                  overlay ? overlayInputBase : defaultInputBase,
+                  overlay
+                    ? email && !emailValid
+                      ? overlayInputInvalid
+                      : overlayInputValid
+                    : email && !emailValid
+                    ? defaultInputInvalid
+                    : defaultInputValid,
+                ].join(" ")}
+                placeholder="you@example.com"
+              />
+              {email && !emailValid && (
+                <p className={`mt-1 text-sm ${overlay ? "text-rose-300" : "text-rose-600"}`}>
+                  Please enter a valid email address (e.g. name@example.com).
+                </p>
+              )}
+            </label>
 
-              <label className="block">
-                <span
-                  className={`text-sm font-medium ${
-                    overlay ? "text-emerald-50" : ""
-                  }`}
-                >
-                  Name (optional)
-                </span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={[
-                    overlay ? overlayInputBase : defaultInputBase,
-                    overlay ? overlayInputValid : defaultInputValid,
-                  ].join(" ")}
-                  placeholder="Jane Doe"
-                />
-              </label>
+            <label className="block">
+              <span
+                className={`text-sm font-medium ${
+                  overlay ? "text-emerald-50" : ""
+                }`}
+              >
+                Name (optional)
+              </span>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={[
+                  overlay ? overlayInputBase : defaultInputBase,
+                  overlay ? overlayInputValid : defaultInputValid,
+                ].join(" ")}
+                placeholder="Jane Doe"
+              />
+            </label>
 
-              <label className="block">
-                <span
-                  className={`text-sm font-medium ${
-                    overlay ? "text-emerald-50" : ""
-                  }`}
-                >
-                  Phone (optional)
-                </span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className={[
-                    overlay ? overlayInputBase : defaultInputBase,
-                    overlay ? overlayInputValid : defaultInputValid,
-                  ].join(" ")}
-                  placeholder="(555) 555-5555"
-                />
-              </label>
+            <label className="block">
+              <span
+                className={`text-sm font-medium ${
+                  overlay ? "text-emerald-50" : ""
+                }`}
+              >
+                Phone (optional)
+              </span>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={[
+                  overlay ? overlayInputBase : defaultInputBase,
+                  overlay ? overlayInputValid : defaultInputValid,
+                ].join(" ")}
+                placeholder="(555) 555-5555"
+              />
+            </label>
 
-              <div className="block">
-                <span
-                  className={`text-sm font-medium ${
-                    overlay ? "text-emerald-50" : ""
-                  }`}
-                >
-                  Contact preference
-                </span>
-                <div
-                  className={`mt-1 inline-flex rounded-lg border p-1 ${
-                    overlay ? "border-white/18 bg-emerald-950/40" : "border-emerald-300 bg-white"
-                  }`}
-                >
-                  {["Email", "WhatsApp", "Either"].map((opt) => (
-                    <button
-                      key={opt}
-                      type="button"
-                      className={[
-                        "px-3 py-1.5 rounded-md text-sm font-medium transition",
-                        overlay
-                          ? pref === opt
-                            ? "bg-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,0.45)]"
-                            : "text-emerald-100 hover:bg-white/10"
-                          : pref === opt
-                          ? "bg-emerald-600 text-white"
-                          : "text-gray-700 hover:bg-gray-50",
-                      ].join(" ")}
-                      onClick={() => setPref(opt)}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
+            <div className="block">
+              <span
+                className={`text-sm font-medium ${
+                  overlay ? "text-emerald-50" : ""
+                }`}
+              >
+                Contact preference
+              </span>
+              <div
+                className={`mt-1 inline-flex w-full flex-wrap justify-start gap-1 rounded-lg border p-1 ${
+                  overlay ? "border-white/18 bg-emerald-950/40" : "border-emerald-300 bg-white"
+                }`}
+              >
+                {["Email", "WhatsApp", "Either"].map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    className={[
+                      "px-3 py-1.5 rounded-md text-sm font-medium transition",
+                      overlay
+                        ? pref === opt
+                          ? "bg-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,0.45)]"
+                          : "text-emerald-100 hover:bg-white/10"
+                        : pref === opt
+                        ? "bg-emerald-600 text-white"
+                        : "text-gray-700 hover:bg-gray-50",
+                    ].join(" ")}
+                    onClick={() => setPref(opt)}
+                  >
+                    {opt}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="md:col-span-2">
+            <div className="block">
               <span
                 className={`text-sm font-medium ${
                   overlay ? "text-emerald-50" : ""
@@ -489,33 +490,33 @@ export default function QuickContactCard({
                   );
                 })}
               </div>
+            </div>
 
-              <div className="mt-4 space-y-2">
-                <label className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    checked={notUnderContract}
-                    onChange={(e) => setNotUnderContract(e.target.checked)}
-                    className={`mt-1 rounded focus:ring-emerald-500 ${
-                      overlay
-                        ? "border-white/20 bg-emerald-950/40 text-emerald-400"
-                        : "border-emerald-400 text-emerald-600"
-                    }`}
-                  />
-                  <span
-                    className={`text-sm ${
-                      overlay ? "text-emerald-50/85" : "text-gray-800"
-                    }`}
-                  >
-                    I confirm I’m <strong>not currently under contract</strong> with another real
-                    estate brokerage.
-                  </span>
-                </label>
-                <p className={`text-xs ${overlay ? "text-emerald-100/70" : "text-gray-600"}`}>
-                  By submitting, you agree to receive information from Finally Home Agents. You can
-                  unsubscribe anytime.
-                </p>
-              </div>
+            <div className="space-y-2">
+              <label className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  checked={notUnderContract}
+                  onChange={(e) => setNotUnderContract(e.target.checked)}
+                  className={`mt-1 rounded focus:ring-emerald-500 ${
+                    overlay
+                      ? "border-white/20 bg-emerald-950/40 text-emerald-400"
+                      : "border-emerald-400 text-emerald-600"
+                  }`}
+                />
+                <span
+                  className={`text-sm ${
+                    overlay ? "text-emerald-50/85" : "text-gray-800"
+                  }`}
+                >
+                  I confirm I’m <strong>not currently under contract</strong> with another real estate
+                  brokerage.
+                </span>
+              </label>
+              <p className={`text-xs ${overlay ? "text-emerald-100/70" : "text-gray-600"}`}>
+                By submitting, you agree to receive information from Finally Home Agents. You can
+                unsubscribe anytime.
+              </p>
             </div>
           </div>
 
