@@ -19,9 +19,22 @@ export default function QuickContactCard({
   formspreeId = "xanbzajw",
   variant = "default",
   className = "",
+  controlledOpen,
+  onOpenChange,
 }) {
   // collapsed/expanded
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = typeof controlledOpen === "boolean";
+  const open = isControlled ? controlledOpen : internalOpen;
+
+  const setOpenState = (value) => {
+    if (!isControlled) {
+      setInternalOpen(value);
+    }
+    if (onOpenChange) {
+      onOpenChange(value);
+    }
+  };
 
   // form state
   const [name, setName] = useState("");
@@ -209,7 +222,7 @@ export default function QuickContactCard({
             {/* START HERE (primary) */}
             <button
               type="button"
-              onClick={() => setOpen(true)}
+              onClick={() => setOpenState(true)}
               className={`
                 px-5 py-2.5 rounded-xl font-bold tracking-wide
                 bg-emerald-700 text-white hover:bg-emerald-800
@@ -544,7 +557,7 @@ export default function QuickContactCard({
 
             <button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => setOpenState(false)}
               className={`px-3 py-2 rounded-lg border transition ${
                 overlay
                   ? "border-white/25 bg-white/10 text-emerald-50 hover:bg-white/20"

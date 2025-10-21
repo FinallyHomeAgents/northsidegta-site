@@ -1,5 +1,5 @@
 // src/MapHero.js
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useId } from "react";
 import QuickContactCard from "./QuickContactCard";
 import LiveTicker from "./components/LiveTicker";
 
@@ -380,16 +380,58 @@ const Styles = () => (
     .hero-shell {
       grid-template-columns: 1fr;
       --heroH: clamp(420px, 52vh, 600px);
+      display: grid;
+      grid-auto-rows: auto;
+      row-gap: 16px;
     }
-    .panel-left, .hero-core, .panel-right {
+    .hero-core,
+    .panel-left,
+    .panel-right {
       grid-column: 1;
     }
+    .hero-core { order: 1; }
+    .panel-left { order: 2; }
+    .panel-right { order: 3; }
     .panel {
       height: auto;
+      max-height: var(--heroH);
       padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .panel-left {
+      overflow: visible;
+      max-height: none;
+    }
+    .panel-right {
+      overflow-y: auto;
     }
     .hero-core {
       height: var(--heroH);
+    }
+    .mobile-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mobile-accordion-region {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease;
+    }
+    .mobile-accordion-region.open {
+      max-height: 70vh;
+    }
+    .mobile-accordion-content {
+      max-height: 70vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .panel-right .panel-summary {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
   `}</style>
@@ -477,6 +519,9 @@ export default function MapHero({
     width: 0,
     height: 0,
   });
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [mobileMatchOpen, setMobileMatchOpen] = useState(false);
+  const accordionRegionId = `${useId()}-match-panel`;
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -576,6 +621,34 @@ export default function MapHero({
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+
+    const mq = window.matchMedia("(max-width: 980px)");
+
+    const handleChange = (event) => {
+      setIsMobileViewport(event.matches);
+    };
+
+    setIsMobileViewport(mq.matches);
+
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", handleChange);
+      return () => mq.removeEventListener("change", handleChange);
+    }
+
+    mq.addListener(handleChange);
+    return () => mq.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileViewport) {
+      setMobileMatchOpen(false);
+    }
+  }, [isMobileViewport]);
+
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
@@ -593,6 +666,16 @@ export default function MapHero({
     window.addEventListener("keydown", onEsc);
     return () => window.removeEventListener("keydown", onEsc);
   }, [canHover]);
+
+  const handleMobileAccordionToggle = () => {
+    setMobileMatchOpen((prev) => !prev);
+  };
+
+  const handleMobileAccordionChange = (next) => {
+    if (isMobileViewport) {
+      setMobileMatchOpen(Boolean(next));
+    }
+  };
 
   const embedded = variant !== "standalone";
 
@@ -636,11 +719,51 @@ export default function MapHero({
           {embedded ? (
             <div className={heroShellClasses}>
               {showQuickContact ? (
-                <aside className="panel panel-left">
-                  <QuickContactCard
-                    variant="overlay"
-                    className="h-full"
-                  />
+                <aside
+                  className={`panel panel-left${
+                    isMobileViewport ? " mobile-accordion-panel" : ""
+                  }`}
+                >
+                  {isMobileViewport ? (
+                    <div className="mobile-accordion">
+                      <div className="flex flex-col gap-3 text-left text-white">
+                        <span className="text-[11px] uppercase tracking-[0.28em] text-white/70">
+                          Match Concierge
+                        </span>
+                        <h3 className="text-[20px] font-semibold leading-tight">
+                          Your NorthSide GTA Match
+                        </h3>
+                        <button
+                          type="button"
+                          className="mobile-accordion-trigger inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_4px_12px_rgba(16,185,129,0.35)] transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-emerald-950"
+                          aria-expanded={mobileMatchOpen}
+                          aria-controls={accordionRegionId}
+                          onClick={handleMobileAccordionToggle}
+                        >
+                          {mobileMatchOpen ? "Hide form" : "Start"}
+                        </button>
+                      </div>
+                      <div
+                        id={accordionRegionId}
+                        className={`mobile-accordion-region${mobileMatchOpen ? " open" : ""}`}
+                        aria-hidden={!mobileMatchOpen}
+                      >
+                        <div className="mobile-accordion-content pt-3">
+                          <QuickContactCard
+                            variant="overlay"
+                            className="h-full"
+                            controlledOpen={mobileMatchOpen}
+                            onOpenChange={handleMobileAccordionChange}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <QuickContactCard
+                      variant="overlay"
+                      className="h-full"
+                    />
+                  )}
                 </aside>
               ) : null}
 
@@ -824,8 +947,10 @@ function TownInsightCard({
         </div>
         <div className={bodyClasses}>
           <p
-            className={`truncate text-sm ${
-              isPanel ? "text-emerald-50/85" : "text-emerald-900/80"
+            className={`text-sm ${
+              isPanel
+                ? "panel-summary md:truncate text-emerald-50/85"
+                : "truncate text-emerald-900/80"
             }`}
           >
             Hover a town to unlock nightly intel.
@@ -918,8 +1043,10 @@ function TownInsightCard({
       <div className={bodyClasses}>
         {town.blurb && (
           <p
-            className={`truncate text-sm md:text-[15px] ${
-              isPanel ? "text-emerald-50/90" : "text-emerald-900/85"
+            className={`${
+              isPanel
+                ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+                : "truncate text-sm md:text-[15px] text-emerald-900/85"
             }`}
           >
             {town.blurb}
