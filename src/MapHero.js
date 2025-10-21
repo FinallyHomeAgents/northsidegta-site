@@ -1,5 +1,5 @@
 // src/MapHero.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import QuickContactCard from "./QuickContactCard";
 import LiveTicker from "./components/LiveTicker";
 
@@ -170,7 +170,12 @@ const Styles = () => (
     70%  { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 0 14px rgba(16,185,129,0.00); }
     100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
   }
-  .pin-wrap { position:absolute; transform:translate(-50%, -50%); }
+  .pin-wrap {
+    position:absolute;
+    left: calc(var(--map-offset-x, 0px) + var(--map-width, 0px) * var(--pin-x, 0));
+    top: calc(var(--map-offset-y, 0px) + var(--map-height, 0px) * var(--pin-y, 0));
+    transform:translate(-50%, -50%);
+  }
   .pin {
     position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
     width:14px; height:14px; border-radius:999px; border:2px solid #fff;
@@ -179,37 +184,59 @@ const Styles = () => (
   }
   .hero-shell {
     display: grid;
-    grid-template-columns: 1fr minmax(720px, 1080px) 1fr;
+    grid-template-columns: 18% 64% 18%;
     align-items: stretch;
-    gap: 0;
     position: relative;
     border-radius: 28px;
     overflow: hidden;
+    max-width: 100%;
+    gap: 0;
   }
   .hero-shell.no-left {
-    grid-template-columns: minmax(720px, 1080px) 1fr;
+    grid-template-columns: 64% 18%;
+  }
+  .hero-shell.no-left .hero-core {
+    grid-column: 1;
+  }
+  .hero-shell.no-left .panel-right {
+    grid-column: 2;
   }
   .hero-shell.no-right {
-    grid-template-columns: 1fr minmax(720px, 1080px);
+    grid-template-columns: 18% 64%;
+  }
+  .hero-shell.no-right .hero-core {
+    grid-column: 2;
   }
   .hero-shell.no-panels {
-    grid-template-columns: minmax(720px, 1080px);
+    grid-template-columns: 1fr;
+  }
+  .hero-shell.no-panels .hero-core {
+    grid-column: 1;
   }
   .hero-core {
     grid-column: 2;
     position: relative;
-    min-height: 520px;
-    height: clamp(520px, 60vh, 720px);
+    height: clamp(420px, 52vh, 620px);
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    overflow: hidden;
   }
   .hero-core-inner {
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
     height: 100%;
   }
   .hero-map-frame {
     position: relative;
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     overflow: hidden;
   }
   .hero-map-frame img,
@@ -221,8 +248,9 @@ const Styles = () => (
   .hero-core video,
   .hero-core .map-root {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
     display: block;
   }
   .panel {
@@ -275,7 +303,19 @@ const Styles = () => (
   .panel, .hero-core { z-index: 1; }
   @media (max-width: 1200px) {
     .hero-shell {
-      grid-template-columns: 320px 1fr 320px;
+      grid-template-columns: 22% 56% 22%;
+    }
+    .hero-shell.no-left {
+      grid-template-columns: 56% 22%;
+    }
+    .hero-shell.no-right {
+      grid-template-columns: 22% 56%;
+    }
+    .hero-core {
+      height: clamp(380px, 48vh, 560px);
+    }
+    .panel {
+      padding: 20px;
     }
   }
   @media (max-width: 980px) {
@@ -289,8 +329,8 @@ const Styles = () => (
       padding: 20px;
     }
     .hero-core {
-      height: 56vh;
-      min-height: 420px;
+      height: auto;
+      min-height: 380px;
     }
   }
   `}</style>
@@ -370,6 +410,14 @@ export default function MapHero({
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
+  const frameRef = useRef(null);
+  const imageRef = useRef(null);
+  const [mapMetrics, setMapMetrics] = useState({
+    offsetX: 0,
+    offsetY: 0,
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -379,6 +427,94 @@ export default function MapHero({
   // keep the “map resize nudge” stub
   useEffect(() => {
     window.__mapboxRef = { resize: () => {} };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const frameEl = frameRef.current;
+    const imageEl = imageRef.current;
+
+    if (!frameEl || !imageEl) {
+      return undefined;
+    }
+
+    let animationFrame = null;
+
+    const updateMetrics = () => {
+      if (!frameRef.current || !imageRef.current) {
+        return;
+      }
+
+      const frameRect = frameRef.current.getBoundingClientRect();
+      const imageRect = imageRef.current.getBoundingClientRect();
+
+      if (!imageRect.width || !imageRect.height) {
+        return;
+      }
+
+      const next = {
+        offsetX: imageRect.left - frameRect.left,
+        offsetY: imageRect.top - frameRect.top,
+        width: imageRect.width,
+        height: imageRect.height,
+      };
+
+      setMapMetrics((prev) => {
+        const delta =
+          Math.abs(prev.offsetX - next.offsetX) +
+          Math.abs(prev.offsetY - next.offsetY) +
+          Math.abs(prev.width - next.width) +
+          Math.abs(prev.height - next.height);
+
+        if (delta < 0.5) {
+          return prev;
+        }
+
+        return next;
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+      animationFrame = requestAnimationFrame(updateMetrics);
+    };
+
+    const handleResize = () => scheduleUpdate();
+
+    const handleLoad = () => scheduleUpdate();
+
+    if (imageEl.complete) {
+      scheduleUpdate();
+    } else {
+      imageEl.addEventListener("load", handleLoad, { once: false });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    let resizeObserver = null;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(scheduleUpdate);
+      resizeObserver.observe(frameEl);
+      resizeObserver.observe(imageEl);
+    }
+
+    scheduleUpdate();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      imageEl.removeEventListener("load", handleLoad);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
   }, []);
 
   // Detect if the device supports hover (desktop/laptop)
@@ -452,21 +588,32 @@ export default function MapHero({
               <div className="hero-core">
                 <div className="hero-core-inner">
                   <div
+                    ref={frameRef}
                     className="hero-map-frame map-hero"
+                    style={{
+                      "--map-offset-x": `${mapMetrics.offsetX}px`,
+                      "--map-offset-y": `${mapMetrics.offsetY}px`,
+                      "--map-width": `${mapMetrics.width}px`,
+                      "--map-height": `${mapMetrics.height}px`,
+                    }}
                     onMouseLeave={() => canHover && setHoverId(null)}
                   >
                     <img
+                      ref={imageRef}
                       src="/Images/northside-map.svg?v=2"
                       alt="NorthSide GTA map with towns"
                       className="block"
                     />
 
-                    {TOWNS.map((t) => (
+                    {(mapMetrics.width > 0 && mapMetrics.height > 0
+                      ? TOWNS
+                      : []
+                    ).map((t) => (
                       <button
                         key={t.id}
                         type="button"
                         className="pin-wrap"
-                        style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                        style={{ "--pin-x": t.x / 100, "--pin-y": t.y / 100 }}
                         aria-label={t.name}
                         aria-pressed={activeId === t.id}
                         onMouseEnter={() => canHover && setHoverId(t.id)}
