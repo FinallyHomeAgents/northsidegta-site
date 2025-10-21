@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/november-8-crit-club/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002700-1762592400-1762599600@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-19T08:29:49.101Z",
-  "firstSeenAt": "2025-10-19T08:29:49.101Z",
-  "updatedAt": "2025-10-19T08:29:49.101Z",
-  "featured": false
+  "updatedAt": "2025-10-19T08:29:49Z"
 }

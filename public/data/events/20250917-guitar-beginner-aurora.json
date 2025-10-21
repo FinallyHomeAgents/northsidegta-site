@@ -316,16 +316,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/guitar-beginner-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002675-1758067200-1762387199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-18T08:30:46.828Z",
-  "updatedAt": "2025-10-18T08:30:46.828Z",
-  "featured": false
+  "updatedAt": "2025-10-18T08:30:46Z"
 }
