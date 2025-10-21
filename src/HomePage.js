@@ -2,7 +2,6 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import MapHero from "./MapHero";
-import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import Footer from "./Footer";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
@@ -162,33 +161,20 @@ function HomeHero() {
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-3 sm:px-5 sm:pt-4 lg:pt-5">
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-2 sm:px-5 sm:pt-3 lg:pt-4">
         <div className="relative">
           <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
             <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
               <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
                 <div className="relative overflow-hidden rounded-[36px] border border-white/10">
-                  <MapHero variant="immersive" showQuickContact={false} />
+                  <MapHero variant="immersive" showQuickContact afterTicker={<TownBridge />} />
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="-mt-6 sm:-mt-8 lg:-mt-10">
-          <div className="mx-auto w-full max-w-[1900px] px-2 sm:px-4">
-            <div className="rounded-[32px] border border-white/12 bg-white/10 px-4 py-4 shadow-[0_30px_70px_rgba(4,47,35,0.45)] backdrop-blur-md sm:px-6 lg:px-7">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
-                <TownBridge className="flex-1" />
-                <div className="w-full lg:max-w-[320px] xl:max-w-[360px]">
-                  <QuickContactCard />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto mt-10 max-w-3xl text-center">
+        <div className="mx-auto mt-12 max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
             NorthSide GTA • Finally Home Agents
           </span>
@@ -241,16 +227,21 @@ function HomeHero() {
 
 function TownBridge({ className = "" }) {
   return (
-    <div className={`flex flex-col gap-4 text-white ${className}`}>
-      <div className="max-w-2xl space-y-1.5">
-        <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+    <div
+      className={`flex h-full flex-col gap-5 rounded-[28px] border border-white/12 bg-white/5 p-4 text-white shadow-[0_30px_70px_rgba(4,47,35,0.45)] backdrop-blur-sm sm:p-5 ${className}`}
+    >
+      <div className="space-y-2 text-left">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+          Town Rail
+        </span>
+        <h2 className="text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
           Jump straight into the towns we serve every day.
         </h2>
-        <p className="text-sm text-emerald-100/85">
-          Slide through Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog spotlights without leaving the map.
+        <p className="text-sm text-emerald-100/85 sm:max-w-2xl">
+          Browse Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog spotlights without leaving the hero map.
         </p>
       </div>
-      <div className="w-full lg:max-w-[520px] xl:max-w-[560px]">
+      <div className="w-full">
         <TownStrip />
       </div>
     </div>

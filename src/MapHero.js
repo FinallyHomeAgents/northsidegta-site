@@ -218,6 +218,7 @@ export default function MapHero({
   variant = "standalone",
   className = "",
   showQuickContact = true,
+  afterTicker = null,
 }) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
@@ -429,14 +430,16 @@ export default function MapHero({
             </div>
           )}
 
-          {/* Divider + Inline Quick Contact */}
-          {showQuickContact && (
-            <div className="mt-4 md:mt-5 border-t border-emerald-100 pt-4 md:pt-5">
-              <QuickContactCard
-                heading="Find Where You Truly Belong in the NorthSide GTA"
-                subheading="Finally Home Agents will guide you beyond the listings — helping you compare communities and uncover the right fit."
-                primaryLabel="START HERE"
-              />
+          {(afterTicker || showQuickContact) && (
+            <div className="border-t border-white/12 bg-white/5 backdrop-blur-sm">
+              <div className="flex flex-col gap-4 px-3 py-4 sm:px-4 sm:py-5 lg:flex-row lg:items-stretch lg:gap-6">
+                {afterTicker && <div className="flex-1">{afterTicker}</div>}
+                {showQuickContact && (
+                  <div className="w-full lg:max-w-[320px] xl:max-w-[360px] lg:self-stretch">
+                    <QuickContactCard />
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
