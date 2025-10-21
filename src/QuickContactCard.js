@@ -195,8 +195,7 @@ export default function QuickContactCard({
                   : "text-[13px] text-emerald-100/80 md:text-sm"
               }`}
             >
-              Compare the towns we move clients through every week — with pricing, commute, and
-              school context curated for your inbox.
+              Compare 3 top towns for your budget and lifestyle.
             </p>
           </div>
 
@@ -253,9 +252,9 @@ export default function QuickContactCard({
               }`}
             >
               {[
-                "Top-3 towns matched to your lifestyle & budget",
-                "Scorecard: prices, commute, schools, vibe",
-                "VIP alerts for good-fit listings & off-market talk",
+                "Prices • Commute • Schools snapshots",
+                "Weekly scorecard in your inbox",
+                "Off-market alerts for good-fit listings",
               ].map((line) => (
                 <li key={line} className="flex items-start gap-2 text-left">
                   <span

@@ -160,6 +160,15 @@ const TOWNS = [
   },
 ];
 
+const PANEL_CHIPS = [
+  "Pricing snapshot",
+  "Commute notes",
+  "Lifestyle vibe",
+  "School scorecards",
+  "Local events",
+  "Weekend escapes",
+];
+
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
@@ -182,24 +191,26 @@ const Styles = () => (
     background: radial-gradient(65% 65% at 35% 35%, #34d399 0%, #059669 60%, #047857 100%);
     animation: pinPulse 2s ease-out infinite;
   }
-  /* ===== LAYOUT: exact 18% | 64% | 18%, no gaps ===== */
+  /* ===== Desktop Hero Layout — 20 | 60 | 20 ===== */
   .hero-shell {
-    /* one height variable for hero + panels */
-    --heroH: clamp(520px, 58vh, 680px);
+    --heroH: clamp(640px, 66vh, 820px);
 
     display: grid;
-    grid-template-columns: 18% 64% 18%;
-    align-items: stretch;     /* panels match hero height */
-    gap: 0;                   /* no gap between columns */
+    grid-template-columns: 20% 60% 20%;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
     position: relative;
     border-radius: 28px;
-    overflow: hidden;         /* keeps everything inside rounded frame */
+    overflow: hidden;
     min-height: var(--heroH);
+    width: 100%;
   }
 
   /* handle layouts where one or both panels are hidden */
   .hero-shell.no-left {
-    grid-template-columns: 64% 18%;
+    grid-template-columns: 60% 20%;
   }
   .hero-shell.no-left .hero-core {
     grid-column: 1;
@@ -208,10 +219,13 @@ const Styles = () => (
     grid-column: 2;
   }
   .hero-shell.no-right {
-    grid-template-columns: 18% 64%;
+    grid-template-columns: 20% 60%;
   }
   .hero-shell.no-right .hero-core {
     grid-column: 2;
+  }
+  .hero-shell.no-right .panel-left {
+    grid-column: 1;
   }
   .hero-shell.no-panels {
     grid-template-columns: 1fr;
@@ -220,20 +234,20 @@ const Styles = () => (
     grid-column: 1;
   }
 
-  /* columns */
+  /* column placement */
   .panel-left  { grid-column: 1; }
   .hero-core   { grid-column: 2; }
   .panel-right { grid-column: 3; }
 
-  /* ===== HERO (center) must not crop and must be centered ===== */
+  /* ===== Hero (center) ===== */
   .hero-core {
     height: var(--heroH);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;                /* kill any default margins */
-    padding: 0;               /* flush against panels */
     overflow: hidden;
+    margin: 0;
+    padding: 0;
   }
   .hero-core-inner {
     position: relative;
@@ -266,30 +280,71 @@ const Styles = () => (
     display: block;
   }
 
-  /* ===== PANELS (same height as hero, no outer gaps) ===== */
+  /* ===== Panels ===== */
   .panel {
     height: var(--heroH);
-    margin: 0;                /* ensure no external margins */
-    padding: 24px 22px;       /* internal breathing room is fine */
+    margin: 0;
+    padding: 26px 22px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: linear-gradient(180deg, rgba(6,34,16,.84) 0%, rgba(6,34,16,.74) 100%);
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(6,34,16,0.86) 0%, rgba(6,34,16,0.76) 100%);
     color: #F4FFF1;
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
-    overflow: auto;
   }
   .panel > * {
     width: 100%;
   }
 
-  /* Text legibility + brevity */
-  .panel h1, .panel h2, .panel h3,
+  /* Typography (compact & legible) */
+  .panel h1, .panel h2 {
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    color: #F4FFF1;
+  }
+  .panel h3, .panel h4,
   .panel p, .panel li, .panel small,
-  .panel label { color: #F4FFF1; }
-  .panel p { max-width: 36ch; line-height: 1.45; }
-  .panel ul { margin: 12px 0 0; }
-  .panel li { margin: 6px 0; }
+  .panel label {
+    color: #F4FFF1;
+  }
+  .panel p {
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: 38ch;
+    margin: 0 0 12px 0;
+  }
+  .panel ul {
+    margin: 12px 0 0;
+  }
+  .panel li {
+    margin: 6px 0;
+  }
+
+  /* Compact insights grid */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .insights-grid .chip {
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #F4FFF1;
+    text-align: center;
+  }
+
+  /* Prevent external padding/margins */
+  .hero-shell,
+  .hero-core,
+  .panel,
+  .panel > * {
+    box-sizing: border-box;
+  }
 
   /* ===== TICKER: flush to bottom of hero ===== */
   .hero-ticker {
@@ -309,23 +364,23 @@ const Styles = () => (
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1200px) {
     .hero-shell {
-      --heroH: clamp(480px, 54vh, 640px);
-      grid-template-columns: 22% 56% 22%;
+      --heroH: clamp(560px, 60vh, 760px);
+      grid-template-columns: 24% 52% 24%;
     }
     .hero-shell.no-left {
-      grid-template-columns: 56% 22%;
+      grid-template-columns: 52% 24%;
     }
     .hero-shell.no-right {
-      grid-template-columns: 22% 56%;
+      grid-template-columns: 24% 52%;
     }
     .panel {
-      padding: 20px;
+      padding: 22px 20px;
     }
   }
   @media (max-width: 980px) {
     .hero-shell {
       grid-template-columns: 1fr;
-      --heroH: clamp(420px, 52vh, 580px);
+      --heroH: clamp(420px, 52vh, 600px);
     }
     .panel-left, .hero-core, .panel-right {
       grid-column: 1;
@@ -763,7 +818,7 @@ function TownInsightCard({
                 Town insights
               </p>
               <p className="text-lg font-semibold leading-tight md:text-xl">
-                Hover a town to unlock live intel.
+                Preview prices, commute, and lifestyle.
               </p>
             </div>
           </div>
@@ -774,24 +829,26 @@ function TownInsightCard({
               isPanel ? "text-emerald-50/85" : "text-emerald-900/80"
             }`}
           >
-            Explore the map to preview pricing, commute notes, and lifestyle scores across the
-            NorthSide GTA.
+            Hover a town on the map to see live pricing, commute expectations, and neighbourhood
+            vibe before you plan a tour.
           </p>
           <div
-            className={`grid grid-cols-2 gap-2 text-sm font-semibold ${
-              isPanel ? "text-emerald-50/95" : "text-emerald-900/85"
-            }`}
+            className={
+              isPanel
+                ? "insights-grid text-sm font-semibold text-emerald-50/95"
+                : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85"
+            }
           >
-            {TOWNS.map((t) => (
+            {PANEL_CHIPS.map((label) => (
               <div
-                key={t.id}
-                className={`rounded-xl px-3 py-2 text-center shadow-sm ${
+                key={label}
+                className={
                   isPanel
-                    ? "border border-white/14 bg-white/10 shadow-black/30"
-                    : "border border-emerald-100/70 bg-emerald-50/70"
-                }`}
+                    ? "chip"
+                    : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70"
+                }
               >
-                {t.name}
+                {label}
               </div>
             ))}
           </div>
@@ -800,7 +857,7 @@ function TownInsightCard({
               isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
             }`}
           >
-            NorthSide GTA • Finally Home Agents
+            NorthSide GTA • Insights refreshed nightly
           </p>
         </div>
       </div>
