@@ -177,12 +177,121 @@ const Styles = () => (
     background: radial-gradient(65% 65% at 35% 35%, #34d399 0%, #059669 60%, #047857 100%);
     animation: pinPulse 2s ease-out infinite;
   }
+  .hero-shell {
+    display: grid;
+    grid-template-columns: 1fr minmax(720px, 1080px) 1fr;
+    align-items: stretch;
+    gap: 0;
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .hero-shell.no-left {
+    grid-template-columns: minmax(720px, 1080px) 1fr;
+  }
+  .hero-shell.no-right {
+    grid-template-columns: 1fr minmax(720px, 1080px);
+  }
+  .hero-shell.no-panels {
+    grid-template-columns: minmax(720px, 1080px);
+  }
+  .hero-core {
+    grid-column: 2;
+    position: relative;
+    min-height: 520px;
+    height: clamp(520px, 60vh, 720px);
+  }
+  .hero-core-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .hero-map-frame {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+  .hero-map-frame img,
+  .hero-map-frame canvas,
+  .hero-map-frame video,
+  .hero-map-frame .map-root,
+  .hero-core img,
+  .hero-core canvas,
+  .hero-core video,
+  .hero-core .map-root {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .panel {
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,.97);
-    border: 1px solid rgba(16,185,129,.18);
-    border-radius: 16px;
-    box-shadow: 0 12px 28px rgba(2,44,34,.18);
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(6, 34, 16, 0.80) 0%, rgba(6, 34, 16, 0.72) 100%);
+    color: #F4FFF1;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    overflow: auto;
+  }
+  .panel-left  { grid-column: 1; }
+  .panel-right { grid-column: 3; }
+  .panel > * { width: 100%; }
+  .panel h1, .panel h2, .panel h3, .panel h4,
+  .panel p, .panel li, .panel label, .panel small {
+    color: #F4FFF1;
+  }
+  .panel .muted, .panel .helper-text {
+    color: rgba(244, 255, 241, 0.80);
+  }
+  .panel a, .panel button {
+    color: #E2FFD9;
+  }
+  .panel .badge, .panel .chip, .panel .tag {
+    background: rgba(255,255,255,0.10);
+    color: #F4FFF1;
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .panel input,
+  .panel select,
+  .panel textarea {
+    background: rgba(4, 17, 12, 0.65);
+    border: 1px solid rgba(244,255,241,0.22);
+    color: #F4FFF1;
+  }
+  .panel input::placeholder,
+  .panel textarea::placeholder {
+    color: rgba(244,255,241,0.60);
+  }
+  .panel input:focus,
+  .panel select:focus,
+  .panel textarea:focus {
+    border-color: rgba(120, 255, 199, 0.65);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(120, 255, 199, 0.25);
+  }
+  .hero-shell * { z-index: 0; }
+  .panel, .hero-core { z-index: 1; }
+  @media (max-width: 1200px) {
+    .hero-shell {
+      grid-template-columns: 320px 1fr 320px;
+    }
+  }
+  @media (max-width: 980px) {
+    .hero-shell {
+      grid-template-columns: 1fr;
+    }
+    .panel-left, .hero-core, .panel-right {
+      grid-column: 1;
+    }
+    .panel {
+      padding: 20px;
+    }
+    .hero-core {
+      height: 56vh;
+      min-height: 420px;
+    }
   }
   `}</style>
 );
@@ -190,14 +299,19 @@ const Styles = () => (
 /* ────────────────────────────────────────────────────────────
    Compact rating row
    ──────────────────────────────────────────────────────────── */
-function RatingRow({ label, value }) {
+function RatingRow({ label, value, tone = "emerald" }) {
   const v = Math.round(value || 0);
   const percent = Math.max(0, Math.min(100, (v / 5) * 100));
+  const isPanel = tone === "panel";
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <span className="min-w-0 pr-1 text-[12px] font-semibold text-emerald-900 md:text-[13px]">
+        <span
+          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${
+            isPanel ? "text-emerald-50" : "text-emerald-900"
+          }`}
+        >
           {label}
         </span>
         <div className="flex flex-none items-center gap-1.5">
@@ -207,18 +321,36 @@ function RatingRow({ label, value }) {
                 key={i}
                 className={`h-[7px] w-[7px] rounded-full md:h-[8px] md:w-[8px] ${
                   i < v
-                    ? "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
+                    ? isPanel
+                      ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
+                      : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
+                    : isPanel
+                    ? "bg-white/18"
                     : "bg-emerald-100"
                 }`}
               />
             ))}
           </div>
-          <span className="text-[11px] font-semibold text-emerald-600">{v}/5</span>
+          <span
+            className={`text-[11px] font-semibold ${
+              isPanel ? "text-emerald-100" : "text-emerald-600"
+            }`}
+          >
+            {v}/5
+          </span>
         </div>
       </div>
-      <div className="h-[6px] w-full rounded-full bg-emerald-100/80">
+      <div
+        className={`h-[6px] w-full rounded-full ${
+          isPanel ? "bg-white/12" : "bg-emerald-100/80"
+        }`}
+      >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
+          className={`h-full rounded-full ${
+            isPanel
+              ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
+              : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
+          }`}
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -290,83 +422,114 @@ export default function MapHero({
     ? "relative mx-auto w-full rounded-[36px]"
     : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
 
+  const heroShellClasses = [
+    "hero-shell",
+    !embedded ? "no-panels" : "",
+    embedded && !showQuickContact ? "no-left" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const insightMode = canHover ? "desktop" : "mobile";
+
   return (
     <section className={sectionClasses}>
       <div className={containerClasses}>
         {/* Bordered hero box (map + inline quick-contact) */}
         <div className={frameClasses}>
           <Styles />
+          {embedded ? (
+            <div className={heroShellClasses}>
+              {showQuickContact ? (
+                <aside className="panel panel-left">
+                  <QuickContactCard
+                    variant="overlay"
+                    className="h-full"
+                  />
+                </aside>
+              ) : null}
 
-          {/* Map frame */}
-          <div
-            className="relative overflow-hidden rounded-[32px] map-hero"
-            onMouseLeave={() => canHover && setHoverId(null)}
-          >
-            {/* Keep natural aspect ratio so pin percentages line up EXACTLY */}
-            <img
-              src="/Images/northside-map.svg?v=2"
-              alt="NorthSide GTA map with towns"
-              className="block h-auto w-full min-h-[240px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] xl:min-h-[420px] xl:max-h-[480px]"
-            />
+              <div className="hero-core">
+                <div className="hero-core-inner">
+                  <div
+                    className="hero-map-frame map-hero"
+                    onMouseLeave={() => canHover && setHoverId(null)}
+                  >
+                    <img
+                      src="/Images/northside-map.svg?v=2"
+                      alt="NorthSide GTA map with towns"
+                      className="block"
+                    />
 
-            {/* Pins */}
-            {TOWNS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className="pin-wrap"
-                style={{ left: `${t.x}%`, top: `${t.y}%` }}
-                aria-label={t.name}
-                aria-pressed={activeId === t.id}
-                onMouseEnter={() => canHover && setHoverId(t.id)}
-                onClick={() =>
-                  !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                }
-              >
-                <span
-                  className="pin"
-                  style={{ animationPlayState: pulsing ? "running" : "paused" }}
-                />
-                <span className="sr-only">{t.name}</span>
-              </button>
-            ))}
+                    {TOWNS.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        className="pin-wrap"
+                        style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                        aria-label={t.name}
+                        aria-pressed={activeId === t.id}
+                        onMouseEnter={() => canHover && setHoverId(t.id)}
+                        onClick={() =>
+                          !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                        }
+                      >
+                        <span
+                          className="pin"
+                          style={{ animationPlayState: pulsing ? "running" : "paused" }}
+                        />
+                        <span className="sr-only">{t.name}</span>
+                      </button>
+                    ))}
+                  </div>
 
-            {/* Desktop overlays anchored inside the green rails */}
-            {embedded && (showQuickContact || canHover) ? (
-              <div className="pointer-events-none absolute inset-x-0 top-4 bottom-[80px] hidden md:flex z-30">
-                <div className="flex w-full items-stretch justify-between gap-4 px-4 sm:px-5 md:px-6 lg:px-7">
-                  {showQuickContact ? (
-                    <div className="pointer-events-auto flex w-[min(26vw,300px)] min-w-[220px] max-w-[300px]">
-                      <QuickContactCard variant="overlay" className="h-full w-full" />
-                    </div>
-                  ) : null}
-
-                  <div className="flex-1" />
-
-                  {canHover ? (
-                    <div className="pointer-events-auto flex w-[min(28vw,320px)] min-w-[230px] max-w-[320px]">
-                      <TownInsightCard town={activeTown} className="flex h-full w-full flex-col" />
-                    </div>
-                  ) : null}
+                  <LiveTicker />
                 </div>
               </div>
-            ) : null}
 
-            {/* NEW: ticker attached to bottom */}
-            <LiveTicker />
-          </div>
-
-          {/* MOBILE: panel below the map with tap instructions */}
-          {!canHover && (
-            <div className="mt-3 md:hidden">
-              <TownInsightCard town={activeTown} mode="mobile" onDismiss={() => setOpenId(null)} />
+              <aside className="panel panel-right">
+                <TownInsightCard
+                  town={activeTown}
+                  mode={insightMode}
+                  onDismiss={() => setOpenId(null)}
+                  className="flex h-full flex-col"
+                  appearance="panel"
+                />
+              </aside>
             </div>
-          )}
+          ) : (
+            <div
+              className="relative overflow-hidden rounded-[32px] map-hero"
+              onMouseLeave={() => canHover && setHoverId(null)}
+            >
+              <img
+                src="/Images/northside-map.svg?v=2"
+                alt="NorthSide GTA map with towns"
+                className="block h-auto w-full"
+              />
 
-          {/* MOBILE: quick contact below the map */}
-          {embedded && showQuickContact && !canHover && (
-            <div className="mt-4 md:hidden">
-              <QuickContactCard variant="overlay" />
+              {TOWNS.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className="pin-wrap"
+                  style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                  aria-label={t.name}
+                  aria-pressed={activeId === t.id}
+                  onMouseEnter={() => canHover && setHoverId(t.id)}
+                  onClick={() =>
+                    !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
+                  }
+                >
+                  <span
+                    className="pin"
+                    style={{ animationPlayState: pulsing ? "running" : "paused" }}
+                  />
+                  <span className="sr-only">{t.name}</span>
+                </button>
+              ))}
+
+              <LiveTicker />
             </div>
           )}
 
@@ -383,13 +546,24 @@ export default function MapHero({
   );
 }
 
-function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) {
+function TownInsightCard({
+  town,
+  mode = "desktop",
+  onDismiss,
+  className = "",
+  appearance = "default",
+}) {
   const isMobile = mode === "mobile";
+  const isPanel = appearance === "panel";
   const hasTown = Boolean(town);
 
   const containerClasses = [
     className,
-    isMobile
+    isPanel
+      ? isMobile
+        ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
+        : "pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border border-white/12 bg-emerald-950/65 shadow-[0_32px_90px_rgba(2,15,10,0.5)] backdrop-blur-xl"
+      : isMobile
       ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
       : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
   ]
@@ -397,24 +571,43 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
     .join(" ");
 
   const headerClasses = [
-    "bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 text-white",
-    isMobile ? "flex-none rounded-t-[26px] px-4 py-3" : "flex-none rounded-t-[30px] px-5 py-4",
+    isPanel
+      ? isMobile
+        ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
+        : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
+      : isMobile
+      ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
+      : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white",
   ].join(" ");
 
-  const bodyClasses = isMobile
-    ? "space-y-4 px-4 py-4"
-    : "flex-1 space-y-5 overflow-y-auto px-5 py-5";
+  const bodyClasses = [
+    isPanel
+      ? isMobile
+        ? "space-y-4 px-4 py-4 text-emerald-50/90"
+        : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
+      : isMobile
+      ? "space-y-4 px-4 py-4"
+      : "flex-1 space-y-5 overflow-y-auto px-5 py-5",
+  ].join(" ");
 
   if (!hasTown) {
     return (
       <div className={containerClasses}>
         <div className={headerClasses}>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg ${
+                isPanel ? "bg-white/15" : "bg-white/20"
+              }`}
+            >
               🧭
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-[0.32em] text-emerald-100/80">
+              <p
+                className={`text-[11px] uppercase tracking-[0.32em] ${
+                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
+                }`}
+              >
                 Town insights
               </p>
               <p className="text-lg font-semibold leading-tight md:text-xl">
@@ -424,21 +617,37 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
           </div>
         </div>
         <div className={bodyClasses}>
-          <p className="text-sm leading-relaxed text-emerald-900/80">
+          <p
+            className={`text-sm leading-relaxed ${
+              isPanel ? "text-emerald-50/85" : "text-emerald-900/80"
+            }`}
+          >
             Explore the map to preview pricing, commute notes, and lifestyle scores across the
             NorthSide GTA.
           </p>
-          <div className="grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85">
+          <div
+            className={`grid grid-cols-2 gap-2 text-sm font-semibold ${
+              isPanel ? "text-emerald-50/95" : "text-emerald-900/85"
+            }`}
+          >
             {TOWNS.map((t) => (
               <div
                 key={t.id}
-                className="rounded-xl border border-emerald-100/70 bg-emerald-50/70 px-3 py-2 text-center shadow-sm"
+                className={`rounded-xl px-3 py-2 text-center shadow-sm ${
+                  isPanel
+                    ? "border border-white/14 bg-white/10 shadow-black/30"
+                    : "border border-emerald-100/70 bg-emerald-50/70"
+                }`}
               >
                 {t.name}
               </div>
             ))}
           </div>
-          <p className="text-[11px] uppercase tracking-[0.28em] text-emerald-500/80">
+          <p
+            className={`text-[11px] uppercase tracking-[0.28em] ${
+              isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
+            }`}
+          >
             NorthSide GTA • Finally Home Agents
           </p>
         </div>
@@ -451,11 +660,19 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
       <div className={headerClasses}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
+                isPanel ? "bg-white/15" : "bg-white/20"
+              }`}
+            >
               {town.name.slice(0, 1)}
             </div>
             <div className="text-left">
-              <p className="text-[11px] uppercase tracking-[0.32em] text-emerald-100/80">
+              <p
+                className={`text-[11px] uppercase tracking-[0.32em] ${
+                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
+                }`}
+              >
                 NorthSide GTA
               </p>
               <p className="text-lg font-semibold leading-tight md:text-xl">
@@ -469,14 +686,22 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
                 type="button"
                 onClick={onDismiss}
                 aria-label="Close town panel"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-base text-white transition hover:bg-white/25"
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-base transition ${
+                  isPanel
+                    ? "bg-white/20 text-white hover:bg-white/30"
+                    : "bg-white/15 text-white hover:bg-white/25"
+                }`}
               >
                 ×
               </button>
             ) : null}
             <a
               href={town.url}
-              className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-white/25"
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
+                isPanel
+                  ? "bg-white/15 text-white hover:bg-white/25"
+                  : "bg-white/15 text-white hover:bg-white/25"
+              }`}
             >
               See town
             </a>
@@ -485,7 +710,11 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
       </div>
       <div className={bodyClasses}>
         {town.blurb && (
-          <p className="text-sm leading-relaxed text-emerald-900/85 md:text-[15px]">
+          <p
+            className={`text-sm leading-relaxed md:text-[15px] ${
+              isPanel ? "text-emerald-50/90" : "text-emerald-900/85"
+            }`}
+          >
             {town.blurb}
           </p>
         )}
@@ -496,14 +725,26 @@ function TownInsightCard({ town, mode = "desktop", onDismiss, className = "" }) 
           ).map((k) => (
             <div
               key={k}
-              className="rounded-2xl border border-emerald-100/70 bg-white/70 p-3 shadow-sm shadow-emerald-900/10"
+              className={`rounded-2xl p-3 shadow-sm ${
+                isPanel
+                  ? "border border-white/14 bg-white/8 shadow-black/30"
+                  : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10"
+              }`}
             >
-              <RatingRow label={CATEGORY_LABELS[k]} value={town.ratings[k]} />
+              <RatingRow
+                label={CATEGORY_LABELS[k]}
+                value={town.ratings[k]}
+                tone={isPanel ? "panel" : "emerald"}
+              />
             </div>
           ))}
         </div>
 
-        <div className="text-[11px] uppercase tracking-[0.28em] text-emerald-500/80">
+        <div
+          className={`text-[11px] uppercase tracking-[0.28em] ${
+            isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
+          }`}
+        >
           ★★★★★ Google reviews • Local data refreshed nightly
         </div>
       </div>
