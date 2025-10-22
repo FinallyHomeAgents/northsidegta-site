@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/Halloween25_FB-1.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/halloween-on-main/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/halloween-on-main/",
-  "updatedAt": "2025-10-18T08:30:46Z"
+  "lastSyncedAt": "2025-10-22T08:36:57.745Z",
+  "updatedAt": "2025-10-22T08:36:57.745Z",
+  "featured": false
 }
