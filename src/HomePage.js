@@ -5,6 +5,8 @@ import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
 import Footer from "./Footer";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
+import DidYouKnowCard from "./components/DidYouKnowCard";
+import { didYouKnowFacts } from "./components/DidYouKnowData";
 import { CANONICAL_TESTIMONIALS } from "./data/testimonials";
 
 const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
@@ -33,33 +35,6 @@ const HERO_STATS = [
     value: "38",
     suffix: "min",
     description: "GO Express from Newmarket to Union Station at 7:10 a.m.",
-  },
-];
-
-const SMART_TOOLS = [
-  {
-    title: "Market Watch North",
-    stat: "412",
-    statSuffix: " active",
-    description: "MLS® listings we monitor nightly across Georgina, East Gwillimbury, Newmarket, and Aurora.",
-  },
-  {
-    title: "School Catchment Lens",
-    stat: "37",
-    statSuffix: " schools",
-    description: "Public & Catholic catchments with boundary notes, EQAO history, and bus zones on file.",
-  },
-  {
-    title: "GO Commute Optimizer",
-    stat: "4",
-    statSuffix: " lines",
-    description: "Live service data for Barrie, Stouffville, Richmond Hill, and Lakeshore East every weekday morning.",
-  },
-  {
-    title: "Lake Effect Monitor",
-    stat: "5",
-    statSuffix: " towns",
-    description: "Keswick, Sutton, Pefferlaw, Port Perry, and Udora waterfront updates with wind + water alerts.",
   },
 ];
 
@@ -143,7 +118,7 @@ export default function HomePage() {
 
       <main>
         <HomeHero />
-        <SmartToolsSection />
+        <DidYouKnowSection />
         <ConciergeSection />
         <ReviewsSection />
       </main>
@@ -248,7 +223,9 @@ function TownBridge({ className = "" }) {
   );
 }
 
-function SmartToolsSection() {
+function DidYouKnowSection() {
+  const cardOffsets = [0, 1, 2, 3];
+
   return (
     <section className="relative overflow-hidden py-20 text-white">
       <div className="absolute inset-0 bg-[#06110d]" aria-hidden />
@@ -260,42 +237,28 @@ function SmartToolsSection() {
       <div className="relative z-10 mx-auto max-w-6xl px-4">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100">
-            Built-In Tools
+            NorthSide GTA Facts
           </span>
           <h2 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Real utilities that sit behind the hero map.
+            Real stories from the towns behind our hero map.
           </h2>
           <p className="mt-4 text-base text-emerald-100/90 sm:text-lg">
-            Every card below pulls from the same datasets we monitor live for clients across the NorthSide GTA.
+            These rotating spotlights surface live from communities across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.
           </p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {SMART_TOOLS.map((tool) => (
-            <ToolCard key={tool.title} tool={tool} />
+          {cardOffsets.map((offset) => (
+            <DidYouKnowCard
+              key={offset}
+              facts={didYouKnowFacts}
+              initialIndex={offset}
+              rotateInterval={8000 + offset * 1200}
+            />
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function ToolCard({ tool }) {
-  return (
-    <div className="flex h-full flex-col justify-between rounded-3xl border border-white/15 bg-white/10 p-6 shadow-xl shadow-black/25 backdrop-blur">
-      <div>
-        <div className="flex items-baseline gap-1 text-3xl font-semibold text-white">
-          <span>{tool.stat}</span>
-          <span className="text-base text-emerald-100/90">{tool.statSuffix}</span>
-        </div>
-        <h3 className="mt-3 text-xl font-semibold text-white sm:text-2xl">{tool.title}</h3>
-        <p className="mt-3 text-sm text-emerald-100/85 sm:text-base">{tool.description}</p>
-      </div>
-      <div className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/70">
-        <span className="inline-flex h-2 w-2 rounded-full bg-emerald-300" aria-hidden />
-        Live Feed
-      </div>
-    </div>
   );
 }
 
