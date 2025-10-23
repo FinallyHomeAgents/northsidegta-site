@@ -358,16 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/comic-drawing-for-children-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002643-1757894400-1762819199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-22T08:36:57.745Z",
-  "updatedAt": "2025-10-22T08:36:57.745Z",
-  "featured": false
+  "updatedAt": "2025-10-22T08:36:57Z"
 }

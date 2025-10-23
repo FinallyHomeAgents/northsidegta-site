@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/expressive-painting-for-wellness-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002687-1762646400-1762732799@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-23T08:36:02.116Z",
-  "firstSeenAt": "2025-10-23T08:36:02.116Z",
-  "updatedAt": "2025-10-23T08:36:02.116Z",
-  "featured": false
+  "updatedAt": "2025-10-23T08:36:02Z"
 }
