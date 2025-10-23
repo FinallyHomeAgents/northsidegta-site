@@ -1,7 +1,7 @@
-// src/SellersPage.js
 import React, { useState, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
+import Footer from "./Footer";
 import Card from "./components/ui/Card";
 
 // ===== Helpers (reused) =====
@@ -38,6 +38,16 @@ const videos = [
 // Towns (multi-select limit 7)
 const TOWNS = ["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","None"];
 
+const SELLER_PILLARS = [
+  { icon: "⏱️", text: "Takes less than 1 minute" },
+  { icon: "✅", text: "No spam, no obligation" },
+  { icon: "🔒", text: "Secure & private" },
+  { icon: "📍", text: "Local market experts" },
+];
+
+const baseFieldClass =
+  "mt-1 w-full rounded-xl border border-emerald-200/60 bg-white/80 px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20";
+
 // WhatsApp icon for post-submit perk
 function WhatsAppIcon({ className = "w-5 h-5" }) {
   return (
@@ -63,6 +73,48 @@ const CheckIcon = (props) => (
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
+
+function SellerHero() {
+  return (
+    <section className="relative overflow-hidden bg-[#04110c] text-white">
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_65%)]"
+        aria-hidden
+      />
+      <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-4 pb-36 pt-24 sm:px-6 lg:px-10">
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+            NorthSide GTA Seller Strategy
+          </span>
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.8rem]">
+            Sell Like a Pro — With Finally Home Agents in Your Corner
+          </h1>
+          <p className="mt-4 text-lg text-emerald-100/90 sm:text-xl">
+            Like an athlete with a great agent, you get strategy, preparation, and negotiations that win — not guesswork.
+          </p>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-3 text-sm text-emerald-100/90">
+          {SELLER_PILLARS.map((pill) => (
+            <span
+              key={pill.text}
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-medium backdrop-blur"
+            >
+              <span>{pill.icon}</span>
+              {pill.text}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 // ===== Two-step, in-place Seller form (with map background + gradient buttons) =====
 function SellerLeadCapture() {
@@ -242,8 +294,8 @@ function SellerLeadCapture() {
 
   if (done) {
     return (
-      <section className="mx-auto max-w-5xl w-full">
-        <div className="relative overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6 shadow-xl md:p-8">
+      <section className="relative mx-auto w-full max-w-5xl">
+        <div className="relative overflow-hidden rounded-[40px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_30px_90px_rgba(15,118,110,0.18)] backdrop-blur md:p-10">
           <div
             className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
             style={{
@@ -253,19 +305,23 @@ function SellerLeadCapture() {
             }}
             aria-hidden="true"
           />
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/70"
+            aria-hidden
+          />
 
-          <div className="relative z-10 space-y-6">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/90 p-6 shadow-sm backdrop-blur">
+          <div className="relative z-10 space-y-6 text-slate-900">
+            <div className="rounded-2xl border border-emerald-200 bg-white/90 p-6 shadow-sm backdrop-blur">
               <div className="flex items-center gap-2 text-emerald-800">
                 <CheckIcon className="h-5 w-5" />
-                <h3 className="text-xl md:text-2xl font-bold">Thanks! You’ve unlocked priority support.</h3>
+                <h3 className="text-xl font-bold md:text-2xl">Thanks! You’ve unlocked priority support.</h3>
               </div>
-              <p className="mt-2 text-sm text-emerald-900/90">
+              <p className="mt-2 text-sm text-slate-700 md:text-base">
                 We’re reviewing your home now. For faster back-and-forth, connect with us on WhatsApp.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-emerald-200 bg-white/80 p-5 shadow-sm backdrop-blur">
+            <div className="rounded-2xl border border-emerald-200 bg-white/90 p-5 shadow-sm backdrop-blur">
               <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
@@ -282,25 +338,23 @@ function SellerLeadCapture() {
                   href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20%E2%80%94%20I%27m%20following%20up%20on%20my%20home%20valuation."
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-white shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                  style={{ background: "linear-gradient(135deg, #25D366 0%, #1ebe57 100%)" }}
+                  className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/60 bg-gradient-to-r from-[#25D366] via-[#1fc559] to-[#1ebe57] px-4 py-3 font-semibold text-white shadow-lg transition hover:from-[#1fc559] hover:via-[#1ebe57] hover:to-[#18a649] focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                 >
-                  <WhatsAppIcon className="w-5 h-5" />
+                  <WhatsAppIcon className="h-5 w-5" />
                   Connect on WhatsApp
                 </a>
               </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <Card className="border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur">
-                <p className="italic text-sm text-slate-700 md:text-base">
-                  “Finally Home Agents exceeded our expectations when selling our home in Holland Landing.
-                  Their professionalism and personal attention set them apart.”
+              <Card className="border border-emerald-200 bg-white/90 p-5 text-slate-900 shadow-sm backdrop-blur">
+                <p className="text-sm italic text-slate-700 md:text-base">
+                  “Finally Home Agents exceeded our expectations when selling our home in Holland Landing. Their professionalism and personal attention set them apart.”
                 </p>
                 <p className="mt-2 text-xs font-semibold text-emerald-800">— Susan Booth</p>
               </Card>
-              <Card className="border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur">
-                <p className="italic text-sm text-slate-700 md:text-base">
+              <Card className="border border-emerald-200 bg-white/90 p-5 text-slate-900 shadow-sm backdrop-blur">
+                <p className="text-sm italic text-slate-700 md:text-base">
                   “Matt sold our house above market and negotiated our forever home for less. Highly recommend.”
                 </p>
                 <p className="mt-2 text-xs font-semibold text-emerald-800">— Arron Breen</p>
@@ -315,8 +369,8 @@ function SellerLeadCapture() {
   const timelineOptions = ["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"];
 
   return (
-    <section className="mx-auto max-w-5xl w-full">
-      <div className="relative overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100 p-6 shadow-xl md:p-8">
+    <section className="relative mx-auto w-full max-w-5xl">
+      <div className="relative overflow-hidden rounded-[40px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_30px_90px_rgba(15,118,110,0.18)] backdrop-blur md:p-10">
         <div
           className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
           style={{
@@ -326,39 +380,41 @@ function SellerLeadCapture() {
           }}
           aria-hidden="true"
         />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/70"
+          aria-hidden
+        />
 
         <div className="relative z-10">
-          <div className="mb-2 flex items-center gap-2 text-emerald-900">
-            <span className="uppercase text-[11px] font-semibold tracking-wider">
+          <div className="mb-2 flex items-center gap-2 text-emerald-800">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em]">
               NorthSide GTA Seller Strategy
             </span>
           </div>
-          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+          <h3 className="text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
             Unlock Your Personalized Home Sale Plan
           </h3>
-          <p className="mt-1 text-slate-800">
+          <p className="mt-2 text-slate-800">
             Start with your address — we’ll craft your pricing roadmap, prep plan, and marketing strategy.
           </p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            {[
-              { icon: "⏱️", text: "Takes less than 1 minute" },
-              { icon: "✅", text: "No spam, no obligation" },
-              { icon: "🔒", text: "Secure & private" },
-              { icon: "📍", text: "Local market experts" },
-            ].map((p) => (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {SELLER_PILLARS.map((p) => (
               <span
                 key={p.text}
-                className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white px-3 py-1 text-[12px] font-semibold text-emerald-900 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/90 px-3 py-1 text-[12px] font-semibold text-emerald-900 shadow-sm backdrop-blur"
               >
                 <span>{p.icon}</span> {p.text}
               </span>
             ))}
           </div>
 
-          <div className="mt-4">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-emerald-100">
-              <div className="h-full bg-emerald-600 transition-all" style={{ width: `${progressPct}%` }} />
+          <div className="mt-6">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-emerald-100/70">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 transition-all"
+                style={{ width: `${progressPct}%` }}
+              />
             </div>
             <div className="mt-1 text-right text-[11px] font-medium text-emerald-700">
               {progressPct}% complete
@@ -371,444 +427,461 @@ function SellerLeadCapture() {
               tabIndex={-1}
               role="alert"
               aria-live="assertive"
-              className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+              className="mt-4 rounded-xl border border-red-200 bg-red-50/90 p-3 text-sm text-red-700 shadow-sm backdrop-blur"
             >
               {error}
             </div>
           )}
 
           {/* STEP 1 */}
-        {!expanded && (
-          <form onSubmit={continueToStep2} className="mt-6 grid grid-cols-1 gap-4">
-            <h4 className="text-lg sm:text-xl font-semibold text-slate-900">Step 1 · Property Details</h4>
+          {!expanded && (
+            <form onSubmit={continueToStep2} className="mt-6 grid grid-cols-1 gap-4">
+              <h4 className="text-lg font-semibold text-slate-900 sm:text-xl">Step 1 · Property Details</h4>
 
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Street Number</span>
-                <input
-                  name="streetNumber"
-                  value={form.streetNumber}
-                  onChange={update}
-                  placeholder="123"
-                  inputMode="numeric"
-                  autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                  required
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Street Name</span>
-                <input
-                  name="streetName"
-                  value={form.streetName}
-                  onChange={update}
-                  placeholder="Main St"
-                  autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                  required
-                />
-              </label>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Bedrooms</span>
-                <select
-                  name="bedrooms"
-                  value={form.bedrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Bathrooms</span>
-                <select
-                  name="bathrooms"
-                  value={form.bathrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center rounded-lg border border-slate-900/70 bg-slate-900 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-slate-900/30 focus:ring-offset-1"
-            >
-              Continue to Step 2
-            </button>
-
-            <p className="text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
-          </form>
-        )}
-
-          {/* STEP 2 (expanded below Step 1) */}
-        {expanded && (
-          <form onSubmit={onSubmit} className="mt-6" id="seller-step2">
-            <h4 className="text-lg sm:text-xl font-semibold text-slate-900">Step 2 · Your Details & Timing</h4>
-
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Street Number</span>
-                <input
-                  name="streetNumber"
-                  value={form.streetNumber}
-                  onChange={update}
-                  placeholder="123"
-                  inputMode="numeric"
-                  autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Street Name</span>
-                <input
-                  name="streetName"
-                  value={form.streetName}
-                  onChange={update}
-                  placeholder="Main St"
-                  autoComplete="address-line1"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Bedrooms</span>
-                <select
-                  name="bedrooms"
-                  value={form.bedrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">Bathrooms</span>
-                <select
-                  name="bathrooms"
-                  value={form.bathrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-
-              <div className="md:col-span-2">
-                <div className="flex items-end justify-between">
-                  <label className="block text-sm font-medium text-slate-900" id="cond-desc">
-                    Overall Condition (1–10)
-                  </label>
-                  <div className="text-sm font-semibold text-emerald-700" aria-live="polite">
-                    {form.condition}
-                  </div>
-                </div>
-                <input
-                  type="range"
-                  name="condition"
-                  min="1"
-                  max="10"
-                  value={form.condition}
-                  onChange={update}
-                  className="mt-3 w-full accent-emerald-600"
-                  aria-describedby="cond-desc"
-                />
-                <div className="mt-2 text-xs text-slate-600">1 Very poor · 5 Average · 10 Pristine</div>
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900" id="up-desc">
-                  Level of Upgrades (1–10)
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Street Number</span>
+                  <input
+                    name="streetNumber"
+                    value={form.streetNumber}
+                    onChange={update}
+                    placeholder="123"
+                    inputMode="numeric"
+                    autoComplete="address-line1"
+                    className={baseFieldClass}
+                    required
+                  />
                 </label>
-                <input
-                  type="range"
-                  name="upgrades"
-                  min="1"
-                  max="10"
-                  value={form.upgrades}
-                  onChange={update}
-                  className="mt-3 w-full accent-emerald-600"
-                  aria-describedby="up-desc"
-                />
-                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 md:grid-cols-5">
-                  <div>
-                    <span className="font-semibold">1–2</span> Original / mostly original
-                  </div>
-                  <div>
-                    <span className="font-semibold">3–4</span> Minor cosmetic / few rooms
-                  </div>
-                  <div>
-                    <span className="font-semibold">5–6</span> Several rooms updated
-                  </div>
-                  <div>
-                    <span className="font-semibold">7–8</span> Mostly updated, consistent
-                  </div>
-                  <div>
-                    <span className="font-semibold">9–10</span> Fully renovated, high-end
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900">
-                  What do you think your home is worth? <span className="text-slate-400">(optional)</span>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Street Name</span>
+                  <input
+                    name="streetName"
+                    value={form.streetName}
+                    onChange={update}
+                    placeholder="Main St"
+                    autoComplete="address-line1"
+                    className={baseFieldClass}
+                    required
+                  />
                 </label>
-                <input
-                  name="estimate"
-                  value={form.estimate}
-                  onChange={update}
-                  placeholder="$900,000"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
               </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900">
-                  Recent improvements we should know about <span className="text-slate-400">(optional)</span>
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Bedrooms</span>
+                  <select
+                    name="bedrooms"
+                    value={form.bedrooms}
+                    onChange={update}
+                    className={baseFieldClass}
+                  >
+                    <option value="">Select…</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5+</option>
+                  </select>
                 </label>
-                <textarea
-                  name="improvements"
-                  value={form.improvements}
-                  onChange={update}
-                  rows={3}
-                  placeholder="Roof 2021, furnace 2020, new flooring main level..."
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900">
-                  Unique features <span className="text-slate-400">(optional)</span>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Bathrooms</span>
+                  <select
+                    name="bathrooms"
+                    value={form.bathrooms}
+                    onChange={update}
+                    className={baseFieldClass}
+                  >
+                    <option value="">Select…</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5+</option>
+                  </select>
                 </label>
-                <textarea
-                  name="features"
-                  value={form.features}
-                  onChange={update}
-                  rows={2}
-                  placeholder="Pie lot, backs onto ravine, legal basement apartment..."
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
               </div>
 
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">
-                  First Name <span className="text-red-500">*</span>
-                </span>
-                <input
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={update}
-                  required
-                  autoComplete="given-name"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">
-                  Last Name <span className="text-red-500">*</span>
-                </span>
-                <input
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={update}
-                  required
-                  autoComplete="family-name"
-                  className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">
-                  Phone Number <span className="text-red-500">*</span>
-                </span>
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={update}
-                  placeholder="(###) ###-####"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.phone
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
-                      : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
-                  }`}
-                />
-                {fieldErrors.phone && (
-                  <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
-                )}
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-slate-900">
-                  Email <span className="text-red-500">*</span>
-                </span>
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={update}
-                  placeholder="you@example.com"
-                  inputMode="email"
-                  autoComplete="email"
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.email
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
-                      : "border-slate-300 focus:border-slate-900 focus:ring-slate-900/20"
-                  }`}
-                />
-                {fieldErrors.email && (
-                  <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
-                )}
-              </label>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900">
-                  How soon might you consider a move?
-                </label>
-                <div className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
-                  {timelineOptions.map((label) => {
-                    const checked = form.timeline === label;
-                    return (
-                      <label
-                        key={label}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition ${
-                          checked
-                            ? "border-slate-900 bg-white text-slate-900 shadow-sm"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="timeline"
-                          value={label}
-                          checked={checked}
-                          onChange={update}
-                          className="h-4 w-4 border-slate-300 text-slate-900 focus:ring-slate-900/30"
-                        />
-                        <span className="leading-snug">{label}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-900">
-                  Which NorthSide GTA towns are you most interested in moving to?
-                </label>
-                <p className="mt-1 text-xs text-slate-600">Select up to 7.</p>
-                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                  {TOWNS.map((town) => {
-                    const checked = form.towns.includes(town);
-                    return (
-                      <label
-                        key={town}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
-                          checked
-                            ? "border-slate-900 bg-white text-slate-900 shadow-sm"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => toggleTown(town)}
-                          className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
-                        />
-                        <span>{town}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <input
-              name="nickname"
-              value={form.nickname}
-              onChange={update}
-              className="hidden"
-              tabIndex="-1"
-              autoComplete="off"
-            />
-            <input type="hidden" name="utm_source" value={utm.get("utm_source") || ""} readOnly />
-            <input type="hidden" name="utm_campaign" value={utm.get("utm_campaign") || ""} readOnly />
-            <input type="hidden" name="device" value={device} readOnly />
-
-            <div className="mt-4 space-y-3 text-sm text-slate-900">
-              <label className="flex items-start gap-2">
-                <input
-                  data-testid="not-under-contract"
-                  type="checkbox"
-                  name="notUnderContract"
-                  checked={form.notUnderContract}
-                  onChange={update}
-                  className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
-                  required
-                />
-                <span>
-                  <span className="font-medium">
-                    I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
-                  </span>
-                  <span className="mt-1 block text-xs text-slate-600">
-                    Required — without this confirmation, we cannot provide a home analysis.
-                  </span>
-                </span>
-              </label>
-              <label className="flex items-start gap-2">
-                <input
-                  type="checkbox"
-                  name="consent"
-                  checked={form.consent}
-                  onChange={update}
-                  className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900/30"
-                  required
-                />
-                <span>
-                  I agree to be contacted by Finally Home Agents about my home analysis.
-                  <span className="block text-xs text-slate-600">You can unsubscribe anytime. We respect your privacy.</span>
-                </span>
-              </label>
-            </div>
-
-            <div className="mt-5">
               <button
                 type="submit"
-                disabled={!requiredOk || sending}
-                className="inline-flex w-full items-center justify-center rounded-lg border border-slate-900/70 bg-slate-900 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-slate-900/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:border-slate-400 disabled:bg-slate-400 disabled:text-white/80"
+                className="inline-flex items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50"
               >
-                {sending ? "Sending…" : "Get My Home Value"}
+                Continue to Step 2
               </button>
-            </div>
 
-            <p className="mt-2 text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
-          </form>
-        )}
+              <p className="text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
+            </form>
+          )}
+
+          {/* STEP 2 (expanded below Step 1) */}
+          {expanded && (
+            <form onSubmit={onSubmit} className="mt-6" id="seller-step2">
+              <h4 className="text-lg font-semibold text-slate-900 sm:text-xl">Step 2 · Your Details & Timing</h4>
+
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Street Number</span>
+                  <input
+                    name="streetNumber"
+                    value={form.streetNumber}
+                    onChange={update}
+                    placeholder="123"
+                    inputMode="numeric"
+                    autoComplete="address-line1"
+                    className={baseFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Street Name</span>
+                  <input
+                    name="streetName"
+                    value={form.streetName}
+                    onChange={update}
+                    placeholder="Main St"
+                    autoComplete="address-line1"
+                    className={baseFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Bedrooms</span>
+                  <select
+                    name="bedrooms"
+                    value={form.bedrooms}
+                    onChange={update}
+                    className={baseFieldClass}
+                  >
+                    <option value="">Select…</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5+</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Bathrooms</span>
+                  <select
+                    name="bathrooms"
+                    value={form.bathrooms}
+                    onChange={update}
+                    className={baseFieldClass}
+                  >
+                    <option value="">Select…</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5+</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Overall condition today</span>
+                  <input
+                    type="range"
+                    name="condition"
+                    min="1"
+                    max="10"
+                    value={form.condition}
+                    onChange={update}
+                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#059669]"
+                  />
+                  <div className="mt-1 text-xs text-slate-600">{form.condition}/10</div>
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Recent upgrades</span>
+                  <input
+                    type="range"
+                    name="upgrades"
+                    min="1"
+                    max="10"
+                    value={form.upgrades}
+                    onChange={update}
+                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#059669]"
+                  />
+                  <div className="mt-1 text-xs text-slate-600">{form.upgrades}/10</div>
+                </label>
+                <label className="md:col-span-2 block">
+                  <span className="text-sm font-medium text-slate-900">Estimated value today (if you have one)</span>
+                  <input
+                    name="estimate"
+                    value={form.estimate}
+                    onChange={update}
+                    placeholder="$1,250,000"
+                    className={baseFieldClass}
+                  />
+                </label>
+                <label className="md:col-span-2 block">
+                  <span className="text-sm font-medium text-slate-900">Any planned improvements before selling?</span>
+                  <textarea
+                    name="improvements"
+                    value={form.improvements}
+                    onChange={update}
+                    placeholder="Kitchen refresh, repainting, etc."
+                    className={`${baseFieldClass} min-h-[110px]`}
+                  />
+                </label>
+                <label className="md:col-span-2 block">
+                  <span className="text-sm font-medium text-slate-900">Standout features or upgrades we should know about?</span>
+                  <textarea
+                    name="features"
+                    value={form.features}
+                    onChange={update}
+                    placeholder="E.g. walkout basement, new roof, EV charger"
+                    className={`${baseFieldClass} min-h-[110px]`}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">First Name</span>
+                  <input
+                    name="firstName"
+                    value={form.firstName}
+                    onChange={update}
+                    placeholder="Jordan"
+                    className={baseFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Last Name</span>
+                  <input
+                    name="lastName"
+                    value={form.lastName}
+                    onChange={update}
+                    placeholder="Taylor"
+                    className={baseFieldClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Phone</span>
+                  <input
+                    name="phone"
+                    value={form.phone}
+                    onChange={update}
+                    placeholder="647-555-1212"
+                    className={`${baseFieldClass} ${
+                      fieldErrors.phone
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                        : ""
+                    }`}
+                  />
+                  {fieldErrors.phone && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                  )}
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-900">Email</span>
+                  <input
+                    name="email"
+                    value={form.email}
+                    onChange={update}
+                    placeholder="you@email.com"
+                    className={`${baseFieldClass} ${
+                      fieldErrors.email
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-400/60"
+                        : ""
+                    }`}
+                  />
+                  {fieldErrors.email && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+                  )}
+                </label>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-900">
+                    How soon might you consider a move?
+                  </label>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
+                    {timelineOptions.map((label) => {
+                      const checked = form.timeline === label;
+                      return (
+                        <label
+                          key={label}
+                          className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition ${
+                            checked
+                              ? "border-emerald-500 bg-white text-emerald-800 shadow-sm"
+                              : "border-emerald-200/70 bg-white/80 text-slate-700 hover:border-emerald-300"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="timeline"
+                            value={label}
+                            checked={checked}
+                            onChange={update}
+                            className="h-4 w-4 border-emerald-200 text-emerald-600 focus:ring-emerald-500/30"
+                          />
+                          <span className="leading-snug">{label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-900">
+                    Which NorthSide GTA towns are you most interested in moving to?
+                  </label>
+                  <p className="mt-1 text-xs text-slate-600">Select up to 7.</p>
+                  <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {TOWNS.map((town) => {
+                      const checked = form.towns.includes(town);
+                      return (
+                        <label
+                          key={town}
+                          className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+                            checked
+                              ? "border-emerald-500 bg-white text-emerald-800 shadow-sm"
+                              : "border-emerald-200/70 bg-white/80 text-slate-700 hover:border-emerald-300"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleTown(town)}
+                            className="h-4 w-4 rounded border-emerald-200 text-emerald-600 focus:ring-emerald-500/30"
+                          />
+                          <span>{town}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <input
+                name="nickname"
+                value={form.nickname}
+                onChange={update}
+                className="hidden"
+                tabIndex="-1"
+                autoComplete="off"
+              />
+              <input type="hidden" name="utm_source" value={utm.get("utm_source") || ""} readOnly />
+              <input type="hidden" name="utm_campaign" value={utm.get("utm_campaign") || ""} readOnly />
+              <input type="hidden" name="device" value={device} readOnly />
+
+              <div className="mt-4 space-y-3 text-sm text-slate-900">
+                <label className="flex items-start gap-2">
+                  <input
+                    data-testid="not-under-contract"
+                    type="checkbox"
+                    name="notUnderContract"
+                    checked={form.notUnderContract}
+                    onChange={update}
+                    className="mt-1 h-4 w-4 rounded border-emerald-200 text-emerald-600 focus:ring-emerald-500/30"
+                    required
+                  />
+                  <span>
+                    <span className="font-medium">
+                      I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
+                    </span>
+                    <span className="mt-1 block text-xs text-slate-600">
+                      Required — without this confirmation, we cannot provide a home analysis.
+                    </span>
+                  </span>
+                </label>
+                <label className="flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    name="consent"
+                    checked={form.consent}
+                    onChange={update}
+                    className="mt-1 h-4 w-4 rounded border-emerald-200 text-emerald-600 focus:ring-emerald-500/30"
+                    required
+                  />
+                  <span>
+                    I agree to be contacted by Finally Home Agents about my home analysis.
+                    <span className="block text-xs text-slate-600">You can unsubscribe anytime. We respect your privacy.</span>
+                  </span>
+                </label>
+              </div>
+
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  disabled={!requiredOk || sending}
+                  className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50 disabled:cursor-not-allowed disabled:border-emerald-200 disabled:from-emerald-400 disabled:to-emerald-400 disabled:opacity-70"
+                >
+                  {sending ? "Sending…" : "Get My Home Value"}
+                </button>
+              </div>
+
+              <p className="mt-2 text-[11px] text-slate-700">No spam. Unsubscribe anytime.</p>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SellerTimeline() {
+  return (
+    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/60"
+        aria-hidden
+      />
+      <div className="relative z-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-2xl font-semibold text-slate-900 md:text-3xl">Your Selling Game Plan</h2>
+          <span className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200/80 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700/90">
+            Lean, effective, proven
+          </span>
+        </div>
+        <div className="mt-6 overflow-x-auto hide-scrollbar">
+          <div className="flex min-w-[680px] gap-3">
+            {timeline.map((s, i) => (
+              <div
+                key={i}
+                className="flex-1 min-w-[220px] rounded-2xl border border-emerald-200/70 bg-white/90 p-4 shadow-sm transition hover:border-emerald-300"
+              >
+                <div className="flex items-center gap-2 text-emerald-700">
+                  <span>{s.icon}</span>
+                  <h3 className="text-sm font-semibold text-slate-900">{s.title}</h3>
+                </div>
+                <p className="mt-2 text-xs text-slate-600">{s.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SellerMediaSection() {
+  return (
+    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/60"
+        aria-hidden
+      />
+      <div className="relative z-10 space-y-6 text-center">
+        <div className="space-y-3">
+          <h2 className="text-3xl font-semibold text-slate-900">See Us in Action</h2>
+          <p className="mx-auto max-w-2xl text-base text-slate-600">
+            A glimpse of the VIP media treatment every listing receives.
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2">
+          {videos.map((v, idx) => (
+            <Card
+              key={idx}
+              className="overflow-hidden border border-emerald-200/70 bg-white/90 p-0 shadow-lg backdrop-blur transition hover:border-emerald-300"
+            >
+              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <iframe
+                  src={v.embed}
+                  title={v.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder="0"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <h3 className="px-5 py-5 text-lg font-semibold text-slate-900">{v.title}</h3>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
@@ -818,7 +891,7 @@ function SellerLeadCapture() {
 // ===== Page shell =====
 export default function SellersPage() {
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
       <Helmet>
   <title>Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing</title>
@@ -872,72 +945,18 @@ export default function SellersPage() {
   </script>
 </Helmet>
 
-      <div className="space-y-14 px-4 md:px-20 py-12">
-        {/* HERO */}
-        <section className="text-center space-y-3">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Sell Like a Pro — With Finally Home Agents in Your Corner
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-            Like an athlete with a great agent, you get strategy, preparation, and negotiations that win — not guesswork.
-          </p>
-        </section>
-
-        {/* Two-step unified form card (now with map background + gradient buttons) */}
-        <SellerLeadCapture />
-
-        {/* Slim horizontal timeline (kept) */}
-        <section className="mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl md:text-2xl font-semibold">Your Selling Game Plan</h2>
-            <span className="text-xs text-slate-500">Lean, effective, proven</span>
+      <main>
+        <SellerHero />
+        <div className="relative z-10 -mt-20 px-4 pb-24 sm:px-6 lg:px-10">
+          <div className="mx-auto flex max-w-6xl flex-col gap-16">
+            <SellerLeadCapture />
+            <SellerTimeline />
+            <SellerMediaSection />
           </div>
-          <div className="relative">
-            <div className="overflow-x-auto hide-scrollbar">
-              <div className="flex gap-3 min-w-[680px]">
-                {timeline.map((s, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 min-w-[220px] rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-emerald-700">{s.icon}</span>
-                      <h3 className="font-semibold text-slate-900 text-sm">{s.title}</h3>
-                    </div>
-                    <p className="text-xs text-slate-600 mt-1">{s.copy}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
+      </main>
 
-        {/* See Us in Action (videos kept) */}
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold text-center">See Us in Action</h2>
-          <p className="text-center text-slate-600 max-w-2xl mx-auto">
-            A glimpse of the VIP media treatment every listing receives.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {videos.map((v, idx) => (
-              <Card key={idx} className="overflow-hidden flex flex-col p-0">
-                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                  <iframe
-                    src={v.embed}
-                    title={v.title}
-                    className="absolute inset-0 w-full h-full"
-                    frameBorder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-                <h3 className="text-lg font-semibold px-5 py-5">{v.title}</h3>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 }
