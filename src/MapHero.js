@@ -1053,7 +1053,11 @@ function TownInsightCard({
           </p>
         )}
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div
+          className={`grid grid-cols-1 gap-3 ${
+            isPanel ? "" : "sm:grid-cols-2"
+          }`}
+        >
           {CATEGORY_ORDER.filter(
             (k) => town.ratings && town.ratings[k] != null
           ).map((k) => (
