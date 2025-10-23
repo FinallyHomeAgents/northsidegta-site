@@ -224,8 +224,6 @@ function TownBridge({ className = "" }) {
 }
 
 function DidYouKnowSection() {
-  const cardOffsets = [0, 1, 2, 3];
-
   return (
     <section className="relative overflow-hidden py-20 text-white">
       <div className="absolute inset-0 bg-[#06110d]" aria-hidden />
@@ -234,8 +232,8 @@ function DidYouKnowSection() {
       <div className="pointer-events-none absolute right-[-12%] bottom-[-24%] h-[30rem] w-[30rem] rounded-full bg-emerald-300/25 blur-3xl" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.15),_transparent_70%)]" aria-hidden />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4">
-        <div className="max-w-3xl">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4">
+        <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100">
             NorthSide GTA Facts
           </span>
@@ -247,16 +245,11 @@ function DidYouKnowSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {cardOffsets.map((offset) => (
-            <DidYouKnowCard
-              key={offset}
-              facts={didYouKnowFacts}
-              initialIndex={offset}
-              rotateInterval={8000 + offset * 1200}
-            />
-          ))}
-        </div>
+        <DidYouKnowCard
+          facts={didYouKnowFacts}
+          rotateInterval={6500}
+          className="mx-auto mt-12 w-full max-w-5xl"
+        />
       </div>
     </section>
   );
