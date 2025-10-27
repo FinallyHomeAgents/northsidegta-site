@@ -1,9 +1,9 @@
-# Events Sync Report — 2025-10-26 04:30 EDT
+# Events Sync Report — 2025-10-27 04:35 EDT
 
-* Created: 9
-* Updated: 21
-* Unchanged: 42
-* Errors: 32
+* Created: 0
+* Updated: 0
+* Unchanged: 41
+* Errors: 33
 
 ## URL Updates
 
@@ -27,7 +27,7 @@
 | Township of Uxbridge Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Township of Scugog Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Explore Georgina | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Discover Stouffville | 0 | 0 | 12 | 28 | ok | — |
+| Discover Stouffville | 0 | 0 | 11 | 24 | ok | — |
 | Discover Uxbridge | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Town Square | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Cultural Centre | 0 | 0 | 30 | 30 | ok | — |
@@ -49,6 +49,6 @@
 | Sutton BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Jackson's Point BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Discover Port Perry | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Experience York Region | 9 | 21 | 0 | 30 | ok | — |
+| Experience York Region | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Universe | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | TicketScene | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
