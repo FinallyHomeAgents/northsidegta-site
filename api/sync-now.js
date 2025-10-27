@@ -68,6 +68,17 @@ function buildHintFromStatus(repoDispatchStatus) {
   return 'Sync started — check GitHub → Actions.'
 }
 
+async function dispatchWorkflow({ owner, repo, ref, headers }) {
+  const workflowId = '.github/workflows/events-sync.yml'
+  const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ref }),
+  })
+  return response
+}
+
 async function dispatchSyncNow({ owner, repo, ref, headers }) {
   const url = `https://api.github.com/repos/${owner}/${repo}/dispatches`
   // Only repository_dispatch; avoids ref-specific 404s.
@@ -79,23 +90,43 @@ async function dispatchSyncNow({ owner, repo, ref, headers }) {
   return response
 }
 
+async function fetchDefaultBranch({ owner, repo, headers }) {
+  try {
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      method: 'GET',
+      headers,
+    })
+    if (!response.ok) {
+      return null
+    }
+    const data = await response.json().catch(() => null)
+    if (data && typeof data.default_branch === 'string' && data.default_branch.trim()) {
+      return data.default_branch.trim()
+    }
+  } catch (error) {
+    console.warn('[sync-now] failed to fetch repository metadata for default branch', error)
+  }
+  return null
+}
+
 async function triggerSync() {
   const env = getGithubEnvConfig()
   const cap = getGithubSyncCapability()
 
   const owner = cap.owner || env?.owner || ''
   const repo  = cap.repo  || env?.repo  || ''
-  const ref   = DEFAULT_DISPATCH_REF // always target main (or your override)
   const token = env?.token || cap.token || ''
+  const initialRef = cap.ref && cap.ref.trim() ? cap.ref.trim() : ''
+  const attemptedRefs = new Set()
 
   if (!cap.hasRepoMetadata && !(env?.owner && env?.repo)) {
     return { status: 500, body: { ok: false, error: 'missing repository metadata',
-      hint: 'Set GITHUB_REPO (owner/repo) or VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG.', owner, repo, ref } }
+      hint: 'Set GITHUB_REPO (owner/repo) or VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG.', owner, repo, ref: initialRef || DEFAULT_DISPATCH_REF } }
   }
 
   if (!token) {
     return { status: 502, body: { ok: false, error: 'missing GH_TOKEN/GITHUB_TOKEN',
-      hint: 'Provide a GitHub token with repo + workflow scopes via GH_TOKEN or GITHUB_TOKEN.', owner, repo, ref } }
+      hint: 'Provide a GitHub token with repo + workflow scopes via GH_TOKEN or GITHUB_TOKEN.', owner, repo, ref: initialRef || DEFAULT_DISPATCH_REF } }
   }
 
   const headers = {
@@ -104,23 +135,82 @@ async function triggerSync() {
     'X-GitHub-Api-Version': '2022-11-28',
   }
 
-  try {
-    const resp = await dispatchSyncNow({ owner, repo, ref, headers })
-    const repoDispatchStatus = resp.status
-    const ok = SUCCESS_STATUSES.has(repoDispatchStatus)
-    const hint = buildHintFromStatus(repoDispatchStatus)
+  async function attemptDispatch(ref) {
+    if (!ref || attemptedRefs.has(ref)) return null
+    attemptedRefs.add(ref)
 
-    if (!ok) {
-      const body = await resp.text().catch(() => '')
-      console.warn('[sync-now] repository_dispatch failed', { repoDispatchStatus, body })
-      return { status: 502, body: { ok: false, error: 'GitHub refused the sync request.', hint, repoDispatchStatus, owner, repo, ref } }
+    let workflowResponse
+    try {
+      workflowResponse = await dispatchWorkflow({ owner, repo, ref, headers })
+    } catch (error) {
+      console.error('[sync-now] workflow dispatch failed', { ref }, error)
+      workflowResponse = { status: 0, text: async () => '' }
     }
 
-    return { status: 200, body: { ok: true, repoDispatchStatus, owner, repo, ref, hint } }
+    let repoResponse
+    try {
+      repoResponse = await dispatchSyncNow({ owner, repo, ref, headers })
+    } catch (error) {
+      console.error('[sync-now] repository dispatch failed', { ref }, error)
+      repoResponse = { status: 0, text: async () => '' }
+    }
+
+    return {
+      ref,
+      workflowResponse,
+      repoResponse,
+      workflowStatus: workflowResponse.status,
+      repoStatus: repoResponse.status,
+    }
+  }
+
+  async function resolveFallbackRef(currentRef) {
+    const fetchedDefault = await fetchDefaultBranch({ owner, repo, headers })
+    if (fetchedDefault && fetchedDefault !== currentRef) {
+      return fetchedDefault
+    }
+    if (DEFAULT_DISPATCH_REF && DEFAULT_DISPATCH_REF !== currentRef) {
+      return DEFAULT_DISPATCH_REF
+    }
+    return null
+  }
+
+  try {
+    let result = await attemptDispatch(initialRef || DEFAULT_DISPATCH_REF)
+
+    if (result && result.workflowStatus === 404) {
+      const fallbackRef = await resolveFallbackRef(result.ref)
+      if (fallbackRef) {
+        result = await attemptDispatch(fallbackRef) || result
+      }
+    } else if (!result || !SUCCESS_STATUSES.has(result.repoStatus)) {
+      const fallbackRef = await resolveFallbackRef(result?.ref)
+      if (fallbackRef) {
+        const fallbackResult = await attemptDispatch(fallbackRef)
+        if (fallbackResult) {
+          result = fallbackResult
+        }
+      }
+    }
+
+    if (!result) {
+      return { status: 502, body: { ok: false, error: 'GitHub refused the sync request.', hint: buildHintFromStatus(0), repoDispatchStatus: 0, owner, repo, ref: initialRef || DEFAULT_DISPATCH_REF } }
+    }
+
+    const repoDispatchStatus = result.repoStatus || 0
+    const hint = buildHintFromStatus(repoDispatchStatus)
+
+    if (!SUCCESS_STATUSES.has(repoDispatchStatus)) {
+      const body = await result.repoResponse.text().catch(() => '')
+      console.warn('[sync-now] repository_dispatch failed', { repoDispatchStatus, body })
+      return { status: 502, body: { ok: false, error: 'GitHub refused the sync request.', hint, repoDispatchStatus, owner, repo, ref: result.ref } }
+    }
+
+    return { status: 200, body: { ok: true, repoDispatchStatus, owner, repo, ref: result.ref, hint } }
   } catch (error) {
     console.error('[sync-now] unexpected error contacting GitHub', error)
     return { status: 502, body: { ok: false, error: 'Failed to reach GitHub.',
-      hint: 'Network error while contacting GitHub. Try again in a moment.', owner, repo, ref } }
+      hint: 'Network error while contacting GitHub. Try again in a moment.', owner, repo, ref: initialRef || DEFAULT_DISPATCH_REF } }
   }
 }
 

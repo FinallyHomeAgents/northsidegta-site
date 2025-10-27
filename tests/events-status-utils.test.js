@@ -29,17 +29,25 @@ test('resolveSourceType respects manual preserved source', () => {
   assert.equal(source, 'manual')
 })
 
-test('resolveStatusForSync auto-approves new feed events', () => {
+test('resolveStatusForSync keeps new feed events pending', () => {
   const status = resolveStatusForSync({ incomingEvent: { source: { id: 'abc' } } })
-  assert.equal(status, 'approved')
+  assert.equal(status, 'pending')
 })
 
-test('resolveStatusForSync upgrades previously pending feed events', () => {
+test('resolveStatusForSync downgrades previously approved feed events', () => {
   const status = resolveStatusForSync({
-    preservedEvent: { status: 'pending', source: 'feed' },
+    preservedEvent: { status: 'approved', source: 'feed' },
     incomingEvent: { source: { id: 'abc' } },
   })
-  assert.equal(status, 'approved')
+  assert.equal(status, 'pending')
+})
+
+test('resolveStatusForSync preserves published feed overrides', () => {
+  const status = resolveStatusForSync({
+    preservedEvent: { status: 'published', source: 'feed' },
+    incomingEvent: { source: { id: 'abc' } },
+  })
+  assert.equal(status, 'published')
 })
 
 test('resolveStatusForSync keeps manual pending events pending', () => {
@@ -48,6 +56,14 @@ test('resolveStatusForSync keeps manual pending events pending', () => {
     incomingEvent: { source: 'manual' },
   })
   assert.equal(status, 'pending')
+})
+
+test('resolveStatusForSync allows manual promotion for manual events', () => {
+  const status = resolveStatusForSync({
+    preservedEvent: { status: 'pending', source: 'manual' },
+    incomingEvent: { status: 'published', source: 'manual' },
+  })
+  assert.equal(status, 'published')
 })
 
 test('resolveStatusForSync preserves archived state', () => {
