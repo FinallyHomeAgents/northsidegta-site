@@ -22,17 +22,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-10-27/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10010900-1761566400-1761580800@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-26T08:30:15.416Z",
-  "firstSeenAt": "2025-10-25T08:29:42.261Z",
-  "updatedAt": "2025-10-26T08:30:15.416Z",
-  "featured": false
+  "updatedAt": "2025-10-26T08:30:15Z"
 }

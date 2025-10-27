@@ -106,16 +106,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/newmarket-culture-days-step-into-the-world-of-5000-years-of-asian-culture-special-exhibition-presented-by-the-toronto-cultural-mingle-association-tcma-at-the-elman-w-campbell-museum/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014187-1760608800-1761840000@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-26T08:30:15.416Z",
-  "updatedAt": "2025-10-26T08:30:15.416Z",
-  "featured": false
+  "updatedAt": "2025-10-26T08:30:15Z"
 }

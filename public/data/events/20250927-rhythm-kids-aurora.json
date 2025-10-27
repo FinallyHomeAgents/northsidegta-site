@@ -358,16 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/rhythm-kids-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002653-1758931200-1763855999@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-24T08:34:38.915Z",
-  "updatedAt": "2025-10-24T08:34:38.915Z",
-  "featured": false
+  "updatedAt": "2025-10-24T08:34:38Z"
 }
