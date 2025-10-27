@@ -1,36 +1,36 @@
 {
-  "locationName": "Laugh Out Loud Indoor Playground",
-  "archived": false,
-  "priceType": "Mixed",
-  "summary": "On November 9, step into a cozy autumn tea party at Laugh Out Loud Indoor Playground. Enjoy delicious teas, treats, and a fun bonding activity where you’ll create a keepsake together. It’s the perfect way to celebrate the season and share quality time.",
-  "endDate": "2025-11-07T00:30:00Z",
-  "hidden": false,
   "slug": "20251106-mother-038-daughter-date-night-whitchurch-stouffville",
-  "featured": false,
-  "updatedAt": "2025-10-24T08:34:38Z",
-  "badges": [
-    "Family-friendly"
-  ],
-  "startDate": "2025-11-06T23:00:00Z",
-  "town": "Stouffville",
-  "status": "approved",
-  "address": "50 Innovator Ave, Whitchurch-Stouffville, ON, MT, L4A 0Y2",
-  "eventUrl": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
-  "use_daily_schedule": false,
   "title": "Mother & Daughter Date Night",
-  "sourceRef": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
-  "source": "feed",
-  "priceNote": "$50",
-  "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/lolplaygrounds-mother-daughter-event-header.avif",
-  "allDay": false,
+  "summary": "On November 9, step into a cozy autumn tea party at Laugh Out Loud Indoor Playground. Enjoy delicious teas, treats, and a fun bonding activity where you’ll create a keepsake together. It’s the perfect way to celebrate the season and share quality time.",
   "description": "On November 6, step into a cozy autumn tea party at Laugh Out Loud Indoor Playground. Enjoy delicious teas, treats, and a fun bonding activity where you’ll create a keepsake together. It’s the perfect way to celebrate the season and share quality time.",
+  "startDate": "2025-11-06T23:00:00Z",
+  "endDate": "2025-11-07T00:30:00Z",
+  "allDay": false,
+  "use_daily_schedule": false,
   "daily_schedule": [
     {
-      "all_day": false,
       "date": "2025-11-06",
+      "all_day": false,
       "start_time": "18:00",
       "end_time": "19:30"
     }
   ],
-  "category": "Family"
+  "category": "Family",
+  "town": "Stouffville",
+  "locationName": "Laugh Out Loud Indoor Playground",
+  "address": "50 Innovator Ave, Whitchurch-Stouffville, ON, MT, L4A 0Y2",
+  "priceType": "Mixed",
+  "priceNote": "$50",
+  "badges": [
+    "Family-friendly"
+  ],
+  "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/lolplaygrounds-mother-daughter-event-header.avif",
+  "eventUrl": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "approved",
+  "source": "feed",
+  "sourceRef": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
+  "updatedAt": "2025-10-24T08:34:38Z"
 }
