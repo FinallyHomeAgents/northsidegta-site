@@ -3,11 +3,24 @@
 const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
+const imageSizeModule = require("image-size");
+const imageSize =
+  typeof imageSizeModule === "function"
+    ? imageSizeModule
+    : imageSizeModule.imageSize || imageSizeModule.default;
 
 const DEFAULT_SUBHEADLINE =
   "Bigger lots, more value, and less traffic — get the listings now.";
 const DEFAULT_ORIGIN = process.env.SITE_ORIGIN || "https://northsidegta.ca";
 const DEFAULT_HERO = "/Images/northside-map.svg";
+const MIME_TYPE_LOOKUP = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif",
+  svg: "image/svg+xml",
+};
 
 const rootDir = path.resolve(__dirname, "..");
 const publicDir = path.join(rootDir, "public");
@@ -137,12 +150,15 @@ function computeMeta(data, slug, origin) {
     cleanString(data.seoDescription) || subheadline
   );
   const heroImageValue = cleanString(data.heroImage) || DEFAULT_HERO;
+  const heroImageDetails = resolveImageDetails(heroImageValue);
   const slugTextSource = cleanString(data.slug) || slug;
   const heroAltBase =
     headline || slugTextSource.replace(/[-_]+/g, " ").trim() || "NorthSide GTA";
 
   const canonicalUrl = buildUrl(origin, `/collections/${encodeSlug(slug)}`);
-  const ogImage = absoluteUrl(origin, heroImageValue);
+  const ogImageRaw = absoluteUrl(origin, heroImageValue);
+  const ogImageSecure = ensureSecureUrl(ogImageRaw);
+  const ogImage = ogImageSecure || ogImageRaw;
   const pageTitle = `${headline} • NorthSide GTA`;
   const heroAltText = `${heroAltBase} hero image`;
   const twitterCard = ogImage ? "summary_large_image" : "summary";
@@ -154,6 +170,11 @@ function computeMeta(data, slug, origin) {
     seoDescription,
     canonicalUrl,
     ogImage,
+    ogImageOriginal: ogImageRaw,
+    ogImageSecureUrl: ogImageSecure,
+    ogImageType: heroImageDetails.mimeType,
+    ogImageWidth: heroImageDetails.width,
+    ogImageHeight: heroImageDetails.height,
     heroAltText,
     twitterCard,
   };
@@ -214,6 +235,31 @@ function buildHtml(template, doctypeValue, meta) {
       head,
       `<meta property="og:image" content="${escapeAttribute(meta.ogImage)}" />`
     );
+    const secureContent = meta.ogImageSecureUrl || meta.ogImage;
+    if (secureContent) {
+      append(
+        head,
+        `<meta property="og:image:secure_url" content="${escapeAttribute(secureContent)}" />`
+      );
+    }
+    if (meta.ogImageType) {
+      append(
+        head,
+        `<meta property="og:image:type" content="${escapeAttribute(meta.ogImageType)}" />`
+      );
+    }
+    if (meta.ogImageWidth > 0) {
+      append(
+        head,
+        `<meta property="og:image:width" content="${escapeAttribute(String(meta.ogImageWidth))}" />`
+      );
+    }
+    if (meta.ogImageHeight > 0) {
+      append(
+        head,
+        `<meta property="og:image:height" content="${escapeAttribute(String(meta.ogImageHeight))}" />`
+      );
+    }
     append(
       head,
       `<meta property="og:image:alt" content="${escapeAttribute(meta.heroAltText)}" />`
@@ -240,6 +286,24 @@ function buildHtml(template, doctypeValue, meta) {
       head,
       `<meta name="twitter:image" content="${escapeAttribute(meta.ogImage)}" />`
     );
+    if (meta.ogImageType) {
+      append(
+        head,
+        `<meta name="twitter:image:type" content="${escapeAttribute(meta.ogImageType)}" />`
+      );
+    }
+    if (meta.ogImageWidth > 0) {
+      append(
+        head,
+        `<meta name="twitter:image:width" content="${escapeAttribute(String(meta.ogImageWidth))}" />`
+      );
+    }
+    if (meta.ogImageHeight > 0) {
+      append(
+        head,
+        `<meta name="twitter:image:height" content="${escapeAttribute(String(meta.ogImageHeight))}" />`
+      );
+    }
     append(
       head,
       `<meta name="twitter:image:alt" content="${escapeAttribute(meta.heroAltText)}" />`
@@ -290,6 +354,79 @@ function absoluteUrl(origin, value) {
   }
   const normalized = value.startsWith("/") ? value : `/${value}`;
   return buildUrl(origin, normalized);
+}
+
+function ensureSecureUrl(url) {
+  if (!url) return "";
+  if (!/^https?:/i.test(url) && url.startsWith("//")) {
+    return `https:${url}`;
+  }
+  if (/^http:\/\//i.test(url)) {
+    try {
+      const parsed = new URL(url);
+      parsed.protocol = "https:";
+      return parsed.toString();
+    } catch (error) {
+      return url.replace(/^http:/i, "https:");
+    }
+  }
+  return url.startsWith("https://") ? url : "";
+}
+
+function resolveImageDetails(value) {
+  const details = { mimeType: "", width: 0, height: 0 };
+  if (!value) {
+    return details;
+  }
+
+  const localPath = value.startsWith("/") ? value.slice(1) : value;
+  const candidate = path.join(publicDir, localPath);
+
+  if (fs.existsSync(candidate) && typeof imageSize === "function") {
+    try {
+      const fileBuffer = fs.readFileSync(candidate);
+      const typedArray =
+        fileBuffer instanceof Uint8Array ? fileBuffer : new Uint8Array(fileBuffer);
+      const size = imageSize(typedArray);
+      if (size && typeof size.width === "number") {
+        details.width = size.width;
+      }
+      if (size && typeof size.height === "number") {
+        details.height = size.height;
+      }
+      if (size && typeof size.type === "string" && size.type.trim()) {
+        details.mimeType = normalizeMimeType(size.type);
+      }
+    } catch (error) {
+      // Ignore failures and fall back to extension-based detection below.
+    }
+  }
+
+  if (!details.mimeType) {
+    details.mimeType = inferMimeTypeFromPath(value);
+  }
+
+  return details;
+}
+
+function normalizeMimeType(rawType) {
+  if (!rawType) return "";
+  const lower = rawType.trim().toLowerCase();
+  if (MIME_TYPE_LOOKUP[lower]) {
+    return MIME_TYPE_LOOKUP[lower];
+  }
+  if (lower.startsWith("image/")) {
+    return lower;
+  }
+  return `image/${lower}`;
+}
+
+function inferMimeTypeFromPath(value) {
+  if (!value) return "";
+  const match = /\.([a-z0-9]+)(?:[?#].*)?$/i.exec(value);
+  if (!match) return "";
+  const extension = match[1].toLowerCase();
+  return MIME_TYPE_LOOKUP[extension] || `image/${extension}`;
 }
 
 function append(node, html) {

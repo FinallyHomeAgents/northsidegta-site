@@ -22,6 +22,41 @@ const HERO_BACKGROUND = "/Images/northside-map.svg";
 const DEFAULT_SUBHEADLINE =
   "Bigger lots, more value, and less traffic — get the listings now.";
 
+const MIME_LOOKUP = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif",
+  svg: "image/svg+xml",
+};
+
+function ensureSecureUrl(url) {
+  if (!url) return "";
+  if (!/^https?:/i.test(url) && url.startsWith("//")) {
+    return `https:${url}`;
+  }
+  if (/^http:\/\//i.test(url)) {
+    try {
+      const parsed = new URL(url);
+      parsed.protocol = "https:";
+      return parsed.toString();
+    } catch (error) {
+      return url.replace(/^http:/i, "https:");
+    }
+  }
+  return url.startsWith("https://") ? url : "";
+}
+
+function guessImageMimeType(value) {
+  if (!value) return "";
+  const match = /\.([a-z0-9]+)(?:[?#].*)?$/i.exec(value);
+  if (!match) return "";
+  const ext = match[1].toLowerCase();
+  if (MIME_LOOKUP[ext]) return MIME_LOOKUP[ext];
+  return `image/${ext}`;
+}
+
 export default function CuratedPage() {
   const { slug } = useParams();
   const { page, err } = useCurated(slug);
@@ -42,7 +77,10 @@ export default function CuratedPage() {
     const normalized = path.startsWith("/") ? path : `/${path}`;
     return `${site.replace(/\/$/, "")}${normalized}`;
   };
-  const ogImage = absoluteUrl(heroImageSrc);
+  const ogImageRaw = absoluteUrl(heroImageSrc);
+  const ogImageSecure = ensureSecureUrl(ogImageRaw);
+  const ogImage = ogImageSecure || ogImageRaw;
+  const ogImageType = guessImageMimeType(heroImageSrc || ogImageRaw);
 
   const legacyTitle =
     (typeof page.title === "string" && page.title.trim()) ||
@@ -90,12 +128,17 @@ export default function CuratedPage() {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         {ogImage && <meta property="og:image" content={ogImage} />}
+        {(ogImageSecure || ogImage) && (
+          <meta property="og:image:secure_url" content={ogImageSecure || ogImage} />
+        )}
+        {ogImageType && <meta property="og:image:type" content={ogImageType} />}
         {ogImage && <meta property="og:image:alt" content={heroAltText} />}
         <meta name="twitter:card" content={twitterCardType} />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={seoDescription} />
         <meta name="twitter:url" content={canonicalUrl} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
+        {ogImageType && <meta name="twitter:image:type" content={ogImageType} />}
         {ogImage && <meta name="twitter:image:alt" content={heroAltText} />}
       </Helmet>
 
