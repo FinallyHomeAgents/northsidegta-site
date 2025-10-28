@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/lolplaygrounds-mother-daughter-event-header.avif",
   "eventUrl": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/mother-daughter-date-night/",
-  "lastSyncedAt": "2025-10-28T08:35:54.214Z",
-  "updatedAt": "2025-10-28T08:35:54.214Z",
-  "featured": false
+  "updatedAt": "2025-10-28T08:35:54Z"
 }
