@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { CANONICAL_TESTIMONIALS } from "../../data/testimonials";
+import { getEnvValue } from "../../utils/env";
 
 const CONTACT_JSON_PATH = "/data/contact-page.json";
 
@@ -84,14 +85,6 @@ const DEFAULT_CONFIG = {
     ],
   },
 };
-
-function envValue(key) {
-  return (
-    (process.env[`REACT_APP_${key}`] || process.env[key] || "")
-      .toString()
-      .trim()
-  );
-}
 
 function normalizeConfig(raw = {}) {
   const merged = {
@@ -204,11 +197,11 @@ export function useContactConfig() {
 
 export function useContactChannels(config) {
   return useMemo(() => {
-    const phone = envValue("PUBLIC_PHONE");
-    const sms = envValue("PUBLIC_SMS") || phone;
-    const whatsappNumber = envValue("PUBLIC_WHATSAPP_NUMBER") || config?.defaultWhatsAppNumber;
-    const instagramUrl = envValue("PUBLIC_INSTAGRAM_URL");
-    const facebookUrl = envValue("PUBLIC_FACEBOOK_URL");
+    const phone = getEnvValue("PUBLIC_PHONE");
+    const sms = getEnvValue("PUBLIC_SMS") || phone;
+    const whatsappNumber = getEnvValue("PUBLIC_WHATSAPP_NUMBER") || config?.defaultWhatsAppNumber;
+    const instagramUrl = getEnvValue("PUBLIC_INSTAGRAM_URL");
+    const facebookUrl = getEnvValue("PUBLIC_FACEBOOK_URL");
     const conciergeLabel = config?.whatsappConciergeLabel;
 
     const baseMessage =
@@ -254,17 +247,17 @@ export function useContactChannels(config) {
 }
 
 export function getFormEndpoint() {
-  const directUrl = envValue("FORMSPREE_CONTACT_URL");
+  const directUrl = getEnvValue("FORMSPREE_CONTACT_URL");
   if (directUrl) return directUrl;
-  const formId = envValue("FORMSPREE_CONTACT_ID");
+  const formId = getEnvValue("FORMSPREE_CONTACT_ID");
   if (formId) return `https://formspree.io/f/${formId}`;
   return "https://formspree.io/f/mwpborow";
 }
 
 export function getContactFeatureEnabled() {
-  const flagValue = envValue("CONTACT_V2").toLowerCase();
-  const vercelEnv = envValue("VERCEL_ENV").toLowerCase() || envValue("NEXT_PUBLIC_VERCEL_ENV").toLowerCase();
-  const reactAppVercel = envValue("REACT_APP_VERCEL_ENV").toLowerCase();
+  const flagValue = getEnvValue("CONTACT_V2").toLowerCase();
+  const vercelEnv = getEnvValue("VERCEL_ENV").toLowerCase() || getEnvValue("NEXT_PUBLIC_VERCEL_ENV").toLowerCase();
+  const reactAppVercel = getEnvValue("REACT_APP_VERCEL_ENV").toLowerCase();
   const isPreview = [vercelEnv, reactAppVercel].some((v) => v === "preview");
 
   if (flagValue === "false" || flagValue === "0") return false;
@@ -273,10 +266,10 @@ export function getContactFeatureEnabled() {
 }
 
 export function getJsonLd(config) {
-  const phone = envValue("PUBLIC_PHONE");
-  const instagramUrl = envValue("PUBLIC_INSTAGRAM_URL");
-  const facebookUrl = envValue("PUBLIC_FACEBOOK_URL");
-  const whatsappNumber = envValue("PUBLIC_WHATSAPP_NUMBER");
+  const phone = getEnvValue("PUBLIC_PHONE");
+  const instagramUrl = getEnvValue("PUBLIC_INSTAGRAM_URL");
+  const facebookUrl = getEnvValue("PUBLIC_FACEBOOK_URL");
+  const whatsappNumber = getEnvValue("PUBLIC_WHATSAPP_NUMBER");
 
   const sameAs = [instagramUrl, facebookUrl].filter(Boolean);
 

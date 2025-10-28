@@ -68,6 +68,113 @@ collections:
         required: false
         hint: 'Optional: only needed if older automations depend on the original title field.'
 
+  - name: 'insights'
+    label: 'Insights'
+    label_singular: 'Insight'
+    folder: 'public/content/insights'
+    create: true
+    path: '{{slug}}/index'
+    slug: '{{slug}}'
+    extension: 'md'
+    format: 'frontmatter'
+    media_folder: 'public/uploads/insights'
+    public_folder: '/uploads/insights'
+    editor:
+      preview: true
+    fields:
+      - name: 'title'
+        label: 'Title'
+        widget: 'string'
+      - name: 'publishDate'
+        label: 'Publish Date'
+        widget: 'datetime'
+        time_format: false
+      - name: 'author'
+        label: 'Author'
+        widget: 'string'
+      - name: 'excerpt'
+        label: 'Excerpt'
+        widget: 'text'
+        hint: 'Used for SEO and social previews (150–160 characters recommended).'
+      - name: 'tags'
+        label: 'Tags'
+        widget: 'list'
+        allow_add: true
+        summary: '{{fields.item}}'
+        field:
+          name: 'item'
+          label: 'Tag'
+          widget: 'string'
+      - name: 'featureImage'
+        label: 'Feature Image'
+        widget: 'image'
+        media_folder: ''
+        public_folder: ''
+        hint: 'Upload a horizontal image (1200×630 recommended). Stored in /uploads/insights.'
+      - name: 'featureImageAlt'
+        label: 'Feature Image Alt'
+        widget: 'string'
+      - name: 'featureImageCredit'
+        label: 'Feature Image Credit'
+        widget: 'string'
+        required: false
+      - name: 'body'
+        label: 'Body'
+        widget: 'markdown'
+        buttons:
+          [
+            'bold',
+            'italic',
+            'link',
+            'heading-two',
+            'heading-three',
+            'quote',
+            'bulleted-list',
+            'numbered-list',
+            'code',
+            'image'
+          ]
+        editor_components: ['image']
+      - name: 'gallery'
+        label: 'Gallery'
+        widget: 'list'
+        required: false
+        summary: '{{fields.image}}'
+        fields:
+          - name: 'image'
+            label: 'Image'
+            widget: 'image'
+            media_folder: ''
+            public_folder: ''
+          - name: 'alt'
+            label: 'Alt Text'
+            widget: 'string'
+            required: false
+          - name: 'caption'
+            label: 'Caption'
+            widget: 'string'
+            required: false
+      - name: 'seo'
+        label: 'SEO Overrides'
+        widget: 'object'
+        required: false
+        collapsed: true
+        fields:
+          - name: 'title'
+            label: 'Custom Title'
+            widget: 'string'
+            required: false
+          - name: 'description'
+            label: 'Custom Description'
+            widget: 'text'
+            required: false
+          - name: 'ogImage'
+            label: 'Custom OG Image'
+            widget: 'image'
+            required: false
+            media_folder: ''
+            public_folder: ''
+
   - name: 'contact-page'
     label: 'Contact Page'
     files:
