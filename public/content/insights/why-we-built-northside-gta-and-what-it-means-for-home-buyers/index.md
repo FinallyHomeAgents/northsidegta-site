@@ -1,5 +1,6 @@
 ---
 title: Why We Built NorthSide GTA — and What It Means for Home Buyers
+slug: why-we-built-northside-gta-and-what-it-means-for-home-buyers
 publishDate: 2025-10-28T15:03:00-04:00
 author: Landon Mulhall & Matthew Mulhall
 excerpt: >-
@@ -20,9 +21,10 @@ tags:
   - matthew mulhall
   - landon mulhall
 featureImage: /uploads/insights/greenway-map-overview.jpg
-featureImageAlt: /uploads/insights/greenway-map-overview.jpg
+featureImageAlt: Map showing NorthSide GTA towns stretching north of Toronto
 gallery:
   - image: /uploads/insights/greenway-map-overview.jpg
+    alt: Map showing NorthSide GTA towns stretching north of Toronto
 ---
 **Why We Built NorthSide GTA and What It Means for Home Buyers**
 

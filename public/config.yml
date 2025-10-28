@@ -551,44 +551,86 @@ collections:
     public_folder: '/uploads/insights'
     preview_path: 'insights/{{slug}}'
     summary: '{{title}} — {{publishDate}}'
+    identifier_field: 'slug'
     fields:
-      - { name: 'title', label: 'Title' }
+      - name: 'title'
+        label: 'Title'
+        hint: 'Main headline shown on the page and cards. Keep it clear and under ~80 characters.'
+      - name: 'slug'
+        label: 'Slug (URL ending)'
+        widget: 'string'
+        pattern:
+          - '^[a-z0-9-]+$'
+          - 'Use lowercase words separated by dashes (no spaces or special characters).'
+        hint: 'Determines the live URL: https://northsidegta.ca/insights/<slug>. Match the folder name if editing an existing post.'
       - name: 'publishDate'
         label: 'Publish Date'
         widget: 'datetime'
         format: 'YYYY-MM-DDTHH:mm:ssZ'
-      - { name: 'author', label: 'Author' }
+        hint: 'Set when the insight should appear live; this date shows on the page and controls ordering.'
+      - name: 'author'
+        label: 'Author'
+        hint: 'Name displayed below the title (e.g., Matthew Mulhall).'
       - name: 'excerpt'
         label: 'Excerpt (SEO)'
         widget: 'text'
+        hint: 'Write a 1–2 sentence summary (about 140–160 characters) for SEO and list previews.'
       - name: 'tags'
         label: 'Tags'
         widget: 'list'
         required: true
+        hint: 'Add at least one topical tag (e.g., Aurora, Market Intel). Press enter after each tag.'
       - name: 'featureImage'
         label: 'Feature Image Path'
         widget: 'string'
-        hint: 'Enter a path such as /uploads/insights/example-hero.jpg.'
+        hint: 'Upload a hero image to /uploads/insights/ and paste the path (recommended 1920×1080 JPG/PNG).'
       - name: 'featureImageAlt'
         label: 'Feature Image Alt Text'
         widget: 'string'
+        hint: 'Describe the feature image for accessibility and SEO. This text is not shown on the page.'
       - name: 'body'
         label: 'Body'
         widget: 'markdown'
+        hint: 'Write the full article in Markdown. Use headings, lists, and images uploaded to /uploads/insights/.'
       - name: 'gallery'
         label: 'Gallery'
         widget: 'list'
         required: false
         summary: '{{fields.image}}'
+        hint: 'Optional supplemental images shown after the article.'
         fields:
-          - { name: 'image', label: 'Image Path', widget: 'string' }
-          - { name: 'alt', label: 'Alt Text', widget: 'string', required: false }
-          - { name: 'caption', label: 'Caption', widget: 'text', required: false }
+          - name: 'image'
+            label: 'Image Path'
+            widget: 'string'
+            hint: 'Path to the gallery image (e.g., /uploads/insights/example.jpg). Aim for 1600×900 or larger.'
+          - name: 'alt'
+            label: 'Alt Text'
+            widget: 'string'
+            required: false
+            hint: 'Short description of the gallery image for accessibility.'
+          - name: 'caption'
+            label: 'Caption'
+            widget: 'text'
+            required: false
+            hint: 'Optional caption displayed below the gallery image.'
       - label: 'SEO Overrides'
         name: 'seo'
         widget: 'object'
         required: false
+        hint: 'Use only if you need to override the default SEO settings.'
         fields:
-          - { name: 'title', label: 'Custom SEO Title', widget: 'string', required: false }
-          - { name: 'description', label: 'Custom Description', widget: 'text', required: false }
-          - { name: 'ogImage', label: 'OG Image Path', widget: 'string', required: false }
+          - name: 'title'
+            label: 'Custom SEO Title'
+            widget: 'string'
+            required: false
+            hint: 'Optional: replaces the default SEO title when sharing links.'
+          - name: 'description'
+            label: 'Custom Description'
+            widget: 'text'
+            required: false
+            hint: 'Optional: overrides the excerpt for meta descriptions (about 155 characters).'
+          - name: 'ogImage'
+            label: 'OG Image Path'
+            widget: 'string'
+            required: false
+            hint: 'Optional: social sharing image path if different from the feature image (1200×630 recommended).'
