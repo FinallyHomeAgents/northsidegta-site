@@ -25,3 +25,99 @@ body {
   height: 50svh;       /* ~half the screen, safe on iPhone */
   width: 100%;
 }
+
+.insight-content {
+  color: #1f2937;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.insight-content p {
+  margin: 0;
+}
+
+.insight-content h2,
+.insight-content h3,
+.insight-content h4 {
+  font-weight: 600;
+  color: #0f172a;
+  margin: 2.5rem 0 1.25rem;
+}
+
+.insight-content h2 {
+  font-size: 2rem;
+}
+
+.insight-content h3 {
+  font-size: 1.5rem;
+}
+
+.insight-content h4 {
+  font-size: 1.25rem;
+}
+
+.insight-content ul,
+.insight-content ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.insight-content a {
+  color: #047857;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.insight-content blockquote {
+  margin: 0;
+  padding: 1.5rem;
+  border-left: 4px solid #34d399;
+  background: rgba(209, 250, 229, 0.35);
+  border-radius: 1.25rem;
+  color: #065f46;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.insight-content .insight-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.insight-content .insight-figure img {
+  width: 100%;
+  border-radius: 1.5rem;
+  box-shadow: 0 30px 70px rgba(15, 118, 110, 0.15);
+}
+
+.insight-content .insight-figure__caption {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .insight-content {
+    font-size: 1rem;
+    gap: 1.25rem;
+  }
+
+  .insight-content h2 {
+    font-size: 1.75rem;
+  }
+
+  .insight-content h3 {
+    font-size: 1.35rem;
+  }
+
+  .insight-content h4 {
+    font-size: 1.15rem;
+  }
+}

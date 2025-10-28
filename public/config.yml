@@ -537,3 +537,58 @@ collections:
         label: 'Consent'
         widget: 'boolean'
         required: false
+
+  - name: 'insights'
+    label: 'Insights'
+    label_singular: 'Insight'
+    folder: 'public/content/insights'
+    create: true
+    slug: '{{slug}}'
+    path: '{{slug}}/index'
+    extension: 'md'
+    format: 'frontmatter'
+    media_folder: 'public/uploads/insights'
+    public_folder: '/uploads/insights'
+    preview_path: 'insights/{{slug}}'
+    summary: '{{title}} — {{publishDate}}'
+    fields:
+      - { name: 'title', label: 'Title' }
+      - name: 'publishDate'
+        label: 'Publish Date'
+        widget: 'datetime'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
+      - { name: 'author', label: 'Author' }
+      - name: 'excerpt'
+        label: 'Excerpt (SEO)'
+        widget: 'text'
+      - name: 'tags'
+        label: 'Tags'
+        widget: 'list'
+        required: true
+      - name: 'featureImage'
+        label: 'Feature Image Path'
+        widget: 'string'
+        hint: 'Enter a path such as /uploads/insights/example-hero.jpg.'
+      - name: 'featureImageAlt'
+        label: 'Feature Image Alt Text'
+        widget: 'string'
+      - name: 'body'
+        label: 'Body'
+        widget: 'markdown'
+      - name: 'gallery'
+        label: 'Gallery'
+        widget: 'list'
+        required: false
+        summary: '{{fields.image}}'
+        fields:
+          - { name: 'image', label: 'Image Path', widget: 'string' }
+          - { name: 'alt', label: 'Alt Text', widget: 'string', required: false }
+          - { name: 'caption', label: 'Caption', widget: 'text', required: false }
+      - label: 'SEO Overrides'
+        name: 'seo'
+        widget: 'object'
+        required: false
+        fields:
+          - { name: 'title', label: 'Custom SEO Title', widget: 'string', required: false }
+          - { name: 'description', label: 'Custom Description', widget: 'text', required: false }
+          - { name: 'ogImage', label: 'OG Image Path', widget: 'string', required: false }

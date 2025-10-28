@@ -109,12 +109,91 @@
           return null;
         }
 
+        function formatPreviewDate(value){
+          if (!value) return '';
+          try {
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' });
+          } catch (err) {
+            return '';
+          }
+        }
+
+        function registerInsightsPreview(){
+          if (window.__insightsPreviewRegistered) return;
+          if (!window.CMS || typeof window.createClass !== 'function' || typeof window.h !== 'function') {
+            return setTimeout(registerInsightsPreview, 50);
+          }
+
+          const { createClass, h } = window;
+
+          const InsightPreview = createClass({
+            render: function () {
+              const entry = this.props.entry;
+              const data = entry && entry.get ? entry.get('data') : null;
+              const body = this.props.widgetFor ? this.props.widgetFor('body') : null;
+              const title = data && data.get ? data.get('title') : '';
+              const author = data && data.get ? data.get('author') : '';
+              const publishDate = data && data.get ? data.get('publishDate') : '';
+              const excerpt = data && data.get ? data.get('excerpt') : '';
+              const featureImage = data && data.get ? data.get('featureImage') : '';
+              const featureImageAlt = data && data.get ? data.get('featureImageAlt') : '';
+              const metaPieces = [author, formatPreviewDate(publishDate)].filter(Boolean);
+
+              return h('div', { className: 'insight-preview-root' }, [
+                h('section', {
+                  className: 'insight-preview-hero',
+                  style: featureImage ? { backgroundImage: `url(${featureImage})` } : {},
+                }, [
+                  h('div', { className: 'insight-preview-hero-overlay' }),
+                  h('div', { className: 'insight-preview-hero-watermark' }),
+                  h('div', { className: 'insight-preview-hero-content' }, [
+                    h('span', { className: 'insight-preview-kicker' }, 'NorthSide GTA Insights'),
+                    h('h1', { className: 'insight-preview-title' }, title || 'Insight title'),
+                    metaPieces.length
+                      ? h('p', { className: 'insight-preview-meta' }, metaPieces.join(' • '))
+                      : null,
+                    featureImageAlt ? h('span', { className: 'sr-only' }, featureImageAlt) : null,
+                  ]),
+                ]),
+                h('main', { className: 'insight-preview-main' }, [
+                  excerpt ? h('p', { className: 'insight-preview-excerpt' }, excerpt) : null,
+                  h('div', { className: 'insight-preview-body' }, body),
+                ]),
+              ]);
+            },
+          });
+
+          CMS.registerPreviewStyle(`
+            .insight-preview-root { font-family: 'Blinker', sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; }
+            .insight-preview-hero { position: relative; min-height: 280px; padding: 48px 32px; display: flex; align-items: flex-end; background-size: cover; background-position: center; overflow: hidden; color: #fff; }
+            .insight-preview-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,17,12,0.85) 0%, rgba(4,17,12,0.75) 50%, rgba(4,17,12,0.92) 100%); }
+            .insight-preview-hero-watermark { position: absolute; bottom: 24px; right: 24px; width: 160px; height: 160px; background: url('/Images/northsidegta-logo.svg') center/contain no-repeat; opacity: 0.12; }
+            .insight-preview-hero-content { position: relative; z-index: 1; max-width: 720px; display: grid; gap: 18px; }
+            .insight-preview-kicker { font-size: 11px; letter-spacing: 0.45em; text-transform: uppercase; color: #bbf7d0; font-weight: 600; }
+            .insight-preview-title { margin: 0; font-size: 2.6rem; font-weight: 600; line-height: 1.1; }
+            .insight-preview-meta { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+            .insight-preview-main { max-width: 780px; margin: 48px auto; padding: 0 32px 80px; }
+            .insight-preview-excerpt { font-size: 1.1rem; color: #475569; margin-bottom: 24px; }
+            .insight-preview-body { font-size: 1rem; line-height: 1.7; color: #334155; }
+            .insight-preview-body img { max-width: 100%; border-radius: 24px; box-shadow: 0 30px 70px rgba(15,118,110,0.15); margin: 32px 0; }
+            .insight-preview-body blockquote { margin: 32px 0; padding: 24px; border-left: 4px solid #34d399; background: rgba(209, 250, 229, 0.4); border-radius: 18px; font-style: italic; color: #065f46; }
+            .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+            @media (max-width: 640px) { .insight-preview-title { font-size: 2rem; } .insight-preview-main { padding: 0 20px 60px; } }
+          `, { raw: true });
+
+          CMS.registerPreviewTemplate('insights', InsightPreview);
+          window.__insightsPreviewRegistered = true;
+        }
+
         function bootCMSOnce() {
           if (cmsHasInitialized) return;
           if (!window.CMS || typeof CMS.init !== 'function') {
             return setTimeout(bootCMSOnce, 50);
           }
           CMS.init();
+          registerInsightsPreview();
           cmsHasInitialized = true;
           document.body.classList.add('cms-loaded');
           // ensure a sensible default route
