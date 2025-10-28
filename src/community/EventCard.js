@@ -9,15 +9,21 @@ import {
 import { BADGE_LABELS, formatDateRange, generateIcsContent } from './eventUtils'
 import { getCanonicalEventUrl, shareEvent } from './shareUtils'
 
-function PlaceholderImage() {
+function PlaceholderImage({ variant }) {
+  const isCompact = variant === 'compact'
+
   return (
-    <div className="h-36 w-full rounded-xl bg-gradient-to-br from-slate-200 via-slate-100 to-slate-200 flex items-center justify-center text-slate-500">
-      <CalendarPlus className="h-8 w-8" aria-hidden="true" />
+    <div
+      className={`flex h-full w-full items-center justify-center rounded-lg bg-gradient-to-br from-slate-100 via-white to-slate-100 ${
+        isCompact ? 'p-6' : 'p-8'
+      }`}
+    >
+      <CalendarPlus className="h-8 w-8 text-slate-400" aria-hidden="true" />
     </div>
   )
 }
 
-export default function EventCard({ event, onSelect, highlighted = false }) {
+export default function EventCard({ event, onSelect, highlighted = false, variant = 'default' }) {
   const occurrence = event.nextOccurrence || event.occurrences?.[0]
   const dateLabel = formatDateRange(occurrence, occurrence?.allDay ?? event.allDay)
   const isFree = event.priceType === 'Free'
@@ -90,6 +96,15 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
     ? { target: '_blank', rel: 'noopener noreferrer' }
     : {}
 
+  const isCompact = variant === 'compact'
+
+  const bodySpacing = isCompact ? 'gap-4 p-4' : 'gap-5 p-6'
+  const titleSize = isCompact ? 'text-xl' : 'text-2xl'
+  const summarySize = isCompact ? 'text-sm' : 'text-base'
+  const footerPadding = isCompact ? 'px-4 py-3' : 'px-6 py-4'
+  const detailButtonPadding = isCompact ? 'px-3 py-2' : 'px-4 py-3'
+  const actionButtonPadding = isCompact ? 'px-3 py-2' : 'px-4 py-2'
+
   return (
     <article
       id={event.slug ? `event-${event.slug}` : undefined}
@@ -100,17 +115,21 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
       <div className="sr-only" role="status" aria-live="polite">
         {showToast ? 'Link copied to clipboard' : ''}
       </div>
-      <div className="flex flex-col gap-5 p-6">
-        {event.image ? (
-          <img
-            src={event.image}
-            alt={`${event.title} preview`}
-            className="h-36 w-full rounded-xl object-cover"
-            loading="lazy"
-          />
-        ) : (
-          <PlaceholderImage />
-        )}
+      <div className={`flex flex-col ${bodySpacing}`}>
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className={`aspect-[4/3] w-full ${isCompact ? 'p-2' : 'p-3'} flex items-center justify-center bg-slate-50`}>
+            {event.image ? (
+              <img
+                src={event.image}
+                alt={`${event.title} preview`}
+                className="h-full w-full object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <PlaceholderImage variant={variant} />
+            )}
+          </div>
+        </div>
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-500">
@@ -118,10 +137,10 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
             <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
             <span>{event.category}</span>
           </div>
-          <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h3 className={`${titleSize} font-semibold tracking-tight text-slate-900`}>
             {event.title}
           </h3>
-          {dateLabel && <p className="text-base text-slate-700">{dateLabel}</p>}
+          {dateLabel && <p className="text-sm text-slate-700 sm:text-base">{dateLabel}</p>}
           {event.locationName && (
             <p className="flex items-center gap-2 text-sm text-slate-600">
               <MapPin className="h-4 w-4" aria-hidden="true" />
@@ -131,7 +150,7 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
               </span>
             </p>
           )}
-          {event.summary && <p className="text-sm leading-relaxed text-slate-600">{event.summary}</p>}
+          {event.summary && <p className={`${summarySize} leading-relaxed text-slate-600`}>{event.summary}</p>}
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -182,7 +201,7 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
             <a
               href={eventSiteHref}
               {...eventSiteLinkProps}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+              className={`inline-flex items-center gap-2 rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 ${actionButtonPadding}`}
             >
               Event site
               <EventSiteIcon className="h-4 w-4" aria-hidden="true" />
@@ -192,7 +211,7 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
           <button
             type="button"
             onClick={handleAddToCalendar}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+            className={`inline-flex items-center gap-2 rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 ${actionButtonPadding}`}
           >
             Add to calendar
             <CalendarPlus className="h-4 w-4" aria-hidden="true" />
@@ -203,7 +222,7 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
               href={mapHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+              className={`inline-flex items-center gap-2 rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 ${actionButtonPadding}`}
             >
               Map
               <MapPin className="h-4 w-4" aria-hidden="true" />
@@ -214,7 +233,7 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className={`inline-flex items-center gap-2 rounded-full border border-slate-300 text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${actionButtonPadding}`}
               aria-label={`Share ${event.title}`}
             >
               Share
@@ -230,11 +249,11 @@ export default function EventCard({ event, onSelect, highlighted = false }) {
         </div>
       )}
 
-      <div className="border-t border-slate-200 bg-slate-50 px-6 py-4">
+      <div className={`border-t border-slate-200 bg-slate-50 ${footerPadding}`}>
         <button
           type="button"
           onClick={() => onSelect?.(event)}
-          className="flex w-full items-center justify-between rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+          className={`flex w-full items-center justify-between rounded-xl bg-white text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600 ${detailButtonPadding}`}
           aria-label={`View details for ${event.title}`}
         >
           View details
