@@ -281,7 +281,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {view === 'calendar' ? (
+        {view === 'calendar' && (
           <>
             <div className="mx-auto mb-6 max-w-6xl px-4 pt-8 text-center sm:px-6">
               <p className="text-base font-medium text-slate-600 sm:text-lg">
@@ -296,7 +296,17 @@ export default function CommunityPage() {
               onClear={handleResetFilters}
             />
           </>
-        ) : (
+        )}
+        {view === 'list' && (
+          <CalendarFilterBar
+            selectedCategories={filters.categories}
+            onSelectCategories={(categories) =>
+              setFilters((prev) => ({ ...prev, categories }))
+            }
+            onClear={handleResetFilters}
+          />
+        )}
+        {view === 'map' && (
           <EventFilters filters={filters} onChange={setFilters} onReset={handleResetFilters} />
         )}
 
