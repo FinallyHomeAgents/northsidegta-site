@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Exhibit-Talk.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/exhibit-talk-worthy/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/exhibit-talk-worthy/",
-  "lastSyncedAt": "2025-10-28T08:35:54.214Z",
-  "updatedAt": "2025-10-28T08:35:54.214Z",
-  "featured": false
+  "updatedAt": "2025-10-28T08:35:54Z"
 }
