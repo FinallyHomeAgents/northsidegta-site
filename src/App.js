@@ -17,6 +17,7 @@ import EventsIndexPage  from "./community/admin/EventsIndexPage";
 import EventsArchivePage from "./community/EventsArchivePage";
 import EventDetailPage  from "./community/EventDetailPage";
 import SubmitEventPage  from "./community/SubmitEventPage";
+import InsightPage      from "./insights/InsightPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -67,6 +68,7 @@ function App() {
         <Route path="/vip"          element={<VipPage />} />
         <Route path="/sign"         element={<SignWithUsPage />} />
         <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
+        <Route path="/insights/:slug" element={<InsightPage />} />
 
         {/* Town pages — short URLs like /aurora */}
         {TOWN_SLUGS.sort().map(slug => (
