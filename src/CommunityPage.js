@@ -7,6 +7,7 @@ import Footer from './Footer'
 import EventFilters from './community/EventFilters'
 import EventCard from './community/EventCard'
 import EventCalendar from './community/EventCalendar'
+import CalendarFilterBar from './community/CalendarFilterBar'
 import EventMap from './community/EventMap'
 import EventModal from './community/EventModal'
 import CommunityStories from './community/CommunityStories'
@@ -280,7 +281,24 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        <EventFilters filters={filters} onChange={setFilters} onReset={handleResetFilters} />
+        {view === 'calendar' ? (
+          <>
+            <div className="mx-auto mb-6 max-w-6xl px-4 pt-8 text-center sm:px-6">
+              <p className="text-base font-medium text-slate-600 sm:text-lg">
+                Discover what’s happening across the NorthSide GTA — events, markets, and more.
+              </p>
+            </div>
+            <CalendarFilterBar
+              selectedCategories={filters.categories}
+              onSelectCategories={(categories) =>
+                setFilters((prev) => ({ ...prev, categories }))
+              }
+              onClear={handleResetFilters}
+            />
+          </>
+        ) : (
+          <EventFilters filters={filters} onChange={setFilters} onReset={handleResetFilters} />
+        )}
 
         <section className="mx-auto max-w-6xl px-4 py-10">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
