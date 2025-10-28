@@ -34,12 +34,12 @@ test('resolveStatusForSync keeps new feed events pending', () => {
   assert.equal(status, 'pending')
 })
 
-test('resolveStatusForSync downgrades previously approved feed events', () => {
+test('resolveStatusForSync preserves manual approvals on feed events', () => {
   const status = resolveStatusForSync({
     preservedEvent: { status: 'approved', source: 'feed' },
     incomingEvent: { source: { id: 'abc' } },
   })
-  assert.equal(status, 'pending')
+  assert.equal(status, 'approved')
 })
 
 test('resolveStatusForSync preserves published feed overrides', () => {
