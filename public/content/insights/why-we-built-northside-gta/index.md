@@ -10,8 +10,8 @@ excerpt: >-
 
   Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think.
 tags:
-  - ""
-  - \ homes north of toronto
+  - northside gta
+  - homes north of toronto
   - york region real estate
   - durham region homes
   - aurora real estate
