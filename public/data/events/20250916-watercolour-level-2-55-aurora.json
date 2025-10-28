@@ -442,11 +442,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-level2-55-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002669-1757980800-1764115199@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-24T08:34:38Z"
+  "lastSyncedAt": "2025-10-28T08:35:54.214Z",
+  "updatedAt": "2025-10-28T08:35:54.214Z",
+  "featured": false
 }

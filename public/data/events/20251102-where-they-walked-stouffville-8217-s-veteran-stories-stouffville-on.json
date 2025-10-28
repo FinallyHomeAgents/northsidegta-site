@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Where-they-walked.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/where-they-walked-stouffvilles-veteran-stories/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/where-they-walked-stouffvilles-veteran-stories/",
-  "updatedAt": "2025-10-25T08:29:42Z"
+  "lastSyncedAt": "2025-10-28T08:35:54.214Z",
+  "updatedAt": "2025-10-28T08:35:54.214Z",
+  "featured": false
 }

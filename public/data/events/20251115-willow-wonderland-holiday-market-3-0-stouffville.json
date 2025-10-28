@@ -7,20 +7,6 @@
   "endDate": "2025-11-16T22:00:00Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "daily_schedule": [
-    {
-      "date": "2025-11-15",
-      "all_day": false,
-      "start_time": "11:00",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-16",
-      "all_day": false,
-      "start_time": "11:00",
-      "end_time": "17:00"
-    }
-  ],
   "category": "Outdoors",
   "town": "Stouffville",
   "locationName": "Willow Springs Winery",
@@ -32,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/08/willow-wonderland.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
-  "featured": true,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/willow-wonderland-holiday-market-3-0/",
-  "updatedAt": "2025-10-24T08:34:38Z"
+  "lastSyncedAt": "2025-10-28T08:35:54.214Z",
+  "updatedAt": "2025-10-28T08:35:54.214Z",
+  "featured": true
 }
