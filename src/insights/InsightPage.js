@@ -321,7 +321,8 @@ function Hero({ insight, loading, featureImageAlt }) {
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute bottom-6 right-6 h-48 w-48 bg-[url('/Images/northsidegta-logo.svg')] bg-contain bg-no-repeat opacity-10"
+        className="pointer-events-none absolute bottom-6 right-6 h-48 w-48 bg-contain bg-no-repeat opacity-10"
+        style={{ backgroundImage: "url('/Images/northsidegta-logo.svg')" }}
         role="presentation"
         aria-hidden
       />
