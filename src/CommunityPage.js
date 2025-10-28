@@ -18,6 +18,10 @@ import {
 } from './community/eventUtils'
 
 const VIEW_STORAGE_KEY = 'northside-community-view'
+const monthFormatter = new Intl.DateTimeFormat('en-CA', {
+  month: 'long',
+  year: 'numeric',
+})
 
 function usePersistedView(initialValue) {
   const [view, setView] = React.useState(() => {
@@ -88,6 +92,57 @@ export default function CommunityPage() {
     () => filterEvents(visibleEvents, filters),
     [visibleEvents, filters]
   )
+
+  const monthlyEvents = React.useMemo(() => {
+    if (!filteredEvents.length) return []
+
+    const entries = new Map()
+
+    for (const event of filteredEvents) {
+      const occurrence = event.nextOccurrence || event.occurrences?.[0]
+      const occurrenceDate = occurrence?.start instanceof Date ? occurrence.start : null
+
+      let baseDate = occurrenceDate
+      if (!baseDate && event.startDateObj instanceof Date) {
+        baseDate = event.startDateObj
+      }
+      if (!baseDate && event.startDate) {
+        const parsed = new Date(event.startDate)
+        if (!Number.isNaN(parsed.getTime())) {
+          baseDate = parsed
+        }
+      }
+
+      if (!baseDate) continue
+
+      const baseTime = baseDate.getTime()
+      if (!Number.isFinite(baseTime)) continue
+
+      const monthStart = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1)
+      const monthKey = `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, '0')}`
+
+      if (!entries.has(monthKey)) {
+        entries.set(monthKey, {
+          key: monthKey,
+          label: monthFormatter.format(monthStart),
+          monthStart,
+          events: [],
+        })
+      }
+
+      entries.get(monthKey).events.push({ event, sortDate: baseDate })
+    }
+
+    return Array.from(entries.values())
+      .sort((a, b) => a.monthStart.getTime() - b.monthStart.getTime())
+      .map((entry) => ({
+        key: entry.key,
+        label: entry.label,
+        events: entry.events
+          .sort((a, b) => a.sortDate.getTime() - b.sortDate.getTime())
+          .map((item) => item.event),
+      }))
+  }, [filteredEvents])
 
   const structuredData = React.useMemo(() => getStructuredData(filteredEvents), [filteredEvents])
 
@@ -290,18 +345,30 @@ export default function CommunityPage() {
               )}
 
               {view === 'list' && (
-                <section className="space-y-6">
-                  <div className="grid gap-6 lg:grid-cols-2">
-                    {filteredEvents.map((event) => (
-                      <EventCard
-                        key={event.slug}
-                        event={event}
-                        onSelect={setSelectedEvent}
-                        highlighted={highlightedSlug === event.slug}
-                      />
-                    ))}
-                  </div>
-                  {!filteredEvents.length && emptyState}
+                <section className="space-y-10">
+                  {monthlyEvents.length ? (
+                    monthlyEvents.map((month) => (
+                      <section key={month.key} className="space-y-4">
+                        <div className="flex items-center gap-4">
+                          <h4 className="text-lg font-semibold text-slate-900 sm:text-xl">{month.label}</h4>
+                          <div className="hidden flex-1 border-t border-slate-200 sm:block" aria-hidden="true" />
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                          {month.events.map((event) => (
+                            <EventCard
+                              key={event.slug}
+                              event={event}
+                              onSelect={setSelectedEvent}
+                              highlighted={highlightedSlug === event.slug}
+                              variant="compact"
+                            />
+                          ))}
+                        </div>
+                      </section>
+                    ))
+                  ) : (
+                    emptyState
+                  )}
                 </section>
               )}
 
