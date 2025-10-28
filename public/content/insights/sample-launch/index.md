@@ -1,5 +1,6 @@
 ---
 title: "Exploring Aurora's Greenway Revival"
+slug: sample-launch
 publishDate: 2025-01-18T09:00:00-05:00
 author: "Matthew Mulhall"
 excerpt: "See how Aurora's Greenway Revival is opening new connections across the NorthSide GTA and what it means for buyers eyeing the commuter belt."
