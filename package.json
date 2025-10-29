@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "node scripts/generate-insights-data.js",
     "build": "react-scripts build",
-    "postbuild": "node scripts/generate-insights-data.js && node scripts/generate-curated-html.js && node scripts/generate-sitemap.js && cp build/index.html build/404.html",
+    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-sitemap.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
