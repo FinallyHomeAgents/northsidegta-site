@@ -543,13 +543,14 @@ collections:
     label_singular: 'Insight'
     folder: 'public/content/insights'
     create: true
-    slug: '{{fields.slug}}'
-    path: '{{fields.slug}}/index'
+    slug: '{{slug}}'
+    slug_field: 'slug'
+    path: '{{slug}}/index'
     extension: 'md'
     format: 'frontmatter'
     media_folder: 'public/uploads/insights'
     public_folder: '/uploads/insights'
-    preview_path: 'insights/{{fields.slug}}'
+    preview_path: 'insights/{{slug}}'
     summary: '{{title}} — {{publishDate}}'
     identifier_field: 'slug'
     fields:
