@@ -22,6 +22,18 @@ import {
   Youtube,
 } from "lucide-react";
 
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+class FrontMatterParseError extends Error {
+  constructor(message, path = "", originalError = null) {
+    super(message);
+    this.name = "FrontMatterParseError";
+    this.type = "frontmatter";
+    this.path = path;
+    this.originalError = originalError;
+  }
+}
+
 const markdownRenderer = new marked.Renderer();
 markdownRenderer.image = (href, title, text) => {
   const caption = title ? `<figcaption class="insight-figure__caption">${title}</figcaption>` : "";
@@ -59,7 +71,15 @@ function normalizeGallery(raw) {
 }
 
 function normalizeInsight(content, sourcePath = "") {
-  const { data, content: body = "" } = matter(content || "");
+  let data = {};
+  let body = "";
+  try {
+    const parsed = matter(content || "");
+    data = parsed.data || {};
+    body = parsed.content || "";
+  } catch (error) {
+    throw new FrontMatterParseError(error.message, sourcePath, error);
+  }
   const tags = Array.isArray(data.tags)
     ? data.tags.map((tag) => (tag || "").toString().trim()).filter(Boolean)
     : [];
@@ -116,10 +136,7 @@ function getInsightPathVariants(slug) {
   return [
     `${base}/index.md`,
     `${base}/index.mdx`,
-    `${base}.md`,
-    `${base}.mdx`,
     `${base}/index.markdown`,
-    `${base}.markdown`,
   ];
 }
 
@@ -145,6 +162,7 @@ function useInsight(slugCandidates) {
       setState({ loading: true, insight: null, error: null });
       const attemptedPaths = [];
       let lastError = null;
+      let sawNotFound = false;
 
       outer: for (const candidateSlug of slugs) {
         for (const path of getInsightPathVariants(candidateSlug)) {
@@ -156,17 +174,30 @@ function useInsight(slugCandidates) {
             if (res.ok) {
               const text = await res.text();
               if (cancelled) return;
-              const parsed = normalizeInsight(text, path);
-              const enriched = {
-                ...parsed,
-                slug: parsed.slug || candidateSlug,
-                sourceSlug: candidateSlug,
-              };
-              setState({ loading: false, insight: enriched, error: null });
-              return;
+
+              try {
+                const parsed = normalizeInsight(text, path);
+                const enriched = {
+                  ...parsed,
+                  slug: parsed.slug || candidateSlug,
+                  sourceSlug: candidateSlug,
+                };
+                setState({ loading: false, insight: enriched, error: null });
+                return;
+              } catch (error) {
+                if (cancelled) return;
+                if (error instanceof FrontMatterParseError) {
+                  error.attemptedPaths = attemptedPaths.slice();
+                  setState({ loading: false, insight: null, error });
+                  return;
+                }
+                lastError = error;
+                break outer;
+              }
             }
 
             if (res.status === 404) {
+              sawNotFound = true;
               continue;
             }
 
@@ -186,22 +217,36 @@ function useInsight(slugCandidates) {
       if (cancelled) return;
 
       if (lastError) {
+        if (lastError instanceof FrontMatterParseError) {
+          lastError.attemptedPaths = attemptedPaths;
+          setState({ loading: false, insight: null, error: lastError });
+          return;
+        }
+
         if (lastError.status && lastError.status !== 404) {
+          lastError.type = lastError.type || "http";
           lastError.attemptedPaths = attemptedPaths;
           setState({ loading: false, insight: null, error: lastError });
           return;
         }
 
         if (!lastError.status) {
+          lastError.type = lastError.type || "network";
           lastError.attemptedPaths = attemptedPaths;
           setState({ loading: false, insight: null, error: lastError });
           return;
         }
       }
 
-      const notFoundError = new Error("not_found");
-      notFoundError.attemptedPaths = attemptedPaths;
-      setState({ loading: false, insight: null, error: notFoundError });
+      if (sawNotFound || attemptedPaths.length > 0) {
+        const missingError = new Error("missing_content");
+        missingError.type = "missing";
+        missingError.attemptedPaths = attemptedPaths;
+        setState({ loading: false, insight: null, error: missingError });
+        return;
+      }
+
+      setState({ loading: false, insight: null, error: null });
     }
     load();
     return () => {
@@ -264,6 +309,7 @@ export default function InsightPage() {
   const origin = getSiteOrigin();
   const insightSlug = useMemo(() => normalizeSlug(insight?.slug), [insight?.slug]);
   const canonicalSlug = insightSlug || normalizedSlug;
+  const slugHint = canonicalSlug || decodedSlug || "<slug>";
   const canonicalUrl = useMemo(() => {
     if (!canonicalSlug) return "";
     const safeSlug = encodeURIComponent(canonicalSlug);
@@ -307,6 +353,28 @@ export default function InsightPage() {
   }, [insight?.publishDate]);
 
   const socialLinks = useMemo(() => getSocialLinks(), []);
+  const attemptedPaths = useMemo(
+    () => (Array.isArray(error?.attemptedPaths) ? error.attemptedPaths : []),
+    [error],
+  );
+  const authoringContext = !IS_PRODUCTION;
+
+  let errorTitle = "We couldn’t find that insight.";
+  let errorMessage = "Check the URL or return to the homepage.";
+  if (error?.type === "missing") {
+    errorTitle = "Insight content file is missing.";
+    errorMessage = authoringContext
+      ? `We couldn’t load the markdown file for this insight. Confirm that the CMS published it to public/content/insights/${slugHint}/index.md and that it’s committed to this branch.`
+      : "Check the URL or return to the homepage.";
+  } else if (error instanceof FrontMatterParseError || error?.type === "frontmatter") {
+    errorTitle = "Front-matter parse error.";
+    errorMessage = authoringContext
+      ? "We found the markdown file but the front-matter could not be parsed. Fix the highlighted YAML issue in the file and publish again."
+      : "Something went wrong while loading this insight.";
+  } else if (error?.type === "network" || error?.type === "http") {
+    errorTitle = "Unable to load insight.";
+    errorMessage = "Something went wrong while loading this insight. Please try again.";
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -347,14 +415,29 @@ export default function InsightPage() {
 
           {!loading && error && (
             <div className="rounded-3xl border border-rose-100 bg-white px-6 py-12 text-center text-sm text-rose-600 shadow-lg shadow-rose-50">
-              We couldn’t find that insight. Check the URL or return to the homepage.
-              {Array.isArray(error?.attemptedPaths) && error.attemptedPaths.length > 0 && (
+              <p className="font-semibold">{errorTitle}</p>
+              <p className="mt-3 text-rose-500">{errorMessage}</p>
+              {authoringContext && (error instanceof FrontMatterParseError || error?.type === "frontmatter") && (
+                <div className="mt-4 space-y-2 text-left text-xs text-rose-500">
+                  {error?.path && (
+                    <p>
+                      <strong>File:</strong> <span className="break-all">{error.path}</span>
+                    </p>
+                  )}
+                  {error?.message && (
+                    <p>
+                      <strong>Details:</strong> {error.message}
+                    </p>
+                  )}
+                </div>
+              )}
+              {authoringContext && attemptedPaths.length > 0 && (
                 <details className="mt-4 text-left text-xs text-rose-500">
                   <summary className="cursor-pointer text-rose-600">Technical details</summary>
                   <div className="mt-2 space-y-1">
                     <p>Checked paths:</p>
                     <ul className="list-disc space-y-1 pl-4">
-                      {error.attemptedPaths.map((path) => (
+                      {attemptedPaths.map((path) => (
                         <li key={path} className="break-all">{path}</li>
                       ))}
                     </ul>
