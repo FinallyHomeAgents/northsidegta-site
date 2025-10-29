@@ -1,6 +1,6 @@
 ---
 title: Why We Built NorthSide GTA — and What It Means for Home Buyers
-slug: why-we-built-northside-gta
+slug: why-we-built-northsidegta
 publishDate: 2025-10-28T15:52:00-04:00
 author: Landon Mulhall & Matthew Mulhall
 excerpt: >-
