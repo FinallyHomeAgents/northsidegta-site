@@ -1,30 +1,17 @@
 ---
-title: Why We Built NorthSide GTA — and What It Means for Home Buyers
-slug: why-we-built-northside-gta
-publishDate: 2025-10-28T15:52:00-04:00
-author: Landon Mulhall & Matthew Mulhall
-excerpt: >-
-  We created NorthSide GTA to help home buyers see what life north of Toronto is
-  really like. 
-
-
-  Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think.
+title: "Why We Built NorthSide GTA — and What It Means for Home Buyers"
+slug: "why-we-built-northside-gta"
+publishDate: "2025-10-28T15:52:00-04:00"
+author: "Landon Mulhall & Matthew Mulhall"
+excerpt: "We created NorthSide GTA to help home buyers see what life north of Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think."
 tags:
-  - northside gta
-  - homes north of toronto
-  - york region real estate
-  - durham region homes
-  - aurora real estate
-  - uxbridge homes for sale
-  - stouffville homes
-  - finally home agents
-  - matthew mulhall
-  - landon mulhall
-featureImage: /uploads/insights/greenway-map-overview.jpg
-featureImageAlt: Map showing NorthSide GTA towns stretching north of Toronto
-gallery:
-  - image: /uploads/insights/greenway-map-overview.jpg
-    alt: Map showing NorthSide GTA towns stretching north of Toronto
+  - "northside gta"
+featureImage: "/uploads/insights/sample-hero.png"
+featureImageAlt: "Aerial view of the NorthSide GTA with morning sunlight"
+seo:
+  title: "Why We Built NorthSide GTA — and What It Means for Home Buyers | NorthSide GTA"
+  description: "We created NorthSide GTA to help home buyers see what life north of Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think."
+  ogImage: "/uploads/insights/sample-hero.png"
 ---
 **Why We Built NorthSide GTA and What It Means for Home Buyers**
 
@@ -72,6 +59,6 @@ A direct connection to us and our team at Finally Home Agents whenever you’re 
 
 **The Bottom Line**
 
-We built NorthSide GTA to help people see that there’s more to life north of the city. It’s about finding the right balance between space, value, and community — all within reach of the places you already know.
+We built NorthSide GTA to help people see that there’s more to life north of the city. Its about finding the right balance between space, value, and community — all within reach of the places you already know.
 
 If you’re curious about what life on the NorthSide is all about, visit NorthSideGTA.ca to explore homes and communities today.

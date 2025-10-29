@@ -1,26 +1,17 @@
 ---
 title: "Exploring Aurora's Greenway Revival"
-slug: sample-launch
-publishDate: 2025-01-18T09:00:00-05:00
-author: "Matthew Mulhall"
+slug: "sample-launch"
+publishDate: "2025-01-18T09:00:00-05:00"
+author: "Landon Mulhall & Matthew Mulhall"
 excerpt: "See how Aurora's Greenway Revival is opening new connections across the NorthSide GTA and what it means for buyers eyeing the commuter belt."
 tags:
-  - Aurora
-  - Market Intel
-  - Trails
-featureImage: "/uploads/insights/greenway-revival-hero.jpg"
-featureImageAlt: "Sunrise over the Aurora greenway boardwalk"
+  - "northside gta"
+featureImage: "/uploads/insights/sample-hero.png"
+featureImageAlt: "Aerial view of the NorthSide GTA with morning sunlight"
 seo:
-  title: "NorthSide GTA Insights: Aurora's Greenway Revival"
-  description: "Finally Home Agents break down Aurora's Greenway Revival and what it signals for NorthSide GTA movers."
-  ogImage: "/uploads/insights/greenway-revival-hero.jpg"
-gallery:
-  - image: "/uploads/insights/greenway-map-overview.jpg"
-    alt: "Map of Aurora highlighting the new greenway loop"
-    caption: "A closer look at the new Aurora greenway connections."
-  - image: "/uploads/insights/greenway-community-event.jpg"
-    alt: "Families gathering at the Aurora greenway ribbon cutting"
-    caption: "Opening day drew neighbours from across the NorthSide GTA."
+  title: "Exploring Aurora's Greenway Revival | NorthSide GTA"
+  description: "See how Aurora's Greenway Revival is opening new connections across the NorthSide GTA and what it means for buyers eyeing the commuter belt."
+  ogImage: "/uploads/insights/sample-hero.png"
 ---
 Welcome to **NorthSide GTA Insights**, our newest series that dives deep into the trends shaping life north of the 407.
 
