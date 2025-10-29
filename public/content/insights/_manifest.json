@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "sample-launch",
+    "dir": "sample-launch",
+    "path": "sample-launch/index.md",
+    "title": "Exploring Aurora's Greenway Revival"
+  },
+  {
+    "slug": "testing-123",
+    "dir": "testing-123",
+    "path": "testing-123/index.md",
+    "title": "Testing 123"
+  },
+  {
+    "slug": "why-we-built-northside-gta",
+    "dir": "why-we-built-northside-gta",
+    "path": "why-we-built-northside-gta/index.md",
+    "title": "Why We Built NorthSide GTA — and What It Means for Home Buyers"
+  }
+]

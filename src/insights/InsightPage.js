@@ -84,23 +84,83 @@ function normalizeInsight(content) {
   };
 }
 
+const INSIGHTS_MANIFEST_URL = "/content/insights/_manifest.json";
+let cachedManifest = null;
+
+function normalizeSlugValue(value) {
+  if (!value) return "";
+  return value.toString().trim().toLowerCase();
+}
+
+async function loadInsightsManifest() {
+  if (cachedManifest) return cachedManifest;
+  try {
+    const res = await fetch(INSIGHTS_MANIFEST_URL, { cache: "no-store" });
+    if (!res.ok) {
+      throw new Error(`manifest_${res.status}`);
+    }
+    const json = await res.json();
+    cachedManifest = Array.isArray(json) ? json : [];
+  } catch (error) {
+    console.warn("Failed to load insights manifest", error);
+    cachedManifest = [];
+  }
+  return cachedManifest;
+}
+
+async function fetchInsightMarkdown(slug) {
+  const normalizedSlug = normalizeSlugValue(slug);
+  if (!normalizedSlug) {
+    const err = new Error("not_found");
+    err.code = "not_found";
+    throw err;
+  }
+
+  const directUrl = `/content/insights/${normalizedSlug}/index.md`;
+  let res = await fetch(directUrl, { cache: "no-store" });
+
+  if (res.ok) {
+    return res.text();
+  }
+
+  if (res.status !== 404) {
+    throw new Error(`Request failed: ${res.status}`);
+  }
+
+  const manifest = await loadInsightsManifest();
+  const match = manifest.find((item) => normalizeSlugValue(item?.slug) === normalizedSlug);
+
+  if (!match) {
+    const err = new Error("not_found");
+    err.code = "not_found";
+    throw err;
+  }
+
+  res = await fetch(`/content/insights/${match.dir}/index.md`, { cache: "no-store" });
+
+  if (!res.ok) {
+    if (res.status === 404) {
+      const err = new Error("not_found");
+      err.code = "not_found";
+      throw err;
+    }
+    throw new Error(`Request failed: ${res.status}`);
+  }
+
+  return res.text();
+}
+
 function useInsight(slug) {
   const [state, setState] = useState({ loading: true, insight: null, error: null });
 
   useEffect(() => {
     if (!slug) return;
     let cancelled = false;
+
     async function load() {
       setState({ loading: true, insight: null, error: null });
       try {
-        const res = await fetch(`/content/insights/${slug}/index.md`, { cache: "no-store" });
-        if (!res.ok) {
-          if (res.status === 404) {
-            throw new Error("not_found");
-          }
-          throw new Error(`Request failed: ${res.status}`);
-        }
-        const text = await res.text();
+        const text = await fetchInsightMarkdown(slug);
         if (cancelled) return;
         const parsed = normalizeInsight(text);
         setState({ loading: false, insight: parsed, error: null });
@@ -109,6 +169,7 @@ function useInsight(slug) {
         setState({ loading: false, insight: null, error });
       }
     }
+
     load();
     return () => {
       cancelled = true;

@@ -4,10 +4,13 @@
   "description": "NorthSide GTA Real Estate Website",
   "main": "index.js",
   "scripts": {
+    "prestart": "npm run generate:insights-manifest",
     "start": "react-scripts start",
+    "prebuild": "npm run generate:insights-manifest",
     "build": "react-scripts build",
     "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-sitemap.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
+    "generate:insights-manifest": "node scripts/generate-insights-manifest.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
     "events:connectivity": "node scripts/events-connectivity.mjs",
