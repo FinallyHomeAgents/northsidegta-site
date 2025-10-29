@@ -57,6 +57,37 @@ function normalizeTags(raw) {
     .filter(Boolean);
 }
 
+function normalizeImagePath(value) {
+  const imagePath = safeString(value);
+  if (!imagePath) return "";
+  if (/^(?:https?:)?\/\//.test(imagePath)) return imagePath;
+  const normalized = imagePath.replace(/^\.+\/?/, "");
+  if (normalized.startsWith("/")) return normalized;
+  return `/${normalized.replace(/^\/+/, "")}`;
+}
+
+function normalizeGallery(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      if (item == null) return null;
+      if (typeof item === "string") {
+        const image = normalizeImagePath(item);
+        if (!image) return null;
+        return { image, alt: "", caption: "" };
+      }
+      if (typeof item !== "object") return null;
+      const image = normalizeImagePath(item.image || item.path || item.src);
+      if (!image) return null;
+      return {
+        image,
+        alt: safeString(item.alt),
+        caption: safeString(item.caption || item.title || item.description),
+      };
+    })
+    .filter(Boolean);
+}
+
 function writeJson(targetPath, data) {
   const json = `${JSON.stringify(data, null, 2)}\n`;
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
@@ -133,6 +164,7 @@ function main() {
       tags: normalizeTags(data.tags),
       featureImage: safeString(data.featureImage || data.feature_image),
       featureImageAlt: safeString(data.featureImageAlt || data.feature_image_alt),
+      gallery: normalizeGallery(data.gallery),
       seo: {
         title: safeString(data?.seo?.title),
         description: safeString(data?.seo?.description),
