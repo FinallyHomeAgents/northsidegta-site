@@ -20,6 +20,8 @@ tags:
   - landon mulhall
 featureImage: uploads/insights/whynorthsidegtablog.jpg
 featureImageAlt: View of the NorthSide GTA with morning sunlight
+gallery:
+  - image: uploads/insights/whynorthsidegtablog.jpg
 seo:
   title: Why We Built NorthSide GTA — and What It Means for Home Buyers |
     NorthSide GTA
