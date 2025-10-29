@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import matter from "gray-matter";
 import { marked } from "marked";
 import { DateTime } from "luxon";
 import Navigation from "../Navigation";
@@ -23,20 +22,6 @@ import {
 } from "lucide-react";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
-
-class FrontMatterParseError extends Error {
-  constructor(message, path = "", originalError = null) {
-    const normalizedMessage = path
-      ? `Unable to parse front matter in ${path}: ${message}`
-      : `Unable to parse front matter: ${message}`;
-    super(normalizedMessage);
-    this.name = "FrontMatterParseError";
-    this.type = "frontmatter";
-    this.path = path;
-    this.originalError = originalError;
-    this.attemptedPaths = [];
-  }
-}
 
 const markdownRenderer = new marked.Renderer();
 markdownRenderer.image = (href, title, text) => {
@@ -74,37 +59,42 @@ function normalizeGallery(raw) {
     .filter(Boolean);
 }
 
-function normalizeInsight(content, sourcePath = "") {
-  let data = {};
-  let body = "";
-  try {
-    const parsed = matter(content || "");
-    data = parsed.data || {};
-    body = parsed.content || "";
-  } catch (error) {
-    throw new FrontMatterParseError(error.message, sourcePath, error);
+function safeString(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return value.trim();
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value).trim();
   }
+  return "";
+}
+
+function normalizeInsight(data, sourcePath = "") {
+  if (!data || typeof data !== "object") {
+    const error = new Error("Invalid insight payload.");
+    error.type = "content";
+    error.path = sourcePath;
+    throw error;
+  }
+
   const tags = Array.isArray(data.tags)
-    ? data.tags.map((tag) => (tag || "").toString().trim()).filter(Boolean)
+    ? data.tags.map((tag) => safeString(tag)).filter(Boolean)
     : [];
-  const publishDate =
-    data.publishDate || data.publish_date || data.date || data.published || null;
 
   return {
-    slug: (data.slug || data.slugId || "").toString().trim(),
-    title: (data.title || "").toString().trim(),
-    author: (data.author || "").toString().trim(),
-    excerpt: (data.excerpt || "").toString().trim(),
-    publishDate,
+    slug: safeString(data.slug),
+    title: safeString(data.title),
+    author: safeString(data.author),
+    excerpt: safeString(data.excerpt),
+    publishDate: safeString(data.publishDate),
     tags,
-    featureImage: (data.featureImage || data.feature_image || "").toString().trim(),
-    featureImageAlt: (data.featureImageAlt || data.feature_image_alt || "").toString().trim(),
-    body,
-    sourcePath,
+    featureImage: safeString(data.featureImage),
+    featureImageAlt: safeString(data.featureImageAlt),
+    body: typeof data.body === "string" ? data.body : "",
+    sourcePath: safeString(data.sourcePath) || sourcePath,
     seo: {
-      title: data?.seo?.title ? data.seo.title.toString() : "",
-      description: data?.seo?.description ? data.seo.description.toString() : "",
-      ogImage: data?.seo?.ogImage ? data.seo.ogImage.toString() : "",
+      title: safeString(data?.seo?.title),
+      description: safeString(data?.seo?.description),
+      ogImage: safeString(data?.seo?.ogImage),
     },
     gallery: normalizeGallery(data.gallery),
   };
@@ -133,15 +123,10 @@ function normalizeSlug(rawSlug) {
     .replace(/^-+|-+$/g, "");
 }
 
-function getInsightPathVariants(slug) {
+function getInsightDataPaths(slug) {
   if (!slug) return [];
   const safeSlug = encodeURIComponent(slug);
-  const base = `/content/insights/${safeSlug}`;
-  return [
-    `${base}/index.md`,
-    `${base}/index.mdx`,
-    `${base}/index.markdown`,
-  ];
+  return [`/data/insights/${safeSlug}.json`];
 }
 
 function useInsight(slugCandidates) {
@@ -168,19 +153,29 @@ function useInsight(slugCandidates) {
       let lastError = null;
       let sawNotFound = false;
 
-      outer: for (const candidateSlug of slugs) {
-        for (const path of getInsightPathVariants(candidateSlug)) {
+      for (const candidateSlug of slugs) {
+        for (const path of getInsightDataPaths(candidateSlug)) {
           attemptedPaths.push(path);
           try {
             const res = await fetch(path, { cache: "no-store" });
             if (cancelled) return;
 
             if (res.ok) {
-              const text = await res.text();
-              if (cancelled) return;
+              let data;
+              try {
+                data = await res.json();
+              } catch (error) {
+                if (cancelled) return;
+                const parseError = new Error(`Failed to parse insight JSON: ${error.message}`);
+                parseError.type = "content";
+                parseError.path = path;
+                parseError.attemptedPaths = attemptedPaths.slice();
+                setState({ loading: false, insight: null, error: parseError });
+                return;
+              }
 
               try {
-                const parsed = normalizeInsight(text, path);
+                const parsed = normalizeInsight(data, path);
                 const enriched = {
                   ...parsed,
                   slug: parsed.slug || candidateSlug,
@@ -190,13 +185,12 @@ function useInsight(slugCandidates) {
                 return;
               } catch (error) {
                 if (cancelled) return;
-                if (error instanceof FrontMatterParseError) {
-                  error.attemptedPaths = attemptedPaths.slice();
-                  setState({ loading: false, insight: null, error });
-                  return;
-                }
-                lastError = error;
-                break outer;
+                const normalizedError = error instanceof Error ? error : new Error(String(error));
+                normalizedError.type = normalizedError.type || "content";
+                normalizedError.path = normalizedError.path || path;
+                normalizedError.attemptedPaths = attemptedPaths.slice();
+                setState({ loading: false, insight: null, error: normalizedError });
+                return;
               }
             }
 
@@ -209,37 +203,27 @@ function useInsight(slugCandidates) {
             error.status = res.status;
             error.path = path;
             lastError = error;
-            break outer;
+            break;
           } catch (error) {
             if (cancelled) return;
-            lastError = error;
-            break outer;
+            lastError = error instanceof Error ? error : new Error(String(error));
+            break;
           }
         }
+        if (lastError) break;
       }
 
       if (cancelled) return;
 
       if (lastError) {
-        if (lastError instanceof FrontMatterParseError) {
-          lastError.attemptedPaths = attemptedPaths;
-          setState({ loading: false, insight: null, error: lastError });
-          return;
-        }
-
         if (lastError.status && lastError.status !== 404) {
           lastError.type = lastError.type || "http";
-          lastError.attemptedPaths = attemptedPaths;
-          setState({ loading: false, insight: null, error: lastError });
-          return;
-        }
-
-        if (!lastError.status) {
+        } else if (!lastError.status) {
           lastError.type = lastError.type || "network";
-          lastError.attemptedPaths = attemptedPaths;
-          setState({ loading: false, insight: null, error: lastError });
-          return;
         }
+        lastError.attemptedPaths = attemptedPaths;
+        setState({ loading: false, insight: null, error: lastError });
+        return;
       }
 
       if (sawNotFound || attemptedPaths.length > 0) {
@@ -252,6 +236,7 @@ function useInsight(slugCandidates) {
 
       setState({ loading: false, insight: null, error: null });
     }
+
     load();
     return () => {
       cancelled = true;
@@ -366,14 +351,14 @@ export default function InsightPage() {
   let errorTitle = "We couldn’t find that insight.";
   let errorMessage = "Check the URL or return to the homepage.";
   if (error?.type === "missing") {
-    errorTitle = "Insight content file is missing.";
+    errorTitle = "Insight data is missing.";
     errorMessage = authoringContext
-      ? `We couldn’t load the markdown file for this insight. Confirm that the CMS published it to public/content/insights/${slugHint}/index.md and that it’s committed to this branch.`
+      ? `We couldn’t load the data for this insight. Confirm that public/content/insights/${slugHint}/index.md exists and run npm run generate:insights to create public/data/insights/${slugHint}.json.`
       : "Check the URL or return to the homepage.";
-  } else if (error instanceof FrontMatterParseError || error?.type === "frontmatter") {
-    errorTitle = "Front-matter parse error.";
+  } else if (error?.type === "content") {
+    errorTitle = "Insight data parse error.";
     errorMessage = authoringContext
-      ? "We found the markdown file but the front-matter could not be parsed. Fix the highlighted YAML issue in the file and publish again."
+      ? "We found the insight file but the generated JSON could not be parsed. Fix the markdown front matter and run npm run generate:insights again."
       : "Something went wrong while loading this insight.";
   } else if (error?.type === "network" || error?.type === "http") {
     errorTitle = "Unable to load insight.";
@@ -421,7 +406,7 @@ export default function InsightPage() {
             <div className="rounded-3xl border border-rose-100 bg-white px-6 py-12 text-center text-sm text-rose-600 shadow-lg shadow-rose-50">
               <p className="font-semibold">{errorTitle}</p>
               <p className="mt-3 text-rose-500">{errorMessage}</p>
-              {authoringContext && (error instanceof FrontMatterParseError || error?.type === "frontmatter") && (
+              {authoringContext && error?.type === "content" && (
                 <div className="mt-4 space-y-2 text-left text-xs text-rose-500">
                   {error?.path && (
                     <p>

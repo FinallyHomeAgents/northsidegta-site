@@ -1,12 +1,16 @@
 ---
-title: testpage
-slug: testpage
-publishDate: 2025-10-29T13:44:00-04:00
-author: matt
-excerpt: testpage
+title: "testpage"
+slug: "testpage"
+publishDate: "2025-10-29T13:44:00-04:00"
+author: "Landon Mulhall & Matthew Mulhall"
+excerpt: "testpage"
 tags:
-  - testpage
-featureImage: public/uploads/under800knorthside-1920-x-1080-px-.jpg
-featureImageAlt: testpage
+  - "northside gta"
+featureImage: "/uploads/insights/sample-hero.png"
+featureImageAlt: "Aerial view of the NorthSide GTA with morning sunlight"
+seo:
+  title: "testpage | NorthSide GTA"
+  description: "testpage"
+  ogImage: "/uploads/insights/sample-hero.png"
 ---
 test page

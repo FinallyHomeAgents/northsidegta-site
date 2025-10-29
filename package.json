@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-sitemap.js && cp build/index.html build/404.html",
+    "postbuild": "node scripts/generate-insights-data.js && node scripts/generate-curated-html.js && node scripts/generate-sitemap.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
@@ -14,7 +14,8 @@
     "events:audit": "node scripts/events-cli.mjs --audit",
     "events:recover": "node scripts/events-recover.mjs",
     "events:normalize": "node scripts/events-normalize.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "generate:insights": "node scripts/generate-insights-data.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
