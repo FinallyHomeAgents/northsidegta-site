@@ -9,6 +9,9 @@
     { "source": "/cms/config.yml", "destination": "/config.yml" },
     { "source": "/cms/(.*)", "destination": "/cms/$1" },
 
-    { "source": "/api/(.*)", "destination": "/api/$1" }
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+
+    { "source": "/insights", "destination": "/index.html" },
+    { "source": "/insights/(.*)", "destination": "/index.html" }
   ]
 }
