@@ -80,3 +80,5 @@ A direct connection to us and our team at Finally Home Agents whenever you’re 
 We built NorthSide GTA to help people see that there’s more to life north of the city. Its about finding the right balance between space, value, and community — all within reach of the places you already know.
 
 If you’re curious about what life on the NorthSide is all about, visit NorthSideGTA.ca to explore homes and communities today.
+
+![](/uploads/insights/whynorthsidegtablog.jpg)
