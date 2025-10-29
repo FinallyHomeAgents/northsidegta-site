@@ -26,11 +26,15 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 class FrontMatterParseError extends Error {
   constructor(message, path = "", originalError = null) {
-    super(message);
+    const normalizedMessage = path
+      ? `Unable to parse front matter in ${path}: ${message}`
+      : `Unable to parse front matter: ${message}`;
+    super(normalizedMessage);
     this.name = "FrontMatterParseError";
     this.type = "frontmatter";
     this.path = path;
     this.originalError = originalError;
+    this.attemptedPaths = [];
   }
 }
 
