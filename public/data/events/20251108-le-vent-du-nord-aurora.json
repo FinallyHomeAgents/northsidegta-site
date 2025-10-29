@@ -22,16 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/le-vent-du-nord-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002605-1762630200-1762637400@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-29T08:36:02.057Z",
-  "updatedAt": "2025-10-29T08:36:02.057Z",
-  "featured": false
+  "updatedAt": "2025-10-29T08:36:02Z"
 }

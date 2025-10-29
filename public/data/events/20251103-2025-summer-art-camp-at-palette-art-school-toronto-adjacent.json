@@ -42,17 +42,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-11-03/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10011588-1762160400-1762444800@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-29T08:36:02.057Z",
-  "firstSeenAt": "2025-10-29T08:36:02.057Z",
-  "updatedAt": "2025-10-29T08:36:02.057Z",
-  "featured": false
+  "updatedAt": "2025-10-29T08:36:02Z"
 }
