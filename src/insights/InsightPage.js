@@ -43,22 +43,6 @@ marked.setOptions({
   renderer: markdownRenderer,
 });
 
-function normalizeGallery(raw) {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .map((item) => {
-      if (!item) return null;
-      const image = typeof item === "string" ? item : item.image;
-      if (!image) return null;
-      return {
-        image,
-        alt: (item.alt || "").toString(),
-        caption: (item.caption || "").toString(),
-      };
-    })
-    .filter(Boolean);
-}
-
 function safeString(value) {
   if (value == null) return "";
   if (typeof value === "string") return value.trim();
@@ -66,6 +50,47 @@ function safeString(value) {
     return String(value).trim();
   }
   return "";
+}
+
+function resolveImageField(value, fallbackAlt = "") {
+  const fallback = safeString(fallbackAlt);
+  if (!value) {
+    return { src: "", alt: fallback };
+  }
+
+  if (typeof value === "string") {
+    return { src: safeString(value), alt: fallback };
+  }
+
+  if (typeof value === "object") {
+    const srcCandidate =
+      value.src ?? value.url ?? value.path ?? value.image ?? value.value ?? value.href ?? "";
+    const altCandidate = value.alt ?? value.title ?? value.caption ?? "";
+    const src = safeString(srcCandidate);
+    const alt = safeString(altCandidate) || fallback;
+    return { src, alt };
+  }
+
+  return { src: "", alt: fallback };
+}
+
+function normalizeGallery(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      if (!item) return null;
+
+      const entry = typeof item === "object" && item !== null ? item : { image: item };
+      const imageField = resolveImageField(entry.image ?? entry, entry.alt);
+      if (!imageField.src) return null;
+
+      return {
+        image: imageField.src,
+        alt: imageField.alt,
+        caption: safeString(entry.caption || entry.title || entry.description),
+      };
+    })
+    .filter(Boolean);
 }
 
 function normalizeInsight(data, sourcePath = "") {
@@ -80,6 +105,25 @@ function normalizeInsight(data, sourcePath = "") {
     ? data.tags.map((tag) => safeString(tag)).filter(Boolean)
     : [];
 
+  const rawFeatureImage = data.featureImage ?? data.feature_image;
+  const rawFeatureImageAlt = data.featureImageAlt ?? data.feature_image_alt;
+  const featureImageField = resolveImageField(rawFeatureImage, rawFeatureImageAlt || data.title);
+  const featureImage = featureImageField.src
+    ? typeof rawFeatureImage === "object" && rawFeatureImage !== null
+      ? featureImageField
+      : { src: featureImageField.src, alt: featureImageField.alt }
+    : null;
+
+  const explicitFeatureAlt = safeString(rawFeatureImageAlt);
+  const featureImageAlt = explicitFeatureAlt || featureImage?.alt || safeString(data.title);
+
+  const seoOgImageField = resolveImageField(data?.seo?.ogImage, featureImageAlt);
+  const seoOgImage = seoOgImageField.src
+    ? typeof data?.seo?.ogImage === "object" && data?.seo?.ogImage !== null
+      ? seoOgImageField
+      : { src: seoOgImageField.src, alt: seoOgImageField.alt }
+    : null;
+
   return {
     slug: safeString(data.slug),
     title: safeString(data.title),
@@ -87,14 +131,14 @@ function normalizeInsight(data, sourcePath = "") {
     excerpt: safeString(data.excerpt),
     publishDate: safeString(data.publishDate),
     tags,
-    featureImage: safeString(data.featureImage),
-    featureImageAlt: safeString(data.featureImageAlt),
+    featureImage,
+    featureImageAlt,
     body: typeof data.body === "string" ? data.body : "",
     sourcePath: safeString(data.sourcePath) || sourcePath,
     seo: {
       title: safeString(data?.seo?.title),
       description: safeString(data?.seo?.description),
-      ogImage: safeString(data?.seo?.ogImage),
+      ogImage: seoOgImage,
     },
     gallery: normalizeGallery(data.gallery),
   };
@@ -330,10 +374,16 @@ export default function InsightPage() {
       ? `NorthSide GTA Insights: ${insight.title}`
       : "NorthSide GTA Insights";
   const metaDescription = truncate(insight?.seo?.description || insight?.excerpt || "");
-  const featureImage = insight?.featureImage || "";
-  const featureImageAlt = insight?.featureImageAlt || insight?.title || "NorthSide GTA";
-  const ogImage = insight?.seo?.ogImage || featureImage;
-  const ogImageAbsolute = toAbsoluteUrl(ogImage, origin);
+  const baseFeatureAlt =
+    safeString(insight?.featureImageAlt) || safeString(insight?.title) || "NorthSide GTA";
+  const featureImageField = resolveImageField(insight?.featureImage, baseFeatureAlt);
+  const featureImageSrc = featureImageField.src;
+  const featureImageAlt = featureImageField.alt || baseFeatureAlt;
+  const ogImageField = insight?.seo?.ogImage
+    ? resolveImageField(insight.seo.ogImage, featureImageAlt)
+    : featureImageField;
+  const ogImageSrc = ogImageField.src || featureImageSrc;
+  const ogImageAbsolute = toAbsoluteUrl(ogImageSrc, origin);
 
   const publishedIso = useMemo(() => {
     if (!insight?.publishDate) return "";
@@ -393,7 +443,12 @@ export default function InsightPage() {
       <Navigation />
 
       <main>
-        <Hero insight={insight} loading={loading} featureImageAlt={featureImageAlt} />
+        <Hero
+          insight={insight}
+          loading={loading}
+          featureImageAlt={featureImageAlt}
+          featureImageSrc={featureImageSrc}
+        />
 
         <article className="mx-auto w-full max-w-[880px] px-4 pb-12 pt-10 sm:px-6 lg:px-0">
           {loading && (
@@ -468,25 +523,32 @@ export default function InsightPage() {
                 <section className="space-y-6 border-t border-slate-200 pt-8">
                   <h2 className="text-xl font-semibold text-slate-800">Gallery</h2>
                   <div className="grid gap-6 sm:grid-cols-2">
-                    {insight.gallery.map((item) => (
-                      <figure
-                        key={item.image}
-                        className="overflow-hidden rounded-3xl bg-white shadow-lg shadow-emerald-50 ring-1 ring-emerald-100/60"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.alt || ""}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover"
-                        />
-                        {(item.caption || item.alt) && (
-                          <figcaption className="px-4 py-3 text-sm text-slate-500">
-                            {item.caption || item.alt}
-                          </figcaption>
-                        )}
-                      </figure>
-                    ))}
+                    {insight.gallery.map((item, index) => {
+                      const galleryImage = resolveImageField(item?.image ?? item, item?.alt);
+                      if (!galleryImage.src) return null;
+                      const altText = galleryImage.alt || safeString(item?.alt);
+                      const caption = safeString(item?.caption);
+                      const figureKey = galleryImage.src ? `${galleryImage.src}-${index}` : String(index);
+                      return (
+                        <figure
+                          key={figureKey}
+                          className="overflow-hidden rounded-3xl bg-white shadow-lg shadow-emerald-50 ring-1 ring-emerald-100/60"
+                        >
+                          <img
+                            src={galleryImage.src}
+                            alt={altText}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover"
+                          />
+                          {(caption || altText) && (
+                            <figcaption className="px-4 py-3 text-sm text-slate-500">
+                              {caption || altText}
+                            </figcaption>
+                          )}
+                        </figure>
+                      );
+                    })}
                   </div>
                 </section>
               )}
@@ -508,8 +570,8 @@ export default function InsightPage() {
   );
 }
 
-function Hero({ insight, loading, featureImageAlt }) {
-  const featureImage = insight?.featureImage;
+function Hero({ insight, loading, featureImageAlt, featureImageSrc }) {
+  const featureImage = featureImageSrc || resolveImageField(insight?.featureImage, featureImageAlt).src;
   const publishDate = formatPublishDate(insight?.publishDate);
   return (
     <section className="relative isolate overflow-hidden bg-emerald-950 text-white">

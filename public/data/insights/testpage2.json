@@ -7,13 +7,19 @@
   "tags": [
     "northside gta"
   ],
-  "featureImage": "/uploads/insights/sample-hero.png",
+  "featureImage": {
+    "src": "/uploads/insights/sample-hero.png",
+    "alt": "Aerial view of the NorthSide GTA with morning sunlight"
+  },
   "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight",
   "gallery": [],
   "seo": {
     "title": "testpage2 | NorthSide GTA",
     "description": "test",
-    "ogImage": "/uploads/insights/sample-hero.png"
+    "ogImage": {
+      "src": "/uploads/insights/sample-hero.png",
+      "alt": "Aerial view of the NorthSide GTA with morning sunlight"
+    }
   },
   "body": "test\n",
   "sourcePath": "public/content/insights/testpage2/index.md"

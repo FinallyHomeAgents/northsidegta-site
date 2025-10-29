@@ -66,23 +66,39 @@ function normalizeImagePath(value) {
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
+function normalizeImageField(value, fallbackAlt = "") {
+  const fallback = safeString(fallbackAlt);
+  if (!value) return null;
+
+  if (typeof value === "string") {
+    const src = normalizeImagePath(value);
+    if (!src) return null;
+    return { src, alt: fallback };
+  }
+
+  if (typeof value === "object") {
+    const srcCandidate = value.src || value.path || value.image || value.url || value.value || value.href;
+    const src = normalizeImagePath(srcCandidate);
+    if (!src) return null;
+    const alt = safeString(value.alt || value.title || value.caption) || fallback;
+    return { src, alt };
+  }
+
+  return null;
+}
+
 function normalizeGallery(raw) {
   if (!Array.isArray(raw)) return [];
   return raw
     .map((item) => {
       if (item == null) return null;
-      if (typeof item === "string") {
-        const image = normalizeImagePath(item);
-        if (!image) return null;
-        return { image, alt: "", caption: "" };
-      }
-      if (typeof item !== "object") return null;
-      const image = normalizeImagePath(item.image || item.path || item.src);
-      if (!image) return null;
+      const entry = typeof item === "object" ? item : { image: item };
+      const imageField = normalizeImageField(entry.image ?? entry, entry.alt);
+      if (!imageField) return null;
       return {
-        image,
-        alt: safeString(item.alt),
-        caption: safeString(item.caption || item.title || item.description),
+        image: imageField.src,
+        alt: imageField.alt,
+        caption: safeString(entry.caption || entry.title || entry.description),
       };
     })
     .filter(Boolean);
@@ -155,6 +171,17 @@ function main() {
     const body = parsed.content.replace(/^\uFEFF/, "").replace(/^\n+/, "");
     const excerpt = collapseWhitespace(data.excerpt) || collapseWhitespace(body).slice(0, 150);
 
+    const featureImageField = normalizeImageField(
+      data.featureImage || data.feature_image,
+      data.featureImageAlt || data.feature_image_alt || data.title,
+    );
+    const featureImageAlt =
+      safeString(data.featureImageAlt || data.feature_image_alt) ||
+      (featureImageField ? featureImageField.alt : "") ||
+      safeString(data.title);
+
+    const seoOgImageField = normalizeImageField(data?.seo?.ogImage, featureImageAlt);
+
     const result = {
       slug: folderSlug,
       title: safeString(data.title),
@@ -162,13 +189,13 @@ function main() {
       author: safeString(data.author),
       excerpt,
       tags: normalizeTags(data.tags),
-      featureImage: safeString(data.featureImage || data.feature_image),
-      featureImageAlt: safeString(data.featureImageAlt || data.feature_image_alt),
+      featureImage: featureImageField,
+      featureImageAlt,
       gallery: normalizeGallery(data.gallery),
       seo: {
         title: safeString(data?.seo?.title),
         description: safeString(data?.seo?.description),
-        ogImage: safeString(data?.seo?.ogImage),
+        ogImage: seoOgImageField,
       },
       body,
       sourcePath: relativeIndexPath,
@@ -192,7 +219,7 @@ function main() {
       result.seo.title = `${result.title} | NorthSide GTA`;
     }
 
-    if (!result.seo.ogImage) {
+    if (!result.seo.ogImage && result.featureImage) {
       result.seo.ogImage = result.featureImage;
     }
 
