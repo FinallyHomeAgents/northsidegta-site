@@ -175,12 +175,18 @@ function main() {
       data.featureImage || data.feature_image,
       data.featureImageAlt || data.feature_image_alt || data.title,
     );
+    const featureImage = featureImageField
+      ? { src: normalizeImagePath(featureImageField.src), alt: featureImageField.alt }
+      : null;
     const featureImageAlt =
       safeString(data.featureImageAlt || data.feature_image_alt) ||
-      (featureImageField ? featureImageField.alt : "") ||
+      (featureImage ? featureImage.alt : "") ||
       safeString(data.title);
 
     const seoOgImageField = normalizeImageField(data?.seo?.ogImage, featureImageAlt);
+    const seoOgImage = seoOgImageField
+      ? { src: normalizeImagePath(seoOgImageField.src), alt: seoOgImageField.alt }
+      : null;
 
     const result = {
       slug: folderSlug,
@@ -189,13 +195,13 @@ function main() {
       author: safeString(data.author),
       excerpt,
       tags: normalizeTags(data.tags),
-      featureImage: featureImageField,
+      featureImage,
       featureImageAlt,
       gallery: normalizeGallery(data.gallery),
       seo: {
         title: safeString(data?.seo?.title),
         description: safeString(data?.seo?.description),
-        ogImage: seoOgImageField,
+        ogImage: seoOgImage,
       },
       body,
       sourcePath: relativeIndexPath,
@@ -220,7 +226,7 @@ function main() {
     }
 
     if (!result.seo.ogImage && result.featureImage) {
-      result.seo.ogImage = result.featureImage;
+      result.seo.ogImage = { ...result.featureImage };
     }
 
     const outputPath = path.join(outputDir, `${folderSlug}.json`);

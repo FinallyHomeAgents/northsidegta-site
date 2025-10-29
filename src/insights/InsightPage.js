@@ -52,6 +52,19 @@ function safeString(value) {
   return "";
 }
 
+function normalizeImagePath(value) {
+  const imagePath = safeString(value);
+  if (!imagePath) return "";
+  if (/^(?:https?:)?\/\//.test(imagePath) || imagePath.startsWith("data:")) {
+    return imagePath;
+  }
+  const normalized = imagePath.replace(/^\.+\/?/, "");
+  if (normalized.startsWith("/")) {
+    return normalized;
+  }
+  return `/${normalized.replace(/^\/+/, "")}`;
+}
+
 function resolveImageField(value, fallbackAlt = "") {
   const fallback = safeString(fallbackAlt);
   if (!value) {
@@ -59,14 +72,14 @@ function resolveImageField(value, fallbackAlt = "") {
   }
 
   if (typeof value === "string") {
-    return { src: safeString(value), alt: fallback };
+    return { src: normalizeImagePath(value), alt: fallback };
   }
 
   if (typeof value === "object") {
     const srcCandidate =
       value.src ?? value.url ?? value.path ?? value.image ?? value.value ?? value.href ?? "";
     const altCandidate = value.alt ?? value.title ?? value.caption ?? "";
-    const src = safeString(srcCandidate);
+    const src = normalizeImagePath(srcCandidate);
     const alt = safeString(altCandidate) || fallback;
     return { src, alt };
   }
