@@ -12,6 +12,7 @@ function safeString(value, fallback = "") {
   if (value == null) return fallback;
   if (typeof value === "string") return value.trim();
   if (typeof value === "number" || typeof value === "boolean") return String(value).trim();
+  if (value instanceof Date) return value.toISOString();
   return fallback;
 }
 
@@ -66,22 +67,81 @@ function normalizeImagePath(value) {
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
-function normalizeImageField(value, fallbackAlt = "") {
-  const fallback = safeString(fallbackAlt);
-  if (!value) return null;
+const IMAGE_SRC_KEYS = [
+  "src",
+  "url",
+  "path",
+  "image",
+  "value",
+  "href",
+  "asset",
+  "file",
+  "publicURL",
+  "publicUrl",
+];
 
-  if (typeof value === "string") {
+const IMAGE_ALT_KEYS = [
+  "alt",
+  "title",
+  "caption",
+  "description",
+  "label",
+  "altText",
+  "alternativeText",
+  "ariaLabel",
+  "aria-label",
+  "name",
+];
+
+function normalizeImageField(value, fallbackAlt = "", visited) {
+  const fallback = safeString(fallbackAlt);
+  if (value == null) {
+    return null;
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     const src = normalizeImagePath(value);
     if (!src) return null;
     return { src, alt: fallback };
   }
 
+  const tracker = visited instanceof WeakSet ? visited : new WeakSet();
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const resolved = normalizeImageField(item, fallback, tracker);
+      if (resolved?.src) {
+        return { src: resolved.src, alt: resolved.alt || fallback };
+      }
+    }
+    return null;
+  }
+
   if (typeof value === "object") {
-    const srcCandidate = value.src || value.path || value.image || value.url || value.value || value.href;
-    const src = normalizeImagePath(srcCandidate);
-    if (!src) return null;
-    const alt = safeString(value.alt || value.title || value.caption) || fallback;
-    return { src, alt };
+    if (tracker.has(value)) {
+      return null;
+    }
+    tracker.add(value);
+
+    const altCandidate = IMAGE_ALT_KEYS.map((key) => safeString(value[key])).find(Boolean) || fallback;
+
+    for (const key of IMAGE_SRC_KEYS) {
+      if (value[key] == null) continue;
+      const resolved = normalizeImageField(value[key], altCandidate, tracker);
+      if (resolved?.src) {
+        return { src: resolved.src, alt: resolved.alt || altCandidate };
+      }
+    }
+
+    for (const [key, nested] of Object.entries(value)) {
+      if (IMAGE_ALT_KEYS.includes(key) || IMAGE_SRC_KEYS.includes(key)) continue;
+      const resolved = normalizeImageField(nested, altCandidate, tracker);
+      if (resolved?.src) {
+        return { src: resolved.src, alt: resolved.alt || altCandidate };
+      }
+    }
+
+    return null;
   }
 
   return null;

@@ -23,31 +23,14 @@ import {
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-const markdownRenderer = new marked.Renderer();
-markdownRenderer.image = (href, title, text) => {
-  const caption = title ? `<figcaption class="insight-figure__caption">${title}</figcaption>` : "";
-  const safeSrc = href || "";
-  const safeAlt = text || "";
-  return `
-    <figure class="insight-figure">
-      <img src="${safeSrc}" alt="${safeAlt}" loading="lazy" decoding="async" />
-      ${caption}
-    </figure>
-  `;
-};
-
-marked.setOptions({
-  gfm: true,
-  breaks: true,
-  smartypants: true,
-  renderer: markdownRenderer,
-});
-
 function safeString(value) {
   if (value == null) return "";
   if (typeof value === "string") return value.trim();
   if (typeof value === "number" || typeof value === "boolean") {
     return String(value).trim();
+  }
+  if (value instanceof Date) {
+    return value.toISOString();
   }
   return "";
 }
@@ -65,27 +48,107 @@ function normalizeImagePath(value) {
   return `/${normalized.replace(/^\/+/, "")}`;
 }
 
-function resolveImageField(value, fallbackAlt = "") {
+const IMAGE_SRC_KEYS = [
+  "src",
+  "url",
+  "path",
+  "image",
+  "value",
+  "href",
+  "asset",
+  "file",
+  "publicURL",
+  "publicUrl",
+];
+
+const IMAGE_ALT_KEYS = [
+  "alt",
+  "title",
+  "caption",
+  "description",
+  "label",
+  "altText",
+  "alternativeText",
+  "ariaLabel",
+  "aria-label",
+  "name",
+];
+
+function resolveImageField(value, fallbackAlt = "", visited) {
   const fallback = safeString(fallbackAlt);
-  if (!value) {
+  if (value == null) {
     return { src: "", alt: fallback };
   }
 
-  if (typeof value === "string") {
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     return { src: normalizeImagePath(value), alt: fallback };
   }
 
+  const tracker = visited instanceof WeakSet ? visited : new WeakSet();
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const resolved = resolveImageField(item, fallback, tracker);
+      if (resolved.src) {
+        return { src: resolved.src, alt: resolved.alt || fallback };
+      }
+    }
+    return { src: "", alt: fallback };
+  }
+
   if (typeof value === "object") {
-    const srcCandidate =
-      value.src ?? value.url ?? value.path ?? value.image ?? value.value ?? value.href ?? "";
-    const altCandidate = value.alt ?? value.title ?? value.caption ?? "";
-    const src = normalizeImagePath(srcCandidate);
-    const alt = safeString(altCandidate) || fallback;
-    return { src, alt };
+    if (tracker.has(value)) {
+      return { src: "", alt: fallback };
+    }
+    tracker.add(value);
+
+    const altCandidate = IMAGE_ALT_KEYS.map((key) => safeString(value[key])).find(Boolean) || fallback;
+
+    for (const key of IMAGE_SRC_KEYS) {
+      if (value[key] == null) continue;
+      const resolved = resolveImageField(value[key], altCandidate, tracker);
+      if (resolved.src) {
+        return { src: resolved.src, alt: resolved.alt || altCandidate };
+      }
+    }
+
+    for (const [key, nested] of Object.entries(value)) {
+      if (IMAGE_ALT_KEYS.includes(key) || IMAGE_SRC_KEYS.includes(key)) continue;
+      const resolved = resolveImageField(nested, altCandidate, tracker);
+      if (resolved.src) {
+        return { src: resolved.src, alt: resolved.alt || altCandidate };
+      }
+    }
+
+    return { src: "", alt: altCandidate };
   }
 
   return { src: "", alt: fallback };
 }
+
+const markdownRenderer = new marked.Renderer();
+markdownRenderer.image = (href, title, text) => {
+  const resolved = resolveImageField(href, text);
+  const caption = title ? `<figcaption class="insight-figure__caption">${title}</figcaption>` : "";
+  const safeSrc = resolved.src;
+  const safeAlt = resolved.alt || text || "";
+  if (!safeSrc) {
+    return text ? `<p>${text}</p>` : "";
+  }
+  return `
+    <figure class="insight-figure">
+      <img src="${safeSrc}" alt="${safeAlt}" loading="lazy" decoding="async" />
+      ${caption}
+    </figure>
+  `;
+};
+
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+  smartypants: true,
+  renderer: markdownRenderer,
+});
 
 function normalizeGallery(raw) {
   if (!Array.isArray(raw)) return [];
