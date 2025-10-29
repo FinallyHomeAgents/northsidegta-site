@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import matter from "gray-matter";
 import { marked } from "marked";
@@ -84,6 +84,34 @@ function normalizeInsight(content) {
   };
 }
 
+function decodeSlug(rawSlug) {
+  if (!rawSlug) return "";
+  try {
+    return decodeURIComponent(rawSlug);
+  } catch (error) {
+    return rawSlug;
+  }
+}
+
+function normalizeSlug(rawSlug) {
+  const decoded = decodeSlug(rawSlug);
+  if (!decoded) return "";
+
+  return decoded
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getInsightPath(slug) {
+  const safeSlug = encodeURIComponent(slug);
+  return `/content/insights/${safeSlug}/index.md`;
+}
+
 function useInsight(slug) {
   const [state, setState] = useState({ loading: true, insight: null, error: null });
 
@@ -93,7 +121,7 @@ function useInsight(slug) {
     async function load() {
       setState({ loading: true, insight: null, error: null });
       try {
-        const res = await fetch(`/content/insights/${slug}/index.md`, { cache: "no-store" });
+        const res = await fetch(getInsightPath(slug), { cache: "no-store" });
         if (!res.ok) {
           if (res.status === 404) {
             throw new Error("not_found");
@@ -142,7 +170,9 @@ const SOCIAL_ICON_MAP = {
 
 export default function InsightPage() {
   const { slug } = useParams();
-  const { loading, insight, error } = useInsight(slug);
+  const normalizedSlug = useMemo(() => normalizeSlug(slug), [slug]);
+  const shouldRedirect = slug && normalizedSlug && slug !== normalizedSlug;
+  const { loading, insight, error } = useInsight(normalizedSlug);
   const contactConfig = useContactConfig();
   const channels = useContactChannels(contactConfig);
   const whatsappChannel = useMemo(
@@ -153,10 +183,18 @@ export default function InsightPage() {
 
   const origin = getSiteOrigin();
   const canonicalUrl = useMemo(() => {
-    if (!slug) return "";
-    const safeSlug = encodeURIComponent(slug);
+    if (!normalizedSlug) return "";
+    const safeSlug = encodeURIComponent(normalizedSlug);
     return `https://northsidegta.ca/insights/${safeSlug}`;
-  }, [slug]);
+  }, [normalizedSlug]);
+
+  if (!normalizedSlug) {
+    return <Navigate to="/insights" replace />;
+  }
+
+  if (shouldRedirect) {
+    return <Navigate to={`/insights/${normalizedSlug}`} replace />;
+  }
 
   const bodyHtml = useMemo(() => {
     if (!insight?.body) return "";
