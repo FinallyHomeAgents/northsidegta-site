@@ -58,7 +58,7 @@ function normalizeGallery(raw) {
     .filter(Boolean);
 }
 
-function normalizeInsight(content) {
+function normalizeInsight(content, sourcePath = "") {
   const { data, content: body = "" } = matter(content || "");
   const tags = Array.isArray(data.tags)
     ? data.tags.map((tag) => (tag || "").toString().trim()).filter(Boolean)
@@ -67,6 +67,7 @@ function normalizeInsight(content) {
     data.publishDate || data.publish_date || data.date || data.published || null;
 
   return {
+    slug: (data.slug || data.slugId || "").toString().trim(),
     title: (data.title || "").toString().trim(),
     author: (data.author || "").toString().trim(),
     excerpt: (data.excerpt || "").toString().trim(),
@@ -75,6 +76,7 @@ function normalizeInsight(content) {
     featureImage: (data.featureImage || data.feature_image || "").toString().trim(),
     featureImageAlt: (data.featureImageAlt || data.feature_image_alt || "").toString().trim(),
     body,
+    sourcePath,
     seo: {
       title: data?.seo?.title ? data.seo.title.toString() : "",
       description: data?.seo?.description ? data.seo.description.toString() : "",
@@ -107,41 +109,105 @@ function normalizeSlug(rawSlug) {
     .replace(/^-+|-+$/g, "");
 }
 
-function getInsightPath(slug) {
+function getInsightPathVariants(slug) {
+  if (!slug) return [];
   const safeSlug = encodeURIComponent(slug);
-  return `/content/insights/${safeSlug}/index.md`;
+  const base = `/content/insights/${safeSlug}`;
+  return [
+    `${base}/index.md`,
+    `${base}/index.mdx`,
+    `${base}.md`,
+    `${base}.mdx`,
+    `${base}/index.markdown`,
+    `${base}.markdown`,
+  ];
 }
 
-function useInsight(slug) {
+function useInsight(slugCandidates) {
   const [state, setState] = useState({ loading: true, insight: null, error: null });
 
+  const slugKey = useMemo(() => {
+    if (Array.isArray(slugCandidates)) {
+      return slugCandidates.filter(Boolean).join("|");
+    }
+    return slugCandidates ? [slugCandidates].join("|") : "";
+  }, [slugCandidates]);
+
   useEffect(() => {
-    if (!slug) return;
+    const slugs = slugKey ? slugKey.split("|").filter(Boolean) : [];
+    if (slugs.length === 0) {
+      setState({ loading: false, insight: null, error: null });
+      return;
+    }
+
     let cancelled = false;
     async function load() {
       setState({ loading: true, insight: null, error: null });
-      try {
-        const res = await fetch(getInsightPath(slug), { cache: "no-store" });
-        if (!res.ok) {
-          if (res.status === 404) {
-            throw new Error("not_found");
+      const attemptedPaths = [];
+      let lastError = null;
+
+      outer: for (const candidateSlug of slugs) {
+        for (const path of getInsightPathVariants(candidateSlug)) {
+          attemptedPaths.push(path);
+          try {
+            const res = await fetch(path, { cache: "no-store" });
+            if (cancelled) return;
+
+            if (res.ok) {
+              const text = await res.text();
+              if (cancelled) return;
+              const parsed = normalizeInsight(text, path);
+              const enriched = {
+                ...parsed,
+                slug: parsed.slug || candidateSlug,
+                sourceSlug: candidateSlug,
+              };
+              setState({ loading: false, insight: enriched, error: null });
+              return;
+            }
+
+            if (res.status === 404) {
+              continue;
+            }
+
+            const error = new Error(`Request failed: ${res.status}`);
+            error.status = res.status;
+            error.path = path;
+            lastError = error;
+            break outer;
+          } catch (error) {
+            if (cancelled) return;
+            lastError = error;
+            break outer;
           }
-          throw new Error(`Request failed: ${res.status}`);
         }
-        const text = await res.text();
-        if (cancelled) return;
-        const parsed = normalizeInsight(text);
-        setState({ loading: false, insight: parsed, error: null });
-      } catch (error) {
-        if (cancelled) return;
-        setState({ loading: false, insight: null, error });
       }
+
+      if (cancelled) return;
+
+      if (lastError) {
+        if (lastError.status && lastError.status !== 404) {
+          lastError.attemptedPaths = attemptedPaths;
+          setState({ loading: false, insight: null, error: lastError });
+          return;
+        }
+
+        if (!lastError.status) {
+          lastError.attemptedPaths = attemptedPaths;
+          setState({ loading: false, insight: null, error: lastError });
+          return;
+        }
+      }
+
+      const notFoundError = new Error("not_found");
+      notFoundError.attemptedPaths = attemptedPaths;
+      setState({ loading: false, insight: null, error: notFoundError });
     }
     load();
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [slugKey]);
 
   return state;
 }
@@ -171,8 +237,22 @@ const SOCIAL_ICON_MAP = {
 export default function InsightPage() {
   const { slug } = useParams();
   const normalizedSlug = useMemo(() => normalizeSlug(slug), [slug]);
+  const decodedSlug = useMemo(() => decodeSlug(slug), [slug]);
+  const slugCandidates = useMemo(() => {
+    const candidates = [];
+    if (normalizedSlug) {
+      candidates.push(normalizedSlug);
+    }
+    const decodedNormalized = normalizeSlug(decodedSlug);
+    if (decodedNormalized && decodedNormalized !== normalizedSlug) {
+      candidates.push(decodedNormalized);
+    } else if (decodedSlug && !normalizedSlug) {
+      candidates.push(decodedSlug.trim());
+    }
+    return Array.from(new Set(candidates.filter(Boolean)));
+  }, [normalizedSlug, decodedSlug]);
   const shouldRedirect = slug && normalizedSlug && slug !== normalizedSlug;
-  const { loading, insight, error } = useInsight(normalizedSlug);
+  const { loading, insight, error } = useInsight(slugCandidates);
   const contactConfig = useContactConfig();
   const channels = useContactChannels(contactConfig);
   const whatsappChannel = useMemo(
@@ -182,11 +262,13 @@ export default function InsightPage() {
   const formRef = useRef(null);
 
   const origin = getSiteOrigin();
+  const insightSlug = useMemo(() => normalizeSlug(insight?.slug), [insight?.slug]);
+  const canonicalSlug = insightSlug || normalizedSlug;
   const canonicalUrl = useMemo(() => {
-    if (!normalizedSlug) return "";
-    const safeSlug = encodeURIComponent(normalizedSlug);
+    if (!canonicalSlug) return "";
+    const safeSlug = encodeURIComponent(canonicalSlug);
     return `https://northsidegta.ca/insights/${safeSlug}`;
-  }, [normalizedSlug]);
+  }, [canonicalSlug]);
 
   if (!normalizedSlug) {
     return <Navigate to="/insights" replace />;
@@ -194,6 +276,10 @@ export default function InsightPage() {
 
   if (shouldRedirect) {
     return <Navigate to={`/insights/${normalizedSlug}`} replace />;
+  }
+
+  if (!loading && !error && insightSlug && normalizedSlug && insightSlug !== normalizedSlug) {
+    return <Navigate to={`/insights/${insightSlug}`} replace />;
   }
 
   const bodyHtml = useMemo(() => {
@@ -262,6 +348,19 @@ export default function InsightPage() {
           {!loading && error && (
             <div className="rounded-3xl border border-rose-100 bg-white px-6 py-12 text-center text-sm text-rose-600 shadow-lg shadow-rose-50">
               We couldn’t find that insight. Check the URL or return to the homepage.
+              {Array.isArray(error?.attemptedPaths) && error.attemptedPaths.length > 0 && (
+                <details className="mt-4 text-left text-xs text-rose-500">
+                  <summary className="cursor-pointer text-rose-600">Technical details</summary>
+                  <div className="mt-2 space-y-1">
+                    <p>Checked paths:</p>
+                    <ul className="list-disc space-y-1 pl-4">
+                      {error.attemptedPaths.map((path) => (
+                        <li key={path} className="break-all">{path}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+              )}
             </div>
           )}
 
