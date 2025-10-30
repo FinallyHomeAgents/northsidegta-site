@@ -11,6 +11,17 @@ const outputDir = path.join(rootDir, "public", "data", "insights");
 const INSIGHTS_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHTS_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
 
+function splitPathAndSuffix(value) {
+  const suffixIndex = value.search(/[?#]/);
+  if (suffixIndex === -1) {
+    return { path: value, suffix: "" };
+  }
+  return {
+    path: value.slice(0, suffixIndex),
+    suffix: value.slice(suffixIndex),
+  };
+}
+
 function safeString(value, fallback = "") {
   if (value == null) return fallback;
   if (typeof value === "string") return value.trim();
@@ -33,11 +44,18 @@ function normalizeAssetPath(value) {
 
   if (!normalized) return "";
 
-  if (normalized.startsWith(INSIGHTS_UPLOAD_INTERNAL_PREFIX)) {
-    return `/${normalized}`;
+  const uploadsIndex = normalized.indexOf(INSIGHTS_UPLOAD_INTERNAL_PREFIX);
+  if (uploadsIndex !== -1) {
+    const remainder = normalized.slice(uploadsIndex + INSIGHTS_UPLOAD_INTERNAL_PREFIX.length);
+    if (!remainder) return "";
+    const { path: uploadPath, suffix } = splitPathAndSuffix(remainder);
+    if (!uploadPath) return "";
+    return `${INSIGHTS_UPLOAD_WEB_PATH}${uploadPath}${suffix}`;
   }
 
-  return `${INSIGHTS_UPLOAD_WEB_PATH}${normalized}`;
+  const { path: uploadPath, suffix } = splitPathAndSuffix(normalized);
+  if (!uploadPath) return "";
+  return `${INSIGHTS_UPLOAD_WEB_PATH}${uploadPath}${suffix}`;
 }
 
 function normalizeGallery(raw) {

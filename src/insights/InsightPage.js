@@ -25,6 +25,17 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const INSIGHT_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHT_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
 
+function splitPathAndSuffix(value) {
+  const suffixIndex = value.search(/[?#]/);
+  if (suffixIndex === -1) {
+    return { path: value, suffix: "" };
+  }
+  return {
+    path: value.slice(0, suffixIndex),
+    suffix: value.slice(suffixIndex),
+  };
+}
+
 function ensureInsightUploadPath(value) {
   if (value == null) return "";
   const raw = typeof value === "string" ? value.trim() : String(value).trim();
@@ -38,11 +49,18 @@ function ensureInsightUploadPath(value) {
 
   if (!normalized) return "";
 
-  if (normalized.startsWith(INSIGHT_UPLOAD_INTERNAL_PREFIX)) {
-    return `/${normalized}`;
+  const uploadsIndex = normalized.indexOf(INSIGHT_UPLOAD_INTERNAL_PREFIX);
+  if (uploadsIndex !== -1) {
+    const remainder = normalized.slice(uploadsIndex + INSIGHT_UPLOAD_INTERNAL_PREFIX.length);
+    if (!remainder) return "";
+    const { path: uploadPath, suffix } = splitPathAndSuffix(remainder);
+    if (!uploadPath) return "";
+    return `${INSIGHT_UPLOAD_WEB_PATH}${uploadPath}${suffix}`;
   }
 
-  return `${INSIGHT_UPLOAD_WEB_PATH}${normalized}`;
+  const { path: uploadPath, suffix } = splitPathAndSuffix(normalized);
+  if (!uploadPath) return "";
+  return `${INSIGHT_UPLOAD_WEB_PATH}${uploadPath}${suffix}`;
 }
 
 const markdownRenderer = new marked.Renderer();
