@@ -6,6 +6,7 @@ const matter = require("gray-matter");
 
 const rootDir = path.resolve(__dirname, "..");
 const insightsDir = path.join(rootDir, "public", "content", "insights");
+const uploadsDir = path.join(rootDir, "public", "uploads", "insights");
 const INSIGHTS_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHTS_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
 
@@ -94,6 +95,79 @@ function parseImageDestination(destination) {
   };
 }
 
+function cleanupEmptyDirectories(...dirs) {
+  dirs.forEach((dir) => {
+    if (!dir) return;
+    if (!fs.existsSync(dir)) return;
+    try {
+      const entries = fs.readdirSync(dir);
+      if (entries.length === 0) {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    } catch (error) {
+      console.warn(`[migrate-insight-image-paths] Failed to clean up ${path.relative(rootDir, dir)}: ${error.message}`);
+    }
+  });
+}
+
+function moveNestedInsightAssets() {
+  if (!fs.existsSync(insightsDir)) return;
+
+  fs.mkdirSync(uploadsDir, { recursive: true });
+
+  const entries = fs
+    .readdirSync(insightsDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory());
+
+  let movedCount = 0;
+  const collisions = [];
+
+  entries.forEach((entry) => {
+    const nestedDir = path.join(insightsDir, entry.name, "public", "uploads", "insights");
+    if (!fs.existsSync(nestedDir)) return;
+
+    const files = fs.readdirSync(nestedDir, { withFileTypes: true });
+    files.forEach((file) => {
+      if (!file.isFile()) return;
+
+      const sourcePath = path.join(nestedDir, file.name);
+      const targetPath = path.join(uploadsDir, file.name);
+
+      if (fs.existsSync(targetPath)) {
+        collisions.push({
+          source: path.relative(rootDir, sourcePath),
+          target: path.relative(rootDir, targetPath),
+        });
+        return;
+      }
+
+      fs.renameSync(sourcePath, targetPath);
+      movedCount += 1;
+    });
+
+    cleanupEmptyDirectories(
+      nestedDir,
+      path.join(insightsDir, entry.name, "public", "uploads"),
+      path.join(insightsDir, entry.name, "public"),
+    );
+  });
+
+  if (movedCount > 0) {
+    console.log(
+      `[migrate-insight-image-paths] Moved ${movedCount} nested asset${movedCount === 1 ? "" : "s"} into ${path.relative(
+        rootDir,
+        uploadsDir,
+      )}`,
+    );
+  }
+
+  collisions.forEach(({ source, target }) => {
+    console.warn(
+      `[migrate-insight-image-paths] Skipped moving ${source} — destination already exists at ${target}. Delete or rename the nested file if it is outdated.`,
+    );
+  });
+}
+
 function rewriteMarkdownImages(markdown) {
   if (!markdown) return { content: markdown, changed: false };
 
@@ -177,6 +251,8 @@ function main() {
     console.log("[migrate-insight-image-paths] No insight markdown files found.");
     return;
   }
+
+  moveNestedInsightAssets();
 
   let updatedCount = 0;
   files.forEach((filePath) => {

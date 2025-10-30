@@ -5,6 +5,7 @@ backend:
 
 media_folder: 'public/uploads'
 public_folder: '/uploads'
+media_folder_relative: false
 
 collections:
   - name: 'collections'
