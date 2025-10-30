@@ -550,6 +550,7 @@ collections:
     format: 'frontmatter'
     media_folder: 'public/uploads/insights'
     public_folder: '/uploads/insights'
+    media_folder_relative: false
     preview_path: 'insights/{{slug}}'
     summary: '{{title}} — {{publishDate}}'
     identifier_field: 'slug'
