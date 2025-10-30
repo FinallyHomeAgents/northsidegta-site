@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/christmas-logo.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/the-stouffville-christmas-market/",
-  "updatedAt": "2025-10-29T08:36:02Z"
+  "lastSyncedAt": "2025-10-30T08:34:24.149Z",
+  "updatedAt": "2025-10-30T08:34:24.149Z",
+  "featured": false
 }
