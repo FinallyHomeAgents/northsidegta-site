@@ -1,6 +1,6 @@
 ---
 title: Why We Built NorthSide GTA — and What It Means for Home Buyers
-slug: why-we-built-northside-gta-fh
+slug: why-we-built-northside-gta
 publishDate: 2025-10-30T14:02:00-04:00
 author: Landon Mulhall & Matthew Mulhall
 excerpt: We created NorthSide GTA to help home buyers see what life north of
@@ -77,6 +77,6 @@ A direct connection to us and our team at Finally Home Agents whenever you’re 
 
 **The Bottom Line**
 
-We built NorthSide GTA to help people see that there’s more to life north of the city. Its about finding the right balance between space, value, and community — all within reach of the places you already know.
+We built NorthSide GTA to help people see that there’s more to life north of the city. It’s about finding the right balance between space, value, and community — all within reach of the places you already know.
 
 If you’re curious about what life on the NorthSide is all about, visit NorthSideGTA.ca to explore homes and communities today.
