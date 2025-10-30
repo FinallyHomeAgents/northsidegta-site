@@ -358,16 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002666-1757894400-1762819199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-10-30T08:34:24.149Z",
-  "updatedAt": "2025-10-30T08:34:24.149Z",
-  "featured": false
+  "updatedAt": "2025-10-30T08:34:24Z"
 }
