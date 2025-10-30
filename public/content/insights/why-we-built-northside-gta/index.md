@@ -18,7 +18,7 @@ tags:
   - finally home agents
   - matthew mulhall
   - landon mulhall
-featureImage: uploads/insights/whynorthsidegtablog.jpg
+featureImage: /uploads/insights/whynorthsidegtablog.jpg
 featureImageAlt: View of the NorthSide GTA with morning sunlight
 gallery:
   - image: uploads/insights/whynorthsidegtablog.jpg
@@ -29,7 +29,7 @@ seo:
     Toronto is really like. Discover how towns like Uxbridge, Stouffville,
     Aurora, and Georgina offer more space, more value, and stronger community
     while staying closer to the city than most people think.
-  ogImage: uploads/insights/whynorthsidegtablog.jpg
+  ogImage: /uploads/insights/whynorthsidegtablog.jpg
 ---
 **Why We Built NorthSide GTA and What It Means for Home Buyers**
 
