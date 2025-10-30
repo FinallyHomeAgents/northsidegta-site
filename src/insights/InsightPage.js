@@ -36,9 +36,25 @@ function splitPathAndSuffix(value) {
   };
 }
 
+function extractAssetInput(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (typeof value === "object") {
+    const candidates = [value.path, value.url, value.href, value.src, value.download_url, value.value];
+    for (const candidate of candidates) {
+      if (typeof candidate === "string" && candidate.trim()) {
+        return candidate;
+      }
+    }
+  }
+  return "";
+}
+
 function ensureInsightUploadPath(value) {
   if (value == null) return "";
-  const raw = typeof value === "string" ? value.trim() : String(value).trim();
+  const input = extractAssetInput(value);
+  const raw = typeof input === "string" ? input.trim() : String(input).trim();
   if (!raw) return "";
   if (/^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
   if (raw.startsWith(INSIGHT_UPLOAD_WEB_PATH)) return raw;
@@ -105,6 +121,17 @@ function safeString(value) {
   if (typeof value === "string") return value.trim();
   if (typeof value === "number" || typeof value === "boolean") {
     return String(value).trim();
+  }
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+  if (typeof value === "object") {
+    const candidates = [value.value, value.label, value.text];
+    for (const candidate of candidates) {
+      if (candidate == null || candidate === value) continue;
+      const normalized = safeString(candidate);
+      if (normalized) return normalized;
+    }
   }
   return "";
 }

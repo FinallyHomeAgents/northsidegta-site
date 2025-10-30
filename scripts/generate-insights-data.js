@@ -29,11 +29,34 @@ function safeString(value, fallback = "") {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString();
   }
+  if (typeof value === "object") {
+    const candidates = [value.value, value.label, value.text];
+    for (const candidate of candidates) {
+      if (candidate == null || candidate === value) continue;
+      const normalized = safeString(candidate);
+      if (normalized) return normalized;
+    }
+  }
   return fallback;
 }
 
+function extractAssetInput(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (typeof value === "object") {
+    const candidates = [value.path, value.url, value.href, value.src, value.download_url, value.value];
+    for (const candidate of candidates) {
+      if (typeof candidate === "string" && candidate.trim()) {
+        return candidate;
+      }
+    }
+  }
+  return "";
+}
+
 function normalizeAssetPath(value) {
-  const raw = safeString(value);
+  const raw = safeString(extractAssetInput(value));
   if (!raw) return "";
   if (/^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
   if (raw.startsWith(INSIGHTS_UPLOAD_WEB_PATH)) return raw;
