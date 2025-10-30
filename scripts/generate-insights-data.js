@@ -12,7 +12,41 @@ function safeString(value, fallback = "") {
   if (value == null) return fallback;
   if (typeof value === "string") return value.trim();
   if (typeof value === "number" || typeof value === "boolean") return String(value).trim();
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
   return fallback;
+}
+
+function normalizeAssetPath(value) {
+  const raw = safeString(value);
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const normalized = raw
+    .replace(/^(\.\/|\.\.\/)+/, "")
+    .replace(/^\/+/, "");
+  return `/${normalized}`;
+}
+
+function normalizeGallery(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry) => {
+      if (!entry) return null;
+      if (typeof entry === "string") {
+        const image = normalizeAssetPath(entry);
+        if (!image) return null;
+        return { image, alt: "", caption: "" };
+      }
+      const image = normalizeAssetPath(entry.image);
+      if (!image) return null;
+      return {
+        image,
+        alt: safeString(entry.alt),
+        caption: safeString(entry.caption),
+      };
+    })
+    .filter(Boolean);
 }
 
 function normalizeSlug(value) {
@@ -131,13 +165,14 @@ function main() {
       author: safeString(data.author),
       excerpt,
       tags: normalizeTags(data.tags),
-      featureImage: safeString(data.featureImage || data.feature_image),
+      featureImage: normalizeAssetPath(data.featureImage || data.feature_image),
       featureImageAlt: safeString(data.featureImageAlt || data.feature_image_alt),
       seo: {
         title: safeString(data?.seo?.title),
         description: safeString(data?.seo?.description),
-        ogImage: safeString(data?.seo?.ogImage),
+        ogImage: normalizeAssetPath(data?.seo?.ogImage),
       },
+      gallery: normalizeGallery(data.gallery),
       body,
       sourcePath: relativeIndexPath,
     };

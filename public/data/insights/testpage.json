@@ -14,6 +14,7 @@
     "description": "testpage",
     "ogImage": "/uploads/insights/sample-hero.png"
   },
+  "gallery": [],
   "body": "test page\n",
   "sourcePath": "public/content/insights/testpage/index.md"
 }
