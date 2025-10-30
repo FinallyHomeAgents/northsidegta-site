@@ -22,11 +22,33 @@ import {
 } from "lucide-react";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const INSIGHT_UPLOAD_WEB_PATH = "/uploads/insights/";
+const INSIGHT_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
+
+function ensureInsightUploadPath(value) {
+  if (value == null) return "";
+  const raw = typeof value === "string" ? value.trim() : String(value).trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
+  if (raw.startsWith(INSIGHT_UPLOAD_WEB_PATH)) return raw;
+
+  const normalized = raw
+    .replace(/^(\.\/|\.\.\/)+/, "")
+    .replace(/^\/+/, "");
+
+  if (!normalized) return "";
+
+  if (normalized.startsWith(INSIGHT_UPLOAD_INTERNAL_PREFIX)) {
+    return `/${normalized}`;
+  }
+
+  return `${INSIGHT_UPLOAD_WEB_PATH}${normalized}`;
+}
 
 const markdownRenderer = new marked.Renderer();
 markdownRenderer.image = (href, title, text) => {
   const caption = title ? `<figcaption class="insight-figure__caption">${title}</figcaption>` : "";
-  const safeSrc = href || "";
+  const safeSrc = ensureInsightUploadPath(href || "");
   const safeAlt = text || "";
   return `
     <figure class="insight-figure">
@@ -48,7 +70,8 @@ function normalizeGallery(raw) {
   return raw
     .map((item) => {
       if (!item) return null;
-      const image = typeof item === "string" ? item : item.image;
+      const imageValue = typeof item === "string" ? item : item.image;
+      const image = ensureInsightUploadPath(imageValue);
       if (!image) return null;
       return {
         image,
@@ -87,14 +110,14 @@ function normalizeInsight(data, sourcePath = "") {
     excerpt: safeString(data.excerpt),
     publishDate: safeString(data.publishDate),
     tags,
-    featureImage: safeString(data.featureImage),
+    featureImage: ensureInsightUploadPath(data.featureImage),
     featureImageAlt: safeString(data.featureImageAlt),
     body: typeof data.body === "string" ? data.body : "",
     sourcePath: safeString(data.sourcePath) || sourcePath,
     seo: {
       title: safeString(data?.seo?.title),
       description: safeString(data?.seo?.description),
-      ogImage: safeString(data?.seo?.ogImage),
+      ogImage: ensureInsightUploadPath(data?.seo?.ogImage),
     },
     gallery: normalizeGallery(data.gallery),
   };

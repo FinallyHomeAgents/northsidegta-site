@@ -8,6 +8,9 @@ const rootDir = path.resolve(__dirname, "..");
 const contentDir = path.join(rootDir, "public", "content", "insights");
 const outputDir = path.join(rootDir, "public", "data", "insights");
 
+const INSIGHTS_UPLOAD_WEB_PATH = "/uploads/insights/";
+const INSIGHTS_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
+
 function safeString(value, fallback = "") {
   if (value == null) return fallback;
   if (typeof value === "string") return value.trim();
@@ -21,11 +24,20 @@ function safeString(value, fallback = "") {
 function normalizeAssetPath(value) {
   const raw = safeString(value);
   if (!raw) return "";
-  if (/^https?:\/\//i.test(raw)) return raw;
+  if (/^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
+  if (raw.startsWith(INSIGHTS_UPLOAD_WEB_PATH)) return raw;
+
   const normalized = raw
     .replace(/^(\.\/|\.\.\/)+/, "")
     .replace(/^\/+/, "");
-  return `/${normalized}`;
+
+  if (!normalized) return "";
+
+  if (normalized.startsWith(INSIGHTS_UPLOAD_INTERNAL_PREFIX)) {
+    return `/${normalized}`;
+  }
+
+  return `${INSIGHTS_UPLOAD_WEB_PATH}${normalized}`;
 }
 
 function normalizeGallery(raw) {

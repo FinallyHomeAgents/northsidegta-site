@@ -1,12 +1,9 @@
 ---
 title: Why We Built NorthSide GTA — and What It Means for Home Buyers
 slug: why-we-built-northside-gta
-publishDate: 2025-10-28T15:52:00-04:00
+publishDate: 2025-10-28T19:52:00.000Z
 author: Landon Mulhall & Matthew Mulhall
-excerpt: We created NorthSide GTA to help home buyers see what life north of
-  Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora,
-  and Georgina offer more space, more value, and stronger community while
-  staying closer to the city than most people think.
+excerpt: 'We created NorthSide GTA to help home buyers see what life north of Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think.'
 tags:
   - northside gta
   - homes north of toronto
@@ -21,14 +18,10 @@ tags:
 featureImage: /uploads/insights/whynorthsidegtablog.jpg
 featureImageAlt: View of the NorthSide GTA with morning sunlight
 gallery:
-  - image: uploads/insights/whynorthsidegtablog.jpg
+  - image: /uploads/insights/whynorthsidegtablog.jpg
 seo:
-  title: Why We Built NorthSide GTA — and What It Means for Home Buyers |
-    NorthSide GTA
-  description: We created NorthSide GTA to help home buyers see what life north of
-    Toronto is really like. Discover how towns like Uxbridge, Stouffville,
-    Aurora, and Georgina offer more space, more value, and stronger community
-    while staying closer to the city than most people think.
+  title: Why We Built NorthSide GTA — and What It Means for Home Buyers | NorthSide GTA
+  description: 'We created NorthSide GTA to help home buyers see what life north of Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think.'
   ogImage: /uploads/insights/whynorthsidegtablog.jpg
 ---
 **Why We Built NorthSide GTA and What It Means for Home Buyers**
