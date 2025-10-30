@@ -582,9 +582,9 @@ collections:
         required: true
         hint: 'Add at least one topical tag (e.g., Aurora, Market Intel). Press enter after each tag.'
       - name: 'featureImage'
-        label: 'Feature Image Path'
-        widget: 'string'
-        hint: 'Upload a hero image to /uploads/insights/ and paste the path (recommended 1920×1080 JPG/PNG).'
+        label: 'Feature Image'
+        widget: 'image'
+        hint: 'Upload or select a hero image (recommended 1920×1080 JPG/PNG). Paths will be saved automatically.'
       - name: 'featureImageAlt'
         label: 'Feature Image Alt Text'
         widget: 'string'
@@ -601,9 +601,9 @@ collections:
         hint: 'Optional supplemental images shown after the article.'
         fields:
           - name: 'image'
-            label: 'Image Path'
-            widget: 'string'
-            hint: 'Path to the gallery image (e.g., /uploads/insights/example.jpg). Aim for 1600×900 or larger.'
+            label: 'Image'
+            widget: 'image'
+            hint: 'Upload or select a gallery image (aim for 1600×900 or larger).'
           - name: 'alt'
             label: 'Alt Text'
             widget: 'string'
@@ -631,7 +631,7 @@ collections:
             required: false
             hint: 'Optional: overrides the excerpt for meta descriptions (about 155 characters).'
           - name: 'ogImage'
-            label: 'OG Image Path'
-            widget: 'string'
+            label: 'OG Image'
+            widget: 'image'
             required: false
-            hint: 'Optional: social sharing image path if different from the feature image (1200×630 recommended).'
+            hint: 'Optional: upload a social sharing image if different from the feature image (1200×630 recommended).'

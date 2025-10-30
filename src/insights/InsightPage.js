@@ -395,7 +395,7 @@ export default function InsightPage() {
       <main>
         <Hero insight={insight} loading={loading} featureImageAlt={featureImageAlt} />
 
-        <article className="mx-auto w-full max-w-[880px] px-4 pb-12 pt-10 sm:px-6 lg:px-0">
+        <article className="mx-auto w-full max-w-6xl px-4 pb-16 pt-12 sm:px-6 lg:px-8">
           {loading && (
             <div className="rounded-3xl border border-emerald-100 bg-white/70 px-6 py-12 text-center text-sm text-slate-500 shadow-lg shadow-emerald-50">
               Loading insight…
@@ -437,59 +437,80 @@ export default function InsightPage() {
           )}
 
           {!loading && !error && insight && (
-            <div className="space-y-8">
-              <header className="space-y-3">
-                <div className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-500">
-                  {formattedDate}
-                  {insight.author ? ` • ${insight.author}` : ""}
+            <div className="grid gap-10 lg:gap-16 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+              <aside className="space-y-6 lg:order-1 lg:sticky lg:top-32 self-start">
+                <div className="rounded-3xl bg-white/80 p-6 shadow-xl shadow-emerald-100/60 ring-1 ring-emerald-100 backdrop-blur">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.42em] text-emerald-500">
+                    Published
+                  </p>
+                  <div className="mt-4 space-y-2 text-base text-slate-600">
+                    {formattedDate && (
+                      <p className="font-semibold text-slate-900">{formattedDate}</p>
+                    )}
+                    {insight.author && (
+                      <p className="text-sm text-slate-500">By {insight.author}</p>
+                    )}
+                    {!formattedDate && !insight.author && (
+                      <p className="text-sm text-slate-500">Publication details coming soon.</p>
+                    )}
+                  </div>
+                  {insight.tags?.length > 0 && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {insight.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-full border border-emerald-200/80 bg-emerald-50/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-700"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {insight.excerpt && (
-                  <p className="text-lg text-slate-600">{insight.excerpt}</p>
+                  <p className="rounded-3xl border border-emerald-100 bg-emerald-50/80 p-6 text-lg font-medium leading-relaxed text-emerald-900 shadow-inner shadow-emerald-100/80">
+                    {insight.excerpt}
+                  </p>
                 )}
-                {insight.tags?.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {insight.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+              </aside>
+
+              <div className="space-y-12 lg:order-2">
+                {bodyHtml && (
+                  <div className="insight-content" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
                 )}
-              </header>
 
-              {bodyHtml && (
-                <div className="insight-content" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
-              )}
-
-              {insight.gallery?.length > 0 && (
-                <section className="space-y-6 border-t border-slate-200 pt-8">
-                  <h2 className="text-xl font-semibold text-slate-800">Gallery</h2>
-                  <div className="grid gap-6 sm:grid-cols-2">
-                    {insight.gallery.map((item) => (
-                      <figure
-                        key={item.image}
-                        className="overflow-hidden rounded-3xl bg-white shadow-lg shadow-emerald-50 ring-1 ring-emerald-100/60"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.alt || ""}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover"
-                        />
-                        {(item.caption || item.alt) && (
-                          <figcaption className="px-4 py-3 text-sm text-slate-500">
-                            {item.caption || item.alt}
-                          </figcaption>
-                        )}
-                      </figure>
-                    ))}
-                  </div>
-                </section>
-              )}
+                {insight.gallery?.length > 0 && (
+                  <section className="space-y-6 rounded-3xl border border-emerald-100/80 bg-white/80 p-8 shadow-xl shadow-emerald-100/60 backdrop-blur">
+                    <div>
+                      <h2 className="text-2xl font-semibold tracking-tight text-slate-900">In pictures</h2>
+                      <p className="mt-1 text-sm text-slate-500">
+                        A closer look at the moments behind this insight.
+                      </p>
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      {insight.gallery.map((item) => (
+                        <figure
+                          key={item.image}
+                          className="group overflow-hidden rounded-3xl border border-emerald-100/70 bg-white/80 shadow-lg shadow-emerald-100/60"
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.alt || ""}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.02]"
+                          />
+                          {(item.caption || item.alt) && (
+                            <figcaption className="px-4 py-3 text-sm text-slate-500">
+                              {item.caption || item.alt}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </div>
             </div>
           )}
         </article>
@@ -511,44 +532,49 @@ export default function InsightPage() {
 function Hero({ insight, loading, featureImageAlt }) {
   const featureImage = insight?.featureImage;
   const publishDate = formatPublishDate(insight?.publishDate);
+  const heroAlt = featureImageAlt || insight?.title || "NorthSide GTA";
   return (
     <section className="relative isolate overflow-hidden bg-emerald-950 text-white">
-      <div className="absolute inset-0 bg-[#04110c]" aria-hidden />
-      {featureImage && (
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${featureImage})` }}
-        />
+      {featureImage ? (
+        <div className="absolute inset-0">
+          <img
+            src={featureImage}
+            alt={heroAlt}
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-emerald-950/65 mix-blend-multiply" aria-hidden />
+          <div
+            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-emerald-950/90 via-emerald-900/70 to-transparent"
+            aria-hidden
+          />
+        </div>
+      ) : (
+        <div className="absolute inset-0 bg-[#04110c]" aria-hidden />
       )}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-emerald-900/80 via-emerald-900/75 to-emerald-950/90"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.22),_transparent_60%)]"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.18),_transparent_65%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute bottom-6 right-6 h-48 w-48 bg-contain bg-no-repeat opacity-10"
+        className="pointer-events-none absolute bottom-8 right-8 hidden h-48 w-48 bg-contain bg-no-repeat opacity-15 sm:block"
         style={{ backgroundImage: "url('/Images/northsidegta-logo.svg')" }}
-        role="presentation"
         aria-hidden
       />
-      <div className="relative z-10 mx-auto flex min-h-[40vh] w-full max-w-5xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.45em] text-emerald-200">
+      <div className="relative z-10 mx-auto flex min-h-[48vh] w-full max-w-5xl flex-col justify-end px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+        <div className="inline-flex w-max items-center gap-3 rounded-full bg-white/10 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.42em] text-emerald-100 backdrop-blur">
           NorthSide GTA Insights
         </div>
-        <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.75rem]">
+        <h1 className="mt-8 text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-[3.25rem]">
           {loading ? "Loading insight…" : insight?.title}
         </h1>
-        <p className="mt-4 text-sm font-medium text-emerald-100 sm:text-base">
+        <p className="mt-6 text-sm font-medium text-emerald-100/90 sm:text-base">
           {insight?.author && publishDate
             ? `${insight.author} • ${publishDate}`
             : insight?.author || publishDate}
         </p>
       </div>
-      {featureImageAlt && <span className="sr-only">{featureImageAlt}</span>}
     </section>
   );
 }
