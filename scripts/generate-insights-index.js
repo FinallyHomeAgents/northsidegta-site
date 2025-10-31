@@ -8,6 +8,18 @@ const ROOT = path.resolve(__dirname, "..");
 const INSIGHTS_DIR = path.join(ROOT, "public", "content", "insights");
 const OUTPUT_FILE = path.join(INSIGHTS_DIR, "index.json");
 
+function normalizeSlug(value) {
+  const raw = safeString(value);
+  if (!raw) return "";
+  return raw
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function safeString(value) {
   if (value == null) return "";
   if (typeof value === "string") return value.trim();
@@ -36,8 +48,19 @@ function collectInsightEntries(dir) {
       continue;
     }
 
+    const folderSlug = normalizeSlug(entry);
+    const frontMatterSlug = normalizeSlug(frontMatter.slug);
+    const slug = folderSlug || frontMatterSlug;
+
+    if (folderSlug && frontMatterSlug && folderSlug !== frontMatterSlug) {
+      const relativePath = path.relative(ROOT, markdownPath);
+      console.warn(
+        `[generate-insights-index] Adjusted slug for ${relativePath} from ${frontMatterSlug || "<missing>"} to ${folderSlug}`
+      );
+    }
+
     const item = {
-      slug: safeString(frontMatter.slug) || safeString(entry),
+      slug,
       title: safeString(frontMatter.title),
       publishDate: safeString(frontMatter.publishDate),
       excerpt: safeString(frontMatter.excerpt),
