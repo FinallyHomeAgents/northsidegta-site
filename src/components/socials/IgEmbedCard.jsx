@@ -11,7 +11,7 @@ function ensureInstagramScript() {
   document.body.appendChild(s);
 }
 
-export default function IgEmbedCard({ url, title, captioned = false }) {
+export default function IgEmbedCard({ url, title, captioned = false, showOverlay = true }) {
   const [open, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const cardRef = useRef(null);
@@ -68,19 +68,21 @@ export default function IgEmbedCard({ url, title, captioned = false }) {
           />
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3">
-          {title && (
-            <div className="pointer-events-auto inline-block rounded-xl bg-black/50 px-3 py-1 text-xs text-white backdrop-blur">
-              {title}
-            </div>
-          )}
-          <button
-            onClick={() => setOpen(true)}
-            className="pointer-events-auto ml-2 rounded-xl border border-white/20 bg-white/10 px-3 py-1 text-xs text-white transition hover:bg-white/20"
-          >
-            Open
-          </button>
-        </div>
+        {showOverlay && (
+          <div className="absolute inset-x-0 bottom-0 p-3 pointer-events-none">
+            {title && (
+              <div className="pointer-events-auto inline-block rounded-xl bg-black/50 px-3 py-1 text-white text-xs backdrop-blur">
+                {title}
+              </div>
+            )}
+            <button
+              onClick={() => setOpen(true)}
+              className="pointer-events-auto ml-2 rounded-xl border border-white/20 bg-white/10 px-3 py-1 text-white text-xs hover:bg-white/20"
+            >
+              Open
+            </button>
+          </div>
+        )}
       </article>
 
       <Modal open={open} onClose={() => setOpen(false)}>
