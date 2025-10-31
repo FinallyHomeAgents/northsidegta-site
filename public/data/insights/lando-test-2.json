@@ -1,0 +1,20 @@
+{
+  "slug": "lando-test-2",
+  "title": "Lando Test 2",
+  "publishDate": "2025-10-30T19:06:00.000Z",
+  "author": "Landon",
+  "excerpt": "Test",
+  "tags": [
+    "test"
+  ],
+  "featureImage": "/uploads/insights/eastgwillimbury-banner.jpg",
+  "featureImageAlt": "test",
+  "seo": {
+    "title": "test",
+    "description": "test",
+    "ogImage": "/uploads/insights/eastgwillimbury-banner.jpg"
+  },
+  "gallery": [],
+  "body": "test\n",
+  "sourcePath": "public/content/insights/lando-test-2/index.md"
+}
