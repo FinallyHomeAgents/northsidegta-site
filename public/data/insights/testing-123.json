@@ -1,7 +1,7 @@
 {
   "slug": "testing-123",
   "title": "Testing 123",
-  "publishDate": "2025-10-30T14:04:00.000Z",
+  "publishDate": "2025-10-30T14:29:00.000Z",
   "author": "Landon Mulhall & Matthew Mulhall",
   "excerpt": "Test",
   "tags": [
@@ -12,11 +12,11 @@
   "seo": {
     "title": "Testing 123 | NorthSide GTA",
     "description": "Test",
-    "ogImage": "/uploads/insights/eastgwillimbury-banner.jpg"
+    "ogImage": "/uploads/insights/scugog-banner.jpg"
   },
   "gallery": [
     {
-      "image": "/uploads/insights/scugog-banner.jpg",
+      "image": "/uploads/insights/eastgwillimbury-banner.jpg",
       "alt": "",
       "caption": ""
     }

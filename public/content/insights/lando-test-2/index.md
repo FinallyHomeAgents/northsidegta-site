@@ -6,7 +6,7 @@ author: Landon
 excerpt: Test
 tags:
   - test
-featureImage: https://northsidegta.ca/uploads/insights/eastgwillimbury-banner.jpg
+featureImage: /uploads/insights/eastgwillimbury-banner.jpg
 featureImageAlt: test
 seo:
   title: test
