@@ -595,17 +595,68 @@ collections:
         label: 'Body'
         widget: 'markdown'
         hint: 'Write the full article in Markdown. Use headings, lists, and images uploaded to /uploads/insights/.'
+      - name: 'inlineImages'
+        label: 'Inline Images'
+        widget: 'list'
+        required: false
+        collapsed: true
+        summary: '{{fields.image}} — {{fields.placement}}'
+        hint: 'Used to sprinkle photos through the article. Recommended ≈ 1200 px width (3:2 or 4:3).'
+        fields:
+          - name: 'image'
+            label: 'Image'
+            widget: 'image'
+            hint: 'Upload to /public/uploads/insights. Aim for ≈ 1200 px width in 3:2 or 4:3.'
+          - name: 'alt'
+            label: 'Alt Text'
+            widget: 'string'
+            hint: 'Describe the image for accessibility.'
+          - name: 'caption'
+            label: 'Caption (optional)'
+            widget: 'text'
+            required: false
+            hint: 'Optional caption shown below the image.'
+          - name: 'placement'
+            label: 'Placement'
+            widget: 'select'
+            default: 'after-P2'
+            options:
+              - { label: 'After H1', value: 'after-H1' }
+              - { label: 'After 2nd Paragraph', value: 'after-P2' }
+              - { label: 'After 4th Paragraph', value: 'after-P4' }
+              - { label: 'End of Article', value: 'end' }
+      - name: 'pullQuote'
+        label: 'Pull Quote'
+        widget: 'object'
+        required: false
+        collapsed: true
+        hint: 'Highlight a short quote or takeaway mid-article.'
+        fields:
+          - name: 'text'
+            label: 'Quote Text'
+            widget: 'text'
+            hint: 'Keep it to 1–2 sentences.'
+          - name: 'attribution'
+            label: 'Attribution'
+            widget: 'string'
+            required: false
+            hint: 'Who said it? (Optional)'
+          - name: 'portrait'
+            label: 'Portrait Image (optional)'
+            widget: 'image'
+            required: false
+            hint: 'Optional portrait (~800×1000 px) shown alongside the quote.'
       - name: 'gallery'
         label: 'Gallery'
         widget: 'list'
         required: false
         summary: '{{fields.image}}'
-        hint: 'Optional supplemental images shown after the article.'
+        hint: 'Optional supplemental images shown after the article. Use 3:2 or 4:3 aspect ratios.'
         fields:
           - name: 'image'
             label: 'Image'
             widget: 'image'
-            hint: 'Upload or select a gallery image (aim for 1600×900 or larger).'
+            hint: 'Upload or select a gallery image (aim for ≈1600 px width, 3:2 or 4:3).'
           - name: 'alt'
             label: 'Alt Text'
             widget: 'string'
@@ -616,6 +667,85 @@ collections:
             widget: 'text'
             required: false
             hint: 'Optional caption displayed below the gallery image.'
+      - name: 'videos'
+        label: 'Videos'
+        widget: 'list'
+        required: false
+        collapsed: true
+        summary: '{{fields.title}} — {{fields.placement}}'
+        hint: 'Prefer external links for performance. Keep uploads ≤ 80 MB MP4/WebM + poster image.'
+        fields:
+          - name: 'placement'
+            label: 'Placement'
+            widget: 'select'
+            default: 'after-P2'
+            options:
+              - { label: 'After H1', value: 'after-H1' }
+              - { label: 'After 2nd Paragraph', value: 'after-P2' }
+              - { label: 'After 4th Paragraph', value: 'after-P4' }
+              - { label: 'End of Article', value: 'end' }
+          - name: 'aspectRatio'
+            label: 'Aspect Ratio'
+            widget: 'select'
+            default: '16:9'
+            options:
+              - { label: '16:9 (Widescreen)', value: '16:9' }
+              - { label: '4:3', value: '4:3' }
+              - { label: '3:2', value: '3:2' }
+              - { label: '1:1 (Square)', value: '1:1' }
+              - { label: '9:16 (Vertical)', value: '9:16' }
+          - name: 'externalUrl'
+            label: 'External URL (YouTube or Vimeo)'
+            widget: 'string'
+            required: false
+            hint: 'Paste a YouTube or Vimeo link for faster playback.'
+          - name: 'file'
+            label: 'Upload File (optional)'
+            widget: 'file'
+            required: false
+            media_library:
+              folder: 'public/uploads/insights/video'
+            hint: 'MP4/WebM only. Keep ≤ 80 MB.'
+          - name: 'poster'
+            label: 'Poster Image (optional)'
+            widget: 'image'
+            required: false
+            hint: 'Upload a poster/thumbnail image shown before playback.'
+          - name: 'captions'
+            label: 'Captions (VTT, optional)'
+            widget: 'file'
+            required: false
+            hint: 'Upload caption files in .vtt format.'
+          - name: 'title'
+            label: 'Accessible Title'
+            widget: 'string'
+            hint: 'Used for screen readers and video labels.'
+          - name: 'playerOptions'
+            label: 'Player Options'
+            widget: 'object'
+            required: false
+            collapsed: true
+            fields:
+              - { name: 'autoplay', label: 'Autoplay (muted)', widget: 'boolean', required: false, default: false }
+              - { name: 'loop', label: 'Loop', widget: 'boolean', required: false, default: false }
+              - { name: 'showControls', label: 'Show Controls', widget: 'boolean', required: false, default: true }
+              - { name: 'startAt', label: 'Start At (seconds)', widget: 'number', required: false, value_type: 'int', min: 0 }
+      - name: 'mediaGuidelines'
+        label: 'Media Guidelines (read-only)'
+        widget: 'text'
+        default: "Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or 4:3. Pull-quote portraits ≈800×1000 px."
+        pattern:
+          - '^Inline images ≈1200 px wide \(3:2 or 4:3\)\. Gallery images 3:2 or 4:3\. Pull-quote portraits ≈800×1000 px\.$'
+          - 'Read-only field. Update config.yml to change.'
+        hint: 'Read-only guidelines summarizing recommended image sizes.'
+      - name: 'videoGuidelines'
+        label: 'Video Guidelines (read-only)'
+        widget: 'text'
+        default: "Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB with poster image + optional VTT captions."
+        pattern:
+          - '^Prefer external hosts \(YouTube/Vimeo\)\. Uploaded MP4/WebM ≤80 MB with poster image \+ optional VTT captions\.$'
+          - 'Read-only field. Update config.yml to change.'
+        hint: 'Quick reminder for video sizing and hosting best practices.'
       - label: 'SEO Overrides'
         name: 'seo'
         widget: 'object'

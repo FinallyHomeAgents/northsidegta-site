@@ -20,10 +20,18 @@ import {
   Music,
   Youtube,
 } from "lucide-react";
+import { HTMLElement, TextNode, parse } from "node-html-parser";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const INSIGHT_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHT_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
+const HERO_PLACEHOLDER_IMAGE = "/images/placeholder-insight-hero.svg";
+const OG_FALLBACK_IMAGE = "/Images/og-home.jpg";
+const INLINE_MEDIA_PLACEMENTS = new Set(["after-h1", "after-p2", "after-p4", "end"]);
+const DEFAULT_INLINE_PLACEMENT = "after-p2";
+const ALLOWED_ASPECT_RATIOS = new Set(["16:9", "4:3", "3:2", "1:1", "9:16"]);
+const DEFAULT_ASPECT_RATIO = "16:9";
+const DEFAULT_VIDEO_TITLE = "Insight video";
 
 function splitPathAndSuffix(value) {
   const suffixIndex = value.search(/[?#]/);
@@ -100,6 +108,138 @@ function normalizeGallery(raw) {
     .filter(Boolean);
 }
 
+function normalizePlacement(value, fallback = DEFAULT_INLINE_PLACEMENT) {
+  const raw = safeString(value).toLowerCase();
+  if (INLINE_MEDIA_PLACEMENTS.has(raw)) return raw;
+  return fallback;
+}
+
+function normalizeInlineImages(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      if (!item) return null;
+      const imageValue = typeof item === "string" ? item : item.image;
+      const image = ensureInsightUploadPath(imageValue);
+      if (!image) return null;
+      return {
+        image,
+        alt: safeString(item.alt),
+        caption: safeString(item.caption),
+        placement: normalizePlacement(item.placement),
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizePullQuote(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const text = safeString(raw.text);
+  if (!text) return null;
+  return {
+    text,
+    attribution: safeString(raw.attribution),
+    portrait: ensureInsightUploadPath(raw.portrait || raw.image),
+  };
+}
+
+function normalizePlayerOptions(raw) {
+  if (!raw || typeof raw !== "object") {
+    return {
+      autoplay: false,
+      loop: false,
+      showControls: true,
+      startAt: 0,
+    };
+  }
+
+  const startAtNumber = Number(raw.startAt);
+  return {
+    autoplay: Boolean(raw.autoplay),
+    loop: Boolean(raw.loop),
+    showControls: raw.showControls !== false,
+    startAt: Number.isFinite(startAtNumber) && startAtNumber >= 0 ? Math.floor(startAtNumber) : 0,
+  };
+}
+
+function sanitizeExternalVideoUrl(rawUrl) {
+  const candidate = safeString(rawUrl);
+  if (!candidate) return "";
+  let parsed;
+  try {
+    parsed = new URL(candidate);
+  } catch (error) {
+    return "";
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  const buildYouTubeEmbed = (id) => {
+    if (!id) return "";
+    const url = new URL(`https://www.youtube.com/embed/${id}`);
+    url.searchParams.set("rel", "0");
+    url.searchParams.set("modestbranding", "1");
+    url.searchParams.set("playsinline", "1");
+    return url.toString();
+  };
+  if (hostname === "youtu.be") {
+    const id = parsed.pathname.replace(/^\/+/, "").split(/[/?#&]/)[0];
+    return buildYouTubeEmbed(id);
+  }
+
+  if (hostname === "youtube.com" || hostname === "www.youtube.com") {
+    if (parsed.pathname.startsWith("/embed/")) {
+      const id = parsed.pathname.split("/")[2];
+      return buildYouTubeEmbed(id);
+    }
+    if (parsed.pathname.startsWith("/shorts/")) {
+      const id = parsed.pathname.split("/")[2];
+      return buildYouTubeEmbed(id);
+    }
+    const id = parsed.searchParams.get("v");
+    return buildYouTubeEmbed(id);
+  }
+
+  if (hostname === "vimeo.com" || hostname === "www.vimeo.com") {
+    const id = parsed.pathname.replace(/^\/+/, "").split("/")[0];
+    return id ? `https://player.vimeo.com/video/${id}` : "";
+  }
+
+  if (hostname === "player.vimeo.com") {
+    if (!parsed.pathname.startsWith("/video/")) return "";
+    return `https://player.vimeo.com${parsed.pathname}${parsed.search || ""}`;
+  }
+
+  return "";
+}
+
+function normalizeAspectRatio(value) {
+  const raw = safeString(value);
+  if (ALLOWED_ASPECT_RATIOS.has(raw)) return raw;
+  return DEFAULT_ASPECT_RATIO;
+}
+
+function normalizeVideos(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const external = sanitizeExternalVideoUrl(item.externalUrl || item.url || item.href);
+      const file = ensureInsightUploadPath(item.file || item.src || item.video);
+      if (!external && !file) return null;
+      return {
+        placement: normalizePlacement(item.placement),
+        aspectRatio: normalizeAspectRatio(item.aspectRatio),
+        external,
+        file,
+        poster: ensureInsightUploadPath(item.poster),
+        captions: ensureInsightUploadPath(item.captions || item.captionsFile),
+        title: safeString(item.title) || DEFAULT_VIDEO_TITLE,
+        playerOptions: normalizePlayerOptions(item.playerOptions),
+      };
+    })
+    .filter(Boolean);
+}
+
 function safeString(value) {
   if (value == null) return "";
   if (typeof value === "string") return value.trim();
@@ -138,6 +278,9 @@ function normalizeInsight(data, sourcePath = "") {
       ogImage: ensureInsightUploadPath(data?.seo?.ogImage),
     },
     gallery: normalizeGallery(data.gallery),
+    inlineImages: normalizeInlineImages(data.inlineImages),
+    pullQuote: normalizePullQuote(data.pullQuote),
+    videos: normalizeVideos(data.videos),
   };
 }
 
@@ -162,6 +305,175 @@ function normalizeSlug(rawSlug) {
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-{2,}/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function toCamelCaseProperty(property) {
+  return property
+    .trim()
+    .replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+}
+
+function parseStyleAttribute(value) {
+  if (!value) return undefined;
+  return value
+    .split(";")
+    .map((rule) => rule.trim())
+    .filter(Boolean)
+    .reduce((acc, rule) => {
+      const [property, rawVal] = rule.split(":");
+      if (!property || !rawVal) return acc;
+      const key = toCamelCaseProperty(property);
+      acc[key] = rawVal.trim();
+      return acc;
+    }, {});
+}
+
+function convertNodeToReact(node, key) {
+  if (node instanceof TextNode) {
+    const text = node.rawText;
+    if (!text) return null;
+    return <React.Fragment key={key}>{text}</React.Fragment>;
+  }
+
+  if (!(node instanceof HTMLElement)) {
+    return null;
+  }
+
+  const tagName = node.tagName.toLowerCase();
+  const props = { key };
+
+  Object.entries(node.attributes || {}).forEach(([attrName, attrValue]) => {
+    if (attrName === "class") {
+      props.className = attrValue;
+    } else if (attrName === "for") {
+      props.htmlFor = attrValue;
+    } else if (attrName === "style") {
+      const styleObject = parseStyleAttribute(attrValue);
+      if (styleObject && Object.keys(styleObject).length > 0) {
+        props.style = styleObject;
+      }
+    } else {
+      props[attrName] = attrValue;
+    }
+  });
+
+  const children = node.childNodes
+    .map((child, index) => convertNodeToReact(child, `${key}-${index}`))
+    .filter((child) => child !== null && child !== undefined);
+
+  if (children.length === 0) {
+    return React.createElement(tagName, props);
+  }
+
+  return React.createElement(tagName, props, ...children);
+}
+
+function parseBodyHtmlToBlocks(html) {
+  if (!html) return [];
+  const root = parse(`<div>${html}</div>`, {
+    blockTextElements: {
+      script: true,
+      noscript: true,
+      style: true,
+      pre: true,
+    },
+  });
+
+  return root.childNodes
+    .filter((node) => !(node instanceof TextNode && !node.rawText.trim()) && node.nodeType !== 8)
+    .map((node, index) => ({
+      element: convertNodeToReact(node, `body-${index}`),
+      tagName: node instanceof HTMLElement ? node.tagName.toLowerCase() : null,
+    }))
+    .filter((entry) => entry.element != null);
+}
+
+function findAfterNthTag(blocks, tagName, occurrence) {
+  let count = 0;
+  for (let index = 0; index < blocks.length; index += 1) {
+    if (blocks[index].tagName === tagName) {
+      count += 1;
+      if (count === occurrence) {
+        return index;
+      }
+    }
+  }
+  return -1;
+}
+
+function findInsertionSlotIndex(blocks, placement) {
+  if (!Array.isArray(blocks) || blocks.length === 0) return -1;
+  switch (placement) {
+    case "after-h1":
+      return findAfterNthTag(blocks, "h1", 1);
+    case "after-p2":
+      return findAfterNthTag(blocks, "p", 2);
+    case "after-p4":
+      return findAfterNthTag(blocks, "p", 4);
+    case "end":
+      return blocks.length - 1;
+    default:
+      return blocks.length - 1;
+  }
+}
+
+function getAspectRatioStyle(aspectRatio) {
+  const [width, height] = String(aspectRatio)
+    .split(":")
+    .map((part) => Number(part));
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
+    return { aspectRatio: DEFAULT_ASPECT_RATIO.replace(":", " / ") };
+  }
+  return { aspectRatio: `${width} / ${height}` };
+}
+
+function useLazyVisibility(rootMargin = "200px") {
+  const [isVisible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [rootMargin]);
+
+  return [ref, isVisible];
+}
+
+function getVideoMimeType(src) {
+  const safeSrc = safeString(src).toLowerCase();
+  if (safeSrc.endsWith(".webm")) return "video/webm";
+  if (safeSrc.endsWith(".ogv") || safeSrc.endsWith(".ogg")) return "video/ogg";
+  return "video/mp4";
+}
+
+function extractPlainText(html) {
+  if (!html) return "";
+  try {
+    const root = parse(`<div>${html}</div>`);
+    return root.textContent.replace(/\s+/g, " ").trim();
+  } catch (error) {
+    return "";
+  }
 }
 
 function getInsightDataPaths(slug) {
@@ -363,6 +675,9 @@ export default function InsightPage() {
     return marked.parse(insight.body);
   }, [insight?.body]);
 
+  const bodyBlocks = useMemo(() => parseBodyHtmlToBlocks(bodyHtml), [bodyHtml]);
+  const plainTextBody = useMemo(() => extractPlainText(bodyHtml), [bodyHtml]);
+
   const formattedDate = useMemo(() => formatPublishDate(insight?.publishDate), [insight?.publishDate]);
 
   const seoTitle = insight?.seo?.title
@@ -370,11 +685,18 @@ export default function InsightPage() {
     : insight?.title
       ? `NorthSide GTA Insights: ${insight.title}`
       : "NorthSide GTA Insights";
-  const metaDescription = truncate(insight?.seo?.description || insight?.excerpt || "");
+  const excerptOrBody = useMemo(() => {
+    if (insight?.excerpt) return insight.excerpt;
+    if (plainTextBody) return truncate(plainTextBody, 150);
+    return "";
+  }, [insight?.excerpt, plainTextBody]);
+  const metaDescriptionSource = insight?.seo?.description || excerptOrBody;
+  const metaDescription = truncate(metaDescriptionSource, 160);
   const featureImage = insight?.featureImage || "";
   const featureImageAlt = insight?.featureImageAlt || insight?.title || "NorthSide GTA";
-  const ogImage = insight?.seo?.ogImage || featureImage;
-  const ogImageAbsolute = toAbsoluteUrl(ogImage, origin);
+  const ogImageSource = insight?.seo?.ogImage || featureImage || OG_FALLBACK_IMAGE;
+  const ogImageAbsolute = toAbsoluteUrl(ogImageSource, origin);
+  const ogImageAlt = featureImage ? featureImageAlt : "NorthSide GTA";
 
   const publishedIso = useMemo(() => {
     if (!insight?.publishDate) return "";
@@ -388,6 +710,66 @@ export default function InsightPage() {
     [error],
   );
   const authoringContext = !IS_PRODUCTION;
+
+  const contentSequence = useMemo(() => {
+    const additions = [];
+
+    if (Array.isArray(insight?.inlineImages)) {
+      insight.inlineImages.forEach((image, index) => {
+        if (!image?.image) return;
+        additions.push({
+          placement: image.placement || DEFAULT_INLINE_PLACEMENT,
+          element: <InlineImageBlock key={`inline-image-${index}`} image={image} />,
+        });
+      });
+    }
+
+    if (insight?.pullQuote) {
+      additions.push({
+        placement: DEFAULT_INLINE_PLACEMENT,
+        element: <PullQuoteBlock key="pull-quote" quote={insight.pullQuote} />,
+      });
+    }
+
+    if (Array.isArray(insight?.videos)) {
+      insight.videos.forEach((video, index) => {
+        if (!video?.external && !video?.file) return;
+        additions.push({
+          placement: video.placement || DEFAULT_INLINE_PLACEMENT,
+          element: <InlineVideoBlock key={`inline-video-${index}`} video={video} />,
+        });
+      });
+    }
+
+    const slotMap = new Map();
+    const trailing = [];
+
+    additions.forEach((item) => {
+      const slotIndex = findInsertionSlotIndex(bodyBlocks, item.placement || DEFAULT_INLINE_PLACEMENT);
+      if (slotIndex === -1) {
+        trailing.push(item.element);
+      } else {
+        if (!slotMap.has(slotIndex)) slotMap.set(slotIndex, []);
+        slotMap.get(slotIndex).push(item.element);
+      }
+    });
+
+    const ordered = [];
+
+    bodyBlocks.forEach((block, index) => {
+      if (block.element) {
+        ordered.push(block.element);
+      }
+      const extras = slotMap.get(index);
+      if (extras) {
+        extras.forEach((extra) => {
+          ordered.push(extra);
+        });
+      }
+    });
+
+    return ordered.concat(trailing);
+  }, [bodyBlocks, insight?.inlineImages, insight?.pullQuote, insight?.videos]);
 
   let errorTitle = "We couldn’t find that insight.";
   let errorMessage = "Check the URL or return to the homepage.";
@@ -417,12 +799,12 @@ export default function InsightPage() {
         {metaDescription && <meta property="og:description" content={metaDescription} />}
         {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
         {ogImageAbsolute && <meta property="og:image" content={ogImageAbsolute} />}
-        {featureImageAlt && <meta property="og:image:alt" content={featureImageAlt} />}
+        {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
         <meta name="twitter:card" content="summary_large_image" />
         {seoTitle && <meta name="twitter:title" content={seoTitle} />}
         {metaDescription && <meta name="twitter:description" content={metaDescription} />}
         {ogImageAbsolute && <meta name="twitter:image" content={ogImageAbsolute} />}
-        {featureImageAlt && <meta name="twitter:image:alt" content={featureImageAlt} />}
+        {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
         {publishedIso && <meta property="article:published_time" content={publishedIso} />}
         {insight?.author && <meta property="article:author" content={insight.author} />}
         {Array.isArray(insight?.tags) &&
@@ -516,8 +898,8 @@ export default function InsightPage() {
               </aside>
 
               <div className="space-y-12 lg:order-2">
-                {bodyHtml && (
-                  <div className="insight-content" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
+                {contentSequence.length > 0 && (
+                  <div className="insight-content">{contentSequence}</div>
                 )}
 
                 {insight.gallery?.length > 0 && (
@@ -570,30 +952,162 @@ export default function InsightPage() {
   );
 }
 
+function InlineImageBlock({ image }) {
+  if (!image?.image) return null;
+  const caption = image.caption || image.alt;
+  return (
+    <figure className="insight-inline-media">
+      <img
+        src={image.image}
+        alt={image.alt || ""}
+        loading="lazy"
+        decoding="async"
+      />
+      {caption && <figcaption className="insight-inline-media__caption">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+function PullQuoteBlock({ quote }) {
+  if (!quote?.text) return null;
+  return (
+    <figure className="insight-pull-quote">
+      {quote.portrait && (
+        <div className="insight-pull-quote__portrait">
+          <img
+            src={quote.portrait}
+            alt={quote.attribution ? `${quote.attribution} portrait` : "Portrait"}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+      <blockquote>{quote.text}</blockquote>
+      {quote.attribution && <figcaption>— {quote.attribution}</figcaption>}
+    </figure>
+  );
+}
+
+function InlineVideoBlock({ video }) {
+  if (!video) return null;
+  const [containerRef, isVisible] = useLazyVisibility();
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      setHasBeenVisible(true);
+    }
+  }, [isVisible]);
+
+  const shouldLoad = hasBeenVisible || isVisible;
+  const frameStyle = useMemo(() => getAspectRatioStyle(video.aspectRatio), [video.aspectRatio]);
+  const caption = safeString(video.title);
+
+  return (
+    <figure className="insight-inline-video" ref={containerRef}>
+      <div className="insight-inline-video__frame" style={frameStyle}>
+        {video.external ? (
+          <ExternalVideoEmbed video={video} shouldLoad={shouldLoad} />
+        ) : (
+          <UploadedVideoPlayer video={video} shouldLoad={shouldLoad} />
+        )}
+      </div>
+      {caption && <figcaption className="insight-inline-video__caption">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+function ExternalVideoEmbed({ video, shouldLoad }) {
+  if (!video?.external) return null;
+  const src = shouldLoad ? video.external : undefined;
+  return (
+    <iframe
+      className="insight-inline-video__iframe"
+      src={src}
+      title={video.title || "Embedded video"}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+      referrerPolicy="strict-origin-when-cross-origin"
+    />
+  );
+}
+
+function UploadedVideoPlayer({ video, shouldLoad }) {
+  if (!video?.file) return null;
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (!shouldLoad) return undefined;
+    const node = videoRef.current;
+    if (!node || !video.playerOptions?.startAt) return undefined;
+
+    const handleLoadedMetadata = () => {
+      try {
+        node.currentTime = video.playerOptions.startAt;
+      } catch (error) {
+        // ignore seek errors
+      }
+    };
+
+    node.addEventListener("loadedmetadata", handleLoadedMetadata, { once: true });
+    return () => {
+      node.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
+  }, [shouldLoad, video.playerOptions?.startAt]);
+
+  const autoPlay = Boolean(shouldLoad && video.playerOptions?.autoplay);
+  const controls = video.playerOptions?.showControls !== false;
+  const loop = Boolean(video.playerOptions?.loop);
+  const preload = shouldLoad ? "metadata" : "none";
+
+  return (
+    <video
+      ref={videoRef}
+      className="insight-inline-video__video"
+      controls={controls}
+      autoPlay={autoPlay}
+      muted={autoPlay || undefined}
+      loop={loop}
+      playsInline
+      poster={video.poster || undefined}
+      preload={preload}
+      title={video.title || "Insight video"}
+      aria-label={video.title || "Insight video"}
+    >
+      {shouldLoad && (
+        <>
+          <source src={video.file} type={getVideoMimeType(video.file)} />
+          {video.captions && (
+            <track kind="captions" src={video.captions} label="Captions" default />
+          )}
+        </>
+      )}
+      Your browser does not support the video tag.
+    </video>
+  );
+}
+
 function Hero({ insight, loading, featureImageAlt }) {
-  const featureImage = insight?.featureImage;
+  const featureImage = insight?.featureImage || HERO_PLACEHOLDER_IMAGE;
   const publishDate = formatPublishDate(insight?.publishDate);
   const heroAlt = featureImageAlt || insight?.title || "NorthSide GTA";
   return (
     <section className="relative isolate overflow-hidden bg-emerald-950 text-white">
-      {featureImage ? (
-        <div className="absolute inset-0">
-          <img
-            src={featureImage}
-            alt={heroAlt}
-            loading="eager"
-            decoding="async"
-            className="h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-emerald-950/65 mix-blend-multiply" aria-hidden />
-          <div
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-emerald-950/90 via-emerald-900/70 to-transparent"
-            aria-hidden
-          />
-        </div>
-      ) : (
-        <div className="absolute inset-0 bg-[#04110c]" aria-hidden />
-      )}
+      <div className="absolute inset-0">
+        <img
+          src={featureImage}
+          alt={heroAlt}
+          loading="eager"
+          decoding="async"
+          className="h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-emerald-950/65 mix-blend-multiply" aria-hidden />
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-emerald-950/90 via-emerald-900/70 to-transparent"
+          aria-hidden
+        />
+      </div>
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.22),_transparent_60%)]"
         aria-hidden

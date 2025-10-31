@@ -15,6 +15,9 @@
     "ogImage": "/uploads/insights/eastgwillimbury-banner.jpg"
   },
   "gallery": [],
+  "inlineImages": [],
+  "pullQuote": null,
+  "videos": [],
   "body": "test\n",
   "sourcePath": "public/content/insights/lando-test-2/index.md"
 }
