@@ -20,8 +20,16 @@ tags:
   - landon mulhall
 featureImage: /uploads/insights/whynorthsidegtablog.jpg
 featureImageAlt: View of the NorthSide GTA with morning sunlight
+pullQuote:
+  text: In reality, communities like Aurora, Stouffville, Uxbridge, East
+    Gwillimbury, Newmarket, Georgina, and Scugog are closer than most people
+    think.
 gallery:
   - image: /uploads/insights/whynorthsidegtablog.jpg
+mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
+  4:3. Pull-quote portraits ≈800×1000 px.
+videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
+  with poster image + optional VTT captions.
 seo:
   title: Why We Built NorthSide GTA — and What It Means for Home Buyers |
     NorthSide GTA
