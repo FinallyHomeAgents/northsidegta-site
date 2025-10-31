@@ -24,6 +24,13 @@ export default function HeroPromo({ pinned }) {
     ensureInstagramScript();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (open && !useLocalVideo && window.instgrm?.Embeds) {
+      window.instgrm.Embeds.process();
+    }
+  }, [open, useLocalVideo]);
+
   return (
     <section className="relative overflow-hidden">
       <div
