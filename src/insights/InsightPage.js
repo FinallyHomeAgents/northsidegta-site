@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import { DateTime } from "luxon";
 import Navigation from "../Navigation";
@@ -13,6 +12,7 @@ import {
 import { trackEvent } from "../utils/analytics";
 import { getSiteOrigin, toAbsoluteUrl } from "../community/shareUtils";
 import { getSocialLinks } from "../utils/socialLinks";
+import DynamicMetaTags from "../components/seo/DynamicMetaTags";
 import {
   Facebook,
   Instagram,
@@ -788,30 +788,47 @@ export default function InsightPage() {
     errorMessage = "Something went wrong while loading this insight. Please try again.";
   }
 
+  const articleTagsMeta = useMemo(() => {
+    if (!Array.isArray(insight?.tags)) return [];
+    return insight.tags
+      .map((tag) => {
+        if (!tag) return null;
+        const trimmed = typeof tag === "string" ? tag.trim() : String(tag).trim();
+        if (!trimmed) return null;
+        return { property: "article:tag", content: trimmed, key: `article-tag-${trimmed}` };
+      })
+      .filter(Boolean);
+  }, [insight?.tags]);
+
+  const metaConfig = useMemo(
+    () => ({
+      documentTitle: seoTitle,
+      title: seoTitle,
+      description: metaDescription,
+      canonicalUrl,
+      ogType: "article",
+      ogImage: ogImageAbsolute,
+      ogImageAlt,
+      twitterCard: "summary_large_image",
+      articlePublishedTime: publishedIso,
+      articleAuthor: insight?.author,
+      additionalMeta: articleTagsMeta,
+    }),
+    [
+      seoTitle,
+      metaDescription,
+      canonicalUrl,
+      ogImageAbsolute,
+      ogImageAlt,
+      publishedIso,
+      insight?.author,
+      articleTagsMeta,
+    ],
+  );
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Helmet>
-        <title>{seoTitle}</title>
-        {metaDescription && <meta name="description" content={metaDescription} />}
-        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-        <meta property="og:type" content="article" />
-        {seoTitle && <meta property="og:title" content={seoTitle} />}
-        {metaDescription && <meta property="og:description" content={metaDescription} />}
-        {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-        {ogImageAbsolute && <meta property="og:image" content={ogImageAbsolute} />}
-        {ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
-        <meta name="twitter:card" content="summary_large_image" />
-        {seoTitle && <meta name="twitter:title" content={seoTitle} />}
-        {metaDescription && <meta name="twitter:description" content={metaDescription} />}
-        {ogImageAbsolute && <meta name="twitter:image" content={ogImageAbsolute} />}
-        {ogImageAlt && <meta name="twitter:image:alt" content={ogImageAlt} />}
-        {publishedIso && <meta property="article:published_time" content={publishedIso} />}
-        {insight?.author && <meta property="article:author" content={insight.author} />}
-        {Array.isArray(insight?.tags) &&
-          insight.tags.map((tag) => (
-            <meta key={tag} property="article:tag" content={tag} />
-          ))}
-      </Helmet>
+      <DynamicMetaTags {...metaConfig} />
 
       <Navigation />
 

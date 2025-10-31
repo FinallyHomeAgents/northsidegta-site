@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
 import {
   ArrowLeft,
   CalendarPlus,
@@ -23,6 +22,7 @@ import {
   shareEvent,
   toAbsoluteUrl,
 } from './shareUtils'
+import DynamicMetaTags from '../components/seo/DynamicMetaTags'
 
 const SITE_ORIGIN = 'https://northsidegta.ca'
 const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
@@ -66,6 +66,13 @@ function splitParagraphs(text) {
     .split(/\n{2,}/)
     .map((segment) => segment.trim())
     .filter(Boolean)
+}
+
+function toIsoString(value) {
+  if (!value) return ''
+  const date = value instanceof Date ? value : new Date(value)
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return ''
+  return date.toISOString()
 }
 
 function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '', occurrenceOverride = null) {
@@ -416,6 +423,53 @@ export default function EventDetailPage() {
       ? new Date(event.startDate).toISOString()
       : ''
 
+  const eventStartIso = occurrence?.start ? toIsoString(occurrence.start) : toIsoString(event?.startDate)
+  const eventEndIso = occurrence?.end ? toIsoString(occurrence.end) : toIsoString(event?.endDate)
+  const eventLocation = React.useMemo(() => {
+    if (!event) return ''
+    const parts = [event.locationName, event.address, event.subArea, event.town]
+      .map((value) => (typeof value === 'string' ? normalizeWhitespace(value) : ''))
+      .filter(Boolean)
+    if (!parts.length) return ''
+    return [...new Set(parts)].join(', ')
+  }, [event])
+
+  const metaConfig = React.useMemo(
+    () => ({
+      documentTitle: pageTitle,
+      title: shareTitle || pageTitle,
+      ogTitle: shareTitle || pageTitle,
+      twitterTitle: shareTitle || pageTitle,
+      description: pageDescription,
+      canonicalUrl,
+      ogType: 'event',
+      ogImage,
+      ogImageAlt: shareTitle,
+      siteName: 'NorthSide GTA',
+      twitterCard: 'summary_large_image',
+      twitterImage: ogImage,
+      articlePublishedTime: publishedTime,
+      additionalMeta: [
+        eventStartIso && { property: 'event:start_time', content: eventStartIso },
+        eventEndIso && { property: 'event:end_time', content: eventEndIso },
+        eventLocation && { property: 'event:location', content: eventLocation },
+        event?.hidden && { name: 'robots', content: 'noindex' },
+      ].filter(Boolean),
+    }),
+    [
+      canonicalUrl,
+      event?.hidden,
+      eventEndIso,
+      eventLocation,
+      eventStartIso,
+      ogImage,
+      pageDescription,
+      pageTitle,
+      publishedTime,
+      shareTitle,
+    ],
+  )
+
   const handleAddToCalendar = React.useCallback(() => {
     if (!event) return
     if (event.icsUrl) {
@@ -481,26 +535,9 @@ export default function EventDetailPage() {
 
   return (
     <>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={shareTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:type" content="event" />
-        <meta property="og:url" content={shareUrl} />
-        {ogImage && <meta property="og:image" content={ogImage} />}
-        {ogImage && <meta property="og:image:alt" content={shareTitle} />}
-        <meta property="og:site_name" content="NorthSide GTA" />
-        {publishedTime && <meta property="article:published_time" content={publishedTime} />}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={shareTitle} />
-        <meta name="twitter:description" content={pageDescription} />
-        {ogImage && <meta name="twitter:image" content={ogImage} />}
-        {ogImage && <meta name="twitter:image:alt" content={shareTitle} />}
-        {event?.hidden && <meta name="robots" content="noindex" />}
+      <DynamicMetaTags {...metaConfig}>
         {schema && <script type="application/ld+json">{schema}</script>}
-      </Helmet>
+      </DynamicMetaTags>
 
       <Navigation />
 

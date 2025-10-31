@@ -161,7 +161,7 @@ function computeMeta(data, slug, origin) {
   const ogImage = ogImageSecure || ogImageRaw;
   const pageTitle = `${headline} • NorthSide GTA`;
   const heroAltText = `${heroAltBase} hero image`;
-  const twitterCard = ogImage ? "summary_large_image" : "summary";
+  const twitterCard = "summary_large_image";
 
   return {
     slug,
