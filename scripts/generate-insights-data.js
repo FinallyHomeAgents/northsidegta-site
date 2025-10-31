@@ -10,6 +10,10 @@ const outputDir = path.join(rootDir, "public", "data", "insights");
 
 const INSIGHTS_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHTS_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
+const INLINE_MEDIA_PLACEMENTS = new Set(["after-h1", "after-p2", "after-p4", "end"]);
+const DEFAULT_INLINE_PLACEMENT = "after-p2";
+const ALLOWED_ASPECT_RATIOS = new Set(["16:9", "4:3", "3:2", "1:1", "9:16"]);
+const DEFAULT_ASPECT_RATIO = "16:9";
 
 function splitPathAndSuffix(value) {
   const suffixIndex = value.search(/[?#]/);
@@ -74,6 +78,86 @@ function normalizeGallery(raw) {
         image,
         alt: safeString(entry.alt),
         caption: safeString(entry.caption),
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizePlacement(value, fallback = DEFAULT_INLINE_PLACEMENT) {
+  const raw = safeString(value).toLowerCase();
+  if (INLINE_MEDIA_PLACEMENTS.has(raw)) return raw;
+  return fallback;
+}
+
+function normalizeInlineImages(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry) => {
+      if (!entry) return null;
+      const image = normalizeAssetPath(entry.image || entry.src || entry.path || entry);
+      if (!image) return null;
+      return {
+        image,
+        alt: safeString(entry.alt),
+        caption: safeString(entry.caption),
+        placement: normalizePlacement(entry.placement, DEFAULT_INLINE_PLACEMENT),
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizePullQuote(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const text = safeString(raw.text);
+  if (!text) return null;
+  return {
+    text,
+    attribution: safeString(raw.attribution),
+    portrait: normalizeAssetPath(raw.portrait || raw.image),
+  };
+}
+
+function normalizeAspectRatio(value) {
+  const raw = safeString(value);
+  if (ALLOWED_ASPECT_RATIOS.has(raw)) return raw;
+  return DEFAULT_ASPECT_RATIO;
+}
+
+function normalizePlayerOptions(raw) {
+  if (!raw || typeof raw !== "object") {
+    return {
+      autoplay: false,
+      loop: false,
+      showControls: true,
+      startAt: 0,
+    };
+  }
+  const startAtNumber = Number(raw.startAt);
+  return {
+    autoplay: Boolean(raw.autoplay),
+    loop: Boolean(raw.loop),
+    showControls: raw.showControls !== false,
+    startAt: Number.isFinite(startAtNumber) && startAtNumber >= 0 ? Math.floor(startAtNumber) : 0,
+  };
+}
+
+function normalizeVideos(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") return null;
+      const externalUrl = safeString(entry.externalUrl || entry.url || entry.href);
+      const file = normalizeAssetPath(entry.file || entry.src || entry.video);
+      if (!externalUrl && !file) return null;
+      return {
+        placement: normalizePlacement(entry.placement, DEFAULT_INLINE_PLACEMENT),
+        aspectRatio: normalizeAspectRatio(entry.aspectRatio),
+        externalUrl,
+        file,
+        poster: normalizeAssetPath(entry.poster),
+        captions: normalizeAssetPath(entry.captions || entry.captionsFile),
+        title: safeString(entry.title),
+        playerOptions: normalizePlayerOptions(entry.playerOptions),
       };
     })
     .filter(Boolean);
@@ -203,6 +287,9 @@ function main() {
         ogImage: normalizeAssetPath(data?.seo?.ogImage),
       },
       gallery: normalizeGallery(data.gallery),
+      inlineImages: normalizeInlineImages(data.inlineImages),
+      pullQuote: normalizePullQuote(data.pullQuote),
+      videos: normalizeVideos(data.videos),
       body,
       sourcePath: relativeIndexPath,
     };
