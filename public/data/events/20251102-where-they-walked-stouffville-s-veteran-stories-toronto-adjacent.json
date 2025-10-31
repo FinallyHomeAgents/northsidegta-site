@@ -22,16 +22,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/where-they-walked-stouffvilles-veteran-stories/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014310-1762081200-1762088400@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-10-31T08:34:41.919Z",
-  "updatedAt": "2025-10-31T08:34:41.919Z",
-  "featured": false
+  "updatedAt": "2025-10-31T08:34:41Z"
 }
