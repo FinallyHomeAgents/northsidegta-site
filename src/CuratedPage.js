@@ -1,8 +1,8 @@
 // src/CuratedPage.js
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import LeadForm from "./components/LeadForm";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 function useCurated(slug) {
   const [page, setPage] = React.useState(null);
@@ -107,40 +107,36 @@ export default function CuratedPage() {
   const whatsappHref = typeof page.whatsappUrl === "string" ? page.whatsappUrl.trim() : "";
 
   const slugValue = typeof slug === "string" ? slug.trim() : "";
+  const canonicalSlug =
+    (typeof page.slug === "string" && page.slug.trim()) || slugValue || "";
   const slugText = slugValue ? slugValue.replace(/[-_]+/g, " ").trim() : "";
   const heroAltText = `${headline || slugText || "NorthSide GTA"} hero image`;
-  const canonicalUrl =
-    typeof window !== "undefined" && window.location
-      ? window.location.href
-      : absoluteUrl(`/collections/${encodeURIComponent(slugValue)}`);
+  const canonicalUrl = absoluteUrl(`/collections/${encodeURIComponent(canonicalSlug)}`);
   const pageTitle = `${headline} • NorthSide GTA`;
-  const twitterCardType = ogImage ? "summary_large_image" : "summary";
+
+  const metaConfig = {
+    documentTitle: pageTitle,
+    title: pageTitle,
+    description: seoDescription,
+    canonicalUrl,
+    ogType: "website",
+    ogImage,
+    ogImageAlt: heroAltText,
+    siteName: "NorthSide GTA",
+    twitterCard: "summary_large_image",
+    twitterImage: ogImage,
+    additionalMeta: [
+      { name: "robots", content: "noindex,nofollow" },
+      ogImageSecure && { property: "og:image:secure_url", content: ogImageSecure || ogImage },
+      ogImageType && { property: "og:image:type", content: ogImageType },
+      canonicalUrl && { name: "twitter:url", content: canonicalUrl },
+      ogImageType && { name: "twitter:image:type", content: ogImageType },
+    ].filter(Boolean),
+  };
 
   return (
     <>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta name="robots" content="noindex,nofollow" />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        {ogImage && <meta property="og:image" content={ogImage} />}
-        {(ogImageSecure || ogImage) && (
-          <meta property="og:image:secure_url" content={ogImageSecure || ogImage} />
-        )}
-        {ogImageType && <meta property="og:image:type" content={ogImageType} />}
-        {ogImage && <meta property="og:image:alt" content={heroAltText} />}
-        <meta name="twitter:card" content={twitterCardType} />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:url" content={canonicalUrl} />
-        {ogImage && <meta name="twitter:image" content={ogImage} />}
-        {ogImageType && <meta name="twitter:image:type" content={ogImageType} />}
-        {ogImage && <meta name="twitter:image:alt" content={heroAltText} />}
-      </Helmet>
+      <DynamicMetaTags {...metaConfig} />
 
       <div style={layout.page}>
         <main style={layout.main}>
