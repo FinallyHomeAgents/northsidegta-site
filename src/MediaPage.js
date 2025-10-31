@@ -54,6 +54,8 @@ export default function MediaPage() {
   }, []);
 
   const heroEnabled = settings?.pinned?.enabled !== false;
+  const showHeroCard = heroEnabled && Boolean(settings?.pinned?.source_url);
+  const hasItems = items.length > 0;
 
   return (
     <>
@@ -75,7 +77,20 @@ export default function MediaPage() {
       </Helmet>
       <Navigation />
       <main className="relative min-h-screen bg-neutral-950 text-white">
-        {heroEnabled && <HeroPromo pinned={settings?.pinned} />}
+        <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-10">
+          <div
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{ background: "radial-gradient(1200px 600px at 50% -10%, rgba(50,97,14,0.35), transparent)" }}
+          />
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              {settings?.pinned?.title || "Videos + Reels"}
+            </h1>
+            {settings?.pinned?.tagline && (
+              <p className="mt-3 text-neutral-300">{settings?.pinned?.tagline}</p>
+            )}
+          </div>
+        </div>
 
         <div className="mx-auto max-w-6xl px-6">
           {error && (
@@ -86,12 +101,9 @@ export default function MediaPage() {
         </div>
 
         <section className="mx-auto max-w-6xl px-6 pb-16">
-          {items.length === 0 ? (
-            <div className="rounded-2xl border border-white/10 bg-neutral-900/60 p-6 text-neutral-300">
-              No items yet — paste Instagram links in CMS → Socials → Media Links.
-            </div>
-          ) : (
+          {showHeroCard || hasItems ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {showHeroCard && <HeroPromo pinned={settings?.pinned} />}
               {items.map((item, index) => (
                 <IgEmbedCard
                   key={`${item.url}-${index}`}
@@ -100,6 +112,10 @@ export default function MediaPage() {
                   captioned={Boolean(item.captioned)}
                 />
               ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-white/10 bg-neutral-900/60 p-6 text-neutral-300">
+              No items yet — paste Instagram links in CMS → Socials → Media Links.
             </div>
           )}
         </section>
