@@ -188,6 +188,43 @@ collections:
                   name: 'area'
                   label: 'Area'
 
+  - name: "socials"
+    label: "Socials"
+    editor: { preview: false }
+    files:
+      - name: "socials_settings"
+        label: "Videos + Reels Settings"
+        file: "public/content/socials-settings.json"
+        format: "json"
+        fields:
+          - label: "Pinned Hero"
+            name: "pinned"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string", default: "Videos + Reels" }
+              - { label: "Tagline", name: "tagline", widget: "string", required: false, hint: "e.g., Stories from the NorthSide" }
+              - { label: "Pinned Source URL", name: "source_url", widget: "string", hint: "Paste an Instagram permalink OR a local /uploads/*.mp4|.webm" }
+              - { label: "Poster Image (optional)", name: "poster_url", widget: "string", required: false, hint: "/uploads/hero-poster.jpg" }
+              - { label: "Captioned IG Embed", name: "captioned", widget: "boolean", default: false }
+              - { label: "Enable Hero", name: "enabled", widget: "boolean", default: true }
+
+      - name: "media_links"
+        label: "Media Links"
+        file: "public/content/socials.json"
+        format: "json"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.url}}"
+            fields:
+              - { label: "URL", name: "url", widget: "string", hint: "Instagram post/reel/video/photo permalink" }
+              - { label: "Title (optional)", name: "title", widget: "string", required: false }
+              - { label: "Date", name: "date", widget: "datetime", required: false }
+              - { label: "Pin", name: "pin", widget: "boolean", default: false }
+              - { label: "Show Caption", name: "captioned", widget: "boolean", default: false }
+              - { label: "Published", name: "published", widget: "boolean", default: true }
+
   - name: 'events'
     label: 'Community Events'
     label_singular: 'Event'

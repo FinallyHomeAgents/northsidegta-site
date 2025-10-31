@@ -60,6 +60,7 @@ export default function Navigation() {
               { to: "/buyers", label: "Buyers" },
               { to: "/sellers", label: "Sellers" },
               { to: "/community", label: "Community" },
+              { to: "/media", label: "Videos + Reels" },
               { to: "/contact", label: "Contact" },
               { to: "/vip", label: "VIP" },
             ].map((l) => (
@@ -131,6 +132,7 @@ export default function Navigation() {
               <li><Link to="/buyers" onClick={toggleMenu}>Buyers</Link></li>
               <li><Link to="/sellers" onClick={toggleMenu}>Sellers</Link></li>
               <li><Link to="/community" onClick={toggleMenu}>Community</Link></li>
+              <li><Link to="/media" onClick={toggleMenu}>Videos + Reels</Link></li>
               <li><Link to="/contact" onClick={toggleMenu}>Contact</Link></li>
               <li><Link to="/vip" onClick={toggleMenu}>VIP</Link></li>
               <li>
