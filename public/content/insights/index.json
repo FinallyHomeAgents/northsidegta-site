@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "testpage2",
+    "title": "testpage2",
+    "publishDate": "2025-10-29T13:48:00-04:00",
+    "excerpt": "test",
+    "featureImage": "/uploads/insights/sample-hero.png",
+    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
+  },
+  {
+    "slug": "testpage",
+    "title": "testpage",
+    "publishDate": "2025-10-29T13:44:00-04:00",
+    "excerpt": "testpage",
+    "featureImage": "/uploads/insights/sample-hero.png",
+    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
+  },
+  {
+    "slug": "sample-launch",
+    "title": "Exploring Aurora's Greenway Revival",
+    "publishDate": "2025-01-18T09:00:00-05:00",
+    "excerpt": "See how Aurora's Greenway Revival is opening new connections across the NorthSide GTA and what it means for buyers eyeing the commuter belt.",
+    "featureImage": "/uploads/insights/sample-hero.png",
+    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
+  }
+]

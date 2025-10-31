@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { marked } from "marked";
 import { DateTime } from "luxon";
 import Navigation from "../Navigation";
@@ -836,6 +836,15 @@ export default function InsightPage() {
         <Hero insight={insight} loading={loading} featureImageAlt={featureImageAlt} />
 
         <article className="mx-auto w-full max-w-6xl px-4 pb-16 pt-12 sm:px-6 lg:px-8">
+          <p className="mb-6 text-sm text-emerald-700">
+            <Link
+              to="/insights"
+              className="inline-flex items-center gap-1 font-semibold text-emerald-700 transition hover:text-emerald-800 hover:underline"
+            >
+              <span aria-hidden>←</span>
+              <span>Back to Insights</span>
+            </Link>
+          </p>
           {loading && (
             <div className="rounded-3xl border border-emerald-100 bg-white/70 px-6 py-12 text-center text-sm text-slate-500 shadow-lg shadow-emerald-50">
               Loading insight…
