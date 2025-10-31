@@ -358,11 +358,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/wood-carving-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002667-1757894400-1762819199@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-30T08:34:24Z"
+  "lastSyncedAt": "2025-10-31T08:34:41.919Z",
+  "updatedAt": "2025-10-31T08:34:41.919Z",
+  "featured": false
 }
