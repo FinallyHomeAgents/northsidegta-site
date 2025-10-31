@@ -275,3 +275,8 @@ body {
     justify-self: center;
   }
 }
+@keyframes ns-pulse-slow {
+  0%, 100% { opacity: .75; }
+  50%      { opacity: 1; }
+}
+.ns-animate-pulse-slow { animation: ns-pulse-slow 6s ease-in-out infinite; }
