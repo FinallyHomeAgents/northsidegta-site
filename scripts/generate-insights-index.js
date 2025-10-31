@@ -1,125 +1,128 @@
-#!/usr/bin/env node
-
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
+let fg;
+try {
+  fg = require("fast-glob");
+} catch {
+  fg = null;
+}
 
 const ROOT = path.resolve(__dirname, "..");
-const INSIGHTS_DIR = path.join(ROOT, "public", "content", "insights");
-const OUTPUT_FILE = path.join(INSIGHTS_DIR, "index.json");
+const CANDIDATE_ROOTS = [
+  path.join(ROOT, "public", "content", "insights"),
+  path.join(ROOT, "public", "content", "insight"),
+  path.join(ROOT, "content", "insights"),
+];
 
-function normalizeSlug(value) {
-  const raw = safeString(value);
-  if (!raw) return "";
-  return raw
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9-_]+/g, "-")
-    .replace(/-{2,}/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+const OUTPUT = path.join(ROOT, "public", "content", "insights", "index.json");
 
-function safeString(value) {
-  if (value == null) return "";
-  if (typeof value === "string") return value.trim();
-  if (typeof value === "number" || typeof value === "boolean") return String(value).trim();
-  return "";
-}
-
-function collectInsightEntries(dir) {
-  if (!fs.existsSync(dir)) return [];
-  const entries = [];
-  for (const entry of fs.readdirSync(dir)) {
-    const fullPath = path.join(dir, entry);
-    const stat = fs.statSync(fullPath);
-    if (!stat.isDirectory()) continue;
-
-    const markdownPath = path.join(fullPath, "index.md");
-    if (!fs.existsSync(markdownPath)) continue;
-
-    const raw = fs.readFileSync(markdownPath, "utf8");
-    let frontMatter;
-    try {
-      frontMatter = matter(raw).data || {};
-    } catch (error) {
-      const relativePath = path.relative(ROOT, markdownPath);
-      console.warn(`Skipping ${relativePath}: ${error.message}`);
-      continue;
+function findIndexFiles() {
+  const files = new Set();
+  for (const base of CANDIDATE_ROOTS) {
+    if (!fs.existsSync(base)) continue;
+    if (fg) {
+      for (const f of fg.sync("**/index.md", { cwd: base, dot: false })) {
+        files.add(path.join(base, f));
+      }
+    } else {
+      // Fallback walker
+      const stack = [base];
+      while (stack.length) {
+        const dir = stack.pop();
+        for (const entry of fs.readdirSync(dir)) {
+          const full = path.join(dir, entry);
+          const stat = fs.statSync(full);
+          if (stat.isDirectory()) stack.push(full);
+          else if (entry === "index.md") files.add(full);
+        }
+      }
     }
-
-    const folderSlug = normalizeSlug(entry);
-    const frontMatterSlug = normalizeSlug(frontMatter.slug);
-    const slug = folderSlug || frontMatterSlug;
-
-    if (folderSlug && frontMatterSlug && folderSlug !== frontMatterSlug) {
-      const relativePath = path.relative(ROOT, markdownPath);
-      console.warn(
-        `[generate-insights-index] Adjusted slug for ${relativePath} from ${frontMatterSlug || "<missing>"} to ${folderSlug}`
-      );
-    }
-
-    const item = {
-      slug,
-      title: safeString(frontMatter.title),
-      publishDate: safeString(frontMatter.publishDate),
-      excerpt: safeString(frontMatter.excerpt),
-      featureImage: safeString(frontMatter.featureImage),
-      featureImageAlt: safeString(frontMatter.featureImageAlt),
-    };
-
-    if (!item.slug || !item.title || !item.publishDate) {
-      const relativePath = path.relative(ROOT, markdownPath);
-      console.warn(
-        `Skipping ${relativePath}: missing required fields (slug/title/publishDate)`
-      );
-      continue;
-    }
-
-    entries.push(item);
   }
-  return entries;
+  return Array.from(files);
 }
 
-function sortByPublishDateDesc(a, b) {
-  const timeA = new Date(a.publishDate).getTime();
-  const timeB = new Date(b.publishDate).getTime();
-
-  const aValid = Number.isFinite(timeA);
-  const bValid = Number.isFinite(timeB);
-  if (aValid && bValid) {
-    return timeB - timeA;
-  }
-  if (aValid) return -1;
-  if (bValid) return 1;
-  return 0;
+function firstDefined(...vals) {
+  for (const v of vals) if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+  return undefined;
 }
 
-function ensureOutputDir(filePath) {
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-}
-
-function writeJson(filePath, data) {
-  const json = JSON.stringify(data, null, 2);
-  ensureOutputDir(filePath);
-  fs.writeFileSync(filePath, `${json}\n`, "utf8");
+function toISO(val) {
+  const d = new Date(val);
+  return isNaN(d) ? "1970-01-01T00:00:00Z" : d.toISOString();
 }
 
 function main() {
-  const items = collectInsightEntries(INSIGHTS_DIR).sort(sortByPublishDateDesc);
-  writeJson(OUTPUT_FILE, items);
-  const relative = path.relative(ROOT, OUTPUT_FILE);
-  console.log(`Wrote ${items.length} insights to ${relative}`);
+  const files = findIndexFiles();
+  const items = [];
+  const warnings = [];
+
+  for (const file of files) {
+    const raw = fs.readFileSync(file, "utf8");
+    const { data } = matter(raw);
+    const relativePath = path.relative(ROOT, file);
+
+    const dirName = path.basename(path.dirname(file));
+    const title = firstDefined(data.title);
+    if (!title) {
+      warnings.push(`Skipping (missing title): ${relativePath}`);
+      continue;
+    }
+
+    const slugFromData = firstDefined(data.slug);
+    const slug = firstDefined(slugFromData, dirName);
+    if (!slug) {
+      warnings.push(`Skipping (missing slug): ${relativePath}`);
+      continue;
+    }
+
+    const publishDateRaw = firstDefined(data.publishDate, data.date, data.published, data.publish_date);
+    const publishDate = publishDateRaw ? toISO(publishDateRaw) : "1970-01-01T00:00:00Z";
+    const excerptRaw = firstDefined(data.excerpt);
+    const excerpt = excerptRaw ?? "";
+    const featureImageRaw = firstDefined(data.featureImage, data.image, data.cover);
+    const featureImage = featureImageRaw ?? "";
+    const featureImageAltRaw = firstDefined(data.featureImageAlt, data.imageAlt, data.alt);
+    const featureImageAlt = featureImageAltRaw ?? "";
+
+    const missingFields = [];
+    if (!slugFromData) missingFields.push("slug");
+    if (!publishDateRaw) missingFields.push("publishDate");
+    if (!excerptRaw) missingFields.push("excerpt");
+    if (!featureImageRaw) missingFields.push("featureImage");
+    if (!featureImageAltRaw) missingFields.push("featureImageAlt");
+
+    if (missingFields.length) {
+      warnings.push(`Missing [${missingFields.join(", ")}] in ${relativePath}`);
+    }
+
+    items.push({
+      slug,
+      title,
+      publishDate,
+      excerpt,
+      featureImage,
+      featureImageAlt,
+      __source: relativePath,
+    });
+  }
+
+  // Sort newest first
+  items.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+
+  // Ensure output dir exists
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
+  const payload = JSON.stringify(items.map(({ __source, ...rest }) => rest), null, 2);
+  fs.writeFileSync(OUTPUT, `${payload}\n`, "utf8");
+
+  // Logs for debugging in CI/Vercel
+  console.log("=== Insights index ===");
+  items.forEach(it => console.log(`${it.slug} | ${it.publishDate} | src: ${it.__source}`));
+  if (warnings.length) {
+    console.warn("Warnings:");
+    warnings.forEach(w => console.warn(" -", w));
+  }
+  console.log(`Total insights indexed: ${items.length}`);
 }
 
-if (require.main === module) {
-  try {
-    main();
-  } catch (error) {
-    console.error(error);
-    process.exitCode = 1;
-  }
-}
+if (require.main === module) main();
