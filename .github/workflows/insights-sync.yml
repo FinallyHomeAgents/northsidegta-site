@@ -1,0 +1,54 @@
+name: Sync Insights Data
+
+on:
+  pull_request:
+    paths:
+      - 'public/content/insights/**'
+      - 'public/data/insights/**'
+      - 'scripts/generate-insights-data.js'
+      - 'scripts/generate-insights-index.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/insights-sync.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'public/content/insights/**'
+      - 'public/data/insights/**'
+      - 'scripts/generate-insights-data.js'
+      - 'scripts/generate-insights-index.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/insights-sync.yml'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci || npm install
+      - name: Generate insight data
+        run: |
+          node scripts/generate-insights-data.js
+          node scripts/generate-insights-index.js
+      - name: Check for uncommitted changes
+        if: github.event_name == 'pull_request'
+        run: |
+          if ! git diff --quiet --exit-code; then
+            echo '::error::Insight data is out of date. Run `npm run generate:insights` and `node scripts/generate-insights-index.js`.'
+            git status --short
+            exit 1
+          fi
+      - name: Commit updated insight data
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: sync insights data'
+          branch: ${{ github.ref_name }}
+          file_pattern: |
+            public/data/insights/**
+            public/content/insights/index.json
