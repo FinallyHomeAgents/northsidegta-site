@@ -1,11 +1,11 @@
 [
   {
-    "slug": "lando-test",
-    "title": "Lando Test",
-    "publishDate": "2025-10-30T19:03:00.000Z",
-    "excerpt": "Test",
-    "featureImage": "/uploads/insights/whynorthsidegtablog-lando.jpg",
-    "featureImageAlt": "Test"
+    "slug": "blue-jays-game7",
+    "title": "Official Game 7 Viewing Parties Across the NorthSide GTA",
+    "publishDate": "2025-11-01T14:23:00.000Z",
+    "excerpt": "If you’re planning to watch tonight’s Game 7 of the World Series out in the community, a few NorthSide GTA towns are turning public spaces into Jays-blue fan zones. Here’s where the towns themselves are hosting official viewing parties.",
+    "featureImage": "/uploads/insights/game7viewingig-1200-x-630-px-.jpg",
+    "featureImageAlt": "LETS GO BLUE JAYS"
   },
   {
     "slug": "why-we-built-northside-gta",
@@ -14,45 +14,5 @@
     "excerpt": "We created NorthSide GTA to help home buyers see what life north of Toronto is really like. Discover how towns like Uxbridge, Stouffville, Aurora, and Georgina offer more space, more value, and stronger community while staying closer to the city than most people think.",
     "featureImage": "/uploads/insights/whynorthsidegtablog.jpg",
     "featureImageAlt": "View of the NorthSide GTA with morning sunlight"
-  },
-  {
-    "slug": "test5",
-    "title": "test5",
-    "publishDate": "2025-10-30T15:36:00.000Z",
-    "excerpt": "test",
-    "featureImage": "/uploads/insights/eastgwillimbury-banner.jpg",
-    "featureImageAlt": "test image"
-  },
-  {
-    "slug": "test4",
-    "title": "test4",
-    "publishDate": "2025-10-30T15:13:00.000Z",
-    "excerpt": "test",
-    "featureImage": "/uploads/insights/eastgwillimbury-banner.jpg",
-    "featureImageAlt": "test"
-  },
-  {
-    "slug": "testing-123",
-    "title": "Testing 123",
-    "publishDate": "2025-10-30T14:29:00.000Z",
-    "excerpt": "Test",
-    "featureImage": "/uploads/insights/hero-about.jpg",
-    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
-  },
-  {
-    "slug": "testpage",
-    "title": "testpage",
-    "publishDate": "2025-10-29T17:44:00.000Z",
-    "excerpt": "testpage",
-    "featureImage": "/uploads/insights/sample-hero.png",
-    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
-  },
-  {
-    "slug": "sample-launch",
-    "title": "Exploring Aurora's Greenway Revival",
-    "publishDate": "2025-01-18T14:00:00.000Z",
-    "excerpt": "See how Aurora's Greenway Revival is opening new connections across the NorthSide GTA and what it means for buyers eyeing the commuter belt.",
-    "featureImage": "/uploads/insights/sample-hero.png",
-    "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight"
   }
 ]
