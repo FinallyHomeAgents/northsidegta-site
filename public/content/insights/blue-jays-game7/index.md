@@ -18,16 +18,7 @@ inlineImages:
 pullQuote:
   text: One last time this year — LET’S GO BLUE JAYS!
   portrait: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
-videos:
-  - placement: after-P2
-    aspectRatio: 16:9
-    playerOptions:
-      autoplay: false
-      loop: false
-      showControls: true
-    title: LETS GO BLUE JAYS
-    file: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
-    poster: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
+videos: []
 mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
   4:3. Pull-quote portraits ≈800×1000 px.
 videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
@@ -38,11 +29,9 @@ seo:
 ---
 Looking for somewhere in the NorthSide to watch tonight’s **Game 7 of the World Series**? The energy couldn’t be higher, and a few local towns are turning public spaces into full-on Jays zones. Whether you’re in Newmarket, Aurora, or Bradford, you can join fellow fans for one more unforgettable night of baseball under the lights.
 
-\## Official Municipal Viewing Parties — November 1, 2025
+**Official Municipal Viewing Parties — November 1, 2025**
 
-
-
-\### Newmarket — The Nest (NewRoads Performing Arts Centre)
+Newmarket — The Nest (NewRoads Performing Arts Centre)
 
 \*\*505 Pickering Crescent, Newmarket\*\*  
 
@@ -56,11 +45,11 @@ Hosted by the Town of Newmarket.
 
 \- Family-friendly — no tickets needed
 
-Details: <https://www.newmarket.ca/ThingsToDo/Pages/Recreation%20and%20Culture/Events/World-Series-Viewing-Party.aspx>
+**Details:** <https://www.newmarket.ca/ThingsToDo/Pages/Recreation%20and%20Culture/Events/World-Series-Viewing-Party.aspx>
 
 \---
 
-\### Aurora — Aurora Town Square
+**Aurora — Aurora Town Square**
 
 \*\*50 Victoria Street, Aurora\*\*  
 
@@ -74,17 +63,15 @@ Town of Aurora public watch party.
 
 \- Food/refreshments available
 
-Details: <https://www.aurora.ca/news/posts/aurora-to-host-blue-jays-world-series-watch-parties-at-town-square/>
+**Details:** <https://www.aurora.ca/news/posts/aurora-to-host-blue-jays-world-series-watch-parties-at-town-square/>
 
 \---
 
-\### Bradford West Gwillimbury — BWG Public Square
+**Bradford West Gwillimbury — BWG Public Square**
 
 \*\*425 Holland Street West, Bradford West Gwillimbury\*\*  
 
 \*\*Festivities begin around 7:30 p.m.\*\*
-
-
 
 Town-run outdoor viewing.  
 
@@ -94,4 +81,4 @@ Town-run outdoor viewing.
 
 \- Snacks and drinks on site
 
-Details: <https://www.townofbwg.com/events>
+**Details:** <https://www.townofbwg.com/events>
