@@ -37,3 +37,61 @@ seo:
   ogImage: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
 ---
 Looking for somewhere in the NorthSide to watch tonight’s **Game 7 of the World Series**? The energy couldn’t be higher, and a few local towns are turning public spaces into full-on Jays zones. Whether you’re in Newmarket, Aurora, or Bradford, you can join fellow fans for one more unforgettable night of baseball under the lights.
+
+\## Official Municipal Viewing Parties — November 1, 2025
+
+
+
+\### Newmarket — The Nest (NewRoads Performing Arts Centre)
+
+\*\*505 Pickering Crescent, Newmarket\*\*  
+
+\*\*Doors open 7:30 p.m. • First pitch 8:00 p.m.\*\*
+
+Hosted by the Town of Newmarket.  
+
+\- Free popcorn and pizza (while supplies last)  
+
+\- Licensed venue with drinks/snacks for purchase  
+
+\- Family-friendly — no tickets needed
+
+Details: <https://www.newmarket.ca/ThingsToDo/Pages/Recreation%20and%20Culture/Events/World-Series-Viewing-Party.aspx>
+
+\---
+
+\### Aurora — Aurora Town Square
+
+\*\*50 Victoria Street, Aurora\*\*  
+
+\*\*Doors open 7:30 p.m. • First pitch 8:00 p.m.\*\*
+
+Town of Aurora public watch party.  
+
+\- Free admission, family-friendly  
+
+\- Giveaways/merch draws  
+
+\- Food/refreshments available
+
+Details: <https://www.aurora.ca/news/posts/aurora-to-host-blue-jays-world-series-watch-parties-at-town-square/>
+
+\---
+
+\### Bradford West Gwillimbury — BWG Public Square
+
+\*\*425 Holland Street West, Bradford West Gwillimbury\*\*  
+
+\*\*Festivities begin around 7:30 p.m.\*\*
+
+
+
+Town-run outdoor viewing.  
+
+\- Free entry for all ages  
+
+\- Bring a chair/blanket  
+
+\- Snacks and drinks on site
+
+Details: <https://www.townofbwg.com/events>
