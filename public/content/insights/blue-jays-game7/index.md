@@ -17,7 +17,7 @@ inlineImages:
     alt: LETS GO BLUE JAYS
 pullQuote:
   text: One last time this year — LET’S GO BLUE JAYS!
-  portrait: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
+  portrait: ""
 videos: []
 mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
   4:3. Pull-quote portraits ≈800×1000 px.
