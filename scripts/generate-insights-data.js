@@ -7,6 +7,7 @@ const matter = require("gray-matter");
 const rootDir = path.resolve(__dirname, "..");
 const contentDir = path.join(rootDir, "public", "content", "insights");
 const outputDir = path.join(rootDir, "public", "data", "insights");
+const uploadsDir = path.join(rootDir, "public", "uploads", "insights");
 
 const INSIGHTS_UPLOAD_WEB_PATH = "/uploads/insights/";
 const INSIGHTS_UPLOAD_INTERNAL_PREFIX = "uploads/insights/";
@@ -14,6 +15,102 @@ const INLINE_MEDIA_PLACEMENTS = new Set(["after-h1", "after-p2", "after-p4", "en
 const DEFAULT_INLINE_PLACEMENT = "after-p2";
 const ALLOWED_ASPECT_RATIOS = new Set(["16:9", "4:3", "3:2", "1:1", "9:16"]);
 const DEFAULT_ASPECT_RATIO = "16:9";
+
+function cleanupEmptyDirectories(...dirs) {
+  dirs.forEach((dir) => {
+    if (!dir) return;
+    if (!fs.existsSync(dir)) return;
+    try {
+      const entries = fs.readdirSync(dir);
+      if (entries.length === 0) {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    } catch (error) {
+      console.warn(
+        `[generate-insights-data] Failed to clean up ${path.relative(rootDir, dir)}: ${error.message}`,
+      );
+    }
+  });
+}
+
+function moveFilesRecursively(sourceDir, collisions) {
+  let movedCount = 0;
+  let entries = [];
+  try {
+    entries = fs.readdirSync(sourceDir, { withFileTypes: true });
+  } catch (error) {
+    console.warn(
+      `[generate-insights-data] Unable to read ${path.relative(rootDir, sourceDir)}: ${error.message}`,
+    );
+    return movedCount;
+  }
+
+  entries.forEach((entry) => {
+    const sourcePath = path.join(sourceDir, entry.name);
+    if (entry.isDirectory()) {
+      movedCount += moveFilesRecursively(sourcePath, collisions);
+      cleanupEmptyDirectories(sourcePath);
+      return;
+    }
+
+    if (!entry.isFile()) return;
+
+    const targetPath = path.join(uploadsDir, entry.name);
+    if (fs.existsSync(targetPath)) {
+      collisions.push({
+        source: path.relative(rootDir, sourcePath),
+        target: path.relative(rootDir, targetPath),
+      });
+      return;
+    }
+
+    fs.renameSync(sourcePath, targetPath);
+    movedCount += 1;
+  });
+
+  return movedCount;
+}
+
+function moveNestedInsightAssets() {
+  if (!fs.existsSync(contentDir)) return;
+
+  fs.mkdirSync(uploadsDir, { recursive: true });
+
+  let movedCount = 0;
+  const collisions = [];
+
+  const entries = fs
+    .readdirSync(contentDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory());
+
+  entries.forEach((entry) => {
+    const baseDir = path.join(contentDir, entry.name);
+    const nestedUploadsDir = path.join(baseDir, "public", "uploads", "insights");
+    if (!fs.existsSync(nestedUploadsDir)) return;
+
+    movedCount += moveFilesRecursively(nestedUploadsDir, collisions);
+    cleanupEmptyDirectories(
+      nestedUploadsDir,
+      path.join(baseDir, "public", "uploads"),
+      path.join(baseDir, "public"),
+    );
+  });
+
+  if (movedCount > 0) {
+    console.log(
+      `[generate-insights-data] Moved ${movedCount} nested asset${movedCount === 1 ? "" : "s"} into ${path.relative(
+        rootDir,
+        uploadsDir,
+      )}`,
+    );
+  }
+
+  collisions.forEach(({ source, target }) => {
+    console.warn(
+      `[generate-insights-data] Skipped moving ${source} — destination already exists at ${target}. Delete or rename the nested file if it is outdated.`,
+    );
+  });
+}
 
 function splitPathAndSuffix(value) {
   const suffixIndex = value.search(/[?#]/);
@@ -218,6 +315,8 @@ function main() {
     );
     process.exit(0);
   }
+
+  moveNestedInsightAssets();
 
   const entries = fs
     .readdirSync(contentDir, { withFileTypes: true })
