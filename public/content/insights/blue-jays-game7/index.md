@@ -26,6 +26,8 @@ videos:
       loop: false
       showControls: true
     title: LETS GO BLUE JAYS
+    file: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
+    poster: /uploads/insights/game7viewingig-1200-x-630-px-.jpg
 mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
   4:3. Pull-quote portraits ≈800×1000 px.
 videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
