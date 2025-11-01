@@ -316,11 +316,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/watercolours-basics-beyond-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002674-1758153600-1762473599@auroraculturalcentre.ca",
-  "updatedAt": "2025-10-31T08:34:41Z"
+  "lastSyncedAt": "2025-11-01T08:30:46.486Z",
+  "updatedAt": "2025-11-01T08:30:46.486Z",
+  "featured": false
 }

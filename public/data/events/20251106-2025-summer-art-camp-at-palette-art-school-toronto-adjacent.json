@@ -1,76 +1,46 @@
 {
-  "slug": "20251105-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
-  "title": "March Break at LEGOLAND® Discovery Centre Toronto",
-  "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
+  "slug": "20251106-2025-summer-art-camp-at-palette-art-school-toronto-adjacent",
+  "title": "2025 Summer Art Camp at Palette Art School",
+  "summary": "2025 Summer Art Camp at Palette Art School",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School The Heintzman House 2025 Art Show and Sale. March Break at LEGOLAND® Discovery Centre Toronto Loading view. Today Now Now Select date. Nov 1 October 24 @ 9:30 am - November 1 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 25 @ 9:30 am - November 2 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 26 @ 9:30 am - November 3 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 27 @ 9:30 am - November 4 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 28 @ 9:30 am - November 5 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 29 @ 9:00 am - November 1 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 1 October 29 @ 9:30 am - November 6 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 30 @ 9:00 am - November 2 @ 3:00 pm 2025 Summer Art Camp at Palette Art School Nov 1 October 30 @ 9:30 am - November 7 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 October 31 @ 9:00 am - November 3 @ 3:00 pm 2025 Summer Art Camp at Palette Art School Nov 1 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 1 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-05T14:30:00Z",
-  "endDate": "2025-11-13T22:00:00Z",
+  "startDate": "2025-11-06T14:00:00Z",
+  "endDate": "2025-11-09T21:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-05",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
       "date": "2025-11-06",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
+      "start_time": "09:00",
+      "end_time": "16:00"
     },
     {
       "date": "2025-11-07",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
+      "start_time": "09:00",
+      "end_time": "16:00"
     },
     {
       "date": "2025-11-08",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
+      "start_time": "09:00",
+      "end_time": "16:00"
     },
     {
       "date": "2025-11-09",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-10",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-11",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-12",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-13",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
+      "start_time": "09:00",
+      "end_time": "16:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "lat": 43.8256383,
-  "lng": -79.5382147,
+  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "lat": 43.787474,
+  "lng": -79.4727017,
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-11-05/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-11-06/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -80,8 +50,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10009034-1762335000-1763053200@www.experienceyorkregion.com",
+  "sourceRef": "10011591-1762419600-1762704000@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-01T08:30:46.486Z",
+  "firstSeenAt": "2025-11-01T08:30:46.486Z",
   "updatedAt": "2025-11-01T08:30:46.486Z",
   "featured": false
 }
