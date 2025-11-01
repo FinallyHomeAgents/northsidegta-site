@@ -65,4 +65,4 @@ Town of Aurora public watch party.
 
 **Details:** <https://www.aurora.ca/news/posts/aurora-to-host-blue-jays-world-series-watch-parties-at-town-square/>
 
-\---[](https://www.townofbwg.com/events)
+***One last time this year — LET’S GO BLUE JAYS!***[](https://www.townofbwg.com/events)
