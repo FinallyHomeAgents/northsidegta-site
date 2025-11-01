@@ -316,16 +316,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/you-can-uke-it-beginner-intermediate-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002645-1758067200-1762387199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-01T08:30:46.486Z",
-  "updatedAt": "2025-11-01T08:30:46.486Z",
-  "featured": false
+  "updatedAt": "2025-11-01T08:30:46Z"
 }
