@@ -1,7 +1,7 @@
-# Events Sync Report — 2025-11-01 04:30 EDT
+# Events Sync Report — 2025-11-02 03:29 EST
 
 * Created: 4
-* Updated: 72
+* Updated: 70
 * Unchanged: 0
 * Errors: 32
 
@@ -27,7 +27,7 @@
 | Township of Uxbridge Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Township of Scugog Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Explore Georgina | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Discover Stouffville | 0 | 16 | 0 | 34 | ok | — |
+| Discover Stouffville | 0 | 14 | 0 | 30 | ok | — |
 | Discover Uxbridge | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Town Square | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Cultural Centre | 0 | 30 | 0 | 30 | ok | — |

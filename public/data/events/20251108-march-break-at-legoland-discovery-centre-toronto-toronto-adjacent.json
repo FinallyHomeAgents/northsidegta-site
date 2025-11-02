@@ -1,37 +1,13 @@
 {
-  "slug": "20251104-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
+  "slug": "20251108-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
   "title": "March Break at LEGOLAND® Discovery Centre Toronto",
   "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. Loading view. Today Now Now Select date. Nov 2 October 25 @ 9:30 am - November 2 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 26 @ 9:30 am - November 3 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 27 @ 9:30 am - November 4 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 28 @ 9:30 am - November 5 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 29 @ 9:30 am - November 6 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 30 @ 9:00 am - November 2 @ 3:00 pm 2025 Summer Art Camp at Palette Art School Nov 2 October 30 @ 9:30 am - November 7 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 October 31 @ 9:00 am - November 3 @ 3:00 pm 2025 Summer Art Camp at Palette Art School Nov 2 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 November 2 @ 9:30 am - November 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 2 11:00 am - 1:00 pm Where They Walked: Stouffville’s Veteran Stories Free Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-04T14:30:00Z",
-  "endDate": "2025-11-12T22:00:00Z",
+  "startDate": "2025-11-08T14:30:00Z",
+  "endDate": "2025-11-16T22:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2025-11-04",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-05",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-06",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-07",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
     {
       "date": "2025-11-08",
       "all_day": false,
@@ -61,6 +37,30 @@
       "all_day": false,
       "start_time": "09:30",
       "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-13",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-14",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-15",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-16",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
     }
   ],
   "category": "Festivals",
@@ -70,7 +70,7 @@
   "lat": 43.8256383,
   "lng": -79.5382147,
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-11-04/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-11-08/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -80,8 +80,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10009033-1762248600-1762966800@www.experienceyorkregion.com",
+  "sourceRef": "10009037-1762594200-1763312400@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-02T08:29:06.843Z",
+  "firstSeenAt": "2025-11-02T08:29:06.843Z",
   "updatedAt": "2025-11-02T08:29:06.843Z",
   "featured": false
 }

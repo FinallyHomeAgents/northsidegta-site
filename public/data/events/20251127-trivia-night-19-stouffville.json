@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Trivia-Night-1.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/trivia-night-19/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/trivia-night-19/",
-  "updatedAt": "2025-11-01T08:30:46Z"
+  "lastSyncedAt": "2025-11-02T08:29:06.843Z",
+  "updatedAt": "2025-11-02T08:29:06.843Z",
+  "featured": false
 }
