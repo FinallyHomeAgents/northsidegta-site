@@ -1,76 +1,26 @@
 {
-  "slug": "20251028-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
-  "title": "March Break at LEGOLAND® Discovery Centre Toronto",
-  "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
+  "slug": "20251108-exhibit-anne-in-costume-designing-a-literary-icon-toronto-adjacent",
+  "title": "Exhibit - Anne in Costume: Designing a Literary Icon",
+  "summary": "Exhibit - Anne in Costume: Designing a Literary Icon",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. The Heintzman House 2025 Art Show and Sale. Loading view. Today Now Now Select date. Nov 3 October 26 @ 9:30 am - November 3 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 October 27 @ 9:30 am - November 4 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 October 28 @ 9:30 am - November 5 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 October 29 @ 9:30 am - November 6 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 October 30 @ 9:30 am - November 7 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 October 31 @ 9:00 am - November 3 @ 3:00 pm 2025 Summer Art Camp at Palette Art School Nov 3 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 November 2 @ 9:30 am - November 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 November 3 @ 9:00 am - November 6 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 3 November 3 @ 9:30 am - November 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 3 12:00 pm - 4:00 pm The Heintzman House 2025 Art Show and Sale. Free Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-10-28T13:30:00Z",
-  "endDate": "2025-11-05T21:00:00Z",
+  "startDate": "2025-11-08T15:00:00Z",
+  "endDate": "2025-11-08T21:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-10-28",
+      "date": "2025-11-08",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-10-29",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-10-30",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-10-31",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-01",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-02",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-03",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-04",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-05",
-      "all_day": false,
-      "start_time": "09:30",
+      "start_time": "10:00",
       "end_time": "16:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "lat": 43.8256383,
-  "lng": -79.5382147,
+  "locationName": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
+  "address": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-10-28/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/exhibit-anne-in-costume-designing-a-literary-icon/2025-11-08/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -80,8 +30,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10009026-1761643800-1762358400@www.experienceyorkregion.com",
+  "sourceRef": "10014286-1762596000-1762617600@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-03T08:36:41.025Z",
+  "firstSeenAt": "2025-11-03T08:36:41.025Z",
   "updatedAt": "2025-11-03T08:36:41.025Z",
   "featured": false
 }
