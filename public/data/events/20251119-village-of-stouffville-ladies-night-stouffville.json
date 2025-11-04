@@ -7,7 +7,7 @@
   "endDate": "2025-11-20T01:00:00Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "category": "Festivals",
+  "category": "Other",
   "town": "Stouffville",
   "locationName": "Village of Stouffville",
   "address": "Village of Stouffville",
@@ -16,6 +16,7 @@
   "badges": [
     "Family-friendly"
   ],
+  "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/Copy-of-Ladies-Night-FB.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/village-of-stouffville-ladies-night/",
   "status": "approved",
   "hidden": false,
@@ -26,7 +27,7 @@
   "sourceDomain": "discoverstouffville.ca",
   "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/village-of-stouffville-ladies-night/",
-  "lastSyncedAt": "2025-11-02T08:29:06.843Z",
-  "updatedAt": "2025-11-02T08:29:06.843Z",
+  "lastSyncedAt": "2025-11-04T08:36:02.483Z",
+  "updatedAt": "2025-11-04T08:36:02.483Z",
   "featured": false
 }
