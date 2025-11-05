@@ -97,6 +97,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://northsidegta.ca/collections/northside-georgina-under700k</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/northside-gta-404-access</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://northsidegta.ca/collections/northside-gta-pool-homes</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -108,6 +118,11 @@
   </url>
   <url>
     <loc>https://northsidegta.ca/collections/northside-gta-under-900k</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/northsidegta-basements-under1m</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -137,34 +152,46 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/events/aurora-cultural-centre-10002603-1759518000-1759527000-auroraculturalcentre.ca-20251003</loc>
+    <loc>https://northsidegta.ca/events/20251008-printmaking-linocut-reduction-aurora</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-10-03T19:53:43.428Z</lastmod>
+    <lastmod>2025-10-05T10:15:14.000Z</lastmod>
   </url>
   <url>
-    <loc>https://northsidegta.ca/events/aurora-cultural-centre-10002683-1759968000-1760054399-auroraculturalcentre.ca-20251008</loc>
+    <loc>https://northsidegta.ca/events/20251009-printmaking-linocut-reduction-aurora</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-10-03T19:53:43.428Z</lastmod>
+    <lastmod>2025-10-06T16:03:30.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/aurora-cultural-centre-10002603-1759518000-1759527000-auroraculturalcentre-ca-20251003</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-10-03T19:53:43.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/aurora-cultural-centre-10002683-1759968000-1760054399-auroraculturalcentre-ca-20251008</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-10-03T19:53:43.000Z</lastmod>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/aurora-cultural-centre-cooo</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-09-23T17:24:17.531Z</lastmod>
+    <lastmod>2025-09-23T17:24:17.000Z</lastmod>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/aurora-cultural-centre-pa-day-ages-4-to-7-september-26</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-09-23T17:24:17.530Z</lastmod>
+    <lastmod>2025-09-23T17:24:17.000Z</lastmod>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/aurora-cultural-centre-printmaking-trace-monotypes</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-09-23T17:24:17.530Z</lastmod>
+    <lastmod>2025-09-23T17:24:17.000Z</lastmod>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/aurora-farmers-market</loc>
@@ -173,16 +200,16 @@
     <lastmod>2025-05-01T14:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://northsidegta.ca/events/experience-york-region-10014157-1759582800-1759593600-www.experienceyorkregion.com-20251003</loc>
+    <loc>https://northsidegta.ca/events/experience-york-region-10014157-1759582800-1759593600-www-experienceyorkregion-com-20251003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-10-04T10:14:53.999Z</lastmod>
+    <lastmod>2025-10-04T10:14:53.000Z</lastmod>
   </url>
   <url>
-    <loc>https://northsidegta.ca/events/experience-york-region-10014244-1759582800-1759593600-www.experienceyorkregion.com-20251004</loc>
+    <loc>https://northsidegta.ca/events/experience-york-region-10014244-1759582800-1759593600-www-experienceyorkregion-com-20251004</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-10-04T10:14:53.999Z</lastmod>
+    <lastmod>2025-10-04T10:14:53.000Z</lastmod>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/uxbridge-trails-challenge</loc>
@@ -194,13 +221,7 @@
     <loc>https://northsidegta.ca/events/york-region-echoes-of-bond-lake-the-lost-hotel</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
-    <lastmod>2025-09-23T17:24:57.390Z</lastmod>
-  </url>
-
-  <url>
-    <loc>https://northsidegta.ca/georgeina/</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2025-09-23T17:24:57.000Z</lastmod>
   </url>
 
 </urlset>
