@@ -21,7 +21,9 @@ export default function HeroPromo({ pinned }) {
   const src = pinned?.source_url?.trim() || "";
   const useLocalVideo = isVideoFile(src);
   const cardRef = useRef(null);
+  const videoRef = useRef(null);
   const [hydrated, setHydrated] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     if (!src || useLocalVideo) return;
@@ -53,6 +55,25 @@ export default function HeroPromo({ pinned }) {
 
   const captioned = Boolean(pinned?.captioned);
 
+  useEffect(() => {
+    if (!useLocalVideo) return;
+    setMuted(true);
+  }, [src, useLocalVideo]);
+
+  useEffect(() => {
+    if (!useLocalVideo) return;
+    const videoEl = videoRef.current;
+    if (!videoEl) return;
+
+    videoEl.muted = muted;
+    if (!muted) {
+      const playPromise = videoEl.play();
+      if (playPromise instanceof Promise) {
+        playPromise.catch(() => {});
+      }
+    }
+  }, [muted, useLocalVideo]);
+
   if (!src) return null;
 
   return (
@@ -69,18 +90,30 @@ export default function HeroPromo({ pinned }) {
 
         <div
           ref={cardRef}
-          className="rounded-2xl overflow-hidden border border-white/10 bg-neutral-950 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]"
+          className="relative rounded-2xl overflow-hidden border border-white/10 bg-neutral-950 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]"
         >
           {useLocalVideo ? (
-            <video
-              src={src}
-              poster={pinned?.poster_url || undefined}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover"
-            />
+            <>
+              <video
+                ref={videoRef}
+                src={src}
+                poster={pinned?.poster_url || undefined}
+                autoPlay
+                muted={muted}
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => setMuted((prev) => !prev)}
+                className="absolute bottom-3 right-3 z-10 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md transition hover:bg-black/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                aria-pressed={!muted}
+                aria-label={muted ? "Unmute featured video" : "Mute featured video"}
+              >
+                {muted ? "Unmute" : "Mute"}
+              </button>
+            </>
           ) : (
             <blockquote
               className="instagram-media w-full"
