@@ -22,16 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/divine-brown-sings-ella-billy-sarah-2-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002634-1763235000-1763240400@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-02T08:29:06.843Z",
-  "updatedAt": "2025-11-02T08:29:06.843Z",
-  "featured": false
+  "updatedAt": "2025-11-02T08:29:06Z"
 }
