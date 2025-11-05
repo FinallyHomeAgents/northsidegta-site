@@ -457,6 +457,10 @@ export default function ReferralPartnersPage() {
 
       <main className="bg-slate-50 text-slate-900">
         <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-emerald-900 to-emerald-700 text-white">
+          <div
+            className="absolute inset-0 bg-[url('/Images/northsidegta-map-bg.jpg')] bg-cover bg-center opacity-20 mix-blend-soft-light"
+            aria-hidden
+          />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_60%)]" aria-hidden />
           <div className="absolute -left-10 top-10 h-64 w-64 rounded-full bg-emerald-500/30 blur-3xl" aria-hidden />
           <div className="absolute -right-16 bottom-[-40%] h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
