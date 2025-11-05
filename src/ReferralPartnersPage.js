@@ -475,13 +475,47 @@ export default function ReferralPartnersPage() {
           </div>
         </section>
 
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:px-8 lg:flex-row lg:items-start">
-            <div className="flex-1 space-y-6">
+        <section className="bg-white py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start">
+              <div className="space-y-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-600/80">Referral Intake</p>
+                <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Share Your Referral Details</h2>
+                <p className="text-base text-slate-600">
+                  Use this form to share how we can help your client in the NorthSide GTA. We’ll review your notes, connect with you directly,
+                  and collaborate on referral terms before reaching out to your client.
+                </p>
+                <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-6 text-sm text-emerald-900 shadow-sm">
+                  <h3 className="text-base font-semibold text-emerald-900">What to expect</h3>
+                  <ul className="mt-3 space-y-3">
+                    {["Quick follow-up from Matthew or Landon.", "Transparent conversation about referral terms.", "Your client relationship stays front and centre.", "No client contact until we’ve agreed together."].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="space-y-6 rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/50 sm:p-8">
+                <ReferralPartnerForm />
+                <p className="text-xs text-slate-500">
+                  This form is for us to review your referral opportunity and reach out to you directly. We’re not collecting your client’s personal
+                  contact information here. Once we’ve connected and agreed on terms, we’ll finalize a written referral agreement and then gather any
+                  client details needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 sm:py-16">
+          <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8 lg:flex-row lg:items-start">
+            <div className="flex-1 space-y-5">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
                 Why Agents Trust Finally Home Agents
               </h2>
-              <ul className="space-y-4 text-base text-slate-700">
+              <ul className="space-y-3 text-base text-slate-700">
                 {["Full-time licensed agents focused on the NorthSide GTA.", "Strong experience helping families relocate from Toronto and the GTA.", "Excellent client feedback and reviews across the region."].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500" />
@@ -493,21 +527,22 @@ export default function ReferralPartnersPage() {
                 Recognized within HomeLife Optimum Realty for service and production.
               </p>
             </div>
-            <div className="flex-1 lg:pt-6">
+            <div className="flex-1 lg:pt-4">
               <GoogleGradientReviews className="lg:mx-0 lg:ml-auto" />
             </div>
           </div>
         </section>
 
-        <section className="bg-white py-16 sm:py-20">
+        <section className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center sm:text-left">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Where We Work</h2>
               <p className="text-base text-slate-600 sm:max-w-3xl">
-                We cover the core NorthSide GTA communities your clients are asking about — with a strong focus on Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, Scugog, and the surrounding hamlets.
+                We cover the core NorthSide GTA communities your clients are asking about — with a strong focus on Uxbridge, Stouffville, Georgina,
+                East Gwillimbury, Newmarket, Aurora, Scugog, and the surrounding hamlets.
               </p>
             </div>
-            <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
               {["Uxbridge", "Stouffville", "Georgina", "East Gwillimbury", "Newmarket", "Aurora", "Scugog"].map((town) => (
                 <span
                   key={town}
@@ -520,7 +555,7 @@ export default function ReferralPartnersPage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden py-20">
+        <section className="relative overflow-hidden py-12 sm:py-16">
           <div className="absolute inset-0 bg-slate-950" aria-hidden />
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700" aria-hidden />
           <div className="relative mx-auto max-w-5xl px-4 text-center text-white sm:px-6 lg:px-8">
@@ -541,26 +576,7 @@ export default function ReferralPartnersPage() {
           </div>
         </section>
 
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl rounded-3xl border border-emerald-100 bg-white/95 p-6 shadow-xl shadow-emerald-100/60 sm:p-10">
-              <div className="space-y-2 text-center">
-                <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Share Your Referral Details</h2>
-                <p className="text-sm text-slate-600">
-                  This form is for your information and scenario details only — not your client’s personal contact info.
-                </p>
-              </div>
-              <div className="mt-10">
-                <ReferralPartnerForm />
-              </div>
-              <p className="mt-10 text-xs text-slate-500">
-                This form is for us to review your referral opportunity and reach out to you directly. We’re not collecting your client’s personal contact information here. Once we’ve connected and agreed on terms, we’ll finalize a written referral agreement and then gather any client details needed.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white py-16 sm:py-20">
+        <section className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center sm:text-left">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">About Finally Home Agents</h2>
@@ -568,7 +584,7 @@ export default function ReferralPartnersPage() {
                 We’re Matthew and Landon Mulhall — founders of Finally Home Agents and NorthSideGTA.ca. We specialize in helping buyers and sellers in the NorthSide communities north of Toronto, including Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog. We partner with top agents across Ontario to provide a seamless experience for their clients when their search moves into the NorthSide GTA.
               </p>
             </div>
-            <div className="mt-10 grid gap-10 lg:grid-cols-2">
+            <div className="mt-8 grid gap-8 lg:grid-cols-2">
               {teamMembers.map((member) => (
                 <article
                   key={member.name}
