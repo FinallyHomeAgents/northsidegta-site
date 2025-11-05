@@ -76,7 +76,19 @@ export default function MediaPage() {
         <link rel="canonical" href="https://www.northsidegta.ca/media" />
       </Helmet>
       <Navigation />
-      <main className="relative min-h-screen bg-neutral-950 text-white">
+      <main className="relative min-h-screen overflow-hidden bg-neutral-950 text-white">
+        <div className="pointer-events-none absolute inset-0 -z-20">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-90"
+            style={{ backgroundImage: "url('/Images/northsidegta-map-bg.jpg')" }}
+            aria-hidden
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0a1c12]/90 via-[#08150f]/80 to-[#040708]/90 mix-blend-multiply" aria-hidden />
+          <div
+            className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,16,12,0)_55%,rgba(3,6,5,0.7)_100%)]"
+            aria-hidden
+          />
+        </div>
         <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-10">
           <div
             className="pointer-events-none absolute inset-0 -z-10"
