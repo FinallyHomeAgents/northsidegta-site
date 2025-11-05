@@ -20,6 +20,7 @@ import SubmitEventPage  from "./community/SubmitEventPage";
 import InsightPage      from "./insights/InsightPage";
 import MediaPage        from "./MediaPage";
 import InsightsPage     from "./InsightsPage";
+import ReferralPartnersPage from "./ReferralPartnersPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -73,6 +74,7 @@ function App() {
         <Route path="/insights"     element={<InsightsPage />} />
         <Route path="/insights/:slug" element={<InsightPage />} />
         <Route path="/media"        element={<MediaPage />} />
+        <Route path="/referral-partners" element={<ReferralPartnersPage />} />
 
         {/* Town pages — short URLs like /aurora */}
         {TOWN_SLUGS.sort().map(slug => (
