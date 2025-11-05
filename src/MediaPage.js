@@ -77,19 +77,22 @@ export default function MediaPage() {
       </Helmet>
       <Navigation />
       <main className="relative min-h-screen overflow-hidden bg-neutral-950 text-white">
-        <div className="pointer-events-none absolute inset-0 -z-20">
+        <div className="pointer-events-none absolute inset-0 z-0">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-90"
             style={{ backgroundImage: "url('/Images/northsidegta-map-bg.jpg')" }}
             aria-hidden
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0a1c12]/90 via-[#08150f]/80 to-[#040708]/90 mix-blend-multiply" aria-hidden />
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-[#0a1c12]/90 via-[#08150f]/80 to-[#040708]/90 mix-blend-multiply"
+            aria-hidden
+          />
           <div
             className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,16,12,0)_55%,rgba(3,6,5,0.7)_100%)]"
             aria-hidden
           />
         </div>
-        <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-10">
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pt-12 pb-10">
           <div
             className="pointer-events-none absolute inset-0 -z-10"
             style={{ background: "radial-gradient(1200px 600px at 50% -10%, rgba(50,97,14,0.35), transparent)" }}
@@ -104,7 +107,7 @@ export default function MediaPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="relative z-10 mx-auto max-w-6xl px-6">
           {error && (
             <div className="mb-6 rounded-2xl border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
               {error}
@@ -112,7 +115,7 @@ export default function MediaPage() {
           )}
         </div>
 
-        <section className="mx-auto max-w-6xl px-6 pb-16">
+        <section className="relative z-10 mx-auto max-w-6xl px-6 pb-16">
           {showHeroCard || hasItems ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {showHeroCard && <HeroPromo pinned={settings?.pinned} />}
