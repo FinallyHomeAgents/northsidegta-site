@@ -251,9 +251,10 @@ const Styles = () => (
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     height: 100%;
+    gap: 0;
   }
   .hero-map-frame {
     position: relative;
@@ -507,6 +508,7 @@ export default function MapHero({
   className = "",
   showQuickContact = true,
   afterTicker = null,
+  tickerSlot,
 }) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
@@ -709,6 +711,22 @@ export default function MapHero({
     .join(" ");
 
   const insightMode = canHover ? "desktop" : "mobile";
+  const usingDefaultTicker = typeof tickerSlot === "undefined";
+  const resolvedTicker =
+    usingDefaultTicker ? <LiveTicker /> : tickerSlot || null;
+  const showTicker = Boolean(resolvedTicker);
+  const mapFrameClassName = [
+    "hero-map-frame",
+    usingDefaultTicker && showTicker ? "map-hero" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const mobileMapClassName = [
+    "relative overflow-hidden rounded-[32px]",
+    usingDefaultTicker && showTicker ? "map-hero" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className={sectionClasses}>
@@ -771,7 +789,7 @@ export default function MapHero({
                 <div className="hero-core-inner">
                   <div
                     ref={frameRef}
-                    className="hero-map-frame map-hero"
+                    className={mapFrameClassName}
                     style={{
                       "--map-offset-x": `${mapMetrics.offsetX}px`,
                       "--map-offset-y": `${mapMetrics.offsetY}px`,
@@ -812,7 +830,7 @@ export default function MapHero({
                     ))}
                   </div>
 
-                  <LiveTicker />
+                  {showTicker ? resolvedTicker : null}
                 </div>
               </div>
 
@@ -828,7 +846,7 @@ export default function MapHero({
             </div>
           ) : (
             <div
-              className="relative overflow-hidden rounded-[32px] map-hero"
+              className={mobileMapClassName}
               onMouseLeave={() => canHover && setHoverId(null)}
             >
               <img
@@ -858,7 +876,7 @@ export default function MapHero({
                 </button>
               ))}
 
-              <LiveTicker />
+              {showTicker ? resolvedTicker : null}
             </div>
           )}
 
