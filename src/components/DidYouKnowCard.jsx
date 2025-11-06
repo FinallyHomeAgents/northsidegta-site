@@ -76,9 +76,9 @@ export default function DidYouKnowCard({
     heroTicker: {
       outerGlow: false,
       container:
-        "rounded-none border border-white/10 bg-gradient-to-r from-emerald-950/88 via-emerald-900/82 to-emerald-950/88 shadow-[0_32px_90px_rgba(2,18,12,0.65)] backdrop-blur-xl",
+        "flex h-full flex-col rounded-none border border-white/10 bg-gradient-to-r from-emerald-950/88 via-emerald-900/82 to-emerald-950/88 shadow-[0_32px_90px_rgba(2,18,12,0.65)] backdrop-blur-xl",
       inner:
-        "relative flex flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6 sm:py-[22px]",
+        "relative flex flex-1 flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6 sm:py-[22px]",
       kicker:
         "inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.28em] text-emerald-100/90",
       fact:

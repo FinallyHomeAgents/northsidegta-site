@@ -363,10 +363,15 @@ const Styles = () => (
   /* ===== TICKER: stacked below the map ===== */
   .hero-ticker {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
   }
   .hero-ticker > * {
     width: 100%;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
   }
 
   /* Ensure overlay pieces stay above */
