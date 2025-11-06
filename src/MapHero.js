@@ -261,7 +261,7 @@ const Styles = () => (
     flex: 1 1 auto;
     min-height: var(--heroH);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     overflow: hidden;
@@ -706,6 +706,13 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
+  const heroShellStyle =
+    mapMetrics.height > 0
+      ? {
+          "--heroH": `${mapMetrics.height}px`,
+        }
+      : undefined;
+
   const insightMode = canHover ? "desktop" : "mobile";
   const resolvedTicker =
     typeof tickerSlot === "undefined" ? null : tickerSlot || null;
@@ -730,7 +737,7 @@ export default function MapHero({
           <Styles />
           {embedded ? (
             <>
-              <div className={heroShellClasses}>
+              <div className={heroShellClasses} style={heroShellStyle}>
                 {showQuickContact ? (
                   <aside
                     className={`panel panel-left${
