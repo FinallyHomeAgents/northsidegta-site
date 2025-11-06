@@ -12,7 +12,7 @@ const imageSize =
 const DEFAULT_SUBHEADLINE =
   "Bigger lots, more value, and less traffic — get the listings now.";
 const DEFAULT_ORIGIN = process.env.SITE_ORIGIN || "https://northsidegta.ca";
-const DEFAULT_HERO = "/Images/northside-map.svg";
+const DEFAULT_HERO = "/Images/hero2000x1500.svg";
 const MIME_TYPE_LOOKUP = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",

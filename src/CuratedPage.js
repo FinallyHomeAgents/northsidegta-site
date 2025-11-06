@@ -18,7 +18,7 @@ function useCurated(slug) {
   return { page, err };
 }
 
-const HERO_BACKGROUND = "/Images/northside-map.svg";
+const HERO_BACKGROUND = "/Images/hero2000x1500.svg";
 const DEFAULT_SUBHEADLINE =
   "Bigger lots, more value, and less traffic — get the listings now.";
 
