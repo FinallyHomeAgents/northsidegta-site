@@ -115,7 +115,9 @@ export default function TownPage() {
     );
   }
 
-  if ((town.slug || "").toLowerCase() === "aurora") {
+  const slug = (town.slug || "").toLowerCase();
+
+  if (["aurora", "uxbridge"].includes(slug)) {
     const ratingDescriptions = town.ratingDescriptions || {};
     const ratings = CATEGORY_ORDER.filter((k) => town.ratings?.[k] != null).map((key) => ({
       label: CATEGORY_LABELS[key] || key,

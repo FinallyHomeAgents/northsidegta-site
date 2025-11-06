@@ -263,7 +263,123 @@
     "commute": {
       "to404SteelesMinutes": 37
     },
-    "pdf": "/PDF/Uxbridge-Guide.pdf"
+    "pdf": "/PDF/Uxbridge-Guide.pdf",
+    "hero": {
+      "tagline": "Town \u2022 NorthSide GTA",
+      "title": "Living in Uxbridge",
+      "subtitle": "A NorthSide GTA town with a small-town feel, extensive trail networks, and access to nearby communities.",
+      "backgroundImage": "/Images/uxbridge-banner.jpg",
+      "backgroundAlt": "Uxbridge streetscape with historic buildings",
+      "primaryButton": {
+        "label": "Explore Homes in Uxbridge",
+        "href": "/buyers"
+      },
+      "secondaryButton": {
+        "label": "Match With a Local Agent",
+        "href": "/contact"
+      }
+    },
+    "snapshot": {
+      "population": "To be updated with the latest census details.",
+      "driveToToronto": "Approximate drive into Toronto via regional routes and Highway 404.",
+      "goTrainTime": "GO service typically accessed through nearby Stouffville or Whitby stations.",
+      "homePriceRange": "Mix of detached homes, townhomes, and rural properties across varied price points.",
+      "highways": "Connections toward Highways 404, 407, and 401 via regional roads.",
+      "transitSummary": "Durham Region Transit and YRT services link to neighbouring towns with GO Transit access."
+    },
+    "ratingDescriptions": {
+      "housePrices": "Housing spans heritage homes, subdivisions, and rural properties with prices that vary by property type.",
+      "commuterAccess": "Regional roads connect to Highways 404, 407, and 401, with some residents using GO stations in nearby towns.",
+      "localTraffic": "Traffic stays relatively light in-town, with occasional congestion on main corridors during peak travel.",
+      "golf": "Multiple local courses and driving ranges give golfers options close to home.",
+      "fishing": "Nearby ponds, rivers, and lakes provide spots for casual fishing excursions.",
+      "trailsNature": "Uxbridge's Trail Capital reputation keeps forests and conservation areas within minutes of most neighbourhoods.",
+      "restaurants": "Independent caf\u00e9s and restaurants line the downtown core alongside convenient everyday stops.",
+      "localEvents": "Seasonal markets, fairs, and arts events draw the community together year-round."
+    },
+    "lifestyleHighlights": [
+      {
+        "icon": "leaf",
+        "title": "Nature & Green Space",
+        "description": "Uxbridge is surrounded by forests, conservation areas, and rolling farmland that keep outdoor escapes close."
+      },
+      {
+        "icon": "users",
+        "title": "Community & Family Life",
+        "description": "Recreation centres, local sports, and community events make it easy to plug into small-town life."
+      },
+      {
+        "icon": "map",
+        "title": "Local Spots & Convenience",
+        "description": "Historic downtown shops mix with practical amenities, keeping errands and weekend outings nearby."
+      }
+    ],
+    "audiences": [
+      {
+        "icon": "family",
+        "title": "Families with Kids",
+        "description": "Schools, parks, and recreation programs support active family routines."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Commuters & Professionals",
+        "description": "Those working in the GTA balance quieter living with regional road and GO access."
+      },
+      {
+        "icon": "activity",
+        "title": "Active Lifestyles",
+        "description": "Cycling, hiking, and equestrian trails cater to residents who love the outdoors."
+      },
+      {
+        "icon": "home",
+        "title": "Move-Up & Rural Seekers",
+        "description": "Larger lots and rural properties appeal to buyers looking for extra space without leaving the region."
+      }
+    ],
+    "neighbourhoods": [
+      {
+        "name": "Uxbridge Town Centre",
+        "description": "Heritage streets with shops, caf\u00e9s, and established homes near local amenities."
+      },
+      {
+        "name": "Coral Creek & Quaker Village",
+        "description": "Family neighbourhoods with parks, schools, and trail connections."
+      },
+      {
+        "name": "Rural Uxbridge & Hamlets",
+        "description": "Country properties and hamlets offering privacy, barns, and wide-open views."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long is the commute to Toronto?",
+        "answer": "Most residents drive via regional roads to Highways 404, 407, or 401, with some using GO stations in neighbouring towns for train service."
+      },
+      {
+        "question": "What types of homes are common here?",
+        "answer": "Expect a mix of century homes, newer subdivisions, townhomes, and rural properties with acreage."
+      },
+      {
+        "question": "Is Uxbridge good for families?",
+        "answer": "Yes—recreation facilities, local schools, and small-town programming make it welcoming for families."
+      },
+      {
+        "question": "What’s the general price point for homes?",
+        "answer": "Home prices vary widely between in-town properties and rural acreages, so connect with us for the latest local trends."
+      }
+    ],
+    "cta": {
+      "title": "Ready to explore homes in Uxbridge?",
+      "description": "We live and work across the NorthSide GTA and can help you decide if Uxbridge fits your commute, your budget, and your lifestyle.",
+      "primaryButton": {
+        "label": "Book a Discovery Call",
+        "href": "/contact"
+      },
+      "secondaryButton": {
+        "label": "Tell Us What You’re Looking For",
+        "href": "/vip"
+      }
+    }
   },
   {
     "slug": "scugog",
