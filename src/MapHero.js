@@ -1,7 +1,6 @@
 // src/MapHero.js
-import React, { useEffect, useRef, useState, useId } from "react";
+import React, { useEffect, useRef, useState, useId, useLayoutEffect } from "react";
 import QuickContactCard from "./QuickContactCard";
-import LiveTicker from "./components/LiveTicker";
 
 /* ────────────────────────────────────────────────────────────
    Category labels + display order
@@ -170,6 +169,9 @@ const PANEL_CHIPS = [
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 const Styles = () => (
   <style>{`
   @keyframes pinPulse {
@@ -191,7 +193,8 @@ const Styles = () => (
   }
   /* ===== Desktop Hero Layout — 20 | 60 | 20 ===== */
   .hero-shell {
-    --heroH: clamp(640px, 66vh, 820px);
+    --hero-map-h: clamp(640px, 66vh, 820px);
+    --hero-panels-h: var(--hero-map-h);
 
     display: grid;
     grid-template-columns: 20% 60% 20%;
@@ -202,7 +205,7 @@ const Styles = () => (
     position: relative;
     border-radius: 28px;
     overflow: hidden;
-    min-height: var(--heroH);
+    min-height: var(--hero-panels-h);
     width: 100%;
   }
 
@@ -239,10 +242,11 @@ const Styles = () => (
 
   /* ===== Hero (center) ===== */
   .hero-core {
-    height: var(--heroH);
+    min-height: var(--hero-panels-h);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -251,15 +255,17 @@ const Styles = () => (
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
+    gap: 0;
   }
   .hero-map-frame {
     position: relative;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: var(--hero-map-h);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     overflow: hidden;
@@ -280,7 +286,8 @@ const Styles = () => (
 
   /* ===== Panels ===== */
   .panel {
-    height: var(--heroH);
+    min-height: var(--hero-panels-h);
+    max-height: var(--hero-panels-h);
     margin: 0;
     padding: 26px 22px;
     display: flex;
@@ -291,6 +298,14 @@ const Styles = () => (
     background: linear-gradient(180deg, rgba(6,34,16,0.86) 0%, rgba(6,34,16,0.76) 100%);
     color: #F4FFF1;
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
+  }
+  .panel.panel-right {
+    justify-content: flex-start;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .panel.panel-right > * {
+    height: 100%;
   }
   .panel > * {
     width: 100%;
@@ -345,15 +360,20 @@ const Styles = () => (
     box-sizing: border-box;
   }
 
-  /* ===== TICKER: flush to bottom of hero ===== */
-  .hero-ticker {
-    grid-column: 1 / -1;
-    align-self: end;
-    margin-top: 0;
-    border-top: 1px solid rgba(255,255,255,0.08);
+  /* ===== TICKER: stacked below the map ===== */
+  .hero-ticker-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
   }
-  .hero-shell + .hero-ticker {
-    margin-top: 0;            /* no gap between hero and ticker */
+  .hero-ticker-content > * {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
   }
 
   /* Ensure overlay pieces stay above */
@@ -363,7 +383,8 @@ const Styles = () => (
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1200px) {
     .hero-shell {
-      --heroH: clamp(560px, 60vh, 760px);
+      --hero-map-h: clamp(560px, 60vh, 760px);
+      --hero-panels-h: var(--hero-map-h);
       grid-template-columns: 24% 52% 24%;
     }
     .hero-shell.no-left {
@@ -379,7 +400,8 @@ const Styles = () => (
   @media (max-width: 980px) {
     .hero-shell {
       grid-template-columns: 1fr;
-      --heroH: clamp(420px, 52vh, 600px);
+      --hero-map-h: clamp(420px, 52vh, 600px);
+      --hero-panels-h: var(--hero-map-h);
       display: grid;
       grid-auto-rows: auto;
       row-gap: 16px;
@@ -393,8 +415,9 @@ const Styles = () => (
     .panel-left { order: 2; }
     .panel-right { order: 3; }
     .panel {
+      min-height: auto;
       height: auto;
-      max-height: var(--heroH);
+      max-height: none;
       padding: 20px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -405,9 +428,6 @@ const Styles = () => (
     }
     .panel-right {
       overflow-y: auto;
-    }
-    .hero-core {
-      height: var(--heroH);
     }
     .mobile-accordion {
       display: flex;
@@ -507,12 +527,15 @@ export default function MapHero({
   className = "",
   showQuickContact = true,
   afterTicker = null,
+  tickerSlot,
 }) {
   const [pulsing, setPulsing] = useState(true);
   const [openId, setOpenId] = useState(null);   // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
   const frameRef = useRef(null);
   const imageRef = useRef(null);
+  const heroCoreRef = useRef(null);
+  const [heroCoreHeight, setHeroCoreHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
     offsetY: 0,
@@ -522,6 +545,8 @@ export default function MapHero({
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [mobileMatchOpen, setMobileMatchOpen] = useState(false);
   const accordionRegionId = `${useId()}-match-panel`;
+  const embedded = variant !== "standalone";
+  const heroFullHeight = Math.max(heroCoreHeight, mapMetrics.height);
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -621,6 +646,68 @@ export default function MapHero({
     };
   }, []);
 
+  useIsomorphicLayoutEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const element = heroCoreRef.current;
+
+    if (!element) {
+      return undefined;
+    }
+
+    let animationFrame = null;
+
+    const updateHeight = () => {
+      if (!heroCoreRef.current) {
+        return;
+      }
+
+      const rect = heroCoreRef.current.getBoundingClientRect();
+      const nextHeight = rect.height;
+
+      setHeroCoreHeight((prev) => {
+        if (Math.abs(prev - nextHeight) < 0.5) {
+          return prev;
+        }
+
+        return nextHeight;
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+
+      animationFrame = requestAnimationFrame(updateHeight);
+    };
+
+    scheduleUpdate();
+
+    let resizeObserver = null;
+
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(scheduleUpdate);
+      resizeObserver.observe(element);
+    } else {
+      window.addEventListener("resize", scheduleUpdate);
+    }
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      } else {
+        window.removeEventListener("resize", scheduleUpdate);
+      }
+    };
+  }, [embedded, isMobileViewport]);
+
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return undefined;
@@ -677,8 +764,6 @@ export default function MapHero({
     }
   };
 
-  const embedded = variant !== "standalone";
-
   const sectionClasses = [
     embedded
       ? "relative"
@@ -708,7 +793,53 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
+  const heroShellDynamicStyle = {};
+
+  if (mapMetrics.height > 0) {
+    heroShellDynamicStyle["--hero-map-h"] = `${mapMetrics.height}px`;
+  }
+
+  const heroPanelsHeight = heroFullHeight > 0 ? heroFullHeight : 0;
+
+  if (heroPanelsHeight > 0) {
+    heroShellDynamicStyle["--hero-panels-h"] = `${Math.round(
+      heroPanelsHeight
+    )}px`;
+  }
+
+  const heroShellStyle =
+    Object.keys(heroShellDynamicStyle).length > 0
+      ? heroShellDynamicStyle
+      : undefined;
+
   const insightMode = canHover ? "desktop" : "mobile";
+  const resolvedTicker =
+    typeof tickerSlot === "undefined" ? null : tickerSlot || null;
+  const decoratedTicker =
+    resolvedTicker &&
+    React.isValidElement(resolvedTicker) &&
+    resolvedTicker.type !== React.Fragment
+      ? React.cloneElement(resolvedTicker, {
+          className: [
+            "hero-ticker-content",
+            resolvedTicker.props.className || "",
+          ]
+            .filter(Boolean)
+            .join(" "),
+        })
+      : resolvedTicker;
+  const showTicker = Boolean(decoratedTicker);
+  const mapFrameClassName = [
+    "hero-map-frame",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const mobileMapClassName = [
+    "hero-map-frame",
+    "relative overflow-hidden rounded-[32px]",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className={sectionClasses}>
@@ -717,12 +848,13 @@ export default function MapHero({
         <div className={frameClasses}>
           <Styles />
           {embedded ? (
-            <div className={heroShellClasses}>
-              {showQuickContact ? (
-                <aside
-                  className={`panel panel-left${
-                    isMobileViewport ? " mobile-accordion-panel" : ""
-                  }`}
+            <>
+              <div className={heroShellClasses} style={heroShellStyle}>
+                {showQuickContact ? (
+                  <aside
+                    className={`panel panel-left${
+                      isMobileViewport ? " mobile-accordion-panel" : ""
+                    }`}
                 >
                   {isMobileViewport ? (
                     <div className="mobile-accordion">
@@ -768,10 +900,10 @@ export default function MapHero({
               ) : null}
 
               <div className="hero-core">
-                <div className="hero-core-inner">
+                <div className="hero-core-inner" ref={heroCoreRef}>
                   <div
                     ref={frameRef}
-                    className="hero-map-frame map-hero"
+                    className={mapFrameClassName}
                     style={{
                       "--map-offset-x": `${mapMetrics.offsetX}px`,
                       "--map-offset-y": `${mapMetrics.offsetY}px`,
@@ -811,8 +943,7 @@ export default function MapHero({
                       </button>
                     ))}
                   </div>
-
-                  <LiveTicker />
+                  {showTicker ? decoratedTicker : null}
                 </div>
               </div>
 
@@ -826,40 +957,45 @@ export default function MapHero({
                 />
               </aside>
             </div>
+            </>
           ) : (
-            <div
-              className="relative overflow-hidden rounded-[32px] map-hero"
-              onMouseLeave={() => canHover && setHoverId(null)}
-            >
-              <img
-                src="/Images/northside-map.svg?v=2"
-                alt="NorthSide GTA map with towns"
-                className="block h-auto w-full"
-              />
+            <>
+              <div
+                className={mobileMapClassName}
+                onMouseLeave={() => canHover && setHoverId(null)}
+              >
+                <img
+                  src="/Images/northside-map.svg?v=2"
+                  alt="NorthSide GTA map with towns"
+                  className="block h-auto w-full"
+                />
 
-              {TOWNS.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  className="pin-wrap"
-                  style={{ left: `${t.x}%`, top: `${t.y}%` }}
-                  aria-label={t.name}
-                  aria-pressed={activeId === t.id}
-                  onMouseEnter={() => canHover && setHoverId(t.id)}
-                  onClick={() =>
-                    !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                  }
-                >
-                  <span
-                    className="pin"
-                    style={{ animationPlayState: pulsing ? "running" : "paused" }}
-                  />
-                  <span className="sr-only">{t.name}</span>
-                </button>
-              ))}
-
-              <LiveTicker />
-            </div>
+                {TOWNS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    className="pin-wrap"
+                    style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                    aria-label={t.name}
+                    aria-pressed={activeId === t.id}
+                    onMouseEnter={() => canHover && setHoverId(t.id)}
+                    onClick={() =>
+                      !canHover &&
+                      setOpenId((cur) => (cur === t.id ? null : t.id))
+                    }
+                  >
+                    <span
+                      className="pin"
+                      style={{
+                        animationPlayState: pulsing ? "running" : "paused",
+                      }}
+                    />
+                    <span className="sr-only">{t.name}</span>
+                  </button>
+                ))}
+              </div>
+              {showTicker ? decoratedTicker : null}
+            </>
           )}
 
           {afterTicker && (
