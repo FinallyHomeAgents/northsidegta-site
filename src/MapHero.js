@@ -239,7 +239,7 @@ const Styles = () => (
 
   /* ===== Hero (center) ===== */
   .hero-core {
-    height: var(--heroH);
+    height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -264,6 +264,7 @@ const Styles = () => (
     justify-content: center;
     width: 100%;
     overflow: hidden;
+    padding-bottom: var(--hero-ticker-height, 0px);
   }
 
   /* Whatever renders the map/image */
@@ -281,7 +282,7 @@ const Styles = () => (
 
   /* ===== Panels ===== */
   .panel {
-    height: var(--heroH);
+    height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
     margin: 0;
     padding: 26px 22px;
     display: flex;
@@ -348,17 +349,25 @@ const Styles = () => (
 
   /* ===== TICKER: flush to bottom of hero ===== */
   .hero-ticker {
-    grid-column: 1 / -1;
-    align-self: end;
-    margin-top: 0;
-    border-top: 1px solid rgba(255,255,255,0.08);
     width: 100%;
-  }
-  .hero-shell + .hero-ticker {
-    margin-top: 0;            /* no gap between hero and ticker */
   }
   .hero-ticker > * {
     width: 100%;
+  }
+  .hero-ticker--overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    z-index: 5;
+  }
+  .hero-ticker--overlay > * {
+    width: 100%;
+    height: 100%;
   }
 
   /* Ensure overlay pieces stay above */
@@ -399,7 +408,7 @@ const Styles = () => (
     .panel-right { order: 3; }
     .panel {
       height: auto;
-      max-height: var(--heroH);
+      max-height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
       padding: 20px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -412,7 +421,7 @@ const Styles = () => (
       overflow-y: auto;
     }
     .hero-core {
-      height: var(--heroH);
+      height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
     }
     .mobile-accordion {
       display: flex;
@@ -519,6 +528,8 @@ export default function MapHero({
   const [hoverId, setHoverId] = useState(null); // pointer devices
   const frameRef = useRef(null);
   const imageRef = useRef(null);
+  const tickerRef = useRef(null);
+  const [tickerHeight, setTickerHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
     offsetY: 0,
@@ -719,21 +730,50 @@ export default function MapHero({
   const resolvedTicker =
     usingDefaultTicker ? <LiveTicker /> : tickerSlot || null;
   const showTicker = Boolean(resolvedTicker);
-  const tickerElement = showTicker ? (
-    <div className="hero-ticker">{resolvedTicker}</div>
+  useEffect(() => {
+    if (!showTicker) {
+      setTickerHeight(0);
+      return undefined;
+    }
+
+    const node = tickerRef.current;
+    if (!node) {
+      return undefined;
+    }
+
+    const measure = () => {
+      setTickerHeight(node.offsetHeight || 0);
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === "function") {
+      const observer = new ResizeObserver(measure);
+      observer.observe(node);
+      return () => observer.disconnect();
+    }
+
+    return undefined;
+  }, [showTicker, resolvedTicker]);
+
+  const tickerOverlay = showTicker ? (
+    <div ref={tickerRef} className="hero-ticker hero-ticker--overlay">
+      {resolvedTicker}
+    </div>
   ) : null;
   const mapFrameClassName = [
     "hero-map-frame",
-    usingDefaultTicker && showTicker ? "map-hero" : "",
   ]
     .filter(Boolean)
     .join(" ");
   const mobileMapClassName = [
+    "hero-map-frame",
     "relative overflow-hidden rounded-[32px]",
-    usingDefaultTicker && showTicker ? "map-hero" : "",
   ]
     .filter(Boolean)
     .join(" ");
+
+  const tickerPadding = showTicker ? tickerHeight : 0;
 
   return (
     <section className={sectionClasses}>
@@ -743,7 +783,10 @@ export default function MapHero({
           <Styles />
           {embedded ? (
             <>
-              <div className={heroShellClasses}>
+              <div
+                className={heroShellClasses}
+                style={{ "--hero-ticker-height": `${tickerPadding}px` }}
+              >
                 {showQuickContact ? (
                   <aside
                     className={`panel panel-left${
@@ -803,6 +846,7 @@ export default function MapHero({
                       "--map-offset-y": `${mapMetrics.offsetY}px`,
                       "--map-width": `${mapMetrics.width}px`,
                       "--map-height": `${mapMetrics.height}px`,
+                      "--hero-ticker-height": `${tickerPadding}px`,
                     }}
                     onMouseLeave={() => canHover && setHoverId(null)}
                   >
@@ -836,6 +880,7 @@ export default function MapHero({
                         <span className="sr-only">{t.name}</span>
                       </button>
                     ))}
+                    {tickerOverlay}
                   </div>
                 </div>
               </div>
@@ -850,12 +895,12 @@ export default function MapHero({
                 />
               </aside>
             </div>
-            {tickerElement}
             </>
           ) : (
             <>
               <div
                 className={mobileMapClassName}
+                style={{ "--hero-ticker-height": `${tickerPadding}px` }}
                 onMouseLeave={() => canHover && setHoverId(null)}
               >
                 <img
@@ -887,8 +932,8 @@ export default function MapHero({
                     <span className="sr-only">{t.name}</span>
                   </button>
                 ))}
+                {tickerOverlay}
               </div>
-              {tickerElement}
             </>
           )}
 

@@ -148,8 +148,8 @@ function HomeHero() {
                       <DidYouKnowCard
                         facts={didYouKnowFacts}
                         rotateInterval={6500}
-                        className="w-full"
-                        variant="compact"
+                        className="h-full w-full"
+                        variant="heroTicker"
                       />
                     }
                     afterTicker={<TownBridge />}
