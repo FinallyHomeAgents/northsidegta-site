@@ -149,6 +149,7 @@ function HomeHero() {
                         facts={didYouKnowFacts}
                         rotateInterval={6500}
                         className="w-full"
+                        variant="compact"
                       />
                     }
                     afterTicker={<TownBridge />}

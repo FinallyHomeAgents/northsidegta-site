@@ -352,9 +352,13 @@ const Styles = () => (
     align-self: end;
     margin-top: 0;
     border-top: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
   }
   .hero-shell + .hero-ticker {
     margin-top: 0;            /* no gap between hero and ticker */
+  }
+  .hero-ticker > * {
+    width: 100%;
   }
 
   /* Ensure overlay pieces stay above */
@@ -715,6 +719,9 @@ export default function MapHero({
   const resolvedTicker =
     usingDefaultTicker ? <LiveTicker /> : tickerSlot || null;
   const showTicker = Boolean(resolvedTicker);
+  const tickerElement = showTicker ? (
+    <div className="hero-ticker">{resolvedTicker}</div>
+  ) : null;
   const mapFrameClassName = [
     "hero-map-frame",
     usingDefaultTicker && showTicker ? "map-hero" : "",
@@ -735,10 +742,11 @@ export default function MapHero({
         <div className={frameClasses}>
           <Styles />
           {embedded ? (
-            <div className={heroShellClasses}>
-              {showQuickContact ? (
-                <aside
-                  className={`panel panel-left${
+            <>
+              <div className={heroShellClasses}>
+                {showQuickContact ? (
+                  <aside
+                    className={`panel panel-left${
                     isMobileViewport ? " mobile-accordion-panel" : ""
                   }`}
                 >
@@ -829,8 +837,6 @@ export default function MapHero({
                       </button>
                     ))}
                   </div>
-
-                  {showTicker ? resolvedTicker : null}
                 </div>
               </div>
 
@@ -844,40 +850,46 @@ export default function MapHero({
                 />
               </aside>
             </div>
+            {tickerElement}
+            </>
           ) : (
-            <div
-              className={mobileMapClassName}
-              onMouseLeave={() => canHover && setHoverId(null)}
-            >
-              <img
-                src="/Images/northside-map.svg?v=2"
-                alt="NorthSide GTA map with towns"
-                className="block h-auto w-full"
-              />
+            <>
+              <div
+                className={mobileMapClassName}
+                onMouseLeave={() => canHover && setHoverId(null)}
+              >
+                <img
+                  src="/Images/northside-map.svg?v=2"
+                  alt="NorthSide GTA map with towns"
+                  className="block h-auto w-full"
+                />
 
-              {TOWNS.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  className="pin-wrap"
-                  style={{ left: `${t.x}%`, top: `${t.y}%` }}
-                  aria-label={t.name}
-                  aria-pressed={activeId === t.id}
-                  onMouseEnter={() => canHover && setHoverId(t.id)}
-                  onClick={() =>
-                    !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                  }
-                >
-                  <span
-                    className="pin"
-                    style={{ animationPlayState: pulsing ? "running" : "paused" }}
-                  />
-                  <span className="sr-only">{t.name}</span>
-                </button>
-              ))}
-
-              {showTicker ? resolvedTicker : null}
-            </div>
+                {TOWNS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    className="pin-wrap"
+                    style={{ left: `${t.x}%`, top: `${t.y}%` }}
+                    aria-label={t.name}
+                    aria-pressed={activeId === t.id}
+                    onMouseEnter={() => canHover && setHoverId(t.id)}
+                    onClick={() =>
+                      !canHover &&
+                      setOpenId((cur) => (cur === t.id ? null : t.id))
+                    }
+                  >
+                    <span
+                      className="pin"
+                      style={{
+                        animationPlayState: pulsing ? "running" : "paused",
+                      }}
+                    />
+                    <span className="sr-only">{t.name}</span>
+                  </button>
+                ))}
+              </div>
+              {tickerElement}
+            </>
           )}
 
           {afterTicker && (
