@@ -190,7 +190,8 @@ const Styles = () => (
   }
   /* ===== Desktop Hero Layout — 20 | 60 | 20 ===== */
   .hero-shell {
-    --heroH: clamp(640px, 66vh, 820px);
+    --hero-map-h: clamp(640px, 66vh, 820px);
+    --hero-panels-h: var(--hero-map-h);
 
     display: grid;
     grid-template-columns: 20% 60% 20%;
@@ -201,7 +202,7 @@ const Styles = () => (
     position: relative;
     border-radius: 28px;
     overflow: hidden;
-    min-height: var(--heroH);
+    min-height: var(--hero-panels-h);
     width: 100%;
   }
 
@@ -238,7 +239,7 @@ const Styles = () => (
 
   /* ===== Hero (center) ===== */
   .hero-core {
-    min-height: var(--heroH);
+    min-height: var(--hero-panels-h);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -259,7 +260,7 @@ const Styles = () => (
   .hero-map-frame {
     position: relative;
     flex: 1 1 auto;
-    min-height: var(--heroH);
+    min-height: var(--hero-map-h);
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -282,8 +283,8 @@ const Styles = () => (
 
   /* ===== Panels ===== */
   .panel {
-    min-height: var(--heroH);
-    max-height: var(--heroH);
+    min-height: var(--hero-panels-h);
+    max-height: var(--hero-panels-h);
     margin: 0;
     padding: 26px 22px;
     display: flex;
@@ -364,7 +365,8 @@ const Styles = () => (
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1200px) {
     .hero-shell {
-      --heroH: clamp(560px, 60vh, 760px);
+      --hero-map-h: clamp(560px, 60vh, 760px);
+      --hero-panels-h: var(--hero-map-h);
       grid-template-columns: 24% 52% 24%;
     }
     .hero-shell.no-left {
@@ -380,7 +382,8 @@ const Styles = () => (
   @media (max-width: 980px) {
     .hero-shell {
       grid-template-columns: 1fr;
-      --heroH: clamp(420px, 52vh, 600px);
+      --hero-map-h: clamp(420px, 52vh, 600px);
+      --hero-panels-h: var(--hero-map-h);
       display: grid;
       grid-auto-rows: auto;
       row-gap: 16px;
@@ -394,6 +397,7 @@ const Styles = () => (
     .panel-left { order: 2; }
     .panel-right { order: 3; }
     .panel {
+      min-height: auto;
       height: auto;
       max-height: none;
       padding: 20px;
@@ -512,6 +516,8 @@ export default function MapHero({
   const [hoverId, setHoverId] = useState(null); // pointer devices
   const frameRef = useRef(null);
   const imageRef = useRef(null);
+  const heroCoreRef = useRef(null);
+  const [heroCoreHeight, setHeroCoreHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
     offsetY: 0,
@@ -621,6 +627,68 @@ export default function MapHero({
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const element = heroCoreRef.current;
+
+    if (!element) {
+      return undefined;
+    }
+
+    let animationFrame = null;
+
+    const updateHeight = () => {
+      if (!heroCoreRef.current) {
+        return;
+      }
+
+      const rect = heroCoreRef.current.getBoundingClientRect();
+      const nextHeight = rect.height;
+
+      setHeroCoreHeight((prev) => {
+        if (Math.abs(prev - nextHeight) < 0.5) {
+          return prev;
+        }
+
+        return nextHeight;
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+
+      animationFrame = requestAnimationFrame(updateHeight);
+    };
+
+    scheduleUpdate();
+
+    let resizeObserver = null;
+
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(scheduleUpdate);
+      resizeObserver.observe(element);
+    } else {
+      window.addEventListener("resize", scheduleUpdate);
+    }
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      } else {
+        window.removeEventListener("resize", scheduleUpdate);
+      }
+    };
+  }, [embedded, isMobileViewport]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return undefined;
     }
@@ -707,11 +775,21 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
+  const heroFullHeight = Math.max(heroCoreHeight, mapMetrics.height);
+
+  const heroShellDynamicStyle = {};
+
+  if (mapMetrics.height > 0) {
+    heroShellDynamicStyle["--hero-map-h"] = `${mapMetrics.height}px`;
+  }
+
+  if (heroFullHeight > 0) {
+    heroShellDynamicStyle["--hero-panels-h"] = `${heroFullHeight}px`;
+  }
+
   const heroShellStyle =
-    mapMetrics.height > 0
-      ? {
-          "--heroH": `${mapMetrics.height}px`,
-        }
+    Object.keys(heroShellDynamicStyle).length > 0
+      ? heroShellDynamicStyle
       : undefined;
 
   const insightMode = canHover ? "desktop" : "mobile";
@@ -789,7 +867,7 @@ export default function MapHero({
               ) : null}
 
               <div className="hero-core">
-                <div className="hero-core-inner">
+                <div className="hero-core-inner" ref={heroCoreRef}>
                   <div
                     ref={frameRef}
                     className={mapFrameClassName}
