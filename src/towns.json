@@ -238,7 +238,123 @@
     "commute": {
       "to404SteelesMinutes": 26
     },
-    "pdf": "/PDF/Stouffville-Guide.pdf"
+    "pdf": "/PDF/Stouffville-Guide.pdf",
+    "hero": {
+      "tagline": "Town • NorthSide GTA",
+      "title": "Living in Stouffville",
+      "subtitle": "A NorthSide GTA community that balances small-town main street energy with quick access to the city.",
+      "backgroundImage": "/Images/stouffville-banner.jpg",
+      "backgroundAlt": "Stouffville Main Street at dusk",
+      "primaryButton": {
+        "label": "Explore Homes in Stouffville",
+        "href": "/buyers"
+      },
+      "secondaryButton": {
+        "label": "Match With a Local Agent",
+        "href": "/contact"
+      }
+    },
+    "snapshot": {
+      "population": "Update with latest population in CMS.",
+      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
+      "goTrainTime": "Approx. GO Train time from Stouffville to Union Station (update with accurate range).",
+      "homePriceRange": "Typical home price range (update with current data).",
+      "highways": "Access via major routes / highways (update details).",
+      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
+    },
+    "ratingDescriptions": {
+      "housePrices": "Detached homes and newer builds keep pricing competitive within the GTA market.",
+      "commuterAccess": "Residents lean on Highway 404, 407, and GO service for commutes into Toronto.",
+      "localTraffic": "Local streets are generally manageable, with busier periods around Main Street and school zones.",
+      "golf": "Multiple nearby courses and clubs make it easy to schedule a round close to home.",
+      "fishing": "Surrounding lakes and reservoirs offer relaxed spots for casual fishing excursions.",
+      "trailsNature": "Rouge National Urban Park and local conservation areas keep trails and forests minutes away.",
+      "restaurants": "Main Street blends independent cafés and restaurants with convenient everyday stops.",
+      "localEvents": "Seasonal festivals, markets, and community events keep the town calendar active."
+    },
+    "lifestyleHighlights": [
+      {
+        "icon": "leaf",
+        "title": "Nature & Green Space",
+        "description": "Neighbourhoods back onto trails, conservation lands, and parks that connect residents to the outdoors."
+      },
+      {
+        "icon": "users",
+        "title": "Community & Family Life",
+        "description": "Arenas, community centres, and local programming create a family-focused rhythm year-round."
+      },
+      {
+        "icon": "map",
+        "title": "Local Spots & Convenience",
+        "description": "Main Street shops pair with everyday amenities and GO access for effortless daily routines."
+      }
+    ],
+    "audiences": [
+      {
+        "icon": "family",
+        "title": "Families with Kids",
+        "description": "Schools, parks, and youth programs make it easy for families to settle in."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Young Professionals",
+        "description": "Commutable access to Toronto with a quieter hometown feel appeals to career-focused residents."
+      },
+      {
+        "icon": "activity",
+        "title": "Active Lifestyles",
+        "description": "Trail networks, golf courses, and recreation complexes support busy, outdoorsy routines."
+      },
+      {
+        "icon": "home",
+        "title": "Empty Nesters & Retirees",
+        "description": "Low-maintenance homes near amenities keep day-to-day living convenient and connected."
+      }
+    ],
+    "neighbourhoods": [
+      {
+        "name": "Downtown & Main Street",
+        "description": "Established streets with heritage homes, shops, and cafes close to local events."
+      },
+      {
+        "name": "Ballantrae & Surrounding Communities",
+        "description": "Golf-course living and estate-style properties with a relaxed pace near nature."
+      },
+      {
+        "name": "New North Stouffville",
+        "description": "Newer subdivisions with modern homes, parks, and schools designed for growing families."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long is the commute to Toronto?",
+        "answer": "Drivers typically connect through Highways 404 or 407, and many riders make use of GO Train service for downtown trips."
+      },
+      {
+        "question": "What types of homes are common here?",
+        "answer": "Expect a mix of detached homes, townhomes, and low-rise communities with ongoing infill development."
+      },
+      {
+        "question": "Is Stouffville good for families?",
+        "answer": "Yes—schools, recreation centres, and local programming are geared toward family life in every season."
+      },
+      {
+        "question": "What’s the general price point for homes?",
+        "answer": "Pricing shifts by neighbourhood and property type, so we recommend connecting with our team for the latest guidance."
+      }
+    ],
+    "cta": {
+      "title": "Ready to explore homes in Stouffville?",
+      "description": "We know the NorthSide GTA and can help you see if Stouffville matches your commute, budget, and day-to-day lifestyle.",
+      "primaryButton": {
+        "label": "Book a Discovery Call",
+        "href": "/contact"
+      },
+      "secondaryButton": {
+        "label": "Tell Us What You’re Looking For",
+        "href": "/vip"
+      }
+    }
   },
   {
     "slug": "uxbridge",

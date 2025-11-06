@@ -117,7 +117,7 @@ export default function TownPage() {
 
   const slug = (town.slug || "").toLowerCase();
 
-  if (["aurora", "uxbridge"].includes(slug)) {
+  if (["aurora", "stouffville", "uxbridge"].includes(slug)) {
     const ratingDescriptions = town.ratingDescriptions || {};
     const ratings = CATEGORY_ORDER.filter((k) => town.ratings?.[k] != null).map((key) => ({
       label: CATEGORY_LABELS[key] || key,
