@@ -405,11 +405,7 @@ const Styles = () => (
     .hero-shell {
       --hero-map-h: auto;
       --hero-panels-h: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      order: 1;
+      display: contents;
     }
     .hero-core {
       order: 1;
@@ -424,6 +420,8 @@ const Styles = () => (
       min-height: auto;
       width: 100%;
       margin: 0;
+      border-radius: 32px;
+      overflow: hidden;
     }
     .panel {
       min-height: auto;
@@ -443,17 +441,17 @@ const Styles = () => (
       order: 3;
       margin-top: 16px;
     }
-    .panel-right {
+    .hero-ticker-content {
       order: 4;
-      margin-top: 16px;
+      margin-top: 20px;
+    }
+    .panel-right {
+      order: 5;
+      margin-top: 20px;
       overflow-y: auto;
     }
     .panel.panel-right > * {
       height: auto;
-    }
-    .hero-ticker-content {
-      order: 5;
-      margin-top: 20px;
     }
     .mobile-accordion {
       display: flex;
