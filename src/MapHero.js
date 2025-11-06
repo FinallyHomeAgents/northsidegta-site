@@ -283,6 +283,7 @@ const Styles = () => (
   /* ===== Panels ===== */
   .panel {
     min-height: var(--heroH);
+    max-height: var(--heroH);
     margin: 0;
     padding: 26px 22px;
     display: flex;
