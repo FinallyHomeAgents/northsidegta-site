@@ -44,8 +44,8 @@ export default function Navigation() {
             aria-label="NorthSide GTA - Home"
           >
             <img
-              src="/Images/fha-badge.png"
-              alt="NorthSide GTA powered by Finally Home Agents"
+              src="/Images/newtoolbar.png"
+              alt="NorthSide GTA navigation badge"
               className="h-10 sm:h-12 w-auto"
               loading="eager"
               decoding="async"
