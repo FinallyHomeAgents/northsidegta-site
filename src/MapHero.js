@@ -517,6 +517,8 @@ export default function MapHero({
   const frameRef = useRef(null);
   const imageRef = useRef(null);
   const heroCoreRef = useRef(null);
+  const panelLeftRef = useRef(null);
+  const panelRightRef = useRef(null);
   const [heroCoreHeight, setHeroCoreHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
@@ -524,9 +526,12 @@ export default function MapHero({
     width: 0,
     height: 0,
   });
+  const [panelsHeight, setPanelsHeight] = useState(0);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [mobileMatchOpen, setMobileMatchOpen] = useState(false);
   const accordionRegionId = `${useId()}-match-panel`;
+  const embedded = variant !== "standalone";
+  const heroFullHeight = Math.max(heroCoreHeight, mapMetrics.height);
 
   useEffect(() => {
     const t = setTimeout(() => setPulsing(false), 1200);
@@ -716,6 +721,52 @@ export default function MapHero({
     }
   }, [isMobileViewport]);
 
+  useEffect(() => {
+    if (!embedded || isMobileViewport) {
+      setPanelsHeight(0);
+      return;
+    }
+
+    const measurements = [];
+
+    const addMeasurement = (value) => {
+      if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
+        measurements.push(value);
+      }
+    };
+
+    const measureElement = (node) => {
+      if (!node) return 0;
+      const rect = node.getBoundingClientRect();
+      if (rect && rect.height > 0) {
+        return rect.height;
+      }
+      return node.scrollHeight || 0;
+    };
+
+    addMeasurement(heroFullHeight);
+    addMeasurement(measureElement(panelLeftRef.current));
+    addMeasurement(measureElement(panelRightRef.current));
+
+    if (measurements.length === 0) {
+      return;
+    }
+
+    const candidate = Math.max(...measurements);
+
+    setPanelsHeight((prev) => {
+      if (!prev) {
+        return candidate;
+      }
+
+      if (Math.abs(prev - candidate) > 2) {
+        return candidate;
+      }
+
+      return prev;
+    });
+  }, [embedded, heroFullHeight, isMobileViewport]);
+
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
@@ -743,8 +794,6 @@ export default function MapHero({
       setMobileMatchOpen(Boolean(next));
     }
   };
-
-  const embedded = variant !== "standalone";
 
   const sectionClasses = [
     embedded
@@ -775,7 +824,8 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
-  const heroFullHeight = Math.max(heroCoreHeight, mapMetrics.height);
+  const resolvedPanelsHeight =
+    !isMobileViewport && panelsHeight > 0 ? panelsHeight : heroFullHeight;
 
   const heroShellDynamicStyle = {};
 
@@ -783,8 +833,10 @@ export default function MapHero({
     heroShellDynamicStyle["--hero-map-h"] = `${mapMetrics.height}px`;
   }
 
-  if (heroFullHeight > 0) {
-    heroShellDynamicStyle["--hero-panels-h"] = `${heroFullHeight}px`;
+  if (resolvedPanelsHeight > 0) {
+    heroShellDynamicStyle["--hero-panels-h"] = `${Math.round(
+      resolvedPanelsHeight
+    )}px`;
   }
 
   const heroShellStyle =
@@ -819,9 +871,10 @@ export default function MapHero({
               <div className={heroShellClasses} style={heroShellStyle}>
                 {showQuickContact ? (
                   <aside
+                    ref={panelLeftRef}
                     className={`panel panel-left${
-                    isMobileViewport ? " mobile-accordion-panel" : ""
-                  }`}
+                      isMobileViewport ? " mobile-accordion-panel" : ""
+                    }`}
                 >
                   {isMobileViewport ? (
                     <div className="mobile-accordion">
@@ -916,7 +969,7 @@ export default function MapHero({
                 </div>
               </div>
 
-              <aside className="panel panel-right">
+              <aside ref={panelRightRef} className="panel panel-right">
                 <TownInsightCard
                   town={activeTown}
                   mode={insightMode}
