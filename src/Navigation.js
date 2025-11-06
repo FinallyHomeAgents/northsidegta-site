@@ -94,17 +94,17 @@ export default function Navigation() {
         "
       >
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
             {/* Brand (badge only) */}
             <Link
               to="/"
-              className="flex items-center hover:opacity-90 transition"
+              className="flex items-center hover:opacity-90 transition flex-shrink-0"
               aria-label="NorthSide GTA - Home"
             >
               <img
                 src="/Images/newtoolbar.png"
                 alt="NorthSide GTA navigation badge"
-                className="h-10 sm:h-12 w-auto"
+                className="h-10 sm:h-12 w-auto flex-shrink-0"
                 loading="eager"
                 decoding="async"
               />
