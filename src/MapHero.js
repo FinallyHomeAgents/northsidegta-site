@@ -299,6 +299,14 @@ const Styles = () => (
     color: #F4FFF1;
     box-shadow: inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(0,0,0,0.12);
   }
+  .panel.panel-right {
+    justify-content: flex-start;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .panel.panel-right > * {
+    height: 100%;
+  }
   .panel > * {
     width: 100%;
   }
