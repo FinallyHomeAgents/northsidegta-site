@@ -361,13 +361,15 @@ const Styles = () => (
   }
 
   /* ===== TICKER: stacked below the map ===== */
-  .hero-ticker {
+  .hero-ticker-content {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
+    min-height: 0;
   }
-  .hero-ticker > * {
+  .hero-ticker-content > * {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -813,7 +815,20 @@ export default function MapHero({
   const insightMode = canHover ? "desktop" : "mobile";
   const resolvedTicker =
     typeof tickerSlot === "undefined" ? null : tickerSlot || null;
-  const showTicker = Boolean(resolvedTicker);
+  const decoratedTicker =
+    resolvedTicker &&
+    React.isValidElement(resolvedTicker) &&
+    resolvedTicker.type !== React.Fragment
+      ? React.cloneElement(resolvedTicker, {
+          className: [
+            "hero-ticker-content",
+            resolvedTicker.props.className || "",
+          ]
+            .filter(Boolean)
+            .join(" "),
+        })
+      : resolvedTicker;
+  const showTicker = Boolean(decoratedTicker);
   const mapFrameClassName = [
     "hero-map-frame",
   ]
@@ -928,9 +943,7 @@ export default function MapHero({
                       </button>
                     ))}
                   </div>
-                  {showTicker ? (
-                    <div className="hero-ticker">{resolvedTicker}</div>
-                  ) : null}
+                  {showTicker ? decoratedTicker : null}
                 </div>
               </div>
 
@@ -981,9 +994,7 @@ export default function MapHero({
                   </button>
                 ))}
               </div>
-              {showTicker ? (
-                <div className="hero-ticker">{resolvedTicker}</div>
-              ) : null}
+              {showTicker ? decoratedTicker : null}
             </>
           )}
 
