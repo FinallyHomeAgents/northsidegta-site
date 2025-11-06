@@ -4,6 +4,7 @@ import Navigation from "./Navigation";
 import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
 import Footer from "./Footer";
+import TaglineStrip from "./components/TaglineStrip";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
 import DidYouKnowCard from "./components/DidYouKnowCard";
 import { didYouKnowFacts } from "./components/DidYouKnowData";
@@ -42,6 +43,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
+      <TaglineStrip />
       <Helmet>
         <title>NorthSide GTA | Real Estate Agents for Buyers &amp; Sellers</title>
         <meta
