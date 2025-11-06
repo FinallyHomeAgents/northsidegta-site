@@ -1,5 +1,5 @@
 // src/MapHero.js
-import React, { useEffect, useRef, useState, useId } from "react";
+import React, { useEffect, useRef, useState, useId, useLayoutEffect } from "react";
 import QuickContactCard from "./QuickContactCard";
 
 /* ────────────────────────────────────────────────────────────
@@ -169,6 +169,9 @@ const PANEL_CHIPS = [
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
    ──────────────────────────────────────────────────────────── */
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 const Styles = () => (
   <style>{`
   @keyframes pinPulse {
@@ -517,8 +520,6 @@ export default function MapHero({
   const frameRef = useRef(null);
   const imageRef = useRef(null);
   const heroCoreRef = useRef(null);
-  const panelLeftRef = useRef(null);
-  const panelRightRef = useRef(null);
   const [heroCoreHeight, setHeroCoreHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
@@ -526,7 +527,6 @@ export default function MapHero({
     width: 0,
     height: 0,
   });
-  const [panelsHeight, setPanelsHeight] = useState(0);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [mobileMatchOpen, setMobileMatchOpen] = useState(false);
   const accordionRegionId = `${useId()}-match-panel`;
@@ -631,7 +631,7 @@ export default function MapHero({
     };
   }, []);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (typeof window === "undefined") {
       return undefined;
     }
@@ -721,52 +721,6 @@ export default function MapHero({
     }
   }, [isMobileViewport]);
 
-  useEffect(() => {
-    if (!embedded || isMobileViewport) {
-      setPanelsHeight(0);
-      return;
-    }
-
-    const measurements = [];
-
-    const addMeasurement = (value) => {
-      if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
-        measurements.push(value);
-      }
-    };
-
-    const measureElement = (node) => {
-      if (!node) return 0;
-      const rect = node.getBoundingClientRect();
-      if (rect && rect.height > 0) {
-        return rect.height;
-      }
-      return node.scrollHeight || 0;
-    };
-
-    addMeasurement(heroFullHeight);
-    addMeasurement(measureElement(panelLeftRef.current));
-    addMeasurement(measureElement(panelRightRef.current));
-
-    if (measurements.length === 0) {
-      return;
-    }
-
-    const candidate = Math.max(...measurements);
-
-    setPanelsHeight((prev) => {
-      if (!prev) {
-        return candidate;
-      }
-
-      if (Math.abs(prev - candidate) > 2) {
-        return candidate;
-      }
-
-      return prev;
-    });
-  }, [embedded, heroFullHeight, isMobileViewport]);
-
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
@@ -824,18 +778,17 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
-  const resolvedPanelsHeight =
-    !isMobileViewport && panelsHeight > 0 ? panelsHeight : heroFullHeight;
-
   const heroShellDynamicStyle = {};
 
   if (mapMetrics.height > 0) {
     heroShellDynamicStyle["--hero-map-h"] = `${mapMetrics.height}px`;
   }
 
-  if (resolvedPanelsHeight > 0) {
+  const heroPanelsHeight = heroFullHeight > 0 ? heroFullHeight : 0;
+
+  if (heroPanelsHeight > 0) {
     heroShellDynamicStyle["--hero-panels-h"] = `${Math.round(
-      resolvedPanelsHeight
+      heroPanelsHeight
     )}px`;
   }
 
@@ -871,7 +824,6 @@ export default function MapHero({
               <div className={heroShellClasses} style={heroShellStyle}>
                 {showQuickContact ? (
                   <aside
-                    ref={panelLeftRef}
                     className={`panel panel-left${
                       isMobileViewport ? " mobile-accordion-panel" : ""
                     }`}
@@ -969,7 +921,7 @@ export default function MapHero({
                 </div>
               </div>
 
-              <aside ref={panelRightRef} className="panel panel-right">
+              <aside className="panel panel-right">
                 <TownInsightCard
                   town={activeTown}
                   mode={insightMode}
