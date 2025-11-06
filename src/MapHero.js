@@ -1,7 +1,6 @@
 // src/MapHero.js
 import React, { useEffect, useRef, useState, useId } from "react";
 import QuickContactCard from "./QuickContactCard";
-import LiveTicker from "./components/LiveTicker";
 
 /* ────────────────────────────────────────────────────────────
    Category labels + display order
@@ -239,10 +238,11 @@ const Styles = () => (
 
   /* ===== Hero (center) ===== */
   .hero-core {
-    height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
+    min-height: var(--heroH);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -253,18 +253,18 @@ const Styles = () => (
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
     gap: 0;
   }
   .hero-map-frame {
     position: relative;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: var(--heroH);
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     overflow: hidden;
-    padding-bottom: var(--hero-ticker-height, 0px);
   }
 
   /* Whatever renders the map/image */
@@ -282,7 +282,7 @@ const Styles = () => (
 
   /* ===== Panels ===== */
   .panel {
-    height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
+    min-height: var(--heroH);
     margin: 0;
     padding: 26px 22px;
     display: flex;
@@ -347,27 +347,13 @@ const Styles = () => (
     box-sizing: border-box;
   }
 
-  /* ===== TICKER: flush to bottom of hero ===== */
+  /* ===== TICKER: stacked below the map ===== */
   .hero-ticker {
     width: 100%;
   }
   .hero-ticker > * {
     width: 100%;
-  }
-  .hero-ticker--overlay {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-    padding: 0;
-    z-index: 5;
-  }
-  .hero-ticker--overlay > * {
-    width: 100%;
-    height: 100%;
+    display: block;
   }
 
   /* Ensure overlay pieces stay above */
@@ -408,7 +394,7 @@ const Styles = () => (
     .panel-right { order: 3; }
     .panel {
       height: auto;
-      max-height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
+      max-height: none;
       padding: 20px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -419,9 +405,6 @@ const Styles = () => (
     }
     .panel-right {
       overflow-y: auto;
-    }
-    .hero-core {
-      height: calc(var(--heroH) + var(--hero-ticker-height, 0px));
     }
     .mobile-accordion {
       display: flex;
@@ -528,8 +511,6 @@ export default function MapHero({
   const [hoverId, setHoverId] = useState(null); // pointer devices
   const frameRef = useRef(null);
   const imageRef = useRef(null);
-  const tickerRef = useRef(null);
-  const [tickerHeight, setTickerHeight] = useState(0);
   const [mapMetrics, setMapMetrics] = useState({
     offsetX: 0,
     offsetY: 0,
@@ -726,41 +707,9 @@ export default function MapHero({
     .join(" ");
 
   const insightMode = canHover ? "desktop" : "mobile";
-  const usingDefaultTicker = typeof tickerSlot === "undefined";
   const resolvedTicker =
-    usingDefaultTicker ? <LiveTicker /> : tickerSlot || null;
+    typeof tickerSlot === "undefined" ? null : tickerSlot || null;
   const showTicker = Boolean(resolvedTicker);
-  useEffect(() => {
-    if (!showTicker) {
-      setTickerHeight(0);
-      return undefined;
-    }
-
-    const node = tickerRef.current;
-    if (!node) {
-      return undefined;
-    }
-
-    const measure = () => {
-      setTickerHeight(node.offsetHeight || 0);
-    };
-
-    measure();
-
-    if (typeof ResizeObserver === "function") {
-      const observer = new ResizeObserver(measure);
-      observer.observe(node);
-      return () => observer.disconnect();
-    }
-
-    return undefined;
-  }, [showTicker, resolvedTicker]);
-
-  const tickerOverlay = showTicker ? (
-    <div ref={tickerRef} className="hero-ticker hero-ticker--overlay">
-      {resolvedTicker}
-    </div>
-  ) : null;
   const mapFrameClassName = [
     "hero-map-frame",
   ]
@@ -773,8 +722,6 @@ export default function MapHero({
     .filter(Boolean)
     .join(" ");
 
-  const tickerPadding = showTicker ? tickerHeight : 0;
-
   return (
     <section className={sectionClasses}>
       <div className={containerClasses}>
@@ -783,10 +730,7 @@ export default function MapHero({
           <Styles />
           {embedded ? (
             <>
-              <div
-                className={heroShellClasses}
-                style={{ "--hero-ticker-height": `${tickerPadding}px` }}
-              >
+              <div className={heroShellClasses}>
                 {showQuickContact ? (
                   <aside
                     className={`panel panel-left${
@@ -846,7 +790,6 @@ export default function MapHero({
                       "--map-offset-y": `${mapMetrics.offsetY}px`,
                       "--map-width": `${mapMetrics.width}px`,
                       "--map-height": `${mapMetrics.height}px`,
-                      "--hero-ticker-height": `${tickerPadding}px`,
                     }}
                     onMouseLeave={() => canHover && setHoverId(null)}
                   >
@@ -880,8 +823,10 @@ export default function MapHero({
                         <span className="sr-only">{t.name}</span>
                       </button>
                     ))}
-                    {tickerOverlay}
                   </div>
+                  {showTicker ? (
+                    <div className="hero-ticker">{resolvedTicker}</div>
+                  ) : null}
                 </div>
               </div>
 
@@ -900,7 +845,6 @@ export default function MapHero({
             <>
               <div
                 className={mobileMapClassName}
-                style={{ "--hero-ticker-height": `${tickerPadding}px` }}
                 onMouseLeave={() => canHover && setHoverId(null)}
               >
                 <img
@@ -932,8 +876,10 @@ export default function MapHero({
                     <span className="sr-only">{t.name}</span>
                   </button>
                 ))}
-                {tickerOverlay}
               </div>
+              {showTicker ? (
+                <div className="hero-ticker">{resolvedTicker}</div>
+              ) : null}
             </>
           )}
 
