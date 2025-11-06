@@ -1,76 +1,26 @@
 {
-  "slug": "20251107-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
-  "title": "March Break at LEGOLAND® Discovery Centre Toronto",
-  "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
+  "slug": "20251110-the-heintzman-house-2025-art-show-and-sale-toronto-adjacent",
+  "title": "The Heintzman House 2025 Art Show and Sale.",
+  "summary": "The Heintzman House 2025 Art Show and Sale.",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » The Heintzman House 2025 Art Show and Sale. 2025 Summer Art Camp at Palette Art School 2025 Summer Art Camp at Palette Art School Loading view. Today Now Now Select date. Nov 6 October 29 @ 9:30 am - November 6 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 October 30 @ 9:30 am - November 7 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 2 @ 9:30 am - November 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 3 @ 9:00 am - November 6 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 6 November 3 @ 9:30 am - November 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 4 @ 9:00 am - November 7 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 6 November 4 @ 9:30 am - November 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 5 @ 9:00 am - November 8 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 6 November 5 @ 9:30 am - November 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 6 November 6 @ 9:00 am - November 9 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-07T14:30:00Z",
-  "endDate": "2025-11-15T22:00:00Z",
+  "startDate": "2025-11-10T17:00:00Z",
+  "endDate": "2025-11-10T21:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-07",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-08",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-09",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
       "date": "2025-11-10",
       "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-11",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-12",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-13",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-14",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
-    },
-    {
-      "date": "2025-11-15",
-      "all_day": false,
-      "start_time": "09:30",
-      "end_time": "17:00"
+      "start_time": "12:00",
+      "end_time": "16:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
-  "lat": 43.8256383,
-  "lng": -79.5382147,
+  "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
+  "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-11-07/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-11-10/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -80,8 +30,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10009036-1762507800-1763226000@www.experienceyorkregion.com",
+  "sourceRef": "10010914-1762776000-1762790400@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-06T08:35:55.889Z",
+  "firstSeenAt": "2025-11-06T08:35:55.889Z",
   "updatedAt": "2025-11-06T08:35:55.889Z",
   "featured": false
 }

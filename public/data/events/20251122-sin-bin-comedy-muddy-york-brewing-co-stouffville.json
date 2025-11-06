@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/sin-bin-muddy-brewing-co-stouf-flyer_20251027_150349_0000.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/sin-bin-comedy-muddy-york-brewing-co/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/sin-bin-comedy-muddy-york-brewing-co/",
-  "updatedAt": "2025-11-04T08:36:02Z"
+  "lastSyncedAt": "2025-11-06T08:35:55.889Z",
+  "updatedAt": "2025-11-06T08:35:55.889Z",
+  "featured": false
 }
