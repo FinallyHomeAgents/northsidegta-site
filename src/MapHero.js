@@ -398,6 +398,10 @@ const Styles = () => (
     }
   }
   @media (max-width: 980px) {
+    .hero-frame {
+      display: flex;
+      flex-direction: column;
+    }
     .hero-shell {
       --hero-map-h: auto;
       --hero-panels-h: auto;
@@ -405,6 +409,7 @@ const Styles = () => (
       flex-direction: column;
       align-items: stretch;
       gap: 0;
+      order: 1;
     }
     .hero-core {
       order: 1;
@@ -434,8 +439,12 @@ const Styles = () => (
       overflow: visible;
       max-height: none;
     }
-    .panel-right {
+    .hero-after {
       order: 3;
+      margin-top: 16px;
+    }
+    .panel-right {
+      order: 4;
       margin-top: 16px;
       overflow-y: auto;
     }
@@ -443,7 +452,7 @@ const Styles = () => (
       height: auto;
     }
     .hero-ticker-content {
-      order: 4;
+      order: 5;
       margin-top: 20px;
     }
     .mobile-accordion {
@@ -803,8 +812,8 @@ export default function MapHero({
     .join(" ");
 
   const frameClasses = embedded
-    ? "relative mx-auto w-full rounded-[36px]"
-    : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
+    ? "hero-frame relative mx-auto w-full rounded-[36px]"
+    : "hero-frame relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
 
   const heroShellClasses = [
     "hero-shell",
@@ -1020,7 +1029,7 @@ export default function MapHero({
           )}
 
           {afterTicker && (
-            <div className="border-t border-white/12 bg-white/5 backdrop-blur-sm">
+            <div className="hero-after border-t border-white/12 bg-white/5 backdrop-blur-sm">
               <div className="px-3 py-4 sm:px-4 sm:py-5">
                 {afterTicker}
               </div>
