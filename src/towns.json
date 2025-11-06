@@ -4,7 +4,11 @@
     "name": "Georgina",
     "heroImage": "/Images/georgina-banner.jpg",
     "summary": "Lake life, beaches, and room to roam with easy escapes to the water.",
-    "highlights": ["Lake Simcoe access", "Beaches & marinas", "Growing family neighbourhoods"],
+    "highlights": [
+      "Lake Simcoe access",
+      "Beaches & marinas",
+      "Growing family neighbourhoods"
+    ],
     "ratings": {
       "housePrices": 5,
       "commuterAccess": 4,
@@ -15,7 +19,9 @@
       "restaurants": 3,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 33 },
+    "commute": {
+      "to404SteelesMinutes": 33
+    },
     "pdf": "/PDF/Georgina-Guide.pdf"
   },
   {
@@ -23,7 +29,11 @@
     "name": "East Gwillimbury",
     "heroImage": "/Images/eastgwillimbury-banner.jpg",
     "summary": "New builds, schools and quick 404 access from Sharon, Queensville & Holland Landing.",
-    "highlights": ["Newer homes", "Schools & parks", "Fast 404 access"],
+    "highlights": [
+      "Newer homes",
+      "Schools & parks",
+      "Fast 404 access"
+    ],
     "ratings": {
       "housePrices": 4,
       "commuterAccess": 4,
@@ -34,7 +44,9 @@
       "restaurants": 4,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 27 },
+    "commute": {
+      "to404SteelesMinutes": 27
+    },
     "pdf": "/PDF/East-Gwillimbury-Guide.pdf"
   },
   {
@@ -42,7 +54,11 @@
     "name": "Newmarket",
     "heroImage": "/Images/newmarket-banner.jpg",
     "summary": "Shops, dining and GO convenience with a vibrant Main Street.",
-    "highlights": ["Historic Main Street", "GO Train access", "Shops & dining"],
+    "highlights": [
+      "Historic Main Street",
+      "GO Train access",
+      "Shops & dining"
+    ],
     "ratings": {
       "housePrices": 3,
       "commuterAccess": 5,
@@ -53,7 +69,9 @@
       "restaurants": 5,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 25 },
+    "commute": {
+      "to404SteelesMinutes": 25
+    },
     "pdf": "/PDF/Newmarket-Guide.pdf"
   },
   {
@@ -61,7 +79,11 @@
     "name": "Aurora",
     "heroImage": "/Images/aurora-banner.jpg",
     "summary": "Mature neighbourhoods, schools and quiet streets with fast commuter access.",
-    "highlights": ["Top schools", "Established streets", "GO & 404 access"],
+    "highlights": [
+      "Top schools",
+      "Established streets",
+      "GO & 404 access"
+    ],
     "ratings": {
       "housePrices": 3,
       "commuterAccess": 5,
@@ -72,15 +94,137 @@
       "restaurants": 4,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 23 },
-    "pdf": "/PDF/Aurora-Guide.pdf"
+    "commute": {
+      "to404SteelesMinutes": 23
+    },
+    "pdf": "/PDF/Aurora-Guide.pdf",
+    "hero": {
+      "tagline": "Town \u2022 NorthSide GTA",
+      "title": "Living in Aurora",
+      "subtitle": "A NorthSide GTA community with strong schools, established neighbourhoods, and convenient access to Toronto.",
+      "backgroundImage": "/Images/aurora-banner.jpg",
+      "backgroundAlt": "Aurora streetscape at dusk",
+      "primaryButton": {
+        "label": "Explore Homes in Aurora",
+        "href": "/buyers"
+      },
+      "secondaryButton": {
+        "label": "Match With a Local Agent",
+        "href": "/contact"
+      }
+    },
+    "snapshot": {
+      "population": "~62,000 (2021 Census)",
+      "driveToToronto": "Approx 40\u201350 minutes via Highway 404",
+      "goTrainTime": "Approx 50\u201355 minutes to Union Station from Aurora GO",
+      "homePriceRange": "Detached homes often trade in the mid-to-high $1M range, with townhomes providing more entry options.",
+      "highways": "Easy access to Highway 404 with connections toward Highway 400 via nearby routes.",
+      "transitSummary": "Aurora GO and local YRT/Viva routes connect to Toronto and neighbouring towns."
+    },
+    "ratingDescriptions": {
+      "housePrices": "Aurora\u2019s established detached homes keep pricing on the higher side for the NorthSide GTA.",
+      "commuterAccess": "Direct Highway 404 access and frequent GO trains make downtown commutes manageable.",
+      "localTraffic": "Local roads move steadily, though Yonge Street and Bayview can back up during rush hour.",
+      "golf": "Magna Golf Club, St. Andrew\u2019s Valley, and nearby courses provide plenty of fairways.",
+      "fishing": "In-town fishing spots are limited, but Lake Simcoe and the Holland River are a quick drive away.",
+      "trailsNature": "The Aurora Arboretum, Sheppard\u2019s Bush, and Moraine trails weave green space throughout town.",
+      "restaurants": "Independent restaurants downtown mix with convenient chains along Bayview and Wellington.",
+      "localEvents": "Seasonal farmers\u2019 markets, concerts in the park, and community festivals keep the calendar full."
+    },
+    "lifestyleHighlights": [
+      {
+        "icon": "leaf",
+        "title": "Nature & Green Space",
+        "description": "Aurora sits along the Oak Ridges Moraine with trails, parks, and conservation areas linking neighbourhoods to the outdoors."
+      },
+      {
+        "icon": "users",
+        "title": "Community & Family Life",
+        "description": "Established schools, recreation centres, and active minor sports make it easy for families to plug into the community."
+      },
+      {
+        "icon": "map",
+        "title": "Local Spots & Convenience",
+        "description": "Downtown boutiques, big-box conveniences, and growing dining options keep errands and evenings close to home."
+      }
+    ],
+    "audiences": [
+      {
+        "icon": "family",
+        "title": "Families with Kids",
+        "description": "Top-ranked public schools plus St. Andrew\u2019s College and St. Anne\u2019s School anchor education options."
+      },
+      {
+        "icon": "briefcase",
+        "title": "Commuters & Professionals",
+        "description": "Highway 404 and regular GO service keep downtown Toronto commutes practical on weekdays."
+      },
+      {
+        "icon": "activity",
+        "title": "Active Lifestyles",
+        "description": "Community centres, club sports, and nearby golf courses keep weekends busy."
+      },
+      {
+        "icon": "home",
+        "title": "Upsizers & Move-Up Buyers",
+        "description": "Larger lots and mature trees provide space for upsizing without leaving the GTA."
+      }
+    ],
+    "neighbourhoods": [
+      {
+        "name": "Aurora Village",
+        "description": "Historic downtown streets with century homes, caf\u00e9s, and quick GO Station access."
+      },
+      {
+        "name": "Bayview Wellington",
+        "description": "Family-friendly master-planned area with parks, schools, and everyday amenities."
+      },
+      {
+        "name": "Aurora Highlands",
+        "description": "Tree-lined streets of detached homes close to top schools and the town\u2019s recreation complex."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long is the commute to Toronto?",
+        "answer": "Highway 404 typically delivers a 40\u201350 minute drive to downtown Toronto, and GO trains run about 50\u201355 minutes to Union Station."
+      },
+      {
+        "question": "What types of homes are common here?",
+        "answer": "Aurora is dominated by detached homes and townhomes from the 1980s onward, with some newer infill and estate properties."
+      },
+      {
+        "question": "Is Aurora good for families?",
+        "answer": "Yes\u2014Aurora is known for its school network, community programs, and recreation facilities that cater to families year-round."
+      },
+      {
+        "question": "What\u2019s the general price point for homes?",
+        "answer": "Detached homes often sell in the mid-to-high $1M range, with townhomes and semis offering slightly more attainable options."
+      }
+    ],
+    "cta": {
+      "title": "Ready to explore homes in Aurora?",
+      "description": "We live and work across the NorthSide GTA and can help you decide if Aurora fits your commute, your budget, and your lifestyle.",
+      "primaryButton": {
+        "label": "Book a Discovery Call",
+        "href": "/contact"
+      },
+      "secondaryButton": {
+        "label": "Tell Us What You\u2019re Looking For",
+        "href": "/vip"
+      }
+    }
   },
   {
     "slug": "stouffville",
     "name": "Stouffville",
     "heroImage": "/Images/stouffville-banner.jpg",
     "summary": "Family streets, parks and a lively Main Street close to nature.",
-    "highlights": ["Main Street vibe", "Parks & rec", "Family-friendly"],
+    "highlights": [
+      "Main Street vibe",
+      "Parks & rec",
+      "Family-friendly"
+    ],
     "ratings": {
       "housePrices": 4,
       "commuterAccess": 4,
@@ -91,7 +235,9 @@
       "restaurants": 4,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 26 },
+    "commute": {
+      "to404SteelesMinutes": 26
+    },
     "pdf": "/PDF/Stouffville-Guide.pdf"
   },
   {
@@ -99,7 +245,11 @@
     "name": "Uxbridge",
     "heroImage": "/Images/uxbridge-banner.jpg",
     "summary": "Trail capital charm, rolling hills and small-town feel with outdoor living.",
-    "highlights": ["Trails & nature", "Small-town charm", "Active community"],
+    "highlights": [
+      "Trails & nature",
+      "Small-town charm",
+      "Active community"
+    ],
     "ratings": {
       "housePrices": 3,
       "commuterAccess": 3,
@@ -110,7 +260,9 @@
       "restaurants": 4,
       "localEvents": 4
     },
-    "commute": { "to404SteelesMinutes": 37 },
+    "commute": {
+      "to404SteelesMinutes": 37
+    },
     "pdf": "/PDF/Uxbridge-Guide.pdf"
   },
   {
@@ -118,7 +270,11 @@
     "name": "Scugog",
     "heroImage": "/Images/scugog-banner.jpg",
     "summary": "Port Perry heritage, lakefront sunsets and a relaxed pace by the water.",
-    "highlights": ["Lakefront living", "Main Street heritage", "Community events"],
+    "highlights": [
+      "Lakefront living",
+      "Main Street heritage",
+      "Community events"
+    ],
     "ratings": {
       "housePrices": 4,
       "commuterAccess": 3,
@@ -129,7 +285,9 @@
       "restaurants": 4,
       "localEvents": 5
     },
-    "commute": { "to404SteelesMinutes": 40 },
+    "commute": {
+      "to404SteelesMinutes": 40
+    },
     "pdf": "/PDF/Scugog-Guide.pdf"
   }
 ]

@@ -6,6 +6,22 @@ import Navigation from "./Navigation";
 import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
+import TownPageLayout from "./components/towns/TownPageLayout";
+import {
+  FiTrendingUp,
+  FiClock,
+  FiMapPin,
+  FiFlag,
+  FiAnchor,
+  FiFeather,
+  FiCoffee,
+  FiCalendar,
+  FiUsers,
+  FiBriefcase,
+  FiActivity,
+  FiHome,
+  FiMap,
+} from "react-icons/fi";
 
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
@@ -28,6 +44,27 @@ const CATEGORY_ORDER = [
   "restaurants",
   "localEvents",
 ];
+
+const RATING_ICONS = {
+  housePrices: FiTrendingUp,
+  commuterAccess: FiClock,
+  localTraffic: FiMapPin,
+  golf: FiFlag,
+  fishing: FiAnchor,
+  trailsNature: FiFeather,
+  restaurants: FiCoffee,
+  localEvents: FiCalendar,
+};
+
+const GENERIC_ICON_MAP = {
+  leaf: FiFeather,
+  users: FiUsers,
+  map: FiMap,
+  family: FiUsers,
+  briefcase: FiBriefcase,
+  activity: FiActivity,
+  home: FiHome,
+};
 
 function DotRow({ value = 0 }) {
   const v = Math.round(value);
@@ -78,6 +115,62 @@ export default function TownPage() {
     );
   }
 
+  if ((town.slug || "").toLowerCase() === "aurora") {
+    const ratingDescriptions = town.ratingDescriptions || {};
+    const ratings = CATEGORY_ORDER.filter((k) => town.ratings?.[k] != null).map((key) => ({
+      label: CATEGORY_LABELS[key] || key,
+      score: town.ratings[key],
+      description: ratingDescriptions[key],
+      icon: RATING_ICONS[key],
+    }));
+
+    const mapIcon = (iconKey) => GENERIC_ICON_MAP[iconKey] || null;
+
+    const lifestyleHighlights = Array.isArray(town.lifestyleHighlights)
+      ? town.lifestyleHighlights.map((item) => ({
+          ...item,
+          icon: mapIcon(item?.icon),
+        }))
+      : [];
+
+    const audiences = Array.isArray(town.audiences)
+      ? town.audiences.map((item) => ({
+          ...item,
+          icon: mapIcon(item?.icon),
+        }))
+      : [];
+
+    return (
+      <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
+        <Navigation />
+        <TownPageLayout
+          townName={town.name}
+          hero={town.hero}
+          snapshot={town.snapshot}
+          ratings={ratings}
+          ratingScaleMax={5}
+          lifestyleHighlights={lifestyleHighlights}
+          audiences={audiences}
+          neighbourhoods={town.neighbourhoods || []}
+          faqs={town.faqs || []}
+          cta={town.cta}
+          guide={
+            town.pdf
+              ? {
+                  href: town.pdf,
+                  label: `Download ${town.name} Guide (PDF)`,
+                }
+              : null
+          }
+        />
+        <section className="mx-auto max-w-6xl px-4 pb-12">
+          <TownStrip />
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     // Keep horizontal overflow hidden at the page level to prevent accidental widening.
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
@@ -111,11 +204,11 @@ export default function TownPage() {
 
             {/* Summary + download + MATCH card */}
             <div className="p-5 md:p-6 space-y-4">
-              {town.summary && (
-                <p className="text-gray-700 text-base md:text-lg">
-                  {town.summary}
-                </p>
-              )}
+            {town.summary && (
+              <p className="text-gray-700 text-base md:text-lg">
+                {town.summary}
+              </p>
+            )}
 
               <div className="flex flex-wrap items-center gap-3">
                 {town.pdf && (
