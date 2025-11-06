@@ -43,7 +43,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <TaglineStrip />
       <Helmet>
         <title>NorthSide GTA | Real Estate Agents for Buyers &amp; Sellers</title>
         <meta
@@ -143,19 +142,22 @@ function HomeHero() {
             <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
               <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
                 <div className="relative overflow-hidden rounded-[36px] border border-white/10">
-                  <MapHero
-                    variant="immersive"
-                    showQuickContact
-                    tickerSlot={
-                      <DidYouKnowCard
-                        facts={didYouKnowFacts}
-                        rotateInterval={6500}
-                        className="flex h-full w-full flex-col"
-                        variant="heroTicker"
-                      />
-                    }
-                    afterTicker={<TownBridge />}
-                  />
+                  <TaglineStrip className="absolute left-1/2 top-6 z-30 w-[min(88%,640px)] -translate-x-1/2 px-4 sm:top-8" />
+                  <div className="pt-20 sm:pt-24">
+                    <MapHero
+                      variant="immersive"
+                      showQuickContact
+                      tickerSlot={
+                        <DidYouKnowCard
+                          facts={didYouKnowFacts}
+                          rotateInterval={6500}
+                          className="flex h-full w-full flex-col"
+                          variant="heroTicker"
+                        />
+                      }
+                      afterTicker={<TownBridge />}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

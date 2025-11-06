@@ -13,10 +13,15 @@ module.exports = {
           "0%": { opacity: 1, transform: "translateY(0)" },
           "100%": { opacity: 0, transform: "translateY(-0.5rem)" },
         },
+        hoverFloat: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
       },
       animation: {
         slideDown: "slideDown 0.3s ease-out forwards",
         slideUp:   "slideUp   0.3s ease-in  forwards",
+        hoverFloat: "hoverFloat 6s ease-in-out infinite",
       },
     },
   },
