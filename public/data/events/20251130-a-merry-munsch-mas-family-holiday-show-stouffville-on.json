@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/A-Merry-Munsch-mas.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/a-merry-munsch-mas-family-holiday-show/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/a-merry-munsch-mas-family-holiday-show/",
-  "lastSyncedAt": "2025-11-06T08:35:55.889Z",
-  "updatedAt": "2025-11-06T08:35:55.889Z",
-  "featured": false
+  "updatedAt": "2025-11-06T08:35:55Z"
 }
