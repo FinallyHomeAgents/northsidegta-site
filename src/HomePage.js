@@ -144,15 +144,15 @@ function HomeHero() {
                   <MapHero
                     variant="immersive"
                     showQuickContact
-                    tickerSlot={
+                    tickerSlot={<TownBridge className="flex h-full w-full flex-col" />}
+                    afterTicker={
                       <DidYouKnowCard
                         facts={didYouKnowFacts}
                         rotateInterval={6500}
-                        className="flex h-full w-full flex-col"
-                        variant="heroTicker"
+                        className="mx-auto w-full max-w-4xl"
+                        variant="compact"
                       />
                     }
-                    afterTicker={<TownBridge />}
                   />
                 </div>
               </div>
