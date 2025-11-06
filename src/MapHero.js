@@ -35,7 +35,7 @@ const TOWNS = [
     id: "georgina",
     name: "Georgina",
     x: 50.25,
-    y: 33.42,
+    y: 26.74,
     url: "/georgina",
     blurb: "Lake life, beaches, and room to roam.",
     ratings: {
@@ -53,7 +53,7 @@ const TOWNS = [
     id: "east-gwillimbury",
     name: "East Gwillimbury",
     x: 40.55,
-    y: 42.42,
+    y: 33.94,
     url: "/east-gwillimbury",
     blurb: "New builds, schools & fast 404 access.",
     ratings: {
@@ -71,7 +71,7 @@ const TOWNS = [
     id: "newmarket",
     name: "Newmarket",
     x: 35.6,
-    y: 53.58,
+    y: 42.86,
     url: "/newmarket",
     blurb: "Shops, dining, and GO convenience.",
     ratings: {
@@ -89,7 +89,7 @@ const TOWNS = [
     id: "aurora",
     name: "Aurora",
     x: 40.0,
-    y: 61.42,
+    y: 49.14,
     url: "/aurora",
     blurb: "Mature neighbourhoods, schools, and quiet streets.",
     ratings: {
@@ -107,7 +107,7 @@ const TOWNS = [
     id: "stouffville",
     name: "Stouffville",
     x: 48.3,
-    y: 58.58,
+    y: 46.86,
     url: "/stouffville",
     blurb: "Family streets, parks & a lively Main Street.",
     ratings: {
@@ -125,7 +125,7 @@ const TOWNS = [
     id: "scugog",
     name: "Scugog",
     x: 65.45,
-    y: 54.67,
+    y: 43.74,
     url: "/scugog",
     blurb: "Port Perry heritage + lakefront sunsets.",
     ratings: {
@@ -143,7 +143,7 @@ const TOWNS = [
     id: "uxbridge",
     name: "Uxbridge",
     x: 55.55,
-    y: 52.0,
+    y: 41.6,
     url: "/uxbridge",
     blurb: "Trail capital vibes and small-town charm.",
     ratings: {
@@ -942,7 +942,7 @@ export default function MapHero({
                   >
                     <img
                       ref={imageRef}
-                      src="/Images/northside-map.svg?v=2"
+                      src="/Images/hero2000x1500.svg"
                       alt="NorthSide GTA map with towns"
                       className="block"
                     />
@@ -993,7 +993,7 @@ export default function MapHero({
                 onMouseLeave={() => canHover && setHoverId(null)}
               >
                 <img
-                  src="/Images/northside-map.svg?v=2"
+                  src="/Images/hero2000x1500.svg"
                   alt="NorthSide GTA map with towns"
                   className="block h-auto w-full"
                 />
