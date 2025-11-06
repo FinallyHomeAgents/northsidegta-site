@@ -398,22 +398,31 @@ const Styles = () => (
     }
   }
   @media (max-width: 980px) {
+    .hero-frame {
+      display: flex;
+      flex-direction: column;
+    }
     .hero-shell {
-      grid-template-columns: 1fr;
-      --hero-map-h: clamp(420px, 52vh, 600px);
-      --hero-panels-h: var(--hero-map-h);
-      display: grid;
-      grid-auto-rows: auto;
-      row-gap: 16px;
+      --hero-map-h: auto;
+      --hero-panels-h: auto;
+      display: contents;
     }
-    .hero-core,
-    .panel-left,
-    .panel-right {
-      grid-column: 1;
+    .hero-core {
+      order: 1;
+      display: contents;
+      min-height: auto;
     }
-    .hero-core { order: 1; }
-    .panel-left { order: 2; }
-    .panel-right { order: 3; }
+    .hero-core-inner {
+      display: contents;
+    }
+    .hero-map-frame {
+      order: 1;
+      min-height: auto;
+      width: 100%;
+      margin: 0;
+      border-radius: 32px;
+      overflow: hidden;
+    }
     .panel {
       min-height: auto;
       height: auto;
@@ -423,11 +432,26 @@ const Styles = () => (
       -webkit-overflow-scrolling: touch;
     }
     .panel-left {
+      order: 2;
+      margin-top: 0;
       overflow: visible;
       max-height: none;
     }
+    .hero-after {
+      order: 3;
+      margin-top: 16px;
+    }
+    .hero-ticker-content {
+      order: 4;
+      margin-top: 20px;
+    }
     .panel-right {
+      order: 5;
+      margin-top: 20px;
       overflow-y: auto;
+    }
+    .panel.panel-right > * {
+      height: auto;
     }
     .mobile-accordion {
       display: flex;
@@ -452,6 +476,10 @@ const Styles = () => (
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+    .hero-shell .pin-wrap,
+    .hero-map-frame .pin-wrap {
+      display: none;
     }
   }
   `}</style>
@@ -782,8 +810,8 @@ export default function MapHero({
     .join(" ");
 
   const frameClasses = embedded
-    ? "relative mx-auto w-full rounded-[36px]"
-    : "relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
+    ? "hero-frame relative mx-auto w-full rounded-[36px]"
+    : "hero-frame relative mx-auto mt-4 rounded-2xl bg-white/70 p-3 shadow-sm border";
 
   const heroShellClasses = [
     "hero-shell",
@@ -999,7 +1027,7 @@ export default function MapHero({
           )}
 
           {afterTicker && (
-            <div className="border-t border-white/12 bg-white/5 backdrop-blur-sm">
+            <div className="hero-after border-t border-white/12 bg-white/5 backdrop-blur-sm">
               <div className="px-3 py-4 sm:px-4 sm:py-5">
                 {afterTicker}
               </div>
