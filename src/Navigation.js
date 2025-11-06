@@ -94,24 +94,34 @@ export default function Navigation() {
         "
       >
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          {/* Brand (badge only) */}
-          <Link
-            to="/"
-            className="flex items-center hover:opacity-90 transition"
-            aria-label="NorthSide GTA - Home"
-          >
-            <img
-              src="/Images/newtoolbar.png"
-              alt="NorthSide GTA navigation badge"
-              className="h-10 sm:h-12 w-auto"
-              loading="eager"
-              decoding="async"
-            />
-          </Link>
+          <div className="flex items-center gap-3">
+            {/* Brand (badge only) */}
+            <Link
+              to="/"
+              className="flex items-center hover:opacity-90 transition"
+              aria-label="NorthSide GTA - Home"
+            >
+              <img
+                src="/Images/newtoolbar.png"
+                alt="NorthSide GTA navigation badge"
+                className="h-10 sm:h-12 w-auto"
+                loading="eager"
+                decoding="async"
+              />
+            </Link>
+
+            <p
+              className={`hidden md:block header-purpose-line font-semibold tracking-wide text-[#32610E] leading-snug max-w-[15rem] whitespace-normal transition-all duration-300 ease-out animate-taglineFadeUp cursor-default select-none ${
+                scrolled ? "text-[13px] opacity-75" : "text-sm opacity-100"
+              }`}
+            >
+              Helping GTA buyers find their next home north of Toronto — with us.
+            </p>
+          </div>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex flex-1 items-center text-gray-700 font-medium md:ml-8">
-            <div className="flex items-center space-x-8">
+          <nav className="hidden md:flex flex-1 items-center justify-end text-gray-700 font-medium md:ml-8">
+            <div className="flex items-center space-x-8 mr-4">
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -129,14 +139,6 @@ export default function Navigation() {
                 </Link>
               ))}
             </div>
-
-            <p
-              className={`hidden lg:block header-purpose-line font-semibold tracking-wide text-[#32610E] ml-auto mr-4 whitespace-nowrap transition-all duration-300 ease-out animate-taglineFadeUp cursor-default select-none ${
-                scrolled ? "text-xs opacity-70" : "text-sm opacity-100"
-              }`}
-            >
-              Helping GTA buyers find their next home north of Toronto — with us.
-            </p>
 
             {/* Let’s Talk button */}
             <Link
