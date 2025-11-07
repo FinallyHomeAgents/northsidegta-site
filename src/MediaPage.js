@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import HeroPromo from "./components/socials/HeroPromo";
 import IgEmbedCard from "./components/socials/IgEmbedCard";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 
 function normalize(items = []) {
   const filtered = items.filter((item) => item && item.published !== false && item.url);
@@ -16,6 +17,8 @@ function normalize(items = []) {
     return bDate - aDate;
   });
 }
+
+const MEDIA_ROUTE_META = getStaticRouteMeta("/media") || {};
 
 export default function MediaPage() {
   const [settings, setSettings] = useState(null);
@@ -59,17 +62,7 @@ export default function MediaPage() {
 
   return (
     <>
-      <DynamicMetaTags
-        route="/media"
-        documentTitle="Videos + Reels — NorthSide GTA & Finally Home Agents"
-        title="Videos + Reels — NorthSide GTA & Finally Home Agents"
-        description="Watch our latest NorthSide GTA and Finally Home Agents videos and Instagram Reels — listings, community, and brand stories."
-        canonicalUrl="https://www.northsidegta.ca/media"
-        ogType="website"
-        ogImage="/uploads/hero-poster.jpg"
-        twitterCard="summary_large_image"
-        twitterImage="/uploads/hero-poster.jpg"
-      />
+      <DynamicMetaTags {...MEDIA_ROUTE_META} />
       <Navigation />
       <main className="relative min-h-screen bg-neutral-950 text-white">
         <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-10">

@@ -4,6 +4,7 @@ import Navigation from "./Navigation";
 import Footer from "./Footer";
 import GoogleGradientReviews from "./components/reviews/GoogleGradientReviews";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 
 /* ───────── helpers ───────── */
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -654,36 +655,22 @@ function BuyerSignupForm() {
   );
 }
 
+const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
+
 /* ───────── Page ───────── */
 export default function BuyersPage() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
       <Navigation />
-      <DynamicMetaTags
-        route="/buyers"
-        documentTitle="Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents"
-        title="Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents"
-        description="Ready to buy in the NorthSide GTA? Get a personalized town match, VIP listing alerts, and expert guidance from Finally Home Agents in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-        canonicalUrl="https://www.northsidegta.ca/buyers"
-        ogType="website"
-        ogImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
-        twitterCard="summary_large_image"
-        twitterImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
-        additionalMeta={[
-          { name: "robots", content: "index,follow" },
-          {
-            name: "keywords",
-            content:
-              "NorthSide GTA homes for sale, buy a home Georgina, buy a home East Gwillimbury, buy a home Newmarket, buy a home Aurora, buy a home Stouffville, buy a home Uxbridge, buy a home Scugog, town match, VIP listing alerts, Finally Home Agents",
-          },
-        ]}
-      >
+      <DynamicMetaTags {...BUYERS_ROUTE_META}>
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            name: "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
-            url: "https://www.northsidegta.ca/buyers",
+            name:
+              BUYERS_ROUTE_META.title ||
+              "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
+            url: BUYERS_ROUTE_META.canonicalUrl || "https://northsidegta.ca/buyers",
             description:
               "Personalized town match, VIP listing alerts, and expert guidance for buyers in the NorthSide GTA.",
             about: {
@@ -698,7 +685,7 @@ export default function BuyersPage() {
                 "Uxbridge",
                 "Scugog",
               ],
-              url: "https://www.northsidegta.ca",
+              url: "https://northsidegta.ca",
               brand: "Finally Home Agents",
             },
           })}

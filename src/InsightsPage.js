@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 
 const PAGE_SIZE = 12;
 
@@ -208,17 +209,7 @@ export default function InsightsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <DynamicMetaTags
-        route="/insights"
-        documentTitle="NorthSide GTA Insights — Stories, Market Updates & Local Highlights"
-        title="NorthSide GTA Insights — Stories, Market Updates & Local Highlights"
-        description="Discover the latest stories, market updates, and community insights from the NorthSide GTA. Learn what’s happening across Uxbridge, Stouffville, Georgina, East Gwillimbury, and beyond — powered by Finally Home Agents."
-        canonicalUrl="https://northsidegta.ca/insights"
-        ogType="website"
-        ogImage="https://northsidegta.ca/uploads/insights/northside-insights-hero.png"
-        twitterCard="summary_large_image"
-        twitterImage="https://northsidegta.ca/uploads/insights/northside-insights-hero.png"
-      />
+      <DynamicMetaTags {...INSIGHTS_ROUTE_META} />
 
       <Navigation />
 
@@ -281,3 +272,5 @@ export default function InsightsPage() {
     </div>
   );
 }
+const INSIGHTS_ROUTE_META = getStaticRouteMeta("/insights") || {};
+

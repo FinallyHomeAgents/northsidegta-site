@@ -17,6 +17,7 @@ import {
   hydrateEvents,
 } from './community/eventUtils'
 import DynamicMetaTags from './components/seo/DynamicMetaTags'
+import { getStaticRouteMeta } from './components/seo/staticRouteMetaExports'
 
 const VIEW_STORAGE_KEY = 'northside-community-view'
 const monthFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -148,6 +149,7 @@ export default function CommunityPage() {
   const structuredData = React.useMemo(() => getStructuredData(filteredEvents), [filteredEvents])
 
   const pageDescription =
+    COMMUNITY_ROUTE_META.description ||
     'Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.'
 
   const parseHashSlug = React.useCallback(() => {
@@ -254,15 +256,7 @@ export default function CommunityPage() {
 
   return (
     <>
-      <DynamicMetaTags
-        route="/community"
-        documentTitle="NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond"
-        title="NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond"
-        description={pageDescription}
-        canonicalUrl="https://www.northsidegta.ca/community"
-        ogType="website"
-        ogImage="/Images/hero-desktop.jpg"
-      >
+      <DynamicMetaTags {...COMMUNITY_ROUTE_META} description={pageDescription}>
         {structuredData && (
           <script type="application/ld+json">{structuredData}</script>
         )}
@@ -456,3 +450,5 @@ export default function CommunityPage() {
     </>
   )
 }
+const COMMUNITY_ROUTE_META = getStaticRouteMeta('/community') || {}
+
