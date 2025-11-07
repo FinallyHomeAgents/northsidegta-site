@@ -1,9 +1,9 @@
 // src/BuyersPage.js
 import React, { useMemo, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import GoogleGradientReviews from "./components/reviews/GoogleGradientReviews";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 /* ───────── helpers ───────── */
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -659,26 +659,25 @@ export default function BuyersPage() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
       <Navigation />
-      <Helmet>
-        <title>Buy a Home in the NorthSide GTA | Town Match, VIP Alerts &amp; Expert Agents</title>
-        <meta
-          name="description"
-          content="Ready to buy in the NorthSide GTA? Get a personalized town match, VIP listing alerts, and expert guidance from Finally Home Agents in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-        />
-        <link rel="canonical" href="https://www.northsidegta.ca/buyers" />
-        <meta name="robots" content="index,follow" />
-        <meta
-          name="keywords"
-          content="NorthSide GTA homes for sale, buy a home Georgina, buy a home East Gwillimbury, buy a home Newmarket, buy a home Aurora, buy a home Stouffville, buy a home Uxbridge, buy a home Scugog, town match, VIP listing alerts, Finally Home Agents"
-        />
-        <meta property="og:title" content="Buy a Home in the NorthSide GTA | Town Match, VIP Alerts &amp; Expert Agents" />
-        <meta
-          property="og:description"
-          content="Find the right town—and the right home—across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog with Finally Home Agents."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/buyers" />
-        <meta property="og:image" content="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg" />
+      <DynamicMetaTags
+        route="/buyers"
+        documentTitle="Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents"
+        title="Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents"
+        description="Ready to buy in the NorthSide GTA? Get a personalized town match, VIP listing alerts, and expert guidance from Finally Home Agents in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
+        canonicalUrl="https://www.northsidegta.ca/buyers"
+        ogType="website"
+        ogImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
+        twitterCard="summary_large_image"
+        twitterImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
+        additionalMeta={[
+          { name: "robots", content: "index,follow" },
+          {
+            name: "keywords",
+            content:
+              "NorthSide GTA homes for sale, buy a home Georgina, buy a home East Gwillimbury, buy a home Newmarket, buy a home Aurora, buy a home Stouffville, buy a home Uxbridge, buy a home Scugog, town match, VIP listing alerts, Finally Home Agents",
+          },
+        ]}
+      >
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -704,7 +703,7 @@ export default function BuyersPage() {
             },
           })}
         </script>
-      </Helmet>
+      </DynamicMetaTags>
 
       <main className="relative">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_65%)]" aria-hidden />

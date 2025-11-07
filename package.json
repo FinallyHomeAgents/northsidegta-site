@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
+    "prestart": "node scripts/sync-site-seo.js",
+    "pretest": "node scripts/sync-site-seo.js",
+    "prebuild": "node scripts/sync-site-seo.js && node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
     "build": "react-scripts build",
     "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-sitemap.js && node scripts/check-insight-images.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",

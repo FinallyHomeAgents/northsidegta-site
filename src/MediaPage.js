@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import HeroPromo from "./components/socials/HeroPromo";
 import IgEmbedCard from "./components/socials/IgEmbedCard";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 function normalize(items = []) {
   const filtered = items.filter((item) => item && item.published !== false && item.url);
@@ -59,22 +59,17 @@ export default function MediaPage() {
 
   return (
     <>
-      <Helmet>
-        <title>Videos + Reels — NorthSide GTA &amp; Finally Home Agents</title>
-        <meta
-          name="description"
-          content="Watch our latest NorthSide GTA and Finally Home Agents videos and Instagram Reels — listings, community, and brand stories."
-        />
-        <meta property="og:title" content="Videos + Reels — NorthSide GTA &amp; Finally Home Agents" />
-        <meta
-          property="og:description"
-          content="Watch our latest NorthSide GTA and Finally Home Agents videos and Instagram Reels — listings, community, and brand stories."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="/uploads/hero-poster.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <link rel="canonical" href="https://www.northsidegta.ca/media" />
-      </Helmet>
+      <DynamicMetaTags
+        route="/media"
+        documentTitle="Videos + Reels — NorthSide GTA & Finally Home Agents"
+        title="Videos + Reels — NorthSide GTA & Finally Home Agents"
+        description="Watch our latest NorthSide GTA and Finally Home Agents videos and Instagram Reels — listings, community, and brand stories."
+        canonicalUrl="https://www.northsidegta.ca/media"
+        ogType="website"
+        ogImage="/uploads/hero-poster.jpg"
+        twitterCard="summary_large_image"
+        twitterImage="/uploads/hero-poster.jpg"
+      />
       <Navigation />
       <main className="relative min-h-screen bg-neutral-950 text-white">
         <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-10">
