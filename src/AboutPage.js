@@ -5,6 +5,7 @@ import Navigation from "./Navigation";
 import { Award, Heart, Lightbulb, Mail, MapPin, ShieldCheck } from "lucide-react";
 import teamMembers from "./data/teamMembers";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 
 const metrics = [
   {
@@ -104,28 +105,13 @@ const testimonials = [
   },
 ];
 
+const ABOUT_ROUTE_META = getStaticRouteMeta("/about") || {};
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <DynamicMetaTags
-        route="/about"
-        documentTitle="About Finally Home Agents | Local NorthSide GTA Realtors®"
-        title="About Finally Home Agents | Local NorthSide GTA Realtors®"
-        description="We’re a local, relationship-first real estate team serving the NorthSide GTA—Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
-        canonicalUrl="https://www.northsidegta.ca/about"
-        ogType="profile"
-        ogImage="/Images/northsidegta-map-bg.jpg"
-        twitterCard="summary_large_image"
-        twitterImage="/Images/northsidegta-map-bg.jpg"
-        additionalMeta={[
-          {
-            name: "keywords",
-            content:
-              "about Finally Home Agents, NorthSide GTA realtors, local real estate team, Newmarket, Aurora, Uxbridge",
-          },
-        ]}
-      />
+      <DynamicMetaTags {...ABOUT_ROUTE_META} />
 
       <main className="pb-16">
         {/* ───────── Hero Banner ───────── */}

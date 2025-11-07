@@ -55,7 +55,7 @@ function ContactPageV2() {
         documentTitle={config.seoTitle}
         title={config.seoTitle}
         description={config.seoDescription}
-        canonicalUrl="https://www.northsidegta.ca/contact"
+        canonicalUrl="https://northsidegta.ca/contact"
         ogType="website"
         ogImage={config.seoImage || undefined}
         twitterCard="summary_large_image"

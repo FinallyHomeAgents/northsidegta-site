@@ -8,6 +8,9 @@ import DidYouKnowCard from "./components/DidYouKnowCard";
 import { didYouKnowFacts } from "./components/DidYouKnowData";
 import { CANONICAL_TESTIMONIALS } from "./data/testimonials";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
+
+const HOME_ROUTE_META = getStaticRouteMeta("/") || {};
 
 const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
   id: review.id,
@@ -42,33 +45,13 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <DynamicMetaTags
-        route="/"
-        documentTitle="NorthSide GTA | Real Estate Agents for Buyers & Sellers"
-        title="NorthSide GTA | Real Estate Agents for Buyers & Sellers"
-        description="Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
-        canonicalUrl="https://www.northsidegta.ca/"
-        ogType="website"
-        ogImage="https://www.northsidegta.ca/Images/og-home.jpg"
-        ogImageAlt="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog"
-        twitterCard="summary_large_image"
-        twitterImage="https://www.northsidegta.ca/Images/og-home.jpg"
-        additionalMeta={[
-          {
-            name: "keywords",
-            content:
-              "NorthSide GTA real estate, homes for sale North GTA, sell my home, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, Finally Home Agents",
-          },
-          { property: "og:image:width", content: "1200" },
-          { property: "og:image:height", content: "630" },
-        ]}
-      >
+      <DynamicMetaTags {...HOME_ROUTE_META}>
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "RealEstateAgent",
             name: "Finally Home Agents",
-            url: "https://www.northsidegta.ca/",
+            url: HOME_ROUTE_META.canonicalUrl || "https://northsidegta.ca/",
             areaServed: [
               "Georgina",
               "East Gwillimbury",
@@ -88,11 +71,11 @@ export default function HomePage() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "NorthSide GTA",
-            url: "https://www.northsidegta.ca/",
+            name: HOME_ROUTE_META.title || "NorthSide GTA",
+            url: HOME_ROUTE_META.canonicalUrl || "https://northsidegta.ca/",
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://www.northsidegta.ca/search?q={query}",
+              target: `${(HOME_ROUTE_META.canonicalUrl || "https://northsidegta.ca/").replace(/\/$/, "")}/search?q={query}`,
               "query-input": "required name=query",
             },
           })}
