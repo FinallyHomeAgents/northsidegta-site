@@ -192,7 +192,7 @@ function cloneMeta(meta = {}) {
   return JSON.parse(JSON.stringify(meta));
 }
 
-function getStaticRouteMeta(route) {
+export function getStaticRouteMeta(route) {
   if (!route) return null;
   const normalized = route === "/" ? "/" : `/${route.replace(/^\//, "")}`;
   const entry = STATIC_ROUTE_META_CONFIGS.find((item) => item.route === normalized);
@@ -200,11 +200,16 @@ function getStaticRouteMeta(route) {
   return cloneMeta(entry.meta);
 }
 
-module.exports = {
-  DEFAULT_GLOBAL_META_CONFIG: cloneMeta(DEFAULT_GLOBAL_META_CONFIG),
-  STATIC_ROUTE_META_CONFIGS: STATIC_ROUTE_META_CONFIGS.map((item) => ({
-    route: item.route,
-    meta: cloneMeta(item.meta),
-  })),
+const CLONED_DEFAULT_GLOBAL_META_CONFIG = cloneMeta(DEFAULT_GLOBAL_META_CONFIG);
+const CLONED_STATIC_ROUTE_META_CONFIGS = STATIC_ROUTE_META_CONFIGS.map((item) => ({
+  route: item.route,
+  meta: cloneMeta(item.meta),
+}));
+
+export { CLONED_DEFAULT_GLOBAL_META_CONFIG as DEFAULT_GLOBAL_META_CONFIG, CLONED_STATIC_ROUTE_META_CONFIGS as STATIC_ROUTE_META_CONFIGS };
+
+export default {
+  DEFAULT_GLOBAL_META_CONFIG: CLONED_DEFAULT_GLOBAL_META_CONFIG,
+  STATIC_ROUTE_META_CONFIGS: CLONED_STATIC_ROUTE_META_CONFIGS,
   getStaticRouteMeta,
 };
