@@ -21,6 +21,7 @@ import InsightPage      from "./insights/InsightPage";
 import MediaPage        from "./MediaPage";
 import InsightsPage     from "./InsightsPage";
 import ReferralPartnersPage from "./ReferralPartnersPage";
+import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -52,6 +53,7 @@ function App() {
 
   return (
     <Router>
+      <GlobalDefaultMeta />
       <Routes>
         {/* Core pages */}
         <Route path="/"             element={<HomePage />} />
