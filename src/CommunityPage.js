@@ -1,6 +1,5 @@
 // src/CommunityPage.js
 import React from 'react'
-import { Helmet } from 'react-helmet-async'
 import { CalendarDays, List, Map as MapIcon } from 'lucide-react'
 import Navigation from './Navigation'
 import Footer from './Footer'
@@ -17,6 +16,7 @@ import {
   getStructuredData,
   hydrateEvents,
 } from './community/eventUtils'
+import DynamicMetaTags from './components/seo/DynamicMetaTags'
 
 const VIEW_STORAGE_KEY = 'northside-community-view'
 const monthFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -254,19 +254,19 @@ export default function CommunityPage() {
 
   return (
     <>
-      <Helmet>
-        <title>NorthSide GTA Events | What&apos;s On Across Aurora, Uxbridge &amp; Beyond</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href="https://www.northsidegta.ca/community" />
-        <meta property="og:title" content="NorthSide GTA Events" />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/community" />
-        <meta property="og:image" content="/Images/hero-desktop.jpg" />
+      <DynamicMetaTags
+        route="/community"
+        documentTitle="NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond"
+        title="NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond"
+        description={pageDescription}
+        canonicalUrl="https://www.northsidegta.ca/community"
+        ogType="website"
+        ogImage="/Images/hero-desktop.jpg"
+      >
         {structuredData && (
           <script type="application/ld+json">{structuredData}</script>
         )}
-      </Helmet>
+      </DynamicMetaTags>
 
       <Navigation />
 

@@ -1,3 +1,5 @@
+const { getSiteSeoForRoute } = require("./siteSeoConfig");
+
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 
 function safeString(value) {
@@ -27,25 +29,40 @@ function normalizeAdditionalMeta(additionalMeta) {
 }
 
 function getMetaTagsFromData(raw = {}) {
-  const titleValue = safeString(raw.title);
-  const documentTitleValue = safeString(raw.documentTitle || titleValue);
-  const ogTitleValue = safeString(raw.ogTitle || titleValue);
+  const routeValue = safeString(raw.route);
+  const siteSeo = routeValue ? getSiteSeoForRoute(routeValue) : null;
+  const siteSeoTitle = safeString(siteSeo && siteSeo.seo_title);
+  const siteSeoDescription = safeString(siteSeo && siteSeo.seo_description);
+  const siteSeoImage = safeString(siteSeo && siteSeo.seo_image);
+
+  const fallbackTitleValue = safeString(raw.title);
+  const titleValue = siteSeoTitle || fallbackTitleValue;
+  const documentTitleValue = safeString(
+    siteSeoTitle || raw.documentTitle || fallbackTitleValue,
+  );
+  const ogTitleValue = safeString(siteSeoTitle || raw.ogTitle || fallbackTitleValue);
   const twitterTitleValue = safeString(
-    raw.twitterTitle || ogTitleValue || documentTitleValue,
+    siteSeoTitle || raw.twitterTitle || ogTitleValue || documentTitleValue,
   );
 
-  const descriptionValue = safeString(raw.description);
-  const ogDescriptionValue = safeString(raw.ogDescription || descriptionValue);
+  const fallbackDescriptionValue = safeString(raw.description);
+  const descriptionValue = safeString(siteSeoDescription || raw.description);
+  const ogDescriptionValue = safeString(
+    siteSeoDescription || raw.ogDescription || fallbackDescriptionValue,
+  );
   const twitterDescriptionValue = safeString(
-    raw.twitterDescription || ogDescriptionValue || descriptionValue,
+    siteSeoDescription ||
+      raw.twitterDescription ||
+      ogDescriptionValue ||
+      descriptionValue,
   );
 
   const canonicalValue = safeString(raw.canonicalUrl);
   const ogTypeValue = safeString(raw.ogType);
-  const ogImageValue = safeString(raw.ogImage);
+  const ogImageValue = safeString(siteSeoImage || raw.ogImage || raw.image);
   const ogImageAltValue = safeString(raw.ogImageAlt);
   const twitterCardValue = safeString(raw.twitterCard) || DEFAULT_TWITTER_CARD;
-  const twitterImageValue = safeString(raw.twitterImage || ogImageValue);
+  const twitterImageValue = safeString(siteSeoImage || raw.twitterImage || ogImageValue);
   const twitterImageAltValue = safeString(raw.twitterImageAlt || ogImageAltValue);
   const siteNameValue = safeString(raw.siteName);
   const articleAuthorValue = safeString(raw.articleAuthor);

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import ContactHero from "./components/contact/ContactHero";
 import ContactChannelBar from "./components/contact/ContactChannelBar";
@@ -16,6 +15,7 @@ import {
   // getContactFeatureEnabled, // remove this
   getJsonLd,
 } from "./components/contact/contactConfig";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 export default function ContactPage() {
   // Always render the new version
@@ -50,17 +50,19 @@ function ContactPageV2() {
 
   return (
     <>
-      <Helmet>
-        <title>{config.seoTitle}</title>
-        <meta name="description" content={config.seoDescription} />
-        <meta property="og:title" content={config.seoTitle} />
-        <meta property="og:description" content={config.seoDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/contact" />
-        {config.seoImage && <meta property="og:image" content={config.seoImage} />}
-        <link rel="canonical" href="https://www.northsidegta.ca/contact" />
+      <DynamicMetaTags
+        route="/contact"
+        documentTitle={config.seoTitle}
+        title={config.seoTitle}
+        description={config.seoDescription}
+        canonicalUrl="https://www.northsidegta.ca/contact"
+        ogType="website"
+        ogImage={config.seoImage || undefined}
+        twitterCard="summary_large_image"
+        twitterImage={config.seoImage || undefined}
+      >
         <script type="application/ld+json">{jsonLd}</script>
-      </Helmet>
+      </DynamicMetaTags>
       <Navigation />
       <main className="bg-slate-50 pb-20">
         <ContactHero

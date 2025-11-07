@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useRef } from "react";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import Card from "./components/ui/Card";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 // ===== Helpers (reused) =====
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -893,57 +893,51 @@ export default function SellersPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <Helmet>
-  <title>Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing</title>
-  <meta
-    name="description"
-    content="Thinking of selling in the NorthSide GTA? Get AI-backed pricing, pro staging, premium media, and negotiation that wins—serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-  />
-  <link rel="canonical" href="https://www.northsidegta.ca/sellers" />
-  <meta name="robots" content="index,follow" />
-
-  <meta
-    name="keywords"
-    content="sell my home NorthSide GTA, list my home Georgina, list my home East Gwillimbury, sell house Newmarket, sell house Aurora, sell house Stouffville, sell house Uxbridge, sell house Scugog, home marketing, real estate agent"
-  />
-
-  {/* Open Graph */}
-  <meta property="og:title" content="Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing" />
-  <meta
-    property="og:description"
-    content="AI market analysis, prep support, premium media, and top-tier negotiation across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.northsidegta.ca/sellers" />
-  <meta property="og:image" content="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg" />
-
-  {/* JSON-LD */}
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
-      "url": "https://www.northsidegta.ca/sellers",
-      "description":
-        "Full-service selling strategy with AI pricing, pro staging, premium media, and expert negotiation.",
-      "about": {
-        "@type": "RealEstateAgent",
-        "name": "Finally Home Agents",
-        "areaServed": [
-          "Georgina",
-          "East Gwillimbury",
-          "Newmarket",
-          "Aurora",
-          "Stouffville",
-          "Uxbridge",
-          "Scugog"
-        ],
-        "url": "https://www.northsidegta.ca",
-        "brand": "Finally Home Agents"
-      }
-    })}
-  </script>
-</Helmet>
+      <DynamicMetaTags
+        route="/sellers"
+        documentTitle="Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing"
+        title="Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing"
+        description="Thinking of selling in the NorthSide GTA? Get AI-backed pricing, pro staging, premium media, and negotiation that wins—serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
+        canonicalUrl="https://www.northsidegta.ca/sellers"
+        ogType="website"
+        ogImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
+        twitterCard="summary_large_image"
+        twitterImage="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg"
+        additionalMeta={[
+          { name: "robots", content: "index,follow" },
+          {
+            name: "keywords",
+            content:
+              "sell my home NorthSide GTA, list my home Georgina, list my home East Gwillimbury, sell house Newmarket, sell house Aurora, sell house Stouffville, sell house Uxbridge, sell house Scugog, home marketing, real estate agent",
+          },
+        ]}
+      >
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
+            url: "https://www.northsidegta.ca/sellers",
+            description:
+              "Full-service selling strategy with AI pricing, pro staging, premium media, and expert negotiation.",
+            about: {
+              "@type": "RealEstateAgent",
+              name: "Finally Home Agents",
+              areaServed: [
+                "Georgina",
+                "East Gwillimbury",
+                "Newmarket",
+                "Aurora",
+                "Stouffville",
+                "Uxbridge",
+                "Scugog",
+              ],
+              url: "https://www.northsidegta.ca",
+              brand: "Finally Home Agents",
+            },
+          })}
+        </script>
+      </DynamicMetaTags>
 
       <main>
         <SellerHero />

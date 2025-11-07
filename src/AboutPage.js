@@ -1,10 +1,10 @@
 // src/AboutPage.js
 import React from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import { Award, Heart, Lightbulb, Mail, MapPin, ShieldCheck } from "lucide-react";
 import teamMembers from "./data/teamMembers";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 const metrics = [
   {
@@ -108,30 +108,24 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <Helmet>
-        <title>About Finally Home Agents | Local NorthSide GTA Realtors®</title>
-        <meta
-          name="description"
-          content="We’re a local, relationship-first real estate team serving the NorthSide GTA—Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
-        />
-        <meta
-          name="keywords"
-          content="about Finally Home Agents, NorthSide GTA realtors, local real estate team, Newmarket, Aurora, Uxbridge"
-        />
-        <link rel="canonical" href="https://www.northsidegta.ca/about" />
-
-        <meta
-          property="og:title"
-          content="About Finally Home Agents | NorthSide GTA"
-        />
-        <meta
-          property="og:description"
-          content="Local team. Personal guidance. NorthSide GTA focus."
-        />
-        <meta property="og:type" content="profile" />
-        <meta property="og:url" content="https://www.northsidegta.ca/about" />
-        <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
-      </Helmet>
+      <DynamicMetaTags
+        route="/about"
+        documentTitle="About Finally Home Agents | Local NorthSide GTA Realtors®"
+        title="About Finally Home Agents | Local NorthSide GTA Realtors®"
+        description="We’re a local, relationship-first real estate team serving the NorthSide GTA—Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+        canonicalUrl="https://www.northsidegta.ca/about"
+        ogType="profile"
+        ogImage="/Images/northsidegta-map-bg.jpg"
+        twitterCard="summary_large_image"
+        twitterImage="/Images/northsidegta-map-bg.jpg"
+        additionalMeta={[
+          {
+            name: "keywords",
+            content:
+              "about Finally Home Agents, NorthSide GTA realtors, local real estate team, Newmarket, Aurora, Uxbridge",
+          },
+        ]}
+      />
 
       <main className="pb-16">
         {/* ───────── Hero Banner ───────── */}

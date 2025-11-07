@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
 import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
@@ -8,6 +7,7 @@ import ReviewsCarousel from "./components/contact/ReviewsCarousel";
 import DidYouKnowCard from "./components/DidYouKnowCard";
 import { didYouKnowFacts } from "./components/DidYouKnowData";
 import { CANONICAL_TESTIMONIALS } from "./data/testimonials";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 
 const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
   id: review.id,
@@ -42,44 +42,27 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
-      <Helmet>
-        <title>NorthSide GTA | Real Estate Agents for Buyers &amp; Sellers</title>
-        <meta
-          name="description"
-          content="Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge &amp; Scugog."
-        />
-        <meta
-          name="keywords"
-          content="NorthSide GTA real estate, homes for sale North GTA, sell my home, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, Finally Home Agents"
-        />
-        <link rel="canonical" href="https://www.northsidegta.ca/" />
-        <meta
-          property="og:title"
-          content="NorthSide GTA | Real Estate Agents for Buyers &amp; Sellers"
-        />
-        <meta
-          property="og:description"
-          content="Local team helping you buy and sell in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge &amp; Scugog."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/" />
-        <meta property="og:image" content="https://www.northsidegta.ca/Images/og-home.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta
-          property="og:image:alt"
-          content="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="NorthSide GTA | Real Estate Agents for Buyers &amp; Sellers"
-        />
-        <meta
-          name="twitter:description"
-          content="Find your perfect home or sell for more in the NorthSide GTA with expert agents."
-        />
-        <meta name="twitter:image" content="https://www.northsidegta.ca/Images/og-home.jpg" />
+      <DynamicMetaTags
+        route="/"
+        documentTitle="NorthSide GTA | Real Estate Agents for Buyers & Sellers"
+        title="NorthSide GTA | Real Estate Agents for Buyers & Sellers"
+        description="Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+        canonicalUrl="https://www.northsidegta.ca/"
+        ogType="website"
+        ogImage="https://www.northsidegta.ca/Images/og-home.jpg"
+        ogImageAlt="NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog"
+        twitterCard="summary_large_image"
+        twitterImage="https://www.northsidegta.ca/Images/og-home.jpg"
+        additionalMeta={[
+          {
+            name: "keywords",
+            content:
+              "NorthSide GTA real estate, homes for sale North GTA, sell my home, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, Finally Home Agents",
+          },
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "630" },
+        ]}
+      >
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -114,7 +97,7 @@ export default function HomePage() {
             },
           })}
         </script>
-      </Helmet>
+      </DynamicMetaTags>
 
       <main>
         <HomeHero />
