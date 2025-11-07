@@ -1,26 +1,46 @@
 {
-  "slug": "20251109-the-heintzman-house-2025-art-show-and-sale-toronto-adjacent",
-  "title": "The Heintzman House 2025 Art Show and Sale.",
-  "summary": "The Heintzman House 2025 Art Show and Sale.",
+  "slug": "20251112-2025-summer-art-camp-at-palette-art-school-toronto-adjacent",
+  "title": "2025 Summer Art Camp at Palette Art School",
+  "summary": "2025 Summer Art Camp at Palette Art School",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto Crit Club (Ages 18+) Loading view. Today Now Now Select date. Nov 7 October 30 @ 9:30 am - November 7 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 2 @ 9:30 am - November 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 3 @ 9:30 am - November 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 4 @ 9:00 am - November 7 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 7 November 4 @ 9:30 am - November 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 5 @ 9:00 am - November 8 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 7 November 5 @ 9:30 am - November 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 6 @ 9:00 am - November 9 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 7 November 6 @ 9:30 am - November 14 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 7 November 7 @ 9:00 am - November 10 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-09T17:00:00Z",
-  "endDate": "2025-11-09T21:00:00Z",
+  "startDate": "2025-11-12T14:00:00Z",
+  "endDate": "2025-11-15T21:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-09",
+      "date": "2025-11-12",
       "all_day": false,
-      "start_time": "12:00",
+      "start_time": "09:00",
+      "end_time": "16:00"
+    },
+    {
+      "date": "2025-11-13",
+      "all_day": false,
+      "start_time": "09:00",
+      "end_time": "16:00"
+    },
+    {
+      "date": "2025-11-14",
+      "all_day": false,
+      "start_time": "09:00",
+      "end_time": "16:00"
+    },
+    {
+      "date": "2025-11-15",
+      "all_day": false,
+      "start_time": "09:00",
       "end_time": "16:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
-  "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
+  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
+  "lat": 43.787474,
+  "lng": -79.4727017,
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-11-09/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-11-12/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -30,8 +50,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10010913-1762689600-1762704000@www.experienceyorkregion.com",
+  "sourceRef": "10011595-1762938000-1763222400@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-07T08:35:22.039Z",
+  "firstSeenAt": "2025-11-07T08:35:22.039Z",
   "updatedAt": "2025-11-07T08:35:22.039Z",
   "featured": false
 }
