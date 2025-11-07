@@ -3,6 +3,8 @@ const { getSiteSeoForRoute } = require("./siteSeoConfig");
 const SITE_BASE_URL = "https://northsidegta.ca";
 const DEFAULT_META_IMAGE_PATH = "/Images/og-home.jpg";
 const DEFAULT_TWITTER_CARD = "summary_large_image";
+const SOCIAL_IMAGE_WIDTH = "1200";
+const SOCIAL_IMAGE_HEIGHT = "630";
 
 const SOCIAL_META_KEYS = [
   "property:og:type",
@@ -10,6 +12,8 @@ const SOCIAL_META_KEYS = [
   "property:og:description",
   "property:og:url",
   "property:og:image",
+  "property:og:image:width",
+  "property:og:image:height",
   "property:og:image:alt",
   "property:og:site_name",
   "name:twitter:card",
@@ -101,59 +105,57 @@ function buildAbsoluteUrl(value) {
 
 function normalizeMetaImage(siteSeoImage, raw = {}) {
   const candidates = [
-    safeString(siteSeoImage),
-    safeString(raw.ogImage),
-    safeString(raw.image),
-    safeString(raw.twitterImage),
+    siteSeoImage,
+    raw.ogImage,
+    raw.image,
+    raw.twitterImage,
+    raw.metaImage,
+    raw.metaImagePath,
     DEFAULT_META_IMAGE_PATH,
   ];
 
-  let chosen = "";
+  let resolvedPath = "";
+
   for (const candidate of candidates) {
-    if (candidate) {
-      chosen = candidate;
+    const normalized = normalizeImageCandidate(candidate);
+    if (normalized) {
+      resolvedPath = normalized;
       break;
     }
   }
 
-  let absoluteUrl = "";
-  let path = "";
-
-  if (chosen) {
-    if (isAbsoluteUrl(chosen)) {
-      absoluteUrl = chosen;
-      if (absoluteUrl.startsWith(`${SITE_BASE_URL}`)) {
-        try {
-          const url = new URL(absoluteUrl);
-          path = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
-        } catch (error) {
-          path = "";
-        }
-      }
-    } else if (chosen.startsWith("//")) {
-      absoluteUrl = `https:${chosen}`;
-    } else {
-      path = ensureLeadingSlash(chosen);
-      absoluteUrl = `${SITE_BASE_URL}${path}`;
-    }
+  if (!resolvedPath) {
+    resolvedPath = ensureLeadingSlash(DEFAULT_META_IMAGE_PATH);
   }
 
-  if (!absoluteUrl) {
-    path = ensureLeadingSlash(DEFAULT_META_IMAGE_PATH);
-    absoluteUrl = `${SITE_BASE_URL}${path}`;
-  } else if (!path && absoluteUrl.startsWith(`${SITE_BASE_URL}`)) {
-    try {
-      const url = new URL(absoluteUrl);
-      path = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
-    } catch (error) {
-      path = ensureLeadingSlash(DEFAULT_META_IMAGE_PATH);
-    }
-  }
+  const absoluteUrl = buildAbsoluteUrl(resolvedPath);
 
   return {
-    path,
+    path: resolvedPath,
     absoluteUrl,
   };
+}
+
+function normalizeImageCandidate(candidate) {
+  const value = safeString(candidate);
+  if (!value) return "";
+
+  if (value.startsWith("//")) {
+    return normalizeImageCandidate(`https:${value}`);
+  }
+
+  if (isAbsoluteUrl(value)) {
+    try {
+      const url = new URL(value);
+      const combined = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
+      const path = combined || url.pathname || "";
+      return ensureLeadingSlash(path);
+    } catch (error) {
+      return "";
+    }
+  }
+
+  return ensureLeadingSlash(value);
 }
 
 function normalizeAdditionalMeta(additionalMeta) {
@@ -284,6 +286,18 @@ function getMetaTagsFromData(raw = {}) {
       type: "meta",
       key: "meta:og:image",
       attributes: { property: "og:image", content: ogImageValue },
+    });
+
+    tags.push({
+      type: "meta",
+      key: "meta:og:image:width",
+      attributes: { property: "og:image:width", content: SOCIAL_IMAGE_WIDTH },
+    });
+
+    tags.push({
+      type: "meta",
+      key: "meta:og:image:height",
+      attributes: { property: "og:image:height", content: SOCIAL_IMAGE_HEIGHT },
     });
   }
 
@@ -418,6 +432,8 @@ function getMetaTagsFromData(raw = {}) {
       ogImage: ogImageValue,
       metaImagePath,
       metaImage: resolvedMetaImageUrl,
+      metaImageWidth: ogImageValue ? SOCIAL_IMAGE_WIDTH : "",
+      metaImageHeight: ogImageValue ? SOCIAL_IMAGE_HEIGHT : "",
       ogImageAlt: ogImageAltValue,
       twitterCard: twitterCardValue,
       twitterImage: twitterImageValue,
@@ -484,6 +500,8 @@ module.exports = {
   DEFAULT_META_IMAGE_PATH,
   DEFAULT_TWITTER_CARD,
   SITE_BASE_URL,
+  SOCIAL_IMAGE_WIDTH,
+  SOCIAL_IMAGE_HEIGHT,
   SOCIAL_META_KEYS,
   buildAbsoluteUrl,
   getMetaTagsFromData,
