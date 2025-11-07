@@ -24,16 +24,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/crit-club-ages-18/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014254-1762592400-1762599600@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-11-07T08:35:22.039Z",
-  "updatedAt": "2025-11-07T08:35:22.039Z",
-  "featured": false
+  "updatedAt": "2025-11-07T08:35:22Z"
 }
