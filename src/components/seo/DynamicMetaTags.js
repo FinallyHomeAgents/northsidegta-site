@@ -3,6 +3,8 @@ import { Helmet } from "react-helmet-async";
 
 import {
   SITE_BASE_URL,
+  SOCIAL_IMAGE_HEIGHT,
+  SOCIAL_IMAGE_WIDTH,
   getMetaTagsFromData,
   SOCIAL_META_KEYS,
 } from "./metaTagUtils";
@@ -26,8 +28,8 @@ export default function DynamicMetaTags(props) {
 
   const tags = Array.isArray(meta.tags) ? meta.tags : [];
   const metaValues = meta.values || {};
-  const socialImageContent = resolveSocialImageContent(metaValues);
-  const tagsWithSocialImages = ensureSocialImageTags(tags, socialImageContent);
+  const socialImage = resolveSocialImageContent(metaValues);
+  const tagsWithSocialImages = ensureSocialImageTags(tags, socialImage);
   const hasSiteSeoOverrides = Boolean(meta.flags && meta.flags.hasSiteSeoOverrides);
   const filteredChildren = filterMetaChildren(children, hasSiteSeoOverrides);
 
@@ -75,14 +77,20 @@ function safeMetaKey(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
-function ensureSocialImageTags(tags, socialImageContent) {
-  if (!socialImageContent) {
+function ensureSocialImageTags(tags, socialImage) {
+  if (!socialImage || !socialImage.url) {
     return tags.slice();
   }
 
   const next = [];
   let hasOgImage = false;
   let hasTwitterImage = false;
+  let hasOgImageWidth = false;
+  let hasOgImageHeight = false;
+
+  const imageUrl = socialImage.url;
+  const imageWidth = safeString(socialImage.width) || SOCIAL_IMAGE_WIDTH;
+  const imageHeight = safeString(socialImage.height) || SOCIAL_IMAGE_HEIGHT;
 
   for (const tag of tags) {
     if (!tag || tag.type !== "meta") {
@@ -95,7 +103,25 @@ function ensureSocialImageTags(tags, socialImageContent) {
       hasOgImage = true;
       next.push({
         ...tag,
-        attributes: { ...attributes, content: socialImageContent },
+        attributes: { ...attributes, content: imageUrl },
+      });
+      continue;
+    }
+
+    if (attributes.property === "og:image:width") {
+      hasOgImageWidth = true;
+      next.push({
+        ...tag,
+        attributes: { ...attributes, content: imageWidth },
+      });
+      continue;
+    }
+
+    if (attributes.property === "og:image:height") {
+      hasOgImageHeight = true;
+      next.push({
+        ...tag,
+        attributes: { ...attributes, content: imageHeight },
       });
       continue;
     }
@@ -104,7 +130,7 @@ function ensureSocialImageTags(tags, socialImageContent) {
       hasTwitterImage = true;
       next.push({
         ...tag,
-        attributes: { ...attributes, content: socialImageContent },
+        attributes: { ...attributes, content: imageUrl },
       });
       continue;
     }
@@ -118,7 +144,29 @@ function ensureSocialImageTags(tags, socialImageContent) {
       key: "meta:og:image",
       attributes: {
         property: "og:image",
-        content: socialImageContent,
+        content: imageUrl,
+      },
+    });
+  }
+
+  if (!hasOgImageWidth) {
+    next.push({
+      type: "meta",
+      key: "meta:og:image:width",
+      attributes: {
+        property: "og:image:width",
+        content: imageWidth,
+      },
+    });
+  }
+
+  if (!hasOgImageHeight) {
+    next.push({
+      type: "meta",
+      key: "meta:og:image:height",
+      attributes: {
+        property: "og:image:height",
+        content: imageHeight,
       },
     });
   }
@@ -129,7 +177,7 @@ function ensureSocialImageTags(tags, socialImageContent) {
       key: "meta:twitter:image",
       attributes: {
         name: "twitter:image",
-        content: socialImageContent,
+        content: imageUrl,
       },
     });
   }
@@ -138,11 +186,28 @@ function ensureSocialImageTags(tags, socialImageContent) {
 }
 
 function resolveSocialImageContent(values = {}) {
-  const path = safeString(values.metaImagePath);
-  if (path) {
-    return `${SITE_BASE_URL}${path}`;
+  const absoluteUrl = safeString(values.metaImage);
+  let resolvedUrl = absoluteUrl;
+
+  if (!resolvedUrl) {
+    const path = safeString(values.metaImagePath);
+    if (path) {
+      resolvedUrl = `${SITE_BASE_URL}${path}`;
+    }
   }
-  return safeString(values.metaImage);
+
+  if (!resolvedUrl) {
+    return null;
+  }
+
+  const width = safeString(values.metaImageWidth) || SOCIAL_IMAGE_WIDTH;
+  const height = safeString(values.metaImageHeight) || SOCIAL_IMAGE_HEIGHT;
+
+  return {
+    url: resolvedUrl,
+    width,
+    height,
+  };
 }
 
 function safeString(value) {
