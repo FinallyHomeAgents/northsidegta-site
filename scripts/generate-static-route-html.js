@@ -11,12 +11,12 @@ const {
   finalizeHtml,
 } = require("./utils/staticMeta");
 const { getMetaTagsFromData } = require("../src/components/seo/metaTagUtils.js");
-const {
-  DEFAULT_GLOBAL_META_CONFIG,
-  STATIC_ROUTE_META_CONFIGS,
-} = require("../src/components/seo/staticRouteMetaConfigs.js");
+async function main() {
+  const {
+    DEFAULT_GLOBAL_META_CONFIG,
+    STATIC_ROUTE_META_CONFIGS,
+  } = await import("../src/components/seo/staticRouteMetaConfigs.mjs");
 
-function main() {
   const template = loadTemplate();
   if (!template) {
     console.warn("[generate-static-route-html] Skipping — unable to locate HTML template");
@@ -178,4 +178,7 @@ function getOutputPath(root, route) {
   return path.join(root, normalized, "index.html");
 }
 
-main();
+main().catch((error) => {
+  console.error("[generate-static-route-html] Failed:", error);
+  process.exitCode = 1;
+});
