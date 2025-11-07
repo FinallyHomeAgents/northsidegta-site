@@ -2,6 +2,62 @@ const { getSiteSeoForRoute } = require("./siteSeoConfig");
 
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 
+const SOCIAL_META_KEYS = [
+  "property:og:type",
+  "property:og:title",
+  "property:og:description",
+  "property:og:url",
+  "property:og:image",
+  "property:og:image:alt",
+  "property:og:site_name",
+  "name:twitter:card",
+  "name:twitter:title",
+  "name:twitter:description",
+  "name:twitter:image",
+  "name:twitter:image:alt",
+];
+
+const SOCIAL_META_KEY_SET = new Set(SOCIAL_META_KEYS);
+
+function getMetaAttributeKey(attributes = {}) {
+  if (!attributes || typeof attributes !== "object") return "";
+  const property = safeString(attributes.property);
+  if (property) {
+    return `property:${property}`;
+  }
+  const name = safeString(attributes.name);
+  if (name) {
+    return `name:${name}`;
+  }
+  return "";
+}
+
+function dedupeSocialMetaTags(tags = []) {
+  if (!Array.isArray(tags) || tags.length <= 1) {
+    return tags;
+  }
+
+  const result = tags.slice();
+  const latestIndexByKey = new Map();
+
+  for (let index = 0; index < result.length; index += 1) {
+    const tag = result[index];
+    if (!tag || tag.type !== "meta") continue;
+
+    const key = getMetaAttributeKey(tag.attributes);
+    if (!key || !SOCIAL_META_KEY_SET.has(key)) continue;
+
+    if (latestIndexByKey.has(key)) {
+      const previousIndex = latestIndexByKey.get(key);
+      result[previousIndex] = null;
+    }
+
+    latestIndexByKey.set(key, index);
+  }
+
+  return result.filter(Boolean);
+}
+
 function safeString(value) {
   if (value == null) return "";
   if (typeof value === "string") return value.trim();
@@ -34,6 +90,7 @@ function getMetaTagsFromData(raw = {}) {
   const siteSeoTitle = safeString(siteSeo && siteSeo.seo_title);
   const siteSeoDescription = safeString(siteSeo && siteSeo.seo_description);
   const siteSeoImage = safeString(siteSeo && siteSeo.seo_image);
+  const hasSiteSeoOverrides = Boolean(siteSeo);
 
   const fallbackTitleValue = safeString(raw.title);
   const titleValue = siteSeoTitle || fallbackTitleValue;
@@ -254,8 +311,10 @@ function getMetaTagsFromData(raw = {}) {
     return null;
   }
 
+  const dedupedTags = dedupeSocialMetaTags(tags);
+
   return {
-    tags,
+    tags: dedupedTags,
     values: {
       documentTitle: documentTitleValue,
       title: titleValue,
@@ -270,6 +329,9 @@ function getMetaTagsFromData(raw = {}) {
       siteName: siteNameValue,
       articleAuthor: articleAuthorValue,
       articlePublishedTime: articlePublishedTimeValue,
+    },
+    flags: {
+      hasSiteSeoOverrides,
     },
   };
 }
@@ -324,6 +386,7 @@ function renderMetaTagsToString(raw = {}) {
 
 module.exports = {
   DEFAULT_TWITTER_CARD,
+  SOCIAL_META_KEYS,
   getMetaTagsFromData,
   getMetaTagHtmlList,
   renderMetaTagsToString,
