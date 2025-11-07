@@ -1,7 +1,12 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-import { getMetaTagsFromData, SOCIAL_META_KEYS } from "./metaTagUtils";
+import {
+  SITE_BASE_URL,
+  getMetaTagsFromData,
+  SOCIAL_META_KEYS,
+} from "./metaTagUtils";
+import renderHelmetTag from "./renderHelmetTag";
 
 export { getMetaTagsFromData } from "./metaTagUtils";
 
@@ -20,38 +25,22 @@ export default function DynamicMetaTags(props) {
   }
 
   const tags = Array.isArray(meta.tags) ? meta.tags : [];
+  const metaValues = meta.values || {};
+  const socialImageContent = resolveSocialImageContent(metaValues);
+  const tagsWithSocialImages = ensureSocialImageTags(tags, socialImageContent);
   const hasSiteSeoOverrides = Boolean(meta.flags && meta.flags.hasSiteSeoOverrides);
   const filteredChildren = filterMetaChildren(children, hasSiteSeoOverrides);
 
-  if (tags.length === 0 && filteredChildren.length === 0) {
+  if (tagsWithSocialImages.length === 0 && filteredChildren.length === 0) {
     return null;
   }
 
   return (
     <Helmet>
-      {tags.map(renderHelmetTag)}
+      {tagsWithSocialImages.map(renderHelmetTag)}
       {filteredChildren}
     </Helmet>
   );
-}
-
-function renderHelmetTag(tag, index) {
-  if (!tag) return null;
-  const key = tag.key || `${tag.type || "meta"}-${index}`;
-
-  if (tag.type === "title") {
-    return <title key={key}>{tag.content}</title>;
-  }
-
-  if (tag.type === "meta") {
-    return <meta key={key} {...(tag.attributes || {})} />;
-  }
-
-  if (tag.type === "link") {
-    return <link key={key} {...(tag.attributes || {})} />;
-  }
-
-  return null;
 }
 
 function filterMetaChildren(children, hasSiteSeoOverrides) {
@@ -84,5 +73,81 @@ function getChildMetaKey(props = {}) {
 
 function safeMetaKey(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
+}
+
+function ensureSocialImageTags(tags, socialImageContent) {
+  if (!socialImageContent) {
+    return tags.slice();
+  }
+
+  const next = [];
+  let hasOgImage = false;
+  let hasTwitterImage = false;
+
+  for (const tag of tags) {
+    if (!tag || tag.type !== "meta") {
+      next.push(tag);
+      continue;
+    }
+
+    const attributes = tag.attributes || {};
+    if (attributes.property === "og:image") {
+      hasOgImage = true;
+      next.push({
+        ...tag,
+        attributes: { ...attributes, content: socialImageContent },
+      });
+      continue;
+    }
+
+    if (attributes.name === "twitter:image") {
+      hasTwitterImage = true;
+      next.push({
+        ...tag,
+        attributes: { ...attributes, content: socialImageContent },
+      });
+      continue;
+    }
+
+    next.push(tag);
+  }
+
+  if (!hasOgImage) {
+    next.push({
+      type: "meta",
+      key: "meta:og:image",
+      attributes: {
+        property: "og:image",
+        content: socialImageContent,
+      },
+    });
+  }
+
+  if (!hasTwitterImage) {
+    next.push({
+      type: "meta",
+      key: "meta:twitter:image",
+      attributes: {
+        name: "twitter:image",
+        content: socialImageContent,
+      },
+    });
+  }
+
+  return next;
+}
+
+function resolveSocialImageContent(values = {}) {
+  const path = safeString(values.metaImagePath);
+  if (path) {
+    return `${SITE_BASE_URL}${path}`;
+  }
+  return safeString(values.metaImage);
+}
+
+function safeString(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return value.trim();
+  return String(value).trim();
 }
 

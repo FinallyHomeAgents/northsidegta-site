@@ -1,5 +1,7 @@
 const { getSiteSeoForRoute } = require("./siteSeoConfig");
 
+const SITE_BASE_URL = "https://northsidegta.ca";
+const DEFAULT_META_IMAGE_PATH = "/Images/og-home.jpg";
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 
 const SOCIAL_META_KEYS = [
@@ -64,6 +66,96 @@ function safeString(value) {
   return String(value).trim();
 }
 
+function ensureLeadingSlash(value) {
+  const trimmed = safeString(value);
+  if (!trimmed) return "";
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+}
+
+function isAbsoluteUrl(value) {
+  return /^https?:\/\//i.test(value);
+}
+
+function normalizeCanonicalUrl(value, routeValue) {
+  const provided = safeString(value);
+  if (provided) {
+    return buildAbsoluteUrl(provided);
+  }
+  if (!routeValue) return "";
+  const normalizedRoute = routeValue === "/" ? "/" : ensureLeadingSlash(routeValue);
+  return `${SITE_BASE_URL}${normalizedRoute === "/" ? "/" : normalizedRoute}`;
+}
+
+function buildAbsoluteUrl(value) {
+  const trimmed = safeString(value);
+  if (!trimmed) return "";
+  if (isAbsoluteUrl(trimmed)) {
+    return trimmed;
+  }
+  if (trimmed.startsWith("//")) {
+    return `https:${trimmed}`;
+  }
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  return `${SITE_BASE_URL}${withLeadingSlash}`;
+}
+
+function normalizeMetaImage(siteSeoImage, raw = {}) {
+  const candidates = [
+    safeString(siteSeoImage),
+    safeString(raw.ogImage),
+    safeString(raw.image),
+    safeString(raw.twitterImage),
+    DEFAULT_META_IMAGE_PATH,
+  ];
+
+  let chosen = "";
+  for (const candidate of candidates) {
+    if (candidate) {
+      chosen = candidate;
+      break;
+    }
+  }
+
+  let absoluteUrl = "";
+  let path = "";
+
+  if (chosen) {
+    if (isAbsoluteUrl(chosen)) {
+      absoluteUrl = chosen;
+      if (absoluteUrl.startsWith(`${SITE_BASE_URL}`)) {
+        try {
+          const url = new URL(absoluteUrl);
+          path = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
+        } catch (error) {
+          path = "";
+        }
+      }
+    } else if (chosen.startsWith("//")) {
+      absoluteUrl = `https:${chosen}`;
+    } else {
+      path = ensureLeadingSlash(chosen);
+      absoluteUrl = `${SITE_BASE_URL}${path}`;
+    }
+  }
+
+  if (!absoluteUrl) {
+    path = ensureLeadingSlash(DEFAULT_META_IMAGE_PATH);
+    absoluteUrl = `${SITE_BASE_URL}${path}`;
+  } else if (!path && absoluteUrl.startsWith(`${SITE_BASE_URL}`)) {
+    try {
+      const url = new URL(absoluteUrl);
+      path = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
+    } catch (error) {
+      path = ensureLeadingSlash(DEFAULT_META_IMAGE_PATH);
+    }
+  }
+
+  return {
+    path,
+    absoluteUrl,
+  };
+}
+
 function normalizeAdditionalMeta(additionalMeta) {
   if (!Array.isArray(additionalMeta)) return [];
   return additionalMeta
@@ -114,12 +206,14 @@ function getMetaTagsFromData(raw = {}) {
       descriptionValue,
   );
 
-  const canonicalValue = safeString(raw.canonicalUrl);
+  const canonicalValue = normalizeCanonicalUrl(raw.canonicalUrl, routeValue);
   const ogTypeValue = safeString(raw.ogType);
-  const ogImageValue = safeString(siteSeoImage || raw.ogImage || raw.image);
+  const { path: metaImagePath, absoluteUrl: resolvedMetaImageUrl } =
+    normalizeMetaImage(siteSeoImage, raw);
+  const ogImageValue = resolvedMetaImageUrl;
   const ogImageAltValue = safeString(raw.ogImageAlt);
   const twitterCardValue = safeString(raw.twitterCard) || DEFAULT_TWITTER_CARD;
-  const twitterImageValue = safeString(siteSeoImage || raw.twitterImage || ogImageValue);
+  const twitterImageValue = resolvedMetaImageUrl;
   const twitterImageAltValue = safeString(raw.twitterImageAlt || ogImageAltValue);
   const siteNameValue = safeString(raw.siteName);
   const articleAuthorValue = safeString(raw.articleAuthor);
@@ -322,6 +416,8 @@ function getMetaTagsFromData(raw = {}) {
       canonicalUrl: canonicalValue,
       ogType: ogTypeValue,
       ogImage: ogImageValue,
+      metaImagePath,
+      metaImage: resolvedMetaImageUrl,
       ogImageAlt: ogImageAltValue,
       twitterCard: twitterCardValue,
       twitterImage: twitterImageValue,
@@ -385,8 +481,11 @@ function renderMetaTagsToString(raw = {}) {
 }
 
 module.exports = {
+  DEFAULT_META_IMAGE_PATH,
   DEFAULT_TWITTER_CARD,
+  SITE_BASE_URL,
   SOCIAL_META_KEYS,
+  buildAbsoluteUrl,
   getMetaTagsFromData,
   getMetaTagHtmlList,
   renderMetaTagsToString,
