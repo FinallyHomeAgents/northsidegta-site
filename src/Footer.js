@@ -9,10 +9,10 @@ export default function Footer() {
       <span aria-hidden="true">•</span>
       {' '}
       <a
-        href="/events/archive"
-        className="font-medium text-emerald-600 hover:text-emerald-700"
+        href="/community"
+        className="font-medium text-gray-500 hover:text-[#32610E] focus:text-[#32610E]"
       >
-        Past Events Archive
+        Upcoming Events Across the NorthSide GTA
       </a>
     </footer>
   );
