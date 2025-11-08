@@ -216,7 +216,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Buyers Page SEO'
@@ -242,7 +242,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Sellers Page SEO'
@@ -268,7 +268,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Community Page SEO'
@@ -290,7 +290,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Media Page SEO'
@@ -312,7 +312,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'About Page SEO'
@@ -334,7 +334,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Contact Page SEO'
@@ -356,7 +356,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Insights Index SEO'
@@ -378,7 +378,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
 
       - label: 'Events Index SEO'
@@ -400,7 +400,7 @@ collections:
             widget: 'image'
             required: false
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
-            media_folder: 'public/uploads'
+            media_folder: '/public/uploads'
             public_folder: '/uploads'
   - name: "socials"
     label: "Socials"
