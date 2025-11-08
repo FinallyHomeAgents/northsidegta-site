@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/crepe-paper-cosmos-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002685-1763251200-1763337599@auroraculturalcentre.ca",
-  "updatedAt": "2025-11-07T08:35:22Z"
+  "lastSyncedAt": "2025-11-08T08:31:22.114Z",
+  "updatedAt": "2025-11-08T08:31:22.114Z",
+  "featured": false
 }

@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/village-of-stouffville-holiday-market-9.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/holiday-market-2/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/holiday-market-2/",
-  "updatedAt": "2025-11-07T08:35:22Z"
+  "lastSyncedAt": "2025-11-08T08:31:22.114Z",
+  "updatedAt": "2025-11-08T08:31:22.114Z",
+  "featured": false
 }

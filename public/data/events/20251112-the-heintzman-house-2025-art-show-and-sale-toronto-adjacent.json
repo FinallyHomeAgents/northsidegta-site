@@ -1,28 +1,26 @@
 {
-  "slug": "20251108-aurora-cultural-centre-presents-le-vent-du-nord-toronto-adjacent",
-  "title": "Aurora Cultural Centre presents Le Vent du Nord",
-  "summary": "Aurora Cultural Centre presents Le Vent du Nord",
+  "slug": "20251112-the-heintzman-house-2025-art-show-and-sale-toronto-adjacent",
+  "title": "The Heintzman House 2025 Art Show and Sale.",
+  "summary": "The Heintzman House 2025 Art Show and Sale.",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » Fall Artist-Poet Gathering Exhibit – Anne in Costume: Designing a Literary Icon 2025 Summer Art Camp at Palette Art School Loading view. Today Now Now Select date. Nov 8 October 31 @ 9:30 am - November 8 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 1 @ 9:30 am - November 9 @ 4:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 2 @ 9:30 am - November 10 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 3 @ 9:30 am - November 11 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 4 @ 9:30 am - November 12 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 5 @ 9:00 am - November 8 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 8 November 5 @ 9:30 am - November 13 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 6 @ 9:00 am - November 9 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 8 November 6 @ 9:30 am - November 14 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 November 7 @ 9:00 am - November 10 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 8 November 7 @ 9:30 am - November 15 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 8 9:00 am - 11:00 am Crit Club (Ages 18+) Free Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-09T00:30:00Z",
-  "endDate": "2025-11-09T02:30:00Z",
+  "startDate": "2025-11-12T17:00:00Z",
+  "endDate": "2025-11-12T21:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-08",
+      "date": "2025-11-12",
       "all_day": false,
-      "start_time": "19:30",
-      "end_time": "21:30"
+      "start_time": "12:00",
+      "end_time": "16:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "Aurora Cultural Centre, Victoria Street, Aurora, Regional Municipality of York, L4G 1R3, Canada",
-  "address": "Aurora Cultural Centre, Victoria Street, Aurora, Regional Municipality of York, L4G 1R3, Canada",
-  "lat": 43.9978797,
-  "lng": -79.4655424,
+  "locationName": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
+  "address": "The Heintzman House 135 Bay Thorne Drive Thornhill Ontario L3T 3V1, 135 Bay Thorne Drive, Thornhill Ontario, AZ, L3T 3V1",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/aurora-cultural-centre-presents-le-vent-du-nord/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/the-heintzman-house-2025-art-show-and-sale/2025-11-12/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -32,8 +30,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10014047-1762630200-1762637400@www.experienceyorkregion.com",
+  "sourceRef": "10010916-1762948800-1762963200@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-08T08:31:22.114Z",
+  "firstSeenAt": "2025-11-08T08:31:22.114Z",
   "updatedAt": "2025-11-08T08:31:22.114Z",
   "featured": false
 }
