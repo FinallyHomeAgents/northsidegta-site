@@ -741,16 +741,20 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
     ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
     : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
 
-  const labelContainerClasses = `flex min-w-0 items-center gap-2 ${
-    isPanelDesktop ? "flex-1" : ""
-  }`;
+  const rowLayoutClasses = isPanelDesktop
+    ? "grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3"
+    : "flex items-center justify-between gap-2";
+  const labelContainerClasses = "flex min-w-0 items-center gap-2";
   const labelTextClasses = `block min-w-0 pr-1 text-left text-[12px] font-semibold md:text-[13px] ${labelColor} ${
-    isPanelDesktop ? "break-words leading-tight" : ""
+    isPanelDesktop ? "leading-tight whitespace-normal" : ""
+  }`;
+  const ratingContainerClasses = `flex flex-none shrink-0 items-center gap-1.5 ${
+    isPanelDesktop ? "justify-self-end" : ""
   }`;
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between gap-2">
+      <div className={rowLayoutClasses}>
         <div className={labelContainerClasses}>
           {Icon ? (
             <span
@@ -759,11 +763,14 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
               <Icon className="h-3.5 w-3.5" />
             </span>
           ) : null}
-          <span className={labelTextClasses}>
+          <span
+            className={labelTextClasses}
+            style={isPanelDesktop ? { wordBreak: "keep-all" } : undefined}
+          >
             {label}
           </span>
         </div>
-        <div className="flex flex-none shrink-0 items-center gap-1.5">
+        <div className={ratingContainerClasses}>
           <div className="flex items-center gap-[3px]">
             {Array.from({ length: 5 }).map((_, i) => (
               <span
@@ -1490,6 +1497,11 @@ function TownInsightCard({
       ? "bg-white/10 text-emerald-50/90 hover:bg-white/15"
       : "bg-white/15 text-white hover:bg-white/25"
   }`;
+  const seeTownBadgeClasses = `inline-flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold uppercase tracking-[0.12em] transition ${
+    isDesktopPanel
+      ? "bg-white/10 text-emerald-50/90 ring-1 ring-inset ring-white/30 hover:bg-white/15 hover:ring-white/45"
+      : "bg-white/15 text-white"
+  }`;
 
   return (
     <div className={containerClasses} style={panelSurfaceStyles}>
@@ -1518,9 +1530,11 @@ function TownInsightCard({
             </div>
             <a
               href={town.url}
-              className={`${seeTownButtonClasses} ml-auto shrink-0`}
+              className={`${seeTownBadgeClasses} shrink-0`}
+              aria-label={`See town details for ${town.name}`}
+              title={`See town details for ${town.name}`}
             >
-              See town
+              {town.name.slice(0, 1)}
             </a>
           </div>
         ) : (
