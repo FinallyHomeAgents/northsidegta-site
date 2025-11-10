@@ -485,21 +485,80 @@ const Styles = () => (
   `}</style>
 );
 
+function TownGlyph({ className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+    >
+      <path
+        d="M4 14.4 15.64 5.2a1.5 1.5 0 0 1 1.72 0L28 14.4V27a1 1 0 0 1-1 1h-6.75a.75.75 0 0 1-.75-.75V21h-7v6.25a.75.75 0 0 1-.75.75H5a1 1 0 0 1-1-1z"
+        fill="currentColor"
+        fillOpacity="0.92"
+      />
+      <path
+        d="M2.75 15.1a1 1 0 0 1 .25-1.39l12-8.7a1 1 0 0 1 1.2 0l12 8.7a1 1 0 1 1-1.14 1.64L16 7.22 3.94 15.65a1 1 0 0 1-1.19-.55z"
+        fill="currentColor"
+        opacity="0.6"
+      />
+    </svg>
+  );
+}
+
 /* ────────────────────────────────────────────────────────────
    Compact rating row
    ──────────────────────────────────────────────────────────── */
 function RatingRow({ label, value, tone = "emerald" }) {
   const v = Math.round(value || 0);
   const percent = Math.max(0, Math.min(100, (v / 5) * 100));
-  const isPanel = tone === "panel";
+  const isPanelDesktop = tone === "panel-desktop";
+  const isPanelMobile = tone === "panel-mobile";
+  const isPanel = isPanelDesktop || isPanelMobile;
+
+  const labelColor = isPanelDesktop
+    ? "text-emerald-50/95"
+    : isPanelMobile
+    ? "text-emerald-50"
+    : "text-emerald-900";
+
+  const filledDotClass = isPanelDesktop
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200"
+    : isPanelMobile
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]";
+
+  const emptyDotClass = isPanelDesktop
+    ? "bg-emerald-900/45"
+    : isPanelMobile
+    ? "bg-white/18"
+    : "bg-emerald-100";
+
+  const scoreColor = isPanelDesktop
+    ? "text-emerald-50/90"
+    : isPanelMobile
+    ? "text-emerald-100"
+    : "text-emerald-600";
+
+  const trackColor = isPanelDesktop
+    ? "bg-emerald-900/40"
+    : isPanelMobile
+    ? "bg-white/12"
+    : "bg-emerald-100/80";
+
+  const fillColor = isPanelDesktop
+    ? "bg-gradient-to-r from-emerald-200 via-teal-200 to-emerald-100"
+    : isPanelMobile
+    ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]";
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
         <span
-          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${
-            isPanel ? "text-emerald-50" : "text-emerald-900"
-          }`}
+          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${labelColor}`}
         >
           {label}
         </span>
@@ -509,37 +568,21 @@ function RatingRow({ label, value, tone = "emerald" }) {
               <span
                 key={i}
                 className={`h-[7px] w-[7px] rounded-full md:h-[8px] md:w-[8px] ${
-                  i < v
-                    ? isPanel
-                      ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
-                      : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
-                    : isPanel
-                    ? "bg-white/18"
-                    : "bg-emerald-100"
+                  i < v ? filledDotClass : emptyDotClass
                 }`}
               />
             ))}
           </div>
           <span
-            className={`text-[11px] font-semibold ${
-              isPanel ? "text-emerald-100" : "text-emerald-600"
-            }`}
+            className={`text-[11px] font-semibold ${scoreColor}`}
           >
             {v}/5
           </span>
         </div>
       </div>
-      <div
-        className={`h-[6px] w-full rounded-full ${
-          isPanel ? "bg-white/12" : "bg-emerald-100/80"
-        }`}
-      >
+      <div className={`h-[6px] w-full rounded-full ${trackColor}`}>
         <div
-          className={`h-full rounded-full ${
-            isPanel
-              ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
-              : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
-          }`}
+          className={`h-full rounded-full ${fillColor}`}
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -558,8 +601,9 @@ export default function MapHero({
   tickerSlot,
 }) {
   const [pulsing, setPulsing] = useState(true);
-  const [openId, setOpenId] = useState(null);   // touch devices
+  const [openId, setOpenId] = useState(null); // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
+  const [selectedId, setSelectedId] = useState(null); // desktop sticky selection
   const frameRef = useRef(null);
   const imageRef = useRef(null);
   const heroCoreRef = useRef(null);
@@ -764,14 +808,29 @@ export default function MapHero({
     }
   }, [isMobileViewport]);
 
+  useEffect(() => {
+    if (isMobileViewport) {
+      setSelectedId(null);
+    }
+  }, [isMobileViewport]);
+
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
     typeof window.matchMedia === "function" &&
     window.matchMedia("(hover: hover)").matches;
 
-  // Active town depends on capability (NO default active)
-  const activeId = canHover ? hoverId : openId;
+  const isDesktopViewport = !isMobileViewport;
+
+  const desktopActiveId = hoverId || selectedId || null;
+
+  const activeId = isDesktopViewport
+    ? canHover
+      ? desktopActiveId
+      : openId
+    : canHover
+    ? hoverId
+    : openId;
   const activeTown = TOWNS.find((t) => t.id === activeId) || null;
 
   // Allow ESC to clear hover on desktop/pointer devices
@@ -959,9 +1018,13 @@ export default function MapHero({
                         aria-label={t.name}
                         aria-pressed={activeId === t.id}
                         onMouseEnter={() => canHover && setHoverId(t.id)}
-                        onClick={() =>
-                          !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                        }
+                        onClick={() => {
+                          if (!isMobileViewport && canHover) {
+                            setSelectedId(t.id);
+                          } else {
+                            setOpenId((cur) => (cur === t.id ? null : t.id));
+                          }
+                        }}
                       >
                         <span
                           className="pin"
@@ -982,6 +1045,10 @@ export default function MapHero({
                   onDismiss={() => setOpenId(null)}
                   className="flex h-full flex-col"
                   appearance="panel"
+                  isActive={
+                    isDesktopViewport &&
+                    Boolean(selectedId && activeTown && activeTown.id === selectedId)
+                  }
                 />
               </aside>
             </div>
@@ -1007,10 +1074,13 @@ export default function MapHero({
                     aria-label={t.name}
                     aria-pressed={activeId === t.id}
                     onMouseEnter={() => canHover && setHoverId(t.id)}
-                    onClick={() =>
-                      !canHover &&
-                      setOpenId((cur) => (cur === t.id ? null : t.id))
-                    }
+                    onClick={() => {
+                      if (!isMobileViewport && canHover) {
+                        setSelectedId(t.id);
+                      } else {
+                        setOpenId((cur) => (cur === t.id ? null : t.id));
+                      }
+                    }}
                   >
                     <span
                       className="pin"
@@ -1045,105 +1115,130 @@ function TownInsightCard({
   onDismiss,
   className = "",
   appearance = "default",
+  isActive = false,
 }) {
   const isMobile = mode === "mobile";
   const isPanel = appearance === "panel";
+  const isDesktopPanel = isPanel && !isMobile;
   const hasTown = Boolean(town);
 
   const containerClasses = [
     className,
-    isPanel
-      ? isMobile
-        ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
-        : "pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border border-white/12 bg-emerald-950/65 shadow-[0_32px_90px_rgba(2,15,10,0.5)] backdrop-blur-xl"
+    isDesktopPanel
+      ? `pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border transition-colors duration-300 backdrop-blur-xl ${
+          isActive
+            ? "border-emerald-300/60 shadow-[0_36px_110px_rgba(6,50,28,0.5)]"
+            : "border-emerald-900/45 shadow-[0_30px_96px_rgba(3,20,12,0.55)]"
+        }`
+      : isPanel
+      ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
       : isMobile
       ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
-      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
+      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(233,24,0.18)] backdrop-blur",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const headerClasses = [
-    isPanel
-      ? isMobile
-        ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
-        : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
-      : isMobile
-      ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
-      : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white",
-  ].join(" ");
+  const headerClasses = isDesktopPanel
+    ? `flex-none border-b border-emerald-200/20 px-5 py-4 text-emerald-50 transition-colors duration-300 ${
+        isActive ? "bg-white/10" : "bg-white/5"
+      }`
+    : isPanel
+    ? isMobile
+      ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
+      : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
+    : isMobile
+    ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
+    : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white";
 
-  const bodyClasses = [
-    isPanel
-      ? isMobile
-        ? "space-y-4 px-4 py-4 text-emerald-50/90"
-        : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
-      : isMobile
-      ? "space-y-4 px-4 py-4"
-      : "flex-1 space-y-5 overflow-y-auto px-5 py-5",
-  ].join(" ");
+  const bodyClasses = isDesktopPanel
+    ? "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/92 transition-opacity duration-300"
+    : isPanel
+    ? isMobile
+      ? "space-y-4 px-4 py-4 text-emerald-50/90"
+      : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
+    : isMobile
+    ? "space-y-4 px-4 py-4"
+    : "flex-1 space-y-5 overflow-y-auto px-5 py-5";
+
+  const panelSurfaceStyles = isDesktopPanel
+    ? {
+        backgroundImage:
+          "radial-gradient(140% 140% at 15% 20%, rgba(44,113,73,0.32) 0%, rgba(6,27,16,0.96) 52%, rgba(3,18,11,0.98) 100%)",
+        backgroundColor: "#04190e",
+      }
+    : undefined;
 
   if (!hasTown) {
+    const placeholderAvatarClasses = `flex h-10 w-10 items-center justify-center rounded-full text-lg ${
+      isDesktopPanel
+        ? "bg-white/10 text-emerald-50 ring-1 ring-white/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+        : isPanel
+        ? "bg-white/15"
+        : "bg-white/20"
+    }`;
+    const placeholderSubtitleClasses = `text-[11px] uppercase ${
+      isDesktopPanel
+        ? "tracking-[0.38em] text-emerald-100/70"
+        : isPanel
+        ? "tracking-[0.32em] text-emerald-100/70"
+        : "tracking-[0.32em] text-emerald-100/80"
+    }`;
+    const placeholderTitleClasses = isDesktopPanel
+      ? "text-lg font-semibold leading-tight text-emerald-50 md:text-xl"
+      : "text-lg font-semibold leading-tight md:text-xl";
+    const placeholderBodyClasses = `text-sm ${
+      isDesktopPanel
+        ? "panel-summary md:truncate text-emerald-50/90"
+        : isPanel
+        ? "panel-summary md:truncate text-emerald-50/85"
+        : "truncate text-emerald-900/80"
+    }`;
+    const placeholderChipWrapperClasses = isPanel
+      ? "insights-grid text-sm font-semibold text-emerald-50/95"
+      : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85";
+    const placeholderChipClasses = isPanel
+      ? `chip${isDesktopPanel ? " ring-1 ring-white/15 backdrop-blur-sm" : ""}`
+      : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70";
+    const placeholderFooterClasses = `text-[11px] uppercase tracking-[0.28em] ${
+      isDesktopPanel
+        ? "text-emerald-100/75"
+        : isPanel
+        ? "text-emerald-100/70"
+        : "text-emerald-500/80"
+    }`;
+
     return (
-      <div className={containerClasses}>
+      <div className={containerClasses} style={panelSurfaceStyles}>
         <div className={headerClasses}>
           <div className="flex items-center gap-3">
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg ${
-                isPanel ? "bg-white/15" : "bg-white/20"
-              }`}
-            >
-              🧭
+            <div className={placeholderAvatarClasses}>
+              {isDesktopPanel ? (
+                <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+              ) : (
+                "🧭"
+              )}
             </div>
             <div>
-              <p
-                className={`text-[11px] uppercase tracking-[0.32em] ${
-                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
-                }`}
-              >
-                Town insights
-              </p>
-              <p className="text-lg font-semibold leading-tight md:text-xl">
+              <p className={placeholderSubtitleClasses}>Town insights</p>
+              <p className={placeholderTitleClasses}>
                 Preview prices, commute, schools, and lifestyle.
               </p>
             </div>
           </div>
         </div>
         <div className={bodyClasses}>
-          <p
-            className={`text-sm ${
-              isPanel
-                ? "panel-summary md:truncate text-emerald-50/85"
-                : "truncate text-emerald-900/80"
-            }`}
-          >
-            Hover a town to unlock nightly intel.
+          <p className={placeholderBodyClasses}>
+            Hover or click a town to unlock nightly intel.
           </p>
-          <div
-            className={
-              isPanel
-                ? "insights-grid text-sm font-semibold text-emerald-50/95"
-                : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85"
-            }
-          >
+          <div className={placeholderChipWrapperClasses}>
             {PANEL_CHIPS.map((label) => (
-              <div
-                key={label}
-                className={
-                  isPanel
-                    ? "chip"
-                    : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70"
-                }
-              >
+              <div key={label} className={placeholderChipClasses}>
                 {label}
               </div>
             ))}
           </div>
-          <p
-            className={`text-[11px] uppercase tracking-[0.28em] ${
-              isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
-            }`}
-          >
+          <p className={placeholderFooterClasses}>
             NorthSide GTA • Insights refreshed nightly
           </p>
         </div>
@@ -1151,29 +1246,64 @@ function TownInsightCard({
     );
   }
 
+  const avatarClasses = `flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
+    isDesktopPanel
+      ? isActive
+        ? "bg-white/15 text-emerald-50 ring-2 ring-emerald-200/60 shadow-[0_0_0_1px_rgba(255,255,255,0.18)]"
+        : "bg-white/12 text-emerald-100/85 ring-1 ring-white/20"
+      : isPanel
+      ? "bg-white/15"
+      : "bg-white/20"
+  }`;
+  const headerSubtitleClasses = `text-[11px] uppercase ${
+    isDesktopPanel
+      ? "tracking-[0.38em] text-emerald-100/70"
+      : isPanel
+      ? "tracking-[0.32em] text-emerald-100/70"
+      : "tracking-[0.32em] text-emerald-100/80"
+  }`;
+  const townNameClasses = isDesktopPanel
+    ? "text-lg font-semibold leading-tight tracking-[0.02em] text-emerald-50 md:text-xl"
+    : "text-lg font-semibold leading-tight md:text-xl";
+  const summaryClasses = isDesktopPanel
+    ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+    : isPanel
+    ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+    : "truncate text-sm md:text-[15px] text-emerald-900/85";
+  const metricCardVariant = isDesktopPanel
+    ? "border border-emerald-400/20 bg-emerald-950/35 shadow-[0_18px_48px_rgba(3,22,14,0.45)] backdrop-blur-sm"
+    : isPanel
+    ? "border border-white/14 bg-white/8 shadow-black/30"
+    : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10";
+  const footerClasses = `text-[11px] uppercase tracking-[0.28em] ${
+    isDesktopPanel
+      ? "text-emerald-100/75"
+      : isPanel
+      ? "text-emerald-100/70"
+      : "text-emerald-500/80"
+  }`;
+  const seeTownButtonClasses = `inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
+    isDesktopPanel
+      ? "bg-white/10 text-emerald-50/90 hover:bg-white/15"
+      : "bg-white/15 text-white hover:bg-white/25"
+  }`;
+
   return (
-    <div className={containerClasses}>
+    <div className={containerClasses} style={panelSurfaceStyles}>
       <div className={headerClasses}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
-                isPanel ? "bg-white/15" : "bg-white/20"
-              }`}
-            >
-              {town.name.slice(0, 1)}
-            </div>
+            <div className={avatarClasses}>{town.name.slice(0, 1)}</div>
             <div className="text-left">
-              <p
-                className={`text-[11px] uppercase tracking-[0.32em] ${
-                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
-                }`}
-              >
-                NorthSide GTA
-              </p>
-              <p className="text-lg font-semibold leading-tight md:text-xl">
-                {town.name}
-              </p>
+              <p className={headerSubtitleClasses}>NorthSide GTA</p>
+              {isDesktopPanel ? (
+                <div className="flex items-center gap-2">
+                  <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+                  <p className={townNameClasses}>{town.name}</p>
+                </div>
+              ) : (
+                <p className={townNameClasses}>{town.name}</p>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -1191,14 +1321,7 @@ function TownInsightCard({
                 ×
               </button>
             ) : null}
-            <a
-              href={town.url}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
-                isPanel
-                  ? "bg-white/15 text-white hover:bg-white/25"
-                  : "bg-white/15 text-white hover:bg-white/25"
-              }`}
-            >
+            <a href={town.url} className={seeTownButtonClasses}>
               See town
             </a>
           </div>
@@ -1206,13 +1329,7 @@ function TownInsightCard({
       </div>
       <div className={bodyClasses}>
         {town.blurb && (
-          <p
-            className={`${
-              isPanel
-                ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
-                : "truncate text-sm md:text-[15px] text-emerald-900/85"
-            }`}
-          >
+          <p className={summaryClasses}>
             {town.blurb}
           </p>
         )}
@@ -1227,26 +1344,18 @@ function TownInsightCard({
           ).map((k) => (
             <div
               key={k}
-              className={`rounded-2xl p-3 shadow-sm ${
-                isPanel
-                  ? "border border-white/14 bg-white/8 shadow-black/30"
-                  : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10"
-              }`}
+              className={`rounded-2xl p-3 shadow-sm ${metricCardVariant}`}
             >
               <RatingRow
                 label={CATEGORY_LABELS[k]}
                 value={town.ratings[k]}
-                tone={isPanel ? "panel" : "emerald"}
+                tone={isPanel ? (isMobile ? "panel-mobile" : "panel-desktop") : "emerald"}
               />
             </div>
           ))}
         </div>
 
-        <div
-          className={`text-[11px] uppercase tracking-[0.28em] ${
-            isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
-          }`}
-        >
+        <div className={footerClasses}>
           ★★★★★ Google reviews • Local data refreshed nightly
         </div>
       </div>
