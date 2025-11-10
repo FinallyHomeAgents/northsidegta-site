@@ -27,6 +27,16 @@ const CATEGORY_ORDER = [
   "localEvents",
 ];
 
+const TOWN_LOGO_PATHS = {
+  georgina: "/Images/towns/georgina.jpg",
+  "east-gwillimbury": "/Images/towns/eastgwillimbury.jpg",
+  newmarket: "/Images/towns/newmarket.jpg",
+  aurora: "/Images/towns/aurora.jpg",
+  stouffville: "/Images/towns/stouffville.jpg",
+  scugog: "/Images/towns/scugog.jpg",
+  uxbridge: "/Images/towns/uxbridge.jpg",
+};
+
 /* ────────────────────────────────────────────────────────────
    Town pins (percent positions for your SVG map)
    ──────────────────────────────────────────────────────────── */
@@ -38,6 +48,7 @@ const TOWNS = [
     y: 26.74,
     url: "/georgina",
     blurb: "Lake life, beaches, and room to roam.",
+    logo: TOWN_LOGO_PATHS.georgina,
     ratings: {
       housePrices: 5,
       commuterAccess: 4,
@@ -56,6 +67,7 @@ const TOWNS = [
     y: 33.94,
     url: "/east-gwillimbury",
     blurb: "New builds, schools & fast 404 access.",
+    logo: TOWN_LOGO_PATHS["east-gwillimbury"],
     ratings: {
       housePrices: 4,
       commuterAccess: 4,
@@ -74,6 +86,7 @@ const TOWNS = [
     y: 42.86,
     url: "/newmarket",
     blurb: "Shops, dining, and GO convenience.",
+    logo: TOWN_LOGO_PATHS.newmarket,
     ratings: {
       housePrices: 3,
       commuterAccess: 5,
@@ -92,6 +105,7 @@ const TOWNS = [
     y: 49.14,
     url: "/aurora",
     blurb: "Mature neighbourhoods, schools, and quiet streets.",
+    logo: TOWN_LOGO_PATHS.aurora,
     ratings: {
       housePrices: 3,
       commuterAccess: 5,
@@ -110,6 +124,7 @@ const TOWNS = [
     y: 46.86,
     url: "/stouffville",
     blurb: "Family streets, parks & a lively Main Street.",
+    logo: TOWN_LOGO_PATHS.stouffville,
     ratings: {
       housePrices: 4,
       commuterAccess: 4,
@@ -128,6 +143,7 @@ const TOWNS = [
     y: 43.74,
     url: "/scugog",
     blurb: "Port Perry heritage + lakefront sunsets.",
+    logo: TOWN_LOGO_PATHS.scugog,
     ratings: {
       housePrices: 4,
       commuterAccess: 3,
@@ -146,6 +162,7 @@ const TOWNS = [
     y: 41.6,
     url: "/uxbridge",
     blurb: "Trail capital vibes and small-town charm.",
+    logo: TOWN_LOGO_PATHS.uxbridge,
     ratings: {
       housePrices: 3,
       commuterAccess: 3,
@@ -165,6 +182,170 @@ const PANEL_CHIPS = [
   "School scorecards",
   "Lifestyle vibe",
 ];
+
+const CATEGORY_ICONS = {
+  housePrices: function HouseIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M4 11.5L12 5l8 6.5" />
+        <path d="M6.5 10.5V19a1 1 0 0 0 1 1H16.5a1 1 0 0 0 1-1v-8.5" />
+        <path d="M10.25 20v-4.25a.75.75 0 0 1 .75-.75h2a.75.75 0 0 1 .75.75V20" />
+      </svg>
+    );
+  },
+  commuterAccess: function RouteIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M4 19h3" />
+        <path d="M17 19h3" />
+        <path d="M7 19l10-14" />
+        <path d="M5 7.5c0-1.38 1.12-2.5 2.5-2.5S10 6.12 10 7.5 8.88 10 7.5 10 5 8.88 5 7.5Z" />
+        <path d="M14 16.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5Z" />
+      </svg>
+    );
+  },
+  localTraffic: function KeysIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M7 18h10" />
+        <path d="M5 15.5 9 6h6l4 9.5" />
+        <path d="M9.5 13h5" />
+        <path d="M10 9.5h4" />
+      </svg>
+    );
+  },
+  golf: function GolfIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M10 20V4l8 3.5-8 3.5" />
+        <path d="M6 20h12" />
+        <path d="M10 20a2 2 0 1 0 4 0" />
+      </svg>
+    );
+  },
+  fishing: function FishingIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M5 4.5v9a4.5 4.5 0 1 0 9 0v-8" />
+        <path d="M20 5c-2 0-3 .75-3 2.2 0 2.3 3 3.3 3 5.3 0 1.45-1 2.5-2.5 2.5-.9 0-1.64-.42-2.06-1.04" />
+        <path d="M11 8c-.72-1.1-1.95-1.75-3.25-1.75S5.22 6.9 4.5 8" />
+      </svg>
+    );
+  },
+  trailsNature: function TrailsIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M12 3 7 9.5h3V21" />
+        <path d="M12 3 17 9.5h-3V21" />
+        <path d="M8.5 15c.65-.6 1.5-1 2.5-1s1.85.4 2.5 1" />
+        <path d="M8.5 18.5c.65-.6 1.5-1 2.5-1s1.85.4 2.5 1" />
+      </svg>
+    );
+  },
+  restaurants: function DiningIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M6 4v7" />
+        <path d="M10 4v7" />
+        <path d="M6 11c0 1.66 1.12 3 2.5 3S11 12.66 11 11V4" />
+        <path d="M17 4c1.38 0 2.5 1.12 2.5 2.5S18.38 9 17 9h-1V20" />
+      </svg>
+    );
+  },
+  localEvents: function EventsIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M7 3v3" />
+        <path d="M17 3v3" />
+        <path d="M4.5 9h15" />
+        <rect x="4.5" y="6" width="15" height="14" rx="2" />
+        <path d="M9 14h2" />
+        <path d="M13 14h2" />
+        <path d="M9 17h2" />
+      </svg>
+    );
+  },
+};
 
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
@@ -485,61 +666,119 @@ const Styles = () => (
   `}</style>
 );
 
+function TownGlyph({ className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      className={className}
+    >
+      <path
+        d="M4 14.4 15.64 5.2a1.5 1.5 0 0 1 1.72 0L28 14.4V27a1 1 0 0 1-1 1h-6.75a.75.75 0 0 1-.75-.75V21h-7v6.25a.75.75 0 0 1-.75.75H5a1 1 0 0 1-1-1z"
+        fill="currentColor"
+        fillOpacity="0.92"
+      />
+      <path
+        d="M2.75 15.1a1 1 0 0 1 .25-1.39l12-8.7a1 1 0 0 1 1.2 0l12 8.7a1 1 0 1 1-1.14 1.64L16 7.22 3.94 15.65a1 1 0 0 1-1.19-.55z"
+        fill="currentColor"
+        opacity="0.6"
+      />
+    </svg>
+  );
+}
+
 /* ────────────────────────────────────────────────────────────
    Compact rating row
    ──────────────────────────────────────────────────────────── */
-function RatingRow({ label, value, tone = "emerald" }) {
+function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
   const v = Math.round(value || 0);
   const percent = Math.max(0, Math.min(100, (v / 5) * 100));
-  const isPanel = tone === "panel";
+  const isPanelDesktop = tone === "panel-desktop";
+  const isPanelMobile = tone === "panel-mobile";
+  const isPanel = isPanelDesktop || isPanelMobile;
+
+  const labelColor = isPanelDesktop
+    ? "text-emerald-50/95"
+    : isPanelMobile
+    ? "text-emerald-50"
+    : "text-emerald-900";
+
+  const iconHaloClass = isPanelDesktop
+    ? "border-white/15 bg-emerald-500/15 text-emerald-100 shadow-[0_4px_12px_rgba(12,74,40,0.45)]"
+    : isPanelMobile
+    ? "border-white/25 bg-white/15 text-emerald-50 shadow-[0_3px_10px_rgba(16,185,129,0.4)]"
+    : "border-emerald-200/80 bg-emerald-50 text-emerald-600 shadow-[0_4px_10px_rgba(16,185,129,0.18)]";
+
+  const filledDotClass = isPanelDesktop
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200/90"
+    : isPanelMobile
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_8px_rgba(16,185,129,0.38)]";
+
+  const emptyDotClass = isPanelDesktop
+    ? "bg-emerald-900/45"
+    : isPanelMobile
+    ? "bg-white/18"
+    : "bg-emerald-100";
+
+  const scoreColor = isPanelDesktop
+    ? "text-emerald-50/90"
+    : isPanelMobile
+    ? "text-emerald-100"
+    : "text-emerald-600";
+
+  const trackColor = isPanelDesktop
+    ? "bg-emerald-900/40"
+    : isPanelMobile
+    ? "bg-white/12"
+    : "bg-emerald-100/80";
+
+  const fillColor = isPanelDesktop
+    ? "bg-gradient-to-r from-emerald-200 via-emerald-300 to-amber-200"
+    : isPanelMobile
+    ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <span
-          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${
-            isPanel ? "text-emerald-50" : "text-emerald-900"
-          }`}
-        >
-          {label}
-        </span>
+        <div className="flex min-w-0 items-center gap-2">
+          {Icon ? (
+            <span
+              className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border ${iconHaloClass}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </span>
+          ) : null}
+          <span
+            className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${labelColor}`}
+          >
+            {label}
+          </span>
+        </div>
         <div className="flex flex-none items-center gap-1.5">
           <div className="flex items-center gap-[3px]">
             {Array.from({ length: 5 }).map((_, i) => (
               <span
                 key={i}
                 className={`h-[7px] w-[7px] rounded-full md:h-[8px] md:w-[8px] ${
-                  i < v
-                    ? isPanel
-                      ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
-                      : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]"
-                    : isPanel
-                    ? "bg-white/18"
-                    : "bg-emerald-100"
+                  i < v ? filledDotClass : emptyDotClass
                 }`}
               />
             ))}
           </div>
           <span
-            className={`text-[11px] font-semibold ${
-              isPanel ? "text-emerald-100" : "text-emerald-600"
-            }`}
+            className={`text-[11px] font-semibold ${scoreColor}`}
           >
             {v}/5
           </span>
         </div>
       </div>
-      <div
-        className={`h-[6px] w-full rounded-full ${
-          isPanel ? "bg-white/12" : "bg-emerald-100/80"
-        }`}
-      >
+      <div className={`h-[6px] w-full rounded-full ${trackColor}`}>
         <div
-          className={`h-full rounded-full ${
-            isPanel
-              ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
-              : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]"
-          }`}
+          className={`h-full rounded-full ${fillColor}`}
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -558,8 +797,9 @@ export default function MapHero({
   tickerSlot,
 }) {
   const [pulsing, setPulsing] = useState(true);
-  const [openId, setOpenId] = useState(null);   // touch devices
+  const [openId, setOpenId] = useState(null); // touch devices
   const [hoverId, setHoverId] = useState(null); // pointer devices
+  const [selectedId, setSelectedId] = useState(null); // desktop sticky selection
   const frameRef = useRef(null);
   const imageRef = useRef(null);
   const heroCoreRef = useRef(null);
@@ -764,14 +1004,29 @@ export default function MapHero({
     }
   }, [isMobileViewport]);
 
+  useEffect(() => {
+    if (isMobileViewport) {
+      setSelectedId(null);
+    }
+  }, [isMobileViewport]);
+
   // Detect if the device supports hover (desktop/laptop)
   const canHover =
     typeof window !== "undefined" &&
     typeof window.matchMedia === "function" &&
     window.matchMedia("(hover: hover)").matches;
 
-  // Active town depends on capability (NO default active)
-  const activeId = canHover ? hoverId : openId;
+  const isDesktopViewport = !isMobileViewport;
+
+  const desktopActiveId = hoverId || selectedId || null;
+
+  const activeId = isDesktopViewport
+    ? canHover
+      ? desktopActiveId
+      : openId
+    : canHover
+    ? hoverId
+    : openId;
   const activeTown = TOWNS.find((t) => t.id === activeId) || null;
 
   // Allow ESC to clear hover on desktop/pointer devices
@@ -959,9 +1214,13 @@ export default function MapHero({
                         aria-label={t.name}
                         aria-pressed={activeId === t.id}
                         onMouseEnter={() => canHover && setHoverId(t.id)}
-                        onClick={() =>
-                          !canHover && setOpenId((cur) => (cur === t.id ? null : t.id))
-                        }
+                        onClick={() => {
+                          if (!isMobileViewport && canHover) {
+                            setSelectedId(t.id);
+                          } else {
+                            setOpenId((cur) => (cur === t.id ? null : t.id));
+                          }
+                        }}
                       >
                         <span
                           className="pin"
@@ -982,6 +1241,10 @@ export default function MapHero({
                   onDismiss={() => setOpenId(null)}
                   className="flex h-full flex-col"
                   appearance="panel"
+                  isActive={
+                    isDesktopViewport &&
+                    Boolean(selectedId && activeTown && activeTown.id === selectedId)
+                  }
                 />
               </aside>
             </div>
@@ -1007,10 +1270,13 @@ export default function MapHero({
                     aria-label={t.name}
                     aria-pressed={activeId === t.id}
                     onMouseEnter={() => canHover && setHoverId(t.id)}
-                    onClick={() =>
-                      !canHover &&
-                      setOpenId((cur) => (cur === t.id ? null : t.id))
-                    }
+                    onClick={() => {
+                      if (!isMobileViewport && canHover) {
+                        setSelectedId(t.id);
+                      } else {
+                        setOpenId((cur) => (cur === t.id ? null : t.id));
+                      }
+                    }}
                   >
                     <span
                       className="pin"
@@ -1045,105 +1311,130 @@ function TownInsightCard({
   onDismiss,
   className = "",
   appearance = "default",
+  isActive = false,
 }) {
   const isMobile = mode === "mobile";
   const isPanel = appearance === "panel";
+  const isDesktopPanel = isPanel && !isMobile;
   const hasTown = Boolean(town);
 
   const containerClasses = [
     className,
-    isPanel
-      ? isMobile
-        ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
-        : "pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border border-white/12 bg-emerald-950/65 shadow-[0_32px_90px_rgba(2,15,10,0.5)] backdrop-blur-xl"
+    isDesktopPanel
+      ? `pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border transition-colors duration-300 backdrop-blur-xl ${
+          isActive
+            ? "border-emerald-300/60 shadow-[0_36px_110px_rgba(6,50,28,0.5)]"
+            : "border-emerald-900/45 shadow-[0_30px_96px_rgba(3,20,12,0.55)]"
+        }`
+      : isPanel
+      ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
       : isMobile
       ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
-      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(2,33,24,0.18)] backdrop-blur",
+      : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(233,24,0.18)] backdrop-blur",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const headerClasses = [
-    isPanel
-      ? isMobile
-        ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
-        : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
-      : isMobile
-      ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
-      : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white",
-  ].join(" ");
+  const headerClasses = isDesktopPanel
+    ? `flex-none border-b border-emerald-200/20 px-5 py-4 text-emerald-50 transition-colors duration-300 ${
+        isActive ? "bg-white/10" : "bg-white/5"
+      }`
+    : isPanel
+    ? isMobile
+      ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
+      : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
+    : isMobile
+    ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
+    : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white";
 
-  const bodyClasses = [
-    isPanel
-      ? isMobile
-        ? "space-y-4 px-4 py-4 text-emerald-50/90"
-        : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
-      : isMobile
-      ? "space-y-4 px-4 py-4"
-      : "flex-1 space-y-5 overflow-y-auto px-5 py-5",
-  ].join(" ");
+  const bodyClasses = isDesktopPanel
+    ? "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/92 transition-opacity duration-300"
+    : isPanel
+    ? isMobile
+      ? "space-y-4 px-4 py-4 text-emerald-50/90"
+      : "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/90"
+    : isMobile
+    ? "space-y-4 px-4 py-4"
+    : "flex-1 space-y-5 overflow-y-auto px-5 py-5";
+
+  const panelSurfaceStyles = isDesktopPanel
+    ? {
+        backgroundImage:
+          "radial-gradient(140% 140% at 15% 20%, rgba(44,113,73,0.32) 0%, rgba(6,27,16,0.96) 52%, rgba(3,18,11,0.98) 100%)",
+        backgroundColor: "#04190e",
+      }
+    : undefined;
 
   if (!hasTown) {
+    const placeholderAvatarClasses = `flex h-10 w-10 items-center justify-center rounded-full text-lg ${
+      isDesktopPanel
+        ? "bg-white/10 text-emerald-50 ring-1 ring-white/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+        : isPanel
+        ? "bg-white/15"
+        : "bg-white/20"
+    }`;
+    const placeholderSubtitleClasses = `text-[11px] uppercase ${
+      isDesktopPanel
+        ? "tracking-[0.38em] text-emerald-100/70"
+        : isPanel
+        ? "tracking-[0.32em] text-emerald-100/70"
+        : "tracking-[0.32em] text-emerald-100/80"
+    }`;
+    const placeholderTitleClasses = isDesktopPanel
+      ? "text-lg font-semibold leading-tight text-emerald-50 md:text-xl"
+      : "text-lg font-semibold leading-tight md:text-xl";
+    const placeholderBodyClasses = `text-sm ${
+      isDesktopPanel
+        ? "panel-summary md:truncate text-emerald-50/90"
+        : isPanel
+        ? "panel-summary md:truncate text-emerald-50/85"
+        : "truncate text-emerald-900/80"
+    }`;
+    const placeholderChipWrapperClasses = isPanel
+      ? "insights-grid text-sm font-semibold text-emerald-50/95"
+      : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85";
+    const placeholderChipClasses = isPanel
+      ? `chip${isDesktopPanel ? " ring-1 ring-white/15 backdrop-blur-sm" : ""}`
+      : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70";
+    const placeholderFooterClasses = `text-[11px] uppercase tracking-[0.28em] ${
+      isDesktopPanel
+        ? "text-emerald-100/75"
+        : isPanel
+        ? "text-emerald-100/70"
+        : "text-emerald-500/80"
+    }`;
+
     return (
-      <div className={containerClasses}>
+      <div className={containerClasses} style={panelSurfaceStyles}>
         <div className={headerClasses}>
           <div className="flex items-center gap-3">
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg ${
-                isPanel ? "bg-white/15" : "bg-white/20"
-              }`}
-            >
-              🧭
+            <div className={placeholderAvatarClasses}>
+              {isDesktopPanel ? (
+                <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+              ) : (
+                "🧭"
+              )}
             </div>
             <div>
-              <p
-                className={`text-[11px] uppercase tracking-[0.32em] ${
-                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
-                }`}
-              >
-                Town insights
-              </p>
-              <p className="text-lg font-semibold leading-tight md:text-xl">
+              <p className={placeholderSubtitleClasses}>Town insights</p>
+              <p className={placeholderTitleClasses}>
                 Preview prices, commute, schools, and lifestyle.
               </p>
             </div>
           </div>
         </div>
         <div className={bodyClasses}>
-          <p
-            className={`text-sm ${
-              isPanel
-                ? "panel-summary md:truncate text-emerald-50/85"
-                : "truncate text-emerald-900/80"
-            }`}
-          >
-            Hover a town to unlock nightly intel.
+          <p className={placeholderBodyClasses}>
+            Hover or click a town to unlock nightly intel.
           </p>
-          <div
-            className={
-              isPanel
-                ? "insights-grid text-sm font-semibold text-emerald-50/95"
-                : "grid grid-cols-2 gap-2 text-sm font-semibold text-emerald-900/85"
-            }
-          >
+          <div className={placeholderChipWrapperClasses}>
             {PANEL_CHIPS.map((label) => (
-              <div
-                key={label}
-                className={
-                  isPanel
-                    ? "chip"
-                    : "rounded-xl px-3 py-2 text-center shadow-sm border border-emerald-100/70 bg-emerald-50/70"
-                }
-              >
+              <div key={label} className={placeholderChipClasses}>
                 {label}
               </div>
             ))}
           </div>
-          <p
-            className={`text-[11px] uppercase tracking-[0.28em] ${
-              isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
-            }`}
-          >
+          <p className={placeholderFooterClasses}>
             NorthSide GTA • Insights refreshed nightly
           </p>
         </div>
@@ -1151,29 +1442,76 @@ function TownInsightCard({
     );
   }
 
+  const avatarClasses = `flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
+    isDesktopPanel
+      ? isActive
+        ? "bg-white/15 text-emerald-50 ring-2 ring-emerald-200/60 shadow-[0_0_0_1px_rgba(255,255,255,0.18)]"
+        : "bg-white/12 text-emerald-100/85 ring-1 ring-white/20"
+      : isPanel
+      ? "bg-white/15"
+      : "bg-white/20"
+  }`;
+  const headerSubtitleClasses = `text-[11px] uppercase ${
+    isDesktopPanel
+      ? "tracking-[0.38em] text-emerald-100/70"
+      : isPanel
+      ? "tracking-[0.32em] text-emerald-100/70"
+      : "tracking-[0.32em] text-emerald-100/80"
+  }`;
+  const townNameClasses = isDesktopPanel
+    ? "text-lg font-semibold leading-tight tracking-[0.02em] text-emerald-50 md:text-xl"
+    : "text-lg font-semibold leading-tight md:text-xl";
+  const summaryClasses = isDesktopPanel
+    ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+    : isPanel
+    ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
+    : "truncate text-sm md:text-[15px] text-emerald-900/85";
+  const townLogo =
+    town?.logo || (town?.id ? TOWN_LOGO_PATHS[town.id] : undefined);
+  const metricCardVariant = isDesktopPanel
+    ? "border border-emerald-400/20 bg-emerald-950/35 shadow-[0_18px_48px_rgba(3,22,14,0.45)] backdrop-blur-sm"
+    : isPanel
+    ? "border border-white/14 bg-white/8 shadow-black/30"
+    : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10";
+  const footerClasses = `text-[11px] uppercase tracking-[0.28em] ${
+    isDesktopPanel
+      ? "text-emerald-100/75"
+      : isPanel
+      ? "text-emerald-100/70"
+      : "text-emerald-500/80"
+  }`;
+  const seeTownButtonClasses = `inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] transition ${
+    isDesktopPanel
+      ? "bg-white/10 text-emerald-50/90 hover:bg-white/15"
+      : "bg-white/15 text-white hover:bg-white/25"
+  }`;
+
   return (
-    <div className={containerClasses}>
+    <div className={containerClasses} style={panelSurfaceStyles}>
       <div className={headerClasses}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${
-                isPanel ? "bg-white/15" : "bg-white/20"
-              }`}
-            >
-              {town.name.slice(0, 1)}
-            </div>
+            <div className={avatarClasses}>{town.name.slice(0, 1)}</div>
             <div className="text-left">
-              <p
-                className={`text-[11px] uppercase tracking-[0.32em] ${
-                  isPanel ? "text-emerald-100/70" : "text-emerald-100/80"
-                }`}
-              >
-                NorthSide GTA
-              </p>
-              <p className="text-lg font-semibold leading-tight md:text-xl">
-                {town.name}
-              </p>
+              <p className={headerSubtitleClasses}>NorthSide GTA</p>
+              {isDesktopPanel ? (
+                <div className="flex items-center gap-2">
+                  {townLogo ? (
+                    <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
+                      <img
+                        src={townLogo}
+                        alt={`${town.name} emblem`}
+                        className="h-full w-full object-cover"
+                      />
+                    </span>
+                  ) : (
+                    <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+                  )}
+                  <p className={townNameClasses}>{town.name}</p>
+                </div>
+              ) : (
+                <p className={townNameClasses}>{town.name}</p>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -1191,14 +1529,7 @@ function TownInsightCard({
                 ×
               </button>
             ) : null}
-            <a
-              href={town.url}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
-                isPanel
-                  ? "bg-white/15 text-white hover:bg-white/25"
-                  : "bg-white/15 text-white hover:bg-white/25"
-              }`}
-            >
+            <a href={town.url} className={seeTownButtonClasses}>
               See town
             </a>
           </div>
@@ -1206,13 +1537,7 @@ function TownInsightCard({
       </div>
       <div className={bodyClasses}>
         {town.blurb && (
-          <p
-            className={`${
-              isPanel
-                ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
-                : "truncate text-sm md:text-[15px] text-emerald-900/85"
-            }`}
-          >
+          <p className={summaryClasses}>
             {town.blurb}
           </p>
         )}
@@ -1227,26 +1552,19 @@ function TownInsightCard({
           ).map((k) => (
             <div
               key={k}
-              className={`rounded-2xl p-3 shadow-sm ${
-                isPanel
-                  ? "border border-white/14 bg-white/8 shadow-black/30"
-                  : "border border-emerald-100/70 bg-white/70 shadow-emerald-900/10"
-              }`}
+              className={`rounded-2xl p-3 shadow-sm ${metricCardVariant}`}
             >
               <RatingRow
                 label={CATEGORY_LABELS[k]}
                 value={town.ratings[k]}
-                tone={isPanel ? "panel" : "emerald"}
+                tone={isPanel ? (isMobile ? "panel-mobile" : "panel-desktop") : "emerald"}
+                icon={CATEGORY_ICONS[k]}
               />
             </div>
           ))}
         </div>
 
-        <div
-          className={`text-[11px] uppercase tracking-[0.28em] ${
-            isPanel ? "text-emerald-100/70" : "text-emerald-500/80"
-          }`}
-        >
+        <div className={footerClasses}>
           ★★★★★ Google reviews • Local data refreshed nightly
         </div>
       </div>
