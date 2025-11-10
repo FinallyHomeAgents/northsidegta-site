@@ -27,6 +27,16 @@ const CATEGORY_ORDER = [
   "localEvents",
 ];
 
+const TOWN_LOGO_PATHS = {
+  georgina: "/Images/towns/georgina.jpg",
+  "east-gwillimbury": "/Images/towns/eastgwillimbury.jpg",
+  newmarket: "/Images/towns/newmarket.jpg",
+  aurora: "/Images/towns/aurora.jpg",
+  stouffville: "/Images/towns/stouffville.jpg",
+  scugog: "/Images/towns/scugog.jpg",
+  uxbridge: "/Images/towns/uxbridge.jpg",
+};
+
 /* ────────────────────────────────────────────────────────────
    Town pins (percent positions for your SVG map)
    ──────────────────────────────────────────────────────────── */
@@ -38,6 +48,7 @@ const TOWNS = [
     y: 26.74,
     url: "/georgina",
     blurb: "Lake life, beaches, and room to roam.",
+    logo: TOWN_LOGO_PATHS.georgina,
     ratings: {
       housePrices: 5,
       commuterAccess: 4,
@@ -56,6 +67,7 @@ const TOWNS = [
     y: 33.94,
     url: "/east-gwillimbury",
     blurb: "New builds, schools & fast 404 access.",
+    logo: TOWN_LOGO_PATHS["east-gwillimbury"],
     ratings: {
       housePrices: 4,
       commuterAccess: 4,
@@ -74,6 +86,7 @@ const TOWNS = [
     y: 42.86,
     url: "/newmarket",
     blurb: "Shops, dining, and GO convenience.",
+    logo: TOWN_LOGO_PATHS.newmarket,
     ratings: {
       housePrices: 3,
       commuterAccess: 5,
@@ -92,6 +105,7 @@ const TOWNS = [
     y: 49.14,
     url: "/aurora",
     blurb: "Mature neighbourhoods, schools, and quiet streets.",
+    logo: TOWN_LOGO_PATHS.aurora,
     ratings: {
       housePrices: 3,
       commuterAccess: 5,
@@ -110,6 +124,7 @@ const TOWNS = [
     y: 46.86,
     url: "/stouffville",
     blurb: "Family streets, parks & a lively Main Street.",
+    logo: TOWN_LOGO_PATHS.stouffville,
     ratings: {
       housePrices: 4,
       commuterAccess: 4,
@@ -128,6 +143,7 @@ const TOWNS = [
     y: 43.74,
     url: "/scugog",
     blurb: "Port Perry heritage + lakefront sunsets.",
+    logo: TOWN_LOGO_PATHS.scugog,
     ratings: {
       housePrices: 4,
       commuterAccess: 3,
@@ -146,6 +162,7 @@ const TOWNS = [
     y: 41.6,
     url: "/uxbridge",
     blurb: "Trail capital vibes and small-town charm.",
+    logo: TOWN_LOGO_PATHS.uxbridge,
     ratings: {
       housePrices: 3,
       commuterAccess: 3,
@@ -165,6 +182,170 @@ const PANEL_CHIPS = [
   "School scorecards",
   "Lifestyle vibe",
 ];
+
+const CATEGORY_ICONS = {
+  housePrices: function HouseIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M4 11.5L12 5l8 6.5" />
+        <path d="M6.5 10.5V19a1 1 0 0 0 1 1H16.5a1 1 0 0 0 1-1v-8.5" />
+        <path d="M10.25 20v-4.25a.75.75 0 0 1 .75-.75h2a.75.75 0 0 1 .75.75V20" />
+      </svg>
+    );
+  },
+  commuterAccess: function RouteIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M4 19h3" />
+        <path d="M17 19h3" />
+        <path d="M7 19l10-14" />
+        <path d="M5 7.5c0-1.38 1.12-2.5 2.5-2.5S10 6.12 10 7.5 8.88 10 7.5 10 5 8.88 5 7.5Z" />
+        <path d="M14 16.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5Z" />
+      </svg>
+    );
+  },
+  localTraffic: function KeysIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M7 18h10" />
+        <path d="M5 15.5 9 6h6l4 9.5" />
+        <path d="M9.5 13h5" />
+        <path d="M10 9.5h4" />
+      </svg>
+    );
+  },
+  golf: function GolfIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M10 20V4l8 3.5-8 3.5" />
+        <path d="M6 20h12" />
+        <path d="M10 20a2 2 0 1 0 4 0" />
+      </svg>
+    );
+  },
+  fishing: function FishingIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M5 4.5v9a4.5 4.5 0 1 0 9 0v-8" />
+        <path d="M20 5c-2 0-3 .75-3 2.2 0 2.3 3 3.3 3 5.3 0 1.45-1 2.5-2.5 2.5-.9 0-1.64-.42-2.06-1.04" />
+        <path d="M11 8c-.72-1.1-1.95-1.75-3.25-1.75S5.22 6.9 4.5 8" />
+      </svg>
+    );
+  },
+  trailsNature: function TrailsIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M12 3 7 9.5h3V21" />
+        <path d="M12 3 17 9.5h-3V21" />
+        <path d="M8.5 15c.65-.6 1.5-1 2.5-1s1.85.4 2.5 1" />
+        <path d="M8.5 18.5c.65-.6 1.5-1 2.5-1s1.85.4 2.5 1" />
+      </svg>
+    );
+  },
+  restaurants: function DiningIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M6 4v7" />
+        <path d="M10 4v7" />
+        <path d="M6 11c0 1.66 1.12 3 2.5 3S11 12.66 11 11V4" />
+        <path d="M17 4c1.38 0 2.5 1.12 2.5 2.5S18.38 9 17 9h-1V20" />
+      </svg>
+    );
+  },
+  localEvents: function EventsIcon(props) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M7 3v3" />
+        <path d="M17 3v3" />
+        <path d="M4.5 9h15" />
+        <rect x="4.5" y="6" width="15" height="14" rx="2" />
+        <path d="M9 14h2" />
+        <path d="M13 14h2" />
+        <path d="M9 17h2" />
+      </svg>
+    );
+  },
+};
 
 /* ────────────────────────────────────────────────────────────
    Inline styles for map pins/panel polish
@@ -511,7 +692,7 @@ function TownGlyph({ className = "" }) {
 /* ────────────────────────────────────────────────────────────
    Compact rating row
    ──────────────────────────────────────────────────────────── */
-function RatingRow({ label, value, tone = "emerald" }) {
+function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
   const v = Math.round(value || 0);
   const percent = Math.max(0, Math.min(100, (v / 5) * 100));
   const isPanelDesktop = tone === "panel-desktop";
@@ -524,11 +705,17 @@ function RatingRow({ label, value, tone = "emerald" }) {
     ? "text-emerald-50"
     : "text-emerald-900";
 
-  const filledDotClass = isPanelDesktop
-    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200"
+  const iconHaloClass = isPanelDesktop
+    ? "border-white/15 bg-emerald-500/15 text-emerald-100 shadow-[0_4px_12px_rgba(12,74,40,0.45)]"
     : isPanelMobile
-    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-teal-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
-    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_6px_rgba(16,185,129,0.45)]";
+    ? "border-white/25 bg-white/15 text-emerald-50 shadow-[0_3px_10px_rgba(16,185,129,0.4)]"
+    : "border-emerald-200/80 bg-emerald-50 text-emerald-600 shadow-[0_4px_10px_rgba(16,185,129,0.18)]";
+
+  const filledDotClass = isPanelDesktop
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200/90"
+    : isPanelMobile
+    ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_8px_rgba(16,185,129,0.38)]";
 
   const emptyDotClass = isPanelDesktop
     ? "bg-emerald-900/45"
@@ -549,19 +736,28 @@ function RatingRow({ label, value, tone = "emerald" }) {
     : "bg-emerald-100/80";
 
   const fillColor = isPanelDesktop
-    ? "bg-gradient-to-r from-emerald-200 via-teal-200 to-emerald-100"
+    ? "bg-gradient-to-r from-emerald-200 via-emerald-300 to-amber-200"
     : isPanelMobile
-    ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
-    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.45)]";
+    ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
+    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <span
-          className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${labelColor}`}
-        >
-          {label}
-        </span>
+        <div className="flex min-w-0 items-center gap-2">
+          {Icon ? (
+            <span
+              className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border ${iconHaloClass}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </span>
+          ) : null}
+          <span
+            className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${labelColor}`}
+          >
+            {label}
+          </span>
+        </div>
         <div className="flex flex-none items-center gap-1.5">
           <div className="flex items-center gap-[3px]">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -1270,6 +1466,8 @@ function TownInsightCard({
     : isPanel
     ? "panel-summary md:truncate text-sm md:text-[15px] text-emerald-50/90"
     : "truncate text-sm md:text-[15px] text-emerald-900/85";
+  const townLogo =
+    town?.logo || (town?.id ? TOWN_LOGO_PATHS[town.id] : undefined);
   const metricCardVariant = isDesktopPanel
     ? "border border-emerald-400/20 bg-emerald-950/35 shadow-[0_18px_48px_rgba(3,22,14,0.45)] backdrop-blur-sm"
     : isPanel
@@ -1282,7 +1480,7 @@ function TownInsightCard({
       ? "text-emerald-100/70"
       : "text-emerald-500/80"
   }`;
-  const seeTownButtonClasses = `inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] transition ${
+  const seeTownButtonClasses = `inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] transition ${
     isDesktopPanel
       ? "bg-white/10 text-emerald-50/90 hover:bg-white/15"
       : "bg-white/15 text-white hover:bg-white/25"
@@ -1298,7 +1496,17 @@ function TownInsightCard({
               <p className={headerSubtitleClasses}>NorthSide GTA</p>
               {isDesktopPanel ? (
                 <div className="flex items-center gap-2">
-                  <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+                  {townLogo ? (
+                    <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
+                      <img
+                        src={townLogo}
+                        alt={`${town.name} emblem`}
+                        className="h-full w-full object-cover"
+                      />
+                    </span>
+                  ) : (
+                    <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+                  )}
                   <p className={townNameClasses}>{town.name}</p>
                 </div>
               ) : (
@@ -1350,6 +1558,7 @@ function TownInsightCard({
                 label={CATEGORY_LABELS[k]}
                 value={town.ratings[k]}
                 tone={isPanel ? (isMobile ? "panel-mobile" : "panel-desktop") : "emerald"}
+                icon={CATEGORY_ICONS[k]}
               />
             </div>
           ))}
