@@ -741,10 +741,17 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
     ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
     : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
 
+  const labelContainerClasses = `flex min-w-0 items-center gap-2 ${
+    isPanelDesktop ? "flex-1" : ""
+  }`;
+  const labelTextClasses = `block min-w-0 pr-1 text-left text-[12px] font-semibold md:text-[13px] ${labelColor} ${
+    isPanelDesktop ? "break-words leading-tight" : ""
+  }`;
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2">
+        <div className={labelContainerClasses}>
           {Icon ? (
             <span
               className={`flex h-6 w-6 flex-none items-center justify-center rounded-full border ${iconHaloClass}`}
@@ -752,13 +759,11 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
               <Icon className="h-3.5 w-3.5" />
             </span>
           ) : null}
-          <span
-            className={`min-w-0 pr-1 text-[12px] font-semibold md:text-[13px] ${labelColor}`}
-          >
+          <span className={labelTextClasses}>
             {label}
           </span>
         </div>
-        <div className="flex flex-none items-center gap-1.5">
+        <div className="flex flex-none shrink-0 items-center gap-1.5">
           <div className="flex items-center gap-[3px]">
             {Array.from({ length: 5 }).map((_, i) => (
               <span
@@ -1489,13 +1494,13 @@ function TownInsightCard({
   return (
     <div className={containerClasses} style={panelSurfaceStyles}>
       <div className={headerClasses}>
-        <div className="flex items-start justify-between gap-3">
+        {isDesktopPanel ? (
           <div className="flex items-center gap-3">
             <div className={avatarClasses}>{town.name.slice(0, 1)}</div>
-            <div className="text-left">
-              <p className={headerSubtitleClasses}>NorthSide GTA</p>
-              {isDesktopPanel ? (
-                <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <div className="min-w-0 text-left">
+                <p className={headerSubtitleClasses}>NorthSide GTA</p>
+                <div className="flex min-w-0 items-center gap-2">
                   {townLogo ? (
                     <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
                       <img
@@ -1507,33 +1512,64 @@ function TownInsightCard({
                   ) : (
                     <TownGlyph className="h-5 w-5 text-emerald-100/85" />
                   )}
-                  <p className={townNameClasses}>{town.name}</p>
+                  <p className={`${townNameClasses} min-w-0 truncate`}>{town.name}</p>
                 </div>
-              ) : (
-                <p className={townNameClasses}>{town.name}</p>
-              )}
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isMobile && onDismiss ? (
-              <button
-                type="button"
-                onClick={onDismiss}
-                aria-label="Close town panel"
-                className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-base transition ${
-                  isPanel
-                    ? "bg-white/20 text-white hover:bg-white/30"
-                    : "bg-white/15 text-white hover:bg-white/25"
-                }`}
-              >
-                ×
-              </button>
-            ) : null}
-            <a href={town.url} className={seeTownButtonClasses}>
+            <a
+              href={town.url}
+              className={`${seeTownButtonClasses} ml-auto shrink-0`}
+            >
               See town
             </a>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className={avatarClasses}>{town.name.slice(0, 1)}</div>
+              <div className="text-left">
+                <p className={headerSubtitleClasses}>NorthSide GTA</p>
+                {isDesktopPanel ? (
+                  <div className="flex items-center gap-2">
+                    {townLogo ? (
+                      <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
+                        <img
+                          src={townLogo}
+                          alt={`${town.name} emblem`}
+                          className="h-full w-full object-cover"
+                        />
+                      </span>
+                    ) : (
+                      <TownGlyph className="h-5 w-5 text-emerald-100/85" />
+                    )}
+                    <p className={townNameClasses}>{town.name}</p>
+                  </div>
+                ) : (
+                  <p className={townNameClasses}>{town.name}</p>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {isMobile && onDismiss ? (
+                <button
+                  type="button"
+                  onClick={onDismiss}
+                  aria-label="Close town panel"
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-base transition ${
+                    isPanel
+                      ? "bg-white/20 text-white hover:bg-white/30"
+                      : "bg-white/15 text-white hover:bg-white/25"
+                  }`}
+                >
+                  ×
+                </button>
+              ) : null}
+              <a href={town.url} className={seeTownButtonClasses}>
+                See town
+              </a>
+            </div>
+          </div>
+        )}
       </div>
       <div className={bodyClasses}>
         {town.blurb && (
