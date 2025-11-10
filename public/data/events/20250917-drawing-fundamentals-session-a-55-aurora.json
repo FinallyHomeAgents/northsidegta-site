@@ -400,16 +400,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/drawing-fundamentals-1-55-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002671-1758067200-1763596799@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-08T08:31:22.114Z",
-  "updatedAt": "2025-11-08T08:31:22.114Z",
-  "featured": false
+  "updatedAt": "2025-11-08T08:31:22Z"
 }

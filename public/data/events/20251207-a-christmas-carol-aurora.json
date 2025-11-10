@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/a-christmas-carol-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002609-1765105200-1765108800@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-10T08:37:14.123Z",
-  "firstSeenAt": "2025-11-10T08:37:14.123Z",
-  "updatedAt": "2025-11-10T08:37:14.123Z",
-  "featured": false
+  "updatedAt": "2025-11-10T08:37:14Z"
 }

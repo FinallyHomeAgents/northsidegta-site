@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/late-fall-halls-soiree-25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002712-1764873000-1764880200@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-09T08:30:17.334Z",
-  "firstSeenAt": "2025-11-09T08:30:17.334Z",
-  "updatedAt": "2025-11-09T08:30:17.334Z",
-  "featured": false
+  "updatedAt": "2025-11-09T08:30:17Z"
 }
