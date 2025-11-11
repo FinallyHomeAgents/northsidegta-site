@@ -71,7 +71,7 @@ function ComparisonGrid() {
     "AI-assisted insights tailored to your criteria",
   ];
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_45px_130px_rgba(4,47,35,0.5)]">
+    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_45px_130px_rgba(34,68,10,0.5)]">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/15 via-emerald-500/10 to-emerald-700/5" aria-hidden />
       <div className="relative z-10 grid overflow-hidden md:grid-cols-2">
         {/* Left: On your own */}
@@ -270,8 +270,8 @@ function BuyerSignupForm() {
 
   if (done) {
     return (
-      <div className="relative overflow-hidden rounded-[36px] border border-white/15 bg-emerald-500/20 p-8 text-white shadow-[0_40px_120px_rgba(4,47,35,0.55)]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_65%)]" aria-hidden />
+      <div className="relative overflow-hidden rounded-[36px] border border-white/15 bg-emerald-500/20 p-8 text-white shadow-[0_40px_120px_rgba(34,68,10,0.55)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.4),_transparent_65%)]" aria-hidden />
         <div className="relative z-10 flex flex-col gap-3 text-center sm:text-left">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
             <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20">
@@ -293,10 +293,10 @@ function BuyerSignupForm() {
   return (
     <div
       id="buyers-registration"
-      className="relative overflow-hidden rounded-[40px] bg-gradient-to-br from-emerald-400/50 via-emerald-500/35 to-emerald-600/45 p-[1.5px] shadow-[0_55px_140px_rgba(4,47,35,0.55)]"
+      className="relative overflow-hidden rounded-[40px] bg-gradient-to-br from-emerald-400/50 via-emerald-500/35 to-emerald-600/45 p-[1.5px] shadow-[0_55px_140px_rgba(34,68,10,0.55)]"
     >
       <div className="relative overflow-hidden rounded-[38px] border border-white/10 bg-slate-900/85 p-6 backdrop-blur-xl md:p-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.28),_transparent_65%)]" aria-hidden />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.28),_transparent_65%)]" aria-hidden />
         <div className="pointer-events-none absolute inset-0 opacity-30 mix-blend-screen" style={{ backgroundImage: "url('/Images/northside-map-grid.png')", backgroundSize: "cover" }} aria-hidden />
 
         <div className="relative z-10">
@@ -693,7 +693,7 @@ export default function BuyersPage() {
       </DynamicMetaTags>
 
       <main className="relative">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_65%)]" aria-hidden />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.25),_transparent_65%)]" aria-hidden />
         <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
         <div className="pointer-events-none absolute bottom-[-40%] right-[-20%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/20 blur-3xl" aria-hidden />
 
@@ -733,7 +733,7 @@ export default function BuyersPage() {
           </section>
 
           <section className="mt-20">
-            <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-10 text-center shadow-[0_45px_130px_rgba(4,47,35,0.6)]">
+            <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-10 text-center shadow-[0_45px_130px_rgba(34,68,10,0.6)]">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_transparent_70%)]" aria-hidden />
               <div className="relative z-10 space-y-4">
                 <h3 className="text-3xl font-semibold md:text-4xl">Don’t Leave Power on the Table</h3>

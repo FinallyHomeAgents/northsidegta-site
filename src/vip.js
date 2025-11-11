@@ -70,7 +70,7 @@ export default function VipPage() {
           style={{ backgroundImage: `url('/vip-bg.png')` }}
         >
           <form onSubmit={handlePasswordSubmit} className="bg-white bg-opacity-90 p-8 rounded-xl shadow-md max-w-md w-full">
-            <h1 className="text-2xl font-bold mb-4 text-center text-green-700">VIP Access Only</h1>
+            <h1 className="text-2xl font-bold mb-4 text-center text-brand-green">VIP Access Only</h1>
             <p className="text-center text-gray-600 mb-6">
               This page is by invitation only. Please enter your password to continue.
             </p>
@@ -81,7 +81,10 @@ export default function VipPage() {
               onChange={(e) => setEnteredPassword(e.target.value)}
               className="w-full px-4 py-2 border rounded mb-4"
             />
-            <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+            <button
+              type="submit"
+              className="w-full rounded bg-brand-green py-2 text-white transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+            >
               Enter
             </button>
           </form>
@@ -97,7 +100,7 @@ export default function VipPage() {
         <Navigation />
         <div className="min-h-screen bg-white flex items-center justify-center px-4">
           <form onSubmit={handleInfoSubmit} className="bg-gray-100 p-8 rounded-xl shadow-md max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4 text-center text-green-700">You're In!</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center text-brand-green">You're In!</h2>
             <p className="text-center text-gray-600 mb-6">
               You've been accepted into the VIP Club. Please provide your contact details to unlock your VIP perks.
             </p>
@@ -125,7 +128,10 @@ export default function VipPage() {
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="w-full px-4 py-2 border rounded mb-4"
             />
-            <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+            <button
+              type="submit"
+              className="w-full rounded bg-brand-green py-2 text-white transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+            >
               Submit
             </button>
           </form>
@@ -167,12 +173,12 @@ export default function VipPage() {
           </ul>
         </section>
 
-        <section className="bg-green-600 text-white py-12 px-6 text-center">
+        <section className="bg-[linear-gradient(180deg,#32610E_0%,#22440A_100%)] text-white py-12 px-6 text-center">
           <h2 className="text-2xl font-bold mb-2">You're In.</h2>
           <p className="mb-6">Explore your VIP tools and stay tuned for what's next.</p>
           <a
             href="/"
-            className="bg-white text-green-700 font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition"
+            className="rounded-xl bg-white px-6 py-3 font-semibold text-brand-green transition hover:bg-gray-100"
           >
             Return Home
           </a>

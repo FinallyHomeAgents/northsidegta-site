@@ -62,7 +62,7 @@ export default function Navigation() {
         }
 
         .header-purpose-line {
-          background-image: linear-gradient(90deg, #32610E 0%, #4FAE22 100%);
+          background-image: linear-gradient(90deg, #32610E 0%, #22440A 100%);
           background-size: 0% 2px;
           background-repeat: no-repeat;
           background-position: left bottom;
@@ -129,9 +129,9 @@ export default function Navigation() {
                   className="
                     relative text-[15px] tracking-wide
                     transition duration-200
-                    hover:text-emerald-700
+                    hover:text-brand-green
                     after:content-[''] after:absolute after:-bottom-1 after:left-0
-                    after:w-0 after:h-[2px] after:bg-emerald-600 after:transition-all after:duration-200
+                    after:w-0 after:h-[2px] after:bg-brand-green after:transition-all after:duration-200
                     hover:after:w-full
                   "
                 >
@@ -144,13 +144,14 @@ export default function Navigation() {
             <Link
               to="/contact"
               className="
-                inline-flex items-center
-                rounded-lg bg-emerald-700 px-4 py-2
+                ml-2 inline-flex items-center
+                rounded-lg bg-brand-green px-4 py-2
                 text-white font-semibold shadow-sm
-                transition ml-2
-                hover:bg-emerald-800
+                transition
+                hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]
                 hover:-translate-y-[1px]
                 hover:shadow-md
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2
               "
               onMouseEnter={(e) => {
                 e.currentTarget.style.animation = "btnLift 200ms ease-out forwards";
@@ -198,7 +199,7 @@ export default function Navigation() {
                 <Link
                   to="/contact"
                   onClick={toggleMenu}
-                  className="block bg-emerald-700 text-white text-center px-4 py-2 rounded-md hover:bg-emerald-800 transition"
+                  className="block rounded-md bg-brand-green px-4 py-2 text-center text-white transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
                 >
                   Let’s&nbsp;Talk
                 </Link>

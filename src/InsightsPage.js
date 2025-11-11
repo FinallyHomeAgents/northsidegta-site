@@ -83,7 +83,7 @@ function InsightsHero() {
           Stories, market updates, and local perspectives from across the NorthSide.
         </p>
       </div>
-      <figure className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[36px] border border-emerald-100 bg-white/95 shadow-[0_40px_110px_rgba(16,185,129,0.18)]">
+      <figure className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[36px] border border-emerald-100 bg-white/95 shadow-[0_40px_110px_rgba(50,97,14,0.18)]">
         <img
           src="/uploads/insights-hero-finally-home-agents.jpg"
           alt="Person typing on a laptop that shows the words Community Insights, with a fireplace and coffee in the background, representing NorthSide GTA real estate insights."
@@ -268,7 +268,7 @@ export default function InsightsPage() {
             <button
               type="button"
               onClick={loadMore}
-              className="rounded-full border border-emerald-300 px-5 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
+              className="rounded-full border border-brand-green/40 px-5 py-2 text-sm font-semibold text-brand-green transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
             >
               Load more
             </button>

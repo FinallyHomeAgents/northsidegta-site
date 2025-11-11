@@ -9,8 +9,8 @@ function ButtonLink({ href, label, variant = "primary" }) {
 
   const variantClasses =
     variant === "secondary"
-      ? "bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-50 focus:ring-emerald-300 focus:ring-offset-emerald-900"
-      : "bg-emerald-600 text-white shadow hover:bg-emerald-500 focus:ring-emerald-200 focus:ring-offset-emerald-900";
+      ? "border border-brand-green/40 bg-white text-brand-green hover:bg-brand-green/10 focus:ring-brand-green/40 focus:ring-offset-emerald-900"
+      : "bg-brand-green text-white shadow transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:ring-brand-green/50 focus:ring-offset-emerald-900";
 
   const className = `${baseClasses} ${variantClasses}`;
 
@@ -34,15 +34,15 @@ function ButtonLink({ href, label, variant = "primary" }) {
 function IconBubble({ icon: Icon, label }) {
   if (!Icon) {
     return (
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-semibold">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-green/10 font-semibold text-brand-green">
         {label ? label.charAt(0) : ""}
       </div>
     );
   }
 
   return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-      <Icon className="h-6 w-6 text-emerald-700" aria-hidden />
+    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-green/10">
+      <Icon className="h-6 w-6 text-brand-green" aria-hidden />
     </div>
   );
 }

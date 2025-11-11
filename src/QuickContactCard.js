@@ -130,8 +130,8 @@ export default function QuickContactCard({
     baseContainer,
     overlay
       ? open
-        ? "flex h-full flex-col overflow-hidden overflow-y-auto border border-white/14 bg-emerald-950/75 p-5 md:p-6 shadow-[0_32px_90px_rgba(2,15,10,0.5)] backdrop-blur-xl"
-        : "flex h-full flex-col justify-between border border-white/14 bg-emerald-950/65 p-5 md:p-6 shadow-[0_32px_90px_rgba(2,15,10,0.45)] backdrop-blur-xl"
+        ? "flex h-full flex-col overflow-hidden overflow-y-auto border border-white/14 bg-emerald-950/75 p-5 md:p-6 shadow-[0_32px_90px_rgba(18,36,12,0.5)] backdrop-blur-xl"
+        : "flex h-full flex-col justify-between border border-white/14 bg-emerald-950/65 p-5 md:p-6 shadow-[0_32px_90px_rgba(18,36,12,0.45)] backdrop-blur-xl"
       : open
       ? "border border-emerald-200 bg-white/95 p-4 md:p-5 shadow-sm"
       : "border border-white/25 bg-white/5 p-4 md:p-5 shadow-sm backdrop-blur-sm",
@@ -225,9 +225,9 @@ export default function QuickContactCard({
               onClick={() => setOpenState(true)}
               className={`
                 px-5 py-2.5 rounded-xl font-bold tracking-wide
-                bg-emerald-700 text-white hover:bg-emerald-800
-                shadow-[0_4px_12px_rgba(16,185,129,0.35)]
-                transition
+                bg-brand-green text-white shadow-[0_4px_12px_rgba(50,97,14,0.35)]
+                transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2
                 w-full ${overlay ? "" : "sm:w-auto"}
               `}
             >
@@ -438,10 +438,10 @@ export default function QuickContactCard({
                       "px-3 py-1.5 rounded-md text-sm font-medium transition",
                       overlay
                         ? pref === opt
-                          ? "bg-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,0.45)]"
+                          ? "bg-emerald-500 text-white shadow-[0_0_14px_rgba(50,97,14,0.45)]"
                           : "text-emerald-100 hover:bg-white/10"
                         : pref === opt
-                        ? "bg-emerald-600 text-white"
+                        ? "bg-brand-green text-white hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                         : "text-gray-700 hover:bg-gray-50",
                     ].join(" ")}
                     onClick={() => setPref(opt)}
@@ -470,10 +470,10 @@ export default function QuickContactCard({
                     "px-3 py-1.5 rounded-full border text-sm transition",
                     overlay
                       ? allChecked
-                        ? "border-emerald-400 bg-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,0.45)]"
+                        ? "border-emerald-400 bg-emerald-500 text-white shadow-[0_0_14px_rgba(50,97,14,0.45)]"
                         : "border-white/18 text-emerald-100 hover:bg-white/10"
                       : allChecked
-                      ? "bg-emerald-600 text-white border-emerald-600"
+                      ? "bg-brand-green text-white border-brand-green hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                       : "border-emerald-300 hover:bg-gray-50",
                   ].join(" ")}
                 >
@@ -491,10 +491,10 @@ export default function QuickContactCard({
                         "px-3 py-1.5 rounded-full border text-sm transition",
                         overlay
                           ? on
-                            ? "border-emerald-400 bg-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,0.45)]"
+                            ? "border-emerald-400 bg-emerald-500 text-white shadow-[0_0_14px_rgba(50,97,14,0.45)]"
                             : "border-white/18 text-emerald-100 hover:bg-white/10"
                           : on
-                          ? "bg-emerald-600 text-white border-emerald-600"
+                          ? "bg-brand-green text-white border-brand-green hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                           : "border-emerald-300 hover:bg-gray-50",
                       ].join(" ")}
                     >
@@ -545,10 +545,10 @@ export default function QuickContactCard({
                 "px-4 py-2 rounded-lg font-semibold transition",
                 overlay
                   ? canSubmit
-                    ? "bg-emerald-500 text-white shadow-[0_0_18px_rgba(16,185,129,0.5)] hover:bg-emerald-400"
+                    ? "bg-emerald-500 text-white shadow-[0_0_18px_rgba(50,97,14,0.5)] hover:bg-emerald-400"
                     : "bg-white/10 text-emerald-100/60 cursor-not-allowed"
                   : canSubmit
-                  ? "bg-emerald-700 text-white hover:bg-emerald-800"
+                  ? "bg-brand-green text-white hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                   : "bg-emerald-200 text-emerald-900/60 cursor-not-allowed",
               ].join(" ")}
             >

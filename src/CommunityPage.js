@@ -319,7 +319,7 @@ export default function CommunityPage() {
                   onClick={() => setView(option.value)}
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 ${
                     view === option.value
-                      ? 'bg-emerald-600 text-white shadow-sm'
+                      ? 'bg-brand-green text-white shadow-sm hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                   aria-pressed={view === option.value}

@@ -356,9 +356,9 @@ const useIsomorphicLayoutEffect =
 const Styles = () => (
   <style>{`
   @keyframes pinPulse {
-    0%   { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.40); }
-    70%  { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 0 14px rgba(16,185,129,0.00); }
-    100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.00); }
+    0%   { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(50,97,14,0.35); }
+    70%  { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 0 14px rgba(50,97,14,0.00); }
+    100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(50,97,14,0.00); }
   }
   .pin-wrap {
     position:absolute;
@@ -369,7 +369,7 @@ const Styles = () => (
   .pin {
     position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
     width:14px; height:14px; border-radius:999px; border:2px solid #fff;
-    background: radial-gradient(65% 65% at 35% 35%, #34d399 0%, #059669 60%, #047857 100%);
+    background: radial-gradient(65% 65% at 35% 35%, #32610E 0%, #28520C 60%, #22440A 100%);
     animation: pinPulse 2s ease-out infinite;
   }
   /* ===== Desktop Hero Layout — 20 | 60 | 20 ===== */
@@ -706,16 +706,16 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
     : "text-emerald-900";
 
   const iconHaloClass = isPanelDesktop
-    ? "border-white/15 bg-emerald-500/15 text-emerald-100 shadow-[0_4px_12px_rgba(12,74,40,0.45)]"
+    ? "border-white/15 bg-emerald-500/15 text-emerald-100 shadow-[0_4px_12px_rgba(34,68,10,0.45)]"
     : isPanelMobile
-    ? "border-white/25 bg-white/15 text-emerald-50 shadow-[0_3px_10px_rgba(16,185,129,0.4)]"
-    : "border-emerald-200/80 bg-emerald-50 text-emerald-600 shadow-[0_4px_10px_rgba(16,185,129,0.18)]";
+    ? "border-white/25 bg-white/15 text-emerald-50 shadow-[0_3px_10px_rgba(50,97,14,0.4)]"
+    : "border-emerald-200/80 bg-emerald-50 text-emerald-600 shadow-[0_4px_10px_rgba(50,97,14,0.18)]";
 
   const filledDotClass = isPanelDesktop
     ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200/90"
     : isPanelMobile
     ? "bg-gradient-to-br from-emerald-200 via-emerald-300 to-amber-200 shadow-[0_0_8px_rgba(94,234,212,0.45)]"
-    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_8px_rgba(16,185,129,0.38)]";
+    : "bg-gradient-to-br from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_8px_rgba(50,97,14,0.38)]";
 
   const emptyDotClass = isPanelDesktop
     ? "bg-emerald-900/45"
@@ -739,7 +739,7 @@ function RatingRow({ label, value, tone = "emerald", icon: Icon }) {
     ? "bg-gradient-to-r from-emerald-200 via-emerald-300 to-amber-200"
     : isPanelMobile
     ? "bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 shadow-[0_0_12px_rgba(94,234,212,0.45)]"
-    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]";
+    : "bg-gradient-to-r from-emerald-400 via-emerald-500 to-amber-300 shadow-[0_0_12px_rgba(50,97,14,0.3)]";
 
   const rowLayoutClasses = isPanelDesktop
     ? "grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3"
@@ -1162,7 +1162,7 @@ export default function MapHero({
                         </h3>
                         <button
                           type="button"
-                          className="mobile-accordion-trigger inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_4px_12px_rgba(16,185,129,0.35)] transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-emerald-950"
+                          className="mobile-accordion-trigger inline-flex w-full items-center justify-center rounded-xl bg-brand-green px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_4px_12px_rgba(50,97,14,0.35)] transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:ring-offset-2 focus:ring-offset-emerald-950"
                           aria-expanded={mobileMatchOpen}
                           aria-controls={accordionRegionId}
                           onClick={handleMobileAccordionToggle}
@@ -1335,11 +1335,11 @@ function TownInsightCard({
     isDesktopPanel
       ? `pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border transition-colors duration-300 backdrop-blur-xl ${
           isActive
-            ? "border-emerald-300/60 shadow-[0_36px_110px_rgba(6,50,28,0.5)]"
-            : "border-emerald-900/45 shadow-[0_30px_96px_rgba(3,20,12,0.55)]"
+            ? "border-emerald-300/60 shadow-[0_36px_110px_rgba(34,68,10,0.5)]"
+            : "border-emerald-900/45 shadow-[0_30px_96px_rgba(24,47,10,0.55)]"
         }`
       : isPanel
-      ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(2,15,10,0.45)] backdrop-blur-xl"
+      ? "flex flex-col overflow-hidden rounded-[26px] border border-white/12 bg-emerald-950/75 shadow-[0_24px_60px_rgba(18,36,12,0.45)] backdrop-blur-xl"
       : isMobile
       ? "rounded-[26px] border border-emerald-200/80 bg-white/96 shadow-xl shadow-emerald-900/10"
       : "pointer-events-auto overflow-hidden rounded-[30px] border border-emerald-200/70 bg-white/96 shadow-[0_24px_60px_rgba(233,24,0.18)] backdrop-blur",
@@ -1356,8 +1356,8 @@ function TownInsightCard({
       ? "flex-none border-b border-white/12 bg-white/10 px-4 py-3 text-white"
       : "flex-none border-b border-white/10 bg-white/8 px-5 py-4 text-white"
     : isMobile
-    ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-4 py-3 text-white"
-    : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 px-5 py-4 text-white";
+    ? "flex-none rounded-t-[26px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 px-4 py-3 text-white"
+    : "flex-none rounded-t-[30px] bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 px-5 py-4 text-white";
 
   const bodyClasses = isDesktopPanel
     ? "flex-1 space-y-5 overflow-y-auto px-5 py-5 text-emerald-50/92 transition-opacity duration-300"
@@ -1514,7 +1514,7 @@ function TownInsightCard({
                 <p className={headerSubtitleClasses}>NorthSide GTA</p>
                 <div className="flex min-w-0 items-center gap-2">
                   {townLogo ? (
-                    <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
+                    <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(34,68,10,0.45)]">
                       <img
                         src={townLogo}
                         alt={`${town.name} emblem`}
@@ -1546,7 +1546,7 @@ function TownInsightCard({
                 {isDesktopPanel ? (
                   <div className="flex items-center gap-2">
                     {townLogo ? (
-                      <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(12,74,40,0.45)]">
+                      <span className="flex h-6 w-6 flex-none items-center justify-center overflow-hidden rounded-full border border-white/20 bg-emerald-500/20 shadow-[0_6px_16px_rgba(34,68,10,0.45)]">
                         <img
                           src={townLogo}
                           alt={`${town.name} emblem`}

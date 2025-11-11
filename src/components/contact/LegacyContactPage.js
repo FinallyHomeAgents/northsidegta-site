@@ -109,7 +109,7 @@ export default function LegacyContactPage() {
           <Card className="text-center space-y-4 sm:space-y-5 p-6 sm:p-10">
             <div className="flex justify-center gap-4">
               <FaTrophy   className="w-8 h-8 sm:w-10 sm:h-10 text-yellow-500"/>
-              <FaHandshake className="w-8 h-8 sm:w-10 sm:h-10 text-green-600"/>
+              <FaHandshake className="w-8 h-8 sm:w-10 sm:h-10 text-brand-green"/>
             </div>
 
             <h1 className="text-xl sm:text-3xl md:text-4xl font-bold leading-tight">
@@ -141,7 +141,7 @@ export default function LegacyContactPage() {
             Call, chat, or drop us a quick note — whichever’s easiest. We reply fast.
           </p>
           <p className="flex justify-center">
-            <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+            <span className="inline-block rounded-full bg-brand-green/10 px-3 py-1 text-xs font-medium text-brand-green sm:text-sm">
               💬 We reply within 1&nbsp;hour&nbsp;(9&nbsp;am&nbsp;–&nbsp;9&nbsp;pm)
             </span>
           </p>
@@ -182,8 +182,8 @@ export default function LegacyContactPage() {
               </Button>
             </form>
           ) : (
-            <Card className="p-6 text-center bg-green-50">
-              <h3 className="text-xl font-semibold text-green-700 mb-2">Thank you!</h3>
+            <Card className="p-6 text-center bg-emerald-50">
+              <h3 className="mb-2 text-xl font-semibold text-brand-green">Thank you!</h3>
               <p className="text-sm text-muted-foreground">
                 Your message is on its way. We’ll respond within the hour.
               </p>

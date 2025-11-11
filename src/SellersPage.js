@@ -83,7 +83,7 @@ function SellerHero() {
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_65%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_65%)]"
         aria-hidden
       />
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
@@ -307,7 +307,7 @@ function SellerLeadCapture() {
             aria-hidden="true"
           />
           <div
-            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/70"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/70"
             aria-hidden
           />
 
@@ -382,7 +382,7 @@ function SellerLeadCapture() {
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/70"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/70"
           aria-hidden
         />
 
@@ -413,7 +413,7 @@ function SellerLeadCapture() {
           <div className="mt-6">
             <div className="h-2 w-full overflow-hidden rounded-full bg-emerald-100/70">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-400 transition-all"
+                className="h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 transition-all"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -504,7 +504,7 @@ function SellerLeadCapture() {
 
               <button
                 type="submit"
-                className="inline-flex items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50"
+                className="inline-flex items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50"
               >
                 Continue to Step 2
               </button>
@@ -583,7 +583,7 @@ function SellerLeadCapture() {
                     max="10"
                     value={form.condition}
                     onChange={update}
-                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#059669]"
+                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#32610E]"
                   />
                   <div className="mt-1 text-xs text-slate-600">{form.condition}/10</div>
                 </label>
@@ -596,7 +596,7 @@ function SellerLeadCapture() {
                     max="10"
                     value={form.upgrades}
                     onChange={update}
-                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#059669]"
+                    className="mt-2 h-2 w-full appearance-none rounded-full bg-emerald-100 [accent-color:#32610E]"
                   />
                   <div className="mt-1 text-xs text-slate-600">{form.upgrades}/10</div>
                 </label>
@@ -799,7 +799,7 @@ function SellerLeadCapture() {
                 <button
                   type="submit"
                   disabled={!requiredOk || sending}
-                  className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-teal-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50 disabled:cursor-not-allowed disabled:border-emerald-200 disabled:from-emerald-400 disabled:to-emerald-400 disabled:opacity-70"
+                  className="inline-flex w-full items-center justify-center rounded-xl border border-emerald-500/60 bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 px-5 py-3 font-semibold text-white shadow-xl shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-emerald-50 disabled:cursor-not-allowed disabled:border-emerald-200 disabled:from-emerald-400 disabled:to-emerald-400 disabled:opacity-70"
                 >
                   {sending ? "Sending…" : "Get My Home Value"}
                 </button>
@@ -818,7 +818,7 @@ function SellerTimeline() {
   return (
     <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/60"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/60"
         aria-hidden
       />
       <div className="relative z-10">
@@ -853,7 +853,7 @@ function SellerMediaSection() {
   return (
     <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-teal-100/60"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/60"
         aria-hidden
       />
       <div className="relative z-10 space-y-6 text-center">

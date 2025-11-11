@@ -74,7 +74,7 @@ function DotRow({ value = 0 }) {
         <span
           key={i}
           className={`inline-block h-2.5 w-2.5 rounded-full ${
-            i < v ? "bg-emerald-600" : "bg-gray-300"
+            i < v ? "bg-brand-green" : "bg-gray-300"
           }`}
         />
       ))}
@@ -105,7 +105,7 @@ export default function TownPage() {
           </p>
           <Link
             to="/"
-            className="inline-block bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800 transition"
+            className="inline-block rounded bg-brand-green px-4 py-2 text-white transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
           >
             Back to Home
           </Link>

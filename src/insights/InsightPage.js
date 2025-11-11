@@ -1135,7 +1135,7 @@ function Hero({ insight, loading, featureImageAlt }) {
         />
       </div>
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.22),_transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.22),_transparent_60%)]"
         aria-hidden
       />
       <div

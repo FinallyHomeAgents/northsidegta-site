@@ -1724,7 +1724,7 @@ export default function SubmitEventPage() {
                   'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-lg transition',
                   submitting
                     ? 'cursor-wait border border-emerald-200 bg-emerald-200 text-emerald-800'
-                    : 'border border-emerald-600 bg-emerald-600 text-white hover:border-emerald-700 hover:bg-emerald-700'
+                    : 'border border-brand-green/60 bg-brand-green text-white hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2'
                 )}
               >
                 {submitting ? 'Submitting…' : 'Submit for review'}
