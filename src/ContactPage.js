@@ -158,14 +158,14 @@ function ContactPageV2() {
                 name="Matthew Mulhall"
                 role="Co-founder, Finally Home Agents"
                 summary="NorthSide GTA real estate advisor."
-                imageSrc="/uploads/matthew-headshot.jpg"
+                imageSrc="/Images/matthew.jpg"
                 imageAlt="Headshot of Matthew Mulhall, co-founder of Finally Home Agents."
               />
               <AgentCard
                 name="Landon Mulhall"
                 role="Co-founder, Finally Home Agents"
                 summary="NorthSide GTA real estate advisor."
-                imageSrc="/uploads/landon-headshot.jpg"
+                imageSrc="/Images/landon.jpg"
                 imageAlt="Headshot of Landon Mulhall, co-founder of Finally Home Agents."
               />
             </div>
