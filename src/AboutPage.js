@@ -149,6 +149,23 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* ───────── About Hero Image ───────── */}
+        <section className="px-4">
+          <div className="mx-auto mt-16 w-full max-w-6xl pb-12">
+            <figure className="overflow-hidden rounded-[36px] border border-emerald-100 bg-white/90 shadow-2xl shadow-emerald-100/60">
+              <img
+                src="/uploads/about-hero-finally-home-agents.jpg"
+                alt="Matthew and Landon Mulhall of Finally Home Agents standing on a stylized landscape background at sunset, representing their NorthSide GTA real estate approach."
+                className="h-auto w-full object-cover"
+                loading="lazy"
+              />
+              <figcaption className="px-6 py-4 text-sm font-medium text-emerald-900/80 sm:px-8 sm:py-5 sm:text-base">
+                Built on trust, strategy, and community — the Finally Home Agents story.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
         {/* ───────── Metrics Strip ───────── */}
         <section className="relative -mt-12 px-4">
           <div className="mx-auto w-full max-w-6xl rounded-[36px] border border-emerald-100 bg-white/90 p-8 shadow-2xl shadow-emerald-100/70 backdrop-blur">
