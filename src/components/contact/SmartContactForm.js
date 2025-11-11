@@ -198,10 +198,21 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
     <form
       ref={formRef || null}
       onSubmit={onSubmit}
-      className="space-y-7"
+      className="space-y-8"
       aria-live="assertive"
     >
-      <fieldset className="rounded-3xl border border-emerald-100 bg-emerald-50/40 px-5 py-5">
+      <header className="space-y-3 text-center sm:text-left">
+        <span className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">
+          Concierge contact
+        </span>
+        <h2 className="text-3xl font-semibold text-emerald-950 sm:text-[2.25rem]">
+          Tell us about your move
+        </h2>
+        {config.contactMicrocopy && (
+          <p className="text-sm text-emerald-700 sm:text-base">{config.contactMicrocopy}</p>
+        )}
+      </header>
+      <fieldset className="rounded-3xl border border-emerald-100 bg-emerald-50/40 px-5 py-5 shadow-sm shadow-emerald-100">
         <legend className="px-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
           Tell us about your move
         </legend>
@@ -341,7 +352,12 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
         </p>
       )}
 
-      <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
+      <Button
+        type="submit"
+        size="lg"
+        disabled={submitting}
+        className="w-full rounded-2xl shadow-lg shadow-emerald-200 transition hover:shadow-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 sm:w-auto"
+      >
         {submitting ? "Sending…" : "Send Message"}
       </Button>
     </form>

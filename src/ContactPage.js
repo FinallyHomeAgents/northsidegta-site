@@ -69,8 +69,8 @@ function ContactPageV2() {
       <main className="bg-slate-50 pb-20">
         <div className="px-4 pt-10 sm:px-6 sm:pt-12 lg:px-8">
           <section className="mx-auto max-w-6xl">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
-              <div className="flex flex-col gap-6 text-center lg:text-left">
+            <div className="flex flex-col items-center gap-10 text-center lg:gap-12">
+              <div className="flex w-full max-w-3xl flex-col items-center gap-6 text-center">
                 <div className="space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">
                     Finally Home Agents
@@ -87,11 +87,11 @@ function ContactPageV2() {
                     </p>
                   )}
                 </div>
-                <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-start">
+                <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center">
                   <Button
                     size="lg"
                     onClick={handlePrimary}
-                    className="w-full max-w-xs sm:w-auto"
+                    className="w-full max-w-xs rounded-2xl sm:w-auto"
                   >
                     {config.heroPrimaryCtaLabel || "Send a Message"}
                   </Button>
@@ -116,8 +116,8 @@ function ContactPageV2() {
                   )}
                 </div>
               </div>
-              <div className="relative flex justify-center lg:justify-end">
-                <div className="relative w-full max-w-xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(16,185,129,0.18)]">
+              <div className="relative flex w-full justify-center">
+                <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(16,185,129,0.18)] aspect-[4/3] sm:aspect-[5/4] md:aspect-[4/3]">
                   <img
                     src="/uploads/contact-hero-finally-home-agents.jpg"
                     alt="Clean desk scene with a smartphone, notebook, and NorthSide GTA and Finally Home Agents branding, representing how to contact the team."
@@ -135,7 +135,11 @@ function ContactPageV2() {
 
           <section className="mx-auto mt-10 flex max-w-6xl flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)] lg:items-start lg:gap-12">
             <div className="order-2 space-y-6 lg:order-1" ref={formSectionRef} id="contact-form">
-              <div className="rounded-3xl bg-white p-6 shadow-xl shadow-emerald-100 ring-1 ring-emerald-100 sm:p-8">
+              <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-6 pt-10 shadow-xl shadow-emerald-100 sm:p-9 sm:pt-12">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"
+                />
                 <SmartContactForm
                   config={config}
                   formRef={formRef}
@@ -180,6 +184,7 @@ function CallbackFormCard() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [showErrors, setShowErrors] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const formEndpoint = useMemo(() => getFormEndpoint(), []);
 
@@ -258,20 +263,51 @@ function CallbackFormCard() {
     );
   }
 
+  const panelId = "callback-card-panel";
+  const formTitleId = "callback-card-form-title";
+  const headerTextId = "callback-card-heading";
+
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-col gap-5 rounded-3xl border border-emerald-100 bg-white px-6 py-6 shadow-lg shadow-emerald-100 sm:px-8"
-      aria-labelledby="callback-card-heading"
-    >
-      <div className="space-y-2 text-center sm:text-left">
-        <h2 id="callback-card-heading" className="text-2xl font-semibold text-emerald-950">
-          Request a call back
-        </h2>
-        <p className="text-sm text-slate-700">
-          Prefer to talk it through? Leave your details and we’ll call you back between 9am–9pm.
-        </p>
-      </div>
+    <div className="rounded-3xl border border-emerald-100 bg-white shadow-lg shadow-emerald-100">
+      <button
+        type="button"
+        onClick={() => setExpanded((prev) => !prev)}
+        className="flex w-full items-center gap-4 px-6 py-5 text-left transition hover:bg-emerald-50/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 sm:px-8"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        aria-labelledby={headerTextId}
+      >
+        <span className="inline-flex flex-none items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-600">
+          Premium callback
+        </span>
+        <span id={headerTextId} className="flex-1 text-sm font-semibold text-emerald-900 sm:text-base">
+          Get a fast call back from our team (9am–9pm)
+        </span>
+        <span
+          className={`flex h-9 w-9 flex-none items-center justify-center rounded-full border border-emerald-100 text-emerald-600 transition-transform ${
+            expanded ? "rotate-180" : ""
+          }`}
+          aria-hidden
+        >
+          <ChevronDownIcon className="h-4 w-4" />
+        </span>
+      </button>
+
+      {expanded && (
+        <form
+          onSubmit={onSubmit}
+          className="flex flex-col gap-5 border-t border-emerald-100 px-6 py-6 sm:px-8"
+          aria-labelledby={formTitleId}
+          id={panelId}
+        >
+          <div className="space-y-2 text-left">
+            <h2 id={formTitleId} className="text-2xl font-semibold text-emerald-950">
+              Request a call back
+            </h2>
+            <p className="text-sm text-slate-700">
+              Prefer to talk it through? Leave your details and we’ll call you back between 9am–9pm.
+            </p>
+          </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <CallbackField
           id="callback-name"
@@ -311,11 +347,18 @@ function CallbackFormCard() {
         <p className="text-xs font-medium uppercase tracking-[0.3em] text-emerald-500">
           We respond fast
         </p>
-        <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submitting}
+          className="w-full rounded-2xl sm:w-auto"
+        >
           {submitting ? "Requesting…" : "Request Call Back"}
         </Button>
       </div>
-    </form>
+        </form>
+      )}
+    </div>
   );
 }
 
@@ -400,6 +443,24 @@ function AgentCard({ name, role, summary, imageSrc, imageAlt }) {
         <span aria-hidden className="text-base">→</span>
       </a>
     </div>
+  );
+}
+
+function ChevronDownIcon({ className = "h-4 w-4" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path
+        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.18l3.71-2.95a.75.75 0 1 1 .94 1.17l-4.22 3.36a.75.75 0 0 1-.94 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
 
