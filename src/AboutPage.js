@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
-import { Award, Heart, Lightbulb, Mail, ShieldCheck } from "lucide-react";
+import { Award, Lightbulb, Mail, MapPin, ShieldCheck } from "lucide-react";
 import teamMembers from "./data/teamMembers";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
@@ -10,25 +10,45 @@ import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 const trophyHighlights = [
   {
     icon: ShieldCheck,
-    title: "Trust",
-    description: "Built on genuine relationships and proven results.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Strategy",
+    title: "Athlete-Agent Mindset",
     description:
       "We treat our clients like professional athletes — with loyalty, strategy, and trust.",
   },
   {
-    icon: Heart,
-    title: "Community",
-    description: "Helping families thrive with more space, more community, and less traffic.",
-  },
-  {
     icon: Award,
-    title: "Results",
+    title: "Award-Winning Service",
     description:
       "Multiple Top Agent Awards with HomeLife Optimum Realty prove our results.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Premium Marketing",
+    description:
+      "From cinematic media to cutting-edge AI tools, every listing is positioned to win.",
+  },
+  {
+    icon: MapPin,
+    title: "Community Expertise",
+    description: "From golf leagues to local events, our roots run deep across the GTA.",
+  },
+];
+
+const storyMetrics = [
+  {
+    title: "20 Years Combined",
+    description: "Experience that delivers.",
+  },
+  {
+    title: "Award Winners",
+    description: "Multiple Top Agent Awards, HomeLife Optimum Realty.",
+  },
+  {
+    title: "Communities Covered",
+    description: "NorthSide GTA and beyond.",
+  },
+  {
+    title: "Next-Gen Marketing",
+    description: "Professional tools + AI innovation.",
   },
 ];
 
@@ -40,59 +60,95 @@ export default function AboutPage() {
       <Navigation />
       <DynamicMetaTags {...ABOUT_ROUTE_META} />
 
-      <main className="pb-16 pt-8 sm:pt-12">
-        {/* ───────── Intro & Hero ───────── */}
+      <main className="pb-20 pt-6 sm:pt-10">
+        {/* ───────── Hero Figure ───────── */}
         <section className="px-4">
-          <div className="mx-auto w-full max-w-6xl space-y-10">
-            <div className="space-y-6 text-center md:text-left">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-700">
-                NorthSide GTA • Finally Home Agents
-              </span>
-              <h1 className="text-3xl font-semibold tracking-tight text-emerald-900 sm:text-4xl md:text-[2.75rem]">
-                About Finally Home Agents
-              </h1>
-              <div className="space-y-4 text-base text-slate-600 sm:text-lg">
-                <p className="text-slate-700">
-                  Led by brothers Matthew and Landon Mulhall, Finally Home Agents pairs award-winning service with deep NorthSide GTA roots to guide families home.
-                </p>
-                <p>
-                  We treat our clients like professional athletes — with loyalty, strategy, and trust. Helping families thrive with more space, more community, and less traffic.
-                </p>
-              </div>
-            </div>
-            <figure className="mx-auto w-full overflow-hidden rounded-[32px] border border-emerald-100 bg-white/90 shadow-2xl shadow-emerald-100/60">
+          <div className="mx-auto w-full max-w-6xl space-y-12">
+            <figure className="relative overflow-hidden rounded-[36px] border border-emerald-100 bg-white/90 shadow-[0_40px_110px_rgba(16,185,129,0.18)]">
               <img
                 src="/uploads/about-hero-finally-home-agents.jpg"
                 alt="Matthew and Landon Mulhall of Finally Home Agents standing on a stylized landscape background at sunset, representing their NorthSide GTA real estate approach."
                 className="h-auto w-full object-cover"
                 loading="lazy"
               />
-              <figcaption className="px-6 py-4 text-sm font-medium text-emerald-900/80 sm:px-8 sm:py-5 sm:text-base">
+              <span className="absolute left-6 top-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/95 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-700 shadow-sm backdrop-blur">
+                NorthSide GTA • Finally Home Agents
+              </span>
+              <figcaption className="px-6 py-6 text-center text-lg font-semibold tracking-tight text-emerald-800 sm:px-10 sm:text-xl">
                 Built on trust, strategy, and community — the Finally Home Agents story.
               </figcaption>
             </figure>
+
+            <div className="space-y-10 text-center md:text-left">
+              <div className="space-y-6">
+                <h1 className="text-3xl font-semibold tracking-tight text-emerald-900 sm:text-4xl md:text-[2.75rem]">
+                  About Finally Home Agents
+                </h1>
+                <div className="space-y-4 text-base text-slate-600 sm:text-lg">
+                  <p className="text-slate-700">
+                    Led by brothers Matthew and Landon Mulhall, Finally Home Agents pairs award-winning service with deep NorthSide GTA roots to guide families home.
+                  </p>
+                  <p>
+                    We treat our clients like professional athletes — with loyalty, strategy, and trust. Helping families thrive with more space, more community, and less traffic.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ───────── Story Section ───────── */}
+        <section className="px-4 pt-12">
+          <div className="mx-auto w-full max-w-5xl space-y-10 rounded-[32px] border border-emerald-100 bg-white/90 px-6 py-10 shadow-2xl shadow-emerald-100/70 backdrop-blur-sm sm:px-10">
+            <div className="space-y-6 text-center md:text-left">
+              <h2 className="text-2xl font-semibold tracking-tight text-emerald-900 sm:text-3xl">
+                The Finally Home Agents Story
+              </h2>
+              <div className="space-y-4 text-base text-slate-600 sm:text-lg">
+                <p>
+                  Matthew and Landon grew up in the communities they now represent, giving their clients a front-row seat to neighbourhood insights, upcoming developments, and lifestyle fit.
+                </p>
+                <p>
+                  Pair that with decades of combined experience, a network of trusted partners, and a dedication to strategic negotiation, and you get a boutique team that delivers championship-level results.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-6 text-center sm:grid-cols-2">
+              {storyMetrics.map((metric) => (
+                <div
+                  key={metric.title}
+                  className="rounded-3xl border border-emerald-100 bg-emerald-50/70 px-6 py-6 shadow-inner shadow-emerald-100/60"
+                >
+                  <p className="text-lg font-semibold text-emerald-900 sm:text-xl">{metric.title}</p>
+                  <p className="mt-2 text-sm text-emerald-800/80 sm:text-base">{metric.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* ───────── Trophy Case ───────── */}
-        <section className="px-4 pt-12">
-          <div className="mx-auto w-full max-w-6xl rounded-[32px] border border-emerald-100 bg-white/90 px-6 py-12 shadow-2xl shadow-emerald-100/60 backdrop-blur-sm">
-            <div className="space-y-10">
-              <div className="space-y-3 text-center md:text-left">
+        <section className="px-4 pt-14">
+          <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[36px] border border-emerald-100 bg-gradient-to-br from-white via-emerald-50 to-emerald-100/70 p-[1.5px] shadow-[0_45px_120px_rgba(16,185,129,0.2)]">
+            <div className="rounded-[34px] bg-white/80 px-6 py-12 backdrop-blur sm:px-12">
+              <div className="space-y-4 text-center md:text-left">
+                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-600">
+                  Why We’re Different
+                </p>
                 <h2 className="text-3xl font-semibold tracking-tight text-emerald-900 sm:text-4xl">
                   Our Trophy Case
                 </h2>
                 <p className="text-base text-slate-600 sm:text-lg">
-                  The highlights that set Finally Home Agents apart for NorthSide GTA families.
+                  The core strengths we bring to every NorthSide GTA move.
                 </p>
               </div>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                 {trophyHighlights.map(({ icon: Icon, title, description }) => (
                   <div
                     key={title}
-                    className="flex h-full flex-col gap-4 rounded-3xl border border-emerald-100 bg-white p-6 text-center shadow-xl shadow-emerald-100/50 sm:text-left"
+                    className="relative flex h-full flex-col gap-5 rounded-[30px] border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/60 transition duration-200 hover:-translate-y-1 hover:shadow-[0_28px_60px_rgba(16,185,129,0.25)]"
                   >
-                    <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 sm:mx-0">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-700 shadow-inner">
                       <Icon className="h-6 w-6" />
                     </span>
                     <h3 className="text-lg font-semibold text-emerald-900">{title}</h3>
