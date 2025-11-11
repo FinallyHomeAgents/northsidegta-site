@@ -73,15 +73,25 @@ function useInfiniteFeed(items) {
 
 function InsightsHero() {
   return (
-    <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#32610E] via-[#3a7b13] to-[#499721] px-6 py-12 text-white shadow-xl shadow-emerald-900/20 md:px-10 md:py-16">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.22),_transparent_60%)]" aria-hidden />
-      <div className="relative z-10 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.42em] text-emerald-100/90">Insights</p>
-        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">NorthSide GTA Insights</h1>
-        <p className="max-w-2xl text-sm text-emerald-100/95 md:text-base">
+    <section className="space-y-8">
+      <div className="mx-auto max-w-3xl space-y-3 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.42em] text-emerald-600">Insights</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-emerald-900 sm:text-4xl">
+          NorthSide GTA Insights
+        </h1>
+        <p className="text-sm text-slate-600 sm:text-base">
           Stories, market updates, and local perspectives from across the NorthSide.
         </p>
       </div>
+      <figure className="relative mx-auto w-full max-w-5xl overflow-hidden rounded-[36px] border border-emerald-100 bg-white/95 shadow-[0_40px_110px_rgba(16,185,129,0.18)]">
+        <img
+          src="/uploads/insights-hero-finally-home-agents.jpg"
+          alt="Person typing on a laptop that shows the words Community Insights, with a fireplace and coffee in the background, representing NorthSide GTA real estate insights."
+          className="h-auto w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
     </section>
   );
 }
