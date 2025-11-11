@@ -188,7 +188,7 @@ export default function MediaPage() {
   const heroEnabled = settings?.pinned?.enabled !== false;
   const showHeroCard = heroEnabled && Boolean(settings?.pinned?.source_url);
   const hasItems = items.length > 0;
-  const fallbackFeatured = !showHeroCard && hasItems ? { ...items[0], source_url: items[0]?.url } : null;
+  const fallbackFeatured = heroEnabled && !showHeroCard && hasItems ? { ...items[0], source_url: items[0]?.url } : null;
   const heroFeatured = showHeroCard ? settings?.pinned : fallbackFeatured;
   const heroTitle = settings?.pinned?.title || "NorthSide GTA Videos + Reels";
   const heroTagline =
@@ -205,7 +205,14 @@ export default function MediaPage() {
           className="relative overflow-hidden"
         >
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[url('/uploads/videos-reels-hero-finally-home-agents-side2.jpg')] bg-cover bg-left" />
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: "url('/uploads/videos-reels-hero-finally-home-agents-side2.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "left center",
+              }}
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/95 via-neutral-950/80 to-neutral-950/40" />
             <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-neutral-950/50" />
           </div>
