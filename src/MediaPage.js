@@ -98,10 +98,10 @@ function FeaturedHeroCard({ item }) {
 
   return (
     <div className="relative" role="group" aria-label={title}>
-      <span className="mb-3 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/80">
+      <span className="mb-3 inline-flex items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-300 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-neutral-900">
         Featured reel
       </span>
-      <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-black/40 shadow-[0_32px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl">
+      <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-neutral-950/80 shadow-[0_32px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <div ref={cardRef} className="relative">
           <div className="aspect-video w-full">
@@ -202,29 +202,27 @@ export default function MediaPage() {
       <main className="relative min-h-screen bg-neutral-950 text-white">
         <section
           aria-label="Hero section showing a smartphone with Videos Reels on screen, representing NorthSide GTA real estate media content."
-          className="relative overflow-hidden"
+          className="relative"
         >
-          <div className="absolute inset-0">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: "url('/uploads/videos-reels-hero-finally-home-agents-side2.jpg')",
-                backgroundSize: "cover",
-                backgroundPosition: "left center",
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/95 via-neutral-950/80 to-neutral-950/40" />
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-neutral-950/50" />
-          </div>
-          <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 py-20 lg:flex-row lg:items-center lg:gap-16 lg:py-24">
-            <div className="max-w-xl space-y-5 text-white">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">Media</p>
+          <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-20 sm:pb-20 lg:pb-24 lg:pt-24">
+            <div className="max-w-2xl space-y-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300/80">Media</p>
               <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{heroTitle}</h1>
               {heroTagline && <p className="text-base text-neutral-200 sm:text-lg">{heroTagline}</p>}
             </div>
+
             {heroFeatured && (
-              <div className="w-full max-w-2xl lg:max-w-xl">
-                <FeaturedHeroCard item={heroFeatured} />
+              <div className="media-hero-visual relative mt-10">
+                <figure className="overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)]">
+                  <img
+                    className="h-auto w-full"
+                    src="/uploads/videos-reels-hero-finally-home-agents-side2.jpg"
+                    alt="Hand holding a smartphone showing the words Videos Reels with NorthSide GTA styling, against a blurred city background."
+                  />
+                </figure>
+                <div className="mt-6 w-full lg:absolute lg:right-12 lg:top-1/2 lg:mt-0 lg:w-[min(55%,24rem)] lg:-translate-y-1/2">
+                  <FeaturedHeroCard item={heroFeatured} />
+                </div>
               </div>
             )}
           </div>
