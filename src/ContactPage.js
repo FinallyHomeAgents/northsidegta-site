@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import Navigation from "./Navigation";
 import SmartContactForm from "./components/contact/SmartContactForm";
 import Button from "./components/ui/Button";
@@ -9,6 +9,7 @@ import {
   useContactChannels,
   // getContactFeatureEnabled, // remove this
   getJsonLd,
+  getFormEndpoint,
 } from "./components/contact/contactConfig";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { trackEvent } from "./utils/analytics";
@@ -28,19 +29,6 @@ function ContactPageV2() {
     () => channels.find((item) => item.key === "whatsapp"),
     [channels]
   );
-  const callChannel = useMemo(
-    () => channels.find((item) => item.key === "call"),
-    [channels]
-  );
-  const emailChannel = useMemo(
-    () => channels.find((item) => item.key === "email"),
-    [channels]
-  );
-  const textChannel = useMemo(
-    () => channels.find((item) => item.key === "text"),
-    [channels]
-  );
-
   const jsonLd = useMemo(() => getJsonLd(config), [config]);
 
   const scrollToForm = () => {
@@ -62,27 +50,6 @@ function ContactPageV2() {
     }
   };
 
-  const contactDetails = [
-    callChannel?.href && {
-      label: "Call",
-      href: callChannel.href,
-      display: callChannel.href.replace("tel:", ""),
-      tracking: () => trackEvent("click_call", { route: "/contact", source: "hero" }),
-    },
-    textChannel?.href && {
-      label: "Text",
-      href: textChannel.href,
-      display: textChannel.href.replace("sms:", ""),
-      tracking: () => trackEvent("click_text", { route: "/contact", source: "hero" }),
-    },
-    emailChannel?.href && {
-      label: "Email",
-      href: emailChannel.href,
-      display: "contact@finallyhomeagents.com",
-      tracking: () => trackEvent("click_email", { route: "/contact", source: "hero" }),
-    },
-  ].filter(Boolean);
-
   return (
     <>
       <DynamicMetaTags
@@ -102,12 +69,12 @@ function ContactPageV2() {
       <main className="bg-slate-50 pb-20">
         <div className="px-4 pt-10 sm:px-6 sm:pt-12 lg:px-8">
           <section className="mx-auto max-w-6xl">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
               <div className="flex flex-col gap-6 text-center lg:text-left">
-                <div className="inline-flex items-center justify-center gap-2 self-center rounded-full border border-emerald-200 bg-emerald-50/90 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-emerald-700 shadow-sm lg:self-start">
-                  Finally Home Agents
-                </div>
                 <div className="space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">
+                    Finally Home Agents
+                  </p>
                   <h1 className="text-3xl font-semibold tracking-tight text-emerald-950 sm:text-4xl md:text-[2.75rem]">
                     {config.heroHeadline}
                   </h1>
@@ -148,26 +115,6 @@ function ContactPageV2() {
                     </a>
                   )}
                 </div>
-                {contactDetails.length > 0 && (
-                  <dl className="grid gap-4 pt-4 text-left text-sm text-slate-600 sm:grid-cols-2">
-                    {contactDetails.map((item) => (
-                      <div key={item.label} className="rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-sm">
-                        <dt className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-600">
-                          {item.label}
-                        </dt>
-                        <dd className="mt-2 text-base font-semibold text-emerald-900">
-                          <a
-                            href={item.href}
-                            onClick={item.tracking}
-                            className="transition hover:text-emerald-600"
-                          >
-                            {item.display}
-                          </a>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                )}
               </div>
               <div className="relative flex justify-center lg:justify-end">
                 <div className="relative w-full max-w-xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(16,185,129,0.18)]">
@@ -182,27 +129,277 @@ function ContactPageV2() {
             </div>
           </section>
 
-          <section
-            ref={formSectionRef}
-            id="contact-form"
-            className="mx-auto mt-10 max-w-5xl"
-          >
-            <div className="rounded-3xl bg-white p-6 shadow-xl shadow-emerald-100 ring-1 ring-emerald-100 sm:p-8">
-              <SmartContactForm
-                config={config}
-                formRef={formRef}
-                whatsappChannel={whatsappChannel}
+          <section className="mx-auto mt-10 max-w-4xl">
+            <CallbackFormCard />
+          </section>
+
+          <section className="mx-auto mt-10 flex max-w-6xl flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)] lg:items-start lg:gap-12">
+            <div className="order-2 space-y-6 lg:order-1" ref={formSectionRef} id="contact-form">
+              <div className="rounded-3xl bg-white p-6 shadow-xl shadow-emerald-100 ring-1 ring-emerald-100 sm:p-8">
+                <SmartContactForm
+                  config={config}
+                  formRef={formRef}
+                  whatsappChannel={whatsappChannel}
+                />
+              </div>
+              {config.coverageLine && (
+                <p className="text-center text-sm text-slate-600">
+                  {config.coverageLine}
+                </p>
+              )}
+            </div>
+            <div className="order-1 space-y-6 lg:order-2">
+              <TrustCard />
+              <AgentCard
+                name="Matthew Mulhall"
+                role="Co-founder, Finally Home Agents"
+                summary="NorthSide GTA real estate advisor."
+                imageSrc="/uploads/matthew-headshot.jpg"
+                imageAlt="Headshot of Matthew Mulhall, co-founder of Finally Home Agents."
+              />
+              <AgentCard
+                name="Landon Mulhall"
+                role="Co-founder, Finally Home Agents"
+                summary="NorthSide GTA real estate advisor."
+                imageSrc="/uploads/landon-headshot.jpg"
+                imageAlt="Headshot of Landon Mulhall, co-founder of Finally Home Agents."
               />
             </div>
-            {config.coverageLine && (
-              <p className="mt-6 text-center text-sm text-slate-600">
-                {config.coverageLine}
-              </p>
-            )}
           </section>
         </div>
       </main>
     </>
+  );
+}
+
+function CallbackFormCard() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
+  const [showErrors, setShowErrors] = useState(false);
+
+  const formEndpoint = useMemo(() => getFormEndpoint(), []);
+
+  const validations = useMemo(() => {
+    const issues = {};
+    if (!name.trim()) {
+      issues.name = "Name is required.";
+    }
+    if (!phone.trim()) {
+      issues.phone = "Phone number is required.";
+    }
+    return issues;
+  }, [name, phone]);
+
+  const visibleErrors = showErrors ? validations : {};
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    if (submitting) return;
+
+    setError(null);
+
+    if (Object.keys(validations).length > 0) {
+      setShowErrors(true);
+      Object.entries(validations).forEach(([field, reason]) => {
+        trackEvent("callback_form_validation_error", {
+          route: "/contact",
+          field,
+          reason,
+        });
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    setShowErrors(false);
+
+    try {
+      const payload = new FormData();
+      payload.append("name", name);
+      payload.append("phone", phone);
+      if (notes.trim()) {
+        payload.append("message", notes.trim());
+      }
+      payload.append("source", "callback");
+
+      const response = await fetch(formEndpoint, {
+        method: "POST",
+        body: payload,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      setSuccess(true);
+      trackEvent("callback_form_submit", { route: "/contact" });
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100">
+        <h2 className="text-xl font-semibold text-emerald-900">We’ll be in touch shortly</h2>
+        <p className="mt-2 text-sm text-slate-700">
+          Thanks for your request! A member of the team will give you a call between 9am–9pm.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={onSubmit}
+      className="flex flex-col gap-5 rounded-3xl border border-emerald-100 bg-white px-6 py-6 shadow-lg shadow-emerald-100 sm:px-8"
+      aria-labelledby="callback-card-heading"
+    >
+      <div className="space-y-2 text-center sm:text-left">
+        <h2 id="callback-card-heading" className="text-2xl font-semibold text-emerald-950">
+          Request a call back
+        </h2>
+        <p className="text-sm text-slate-700">
+          Prefer to talk it through? Leave your details and we’ll call you back between 9am–9pm.
+        </p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <CallbackField
+          id="callback-name"
+          label="Name"
+          value={name}
+          onChange={setName}
+          required
+          placeholder="Your name"
+          error={visibleErrors.name}
+        />
+        <CallbackField
+          id="callback-phone"
+          label="Phone number"
+          value={phone}
+          onChange={setPhone}
+          required
+          type="tel"
+          placeholder="(xxx) xxx-xxxx"
+          error={visibleErrors.phone}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="callback-notes" className="text-sm font-semibold text-emerald-900">
+          Brief notes <span className="text-emerald-700/60">(optional)</span>
+        </label>
+        <textarea
+          id="callback-notes"
+          value={notes}
+          onChange={(event) => setNotes(event.target.value)}
+          rows={3}
+          className="min-h-[90px] rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-base text-emerald-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          placeholder="Share anything helpful for our call"
+        />
+      </div>
+      {error && <p className="text-sm text-rose-600">{error}</p>}
+      <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+        <p className="text-xs font-medium uppercase tracking-[0.3em] text-emerald-500">
+          We respond fast
+        </p>
+        <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
+          {submitting ? "Requesting…" : "Request Call Back"}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+function CallbackField({ id, label, value, onChange, required, placeholder, error, type = "text" }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-sm font-semibold text-emerald-900">
+        {label}
+        {required && <span className="ml-1 text-emerald-700/60">*</span>}
+      </label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        required={required}
+        placeholder={placeholder}
+        className={`rounded-2xl border px-4 py-3 text-base text-emerald-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-200 ${
+          error ? "border-rose-400" : "border-emerald-100 bg-white"
+        }`}
+        aria-invalid={Boolean(error)}
+      />
+      {error && <p className="text-sm text-rose-600">{error}</p>}
+    </div>
+  );
+}
+
+function TrustCard() {
+  return (
+    <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100">
+      <h2 className="text-xl font-semibold text-emerald-950">Why you’ll love working with us</h2>
+      <p className="mt-3 text-sm text-slate-700">
+        Premium, concierge-level representation for buyers and sellers across the NorthSide GTA.
+      </p>
+      <ul className="mt-5 space-y-3 text-sm text-emerald-900">
+        <li className="flex items-start gap-2">
+          <span className="mt-1 h-2 w-2 flex-none rounded-full bg-emerald-400" aria-hidden />
+          <span>Local experts: we don’t just work here — we live here.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="mt-1 h-2 w-2 flex-none rounded-full bg-emerald-400" aria-hidden />
+          <span>Concierge-level guidance from first chat to closing.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="mt-1 h-2 w-2 flex-none rounded-full bg-emerald-400" aria-hidden />
+          <span>Fast, human replies (9am–9pm).</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="mt-1 h-2 w-2 flex-none rounded-full bg-emerald-400" aria-hidden />
+          <span>Neighborhood intel you won’t find on portals.</span>
+        </li>
+      </ul>
+      <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm font-semibold text-emerald-800">
+        Featured on <span className="ml-2 text-emerald-600">5.0 ★ on Google</span>
+      </div>
+    </div>
+  );
+}
+
+function AgentCard({ name, role, summary, imageSrc, imageAlt }) {
+  return (
+    <div className="flex flex-col gap-4 rounded-3xl border border-emerald-100 bg-white p-5 shadow-lg shadow-emerald-100">
+      <div className="flex items-center gap-4">
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          loading="lazy"
+          className="h-16 w-16 flex-none rounded-full object-cover shadow"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-emerald-950">{name}</h3>
+          <p className="text-sm text-emerald-700">{role}</p>
+        </div>
+      </div>
+      <p className="text-sm text-slate-700">{summary}</p>
+      <a
+        href="#contact-form"
+        onClick={() => trackEvent("agent_card_cta", { route: "/contact", agent: name })}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
+      >
+        Contact {name.split(" ")[0]}
+        <span aria-hidden className="text-base">→</span>
+      </a>
+    </div>
   );
 }
 
