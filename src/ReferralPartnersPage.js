@@ -425,7 +425,7 @@ function ReferralPartnerForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
         >
           {submitting ? "Sending…" : "Send referral details"}
         </button>
@@ -462,7 +462,7 @@ export default function ReferralPartnersPage() {
             style={{ backgroundImage: "url('/Images/northsidegta-map-bg.jpg')" }}
             aria-hidden
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_60%)]" aria-hidden />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_60%)]" aria-hidden />
           <div className="absolute -left-10 top-10 h-64 w-64 rounded-full bg-emerald-500/30 blur-3xl" aria-hidden />
           <div className="absolute -right-16 bottom-[-40%] h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
           <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8 sm:py-24">

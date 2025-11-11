@@ -52,10 +52,10 @@ export default function GoogleGradientReviews({ className = "" }) {
         aria-hidden
       />
 
-      <div className="relative rounded-[36px] bg-gradient-to-br from-emerald-300/70 via-emerald-400/50 to-emerald-600/60 p-[1.5px] shadow-[0_45px_120px_rgba(4,47,35,0.55)]">
+      <div className="relative rounded-[36px] bg-gradient-to-br from-emerald-300/70 via-emerald-400/50 to-emerald-600/60 p-[1.5px] shadow-[0_45px_120px_rgba(34,68,10,0.55)]">
         <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/80 px-6 py-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur">
           <div
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_60%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.25),_transparent_60%)]"
             aria-hidden
           />
 

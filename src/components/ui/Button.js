@@ -8,15 +8,17 @@ export default function Button({
   className = '',
   ...props
 }) {
-  const base = 'font-medium rounded-md inline-block transition duration-200 text-center';
+  const base = 'font-medium rounded-md inline-block transition-colors duration-200 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2';
   const sizes = {
     sm: 'px-4 py-2 text-sm',
     md: 'px-5 py-2.5',
     lg: 'px-6 py-3 text-lg',
   };
   const variants = {
-    primary: 'bg-green-600 text-white hover:bg-green-700',
-    outline: 'border border-green-600 text-green-600 hover:bg-green-100',
+    primary:
+      'bg-brand-green text-white shadow-sm hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] hover:text-white focus:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] active:bg-brand-green-dark',
+    outline:
+      'border border-brand-green text-brand-green hover:bg-brand-green/10 focus:bg-brand-green/10',
   };
 
   return (

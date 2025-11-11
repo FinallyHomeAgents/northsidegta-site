@@ -117,7 +117,7 @@ function ContactPageV2() {
                 </div>
               </div>
               <div className="relative flex w-full justify-center">
-                <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(16,185,129,0.18)] aspect-[4/3] sm:aspect-[5/4] md:aspect-[4/3]">
+                <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(50,97,14,0.18)] aspect-[4/3] sm:aspect-[5/4] md:aspect-[4/3]">
                   <img
                     src="/uploads/contact-hero-finally-home-agents.jpg"
                     alt="Clean desk scene with a smartphone, notebook, and NorthSide GTA and Finally Home Agents branding, representing how to contact the team."

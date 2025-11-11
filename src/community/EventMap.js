@@ -167,7 +167,7 @@ function ClusterMarker({ cluster, onSelectEvent }) {
   const icon = React.useMemo(() => {
     return L.divIcon({
       className: 'cluster-marker',
-      html: `<div style="background:#059669;color:white;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-weight:600;box-shadow:0 10px 20px rgba(5,150,105,0.25);">${cluster.events.length}</div>`,
+      html: `<div style="background:#32610E;color:white;border-radius:50%;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-weight:600;box-shadow:0 10px 20px rgba(50,97,14,0.25);">${cluster.events.length}</div>`,
       iconSize: [42, 42],
     })
   }, [cluster.events.length])

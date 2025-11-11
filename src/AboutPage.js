@@ -64,7 +64,7 @@ export default function AboutPage() {
         {/* ───────── Hero Figure ───────── */}
         <section className="px-4">
           <div className="mx-auto w-full max-w-6xl space-y-12">
-            <figure className="relative overflow-hidden rounded-[36px] border border-emerald-100 bg-white/90 shadow-[0_40px_110px_rgba(16,185,129,0.18)]">
+            <figure className="relative overflow-hidden rounded-[36px] border border-emerald-100 bg-white/90 shadow-[0_40px_110px_rgba(50,97,14,0.18)]">
               <img
                 src="/uploads/about-hero-finally-home-agents.jpg"
                 alt="Matthew and Landon Mulhall of Finally Home Agents standing on a stylized landscape background at sunset, representing their NorthSide GTA real estate approach."
@@ -129,7 +129,7 @@ export default function AboutPage() {
 
         {/* ───────── Trophy Case ───────── */}
         <section className="px-4 pt-14">
-          <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[36px] border border-emerald-100 bg-gradient-to-br from-white via-emerald-50 to-emerald-100/70 p-[1.5px] shadow-[0_45px_120px_rgba(16,185,129,0.2)]">
+          <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[36px] border border-emerald-100 bg-gradient-to-br from-white via-emerald-50 to-emerald-100/70 p-[1.5px] shadow-[0_45px_120px_rgba(50,97,14,0.2)]">
             <div className="rounded-[34px] bg-white/80 px-6 py-12 backdrop-blur sm:px-12">
               <div className="space-y-4 text-center md:text-left">
                 <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-600">
@@ -146,7 +146,7 @@ export default function AboutPage() {
                 {trophyHighlights.map(({ icon: Icon, title, description }) => (
                   <div
                     key={title}
-                    className="relative flex h-full flex-col gap-5 rounded-[30px] border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/60 transition duration-200 hover:-translate-y-1 hover:shadow-[0_28px_60px_rgba(16,185,129,0.25)]"
+                    className="relative flex h-full flex-col gap-5 rounded-[30px] border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/60 transition duration-200 hover:-translate-y-1 hover:shadow-[0_28px_60px_rgba(50,97,14,0.25)]"
                   >
                     <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-700 shadow-inner">
                       <Icon className="h-6 w-6" />
@@ -211,7 +211,7 @@ export default function AboutPage() {
 
         {/* ───────── CTA Footer ───────── */}
         <section className="relative mt-16 overflow-hidden rounded-[36px] px-4">
-          <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 rounded-[32px] border border-emerald-200 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 px-6 py-16 text-center text-white shadow-[0_35px_90px_rgba(16,185,129,0.45)]">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 rounded-[32px] border border-emerald-200 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 px-6 py-16 text-center text-white shadow-[0_35px_90px_rgba(50,97,14,0.45)]">
             <h2 className="text-3xl font-semibold sm:text-4xl">
               Ready to make your move?
             </h2>

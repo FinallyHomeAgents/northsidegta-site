@@ -67,7 +67,7 @@ function ToastNotice({ toast, onClose }) {
   const baseStyles =
     tone === 'error'
       ? 'bg-rose-600 shadow-lg shadow-rose-600/30'
-      : 'bg-emerald-600 shadow-lg shadow-emerald-600/30'
+      : 'bg-brand-green shadow-lg shadow-brand-green/30'
 
   return (
     <div className="fixed bottom-6 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 sm:left-auto sm:right-6 sm:translate-x-0">
@@ -975,7 +975,7 @@ export default function EventsIndexPage() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
                   activeTab === tab.key
-                    ? 'bg-emerald-600 text-white shadow'
+                    ? 'bg-brand-green text-white shadow hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]'
                     : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900'
                 }`}
               >

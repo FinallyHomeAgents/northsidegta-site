@@ -40,7 +40,7 @@ export default function CommunityGrid() {
               <p className="text-sm text-gray-600">
                 Learn why {name} is a top choice for buyers moving north of Toronto.
               </p>
-              <button className="mt-4 text-green-700 font-semibold hover:underline">
+              <button className="mt-4 font-semibold text-brand-green hover:underline">
                 Explore {name}
               </button>
             </div>

@@ -55,7 +55,7 @@ const CATEGORY_STYLES = {
   },
   Golf: {
     background: 'linear-gradient(135deg, rgba(50, 97, 14, 0.24), rgba(209, 250, 229, 0.5))',
-    dot: '#10B981',
+    dot: '#32610E',
   },
   Markets: {
     background: 'linear-gradient(135deg, rgba(50, 97, 14, 0.18), rgba(245, 158, 11, 0.3))',
@@ -67,7 +67,7 @@ const CATEGORY_STYLES = {
   },
   Outdoors: {
     background: 'linear-gradient(135deg, rgba(50, 97, 14, 0.24), rgba(134, 239, 172, 0.4))',
-    dot: '#047857',
+    dot: '#22440A',
   },
   Other: {
     background: 'linear-gradient(135deg, rgba(50, 97, 14, 0.18), rgba(148, 163, 184, 0.32))',

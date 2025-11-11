@@ -785,7 +785,7 @@ export default function EventDetailPage() {
       </div>
 
       {shareToastVisible && (
-        <div className="fixed inset-x-4 bottom-6 z-50 mx-auto max-w-sm rounded-full bg-emerald-600 px-4 py-2 text-center text-xs font-semibold text-white shadow-lg">
+        <div className="fixed inset-x-4 bottom-6 z-50 mx-auto max-w-sm rounded-full bg-brand-green px-4 py-2 text-center text-xs font-semibold text-white shadow-lg">
           Link copied
         </div>
       )}

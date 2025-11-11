@@ -97,14 +97,14 @@ function HomeHero() {
   return (
     <section className="relative overflow-hidden bg-[#04110c] text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_65%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.4),_transparent_65%)]" aria-hidden />
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1900px] px-3 pb-12 pt-2 sm:px-5 sm:pt-3 lg:pt-4">
         <div className="relative">
           <div className="rounded-[56px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-[0_55px_110px_rgba(2,26,20,0.55)]">
-            <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(4,47,35,0.55)] backdrop-blur">
+            <div className="rounded-[52px] border border-white/15 bg-black/45 p-3 sm:p-4 shadow-[0_30px_80px_rgba(34,68,10,0.55)] backdrop-blur">
               <div className="rounded-[44px] border border-white/5 bg-black/25 p-2 sm:p-3">
                 <div className="relative overflow-hidden rounded-[36px] border border-white/10">
                   <MapHero
@@ -180,7 +180,7 @@ function HomeHero() {
 function TownBridge({ className = "" }) {
   return (
     <div
-      className={`flex h-full flex-col gap-5 rounded-[28px] border border-white/12 bg-white/5 p-4 text-white shadow-[0_30px_70px_rgba(4,47,35,0.45)] backdrop-blur-sm sm:p-5 ${className}`}
+      className={`flex h-full flex-col gap-5 rounded-[28px] border border-white/12 bg-white/5 p-4 text-white shadow-[0_30px_70px_rgba(34,68,10,0.45)] backdrop-blur-sm sm:p-5 ${className}`}
     >
       <div className="space-y-2 text-left">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
@@ -207,7 +207,7 @@ function DidYouKnowSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700" aria-hidden />
       <div className="pointer-events-none absolute left-[-18%] top-[-18%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute right-[-12%] bottom-[-24%] h-[30rem] w-[30rem] rounded-full bg-emerald-300/25 blur-3xl" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.15),_transparent_70%)]" aria-hidden />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(50,97,14,0.15),_transparent_70%)]" aria-hidden />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4">
         <div className="mx-auto max-w-3xl text-center">
@@ -248,7 +248,7 @@ function ConciergeSection() {
             <div className="mt-6 grid gap-3 text-sm text-slate-700 sm:grid-cols-2 sm:text-base">
               {["WhatsApp desk 9am–9pm", "Checklists that adjust as you progress", "Pre-market pings for your saved towns", "Closing team synced with lender + lawyer"].map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 px-4 py-3 shadow-sm">
-                  <span className="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">
+                  <span className="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-brand-green text-[10px] font-bold text-white">
                     ✓
                   </span>
                   <span>{item}</span>
@@ -265,7 +265,7 @@ function ConciergeSection() {
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
                 <a
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/40 transition hover:bg-emerald-800"
+                  className="inline-flex items-center justify-center rounded-xl bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
                 >
                   Start the Conversation
                 </a>

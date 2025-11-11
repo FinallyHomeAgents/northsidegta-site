@@ -669,7 +669,7 @@ export default function HomeAnalysisPage() {
                 <div className="md:col-span-2 mt-2">
                   <button
                     disabled={!requiredOk || sending}
-                    className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold hover:bg-emerald-700 disabled:opacity-50"
+                    className="w-full rounded-xl bg-brand-green px-4 py-3 font-semibold text-white transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 disabled:opacity-50"
                   >
                     {sending ? "Sending…" : "Get My Home Value"}
                   </button>
@@ -705,7 +705,7 @@ export default function HomeAnalysisPage() {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-white p-3 md:hidden">
         <button
           form="homeanalysis-form"
-          className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-white font-semibold"
+          className="w-full rounded-xl bg-brand-green px-4 py-3 font-semibold text-white transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 disabled:opacity-50"
           disabled={!requiredOk || sending}
         >
           {sending ? "Sending…" : "Get My Home Value"}
