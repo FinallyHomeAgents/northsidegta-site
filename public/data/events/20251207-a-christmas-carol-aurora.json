@@ -1,12 +1,25 @@
 {
-  "slug": "20251207-a-christmas-carol-aurora",
-  "title": "A Christmas Carol",
+  "locationName": "Aurora Town Square – Brevik Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "archived": false,
+  "priceType": "Paid",
   "summary": "A Christmas Carol",
-  "description": "Pricing Regular: $15.00 (HST included) Tickets On Sale Family Package: Get 4 tickets for the price of 3! Discount provided at checkout. Aurora Cultural Centre Presents A Christmas Carol DuffleBag Theatre Aurora Town Square Performance Hall 50 Victoria Street, Aurora 10:15 am Doors Open 11:00 am Show Start Bah, humbug—until the spirits arrive! Beloved by audiences across North America, DuffleBag Theatre brings their signature wit and interactive charm to Charles Dickens’ A Christmas Carol. Join the “nearly world-famous” troupe as they put their hilarious spin on this timeless holiday tale. Follow miserly Ebenezer Scrooge on a whirlwind journey through past, present, and future, guided by spirited ghosts and packed with laugh-out-loud moments. Featuring audience participation, improvisation, and all your favourite characters—from Fezziwig to Tiny Tim—this joyful retelling is perfect for kids and adults alike. A heartwarming holiday tradition with a twist! This presentation is made possible with the support of Season Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
-  "startDate": "2025-12-07T16:00:00Z",
   "endDate": "2025-12-07T17:00:00Z",
-  "allDay": false,
+  "hidden": false,
+  "slug": "20251207-a-christmas-carol-aurora",
+  "featured": false,
+  "updatedAt": "2025-11-11T08:35:18Z",
+  "startDate": "2025-12-07T16:00:00Z",
+  "town": "Aurora",
+  "status": "approved",
+  "address": "Aurora Town Square – Brevik Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "eventUrl": "https://auroraculturalcentre.ca/event/a-christmas-carol-2526/",
   "use_daily_schedule": true,
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "title": "A Christmas Carol",
+  "sourceRef": "10002609-1765105200-1765108800@auroraculturalcentre.ca",
+  "source": "feed",
+  "allDay": false,
+  "description": "Pricing Regular: $15.00 (HST included) Tickets On Sale Family Package: Get 4 tickets for the price of 3! Discount provided at checkout. Aurora Cultural Centre Presents A Christmas Carol DuffleBag Theatre Aurora Town Square Performance Hall 50 Victoria Street, Aurora 10:15 am Doors Open 11:00 am Show Start Bah, humbug—until the spirits arrive! Beloved by audiences across North America, DuffleBag Theatre brings their signature wit and interactive charm to Charles Dickens’ A Christmas Carol. Join the “nearly world-famous” troupe as they put their hilarious spin on this timeless holiday tale. Follow miserly Ebenezer Scrooge on a whirlwind journey through past, present, and future, guided by spirited ghosts and packed with laugh-out-loud moments. Featuring audience participation, improvisation, and all your favourite characters—from Fezziwig to Tiny Tim—this joyful retelling is perfect for kids and adults alike. A heartwarming holiday tradition with a twist! This presentation is made possible with the support of Season Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
   "daily_schedule": [
     {
       "date": "2025-12-07",
@@ -15,18 +28,5 @@
       "end_time": "12:00"
     }
   ],
-  "category": "Arts & Culture",
-  "town": "Aurora",
-  "locationName": "Aurora Town Square – Brevik Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square – Brevik Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/a-christmas-carol-2526/",
-  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
-  "hidden": false,
-  "archived": false,
-  "status": "pending",
-  "source": "feed",
-  "sourceRef": "10002609-1765105200-1765108800@auroraculturalcentre.ca",
-  "updatedAt": "2025-11-11T08:35:18Z"
+  "category": "Arts & Culture"
 }
