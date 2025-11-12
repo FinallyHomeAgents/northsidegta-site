@@ -663,13 +663,13 @@ function BuyersHero({ onStartSearch, onTalkToAgent }) {
   return (
     <section className="relative isolate">
       <figure className="relative h-[60vh] w-full overflow-hidden lg:h-[75vh] lg:max-h-[820px]">
-        <img
-          src="/public/uploads/buyers-hero-northside-family.jpg"
-          alt="Young family at the edge of a NorthSide GTA neighborhood, looking toward stone and brick homes at golden hour — welcoming the move north of Toronto."
-          className="h-full w-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
+       <img
+  src={`${process.env.PUBLIC_URL || ''}/uploads/buyers-hero-northside-family.jpg`}
+  alt="Young family exploring a NorthSide GTA neighborhood with stone and brick homes at sunset — representing the lifestyle of buying north of Toronto."
+  loading="eager"
+  decoding="async"
+  className="w-full h-[75vh] object-cover"
+/>
       </figure>
 
       <div className="absolute inset-0">
