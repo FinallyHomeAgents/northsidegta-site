@@ -21,7 +21,7 @@ export default function HeaderShell() {
       <Navigation />
 
       {/* Brand green coverage band */}
-      <CoverageStrip showLabels className="border-b border-[#264C0B]" />
+      <CoverageStrip />
     </header>
   );
 }
