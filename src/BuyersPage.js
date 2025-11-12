@@ -1,10 +1,11 @@
 // src/BuyersPage.js
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import GoogleGradientReviews from "./components/reviews/GoogleGradientReviews";
+import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
+import { getFormEndpoint } from "./components/contact/contactConfig";
 
 /* ───────── helpers ───────── */
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -21,14 +22,24 @@ const TOWNS = [
   "None",
 ];
 
+const TOWN_QUICK_PICKS = [
+  { name: "Uxbridge", href: "/uxbridge", hint: "Trails & forests" },
+  { name: "Stouffville", href: "/stouffville", hint: "Main street energy" },
+  { name: "Georgina", href: "/georgina", hint: "Lake Simcoe life" },
+  { name: "East Gwillimbury", href: "/east-gwillimbury", hint: "New builds & 404" },
+  { name: "Newmarket", href: "/newmarket", hint: "Shops & GO train" },
+  { name: "Scugog", href: "/scugog", hint: "Heritage & harbour" },
+];
+
+const PROCESS_STEPS = [
+  { title: "Clarify", description: "Goals, budget, neighborhoods" },
+  { title: "Tour", description: "Curated homes, fast scheduling" },
+  { title: "Offer", description: "Comps, strategy, negotiations" },
+  { title: "Close", description: "Lawyers, keys, move-in plan" },
+];
+
 
 /* ───────── Little inline icons (used in UI labels/headers) ───────── */
-const ShieldIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" />
-    <path d="M9 12l2 2 4-4" />
-  </svg>
-);
 const CheckIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M20 6L9 17l-5-5" />
@@ -39,13 +50,6 @@ const XIcon = (props) => (
     <path d="M6 6l12 12M18 6L6 18" />
   </svg>
 );
-const LockIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <rect x="3" y="11" width="18" height="10" rx="2" />
-    <path d="M7 11V8a5 5 0 0 1 10 0v3" />
-  </svg>
-);
-
 /* ───────── Comparison: Buying on Your Own vs With Finally Home Agents (kept) ───────── */
 function ComparisonGrid() {
   const solo = [
@@ -270,66 +274,66 @@ function BuyerSignupForm() {
 
   if (done) {
     return (
-      <div className="relative overflow-hidden rounded-[36px] border border-white/15 bg-emerald-500/20 p-8 text-white shadow-[0_40px_120px_rgba(34,68,10,0.55)]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.4),_transparent_65%)]" aria-hidden />
-        <div className="relative z-10 flex flex-col gap-3 text-center sm:text-left">
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20">
-              <CheckIcon className="h-6 w-6 text-white" />
+      <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_45px_130px_rgba(34,68,10,0.55)]">
+        <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 px-6 py-10 text-white backdrop-blur-xl sm:px-10">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_70%)]" aria-hidden />
+          <div className="relative z-10 flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+              <CheckIcon className="h-4 w-4" />
+              Match Concierge
             </span>
-            <h3 className="text-2xl font-semibold tracking-tight">
+            <h3 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               You’re in — we’ll reach out within 24 hours
             </h3>
+            <p className="max-w-2xl text-sm text-emerald-100/85 sm:text-base">
+              Thanks! A NorthSide GTA specialist will contact you via email or phone within 24 hours to kick off your personalized town match and search plan.
+            </p>
+            <p className="text-xs uppercase tracking-[0.3em] text-emerald-100/70">Private &amp; secure. We never spam.</p>
           </div>
-          <p className="text-sm text-emerald-100/90">
-            Thanks! A NorthSide GTA specialist will contact you via email or phone within 24 hours to kick off your personalized town match and search plan.
-          </p>
-          <p className="text-xs uppercase tracking-[0.28em] text-emerald-100/70">No spam. You can unsubscribe anytime.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      id="buyers-registration"
-      className="relative overflow-hidden rounded-[40px] bg-gradient-to-br from-emerald-400/50 via-emerald-500/35 to-emerald-600/45 p-[1.5px] shadow-[0_55px_140px_rgba(34,68,10,0.55)]"
-    >
-      <div className="relative overflow-hidden rounded-[38px] border border-white/10 bg-slate-900/85 p-6 backdrop-blur-xl md:p-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.28),_transparent_65%)]" aria-hidden />
-        <div className="pointer-events-none absolute inset-0 opacity-30 mix-blend-screen" style={{ backgroundImage: "url('/Images/northside-map-grid.png')", backgroundSize: "cover" }} aria-hidden />
+    <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_55px_140px_rgba(34,68,10,0.55)]">
+      <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 p-6 backdrop-blur-xl sm:p-8 md:p-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(50,97,14,0.4),_transparent_70%)]" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
+          style={{ backgroundImage: "url('/Images/northside-map-grid.png')", backgroundSize: "cover" }}
+          aria-hidden
+        />
 
-        <div className="relative z-10">
-          <div className="mb-2 flex items-center gap-2 text-emerald-100">
-            <ShieldIcon className="h-5 w-5" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.34em]">
-              Exclusive Buyer Access
-            </span>
+        <div className="relative z-10 space-y-6">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-500/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100 shadow-sm backdrop-blur">
+              VIP
+            </div>
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <h3 className="text-3xl font-semibold tracking-tight text-white md:text-[2.35rem]">Match Concierge</h3>
+              <div className="flex flex-wrap items-center gap-2">
+                {[
+                  { icon: "⏱️", text: "Takes ~1 minute" },
+                  { icon: "✅", text: "No spam, no obligation" },
+                  { icon: "🔒", text: "Secure & private" },
+                  { icon: "📍", text: "Local market experts" },
+                ].map((p) => (
+                  <span
+                    key={p.text}
+                    className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[12px] font-semibold text-white shadow-sm backdrop-blur"
+                  >
+                    <span>{p.icon}</span> {p.text}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="max-w-xl text-sm text-emerald-100/85 md:text-base">
+              Tell us how you live — we’ll match you to the right town, street, and home.
+            </p>
           </div>
-          <h3 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">
-            Unlock Your Secret Weapon for Buying in the NorthSide GTA
-          </h3>
-          <p className="mt-1 max-w-2xl text-sm text-emerald-100/80 md:text-base">
-            Tell us a bit more and we’ll tailor your NorthSide GTA Match, strategy, and tours.
-          </p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            {[
-              { icon: "⏱️", text: "Takes ~1 minute" },
-              { icon: "✅", text: "No spam, no obligation" },
-              { icon: "🔒", text: "Secure & private" },
-              { icon: "📍", text: "Local market experts" },
-            ].map((p) => (
-              <span
-                key={p.text}
-                className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[12px] font-semibold text-white shadow-sm backdrop-blur"
-              >
-                <span>{p.icon}</span> {p.text}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-4">
+          <div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
               <div
                 className="h-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 transition-all"
@@ -347,13 +351,13 @@ function BuyerSignupForm() {
               tabIndex={-1}
               role="alert"
               aria-live="assertive"
-              className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100"
+              className="mt-2 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100"
             >
               {error}
             </div>
           )}
 
-          <form onSubmit={onSubmit} className="mt-4 grid grid-cols-1 gap-5">
+          <form onSubmit={onSubmit} className="grid grid-cols-1 gap-5">
             <div className="grid gap-3 md:grid-cols-2">
               <label className="block">
                 <span className="text-sm font-medium text-white">
@@ -619,16 +623,16 @@ function BuyerSignupForm() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               <button
                 type="submit"
                 disabled={!requiredOk || sending}
-                className="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-base font-semibold text-emerald-900 shadow-xl shadow-emerald-900/40 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {sending ? "Sending…" : "Start Here"}
+                {sending ? "Sending…" : "Start Your Match"}
               </button>
 
-              <p className="text-xs text-emerald-100/70">No spam. Unsubscribe anytime.</p>
+              <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
             </div>
 
             <input
@@ -655,10 +659,430 @@ function BuyerSignupForm() {
   );
 }
 
+function BuyersHero({ onStartSearch, onTalkToAgent }) {
+  return (
+    <section className="relative isolate">
+      <figure className="relative h-[60vh] w-full overflow-hidden lg:h-[75vh] lg:max-h-[820px]">
+       <img
+  src={`${process.env.PUBLIC_URL || ''}/uploads/buyers-hero-northside-family.jpg`}
+  alt="Young family exploring a NorthSide GTA neighborhood with stone and brick homes at sunset — representing the lifestyle of buying north of Toronto."
+  loading="eager"
+  decoding="async"
+  className="w-full h-[75vh] object-cover"
+/>
+      </figure>
+
+      <div className="absolute inset-0">
+        <div className="mx-auto flex h-full w-full max-w-6xl items-end px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-16">
+          <div className="relative max-w-xl">
+            <div
+              className="absolute -inset-6 rounded-[32px] bg-gradient-to-br from-[#32610E]/70 via-[#244c0b]/60 to-transparent"
+              aria-hidden
+            />
+            <div className="relative rounded-[32px] border border-white/15 bg-white/10 p-6 shadow-[0_30px_120px_rgba(4,17,12,0.55)] backdrop-blur lg:p-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+                BUYERS • NORTHSIDE GTA
+              </div>
+              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.9rem]">
+                Find your NorthSide home.
+              </h1>
+              <p className="mt-3 max-w-lg text-base text-emerald-50/90 sm:text-lg">
+                Space, community, and lifestyle north of Toronto — with Finally Home Agents.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button
+                  type="button"
+                  onClick={() => onStartSearch?.()}
+                  className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                >
+                  Start Your Home Search
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTalkToAgent?.()}
+                  className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+                >
+                  Talk to an Agent
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyBuyWithUsBand() {
+  const items = [
+    { icon: "✅", text: "Local intel you can’t Google — schools, micro-neighborhoods, commutes." },
+    { icon: "🧭", text: "Concierge search — we shortlist and book tours for you." },
+    { icon: "🛡️", text: "Offer strategy that wins — clean terms, timing, and comps that matter." },
+    { icon: "🤝", text: "From offer to keys — financing, lawyers, inspections, movers." },
+  ];
+
+  return (
+    <section aria-label="Why buy with Finally Home Agents">
+      <div className="rounded-[28px] border border-white/10 bg-white/10 p-5 shadow-[0_24px_70px_rgba(4,17,12,0.45)] backdrop-blur">
+        <div className="grid gap-4 text-sm text-emerald-50 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map(({ icon, text }) => (
+            <div key={text} className="flex items-start gap-3">
+              <span className="text-lg leading-none">{icon}</span>
+              <p className="leading-6 text-emerald-50/90">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TownQuickPicksStrip() {
+  return (
+    <section aria-labelledby="town-quick-picks-heading" className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_24px_70px_rgba(4,17,12,0.4)] backdrop-blur">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 id="town-quick-picks-heading" className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Town quick-picks
+          </h2>
+          <p className="mt-1 text-sm text-emerald-100/80">Tap a town to jump straight into listings and local intel.</p>
+        </div>
+      </div>
+      <div className="mt-5 flex flex-wrap gap-3">
+        {TOWN_QUICK_PICKS.map((town) => (
+          <a
+            key={town.name}
+            href={town.href}
+            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-white/60 hover:bg-white/20"
+          >
+            <span>{town.name}</span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-100/70 group-hover:text-white/90">
+              {town.hint}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BuyersReviewCarousel() {
+  const grouped = useMemo(() => {
+    const chunkSize = 3;
+    const acc = [];
+    for (let i = 0; i < GOOGLE_REVIEWS.length; i += chunkSize) {
+      acc.push(GOOGLE_REVIEWS.slice(i, i + chunkSize));
+    }
+    return acc;
+  }, []);
+
+  const totalSlides = grouped.length || 1;
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || totalSlides <= 1) return;
+    const id = setInterval(() => {
+      setActive((prev) => (prev + 1) % totalSlides);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [paused, totalSlides]);
+
+  useEffect(() => {
+    if (active >= totalSlides) {
+      setActive(0);
+    }
+  }, [active, totalSlides]);
+
+  if (grouped.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="space-y-6" aria-labelledby="buyers-reviews-heading">
+      <div className="text-center">
+        <h2 id="buyers-reviews-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Real buyers. Real reviews.
+        </h2>
+        <p className="mt-2 text-base text-emerald-100/80">Verified Google reviews from NorthSide GTA clients.</p>
+      </div>
+
+      <div
+        className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-4 shadow-[0_24px_80px_rgba(4,17,12,0.45)] backdrop-blur"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <div
+          className="flex transition-transform duration-700 ease-out"
+          style={{ transform: `translateX(-${active * 100}%)` }}
+        >
+          {grouped.map((group, index) => (
+            <div key={index} className="w-full shrink-0 px-1 sm:px-2">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {group.map((review) => (
+                  <article
+                    key={review.name}
+                    className="flex h-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/12 p-5 text-left text-emerald-50 shadow-[0_14px_40px_rgba(4,17,12,0.35)] backdrop-blur"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/80">
+                      <img src="/Images/google-logo.png" alt="Google" className="h-5 w-5" loading="lazy" />
+                      Finally Home Agents
+                    </div>
+                    <p className="text-sm leading-6 text-emerald-50/90 sm:text-base">{review.quote}</p>
+                    <div className="mt-auto text-sm font-semibold text-white/90">— {review.name}</div>
+                    <span className="text-[11px] uppercase tracking-[0.3em] text-emerald-100/60">Verified Client Review</span>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {totalSlides > 1 && (
+          <div className="mt-6 flex items-center justify-center gap-2">
+            {Array.from({ length: totalSlides }).map((_, index) => (
+              <span
+                key={index}
+                className={`h-1.5 w-6 rounded-full transition ${index === active ? "bg-emerald-300" : "bg-white/25"}`}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ProcessSection() {
+  return (
+    <section aria-labelledby="buyers-process-heading" className="space-y-6">
+      <div className="text-center">
+        <h2 id="buyers-process-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Buying with Finally Home Agents is simple
+        </h2>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {PROCESS_STEPS.map((step) => (
+          <div key={step.title} className="rounded-3xl border border-white/10 bg-white/8 p-5 text-left shadow-[0_18px_50px_rgba(4,17,12,0.4)] backdrop-blur">
+            <h3 className="text-lg font-semibold text-white">{step.title}</h3>
+            <p className="mt-1 text-sm text-emerald-100/80">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CallbackDrawer({ expanded, onExpandedChange }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
+  const [showErrors, setShowErrors] = useState(false);
+
+  const formEndpoint = useMemo(() => getFormEndpoint(), []);
+
+  const validations = useMemo(() => {
+    const issues = {};
+    if (!name.trim()) issues.name = "Name is required.";
+    if (!phone.trim()) issues.phone = "Phone number is required.";
+    return issues;
+  }, [name, phone]);
+
+  const visibleErrors = showErrors ? validations : {};
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (submitting) return;
+
+    if (Object.keys(validations).length > 0) {
+      setShowErrors(true);
+      return;
+    }
+
+    setSubmitting(true);
+    setShowErrors(false);
+    setError(null);
+
+    try {
+      const payload = new FormData();
+      payload.append("name", name.trim());
+      payload.append("phone", phone.trim());
+      if (notes.trim()) {
+        payload.append("message", notes.trim());
+      }
+      payload.append("source", "callback");
+
+      const response = await fetch(formEndpoint, {
+        method: "POST",
+        body: payload,
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      setSuccess(true);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const panelId = "buyers-callback-panel";
+  const titleId = "buyers-callback-title";
+
+  if (success) {
+    return (
+      <div className="rounded-[28px] border border-white/15 bg-white/10 p-6 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
+        <h3 className="text-xl font-semibold">We’ll be in touch shortly</h3>
+        <p className="mt-2 text-sm text-emerald-100/85">Thanks for your request! A NorthSide GTA advisor will call you between 9am–9pm.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-[28px] border border-white/15 bg-white/8 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
+      <button
+        type="button"
+        onClick={() => onExpandedChange(!expanded)}
+        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold uppercase tracking-[0.32em] text-emerald-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        aria-labelledby={titleId}
+      >
+        <span id={titleId}>Premium callback (9am–9pm)</span>
+        <span aria-hidden className="text-lg">{expanded ? "–" : "+"}</span>
+      </button>
+      <div id={panelId} hidden={!expanded} className="border-t border-white/10 px-6 py-6 sm:px-8">
+        <form className="space-y-4" onSubmit={submit}>
+          <label className="block text-sm">
+            <span className="text-emerald-100/80">Name *</span>
+            <input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              required
+            />
+            {visibleErrors.name && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.name}</span>}
+          </label>
+          <label className="block text-sm">
+            <span className="text-emerald-100/80">Phone *</span>
+            <input
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              required
+            />
+            {visibleErrors.phone && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.phone}</span>}
+          </label>
+          <label className="block text-sm">
+            <span className="text-emerald-100/80">Notes <span className="text-emerald-100/60">(optional)</span></span>
+            <textarea
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              rows={3}
+              className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            />
+          </label>
+
+          {error && <p className="text-sm text-red-200">{error}</p>}
+
+          <div className="flex flex-col gap-2">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_35px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? "Sending…" : "Request callback"}
+            </button>
+            <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function StickyCtaBar({ onStartSearch, onCallBack }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const maxScroll = doc.scrollHeight - doc.clientHeight;
+      if (maxScroll <= 0) {
+        setVisible(false);
+        return;
+      }
+      setVisible(scrollTop >= maxScroll * 0.25);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-6">
+      <div className="pointer-events-auto mx-auto flex max-w-3xl flex-col gap-3 rounded-2xl border border-white/10 bg-[#05180f]/95 p-4 text-white shadow-[0_20px_60px_rgba(4,17,12,0.55)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm font-semibold text-emerald-50/90 sm:text-base">Looking north of Toronto? We’ll guide you.</p>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={onStartSearch}
+            className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          >
+            Start Your Search
+          </button>
+          <button
+            type="button"
+            onClick={onCallBack}
+            className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+          >
+            Call Back
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
 
 /* ───────── Page ───────── */
 export default function BuyersPage() {
+  const [callbackOpen, setCallbackOpen] = useState(false);
+
+  const scrollToId = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const handleStartSearch = () => scrollToId("match-concierge");
+  const handleTalkToAgent = () => {
+    setCallbackOpen(true);
+    scrollToId("buyers-contact");
+  };
+
   return (
     <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
       <Navigation />
@@ -692,58 +1116,81 @@ export default function BuyersPage() {
         </script>
       </DynamicMetaTags>
 
-      <main className="relative">
+      <main className="relative pb-24">
+        <BuyersHero onStartSearch={handleStartSearch} onTalkToAgent={handleTalkToAgent} />
+
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.25),_transparent_65%)]" aria-hidden />
         <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
         <div className="pointer-events-none absolute bottom-[-40%] right-[-20%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/20 blur-3xl" aria-hidden />
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-20 pt-16 sm:px-6 lg:px-8">
-          <section className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-              <LockIcon className="h-4 w-4" />
-              Exclusive Buyer Portal
-            </div>
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem]">
-              Unlock Your Secret Weapon for Buying in the NorthSide GTA
-            </h1>
-            <p className="mt-4 text-base text-emerald-100/85 sm:text-lg">
-              Register to get your NorthSide GTA Match, insider strategies, and VIP alerts — the unfair advantage other buyers don’t have.
-            </p>
-          </section>
+        <div className="relative z-10">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-12 sm:px-6 lg:px-8 lg:pb-24">
+            <div className="space-y-16 sm:space-y-20">
+              <WhyBuyWithUsBand />
 
-          <section className="mt-10">
-            <BuyerSignupForm />
-          </section>
+              <section id="match-concierge" className="scroll-mt-28 space-y-8">
+                <div className="max-w-3xl">
+                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                    Match Concierge / Home Search
+                  </h2>
+                  <p className="mt-3 text-base text-emerald-100/80 sm:text-lg">
+                    Register to get your NorthSide GTA match, insider strategies, and VIP alerts — the unfair advantage other buyers don’t have.
+                  </p>
+                </div>
+                <BuyerSignupForm />
+              </section>
 
-          <section className="mt-16">
-            <ComparisonGrid />
-          </section>
+              <BuyersReviewCarousel />
 
-          <section className="mt-10 text-center text-sm text-emerald-100/80">
-            Join NorthSide GTA buyers who found the right town — and won the right home — with Finally Home Agents.
-          </section>
+              <TownQuickPicksStrip />
 
-          <section className="mt-16">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What Our Clients Are Saying</h2>
-            </div>
-            <div className="mt-8">
-              <GoogleGradientReviews />
-            </div>
-          </section>
-
-          <section className="mt-20">
-            <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-10 text-center shadow-[0_45px_130px_rgba(34,68,10,0.6)]">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_transparent_70%)]" aria-hidden />
-              <div className="relative z-10 space-y-4">
-                <h3 className="text-3xl font-semibold md:text-4xl">Don’t Leave Power on the Table</h3>
-                <p className="text-lg text-emerald-100/90 md:text-xl">
-                  Register now to unlock your Match and move forward with confidence.
+              <section className="space-y-6">
+                <div className="mx-auto max-w-3xl text-center">
+                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                    Buying on your own vs with Finally Home Agents
+                  </h2>
+                  <p className="mt-3 text-base text-emerald-100/80">
+                    See how concierge-level strategy, intel, and execution change your outcome in the NorthSide GTA.
+                  </p>
+                </div>
+                <ComparisonGrid />
+                <p className="text-center text-sm text-emerald-100/80">
+                  Join NorthSide GTA buyers who found the right town — and won the right home — with Finally Home Agents.
                 </p>
-              </div>
+              </section>
+
+              <ProcessSection />
+
+              <section className="space-y-6">
+                <div className="mx-auto max-w-3xl text-center">
+                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Featured Google love</h2>
+                  <p className="mt-2 text-base text-emerald-100/80">
+                    A quick spotlight from the buyers we’ve guided north of Toronto.
+                  </p>
+                </div>
+                <GoogleGradientReviews />
+              </section>
+
+              <section className="space-y-6">
+                <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-12 text-center shadow-[0_45px_130px_rgba(34,68,10,0.6)]">
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_transparent_70%)]" aria-hidden />
+                  <div className="relative z-10 space-y-4">
+                    <h3 className="text-3xl font-semibold md:text-4xl">Don’t Leave Power on the Table</h3>
+                    <p className="text-lg text-emerald-100/90 md:text-xl">
+                      Register now to unlock your Match and move forward with confidence.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <section id="buyers-contact" className="scroll-mt-28">
+                <CallbackDrawer expanded={callbackOpen} onExpandedChange={setCallbackOpen} />
+              </section>
             </div>
-          </section>
+          </div>
         </div>
+
+        <StickyCtaBar onStartSearch={handleStartSearch} onCallBack={handleTalkToAgent} />
       </main>
 
       <Footer />

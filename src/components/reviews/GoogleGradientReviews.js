@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const REVIEWS = [
+export const GOOGLE_REVIEWS = [
   {
     name: "Susan Booth",
     quote:
@@ -37,7 +37,7 @@ export default function GoogleGradientReviews({ className = "" }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setIndex((x) => (x + 1) % REVIEWS.length), 6000);
+    const id = setInterval(() => setIndex((x) => (x + 1) % GOOGLE_REVIEWS.length), 6000);
     return () => clearInterval(id);
   }, []);
 
@@ -68,7 +68,7 @@ export default function GoogleGradientReviews({ className = "" }) {
             </div>
 
             <div className="relative h-40 sm:h-36">
-              {REVIEWS.map((review, i) => (
+              {GOOGLE_REVIEWS.map((review, i) => (
                 <div
                   key={review.name}
                   className={`absolute inset-0 flex flex-col items-center justify-center gap-3 px-2 transition-opacity duration-700 ease-out ${
@@ -87,7 +87,7 @@ export default function GoogleGradientReviews({ className = "" }) {
             </div>
 
             <div className="mt-6 flex items-center justify-center gap-2">
-              {REVIEWS.map((review, i) => (
+              {GOOGLE_REVIEWS.map((review, i) => (
                 <span
                   key={review.name}
                   className={`h-1.5 w-6 rounded-full transition ${
