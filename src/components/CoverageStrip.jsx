@@ -9,13 +9,13 @@ import React from "react";
  */
 
 const TOWNS = [
-  { name: "Georgina", slug: "georgina", href: "/communities/georgina", icon: "/Images/towns/georgina.jpg" },
-  { name: "East Gwillimbury", slug: "east-gwillimbury", href: "/communities/east-gwillimbury", icon: "/Images/towns/east-gwillimbury.jpg" },
-  { name: "Newmarket", slug: "newmarket", href: "/communities/newmarket", icon: "/Images/towns/newmarket.jpg" },
-  { name: "Aurora", slug: "aurora", href: "/communities/aurora", icon: "/Images/towns/aurora.jpg" },
-  { name: "Stouffville", slug: "stouffville", href: "/communities/stouffville", icon: "/Images/towns/stouffville.jpg" },
-  { name: "Uxbridge", slug: "uxbridge", href: "/communities/uxbridge", icon: "/Images/towns/uxbridge.jpg" },
-  { name: "Scugog", slug: "scugog", href: "/communities/scugog", icon: "/Images/towns/scugog.jpg" },
+  { name: "Georgina", slug: "georgina", href: "/georgina", icon: "/Images/towns/georgina.jpg" },
+  { name: "East Gwillimbury", slug: "east-gwillimbury", href: "/east-gwillimbury", icon: "/Images/towns/east-gwillimbury.jpg" },
+  { name: "Newmarket", slug: "newmarket", href: "/newmarket", icon: "/Images/towns/newmarket.jpg" },
+  { name: "Aurora", slug: "aurora", href: "/aurora", icon: "/Images/towns/aurora.jpg" },
+  { name: "Stouffville", slug: "stouffville", href: "/stouffville", icon: "/Images/towns/stouffville.jpg" },
+  { name: "Uxbridge", slug: "uxbridge", href: "/uxbridge", icon: "/Images/towns/uxbridge.jpg" },
+  { name: "Scugog", slug: "scugog", href: "/scugog", icon: "/Images/towns/scugog.jpg" },
 ];
 
 function CoverageStrip({ mode = "static", showLabels = true, speed = 20, className = "" }) {
