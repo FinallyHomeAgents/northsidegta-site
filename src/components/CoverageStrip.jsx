@@ -11,9 +11,9 @@ const TOWNS = [
   { name: "Scugog",             slug: "scugog",             href: "/communities/scugog",             icon: "/Images/towns/scugog.jpg" },
 ];
 
-const RAIL_CLASS = "coverage-strip__rail";
+const LIST_CLASS = "coverage-strip__list";
 
-export default function CoverageStrip({ showLabels = true, className = "" }) {
+export default function CoverageStrip({ className = "" }) {
   const rootClassName = `relative w-full bg-[#32610E] text-white ${className || ""}`.trim();
 
   const item = (t) => (
@@ -38,47 +38,43 @@ export default function CoverageStrip({ showLabels = true, className = "" }) {
             }}
           />
         </span>
-        {showLabels && (
-          <span className="hidden md:inline text-[13px] font-semibold leading-none tracking-wide text-white/95 group-hover:text-white">
-            {t.name}
-          </span>
-        )}
+        <span className="hidden md:inline text-[13px] font-semibold leading-none tracking-wide text-white/95 group-hover:text-white">
+          {t.name}
+        </span>
       </a>
     </li>
   );
 
   return (
     <div className={rootClassName}>
-      <div className="mx-auto max-w-7xl px-3">
-        <div className="flex flex-col items-center gap-1 py-1.5">
-          {/* Compact centered NorthSide badge */}
-          <div className="flex h-9 items-center justify-center">
-            <a href="/" aria-label="NorthSide GTA" className="inline-flex items-center gap-2">
-              <img
-                src="/Images/brand/northside-mark.svg"
-                alt=""
-                width={18}
-                height={18}
-                className="h-4 w-4 md:h-[18px] md:w-[18px]"
-                onError={(e) => {
-                  e.currentTarget.remove();
-                }}
-              />
-              <span className="text-[11px] md:text-xs font-bold tracking-wide uppercase text-white/90">
-                NorthSide GTA
-              </span>
-            </a>
-          </div>
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] md:h-[3px] bg-white/12">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] md:h-[3px] w-[40%] bg-gradient-to-r from-white/30 to-transparent animate-[ns-sweep_3s_ease-in-out_infinite] rounded-full" />
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] md:h-[3px] w-[40%] bg-gradient-to-l from-white/30 to-transparent animate-[ns-sweep_3s_ease-in-out_infinite] rounded-full"
+          style={{ animationDelay: "1.5s" }}
+        />
+      </div>
 
-          <ul className={`${RAIL_CLASS} flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-1 [scrollbar-width:none] [-ms-overflow-style:none]`}>
-            <style>{`.${RAIL_CLASS}::-webkit-scrollbar{display:none}`}</style>
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(50%+10px)] md:-translate-y-[calc(50%+12px)]">
+        <div className="relative">
+          <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white/95 ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
+          <div className="absolute -inset-2 rounded-full bg-white/10 blur-sm" />
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-3 py-3">
+        <div className="flex justify-center">
+          <ul className={`${LIST_CLASS} relative z-[1] flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-2 [scrollbar-width:none] [-ms-overflow-style:none]`}>
+            <style>{`.${LIST_CLASS}::-webkit-scrollbar{display:none}`}</style>
             {TOWNS.map(item)}
           </ul>
         </div>
       </div>
-      {/* subtle top+bottom separators for depth */}
+
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[#3A7512]/90" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[#264C0B]/90" />
+
+      <style>{`@keyframes ns-sweep{0%{opacity:.2;transform:translateX(-50%) scaleX(.4)}50%{opacity:.6}100%{opacity:.2;transform:translateX(-50%) scaleX(1)}}`}</style>
     </div>
   );
 }
