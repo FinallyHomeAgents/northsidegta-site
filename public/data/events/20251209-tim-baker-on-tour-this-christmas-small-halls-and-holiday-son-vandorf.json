@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Tim-Baker.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/tim-baker-on-tour/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/tim-baker-on-tour/",
-  "updatedAt": "2025-11-11T08:35:18Z"
+  "lastSyncedAt": "2025-11-12T08:36:56.504Z",
+  "updatedAt": "2025-11-12T08:36:56.504Z",
+  "featured": false
 }
