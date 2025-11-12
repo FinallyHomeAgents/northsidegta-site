@@ -47,7 +47,7 @@ export default function CoverageStrip({ className = "" }) {
 
   return (
     <div className={rootClassName}>
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] md:h-[3px] bg-white/12">
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] md:h-[3px] bg-white/12 z-0">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] md:h-[3px] w-[40%] bg-gradient-to-r from-white/30 to-transparent animate-[ns-sweep_3s_ease-in-out_infinite] rounded-full" />
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] md:h-[3px] w-[40%] bg-gradient-to-l from-white/30 to-transparent animate-[ns-sweep_3s_ease-in-out_infinite] rounded-full"
@@ -55,16 +55,16 @@ export default function CoverageStrip({ className = "" }) {
         />
       </div>
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(50%+10px)] md:-translate-y-[calc(50%+12px)]">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(50%+18px)] md:-translate-y-[calc(50%+22px)] z-20">
         <div className="relative">
-          <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white/95 ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
-          <div className="absolute -inset-2 rounded-full bg-white/10 blur-sm" />
+          <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
+          <div className="absolute -inset-2 rounded-full bg-white/15 blur-sm" />
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl px-3 py-3">
         <div className="flex justify-center">
-          <ul className={`${LIST_CLASS} relative z-[1] flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-2 [scrollbar-width:none] [-ms-overflow-style:none]`}>
+          <ul className={`${LIST_CLASS} relative z-10 flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-2 [scrollbar-width:none] [-ms-overflow-style:none]`}>
             <style>{`.${LIST_CLASS}::-webkit-scrollbar{display:none}`}</style>
             {TOWNS.map(item)}
           </ul>
