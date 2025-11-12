@@ -1,5 +1,7 @@
+'use client';
+
 // src/components/CoverageStrip.jsx
-import React from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 const TOWNS = [
   { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/Images/towns/georgina.jpg" },
@@ -14,7 +16,46 @@ const TOWNS = [
 const LIST_CLASS = "coverage-strip__list";
 
 export default function CoverageStrip({ className = "" }) {
+  const towns = useMemo(() => TOWNS, []);
   const rootClassName = `relative w-full bg-[#32610E] text-white ${className || ""}`.trim();
+  const ulRef = useRef(null);
+  const [pinX, setPinX] = useState(null);
+
+  const updatePinPosition = useCallback(() => {
+    const ul = ulRef.current;
+    if (!ul) return;
+    const items = Array.from(ul.querySelectorAll("li"));
+    if (!items.length) return;
+    const midIndex = Math.floor(items.length / 2);
+    const mid = items[midIndex];
+    if (!mid) return;
+    const r = mid.getBoundingClientRect();
+    const ur = ul.getBoundingClientRect();
+    const center = r.left + r.width / 2 - ur.left;
+    setPinX(center);
+  }, []);
+
+  useLayoutEffect(() => {
+    updatePinPosition();
+    const ul = ulRef.current;
+    if (!ul) return;
+    const supportsResizeObserver = typeof ResizeObserver !== "undefined";
+    const ro = supportsResizeObserver ? new ResizeObserver(updatePinPosition) : null;
+    if (ro) {
+      ro.observe(ul);
+    }
+    window.addEventListener("resize", updatePinPosition);
+    return () => {
+      window.removeEventListener("resize", updatePinPosition);
+      if (ro) {
+        ro.disconnect();
+      }
+    };
+  }, [updatePinPosition]);
+
+  useEffect(() => {
+    updatePinPosition();
+  }, [updatePinPosition, towns]);
 
   const item = (t) => (
     <li key={t.slug} className="shrink-0">
@@ -55,19 +96,29 @@ export default function CoverageStrip({ className = "" }) {
         />
       </div>
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(50%+18px)] md:-translate-y-[calc(50%+22px)] z-20">
-        <div className="relative">
-          <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
-          <div className="absolute -inset-2 rounded-full bg-white/15 blur-sm" />
-        </div>
-      </div>
-
       <div className="mx-auto max-w-7xl px-3 py-3">
-        <div className="flex justify-center">
-          <ul className={`${LIST_CLASS} relative z-10 flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-2 [scrollbar-width:none] [-ms-overflow-style:none]`}>
+        <div className="relative flex h-11 items-center justify-center">
+          <ul
+            ref={ulRef}
+            className={`${LIST_CLASS} relative z-10 flex w-full items-center justify-center gap-1 overflow-x-auto md:overflow-visible py-2 [scrollbar-width:none] [-ms-overflow-style:none]`}
+          >
             <style>{`.${LIST_CLASS}::-webkit-scrollbar{display:none}`}</style>
-            {TOWNS.map(item)}
+            {towns.map(item)}
           </ul>
+          {/* Center pin positioned over the true middle town */}
+          <div
+            className="pointer-events-none absolute z-20"
+            style={{
+              left: pinX ?? "50%",
+              top: "-10px",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="relative">
+              <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
+              <div className="absolute -inset-2 rounded-full bg-white/20 blur-sm" />
+            </div>
+          </div>
         </div>
       </div>
 
