@@ -2,7 +2,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import towns from "./towns.json";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
@@ -97,7 +97,7 @@ export default function TownPage() {
   if (!town) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navigation />
+        <HeaderShell />
         <main className="flex-1 px-4 py-16 max-w-4xl mx-auto text-center">
           <h1 className="text-2xl font-bold mb-2">Town not found</h1>
           <p className="text-gray-600 mb-6">
@@ -144,7 +144,7 @@ export default function TownPage() {
 
     return (
       <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
-        <Navigation />
+        <HeaderShell />
         <TownPageLayout
           townName={town.name}
           hero={town.hero}
@@ -176,7 +176,7 @@ export default function TownPage() {
   return (
     // Keep horizontal overflow hidden at the page level to prevent accidental widening.
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
-      <Navigation />
+      <HeaderShell />
 
       {/* Hero */}
       <section className="relative isolate">

@@ -1,5 +1,5 @@
 import React from "react";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
 import Footer from "./Footer";
@@ -44,7 +44,7 @@ const HERO_STATS = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Navigation />
+      <HeaderShell />
       <DynamicMetaTags {...HOME_ROUTE_META}>
         <script type="application/ld+json">
           {JSON.stringify({

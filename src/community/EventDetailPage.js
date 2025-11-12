@@ -12,7 +12,7 @@ import {
   Linkedin,
   Mail,
 } from 'lucide-react'
-import Navigation from '../Navigation'
+import HeaderShell from '../components/HeaderShell'
 import Footer from '../Footer'
 import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils'
 import {
@@ -539,7 +539,7 @@ export default function EventDetailPage() {
         {schema && <script type="application/ld+json">{schema}</script>}
       </DynamicMetaTags>
 
-      <Navigation />
+      <HeaderShell />
 
       <main className="bg-slate-50">
         <section className="border-b border-slate-200 bg-white">

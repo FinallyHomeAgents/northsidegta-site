@@ -1,7 +1,7 @@
 // Legacy contact page kept for feature-flag fallback
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet-async";
-import Navigation from '../../Navigation';
+import HeaderShell from '../HeaderShell';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 import {
@@ -82,7 +82,7 @@ export default function LegacyContactPage() {
   return (
     <>
       <PageBackground />
-      <Navigation />
+        <HeaderShell />
       <Helmet>
   <title>Contact Finally Home Agents | NorthSide GTA Realtors®</title>
   <meta

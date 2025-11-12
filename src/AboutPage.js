@@ -1,7 +1,7 @@
 // src/AboutPage.js
 import React from "react";
 import { Link } from "react-router-dom";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import { Award, Lightbulb, Mail, MapPin, ShieldCheck } from "lucide-react";
 import teamMembers from "./data/teamMembers";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
@@ -57,7 +57,7 @@ const ABOUT_ROUTE_META = getStaticRouteMeta("/about") || {};
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Navigation />
+      <HeaderShell />
       <DynamicMetaTags {...ABOUT_ROUTE_META} />
 
       <main className="pb-20 pt-6 sm:pt-10">

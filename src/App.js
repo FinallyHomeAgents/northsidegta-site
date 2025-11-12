@@ -78,6 +78,9 @@ function App() {
         <Route path="/media"        element={<MediaPage />} />
         <Route path="/referral-partners" element={<ReferralPartnersPage />} />
 
+        {/* Town pages — community slugs */}
+        <Route path="/communities/:slug" element={<TownPage />} />
+
         {/* Town pages — short URLs like /aurora */}
         {TOWN_SLUGS.sort().map(slug => (
           <Route key={slug} path={`/${slug}`} element={<TownPage />} />

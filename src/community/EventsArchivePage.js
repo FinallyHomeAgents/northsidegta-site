@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { DateTime } from 'luxon'
 import { CalendarDays, ExternalLink, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import Navigation from '../Navigation'
+import HeaderShell from '../components/HeaderShell'
 import Footer from '../Footer'
 import { hydrateEvents, formatDateRange } from './eventUtils'
 
@@ -165,7 +165,7 @@ export default function EventsArchivePage() {
         <meta property="og:description" content={pageDescription} />
       </Helmet>
 
-      <Navigation />
+      <HeaderShell />
 
       <main className="bg-slate-50">
         <section className="bg-slate-900 py-16 text-white">

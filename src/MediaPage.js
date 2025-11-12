@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import HeroPromo from "./components/socials/HeroPromo";
 import IgEmbedCard from "./components/socials/IgEmbedCard";
@@ -198,7 +198,7 @@ export default function MediaPage() {
   return (
     <>
       <DynamicMetaTags {...MEDIA_ROUTE_META} />
-      <Navigation />
+      <HeaderShell />
       <main className="relative min-h-screen bg-neutral-950 text-white">
         <section
           aria-label="Hero section showing a smartphone with Videos Reels on screen, representing NorthSide GTA real estate media content."

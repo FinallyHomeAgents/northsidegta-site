@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from "react";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import Card from "./components/ui/Card";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
@@ -895,7 +895,7 @@ const SELLERS_ROUTE_META = getStaticRouteMeta("/sellers") || {};
 export default function SellersPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <Navigation />
+      <HeaderShell />
       <DynamicMetaTags {...SELLERS_ROUTE_META}>
         <script type="application/ld+json">
           {JSON.stringify({

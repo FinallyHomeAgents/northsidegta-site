@@ -1,7 +1,7 @@
 // src/SignWithUsPage.js
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Button     from "./components/ui/Button";
 import Card       from "./components/ui/Card";
 
@@ -19,7 +19,7 @@ export default function SignWithUsPage() {
   return (
     <>
       <PageBackground />
-      <Navigation />
+      <HeaderShell />
 
       <Helmet>
   <title>Sell With Finally Home Agents | NorthSide GTA Listing Experts</title>

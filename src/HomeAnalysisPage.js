@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 
 const clamp1to10 = (n) => Math.min(10, Math.max(1, Number(n) || 1));
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v).trim());
@@ -311,7 +311,7 @@ export default function HomeAnalysisPage() {
   if (done) {
     return (
       <div className="min-h-screen bg-gray-50 text-gray-900">
-        <Navigation />
+        <HeaderShell />
         <Helmet>
   <title>Free Home Value Estimate — NorthSide GTA | Finally Home Agents</title>
   <meta
@@ -383,7 +383,7 @@ export default function HomeAnalysisPage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <PageBackground />
-      <Navigation />
+      <HeaderShell />
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-white to-emerald-50/40">

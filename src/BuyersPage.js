@@ -1,6 +1,6 @@
 // src/BuyersPage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
@@ -1085,7 +1085,7 @@ export default function BuyersPage() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
-      <Navigation />
+      <HeaderShell />
       <DynamicMetaTags {...BUYERS_ROUTE_META}>
         <script type="application/ld+json">
           {JSON.stringify({

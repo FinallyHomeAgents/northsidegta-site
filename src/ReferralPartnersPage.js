@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import GoogleGradientReviews from "./components/reviews/GoogleGradientReviews";
 import { getFormEndpoint } from "./components/contact/contactConfig";
@@ -453,7 +453,7 @@ export default function ReferralPartnersPage() {
         <link rel="canonical" href="https://www.northsidegta.ca/referral-partners" />
       </Helmet>
 
-      <Navigation />
+      <HeaderShell />
 
       <main className="bg-slate-50 text-slate-900">
         <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-emerald-900 to-emerald-700 text-white">

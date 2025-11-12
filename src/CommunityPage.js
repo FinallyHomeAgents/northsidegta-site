@@ -1,7 +1,7 @@
 // src/CommunityPage.js
 import React from 'react'
 import { CalendarDays, List, Map as MapIcon } from 'lucide-react'
-import Navigation from './Navigation'
+import HeaderShell from './components/HeaderShell'
 import Footer from './Footer'
 import EventFilters from './community/EventFilters'
 import EventCard from './community/EventCard'
@@ -262,7 +262,7 @@ export default function CommunityPage() {
         )}
       </DynamicMetaTags>
 
-      <Navigation />
+      <HeaderShell />
 
       <main className="bg-slate-50">
         <section className="relative isolate overflow-hidden" style={heroStyles}>
