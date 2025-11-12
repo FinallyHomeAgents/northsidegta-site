@@ -2,6 +2,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import Navigation from "./Navigation";
+import CoverageStrip from "./components/CoverageStrip";
 import Button     from "./components/ui/Button";
 import Card       from "./components/ui/Card";
 
@@ -20,6 +21,7 @@ export default function SignWithUsPage() {
     <>
       <PageBackground />
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
 
       <Helmet>
   <title>Sell With Finally Home Agents | NorthSide GTA Listing Experts</title>

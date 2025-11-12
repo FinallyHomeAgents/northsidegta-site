@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { marked } from "marked";
 import { DateTime } from "luxon";
 import Navigation from "../Navigation";
+import CoverageStrip from "../components/CoverageStrip";
 import Footer from "../Footer";
 import SmartContactForm from "../components/contact/SmartContactForm";
 import {
@@ -831,6 +832,7 @@ export default function InsightPage() {
       <DynamicMetaTags {...metaConfig} />
 
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
 
       <main>
         <Hero insight={insight} loading={loading} featureImageAlt={featureImageAlt} />

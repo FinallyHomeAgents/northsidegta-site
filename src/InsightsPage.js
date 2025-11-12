@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
+import CoverageStrip from "./components/CoverageStrip";
 import Footer from "./Footer";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
@@ -222,6 +223,7 @@ export default function InsightsPage() {
       <DynamicMetaTags {...INSIGHTS_ROUTE_META} />
 
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
         <InsightsHero />

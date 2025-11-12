@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navigation from "./Navigation";
+import CoverageStrip from "./components/CoverageStrip";
 import Footer from "./Footer";
 import HeroPromo from "./components/socials/HeroPromo";
 import IgEmbedCard from "./components/socials/IgEmbedCard";
@@ -199,6 +200,7 @@ export default function MediaPage() {
     <>
       <DynamicMetaTags {...MEDIA_ROUTE_META} />
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
       <main className="relative min-h-screen bg-neutral-950 text-white">
         <section
           aria-label="Hero section showing a smartphone with Videos Reels on screen, representing NorthSide GTA real estate media content."

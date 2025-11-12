@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import { CalendarDays, ExternalLink, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Navigation from '../Navigation'
+import CoverageStrip from '../components/CoverageStrip'
 import Footer from '../Footer'
 import { hydrateEvents, formatDateRange } from './eventUtils'
 
@@ -166,6 +167,7 @@ export default function EventsArchivePage() {
       </Helmet>
 
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
 
       <main className="bg-slate-50">
         <section className="bg-slate-900 py-16 text-white">

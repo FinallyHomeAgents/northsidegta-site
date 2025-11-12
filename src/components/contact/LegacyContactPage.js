@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet-async";
 import Navigation from '../../Navigation';
+import CoverageStrip from '../CoverageStrip';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 import {
@@ -83,6 +84,7 @@ export default function LegacyContactPage() {
     <>
       <PageBackground />
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
       <Helmet>
   <title>Contact Finally Home Agents | NorthSide GTA Realtors®</title>
   <meta

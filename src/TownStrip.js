@@ -19,7 +19,7 @@ const CLOSEST_TO_FURTHEST = [
 const TOWNS = [
   { id: "georgina",         name: "Georgina",         href: "/georgina",         img: "/Images/towns/georgina.jpg",        blurb: "Lake life & beaches." },
   { id: "uxbridge",         name: "Uxbridge",         href: "/uxbridge",         img: "/Images/towns/uxbridge.jpg",        blurb: "Trails & small-town charm." },
-  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/Images/towns/eastgwillimbury.jpg", blurb: "New builds & 404 access." },
+  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/Images/towns/east-gwillimbury.jpg", blurb: "New builds & 404 access." },
   { id: "newmarket",        name: "Newmarket",        href: "/newmarket",        img: "/Images/towns/newmarket.jpg",       blurb: "Shops, dining, GO train." },
   { id: "stouffville",      name: "Stouffville",      href: "/stouffville",      img: "/Images/towns/stouffville.jpg",     blurb: "Family streets & parks." },
   { id: "aurora",           name: "Aurora",           href: "/aurora",           img: "/Images/towns/aurora.jpg",          blurb: "Schools & quiet streets." },

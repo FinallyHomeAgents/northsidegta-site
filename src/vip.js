@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Helmet } from "react-helmet-async";
 import Navigation from './Navigation';   // ← added
+import CoverageStrip from './components/CoverageStrip';
 
 export default function VipPage() {
   const [enteredPassword, setEnteredPassword] = useState('');
@@ -42,6 +43,7 @@ export default function VipPage() {
     return (
       <>
         <Navigation />
+        <CoverageStrip mode="static" showLabels />
 
       import { Helmet } from "react-helmet-async";
 
@@ -98,6 +100,7 @@ export default function VipPage() {
     return (
       <>
         <Navigation />
+        <CoverageStrip mode="static" showLabels />
         <div className="min-h-screen bg-white flex items-center justify-center px-4">
           <form onSubmit={handleInfoSubmit} className="bg-gray-100 p-8 rounded-xl shadow-md max-w-md w-full">
             <h2 className="text-2xl font-bold mb-4 text-center text-brand-green">You're In!</h2>
@@ -144,6 +147,7 @@ export default function VipPage() {
   return (
     <>
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
       <div className="min-h-screen bg-white text-gray-900">
         <section className="relative h-64 w-full">
           <img

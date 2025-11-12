@@ -13,6 +13,7 @@ import {
   Mail,
 } from 'lucide-react'
 import Navigation from '../Navigation'
+import CoverageStrip from '../components/CoverageStrip'
 import Footer from '../Footer'
 import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils'
 import {
@@ -540,6 +541,7 @@ export default function EventDetailPage() {
       </DynamicMetaTags>
 
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
 
       <main className="bg-slate-50">
         <section className="border-b border-slate-200 bg-white">

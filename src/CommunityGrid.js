@@ -6,7 +6,7 @@ const towns = [
   { name: "Stouffville",      img: "/Images/towns/stouffville.jpg" },
   { name: "Newmarket",        img: "/Images/towns/newmarket.jpg" },
   { name: "Aurora",           img: "/Images/towns/aurora.jpg" },
-  { name: "East Gwillimbury", img: "/Images/towns/eastgwillimbury.jpg" },
+  { name: "East Gwillimbury", img: "/Images/towns/east-gwillimbury.jpg" },
   { name: "Uxbridge",         img: "/Images/towns/uxbridge.jpg" },
   { name: "Georgina",         img: "/Images/towns/georgina.jpg" },
   { name: "Scugog",           img: "/Images/towns/scugog.jpg" },   // ← NEW card

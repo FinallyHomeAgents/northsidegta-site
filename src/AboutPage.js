@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
+import CoverageStrip from "./components/CoverageStrip";
 import { Award, Lightbulb, Mail, MapPin, ShieldCheck } from "lucide-react";
 import teamMembers from "./data/teamMembers";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
@@ -58,6 +59,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navigation />
+      <CoverageStrip mode="static" showLabels />
       <DynamicMetaTags {...ABOUT_ROUTE_META} />
 
       <main className="pb-20 pt-6 sm:pt-10">

@@ -29,7 +29,7 @@ const CATEGORY_ORDER = [
 
 const TOWN_LOGO_PATHS = {
   georgina: "/Images/towns/georgina.jpg",
-  "east-gwillimbury": "/Images/towns/eastgwillimbury.jpg",
+  "east-gwillimbury": "/Images/towns/east-gwillimbury.jpg",
   newmarket: "/Images/towns/newmarket.jpg",
   aurora: "/Images/towns/aurora.jpg",
   stouffville: "/Images/towns/stouffville.jpg",

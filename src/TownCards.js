@@ -5,7 +5,7 @@ import React from "react";
 const towns = [
   { name: "Georgina",         image: "georgina.jpg" },
   { name: "Uxbridge",         image: "uxbridge.jpg" },
-  { name: "East Gwillimbury", image: "eastgwillimbury.jpg" },
+  { name: "East Gwillimbury", image: "east-gwillimbury.jpg" },
   { name: "Newmarket",        image: "newmarket.jpg" },
   { name: "Stouffville",      image: "stouffville.jpg" },
   { name: "Aurora",           image: "aurora.jpg" },
