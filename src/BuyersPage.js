@@ -664,7 +664,7 @@ function BuyersHero({ onStartSearch, onTalkToAgent }) {
     <section className="relative isolate">
       <figure className="relative h-[60vh] w-full overflow-hidden lg:h-[75vh] lg:max-h-[820px]">
         <img
-          src="/uploads/buyers-hero-northside-family.jpg"
+          src="/public/uploads/buyers-hero-northside-family.jpg"
           alt="Young family at the edge of a NorthSide GTA neighborhood, looking toward stone and brick homes at golden hour — welcoming the move north of Toronto."
           className="h-full w-full object-cover"
           loading="eager"
