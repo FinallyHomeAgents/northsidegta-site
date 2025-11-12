@@ -1,18 +1,38 @@
 // src/VipPage.js
-import { useState } from 'react';
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import Navigation from './Navigation';   // ← added
-import CoverageStrip from './components/CoverageStrip';
+import HeaderShell from "./components/HeaderShell";
+
+const HELMET_CONTENT = (
+  <Helmet>
+    <title>VIP Listing Alerts | NorthSide GTA Buyer Advantage</title>
+    <meta
+      name="description"
+      content="Get VIP alerts for NorthSide GTA listings and off-market opportunities across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+    />
+    <meta
+      name="keywords"
+      content="VIP listing alerts NorthSide GTA, off-market homes, buyer alerts, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
+    />
+    <link rel="canonical" href="https://www.northsidegta.ca/vip" />
+
+    <meta property="og:title" content="VIP Listing Alerts | NorthSide GTA" />
+    <meta property="og:description" content="Be first to know about new and off-market opportunities." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.northsidegta.ca/vip" />
+    <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+  </Helmet>
+);
 
 export default function VipPage() {
-  const [enteredPassword, setEnteredPassword] = useState('');
+  const [enteredPassword, setEnteredPassword] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [submittedInfo, setSubmittedInfo] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    email: '',
-    phone: ''
+    name: "",
+    address: "",
+    email: "",
+    phone: "",
   });
 
   const correctPassword = "northsidevip";
@@ -32,7 +52,7 @@ export default function VipPage() {
     const response = await fetch("https://formspree.io/f/mwpborow", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
     if (response.ok) setSubmittedInfo(true);
     else alert("There was a problem submitting your information. Please try again.");
@@ -42,36 +62,13 @@ export default function VipPage() {
   if (!isAuthorized) {
     return (
       <>
-        <Navigation />
-        <CoverageStrip mode="static" showLabels />
-
-      import { Helmet } from "react-helmet-async";
-
-...
-
-<Helmet>
-  <title>VIP Listing Alerts | NorthSide GTA Buyer Advantage</title>
-  <meta
-    name="description"
-    content="Get VIP alerts for NorthSide GTA listings and off-market opportunities across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
-  />
-  <meta
-    name="keywords"
-    content="VIP listing alerts NorthSide GTA, off-market homes, buyer alerts, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
-  />
-  <link rel="canonical" href="https://www.northsidegta.ca/vip" />
-
-  <meta property="og:title" content="VIP Listing Alerts | NorthSide GTA" />
-  <meta property="og:description" content="Be first to know about new and off-market opportunities." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.northsidegta.ca/vip" />
-  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
-</Helmet>
+        {HELMET_CONTENT}
+        <HeaderShell />
         <div
           className="min-h-screen bg-cover bg-center flex items-center justify-center px-4"
-          style={{ backgroundImage: `url('/vip-bg.png')` }}
+          style={{ backgroundImage: "url('/vip-bg.png')" }}
         >
-          <form onSubmit={handlePasswordSubmit} className="bg-white bg-opacity-90 p-8 rounded-xl shadow-md max-w-md w-full">
+          <form onSubmit={handlePasswordSubmit} className="bg-white/90 p-8 rounded-xl shadow-md max-w-md w-full">
             <h1 className="text-2xl font-bold mb-4 text-center text-brand-green">VIP Access Only</h1>
             <p className="text-center text-gray-600 mb-6">
               This page is by invitation only. Please enter your password to continue.
@@ -99,8 +96,8 @@ export default function VipPage() {
   if (!submittedInfo) {
     return (
       <>
-        <Navigation />
-        <CoverageStrip mode="static" showLabels />
+        {HELMET_CONTENT}
+        <HeaderShell />
         <div className="min-h-screen bg-white flex items-center justify-center px-4">
           <form onSubmit={handleInfoSubmit} className="bg-gray-100 p-8 rounded-xl shadow-md max-w-md w-full">
             <h2 className="text-2xl font-bold mb-4 text-center text-brand-green">You're In!</h2>
@@ -108,25 +105,33 @@ export default function VipPage() {
               You've been accepted into the VIP Club. Please provide your contact details to unlock your VIP perks.
             </p>
             <input
-              type="text" placeholder="Full Name" required
+              type="text"
+              placeholder="Full Name"
+              required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full px-4 py-2 border rounded mb-4"
             />
             <input
-              type="text" placeholder="Address" required
+              type="text"
+              placeholder="Address"
+              required
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               className="w-full px-4 py-2 border rounded mb-4"
             />
             <input
-              type="email" placeholder="Email Address" required
+              type="email"
+              placeholder="Email Address"
+              required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-4 py-2 border rounded mb-4"
             />
             <input
-              type="tel" placeholder="Phone Number" required
+              type="tel"
+              placeholder="Phone Number"
+              required
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="w-full px-4 py-2 border rounded mb-4"
@@ -146,8 +151,8 @@ export default function VipPage() {
   /* ─────────── VIP CONTENT ─────────── */
   return (
     <>
-      <Navigation />
-      <CoverageStrip mode="static" showLabels />
+      {HELMET_CONTENT}
+      <HeaderShell />
       <div className="min-h-screen bg-white text-gray-900">
         <section className="relative h-64 w-full">
           <img
@@ -180,10 +185,7 @@ export default function VipPage() {
         <section className="bg-[linear-gradient(180deg,#32610E_0%,#22440A_100%)] text-white py-12 px-6 text-center">
           <h2 className="text-2xl font-bold mb-2">You're In.</h2>
           <p className="mb-6">Explore your VIP tools and stay tuned for what's next.</p>
-          <a
-            href="/"
-            className="rounded-xl bg-white px-6 py-3 font-semibold text-brand-green transition hover:bg-gray-100"
-          >
+          <a href="/" className="rounded-xl bg-white px-6 py-3 font-semibold text-brand-green transition hover:bg-gray-100">
             Return Home
           </a>
         </section>

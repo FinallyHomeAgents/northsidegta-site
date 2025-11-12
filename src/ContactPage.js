@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import Navigation from "./Navigation";
-import CoverageStrip from "./components/CoverageStrip";
+import HeaderShell from "./components/HeaderShell";
 import SmartContactForm from "./components/contact/SmartContactForm";
 import Button from "./components/ui/Button";
 // ⬇️ remove the Legacy import and the feature flag
@@ -66,8 +65,7 @@ function ContactPageV2() {
       >
         <script type="application/ld+json">{jsonLd}</script>
       </DynamicMetaTags>
-      <Navigation />
-      <CoverageStrip mode="static" showLabels />
+      <HeaderShell />
       <main className="bg-slate-50 pb-20">
         <div className="px-4 pt-10 sm:px-6 sm:pt-12 lg:px-8">
           <section className="mx-auto max-w-6xl">

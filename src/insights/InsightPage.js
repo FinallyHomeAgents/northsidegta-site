@@ -2,8 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { marked } from "marked";
 import { DateTime } from "luxon";
-import Navigation from "../Navigation";
-import CoverageStrip from "../components/CoverageStrip";
+import HeaderShell from "../components/HeaderShell";
 import Footer from "../Footer";
 import SmartContactForm from "../components/contact/SmartContactForm";
 import {
@@ -831,8 +830,7 @@ export default function InsightPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <DynamicMetaTags {...metaConfig} />
 
-      <Navigation />
-      <CoverageStrip mode="static" showLabels />
+      <HeaderShell />
 
       <main>
         <Hero insight={insight} loading={loading} featureImageAlt={featureImageAlt} />
