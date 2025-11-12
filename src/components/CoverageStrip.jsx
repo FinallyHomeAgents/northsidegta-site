@@ -1,7 +1,14 @@
 'use client';
 
 // src/components/CoverageStrip.jsx
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const TOWNS = [
   { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/Images/towns/georgina.jpg" },
@@ -20,17 +27,44 @@ export default function CoverageStrip({ className = "" }) {
   const rootClassName = `relative w-full bg-[#32610E] text-white ${className || ""}`.trim();
   const ulRef = useRef(null);
   const [pinX, setPinX] = useState(null);
+  const hasWarnedRef = useRef(false);
 
   const updatePinPosition = useCallback(() => {
     const ul = ulRef.current;
-    if (!ul) return;
+    if (!ul) {
+      setPinX(null);
+      return;
+    }
+
     const items = Array.from(ul.querySelectorAll("li"));
-    if (!items.length) return;
+    if (!items.length) {
+      setPinX(null);
+      return;
+    }
+
     const midIndex = Math.floor(items.length / 2);
     const mid = items[midIndex];
-    if (!mid) return;
+    if (!mid) {
+      if (!hasWarnedRef.current) {
+        console.warn("CoverageStrip: unable to locate middle town item; falling back to center.");
+        hasWarnedRef.current = true;
+      }
+      setPinX(null);
+      return;
+    }
+
     const r = mid.getBoundingClientRect();
     const ur = ul.getBoundingClientRect();
+    if (!r.width || !ur.width) {
+      if (!hasWarnedRef.current) {
+        console.warn("CoverageStrip: invalid measurements for middle town; falling back to center.");
+        hasWarnedRef.current = true;
+      }
+      setPinX(null);
+      return;
+    }
+
+    hasWarnedRef.current = false;
     const center = r.left + r.width / 2 - ur.left;
     setPinX(center);
   }, []);
@@ -39,12 +73,22 @@ export default function CoverageStrip({ className = "" }) {
     updatePinPosition();
     const ul = ulRef.current;
     if (!ul) return;
+
     const supportsResizeObserver = typeof ResizeObserver !== "undefined";
     const ro = supportsResizeObserver ? new ResizeObserver(updatePinPosition) : null;
     if (ro) {
       ro.observe(ul);
+      Array.from(ul.children).forEach((child) => {
+        try {
+          ro.observe(child);
+        } catch (error) {
+          /* noop */
+        }
+      });
     }
+
     window.addEventListener("resize", updatePinPosition);
+
     return () => {
       window.removeEventListener("resize", updatePinPosition);
       if (ro) {
@@ -55,6 +99,35 @@ export default function CoverageStrip({ className = "" }) {
 
   useEffect(() => {
     updatePinPosition();
+    const handleLoad = () => updatePinPosition();
+    window.addEventListener("load", handleLoad);
+
+    const ul = ulRef.current;
+    const imgs = ul ? Array.from(ul.querySelectorAll("img")) : [];
+    const cleanupFns = imgs.map((img) => {
+      const handle = () => updatePinPosition();
+      img.addEventListener("load", handle, { once: true });
+      img.addEventListener("error", handle, { once: true });
+      if (img.complete) {
+        updatePinPosition();
+      }
+      return () => {
+        img.removeEventListener("load", handle);
+        img.removeEventListener("error", handle);
+      };
+    });
+
+    const fontPromise = typeof document !== "undefined" && document.fonts ? document.fonts.ready : null;
+    if (fontPromise) {
+      fontPromise.then(() => {
+        requestAnimationFrame(() => updatePinPosition());
+      });
+    }
+
+    return () => {
+      window.removeEventListener("load", handleLoad);
+      cleanupFns.forEach((fn) => fn());
+    };
   }, [updatePinPosition, towns]);
 
   const item = (t) => (
@@ -107,16 +180,15 @@ export default function CoverageStrip({ className = "" }) {
           </ul>
           {/* Center pin positioned over the true middle town */}
           <div
-            className="pointer-events-none absolute z-20"
+            className="pointer-events-none absolute z-30 -top-[14px] md:-top-5"
             style={{
               left: pinX ?? "50%",
-              top: "-10px",
               transform: "translateX(-50%)",
             }}
           >
             <div className="relative">
-              <div className="mx-auto h-3 w-3 md:h-3.5 md:w-3.5 rounded-full bg-white ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
-              <div className="absolute -inset-2 rounded-full bg-white/20 blur-sm" />
+              <div className="mx-auto h-[11px] w-[11px] md:h-3 md:w-3 rounded-full bg-white ring-2 ring-[#32610E] shadow-[0_0_0_2px_rgba(255,255,255,0.25)]" />
+              <div className="absolute -inset-3 rounded-full bg-white/20 blur-[12px] animate-[ns-pin-pulse_2.8s_ease-in-out_infinite]" />
             </div>
           </div>
         </div>
@@ -125,7 +197,7 @@ export default function CoverageStrip({ className = "" }) {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[#3A7512]/90" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[#264C0B]/90" />
 
-      <style>{`@keyframes ns-sweep{0%{opacity:.2;transform:translateX(-50%) scaleX(.4)}50%{opacity:.6}100%{opacity:.2;transform:translateX(-50%) scaleX(1)}}`}</style>
+      <style>{`@keyframes ns-sweep{0%{opacity:.2;transform:translateX(-50%) scaleX(.4)}50%{opacity:.6}100%{opacity:.2;transform:translateX(-50%) scaleX(1)}}@keyframes ns-pin-pulse{0%,100%{opacity:.75}50%{opacity:1}}`}</style>
     </div>
   );
 }
