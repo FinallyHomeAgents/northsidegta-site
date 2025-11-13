@@ -280,6 +280,27 @@ body {
     justify-self: center;
   }
 }
+
+.ns-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.ns-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @keyframes ns-pulse-slow {
   0%, 100% { opacity: .75; }
   50%      { opacity: 1; }

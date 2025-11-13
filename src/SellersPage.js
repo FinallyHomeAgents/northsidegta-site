@@ -1,9 +1,11 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import Card from "./components/ui/Card";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
+import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
 
 // ===== Helpers (reused) =====
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -46,6 +48,127 @@ const SELLER_PILLARS = [
   { icon: "📍", text: "Local market experts" },
 ];
 
+const EXPOSURE_POINTS = [
+  { icon: "🌐", label: "Website" },
+  { icon: "📱", label: "Social" },
+  { icon: "🎥", label: "Video" },
+  { icon: "🚁", label: "Drone" },
+  { icon: "🎯", label: "Targeted Ads" },
+  { icon: "🤝", label: "Buyers" },
+];
+
+const SELLING_STEPS = [
+  {
+    icon: "📊",
+    title: "Pricing Strategy",
+    description:
+      "We review comparable sales, local trends, and buyer activity to choose the right strategy for maximum interest.",
+  },
+  {
+    icon: "🛋️",
+    title: "Preparation & Staging",
+    description:
+      "Small improvements can create big impact. We help you prepare, stage, and present your home beautifully.",
+  },
+  {
+    icon: "📸",
+    title: "Professional Media",
+    description:
+      "High-end photography, video, drone, floor plans, and reels that tell the story of your home.",
+  },
+  {
+    icon: "🚀",
+    title: "Marketing Rollout",
+    description:
+      "NorthSideGTA.ca, MLS, social media, paid digital ads, email lists, and targeted GTA buyer reach.",
+  },
+  {
+    icon: "🔑",
+    title: "Showings & Offers",
+    description:
+      "We manage every detail—from timing and feedback to negotiation and offer strategy.",
+  },
+  {
+    icon: "🧭",
+    title: "Closing & Concierge",
+    description:
+      "We guide you through every step, paperwork, and transition so you feel supported from start to finish.",
+  },
+];
+
+function normalizeMediaItems(items = []) {
+  const filtered = items.filter((item) => item && item.published !== false && item.url);
+  return filtered.sort((a, b) => {
+    const pinDelta = (b?.pin ? 1 : 0) - (a?.pin ? 1 : 0);
+    if (pinDelta !== 0) return pinDelta;
+
+    const aDate = a?.date ? new Date(a.date).getTime() : 0;
+    const bDate = b?.date ? new Date(b.date).getTime() : 0;
+    return bDate - aDate;
+  });
+}
+
+function isVideoFile(url = "") {
+  return /\.(mp4|webm)(\?|#|$)/i.test(url);
+}
+
+function ensureInstagramScript() {
+  if (typeof document === "undefined") return;
+  if (document.getElementById("ig-embed")) return;
+  const script = document.createElement("script");
+  script.id = "ig-embed";
+  script.async = true;
+  script.src = "https://www.instagram.com/embed.js";
+  script.onload = () => window.instgrm?.Embeds?.process?.();
+  document.body.appendChild(script);
+}
+
+function useReveal({ immediate = false, once = true, deps = [] } = {}) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+
+    node.classList.remove("ns-reveal-visible");
+
+    const show = () => {
+      node.classList.add("ns-reveal-visible");
+    };
+
+    if (immediate) {
+      const frame = requestAnimationFrame(show);
+      return () => cancelAnimationFrame(frame);
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      show();
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("ns-reveal-visible");
+            if (once) {
+              obs.unobserve(entry.target);
+            }
+          } else if (!once) {
+            entry.target.classList.remove("ns-reveal-visible");
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [immediate, once, ...deps]);
+
+  return ref;
+}
+
 const baseFieldClass =
   "mt-1 w-full rounded-xl border border-emerald-200/60 bg-white/80 px-3 py-2 text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20";
 
@@ -75,42 +198,77 @@ const CheckIcon = (props) => (
   </svg>
 );
 
-function SellerHero() {
+function SellerHero({ onPrimaryClick, onOpenPromo }) {
+  const heroRef = useReveal({ immediate: true });
+
   return (
-    <section className="relative overflow-hidden bg-[#04110c] text-white">
+    <section className="relative isolate overflow-hidden bg-[#04110c] text-white">
+      <figure className="relative h-[60vh] w-full min-h-[420px] overflow-hidden lg:h-[70vh] lg:max-h-[820px]">
+        <img
+          src="/uploads/sellers-page-seo.jpg"
+          alt="Modern NorthSide GTA home exterior at sunset, representing a premium home-selling experience."
+          className="h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-[#04110c]/75 via-[#04110c]/65 to-[#1a3a0a]/70"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-white/12 mix-blend-screen" aria-hidden />
+      </figure>
+
       <div
-        className="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-700"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_65%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.32),_transparent_65%)]"
         aria-hidden
       />
       <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-[-40%] right-[-15%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/25 blur-3xl" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1900px] px-4 pb-36 pt-24 sm:px-6 lg:px-10">
-        <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-            NorthSide GTA Seller Strategy
-          </span>
-          <h1 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.8rem]">
-            Sell Like a Pro — With Finally Home Agents in Your Corner
-          </h1>
-          <p className="mt-4 text-lg text-emerald-100/90 sm:text-xl">
-            Like an athlete with a great agent, you get strategy, preparation, and negotiations that win — not guesswork.
-          </p>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center gap-3 text-sm text-emerald-100/90">
-          {SELLER_PILLARS.map((pill) => (
-            <span
-              key={pill.text}
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-medium backdrop-blur"
-            >
-              <span>{pill.icon}</span>
-              {pill.text}
+      <div className="absolute inset-0">
+        <div className="mx-auto flex h-full w-full max-w-6xl items-end px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-20">
+          <div
+            ref={heroRef}
+            className="ns-reveal relative max-w-2xl rounded-[32px] border border-white/15 bg-white/10 p-6 shadow-[0_30px_120px_rgba(4,17,12,0.55)] backdrop-blur lg:p-10"
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
+              SELLERS • NORTHSIDE GTA
             </span>
-          ))}
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.85rem]">
+              Unlock Your NorthSide Home Value &amp; Sale Strategy
+            </h1>
+            <p className="mt-3 max-w-xl text-base text-emerald-50/90 sm:text-lg">
+              A modern, strategic approach to selling—designed for today’s GTA buyers.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={onPrimaryClick}
+                className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-300"
+              >
+                Get Your Home Value
+              </button>
+              <button
+                type="button"
+                onClick={onOpenPromo}
+                className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+              >
+                ▶︎ Why Sellers Choose Us
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-emerald-50/80">See what it’s like to work with our team.</p>
+            <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-emerald-50/85 sm:text-sm">
+              {SELLER_PILLARS.map((pill) => (
+                <span
+                  key={pill.text}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 font-medium backdrop-blur"
+                >
+                  <span>{pill.icon}</span>
+                  {pill.text}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -118,7 +276,293 @@ function SellerHero() {
 }
 
 // ===== Two-step, in-place Seller form (with map background + gradient buttons) =====
+function GreenGradientDivider() {
+  return (
+    <div
+      className="mx-auto h-[3px] w-full max-w-6xl bg-gradient-to-r from-[#32610E] via-[#63a614] to-[#32610E]"
+      aria-hidden
+    />
+  );
+}
+
+function PromoVideoContent({ promo, open }) {
+  const src = promo?.source_url?.trim?.() || promo?.url?.trim?.() || "";
+  const captioned = Boolean(promo?.captioned);
+  const useLocalVideo = isVideoFile(src);
+
+  useEffect(() => {
+    if (!open || useLocalVideo || !src) return;
+    ensureInstagramScript();
+    const timer = setTimeout(() => {
+      try {
+        window.instgrm?.Embeds?.process?.();
+      } catch (err) {
+        console.warn("Instagram embed processing failed", err);
+      }
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [captioned, open, src, useLocalVideo]);
+
+  if (!src) {
+    return (
+      <div className="flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-black/60 p-6 text-center text-sm text-white/80">
+        Promo video unavailable right now. Please check back soon.
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-black shadow-[0_35px_90px_rgba(0,0,0,0.65)]">
+      <div className="aspect-video w-full">
+        {useLocalVideo ? (
+          <video
+            src={src}
+            poster={promo?.poster_url || undefined}
+            autoPlay
+            controls
+            playsInline
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <blockquote
+            className="instagram-media h-full w-full"
+            data-instgrm-permalink={src}
+            data-instgrm-version="14"
+            {...(captioned ? { "data-instgrm-captioned": "" } : {})}
+            style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PromoVideoModal({ open, onClose, promo }) {
+  const title = promo?.title?.trim?.() || "Why Sellers Choose Finally Home Agents";
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose?.();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [open]);
+
+  if (!open || typeof document === "undefined") return null;
+
+  return ReactDOM.createPortal(
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 px-4 py-12"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Seller promo video"
+      onClick={() => onClose?.()}
+    >
+      <div
+        className="relative w-full max-w-4xl space-y-4"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={() => onClose?.()}
+          className="absolute right-4 top-4 hidden h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 text-base font-semibold text-white shadow-sm transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60 sm:inline-flex"
+          aria-label="Close video"
+        >
+          ✕
+        </button>
+        <div className="sm:rounded-3xl sm:border sm:border-white/20 sm:bg-black/60 sm:p-6 sm:pt-10 sm:shadow-[0_40px_120px_rgba(0,0,0,0.55)]">
+          <div className="space-y-4">
+            <PromoVideoContent promo={promo} open={open} />
+            {title && <p className="text-center text-sm text-white/80">{title}</p>}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => onClose?.()}
+          className="block w-full rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60 sm:hidden"
+          aria-label="Close video"
+        >
+          Close
+        </button>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function ExposureSection() {
+  const sectionRef = useReveal();
+
+  return (
+    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/60"
+        aria-hidden
+      />
+      <div ref={sectionRef} className="ns-reveal relative z-10 space-y-6">
+        <div className="space-y-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-800">
+            Exposure Advantage
+          </span>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+            Strategic Exposure Across the NorthSide GTA &amp; Greater Toronto Area
+          </h2>
+          <p className="text-base text-slate-600 sm:text-lg">
+            Your listing deserves more than the basics. With the reach of NorthSideGTA.ca, professional media, targeted digital advertising, and a strong buyer audience across the GTA, we position your home in front of the right people—at the right time.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3 md:grid-cols-6">
+          {EXPOSURE_POINTS.map((point) => (
+            <div
+              key={point.label}
+              className="flex items-center gap-2 rounded-2xl border border-emerald-200/70 bg-white/90 px-3 py-2 font-semibold text-emerald-900 shadow-sm"
+            >
+              <span className="text-base">{point.icon}</span>
+              <span>{point.label}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700/70">
+          Powered by the reach of NorthSideGTA.ca.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function HowWeSellSection() {
+  const [active, setActive] = useState(0);
+  const headingRef = useReveal();
+  const stepsRef = useReveal();
+  const detailRef = useReveal({ immediate: true, once: false, deps: [active] });
+  const current = SELLING_STEPS[active] || SELLING_STEPS[0];
+
+  return (
+    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/60"
+        aria-hidden
+      />
+      <div className="relative z-10 space-y-8">
+        <div ref={headingRef} className="ns-reveal space-y-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-800">
+            Process
+          </span>
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+            How We Sell Your Home
+          </h2>
+          <p className="text-base text-slate-600 sm:text-lg">
+            Six refined stages — from pricing to concierge closing — tailored to maximize value and calm.
+          </p>
+        </div>
+
+        <div
+          ref={stepsRef}
+          className="ns-reveal grid gap-2 rounded-3xl border border-emerald-200/60 bg-white/70 p-2 sm:grid-cols-3 lg:grid-cols-6"
+        >
+          {SELLING_STEPS.map((step, index) => {
+            const activeStep = index === active;
+            return (
+              <button
+                type="button"
+                key={step.title}
+                onClick={() => setActive(index)}
+                className={`flex items-center justify-between gap-2 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+                  activeStep
+                    ? "bg-white text-emerald-900 shadow-sm shadow-emerald-100"
+                    : "bg-transparent text-emerald-800/80 hover:bg-white/70"
+                }`}
+                aria-pressed={activeStep}
+              >
+                <span className="flex items-center gap-2">
+                  <span className="text-base">{step.icon}</span>
+                  <span>{step.title}</span>
+                </span>
+                <span
+                  className={`hidden h-2 w-2 rounded-full lg:block ${
+                    activeStep ? "bg-emerald-500" : "bg-emerald-200"
+                  }`}
+                  aria-hidden
+                />
+              </button>
+            );
+          })}
+        </div>
+
+        <div ref={detailRef} className="ns-reveal">
+          <div className="rounded-[28px] border border-emerald-200/60 bg-white/90 p-6 shadow-sm sm:p-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-2xl">{current.icon}</span>
+              <h3 className="text-xl font-semibold text-slate-900 sm:text-2xl">{current.title}</h3>
+            </div>
+            <p className="mt-4 text-base text-slate-600 sm:text-lg">{current.description}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SellersReviewsSection() {
+  const headingRef = useReveal();
+  const totalReviews = GOOGLE_REVIEWS?.length || 0;
+
+  return (
+    <section className="space-y-6">
+      <div ref={headingRef} className="ns-reveal mx-auto max-w-3xl text-center">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">What Our Clients Say</h2>
+        <p className="mt-3 text-base text-slate-600 sm:text-lg">
+          {totalReviews > 0
+            ? `Real feedback from ${totalReviews}+ NorthSide GTA clients.`
+            : "Real feedback from NorthSide GTA clients."}
+        </p>
+      </div>
+      <GoogleGradientReviews />
+    </section>
+  );
+}
+
+function BottomCtaSection({ onPrimaryClick }) {
+  const ctaRef = useReveal();
+
+  return (
+    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-gradient-to-br from-emerald-500 via-emerald-500/80 to-emerald-600 px-6 py-12 text-center text-white shadow-[0_45px_130px_rgba(34,68,10,0.45)]">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_70%)]"
+        aria-hidden
+      />
+      <div ref={ctaRef} className="ns-reveal relative z-10 space-y-5">
+        <h3 className="text-3xl font-semibold md:text-4xl">Ready to Start Your Selling Plan?</h3>
+        <button
+          type="button"
+          onClick={onPrimaryClick}
+          className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3 text-base font-semibold text-emerald-700 shadow-[0_18px_40px_rgba(4,17,12,0.35)] transition hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-white/70"
+        >
+          Find Out What Your Home Could Sell For
+        </button>
+        <p className="text-sm text-emerald-50/80">
+          We’ll follow up with a tailored plan—not a pushy sales pitch.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function SellerLeadCapture() {
+  const revealRef = useReveal();
   const [form, setForm] = useState({
     streetNumber: "",
     streetName: "",
@@ -295,7 +739,7 @@ function SellerLeadCapture() {
 
   if (done) {
     return (
-      <section className="relative mx-auto w-full max-w-5xl">
+      <section ref={revealRef} id="seller-home-value" className="ns-reveal relative mx-auto w-full max-w-5xl">
         <div className="relative overflow-hidden rounded-[40px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_30px_90px_rgba(15,118,110,0.18)] backdrop-blur md:p-10">
           <div
             className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
@@ -370,7 +814,7 @@ function SellerLeadCapture() {
   const timelineOptions = ["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"];
 
   return (
-    <section className="relative mx-auto w-full max-w-5xl">
+    <section ref={revealRef} id="seller-home-value" className="ns-reveal relative mx-auto w-full max-w-5xl">
       <div className="relative overflow-hidden rounded-[40px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_30px_90px_rgba(15,118,110,0.18)] backdrop-blur md:p-10">
         <div
           className="pointer-events-none absolute inset-0 opacity-20 mix-blend-multiply"
@@ -815,8 +1259,12 @@ function SellerLeadCapture() {
 }
 
 function SellerTimeline() {
+  const timelineRef = useReveal();
   return (
-    <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
+    <section
+      ref={timelineRef}
+      className="ns-reveal relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10"
+    >
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-100/70 via-white to-emerald-100/60"
         aria-hidden
@@ -850,6 +1298,7 @@ function SellerTimeline() {
 }
 
 function SellerMediaSection() {
+  const headingRef = useReveal();
   return (
     <section className="relative overflow-hidden rounded-[36px] border border-emerald-200/70 bg-white/90 p-6 shadow-[0_25px_70px_rgba(15,118,110,0.14)] backdrop-blur md:p-10">
       <div
@@ -857,10 +1306,10 @@ function SellerMediaSection() {
         aria-hidden
       />
       <div className="relative z-10 space-y-6 text-center">
-        <div className="space-y-3">
-          <h2 className="text-3xl font-semibold text-slate-900">See Us in Action</h2>
+        <div ref={headingRef} className="ns-reveal space-y-3">
+          <h2 className="text-3xl font-semibold text-slate-900">Our Listings in Action</h2>
           <p className="mx-auto max-w-2xl text-base text-slate-600">
-            A glimpse of the VIP media treatment every listing receives.
+            See examples of the media and marketing approach we bring to homes across the NorthSide GTA.
           </p>
         </div>
 
@@ -893,6 +1342,52 @@ const SELLERS_ROUTE_META = getStaticRouteMeta("/sellers") || {};
 
 // ===== Page shell =====
 export default function SellersPage() {
+  const [promoModalOpen, setPromoModalOpen] = useState(false);
+  const [promoData, setPromoData] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPromo = async () => {
+      try {
+        const [settingsRes, itemsRes] = await Promise.all([
+          fetch("/content/socials-settings.json", { cache: "no-store" }),
+          fetch("/content/socials.json", { cache: "no-store" }),
+        ]);
+
+        if (!settingsRes.ok) {
+          throw new Error(`Settings request failed (HTTP ${settingsRes.status})`);
+        }
+        if (!itemsRes.ok) {
+          throw new Error(`Media list request failed (HTTP ${itemsRes.status})`);
+        }
+
+        const [settingsJson, listJson] = await Promise.all([settingsRes.json(), itemsRes.json()]);
+        if (!isMounted) return;
+
+        const items = normalizeMediaItems(listJson?.items || []);
+        const heroEnabled = settingsJson?.pinned?.enabled !== false;
+        const showPinned = heroEnabled && Boolean(settingsJson?.pinned?.source_url);
+        const fallback = heroEnabled && !showPinned && items.length > 0 ? { ...items[0], source_url: items[0]?.url } : null;
+        setPromoData(showPinned ? settingsJson?.pinned : fallback || null);
+      } catch (err) {
+        console.warn("Failed to load seller promo video", err);
+        if (isMounted) setPromoData(null);
+      }
+    };
+
+    loadPromo();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const scrollToForm = () => {
+    if (typeof document === "undefined") return;
+    const el = document.getElementById("seller-home-value");
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <HeaderShell />
@@ -903,10 +1398,11 @@ export default function SellersPage() {
             "@type": "WebPage",
             name:
               SELLERS_ROUTE_META.title ||
-              "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
+              "Sell Your Home | NorthSide GTA & Finally Home Agents",
             url: SELLERS_ROUTE_META.canonicalUrl || "https://northsidegta.ca/sellers",
             description:
-              "Full-service selling strategy with AI pricing, pro staging, premium media, and expert negotiation.",
+              SELLERS_ROUTE_META.description ||
+              "Unlock your NorthSide home value and sale strategy with Finally Home Agents. Strategic exposure across the NorthSide GTA and Greater Toronto Area, professional media, and a modern selling experience.",
             about: {
               "@type": "RealEstateAgent",
               name: "Finally Home Agents",
@@ -926,16 +1422,27 @@ export default function SellersPage() {
         </script>
       </DynamicMetaTags>
 
-      <main>
-        <SellerHero />
-        <div className="relative z-10 -mt-20 px-4 pb-24 sm:px-6 lg:px-10">
-          <div className="mx-auto flex max-w-6xl flex-col gap-16">
-            <SellerLeadCapture />
-            <SellerTimeline />
-            <SellerMediaSection />
+      <main className="relative pb-24">
+        <SellerHero onPrimaryClick={scrollToForm} onOpenPromo={() => setPromoModalOpen(true)} />
+        <div className="bg-slate-50">
+          <div className="px-4 pt-8 sm:px-6 lg:px-8">
+            <GreenGradientDivider />
+          </div>
+          <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
+            <div className="space-y-16">
+              <ExposureSection />
+              <HowWeSellSection />
+              <SellerLeadCapture />
+              <SellerTimeline />
+              <SellerMediaSection />
+              <SellersReviewsSection />
+              <BottomCtaSection onPrimaryClick={scrollToForm} />
+            </div>
           </div>
         </div>
       </main>
+
+      <PromoVideoModal open={promoModalOpen} onClose={() => setPromoModalOpen(false)} promo={promoData} />
 
       <Footer />
     </div>
