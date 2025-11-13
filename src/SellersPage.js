@@ -198,6 +198,13 @@ const CheckIcon = (props) => (
   </svg>
 );
 
+const PlayCircleIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className}>
+    <circle cx="12" cy="12" r="9" fill="currentColor" className="text-white/20" />
+    <path d="M10 8.8v6.4L15.2 12 10 8.8z" fill="currentColor" className="text-white" />
+  </svg>
+);
+
 function SellerHero({ onPrimaryClick, onOpenPromo }) {
   const heroRef = useReveal({ immediate: true });
 
@@ -251,9 +258,12 @@ function SellerHero({ onPrimaryClick, onOpenPromo }) {
               <button
                 type="button"
                 onClick={onOpenPromo}
-                className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+                className="inline-flex items-center justify-center gap-3 rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
               >
-                ▶︎ Why Sellers Choose Us
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                  <PlayCircleIcon className="h-4 w-4 text-white" />
+                </span>
+                Why Sellers Choose Us
               </button>
             </div>
             <p className="mt-2 text-xs text-emerald-50/80">See what it’s like to work with our team.</p>
@@ -312,7 +322,7 @@ function PromoVideoContent({ promo, open }) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-black shadow-[0_35px_90px_rgba(0,0,0,0.65)]">
+    <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-black/85 shadow-[0_35px_90px_rgba(0,0,0,0.65)]">
       <div className="aspect-video w-full">
         {useLocalVideo ? (
           <video
@@ -321,7 +331,7 @@ function PromoVideoContent({ promo, open }) {
             autoPlay
             controls
             playsInline
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
           />
         ) : (
           <blockquote
@@ -339,6 +349,7 @@ function PromoVideoContent({ promo, open }) {
 
 function PromoVideoModal({ open, onClose, promo }) {
   const title = promo?.title?.trim?.() || "Why Sellers Choose Finally Home Agents";
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -354,6 +365,13 @@ function PromoVideoModal({ open, onClose, promo }) {
 
   useEffect(() => {
     if (!open) return undefined;
+    setReady(false);
+    const frame = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -365,34 +383,38 @@ function PromoVideoModal({ open, onClose, promo }) {
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 px-4 py-12"
+      className={`fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 px-4 py-10 transition-opacity duration-200 ${
+        ready ? "opacity-100" : "opacity-0"
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label="Seller promo video"
       onClick={() => onClose?.()}
     >
       <div
-        className="relative w-full max-w-4xl space-y-4"
+        className={`relative flex w-full max-w-[900px] flex-col items-stretch gap-4 rounded-[28px] border border-white/20 bg-black/70 p-4 shadow-[0_40px_140px_rgba(0,0,0,0.6)] transition-all duration-200 sm:max-w-[880px] sm:p-6 ${
+          ready ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        } max-h-[75vh] sm:max-h-[85vh]`}
         onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="absolute right-4 top-4 hidden h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 text-base font-semibold text-white shadow-sm transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60 sm:inline-flex"
+          className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/15 text-lg font-semibold text-white shadow-lg transition hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/70"
           aria-label="Close video"
         >
           ✕
         </button>
-        <div className="sm:rounded-3xl sm:border sm:border-white/20 sm:bg-black/60 sm:p-6 sm:pt-10 sm:shadow-[0_40px_120px_rgba(0,0,0,0.55)]">
-          <div className="space-y-4">
+        <div className="mt-8 flex-1 overflow-hidden rounded-3xl border border-white/10 bg-black/60 p-3 shadow-inner sm:mt-6 sm:p-6">
+          <div className="flex h-full flex-col justify-center">
             <PromoVideoContent promo={promo} open={open} />
-            {title && <p className="text-center text-sm text-white/80">{title}</p>}
+            {title && <p className="mt-4 text-center text-sm text-white/80">{title}</p>}
           </div>
         </div>
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="block w-full rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60 sm:hidden"
+          className="block w-full rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60"
           aria-label="Close video"
         >
           Close
@@ -518,17 +540,12 @@ function HowWeSellSection() {
 
 function SellersReviewsSection() {
   const headingRef = useReveal();
-  const totalReviews = GOOGLE_REVIEWS?.length || 0;
 
   return (
     <section className="space-y-6">
       <div ref={headingRef} className="ns-reveal mx-auto max-w-3xl text-center">
         <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">What Our Clients Say</h2>
-        <p className="mt-3 text-base text-slate-600 sm:text-lg">
-          {totalReviews > 0
-            ? `Real feedback from ${totalReviews}+ NorthSide GTA clients.`
-            : "Real feedback from NorthSide GTA clients."}
-        </p>
+        <p className="mt-3 text-base text-slate-600 sm:text-lg">Real feedback from NorthSide GTA clients.</p>
       </div>
       <GoogleGradientReviews />
     </section>
