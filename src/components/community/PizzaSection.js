@@ -1,32 +1,56 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import LeaderboardWidget from './LeaderboardWidget'
 import VoteFormInline from './VoteFormInline'
+import { UXBRIDGE_PIZZA_OPTIONS } from '../../data/uxbridgePizzaOptions'
 
 export default function PizzaSection({ town, category }) {
-  const [places, setPlaces] = useState([])
+  const normalizedTown = String(town || '').toLowerCase()
+  const normalizedCategory = String(category || '').toLowerCase()
+
+  const staticOptions = useMemo(() => {
+    if (normalizedTown === 'uxbridge' && normalizedCategory === 'pizza') {
+      return UXBRIDGE_PIZZA_OPTIONS.map((option) => ({
+        slug: option.id,
+        title: option.label,
+      }))
+    }
+    return null
+  }, [normalizedTown, normalizedCategory])
+
+  const [places, setPlaces] = useState(() => staticOptions || [])
   const [refreshToken, setRefreshToken] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!staticOptions)
   const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    if (staticOptions) {
+      setPlaces(staticOptions)
+      setIsLoading(false)
+      setHasError(false)
+    }
+  }, [staticOptions])
 
   const handleLeaderboardLoaded = useCallback((payload) => {
     setIsLoading(false)
     setHasError(false)
-    if (Array.isArray(payload?.items)) {
+    if (!staticOptions && Array.isArray(payload?.items)) {
       setPlaces(payload.items.map((item) => ({ slug: item.slug, title: item.title })))
     }
-  }, [])
+  }, [staticOptions])
 
   const handleLeaderboardError = useCallback(() => {
     setIsLoading(false)
-    setHasError(true)
-  }, [])
+    setHasError(!staticOptions)
+  }, [staticOptions])
 
   const handleVoteComplete = useCallback(() => {
-    setIsLoading(true)
+    if (!staticOptions) {
+      setIsLoading(true)
+    }
     setRefreshToken((token) => token + 1)
-  }, [])
+  }, [staticOptions])
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value)

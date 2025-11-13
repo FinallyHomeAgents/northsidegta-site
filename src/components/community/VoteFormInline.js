@@ -21,8 +21,8 @@ export default function VoteFormInline({ town, category, places = [], onVoted, o
   const turnstileRef = useRef(null)
 
   const hasTurnstile = Boolean(TURNSTILE_SITE_KEY)
-  const sortedPlaces = useMemo(() => {
-    return [...places].sort((a, b) => a.title.localeCompare(b.title))
+  const ballotPlaces = useMemo(() => {
+    return Array.isArray(places) ? [...places] : []
   }, [places])
 
   async function handleSubmit(event) {
@@ -132,7 +132,7 @@ export default function VoteFormInline({ town, category, places = [], onVoted, o
       </h3>
       <form className="mt-4 space-y-5" onSubmit={handleSubmit}>
         <div className="space-y-3">
-          {sortedPlaces.map((place) => (
+          {ballotPlaces.map((place) => (
             <label key={place.slug} className="flex items-start gap-3 text-sm text-gray-700">
               <input
                 type="radio"
@@ -145,7 +145,7 @@ export default function VoteFormInline({ town, category, places = [], onVoted, o
               <span className="font-medium text-gray-900">{place.title}</span>
             </label>
           ))}
-          {sortedPlaces.length === 0 && (
+          {ballotPlaces.length === 0 && (
             <p className="text-sm text-gray-500">No spots available yet. Check back soon.</p>
           )}
         </div>
@@ -186,7 +186,7 @@ export default function VoteFormInline({ town, category, places = [], onVoted, o
             isSubmitting ||
             !selected ||
             (hasTurnstile && !turnstileToken) ||
-            sortedPlaces.length === 0
+            ballotPlaces.length === 0
           }
           className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300"
         >
