@@ -41,6 +41,12 @@ const videos = [
 // Towns (multi-select limit 7)
 const TOWNS = ["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","None"];
 
+const LOCAL_PROMO_VIDEO = {
+  title: "Why Sellers Choose Finally Home Agents",
+  source_url: "/uploads/finally-home-agents-promo-video-copy.mp4",
+  url: "/uploads/finally-home-agents-promo-video-copy.mp4",
+};
+
 const SELLER_PILLARS = [
   { icon: "⏱️", text: "Takes less than 1 minute" },
   { icon: "✅", text: "No spam, no obligation" },
@@ -1360,7 +1366,7 @@ const SELLERS_ROUTE_META = getStaticRouteMeta("/sellers") || {};
 // ===== Page shell =====
 export default function SellersPage() {
   const [promoModalOpen, setPromoModalOpen] = useState(false);
-  const [promoData, setPromoData] = useState(null);
+  const [promoData, setPromoData] = useState(LOCAL_PROMO_VIDEO);
 
   useEffect(() => {
     let isMounted = true;
@@ -1386,10 +1392,14 @@ export default function SellersPage() {
         const heroEnabled = settingsJson?.pinned?.enabled !== false;
         const showPinned = heroEnabled && Boolean(settingsJson?.pinned?.source_url);
         const fallback = heroEnabled && !showPinned && items.length > 0 ? { ...items[0], source_url: items[0]?.url } : null;
-        setPromoData(showPinned ? settingsJson?.pinned : fallback || null);
+        const resolved = showPinned ? settingsJson?.pinned : fallback;
+        if (isMounted) {
+          const resolvedData = resolved ? { ...resolved } : {};
+          setPromoData({ ...resolvedData, ...LOCAL_PROMO_VIDEO });
+        }
       } catch (err) {
         console.warn("Failed to load seller promo video", err);
-        if (isMounted) setPromoData(null);
+        if (isMounted) setPromoData(LOCAL_PROMO_VIDEO);
       }
     };
 
