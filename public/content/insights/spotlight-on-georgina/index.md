@@ -16,11 +16,11 @@ tags:
   - finally home agents
   - matthew mulhall
   - landon mulhall
-featureImage: /uploads/insights/meetthetownsspotlights-1920-x-1080-px-2-.jpg
+featureImage: /uploads/insights/meetthetownsspotlights-1920-x-1080-px-4-.jpg
 featureImageAlt: "Meet the Towns: Spotlight on Georgina"
 inlineImages:
   - placement: end
-    image: /uploads/insights/meetthetownsspotlights-1920-x-1080-px-2-.jpg
+    image: /uploads/insights/meetthetownsspotlights-1920-x-1080-px-4-.jpg
     alt: "Meet the Towns: Spotlight on Georgina"
 pullQuote:
   text: Georgina has quickly become one of the most talked-about towns in the
