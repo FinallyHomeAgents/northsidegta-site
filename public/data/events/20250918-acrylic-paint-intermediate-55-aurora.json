@@ -400,16 +400,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-paint-intermediate-55-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002679-1758153600-1763683199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-13T08:36:04.415Z",
-  "updatedAt": "2025-11-13T08:36:04.415Z",
-  "featured": false
+  "updatedAt": "2025-11-13T08:36:04Z"
 }
