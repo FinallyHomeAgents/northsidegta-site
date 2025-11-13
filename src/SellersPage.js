@@ -41,10 +41,30 @@ const videos = [
 // Towns (multi-select limit 7)
 const TOWNS = ["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","None"];
 
+const PUBLIC_ASSET_BASE = (() => {
+  const raw = process.env.PUBLIC_URL || "";
+  if (!raw || raw === ".") return "";
+  return raw.replace(/\/$/, "");
+})();
+
+const buildPublicAssetUrl = (path = "") => {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  if (!path.startsWith("/")) {
+    return `${PUBLIC_ASSET_BASE}/${path}`;
+  }
+  return `${PUBLIC_ASSET_BASE}${path}`;
+};
+
+const LOCAL_PROMO_VIDEO_SRC = buildPublicAssetUrl(
+  "/uploads/finally-home-agents-promo-video-copy.mp4"
+);
+
 const LOCAL_PROMO_VIDEO = {
   title: "Why Sellers Choose Finally Home Agents",
-  source_url: "/uploads/finally-home-agents-promo-video-copy.mp4",
-  url: "/uploads/finally-home-agents-promo-video-copy.mp4",
+  source_url: LOCAL_PROMO_VIDEO_SRC,
+  url: LOCAL_PROMO_VIDEO_SRC,
+  fallback_source_url: "",
 };
 
 const SELLER_PILLARS = [
@@ -302,12 +322,20 @@ function GreenGradientDivider() {
 }
 
 function PromoVideoContent({ promo, open }) {
-  const src = promo?.source_url?.trim?.() || promo?.url?.trim?.() || "";
+  const baseSrc = promo?.source_url?.trim?.() || promo?.url?.trim?.() || "";
+  const fallbackSrc = promo?.fallback_source_url?.trim?.() || "";
   const captioned = Boolean(promo?.captioned);
-  const useLocalVideo = isVideoFile(src);
+  const [useFallback, setUseFallback] = useState(false);
+
+  const effectiveSrc = useFallback && fallbackSrc ? fallbackSrc : baseSrc;
+  const isDirectVideo = isVideoFile(effectiveSrc);
 
   useEffect(() => {
-    if (!open || useLocalVideo || !src) return;
+    setUseFallback(false);
+  }, [baseSrc, fallbackSrc, open]);
+
+  useEffect(() => {
+    if (!open || isDirectVideo || !effectiveSrc) return;
     ensureInstagramScript();
     const timer = setTimeout(() => {
       try {
@@ -317,9 +345,15 @@ function PromoVideoContent({ promo, open }) {
       }
     }, 60);
     return () => clearTimeout(timer);
-  }, [captioned, open, src, useLocalVideo]);
+  }, [captioned, effectiveSrc, isDirectVideo, open]);
 
-  if (!src) {
+  const handleVideoError = () => {
+    if (!useFallback && fallbackSrc) {
+      setUseFallback(true);
+    }
+  };
+
+  if (!effectiveSrc) {
     return (
       <div className="relative mx-auto flex min-h-[260px] w-full max-w-[640px] items-center justify-center rounded-[12px] border-[1.5px] border-[#63a614] bg-slate-950/80 p-6 text-center text-sm text-white/80 shadow-[0_0_28px_rgba(99,166,20,0.22)]">
         Promo video unavailable right now. Please check back soon.
@@ -331,19 +365,21 @@ function PromoVideoContent({ promo, open }) {
     <div className="relative mx-auto w-full max-w-[640px]">
       <div className="w-full rounded-[12px] border-[1.5px] border-[#63a614] bg-slate-950/80 p-3 shadow-[0_0_28px_rgba(99,166,20,0.22)]">
         <div className="flex w-full justify-center">
-          {useLocalVideo ? (
+          {isDirectVideo ? (
             <video
-              src={src}
+              src={effectiveSrc}
               poster={promo?.poster_url || undefined}
               autoPlay
               controls
               playsInline
+              preload="metadata"
+              onError={handleVideoError}
               className="mx-auto h-auto max-h-[90vh] w-full rounded-[10px] bg-black/70 object-contain shadow-[0_18px_45px_rgba(2,6,23,0.45)]"
             />
           ) : (
             <blockquote
               className="instagram-media mx-auto w-full max-w-full"
-              data-instgrm-permalink={src}
+              data-instgrm-permalink={effectiveSrc}
               data-instgrm-version="14"
               {...(captioned ? { "data-instgrm-captioned": "" } : {})}
               style={{
@@ -1395,7 +1431,16 @@ export default function SellersPage() {
         const resolved = showPinned ? settingsJson?.pinned : fallback;
         if (isMounted) {
           const resolvedData = resolved ? { ...resolved } : {};
-          setPromoData({ ...resolvedData, ...LOCAL_PROMO_VIDEO });
+          const remoteSrc = resolvedData?.source_url?.trim?.() || resolvedData?.url?.trim?.() || "";
+          const merged = { ...LOCAL_PROMO_VIDEO, ...resolvedData };
+          const forcedSrc = LOCAL_PROMO_VIDEO.source_url;
+          setPromoData({
+            ...merged,
+            source_url: forcedSrc,
+            url: forcedSrc,
+            fallback_source_url:
+              remoteSrc && remoteSrc !== forcedSrc ? remoteSrc : LOCAL_PROMO_VIDEO.fallback_source_url,
+          });
         }
       } catch (err) {
         console.warn("Failed to load seller promo video", err);
