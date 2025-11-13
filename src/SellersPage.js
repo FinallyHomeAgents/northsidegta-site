@@ -315,33 +315,43 @@ function PromoVideoContent({ promo, open }) {
 
   if (!src) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-black/60 p-6 text-center text-sm text-white/80">
+      <div className="relative mx-auto flex min-h-[260px] w-full max-w-[640px] items-center justify-center rounded-[12px] border-[1.5px] border-[#63a614] bg-slate-950/80 p-6 text-center text-sm text-white/80 shadow-[0_0_28px_rgba(99,166,20,0.22)]">
         Promo video unavailable right now. Please check back soon.
       </div>
     );
   }
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-black/85 shadow-[0_35px_90px_rgba(0,0,0,0.65)]">
-      <div className="aspect-video w-full">
-        {useLocalVideo ? (
-          <video
-            src={src}
-            poster={promo?.poster_url || undefined}
-            autoPlay
-            controls
-            playsInline
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <blockquote
-            className="instagram-media h-full w-full"
-            data-instgrm-permalink={src}
-            data-instgrm-version="14"
-            {...(captioned ? { "data-instgrm-captioned": "" } : {})}
-            style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
-          />
-        )}
+    <div className="relative mx-auto w-full max-w-[640px]">
+      <div className="w-full rounded-[12px] border-[1.5px] border-[#63a614] bg-slate-950/80 p-3 shadow-[0_0_28px_rgba(99,166,20,0.22)]">
+        <div className="flex w-full justify-center">
+          {useLocalVideo ? (
+            <video
+              src={src}
+              poster={promo?.poster_url || undefined}
+              autoPlay
+              controls
+              playsInline
+              className="mx-auto h-auto max-h-[90vh] w-full rounded-[10px] bg-black/70 object-contain shadow-[0_18px_45px_rgba(2,6,23,0.45)]"
+            />
+          ) : (
+            <blockquote
+              className="instagram-media mx-auto w-full max-w-full"
+              data-instgrm-permalink={src}
+              data-instgrm-version="14"
+              {...(captioned ? { "data-instgrm-captioned": "" } : {})}
+              style={{
+                background: "#030712",
+                margin: 0,
+                minHeight: "240px",
+                maxHeight: "90vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -383,7 +393,7 @@ function PromoVideoModal({ open, onClose, promo }) {
 
   return ReactDOM.createPortal(
     <div
-      className={`fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 px-4 py-10 transition-opacity duration-200 ${
+      className={`fixed inset-0 z-[1000] flex items-center justify-center bg-slate-950/65 px-4 py-10 backdrop-blur transition-opacity duration-200 ${
         ready ? "opacity-100" : "opacity-0"
       }`}
       role="dialog"
@@ -392,33 +402,23 @@ function PromoVideoModal({ open, onClose, promo }) {
       onClick={() => onClose?.()}
     >
       <div
-        className={`relative flex w-full max-w-[900px] flex-col items-stretch gap-4 rounded-[28px] border border-white/20 bg-black/70 p-4 shadow-[0_40px_140px_rgba(0,0,0,0.6)] transition-all duration-200 sm:max-w-[880px] sm:p-6 ${
+        className={`relative flex w-full max-w-[700px] flex-col items-center gap-6 rounded-[28px] border border-white/10 bg-slate-950/80 p-6 shadow-[0_32px_120px_rgba(2,6,23,0.7)] transition-all duration-200 ${
           ready ? "scale-100 opacity-100" : "scale-95 opacity-0"
-        } max-h-[75vh] sm:max-h-[85vh]`}
+        } max-h-[90vh] overflow-y-auto`}
         onClick={(event) => event.stopPropagation()}
       >
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/15 text-lg font-semibold text-white shadow-lg transition hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white/70"
+          className="absolute right-6 top-6 inline-flex items-center justify-center p-2 text-2xl font-light text-white/60 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-white/40"
           aria-label="Close video"
         >
-          ✕
+          ×
         </button>
-        <div className="mt-8 flex-1 overflow-hidden rounded-3xl border border-white/10 bg-black/60 p-3 shadow-inner sm:mt-6 sm:p-6">
-          <div className="flex h-full flex-col justify-center">
-            <PromoVideoContent promo={promo} open={open} />
-            {title && <p className="mt-4 text-center text-sm text-white/80">{title}</p>}
-          </div>
+        <div className="w-full pt-10 sm:pt-8">
+          <PromoVideoContent promo={promo} open={open} />
+          {title && <p className="mt-4 text-center text-sm text-white/80">{title}</p>}
         </div>
-        <button
-          type="button"
-          onClick={() => onClose?.()}
-          className="block w-full rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60"
-          aria-label="Close video"
-        >
-          Close
-        </button>
       </div>
     </div>,
     document.body
