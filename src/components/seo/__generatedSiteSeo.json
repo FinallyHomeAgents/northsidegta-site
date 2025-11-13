@@ -1,13 +1,13 @@
 {
   "/": {
-    "seo_title": "NorthSide GTA | Real Estate Agents for Buyers & Sellers",
-    "seo_description": "Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog.",
-    "seo_image": "https://www.northsidegta.ca/Images/og-home.jpg"
+    "seo_title": "NorthSide GTA | Real Estate North of Toronto | Finally Home Agents Team",
+    "seo_description": "Ready to buy or sell your home just outside Toronto? The Finally Home Agents team created the NorthSide GTA to help families make the move — offering trusted real estate guidance across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, Scugog, and the growing communities beyond..",
+    "seo_image": "/uploads/northside-gta-finally-home-agents-hero.jpg"
   },
   "/about": {
-    "seo_title": "About Finally Home Agents | Local NorthSide GTA Realtors®",
-    "seo_description": "We’re a local, relationship-first real estate team serving the NorthSide GTA—Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog.",
-    "seo_image": "/Images/northsidegta-map-bg.jpg"
+    "seo_title": "About Finally Home Agents | NorthSide GTA Real Estate Team",
+    "seo_description": "Matthew and Landon Mulhall built Finally Home Agents with the same dedication and trust found in professional athlete–agent partnerships — guiding families across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog to achieve their real estate goals through teamwork, strategy, and care.",
+    "seo_image": "/uploads/og-about-northsidegta.jpg"
   },
   "/buyers": {
     "seo_title": "Buying a Home in the NorthSide GTA | Finally Home Agents",
@@ -15,9 +15,9 @@
     "seo_image": "/uploads/buyers-page-seo.jpg"
   },
   "/community": {
-    "seo_title": "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
-    "seo_description": "Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.",
-    "seo_image": "/Images/hero-desktop.jpg"
+    "seo_title": "NorthSide GTA Events & Local Happenings | Finally Home Agents",
+    "seo_description": "Find upcoming community events, farmers markets, and local gatherings across the NorthSide GTA — from Uxbridge to Georgina and Stouffville. Explore what’s happening north of Toronto with Finally Home Agents.",
+    "seo_image": "/uploads/community-page-seo.jpg"
   },
   "/community/events": {
     "seo_title": "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
@@ -25,23 +25,23 @@
     "seo_image": "/Images/hero-desktop.jpg"
   },
   "/contact": {
-    "seo_title": "Contact Finally Home Agents | NorthSide GTA Real Estate Experts",
-    "seo_description": "Talk to NorthSide GTA real estate experts for buying and selling guidance across Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",
-    "seo_image": "/Images/northsidegta-map-bg.jpg"
+    "seo_title": "Contact Finally Home Agents | NorthSide GTA Team",
+    "seo_description": "Have questions about buying or selling in the NorthSide GTA? Connect with Matthew and Landon Mulhall at Finally Home Agents for guidance across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog.",
+    "seo_image": "/uploads/og-contact-northsidegta.jpg"
   },
   "/insights": {
-    "seo_title": "NorthSide GTA Insights — Stories, Market Updates & Local Highlights",
-    "seo_description": "Discover the latest stories, market updates, and community insights from the NorthSide GTA. Learn what’s happening across Uxbridge, Stouffville, Georgina, East Gwillimbury, and beyond — powered by Finally Home Agents.",
-    "seo_image": "https://northsidegta.ca/uploads/insights/northside-insights-hero.png"
+    "seo_title": "NorthSide GTA Insights | Local News, Town Highlights & Real Estate Trends",
+    "seo_description": "Explore NorthSide GTA Insights — your source for local stories, community news, and real estate updates across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog. Discover life north of Toronto with Finally Home Agents.",
+    "seo_image": "/uploads/insights-seo.jpg"
   },
   "/media": {
-    "seo_title": "Videos + Reels — NorthSide GTA & Finally Home Agents",
-    "seo_description": "Watch our latest NorthSide GTA and Finally Home Agents videos and Instagram Reels — listings, community, and brand stories.",
-    "seo_image": "/uploads/hero-poster.jpg"
+    "seo_title": "NorthSide GTA Videos & Reels | Finally Home Agents",
+    "seo_description": "Watch NorthSide GTA videos and reels featuring community highlights, real estate insights, and local stories from Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog — served by Finally Home Agents.",
+    "seo_image": "/uploads/videos-reels.jpg"
   },
   "/sellers": {
-    "seo_title": "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
-    "seo_description": "Thinking of selling in the NorthSide GTA? Get AI-backed pricing, pro staging, premium media, and negotiation that wins—serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
+    "seo_title": "Sell Your Home | NorthSide GTA & Finally Home Agents",
+    "seo_description": "Unlock your NorthSide home value and sale strategy with Finally Home Agents. Strategic exposure across the NorthSide GTA and Greater Toronto Area, professional media, and a modern selling experience.",
     "seo_image": "/uploads/sellers-page-seo.jpg"
   }
 }
