@@ -38,7 +38,12 @@ function isVideoFile(url = "") {
 }
 
 function FeaturedHeroCard({ item }) {
-  const src = item?.source_url?.trim?.() || item?.url?.trim?.() || "";
+  const src =
+    typeof item?.source_url === "string"
+      ? item.source_url
+      : typeof item?.url === "string"
+        ? item.url
+        : "";
   const title = item?.title?.trim?.() || "Featured NorthSide GTA reel";
   const captioned = Boolean(item?.captioned);
   const useLocalVideo = isVideoFile(src);

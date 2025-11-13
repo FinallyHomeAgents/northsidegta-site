@@ -18,7 +18,7 @@ function isVideoFile(url = "") {
 }
 
 export default function HeroPromo({ pinned }) {
-  const src = pinned?.source_url?.trim() || "";
+  const src = typeof pinned?.source_url === "string" ? pinned.source_url : "";
   const useLocalVideo = isVideoFile(src);
   const cardRef = useRef(null);
   const videoRef = useRef(null);
