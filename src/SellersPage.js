@@ -1434,12 +1434,15 @@ export default function SellersPage() {
           const remoteSrc = resolvedData?.source_url?.trim?.() || resolvedData?.url?.trim?.() || "";
           const merged = { ...LOCAL_PROMO_VIDEO, ...resolvedData };
           const forcedSrc = LOCAL_PROMO_VIDEO.source_url;
+          const remoteSrcIsVideo = isVideoFile(remoteSrc);
           setPromoData({
             ...merged,
             source_url: forcedSrc,
             url: forcedSrc,
             fallback_source_url:
-              remoteSrc && remoteSrc !== forcedSrc ? remoteSrc : LOCAL_PROMO_VIDEO.fallback_source_url,
+              remoteSrc && remoteSrc !== forcedSrc && !remoteSrcIsVideo
+                ? remoteSrc
+                : LOCAL_PROMO_VIDEO.fallback_source_url,
           });
         }
       } catch (err) {
