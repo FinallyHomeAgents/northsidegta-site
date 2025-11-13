@@ -188,6 +188,53 @@ collections:
                   name: 'area'
                   label: 'Area'
 
+  - name: 'communityPlaces'
+    label: 'Community Places'
+    folder: 'public/data/community-places'
+    create: true
+    extension: 'json'
+    format: 'json'
+    identifier_field: 'slug'
+    slug: '{{slug}}'
+    fields:
+      - { name: 'title', label: 'Title' }
+      - { name: 'slug', label: 'Slug', widget: 'string', pattern: ['^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only.'] }
+      - name: 'town'
+        label: 'Town'
+        widget: 'select'
+        options:
+          - 'Uxbridge'
+          - 'Georgina'
+          - 'East Gwillimbury'
+          - 'Newmarket'
+          - 'Aurora'
+          - 'Stouffville'
+          - 'Scugog'
+      - name: 'category'
+        label: 'Category'
+        widget: 'select'
+        options:
+          - 'Pizza'
+          - 'Burgers'
+          - 'Coffee'
+          - 'Bakery'
+          - 'Dessert'
+          - 'Breakfast'
+          - 'Sushi'
+          - 'Tacos'
+          - 'Pub'
+          - 'Other'
+      - name: 'status'
+        label: 'Status'
+        widget: 'select'
+        options:
+          - { label: 'Published', value: 'published' }
+          - { label: 'Draft', value: 'draft' }
+        default: 'draft'
+      - { name: 'website', label: 'Website', required: false }
+      - { name: 'address', label: 'Address', required: false }
+      - { name: 'image', label: 'Image', widget: 'image', required: false, hint: 'Images are not used yet but can be uploaded for future updates.' }
+
   - label: 'Site SEO'
     name: 'site_seo'
     editor:
