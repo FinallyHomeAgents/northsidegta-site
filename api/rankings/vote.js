@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { readJsonBody } from '../../lib/api-helpers'
 import { loadCommunityPlaces } from '../../lib/community-places'
+import { applyCommunityPlaceFallbacks } from '../../lib/communityRanking/place-fallbacks'
 import { getRedisClient, isRedisConfigured } from '../../lib/communityRanking/kv-client'
 import {
   createBallotHash,
@@ -84,6 +85,9 @@ export default async function handler(req, res) {
 
   const { town, category, choice, turnstileToken, honeypot } = parsed.data
 
+  const normalizedTown = normalizeTown(town)
+  const normalizedCategory = normalizeCategory(category)
+
   if (honeypot && honeypot.trim()) {
     res.status(200).json({ ok: true, ignored: true })
     return
@@ -99,7 +103,10 @@ export default async function handler(req, res) {
     return
   }
 
-  const availablePlaces = loadCommunityPlaces({ town, category, status: 'published' })
+  const availablePlaces = applyCommunityPlaceFallbacks(
+    loadCommunityPlaces({ town, category, status: 'published' }),
+    { normalizedTown, normalizedCategory }
+  )
   const selected = availablePlaces.find(
     (place) => String(place.slug || '').toLowerCase() === String(choice).toLowerCase()
   )
@@ -109,8 +116,6 @@ export default async function handler(req, res) {
     return
   }
 
-  const normalizedTown = normalizeTown(town)
-  const normalizedCategory = normalizeCategory(category)
   const ballotHash = createBallotHash(ip, userAgent, dateKey)
   const ballotKey = `rank:${normalizedCategory}:${normalizedTown}:ballot:${ballotHash}`
   const scoreKey = `rank:${normalizedCategory}:${normalizedTown}:score:${selected.slug}`

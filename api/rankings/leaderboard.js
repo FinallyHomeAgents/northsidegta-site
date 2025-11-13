@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { loadCommunityPlaces } from '../../lib/community-places'
+import { applyCommunityPlaceFallbacks } from '../../lib/communityRanking/place-fallbacks'
 import { getRedisClient, isRedisConfigured } from '../../lib/communityRanking/kv-client'
 import { normalizeCategory, normalizeTown } from '../../lib/communityRanking/utils'
 
@@ -43,7 +44,10 @@ export default async function handler(req, res) {
       return
     }
 
-    const places = loadCommunityPlaces({ town, category, status: 'published' })
+    const places = applyCommunityPlaceFallbacks(
+      loadCommunityPlaces({ town, category, status: 'published' }),
+      { normalizedTown, normalizedCategory }
+    )
     const pipeline = redis.pipeline()
     const keyPairs = []
 
