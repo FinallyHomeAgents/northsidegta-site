@@ -198,6 +198,13 @@ const CheckIcon = (props) => (
   </svg>
 );
 
+const PlayCircleIcon = ({ className = "w-5 h-5" }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className}>
+    <circle cx="12" cy="12" r="9" fill="currentColor" className="text-white/20" />
+    <path d="M10 8.8v6.4L15.2 12 10 8.8z" fill="currentColor" className="text-white" />
+  </svg>
+);
+
 function SellerHero({ onPrimaryClick, onOpenPromo }) {
   const heroRef = useReveal({ immediate: true });
 
@@ -251,9 +258,12 @@ function SellerHero({ onPrimaryClick, onOpenPromo }) {
               <button
                 type="button"
                 onClick={onOpenPromo}
-                className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+                className="inline-flex items-center justify-center gap-3 rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
               >
-                ▶︎ Why Sellers Choose Us
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                  <PlayCircleIcon className="h-4 w-4 text-white" />
+                </span>
+                Why Sellers Choose Us
               </button>
             </div>
             <p className="mt-2 text-xs text-emerald-50/80">See what it’s like to work with our team.</p>
@@ -372,7 +382,7 @@ function PromoVideoModal({ open, onClose, promo }) {
       onClick={() => onClose?.()}
     >
       <div
-        className="relative w-full max-w-4xl space-y-4"
+        className="relative w-full max-w-2xl space-y-4 sm:max-w-3xl"
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -518,17 +528,12 @@ function HowWeSellSection() {
 
 function SellersReviewsSection() {
   const headingRef = useReveal();
-  const totalReviews = GOOGLE_REVIEWS?.length || 0;
 
   return (
     <section className="space-y-6">
       <div ref={headingRef} className="ns-reveal mx-auto max-w-3xl text-center">
         <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">What Our Clients Say</h2>
-        <p className="mt-3 text-base text-slate-600 sm:text-lg">
-          {totalReviews > 0
-            ? `Real feedback from ${totalReviews}+ NorthSide GTA clients.`
-            : "Real feedback from NorthSide GTA clients."}
-        </p>
+        <p className="mt-3 text-base text-slate-600 sm:text-lg">Real feedback from NorthSide GTA clients.</p>
       </div>
       <GoogleGradientReviews />
     </section>
