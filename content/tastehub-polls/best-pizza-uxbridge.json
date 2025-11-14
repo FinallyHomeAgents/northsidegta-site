@@ -10,13 +10,40 @@
   "featured": true,
   "ballot_items": [
     {
-      "name": "Pizzaville Uxbridge"
+      "id": "boston-pizza-uxbridge",
+      "name": "Boston Pizza – Uxbridge"
     },
     {
-      "name": "Sunny’s Pizzeria"
+      "id": "dominos-pizza-uxbridge",
+      "name": "Domino’s Pizza – Uxbridge"
     },
     {
-      "name": "Domino’s Pizza Uxbridge"
+      "id": "free-topping-pizza",
+      "name": "Free Topping Pizza"
+    },
+    {
+      "id": "canadian-pizza-house",
+      "name": "Canadian Pizza House"
+    },
+    {
+      "id": "pizza-pizza-uxbridge",
+      "name": "Pizza Pizza – Uxbridge"
+    },
+    {
+      "id": "sandford-pizza-house",
+      "name": "Sandford Pizza House"
+    },
+    {
+      "id": "pizza-hut-uxbridge",
+      "name": "Pizza Hut – Uxbridge"
+    },
+    {
+      "id": "papas-pizzaland",
+      "name": "Papa’s Pizzaland"
+    },
+    {
+      "id": "pizzaville-uxbridge",
+      "name": "Pizzaville – Uxbridge"
     }
   ]
 }
