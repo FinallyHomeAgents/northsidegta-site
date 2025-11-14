@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { Helmet } from 'react-helmet-async'
 import { DateTime } from 'luxon'
 import { upload } from '@vercel/blob/client'
+import { CircleDollarSign, MapPin, Share2 } from 'lucide-react'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 
@@ -484,6 +485,24 @@ function FormError({ message }) {
 function Hint({ children }) {
   return <p className="mt-1 text-xs text-slate-500">{children}</p>
 }
+
+const submitEventBenefitItems = [
+  {
+    icon: MapPin,
+    title: 'Real local reach',
+    description: 'Your event appears across town pages throughout the entire NorthSide GTA.',
+  },
+  {
+    icon: Share2,
+    title: 'Custom event page',
+    description: 'We create a clean page you can share on social media, email, and group chats.',
+  },
+  {
+    icon: CircleDollarSign,
+    title: 'Always free',
+    description: 'Built for the NorthSide community, including Aurora, with no fees or catches.',
+  },
+]
 
 export default function SubmitEventPage() {
   const [form, setForm] = React.useState(() => initialFormState())
@@ -973,37 +992,37 @@ export default function SubmitEventPage() {
         />
       </Helmet>
       <div className="mx-auto max-w-5xl px-4">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">
-            Community submission
-          </span>
-          <h1 className="mt-4 text-4xl font-semibold text-emerald-900">Submit a NorthSide GTA community event</h1>
-          <p className="mt-3 text-base text-slate-600">
-            Keep it detailed and accurate—titles, dates, and links are reviewed before publishing. We focus on family-friendly,
-            local experiences north of Toronto.
+        <div className="mx-auto max-w-3xl">
+          <h1 className="text-3xl font-semibold text-emerald-900 sm:text-4xl">Add Your Event to the NorthSide GTA Calendar</h1>
+          <div className="submit-event-trust-pill mt-4 inline-flex w-full items-center justify-center rounded-full border border-emerald-100 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-800 shadow-sm sm:w-auto sm:px-6">
+            ✔ Free to list • ✔ Reaches the entire NorthSide GTA (including Aurora) • ✔ Creates a shareable event page
+          </div>
+          <p className="mt-4 text-base text-slate-600">
+            Reach locals across Aurora, Georgina, East Gwillimbury, Newmarket, Stouffville, Uxbridge, Scugog — across the entire
+            NorthSide GTA. It’s free to list, and we built it for the community.
           </p>
-          <div className="mt-6 grid gap-4 rounded-3xl border border-emerald-200 bg-white/70 p-6 text-left shadow-sm md:grid-cols-3">
-            {[1, 2, 3].map((step) => {
-              const copy = [
-                'Fill in every field carefully — formatting matters.',
-                'Our team reviews new submissions quickly and may reach out if details are unclear.',
-                'Approved events are published to our community calendar and newsletter.',
-              ]
+          <div className="submit-event-benefits-row mt-6 grid gap-4 text-left sm:grid-cols-3">
+            {submitEventBenefitItems.map((item) => {
+              const Icon = item.icon
               return (
-                <div key={step} className="space-y-2">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white">
-                    {step}
-                  </span>
-                  <p className="text-sm text-slate-600">{copy[step - 1]}</p>
+                <div key={item.title} className="flex items-start gap-3">
+                  <Icon className="mt-0.5 h-5 w-5 flex-none text-brand-green" aria-hidden />
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                    <p className="mt-1 text-xs text-slate-600">{item.description}</p>
+                  </div>
                 </div>
               )
             })}
           </div>
+          <p className="mt-6 text-sm text-slate-600">
+            Add your event details below and we’ll get it onto the NorthSide GTA calendar once it’s approved.
+          </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mt-10 max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-emerald-900/10"
+          className="mx-auto mt-6 w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-emerald-900/10"
         >
           <div className="space-y-6">
             <section>
@@ -1732,6 +1751,53 @@ export default function SubmitEventPage() {
             </div>
           </div>
         </form>
+
+        <section className="mx-auto mt-12 max-w-4xl">
+          <h2 className="text-lg font-semibold text-emerald-900">Why organizers love using this</h2>
+          <div className="mt-4 grid gap-6 text-sm text-slate-600 sm:grid-cols-3">
+            <div>
+              <p className="font-semibold text-slate-900">Real local reach</p>
+              <p className="mt-1">
+                Your event appears across town pages throughout the entire NorthSide GTA.
+              </p>
+            </div>
+            <div>
+              <p className="font-semibold text-slate-900">Custom event page</p>
+              <p className="mt-1">
+                We create a clean page you can share on social media, email, and group chats.
+              </p>
+            </div>
+            <div>
+              <p className="font-semibold text-slate-900">Always free</p>
+              <p className="mt-1">Built for Aurora and the NorthSide GTA community. No fees. No catch.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto mt-10 max-w-4xl">
+          <h2 className="text-base font-semibold text-emerald-900">How it works (quick + simple):</h2>
+          <ol className="mt-3 grid list-decimal gap-3 pl-5 text-sm text-slate-600 sm:grid-cols-2 lg:grid-cols-4">
+            <li>Submit your event using the form above.</li>
+            <li>We review and approve it.</li>
+            <li>It appears on the NorthSide GTA calendar and town pages.</li>
+            <li>Share your event page link anywhere you’d like.</li>
+          </ol>
+        </section>
+
+        <section className="mx-auto mt-10 max-w-4xl text-sm text-slate-500">
+          <p className="border-t border-slate-200 pt-3">
+            Recently added: Winter Coat Drive (Aurora) • Holiday Market (Stouffville) • Family Skate (Newmarket)
+          </p>
+        </section>
+
+        <section className="mx-auto mt-12 max-w-3xl text-center text-sm text-slate-600">
+          <h2 className="text-base font-semibold text-emerald-900">Why we built this</h2>
+          <p className="mt-3">
+            We live and work in the NorthSide GTA. This calendar helps connect families, small businesses, and community groups
+            across Aurora, Georgina, East Gwillimbury, Newmarket, Stouffville, Uxbridge, and Scugog — all in one place.
+          </p>
+          <p className="mt-3">Thanks for helping make our region even better.</p>
+        </section>
       </div>
     </div>
   )
