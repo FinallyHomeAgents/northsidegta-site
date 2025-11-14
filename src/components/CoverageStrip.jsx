@@ -78,7 +78,7 @@ export default function CoverageStrip({ className = "" }) {
       <a
         href={t.href}
         aria-label={`Explore ${t.name}`}
-        className="group relative inline-flex items-end gap-2 rounded-full px-3 py-1.5 font-medium transition duration-200 hover:-translate-y-[1px] hover:bg-[#3A7512] hover:shadow-[0_10px_22px_-16px_rgba(0,0,0,0.6)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+        className="group relative inline-flex items-end gap-2 rounded-full px-3 py-1 font-medium transition duration-200 hover:-translate-y-[1px] hover:bg-[#3A7512] hover:shadow-[0_10px_22px_-16px_rgba(0,0,0,0.6)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
       >
         <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#32610E] shadow-sm ring-2 ring-white/60 transition duration-200 md:h-9 md:w-9 group-hover:ring-white">
           <img
@@ -104,14 +104,14 @@ export default function CoverageStrip({ className = "" }) {
 
   return (
     <div className={rootClassName}>
-      <div className="mx-auto max-w-7xl px-3 py-3">
+      <div className="mx-auto max-w-7xl px-3 py-1.5">
         <div
           ref={railRef}
-          className={`${RAIL_CLASS} relative flex w-full items-end gap-3 overflow-hidden py-2 md:gap-6`}
+          className={`${RAIL_CLASS} relative flex w-full items-end gap-3 overflow-hidden py-1 md:gap-6`}
         >
           <span
             ref={labelRef}
-            className={`${LABEL_CLASS} relative z-20 flex-shrink-0 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/90 shadow-sm backdrop-blur-[1px] md:px-4`}
+            className={`${LABEL_CLASS} relative z-20 flex-shrink-0 rounded-full border border-white/15 bg-white/10 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/90 shadow-sm backdrop-blur-[1px] md:px-4`}
           >
             NorthSide GTA Towns
           </span>
@@ -135,7 +135,7 @@ export default function CoverageStrip({ className = "" }) {
         .${RAIL_CLASS}::before{
           content:"";
           position:absolute;
-          top:calc(50% + 6px);
+          top:calc(50% + 3px);
           left:var(--rail-line-left);
           right:0;
           height:2px;
@@ -145,8 +145,8 @@ export default function CoverageStrip({ className = "" }) {
         }
         @media (min-width:768px){
           .${RAIL_CLASS}::before{
-            top:calc(50% + 8px);
-            height:3px;
+            top:calc(50% + 4px);
+            height:2px;
           }
         }
         .${LIST_CLASS}::-webkit-scrollbar{display:none}
