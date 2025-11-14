@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import HeaderShell from "./components/HeaderShell";
@@ -57,6 +57,7 @@ function normalizePoll(poll) {
     town: poll.town || "",
     rankingKey: poll.rankingKey || poll.ranking_key || poll.slug,
     ballotItems,
+    image: poll.image || "",
     createdAt: poll.createdAt || poll.updatedAt || null,
   };
 }
@@ -91,6 +92,17 @@ function PollCard({ poll, leaderboard, onOpen }) {
     <article
       className="flex h-full flex-col rounded-3xl border border-emerald-100 bg-white/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
     >
+      {poll.image && (
+        <div className="-mt-2 mb-4 overflow-hidden rounded-2xl border border-emerald-100/70">
+          <img
+            src={poll.image}
+            alt={`${poll.title} feature art`}
+            className="h-40 w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
       <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-600">
         <span>{poll.town}</span>
         <span>{poll.category}</span>
@@ -130,12 +142,24 @@ function PollCard({ poll, leaderboard, onOpen }) {
 }
 
 function FeaturedPoll({ poll, onOpen }) {
+  const backgroundStyles = poll.image
+    ? {
+        backgroundImage: `linear-gradient(135deg, rgba(15, 74, 38, 0.85), rgba(245, 158, 11, 0.7)), url(${poll.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : undefined;
+
   return (
     <button
       type="button"
       onClick={() => onOpen(poll)}
-      className="group flex min-w-[250px] flex-col rounded-3xl border border-white/30 bg-white/10 p-5 text-left text-white shadow-[0_18px_40px_rgba(10,54,27,0.35)] transition hover:bg-white/20"
+      className="group relative flex min-w-[250px] flex-col overflow-hidden rounded-3xl border border-white/30 bg-white/10 p-5 text-left text-white shadow-[0_18px_40px_rgba(10,54,27,0.35)] transition hover:bg-white/20"
+      style={backgroundStyles}
     >
+      {!poll.image && (
+        <div className="pointer-events-none absolute inset-0 opacity-40 mix-blend-screen" aria-hidden />
+      )}
       <span className="text-xs font-semibold uppercase tracking-[0.32em] text-lime-200">
         {poll.town} • {poll.category}
       </span>
@@ -145,6 +169,101 @@ function FeaturedPoll({ poll, onOpen }) {
         <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
       </span>
     </button>
+  );
+}
+
+function PollShareControls({ poll, shareUrl }) {
+  const [copyStatus, setCopyStatus] = useState("idle");
+  const safeUrl = shareUrl || "";
+  const shareText = poll?.title
+    ? `Vote on ${poll.title} on NorthSide TasteHub`
+    : "Check out this NorthSide TasteHub poll";
+  const encodedUrl = encodeURIComponent(safeUrl);
+  const encodedText = encodeURIComponent(shareText);
+  const canUseNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+
+  const handleCopy = useCallback(async () => {
+    if (!safeUrl) return;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(safeUrl);
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = safeUrl;
+        temp.setAttribute("readonly", "");
+        temp.style.position = "absolute";
+        temp.style.left = "-9999px";
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+      }
+      setCopyStatus("copied");
+      setTimeout(() => setCopyStatus("idle"), 3000);
+    } catch (error) {
+      console.error("[TasteHub] copy link failed", error);
+      setCopyStatus("error");
+      setTimeout(() => setCopyStatus("idle"), 4000);
+    }
+  }, [safeUrl]);
+
+  const handleNativeShare = useCallback(async () => {
+    if (!canUseNativeShare || !safeUrl) return;
+    try {
+      await navigator.share({ title: poll?.title || "TasteHub Poll", text: shareText, url: safeUrl });
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        console.warn("[TasteHub] native share failed", error);
+      }
+    }
+  }, [canUseNativeShare, safeUrl, poll?.title, shareText]);
+
+  return (
+    <div className="space-y-3 rounded-2xl border border-white/20 bg-white/10 p-4 text-xs text-white/80">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-lime-200">Spread the word</p>
+      <div className="flex flex-wrap gap-2">
+        {canUseNativeShare && (
+          <button
+            type="button"
+            onClick={handleNativeShare}
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-500/90 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-400"
+          >
+            Share from device
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={handleCopy}
+          disabled={!safeUrl}
+          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {copyStatus === "copied" ? "Link copied!" : copyStatus === "error" ? "Copy failed" : "Copy link"}
+        </button>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+        >
+          Facebook
+        </a>
+        <a
+          href={`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+        >
+          X / Twitter
+        </a>
+        <a
+          href={`mailto:?subject=${encodeURIComponent(poll?.title ? `TasteHub: ${poll.title}` : "TasteHub poll")}&body=${encodedText}%0A${encodedUrl}`}
+          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+        >
+          Email
+        </a>
+      </div>
+      {safeUrl && <p className="break-all text-[11px] text-white/70">{safeUrl}</p>}
+    </div>
   );
 }
 
@@ -166,7 +285,16 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
   if (!poll) return null;
 
   const shareUrl =
-    typeof window !== "undefined" ? `${window.location.origin}/tastehub/${poll.slug}` : `/tastehub/${poll.slug}`;
+    typeof window !== "undefined"
+      ? `${window.location.origin}/tastehub/${poll.slug}`
+      : `https://northsidegta.ca/tastehub/${poll.slug}`;
+  const bannerStyles = poll.image
+    ? {
+        backgroundImage: `linear-gradient(145deg, rgba(6, 78, 59, 0.94), rgba(217, 119, 6, 0.75)), url(${poll.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : undefined;
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-12 backdrop-blur-sm">
@@ -179,15 +307,16 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
         >
           ×
         </button>
-        <div className="space-y-5 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-8 text-white">
+        <div
+          className="space-y-5 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-8 text-white"
+          style={bannerStyles}
+        >
           <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
             {poll.town} • {poll.category}
           </span>
           <h2 className="text-3xl font-semibold leading-tight">{poll.title}</h2>
           <p className="text-sm text-emerald-50/90">{poll.description}</p>
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-4 text-xs text-white/80">
-            Share this poll: <span className="font-semibold">{shareUrl}</span>
-          </div>
+          <PollShareControls poll={poll} shareUrl={shareUrl} />
         </div>
         <div className="max-h-[80vh] overflow-y-auto p-8">
           <TasteHubPoll

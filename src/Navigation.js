@@ -26,7 +26,6 @@ export default function Navigation() {
     { to: "/buyers", label: "Buyers" },
     { to: "/sellers", label: "Sellers" },
     { to: "/community", label: "Community" },
-    { to: "/tastehub", label: "TasteHub" },
     { to: "/insights", label: "Insights" },
     { to: "/media", label: "Videos + Reels" },
     { to: "/contact", label: "Contact" },

@@ -197,7 +197,9 @@ collections:
     identifier_field: 'slug'
     slug: '{{slug}}'
     fields:
-      - { name: 'title', label: 'Title' }
+      - name: 'title'
+        label: 'Title'
+        hint: "Headline that appears on TasteHub cards and detail views (e.g. 'Best Pizza in Uxbridge')."
       - { name: 'slug', label: 'Slug', widget: 'string', pattern: ['^[a-z0-9-]+$', 'Use lowercase letters, numbers, and hyphens only.'] }
       - name: 'town'
         label: 'Town'
@@ -251,9 +253,11 @@ collections:
         pattern:
           - '^[a-z0-9-]+$'
           - 'Use lowercase letters, numbers, and dashes only'
+        hint: "Used in the poll URL (e.g. 'best-pizza-uxbridge')."
       - name: 'town'
         label: 'Town'
         widget: 'select'
+        hint: 'Select where this poll belongs (appears as the location pill).'
         options:
           - 'Georgina'
           - 'East Gwillimbury'
@@ -265,6 +269,7 @@ collections:
       - name: 'category'
         label: 'Category'
         widget: 'select'
+        hint: "Food lane this poll belongs to (e.g. Pizza, Wings)."
         options:
           - 'Pizza'
           - 'Wings'
@@ -279,6 +284,7 @@ collections:
       - name: 'status'
         label: 'Status'
         widget: 'select'
+        hint: "Controls if voting is open. Set to 'Live' to accept ballots, 'Closed' to show final results, 'Draft' to hide."
         options:
           - { label: 'Live', value: 'live' }
           - { label: 'Closed', value: 'closed' }
@@ -287,23 +293,39 @@ collections:
       - name: 'description'
         label: 'Description'
         widget: 'text'
+        hint: "Short teaser shown on cards and in the modal (1–2 sentences)."
       - name: 'ranking_key'
         label: 'Ranking Key'
         widget: 'string'
-        hint: 'Unique key used with the Upstash rankings API (e.g. tastehub_uxbridge_pizza_2025).'
+        hint: "Unique key shared with Upstash for this poll (e.g. 'tastehub_uxbridge_pizza_2025')."
+      - name: 'image'
+        label: 'Feature Image'
+        widget: 'image'
+        required: false
+        hint: 'Optional 1600×900 image used on cards and detail headers. Upload JPG/PNG for best quality.'
       - name: 'featured'
         label: 'Featured'
         widget: 'boolean'
         default: false
         required: false
+        hint: 'Turn on to highlight in the Hot Right Now strip (max 2 shown at a time).'
       - name: 'ballot_items'
         label: 'Ballot Items'
         widget: 'list'
         allow_add: true
+        hint: 'Add every option voters can choose from. Order is preserved in the voting UI.'
         fields:
-          - { name: 'name', label: 'Name' }
-          - { name: 'address', label: 'Address', required: false }
-          - { name: 'link', label: 'Link', required: false }
+          - name: 'name'
+            label: 'Name'
+            hint: "Restaurant or spot name exactly as you want it displayed (e.g. 'Sunny’s Pizzeria')."
+          - name: 'address'
+            label: 'Address'
+            required: false
+            hint: 'Optional helper line for context (e.g. “21 Brock St W”).'
+          - name: 'link'
+            label: 'Link'
+            required: false
+            hint: 'Optional URL for menus or websites (include https://).'
 
   - label: 'Site SEO'
     name: 'site_seo'
