@@ -316,7 +316,7 @@ collections:
           - label: "Run Smart Fill"
             name: "run"
             widget: "hidden"
-        hint: "Click the Smart Fill button below."
+        hint: "Use the Smart Fill button injected below."
       - name: 'ballot_items'
         label: 'Ballot Items'
         widget: 'list'
