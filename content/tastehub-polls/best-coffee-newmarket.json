@@ -1,0 +1,22 @@
+{
+  "title": "Best Coffee in Newmarket",
+  "slug": "best-coffee-newmarket",
+  "town": "Newmarket",
+  "category": "Coffee",
+  "status": "live",
+  "description": "Whether you’re grabbing a latte between showings or a slow Sunday cappuccino, vote for the Newmarket coffee shop you think deserves the top spot.",
+  "ranking_key": "tastehub_newmarket_coffee_2025",
+  "image": "/uploads/tastehub-newmarket-coffee.jpg",
+  "featured": false,
+  "ballot_items": [
+    {
+      "name": "Pickering’s Coffee House"
+    },
+    {
+      "name": "The Maids’ Cottage Coffee Bar"
+    },
+    {
+      "name": "Stellar Grounds Coffee"
+    }
+  ]
+}
