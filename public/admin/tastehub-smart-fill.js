@@ -1,36 +1,36 @@
 // Smart Fill Button Injection for Decap CMS
 window.addEventListener("DOMContentLoaded", () => {
-  // Retry until CMS renders the field panel
   const interval = setInterval(() => {
-    // Look for the Smart Fill field wrapper
-    const panel = document.querySelector('[data-field-name="smart_fill"]');
+    // Try all possible Smart Fill panel selectors
+    const panel =
+      document.querySelector('[data-field-name="smart_fill_restaurants"]') ||
+      document.querySelector('[data-field-name="smart_fill"]') ||
+      document.querySelector("div.SmartFillRestaurants") ||
+      document.querySelector(".SmartFillRestaurants");
 
-    // If panel exists and button not yet injected
     if (panel && !document.getElementById("smartFillBtn")) {
       clearInterval(interval);
 
-      // Create the button element
       const btn = document.createElement("button");
       btn.id = "smartFillBtn";
       btn.innerText = "Smart Fill Restaurants";
       btn.style.padding = "10px 16px";
-      btn.style.background = "#1a73e8";
+      btn.style.background = "#32610E"; // NorthSide GTA green
       btn.style.color = "white";
       btn.style.border = "none";
       btn.style.borderRadius = "6px";
       btn.style.cursor = "pointer";
-      btn.style.margin = "10px 0";
+      btn.style.margin = "10px 0 20px 0";
       btn.style.fontSize = "15px";
       btn.style.fontWeight = "600";
 
-      // Inject button under the panel
       panel.appendChild(btn);
 
-      // Handle click
       btn.addEventListener("click", async () => {
         const entry = window.CMS?.editorInstance?.entry;
+
         if (!entry) {
-          alert("Unable to load current poll entry.");
+          alert("Unable to load poll entry.");
           return;
         }
 
@@ -44,19 +44,18 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         const overwrite = confirm(
-          "Smart Fill Restaurants:\n\nClick OK to OVERWRITE current items.\nClick CANCEL to APPEND new items."
+          "Smart Fill Restaurants:\n\nClick OK to OVERWRITE existing items.\nClick CANCEL to APPEND."
         );
 
         try {
           const res = await fetch(
-            `/api/tastehub/generate-ballot?town=${encodeURIComponent(
-              town
-            )}&category=${encodeURIComponent(category)}`
+            `/api/tastehub/generate-ballot?town=${encodeURIComponent(town)}&category=${encodeURIComponent(category)}`
           );
 
           const data = await res.json();
+
           if (!Array.isArray(data)) {
-            alert("Smart Fill failed — check API key or server logs.");
+            alert("Smart Fill failed — invalid response.");
             return;
           }
 
@@ -66,12 +65,12 @@ window.addEventListener("DOMContentLoaded", () => {
             data: entry.get("data").set("ballot_items", newItems),
           });
 
-          alert("Smart Fill complete! Review your items and save the poll.");
+          alert("Smart Fill complete! Review and save the poll.");
         } catch (err) {
           console.error(err);
           alert("Smart Fill failed — network or server error.");
         }
       });
     }
-  }, 500);
+  }, 300);
 });
