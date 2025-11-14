@@ -40,8 +40,10 @@ export default async function handler(req, res) {
   if (!coords) return res.status(400).json([]);
 
   const types = CATEGORY_MAP[category] || ["restaurant"];
+  const primaryType = types[0] || "restaurant";
+  const keyword = types[1] || category.toLowerCase();
 
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords.lat},${coords.lng}&radius=4500&type=${types[0]}&key=${GOOGLE_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords.lat},${coords.lng}&radius=4500&type=${primaryType}&keyword=${encodeURIComponent(keyword)}&key=${GOOGLE_KEY}`;
 
   const places = await fetch(url).then(r => r.json());
 
