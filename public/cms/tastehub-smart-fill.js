@@ -1,7 +1,7 @@
 // Smart Fill Button Injection for Decap CMS
 window.addEventListener("DOMContentLoaded", () => {
   const interval = setInterval(() => {
-    // Try all possible Smart Fill panel selectors
+    // Try all possible selectors for our field block
     const panel =
       document.querySelector('[data-field-name="smart_fill_restaurants"]') ||
       document.querySelector('[data-field-name="smart_fill"]') ||
@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", () => {
       btn.id = "smartFillBtn";
       btn.innerText = "Smart Fill Restaurants";
       btn.style.padding = "10px 16px";
-      btn.style.background = "#32610E"; // NorthSide GTA green
+      btn.style.background = "#32610E";
       btn.style.color = "white";
       btn.style.border = "none";
       btn.style.borderRadius = "6px";
@@ -49,11 +49,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
         try {
           const res = await fetch(
-            `/api/tastehub/generate-ballot?town=${encodeURIComponent(town)}&category=${encodeURIComponent(category)}`
+            `/api/tastehub/generate-ballot?town=${encodeURIComponent(
+              town
+            )}&category=${encodeURIComponent(category)}`
           );
 
           const data = await res.json();
-
           if (!Array.isArray(data)) {
             alert("Smart Fill failed — invalid response.");
             return;
