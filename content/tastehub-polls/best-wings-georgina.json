@@ -1,13 +1,4 @@
 {
-  "title": "Best Wings in Georgina",
-  "slug": "best-wings-georgina",
-  "town": "Georgina",
-  "category": "Wings",
-  "status": "live",
-  "description": "Are the best wings in Georgina hiding at your favourite pub or takeout spot? Have your say and see where the community lands.",
-  "ranking_key": "tastehub_georgina_wings_2025",
-  "image": "/uploads/tastehub-georgina-wings.jpg",
-  "featured": true,
   "ballot_items": [
     {
       "id": "lake-simcoe-arms-pub-restaurant",
@@ -21,5 +12,14 @@
       "id": "boston-pizza-keswick",
       "name": "Boston Pizza Keswick"
     }
-  ]
+  ],
+  "slug": "best-wings-georgina",
+  "featured": true,
+  "town": "Georgina",
+  "status": "draft",
+  "ranking_key": "tastehub_georgina_wings_2025",
+  "title": "Best Wings in Georgina",
+  "image": "/uploads/tastehub-georgina-wings.jpg",
+  "description": "Are the best wings in Georgina hiding at your favourite pub or takeout spot? Have your say and see where the community lands.",
+  "category": "Wings"
 }
