@@ -109,7 +109,7 @@ function FeaturedHeroCard({ item }) {
       <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-neutral-950/80 shadow-[0_32px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <div ref={cardRef} className="relative">
-          <div className="aspect-video w-full">
+          <div className="reel-frame">
             {useLocalVideo ? (
               <div className="relative h-full w-full">
                 <video
@@ -120,7 +120,7 @@ function FeaturedHeroCard({ item }) {
                   muted={muted}
                   loop
                   playsInline
-                  className="h-full w-full object-cover"
+                  className="reel-media"
                   title={title}
                 />
                 <button
@@ -135,7 +135,7 @@ function FeaturedHeroCard({ item }) {
               </div>
             ) : (
               <blockquote
-                className="instagram-media h-full w-full"
+                className="instagram-media reel-media"
                 data-instgrm-permalink={src}
                 data-instgrm-version="14"
                 {...(captioned ? { "data-instgrm-captioned": "" } : {})}
@@ -225,7 +225,7 @@ export default function MediaPage() {
                     alt="Hand holding a smartphone showing the words Videos Reels with NorthSide GTA styling, against a blurred city background."
                   />
                 </figure>
-                <div className="mt-6 w-full lg:absolute lg:right-12 lg:top-1/2 lg:mt-0 lg:w-[min(55%,24rem)] lg:-translate-y-1/2">
+                <div className="mt-6 flex w-full items-center justify-center lg:absolute lg:right-12 lg:top-1/2 lg:mt-0 lg:w-[min(55%,28rem)] lg:-translate-y-1/2">
                   <FeaturedHeroCard item={heroFeatured} />
                 </div>
               </div>

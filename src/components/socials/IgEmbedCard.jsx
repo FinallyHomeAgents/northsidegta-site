@@ -59,13 +59,15 @@ export default function IgEmbedCard({ url, title, captioned = false, showOverlay
         </div>
 
         <div className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.01]">
-          <blockquote
-            className="instagram-media w-full"
-            data-instgrm-permalink={url}
-            data-instgrm-version="14"
-            {...(captioned ? { "data-instgrm-captioned": "" } : {})}
-            style={{ background: "#0a0a0a", margin: 0 }}
-          />
+          <div className="reel-frame">
+            <blockquote
+              className="instagram-media reel-media"
+              data-instgrm-permalink={url}
+              data-instgrm-version="14"
+              {...(captioned ? { "data-instgrm-captioned": "" } : {})}
+              style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
+            />
+          </div>
         </div>
 
         {showOverlay && (
@@ -86,13 +88,15 @@ export default function IgEmbedCard({ url, title, captioned = false, showOverlay
       </article>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-        <blockquote
-          className="instagram-media w-full"
-          data-instgrm-permalink={url}
-          data-instgrm-version="14"
-          {...(captioned ? { "data-instgrm-captioned": "" } : {})}
-          style={{ background: "#0a0a0a", margin: 0 }}
-        />
+        <div className="reel-frame">
+          <blockquote
+            className="instagram-media reel-media"
+            data-instgrm-permalink={url}
+            data-instgrm-version="14"
+            {...(captioned ? { "data-instgrm-captioned": "" } : {})}
+            style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
+          />
+        </div>
       </Modal>
     </>
   );
