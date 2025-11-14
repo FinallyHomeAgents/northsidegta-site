@@ -311,11 +311,12 @@ collections:
         hint: 'Turn on to highlight in the Hot Right Now strip (max 2 shown at a time).'
       - label: "Smart Fill Restaurants"
         name: "smart_fill"
-        widget: "button"
-        text: "Smart Fill Restaurants"
-        hint: "Automatically fetch restaurants for the selected town + category."
-        onClick:
-          action: "smart-fill-restaurants"
+        widget: "object"
+        fields:
+          - label: "Run Smart Fill"
+            name: "run"
+            widget: "hidden"
+        hint: "Click the Smart Fill button below."
       - name: 'ballot_items'
         label: 'Ballot Items'
         widget: 'list'
