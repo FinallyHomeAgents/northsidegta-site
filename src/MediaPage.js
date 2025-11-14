@@ -220,15 +220,17 @@ export default function MediaPage() {
 
             {heroFeatured && (
               <div className="media-hero-visual relative mt-10">
-                <figure className="mx-auto w-[88%] max-w-[40rem] overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)] sm:w-[82%] lg:mx-0 lg:w-[68%] lg:max-w-[38rem]">
+                <figure className="mx-auto w-[88%] max-w-[40rem] overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)] sm:w-[82%] lg:mx-0 lg:w-[70%] lg:max-w-[38rem]">
                   <img
                     className="h-auto w-full"
                     src="/uploads/videos-reels-hero-finally-home-agents-side2.jpg"
                     alt="Hand holding a smartphone showing the words Videos Reels with NorthSide GTA styling, against a blurred city background."
                   />
                 </figure>
-                <div className="mt-6 flex w-full items-center justify-center lg:absolute lg:right-10 lg:top-1/2 lg:mt-0 lg:w-[min(48%,24rem)] lg:-translate-y-1/2">
-                  <FeaturedHeroCard item={heroFeatured} />
+                <div className="mt-6 flex w-full justify-center lg:absolute lg:right-[2%] lg:top-1/2 lg:mt-0 lg:w-auto lg:-translate-y-1/2 lg:-translate-x-[18%] lg:justify-end">
+                  <div className="relative z-10 w-full max-w-[24rem]">
+                    <FeaturedHeroCard item={heroFeatured} />
+                  </div>
                 </div>
               </div>
             )}
