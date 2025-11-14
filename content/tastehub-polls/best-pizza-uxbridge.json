@@ -1,29 +1,16 @@
 {
-  "title": "Best Pizza in Uxbridge",
-  "slug": "best-pizza-uxbridge",
-  "town": "Uxbridge",
-  "category": "Pizza",
-  "status": "live",
-  "description": "Help crown Uxbridge’s go-to pizza spot. Cast your vote and see who’s on top in real time.",
-  "ranking_key": "tastehub_uxbridge_pizza_2025",
-  "image": "/uploads/tastehub-uxbridge-pizza.jpg",
-  "featured": true,
   "ballot_items": [
     {
-      "id": "boston-pizza-uxbridge",
-      "name": "Boston Pizza – Uxbridge"
+      "id": "papas-pizzaland",
+      "name": "Papa’s Pizzaland"
+    },
+    {
+      "id": "pizzaville-uxbridge",
+      "name": "Pizzaville – Uxbridge"
     },
     {
       "id": "dominos-pizza-uxbridge",
       "name": "Domino’s Pizza – Uxbridge"
-    },
-    {
-      "id": "free-topping-pizza",
-      "name": "Free Topping Pizza"
-    },
-    {
-      "id": "canadian-pizza-house",
-      "name": "Canadian Pizza House"
     },
     {
       "id": "pizza-pizza-uxbridge",
@@ -38,12 +25,17 @@
       "name": "Pizza Hut – Uxbridge"
     },
     {
-      "id": "papas-pizzaland",
-      "name": "Papa’s Pizzaland"
-    },
-    {
-      "id": "pizzaville-uxbridge",
-      "name": "Pizzaville – Uxbridge"
+      "id": "boston-pizza-uxbridge",
+      "name": "Boston Pizza – Uxbridge"
     }
-  ]
+  ],
+  "slug": "best-pizza-uxbridge",
+  "featured": true,
+  "town": "Uxbridge",
+  "status": "live",
+  "ranking_key": "tastehub_uxbridge_pizza_2025",
+  "title": "Best Pizza in Uxbridge",
+  "image": "/uploads/uxbridgepizza.jpg",
+  "description": "Help crown Uxbridge’s go-to pizza spot. Cast your vote and see who’s on top in real time.",
+  "category": "Pizza"
 }
