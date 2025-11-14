@@ -186,6 +186,22 @@ const STATIC_ROUTE_META_CONFIGS = [
       siteName: "NorthSide GTA",
     },
   },
+  {
+    route: "/tastehub",
+    meta: {
+      route: "/tastehub",
+      documentTitle: "NorthSide TasteHub | Community Food Rankings Across the NorthSide GTA",
+      title: "NorthSide TasteHub | Community Food Rankings Across the NorthSide GTA",
+      description:
+        "Vote on the best local spots for pizza, wings, coffee and more in Uxbridge, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog with NorthSide TasteHub, powered by Finally Home Agents.",
+      canonicalUrl: "https://northsidegta.ca/tastehub",
+      ogType: "website",
+      ogImage: "/Images/og-home.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/Images/og-home.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
 ];
 
 function cloneMeta(meta = {}) {

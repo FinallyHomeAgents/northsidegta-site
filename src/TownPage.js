@@ -168,6 +168,27 @@ export default function TownPage() {
           }
         />
         {isUxbridge && <PizzaSection town={town.name} category="Pizza" />}
+        {isUxbridge && (
+          <section className="mx-auto mt-10 max-w-5xl px-4">
+            <div className="rounded-3xl border border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 p-6 shadow-sm">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="max-w-2xl space-y-1">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">TasteHub Spotlight</p>
+                  <h3 className="text-xl font-semibold text-emerald-900">Vote on the Best Pizza in Uxbridge</h3>
+                  <p className="text-sm text-slate-600">
+                    Join NorthSide TasteHub and help crown Uxbridge’s top slice. Cast your ballot and watch the leaderboard update live.
+                  </p>
+                </div>
+                <Link
+                  to="/tastehub/best-pizza-uxbridge"
+                  className="inline-flex items-center gap-2 self-start rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-105"
+                >
+                  Open Poll →
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
         <section className="mx-auto max-w-6xl px-4 pb-12">
           <TownStrip />
         </section>

@@ -235,6 +235,76 @@ collections:
       - { name: 'address', label: 'Address', required: false }
       - { name: 'image', label: 'Image', widget: 'image', required: false, hint: 'Images are not used yet but can be uploaded for future updates.' }
 
+  - name: 'tastehub_polls'
+    label: 'TasteHub Polls'
+    folder: 'content/tastehub-polls'
+    create: true
+    extension: 'json'
+    format: 'json'
+    identifier_field: 'slug'
+    slug: '{{slug}}'
+    fields:
+      - { name: 'title', label: 'Title' }
+      - name: 'slug'
+        label: 'Slug'
+        widget: 'string'
+        pattern:
+          - '^[a-z0-9-]+$'
+          - 'Use lowercase letters, numbers, and dashes only'
+      - name: 'town'
+        label: 'Town'
+        widget: 'select'
+        options:
+          - 'Georgina'
+          - 'East Gwillimbury'
+          - 'Newmarket'
+          - 'Aurora'
+          - 'Stouffville'
+          - 'Uxbridge'
+          - 'Scugog'
+      - name: 'category'
+        label: 'Category'
+        widget: 'select'
+        options:
+          - 'Pizza'
+          - 'Wings'
+          - 'Coffee'
+          - 'Burgers'
+          - 'Breakfast'
+          - 'Takeout'
+          - 'Ice Cream'
+          - 'Bakery'
+          - 'Tacos'
+          - 'Sushi'
+      - name: 'status'
+        label: 'Status'
+        widget: 'select'
+        options:
+          - { label: 'Live', value: 'live' }
+          - { label: 'Closed', value: 'closed' }
+          - { label: 'Draft', value: 'draft' }
+        default: 'draft'
+      - name: 'description'
+        label: 'Description'
+        widget: 'text'
+      - name: 'ranking_key'
+        label: 'Ranking Key'
+        widget: 'string'
+        hint: 'Unique key used with the Upstash rankings API (e.g. tastehub_uxbridge_pizza_2025).'
+      - name: 'featured'
+        label: 'Featured'
+        widget: 'boolean'
+        default: false
+        required: false
+      - name: 'ballot_items'
+        label: 'Ballot Items'
+        widget: 'list'
+        allow_add: true
+        fields:
+          - { name: 'name', label: 'Name' }
+          - { name: 'address', label: 'Address', required: false }
+          - { name: 'link', label: 'Link', required: false }
+
   - label: 'Site SEO'
     name: 'site_seo'
     editor:

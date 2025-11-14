@@ -1,0 +1,21 @@
+{
+  "title": "Best Wings in Georgina",
+  "slug": "best-wings-georgina",
+  "town": "Georgina",
+  "category": "Wings",
+  "status": "live",
+  "description": "Are the best wings in Georgina hiding at your favourite pub or takeout spot? Have your say and see where the community lands.",
+  "ranking_key": "tastehub_georgina_wings_2025",
+  "featured": true,
+  "ballot_items": [
+    {
+      "name": "Lake Simcoe Arms Pub & Restaurant"
+    },
+    {
+      "name": "Tatlows Broiler Bar"
+    },
+    {
+      "name": "Boston Pizza Keswick"
+    }
+  ]
+}
