@@ -10,12 +10,15 @@
   "featured": false,
   "ballot_items": [
     {
+      "id": "pickering-s-coffee-house",
       "name": "Pickering’s Coffee House"
     },
     {
+      "id": "the-maids-cottage-coffee-bar",
       "name": "The Maids’ Cottage Coffee Bar"
     },
     {
+      "id": "stellar-grounds-coffee",
       "name": "Stellar Grounds Coffee"
     }
   ]

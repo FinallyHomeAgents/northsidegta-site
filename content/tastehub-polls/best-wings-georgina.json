@@ -10,12 +10,15 @@
   "featured": true,
   "ballot_items": [
     {
+      "id": "lake-simcoe-arms-pub-restaurant",
       "name": "Lake Simcoe Arms Pub & Restaurant"
     },
     {
+      "id": "tatlows-broiler-bar",
       "name": "Tatlows Broiler Bar"
     },
     {
+      "id": "boston-pizza-keswick",
       "name": "Boston Pizza Keswick"
     }
   ]

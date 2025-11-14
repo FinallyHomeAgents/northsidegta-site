@@ -147,20 +147,28 @@ export default function TasteHubPoll({
   initialLeaderboard,
   onLeaderboardUpdate,
 }) {
-  const { rankingKey, ballotItems = [], status } = poll || {};
+  const rankingKeySource =
+    poll?.rankingKey || poll?.ranking_key || poll?.slug || "";
+  const rankingKey = useMemo(
+    () => rankingKeySource.trim(),
+    [rankingKeySource]
+  );
+
+  const rawBallotItems = poll?.ballotItems || poll?.ballot_items || [];
+  const status = String(poll?.status || "draft").toLowerCase();
   const [selected, setSelected] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [voteStatus, setVoteStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
   const normalizedBallot = useMemo(() => {
-    return Array.isArray(ballotItems)
-      ? ballotItems.map((item) => ({
+    return Array.isArray(rawBallotItems)
+      ? rawBallotItems.map((item) => ({
           ...item,
           id: slugify(item.id || item.name),
         }))
       : [];
-  }, [ballotItems]);
+  }, [rawBallotItems]);
 
   const { data, loading, error, refresh } = useLeaderboard({
     rankingKey,
@@ -318,7 +326,9 @@ export default function TasteHubPoll({
               {message && (
                 <p
                   className={`text-sm ${
-                    voteStatus === "success" || voteStatus === "duplicate"
+                    voteStatus === "success"
+                      ? "inline-flex items-center rounded-full bg-emerald-900/90 px-3 py-1.5 font-semibold text-white shadow-[0_6px_18px_rgba(6,38,21,0.35)]"
+                      : voteStatus === "duplicate"
                       ? "text-emerald-700"
                       : "text-rose-600"
                   }`}
