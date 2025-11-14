@@ -158,6 +158,172 @@ body {
   box-shadow: 0 30px 80px rgba(34, 68, 10, 0.2);
 }
 
+.contact-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4rem, 8vw, 6.5rem) clamp(1.5rem, 6vw, 3.5rem);
+  min-height: 72vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0 0 48px 48px;
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.contact-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(6, 17, 13, 0.78) 0%,
+    rgba(6, 17, 13, 0.62) 45%,
+    rgba(6, 17, 13, 0.75) 100%
+  );
+  z-index: 0;
+}
+
+.contact-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: clamp(8rem, 18vh, 12rem);
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 17, 13, 0.4) 0%,
+    rgba(6, 17, 13, 0.7) 45%,
+    rgba(12, 32, 24, 0.9) 100%
+  );
+  z-index: 0;
+}
+
+.contact-hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  display: grid;
+  gap: 1.75rem;
+  text-align: center;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 5vw, 3rem);
+  border-radius: 32px;
+  background: rgba(6, 17, 13, 0.52);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 40px 110px rgba(5, 12, 9, 0.55);
+}
+
+.contact-hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(209, 250, 229, 0.9);
+  margin: 0;
+}
+
+.contact-hero-heading {
+  margin: 0;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.contact-hero-subhead {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.3vw, 1.45rem);
+  line-height: 1.7;
+  color: rgba(226, 241, 233, 0.95);
+}
+
+.contact-hero-response {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.9vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(240, 253, 244, 0.85);
+}
+
+.contact-hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.contact-hero-primary {
+  width: 100%;
+  border-radius: 9999px;
+  box-shadow: 0 25px 55px rgba(21, 128, 61, 0.35);
+}
+
+.contact-hero-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  width: 100%;
+  border-radius: 28px;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid rgba(232, 252, 244, 0.28);
+  background: rgba(15, 46, 32, 0.55);
+  color: #f0fdf4;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  box-shadow: 0 20px 45px rgba(8, 20, 14, 0.4);
+}
+
+.contact-hero-secondary:hover,
+.contact-hero-secondary:focus-visible {
+  background: rgba(15, 46, 32, 0.7);
+  border-color: rgba(232, 252, 244, 0.45);
+}
+
+.contact-hero-secondary:focus-visible {
+  outline: 3px solid rgba(232, 252, 244, 0.8);
+  outline-offset: 3px;
+}
+
+.contact-hero-secondary span:last-child {
+  color: rgba(240, 253, 244, 0.95);
+}
+
+.contact-hero-secondary span:last-child span:last-child {
+  color: rgba(209, 250, 229, 0.75);
+}
+
+@media (min-width: 640px) {
+  .contact-hero-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .contact-hero-primary,
+  .contact-hero-secondary {
+    width: auto;
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    min-height: 62vh;
+    padding: clamp(3.25rem, 8vw, 4rem) clamp(1.25rem, 6vw, 2rem);
+    border-radius: 0 0 32px 32px;
+  }
+
+  .contact-hero-content {
+    gap: 1.35rem;
+    padding: clamp(1.75rem, 6vw, 2.5rem) clamp(1.25rem, 5vw, 2rem);
+  }
+}
+
 .insight-content .insight-inline-media__caption {
   font-size: 0.9rem;
   color: #475569;

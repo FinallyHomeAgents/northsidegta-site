@@ -67,73 +67,57 @@ function ContactPageV2() {
       </DynamicMetaTags>
       <HeaderShell />
       <main className="bg-slate-50 pb-20">
-        <div className="px-4 pt-10 sm:px-6 sm:pt-12 lg:px-8">
-          <section className="mx-auto max-w-6xl">
-            <div className="flex flex-col items-center gap-10 text-center lg:gap-12">
-              <div className="flex w-full max-w-3xl flex-col items-center gap-6 text-center">
-                <div className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">
-                    Finally Home Agents
-                  </p>
-                  <h1 className="text-3xl font-semibold tracking-tight text-emerald-950 sm:text-4xl md:text-[2.75rem]">
-                    {config.heroHeadline}
-                  </h1>
-                  <p className="text-base leading-relaxed text-slate-700 sm:text-lg">
-                    {config.heroSubhead}
-                  </p>
-                  {config.responsePledge && (
-                    <p className="text-sm font-medium text-emerald-700 sm:text-base">
-                      {config.responsePledge}
-                    </p>
-                  )}
-                </div>
-                <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                  <Button
-                    size="lg"
-                    onClick={handlePrimary}
-                    className="w-full max-w-xs rounded-2xl sm:w-auto"
-                  >
-                    {config.heroPrimaryCtaLabel || "Send a Message"}
-                  </Button>
-                  {whatsappChannel?.href && (
-                    <a
-                      href={whatsappChannel.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={handleWhatsapp}
-                      className="inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-white px-5 py-3 text-base font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-400 hover:text-emerald-800 sm:w-auto"
-                    >
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white shadow-inner">
-                        <WhatsAppGlyph className="h-5 w-5 text-white" />
-                      </span>
-                      <span className="flex flex-col text-left text-sm leading-tight">
-                        <span>{config.heroSecondaryCtaLabel || "Chat on WhatsApp"}</span>
-                        <span className="text-[11px] font-medium text-emerald-500">
-                          Concierge replies in minutes
-                        </span>
-                      </span>
-                    </a>
-                  )}
-                </div>
-              </div>
-              <div className="relative flex w-full justify-center">
-                <div className="relative w-full max-w-4xl overflow-hidden rounded-[32px] border border-emerald-100 bg-white shadow-[0_32px_90px_rgba(50,97,14,0.18)] aspect-[4/3] sm:aspect-[5/4] md:aspect-[4/3]">
-                  <img
-                    src="/uploads/contact-hero-finally-home-agents.jpg"
-                    alt="Clean desk scene with a smartphone, notebook, and NorthSide GTA and Finally Home Agents branding, representing how to contact the team."
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
+        <section
+          className="contact-hero"
+          style={{
+            backgroundImage:
+              "url('/uploads/contact-hero-finally-home-agents.jpg')",
+          }}
+        >
+          <div className="contact-hero-content">
+            <p className="contact-hero-eyebrow">Finally Home Agents</p>
+            <h1 className="contact-hero-heading">{config.heroHeadline}</h1>
+            <p className="contact-hero-subhead">{config.heroSubhead}</p>
+            {config.responsePledge && (
+              <p className="contact-hero-response">{config.responsePledge}</p>
+            )}
+            <div className="contact-hero-actions">
+              <Button
+                size="lg"
+                onClick={handlePrimary}
+                className="contact-hero-primary"
+              >
+                {config.heroPrimaryCtaLabel || "Send a Message"}
+              </Button>
+              {whatsappChannel?.href && (
+                <a
+                  href={whatsappChannel.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handleWhatsapp}
+                  className="contact-hero-secondary"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white shadow-inner shadow-black/30 transition-transform duration-200 ease-out hover:scale-105">
+                    <WhatsAppGlyph className="h-5 w-5 text-white" />
+                  </span>
+                  <span className="flex flex-col text-left text-sm leading-tight">
+                    <span>{config.heroSecondaryCtaLabel || "Chat on WhatsApp"}</span>
+                    <span className="text-[11px] font-medium text-emerald-100">
+                      Concierge replies in minutes
+                    </span>
+                  </span>
+                </a>
+              )}
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="mx-auto mt-10 max-w-4xl">
+        <div className="px-4 pt-16 sm:px-6 lg:px-8">
+          <section className="mx-auto max-w-4xl">
             <CallbackFormCard />
           </section>
 
-          <section className="mx-auto mt-10 flex max-w-6xl flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)] lg:items-start lg:gap-12">
+          <section className="mx-auto mt-16 flex max-w-6xl flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)] lg:items-start lg:gap-12">
             <div className="order-2 space-y-6 lg:order-1" ref={formSectionRef} id="contact-form">
               <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-6 pt-10 shadow-xl shadow-emerald-100 sm:p-9 sm:pt-12">
                 <span
