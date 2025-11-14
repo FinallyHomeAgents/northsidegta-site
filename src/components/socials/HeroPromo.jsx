@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import useInstagramEmbedFit from "../../hooks/useInstagramEmbedFit";
 
 function ensureInstagramScript() {
   if (typeof document === "undefined") return;
@@ -24,6 +25,7 @@ export default function HeroPromo({ pinned }) {
   const videoRef = useRef(null);
   const [hydrated, setHydrated] = useState(false);
   const [muted, setMuted] = useState(true);
+  const frameRef = useInstagramEmbedFit(!useLocalVideo, [src, hydrated]);
 
   useEffect(() => {
     if (!src || useLocalVideo) return;
@@ -90,39 +92,41 @@ export default function HeroPromo({ pinned }) {
 
         <div
           ref={cardRef}
-          className="relative rounded-2xl overflow-hidden border border-white/10 bg-neutral-950 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]"
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]"
         >
-          {useLocalVideo ? (
-            <>
-              <video
-                ref={videoRef}
-                src={src}
-                poster={pinned?.poster_url || undefined}
-                autoPlay
-                muted={muted}
-                loop
-                playsInline
-                className="w-full h-full object-cover"
+          <div ref={frameRef} className="reel-frame">
+            {useLocalVideo ? (
+              <div className="relative h-full w-full">
+                <video
+                  ref={videoRef}
+                  src={src}
+                  poster={pinned?.poster_url || undefined}
+                  autoPlay
+                  muted={muted}
+                  loop
+                  playsInline
+                  className="reel-media"
+                />
+                <button
+                  type="button"
+                  onClick={() => setMuted((prev) => !prev)}
+                  className="absolute bottom-4 right-4 z-10 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md transition hover:bg-black/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  aria-pressed={!muted}
+                  aria-label={muted ? "Unmute featured video" : "Mute featured video"}
+                >
+                  {muted ? "Unmute" : "Mute"}
+                </button>
+              </div>
+            ) : (
+              <blockquote
+                className="instagram-media reel-media"
+                data-instgrm-permalink={src}
+                data-instgrm-version="14"
+                {...(captioned ? { "data-instgrm-captioned": "" } : {})}
+                style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
               />
-              <button
-                type="button"
-                onClick={() => setMuted((prev) => !prev)}
-                className="absolute bottom-3 right-3 z-10 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md transition hover:bg-black/75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                aria-pressed={!muted}
-                aria-label={muted ? "Unmute featured video" : "Mute featured video"}
-              >
-                {muted ? "Unmute" : "Mute"}
-              </button>
-            </>
-          ) : (
-            <blockquote
-              className="instagram-media w-full"
-              data-instgrm-permalink={src}
-              data-instgrm-version="14"
-              {...(captioned ? { "data-instgrm-captioned": "" } : {})}
-              style={{ background: "#0a0a0a", margin: 0 }}
-            />
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

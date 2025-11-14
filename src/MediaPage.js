@@ -5,6 +5,7 @@ import HeroPromo from "./components/socials/HeroPromo";
 import IgEmbedCard from "./components/socials/IgEmbedCard";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
+import useInstagramEmbedFit from "./hooks/useInstagramEmbedFit";
 
 function normalize(items = []) {
   const filtered = items.filter((item) => item && item.published !== false && item.url);
@@ -51,6 +52,7 @@ function FeaturedHeroCard({ item }) {
   const videoRef = useRef(null);
   const [hydrated, setHydrated] = useState(false);
   const [muted, setMuted] = useState(true);
+  const frameRef = useInstagramEmbedFit(!useLocalVideo, [src, hydrated]);
 
   useEffect(() => {
     if (!src || useLocalVideo) return;
@@ -109,7 +111,7 @@ function FeaturedHeroCard({ item }) {
       <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-neutral-950/80 shadow-[0_32px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <div ref={cardRef} className="relative">
-          <div className="reel-frame">
+          <div ref={frameRef} className="reel-frame">
             {useLocalVideo ? (
               <div className="relative h-full w-full">
                 <video
@@ -218,14 +220,14 @@ export default function MediaPage() {
 
             {heroFeatured && (
               <div className="media-hero-visual relative mt-10">
-                <figure className="overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)]">
+                <figure className="mx-auto w-[88%] max-w-[40rem] overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)] sm:w-[82%] lg:mx-0 lg:w-[68%] lg:max-w-[38rem]">
                   <img
                     className="h-auto w-full"
                     src="/uploads/videos-reels-hero-finally-home-agents-side2.jpg"
                     alt="Hand holding a smartphone showing the words Videos Reels with NorthSide GTA styling, against a blurred city background."
                   />
                 </figure>
-                <div className="mt-6 flex w-full items-center justify-center lg:absolute lg:right-12 lg:top-1/2 lg:mt-0 lg:w-[min(55%,28rem)] lg:-translate-y-1/2">
+                <div className="mt-6 flex w-full items-center justify-center lg:absolute lg:right-10 lg:top-1/2 lg:mt-0 lg:w-[min(48%,24rem)] lg:-translate-y-1/2">
                   <FeaturedHeroCard item={heroFeatured} />
                 </div>
               </div>

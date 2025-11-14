@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import useInstagramEmbedFit from "../../hooks/useInstagramEmbedFit";
 import Modal from "../ui/Modal";
 
 function ensureInstagramScript() {
@@ -15,6 +16,8 @@ export default function IgEmbedCard({ url, title, captioned = false, showOverlay
   const [open, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const cardRef = useRef(null);
+  const frameRef = useInstagramEmbedFit(true, [url, hydrated, open]);
+  const modalFrameRef = useInstagramEmbedFit(open, [url, hydrated, open]);
 
   useEffect(() => {
     ensureInstagramScript();
@@ -59,7 +62,7 @@ export default function IgEmbedCard({ url, title, captioned = false, showOverlay
         </div>
 
         <div className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.01]">
-          <div className="reel-frame">
+          <div ref={frameRef} className="reel-frame">
             <blockquote
               className="instagram-media reel-media"
               data-instgrm-permalink={url}
@@ -88,7 +91,7 @@ export default function IgEmbedCard({ url, title, captioned = false, showOverlay
       </article>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-        <div className="reel-frame">
+        <div ref={modalFrameRef} className="reel-frame">
           <blockquote
             className="instagram-media reel-media"
             data-instgrm-permalink={url}
