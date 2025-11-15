@@ -2,6 +2,12 @@ import fetch from "node-fetch";
 
 const GOOGLE_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
+if (!GOOGLE_KEY) {
+  console.warn(
+    "[tastehub:smart-fill] GOOGLE_PLACES_API_KEY is not configured; smart fill API will respond with an error."
+  );
+}
+
 function getRequestPayload(req) {
   if (req.method === "POST") {
     return req.body || {};
@@ -21,6 +27,20 @@ function buildTextSearchUrl({ town, category }) {
 }
 
 export default async function handler(req, res) {
+  const allowedMethods = ["GET", "POST", "HEAD"];
+
+  if (!allowedMethods.includes(req.method || "")) {
+    res.setHeader("Allow", allowedMethods);
+    return res.status(405).json({ error: "Method not allowed." });
+  }
+
+  if (req.method === "HEAD") {
+    if (!GOOGLE_KEY) {
+      return res.status(503).end("GOOGLE_PLACES_API_KEY is not configured");
+    }
+    return res.status(204).end();
+  }
+
   if (!GOOGLE_KEY) {
     return res.status(500).json({ error: "Missing GOOGLE_PLACES_API_KEY" });
   }
@@ -32,11 +52,6 @@ export default async function handler(req, res) {
 
   if (!trimmedTown || !trimmedCategory) {
     return res.status(400).json({ error: "Town and category are required." });
-  }
-
-  if (!["GET", "POST"].includes(req.method || "")) {
-    res.setHeader("Allow", ["GET", "POST"]);
-    return res.status(405).json({ error: "Method not allowed." });
   }
 
   try {
