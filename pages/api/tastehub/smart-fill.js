@@ -54,24 +54,38 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No matching restaurants found." });
     }
 
-    const place = data.results[0] || {};
-
     if (data.status && data.status !== "OK") {
       console.warn("[tastehub:smart-fill] Google Places non-OK status", data.status, data.error_message);
     }
 
-    const restaurantName = place.name || "";
-    const restaurantAddress = place.formatted_address || place.vicinity || "";
+    const items = data.results
+      .filter((result) => result && result.business_status === "OPERATIONAL")
+      .map((result) => {
+        const name = result.name || "";
+        const address = result.formatted_address || result.vicinity || "";
+        const placeId = result.place_id || "";
+        let googleMapsLink = "";
+        if (placeId) {
+          googleMapsLink = `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(placeId)}`;
+        } else if (name) {
+          googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
+        }
 
-    if (!restaurantName) {
-      return res.status(502).json({ error: "Google Places returned an incomplete result." });
+        return {
+          name,
+          address,
+          link: googleMapsLink,
+          placeId: placeId || null,
+        };
+      })
+      .filter((item) => item.name)
+      .slice(0, 10);
+
+    if (!items.length) {
+      return res.status(404).json({ error: "No matching restaurants found." });
     }
 
-    return res.status(200).json({
-      restaurantName,
-      restaurantAddress,
-      placeId: place.place_id || null,
-    });
+    return res.status(200).json({ items });
   } catch (error) {
     console.error("[tastehub:smart-fill] Unexpected error", error);
     return res.status(500).json({ error: "Smart Fill request failed." });

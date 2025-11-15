@@ -107,6 +107,22 @@ window.addEventListener("DOMContentLoaded", () => {
     updateVisibility();
     setInterval(updateVisibility, 500);
 
+    function toArray(value) {
+      if (!value) return [];
+      if (Array.isArray(value)) return value;
+      if (typeof value.toJS === "function") return value.toJS();
+      if (typeof value.toArray === "function") return value.toArray();
+      return [];
+    }
+
+    function toImmutable(value) {
+      const Immutable = window.Immutable;
+      if (Immutable && typeof Immutable.fromJS === "function") {
+        return Immutable.fromJS(value);
+      }
+      return value;
+    }
+
     async function smartFill() {
       const entry = getEntry();
       if (!entry) {
@@ -139,11 +155,24 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        const restaurantName = String(payload?.restaurantName || "").trim();
-        const restaurantAddress = String(payload?.restaurantAddress || "").trim();
+        const responseItems = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.items)
+          ? payload.items
+          : Array.isArray(payload?.restaurants)
+          ? payload.restaurants
+          : [];
 
-        if (!restaurantName) {
-          setHelperMessage("Smart Fill did not return a restaurant name.", true);
+        const smartFillItems = responseItems
+          .map((item) => ({
+            name: String(item?.name || item?.restaurantName || "").trim(),
+            address: String(item?.address || item?.restaurantAddress || "").trim(),
+            link: String(item?.link || "").trim(),
+          }))
+          .filter((item) => item.name);
+
+        if (!smartFillItems.length) {
+          setHelperMessage("Smart Fill did not return any restaurants.", true);
           return;
         }
 
@@ -151,39 +180,49 @@ window.addEventListener("DOMContentLoaded", () => {
         const slug = entry.get("slug");
         let data = entry.get("data");
 
-        let hasUpdatedField = false;
-
-        const nameKeys = ["restaurant_name", "restaurantName"];
-        const addressKeys = ["restaurant_address", "restaurantAddress"];
-
-        if (data && typeof data.has === "function" && typeof data.set === "function") {
-          for (const key of nameKeys) {
-            if (data.has(key)) {
-              data = data.set(key, restaurantName);
-              hasUpdatedField = true;
-            }
-          }
-
-          if (restaurantAddress) {
-            for (const key of addressKeys) {
-              if (data.has(key)) {
-                data = data.set(key, restaurantAddress);
-                hasUpdatedField = true;
-              }
-            }
-          }
-        }
-
-        if (!hasUpdatedField) {
-          setHelperMessage(
-            "Smart Fill worked, but no Restaurant Name/Address fields were found to update.",
-            true
-          );
+        if (!data || typeof data.set !== "function") {
+          setHelperMessage("Smart Fill could not update the poll entry.", true);
           return;
         }
 
-        window.CMS.updateEntry(collection, slug, { data });
-        setHelperMessage("Smart Fill complete! Review the fields before saving.", false);
+        const existingItems = toArray(entry.getIn(["data", "ballot_items"]))
+          .map((item) => ({
+            name: String(item?.name || "").trim(),
+            address: String(item?.address || "").trim(),
+            link: String(item?.link || "").trim(),
+          }))
+          .filter((item) => item.name);
+
+        let shouldOverwrite = true;
+        if (existingItems.length) {
+          shouldOverwrite = window.confirm(
+            "Smart Fill Restaurants:\n\nClick OK to OVERWRITE existing items.\nClick CANCEL to APPEND."
+          );
+        }
+
+        const combinedItems = shouldOverwrite
+          ? smartFillItems
+          : existingItems.concat(smartFillItems);
+
+        const dedupedItems = [];
+        const seenKeys = new Set();
+        combinedItems.forEach((item) => {
+          const key = `${item.name.toLowerCase()}|${item.address.toLowerCase()}`;
+          if (!seenKeys.has(key)) {
+            seenKeys.add(key);
+            dedupedItems.push(item);
+          }
+        });
+
+        const updatedData = data.set("ballot_items", toImmutable(dedupedItems));
+
+        window.CMS.updateEntry(collection, slug, { data: updatedData });
+        setHelperMessage(
+          `Smart Fill ready with ${dedupedItems.length} restaurant${
+            dedupedItems.length === 1 ? "" : "s"
+          }. Review before saving.`,
+          false
+        );
       } catch (error) {
         console.error("[TasteHub Smart Fill]", error);
         setHelperMessage("Smart Fill failed — check your connection and try again.", true);
