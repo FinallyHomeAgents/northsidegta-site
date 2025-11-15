@@ -216,10 +216,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const updatedData = data.set("ballot_items", toImmutable(dedupedItems));
 
-        window.CMS.updateEntry(collection, slug, { data: updatedData });
+        await Promise.resolve(window.CMS.updateEntry(collection, slug, { data: updatedData }));
+
+        const finalCount = dedupedItems.length;
+        const messageAction = shouldOverwrite ? "replaced" : "updated";
         setHelperMessage(
-          `Smart Fill ready with ${dedupedItems.length} restaurant${
-            dedupedItems.length === 1 ? "" : "s"
+          `Smart Fill ${messageAction} the ballot with ${finalCount} restaurant${
+            finalCount === 1 ? "" : "s"
           }. Review before saving.`,
           false
         );
