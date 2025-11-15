@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Slime-Dogs.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/slime-dogs-at-harmony-hall/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/slime-dogs-at-harmony-hall/",
-  "updatedAt": "2025-11-14T08:35:24Z"
+  "lastSyncedAt": "2025-11-15T08:30:50.189Z",
+  "updatedAt": "2025-11-15T08:30:50.189Z",
+  "featured": false
 }
