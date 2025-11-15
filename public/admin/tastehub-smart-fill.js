@@ -27,16 +27,20 @@ window.addEventListener("DOMContentLoaded", () => {
       panel.appendChild(btn);
 
       btn.addEventListener("click", async () => {
-        const entry = window.CMS?.editorInstance?.entry;
+        const cms = window.CMS;
+        const entryDraft = cms?.getState?.().getIn(["entryDraft", "entry"]);
 
-        if (!entry) {
+        if (!entryDraft) {
           alert("Unable to load poll entry.");
           return;
         }
 
-        const town = entry.getIn(["data", "town"]);
-        const category = entry.getIn(["data", "category"]);
-        const items = entry.getIn(["data", "ballot_items"]) || [];
+        const town = entryDraft.getIn(["data", "town"]);
+        const category = entryDraft.getIn(["data", "category"]);
+        const itemsRaw = entryDraft.getIn(["data", "ballot_items"]);
+        const items = Array.isArray(itemsRaw)
+          ? itemsRaw
+          : itemsRaw?.toJS?.() ?? [];
 
         if (!town || !category) {
           alert("Please select BOTH Town and Category before running Smart Fill.");
@@ -52,17 +56,36 @@ window.addEventListener("DOMContentLoaded", () => {
             `/api/tastehub/generate-ballot?town=${encodeURIComponent(town)}&category=${encodeURIComponent(category)}`
           );
 
-          const data = await res.json();
-
-          if (!Array.isArray(data)) {
+          let payload;
+          try {
+            payload = await res.json();
+          } catch (error) {
+            console.error("Smart Fill response parsing failed", error);
             alert("Smart Fill failed — invalid response.");
             return;
           }
 
-          const newItems = overwrite ? data : items.concat(data);
+          if (!res.ok) {
+            const message = payload?.error || res.statusText || "Unknown error";
+            alert(`Smart Fill failed — ${message}.`);
+            return;
+          }
 
-          window.CMS.updateEntry(entry.get("collection"), entry.get("slug"), {
-            data: entry.get("data").set("ballot_items", newItems),
+          if (!Array.isArray(payload)) {
+            const message = payload?.error || "invalid response";
+            alert(`Smart Fill failed — ${message}.`);
+            return;
+          }
+
+          const newItems = overwrite ? payload : items.concat(payload);
+          const dataMap = entryDraft.get("data");
+          const dataObj = dataMap?.toJS?.() ?? dataMap ?? {};
+
+          const collection = entryDraft.get("collection");
+          const slug = entryDraft.get("slug");
+
+          await cms.updateEntry(collection, slug, {
+            data: { ...dataObj, ballot_items: newItems },
           });
 
           alert("Smart Fill complete! Review and save the poll.");
