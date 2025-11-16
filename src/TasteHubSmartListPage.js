@@ -41,13 +41,26 @@ function TasteHubSmartListPage() {
         body: JSON.stringify({ town: trimmedTown, category: trimmedCategory, limit: parsedLimit }),
       });
 
-      const payload = await response.json();
-
-      if (!response.ok) {
-        throw new Error(payload?.error || "Unable to fetch restaurants.");
+      const responseClone = response.clone();
+      let payload;
+      try {
+        payload = await responseClone.json();
+      } catch (parseError) {
+        const fallbackText = await response.text().catch(() => "");
+        setError(
+          response.ok
+            ? "Smart List returned invalid JSON."
+            : `Smart List failed: ${fallbackText || parseError.message}`
+        );
+        return;
       }
 
-      const list = Array.isArray(payload?.restaurants) ? payload.restaurants : [];
+      if (!response.ok || !payload || !Array.isArray(payload.restaurants)) {
+        setError(payload?.error || "Smart List did not return a restaurants list.");
+        return;
+      }
+
+      const list = payload.restaurants;
 
       if (!list.length) {
         setOutput("No restaurants were returned. Try broadening your search.");
