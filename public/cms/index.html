@@ -21,7 +21,8 @@
       /* Top controls (only visible once CMS UI is mounted) */
       #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
       body.cms-loaded #cms-controls{display:block}
-      #events-admin-link{
+      #events-admin-link,
+      #smart-list-link{
         margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
         color:#1d4ed8;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px
       }
@@ -50,6 +51,7 @@
     <!-- Controls visible once CMS is running -->
     <div id="cms-controls">
       <a id="events-admin-link" href="/community/events-admin" target="_blank" rel="noopener noreferrer">Community Events Admin</a>
+      <a id="smart-list-link" href="/tastehub/smart-list" target="_blank" rel="noopener noreferrer">TasteHub Smart List Tool</a>
       <button id="logout-button" type="button">Log out</button>
     </div>
 
@@ -74,7 +76,6 @@
     <!-- Decap: manual init -->
     <script>window.CMS_MANUAL_INIT = true;</script>
     <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
-    <script src="/admin/tastehub-smart-fill.js"></script>
 
     <script>
       (function () {
