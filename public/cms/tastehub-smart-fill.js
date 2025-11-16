@@ -1,13 +1,16 @@
 // Smart Fill Button Injection for Decap CMS
 window.addEventListener("DOMContentLoaded", () => {
   const SELECTOR_CANDIDATES = [
+    '[data-testid="field-control-ballot_items"]',
     '[data-testid="field-control-smart_fill"]',
-    '[data-field-name="smart_fill_restaurants"]',
+    '[data-field-name="ballot_items"]',
     '[data-field-name="smart_fill"]',
     "div.SmartFillRestaurants",
     ".SmartFillRestaurants",
   ];
   const SMART_FILL_ENDPOINT = "/api/tastehub/smart-fill";
+  const SMART_FILL_COLLECTION = "tastehub_polls";
+  const DEFAULT_LIMIT = 20;
 
   let availabilityPromise = null;
 
@@ -127,10 +130,16 @@ window.addEventListener("DOMContentLoaded", () => {
         return { town: String(town || "").trim(), category: String(category || "").trim() };
       }
 
+      function isTargetCollection(entry) {
+        if (!entry || typeof entry.get !== "function") return false;
+        const collectionName = entry.get("collection");
+        return collectionName === SMART_FILL_COLLECTION;
+      }
+
       function updateVisibility() {
         const entry = getEntry();
         const { town, category } = getTownAndCategory(entry);
-        const shouldShow = Boolean(town && category);
+        const shouldShow = Boolean(town && category && isTargetCollection(entry));
         if (!shouldShow) {
           wrapper.style.display = "none";
           setHelperMessage("", false);
@@ -172,7 +181,7 @@ window.addEventListener("DOMContentLoaded", () => {
           const response = await fetch(SMART_FILL_ENDPOINT, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ town, category }),
+            body: JSON.stringify({ town, category, limit: DEFAULT_LIMIT }),
           });
 
           const payload = await response.json().catch(() => ({}));
@@ -183,12 +192,12 @@ window.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
-          const responseItems = Array.isArray(payload)
-            ? payload
+          const responseItems = Array.isArray(payload?.restaurants)
+            ? payload.restaurants
             : Array.isArray(payload?.items)
             ? payload.items
-            : Array.isArray(payload?.restaurants)
-            ? payload.restaurants
+            : Array.isArray(payload)
+            ? payload
             : [];
 
           const smartFillItems = responseItems
@@ -210,6 +219,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
           if (!data || typeof data.set !== "function") {
             setHelperMessage("Smart Fill could not update the poll entry.", true);
+            return;
+          }
+
+          if (!window.CMS || typeof window.CMS.updateEntry !== "function") {
+            setHelperMessage("Smart Fill is not ready yet. Try again in a moment.", true);
             return;
           }
 
