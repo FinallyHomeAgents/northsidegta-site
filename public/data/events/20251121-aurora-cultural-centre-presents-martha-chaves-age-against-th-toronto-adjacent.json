@@ -24,17 +24,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/aurora-cultural-centre-presents-martha-chaves-age-against-the-machine/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014050-1763753400-1763760600@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-11-16T08:32:26.923Z",
-  "firstSeenAt": "2025-11-16T08:32:26.923Z",
-  "updatedAt": "2025-11-16T08:32:26.923Z",
-  "featured": false
+  "updatedAt": "2025-11-16T08:32:26Z"
 }
