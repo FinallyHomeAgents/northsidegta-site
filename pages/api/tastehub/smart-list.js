@@ -44,6 +44,24 @@ export default async function handler(req, res) {
     const fetchImpl = await getFetchImplementation();
     const response = await fetchImpl(url);
     const data = await response.json();
+    const googleStatus = data?.status;
+    const googleMessage = data?.error_message;
+
+    if (googleStatus && googleStatus !== "OK") {
+      console.error(
+        "[tastehub/smart-list] Google error",
+        googleStatus,
+        googleMessage,
+        { town: trimmedTown, category: trimmedCategory }
+      );
+
+      return res.status(502).json({
+        error: "Google Places error",
+        googleStatus,
+        googleMessage: googleMessage ?? null,
+      });
+    }
+
     const results = Array.isArray(data?.results) ? data.results : [];
 
     const restaurants = results.slice(0, parsedLimit).map(place => ({

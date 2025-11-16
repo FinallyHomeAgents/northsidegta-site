@@ -40,6 +40,7 @@ test('Smart List API returns restaurants when provided town and category', async
   const originalFetch = globalThis.fetch
   globalThis.fetch = async () => ({
     json: async () => ({
+      status: 'OK',
       results: [
         {
           name: 'Dragon Wok Aurora',
@@ -92,5 +93,30 @@ test('Smart List API rejects non-POST methods', async () => {
   assert.deepEqual(res.headers?.Allow, ['POST'])
   assert.equal(res.body?.error, 'Method Not Allowed')
 
+  restoreEnv()
+})
+
+test('Smart List API exposes Google error status and message', async () => {
+  const restoreEnv = withMockedEnv('GOOGLE_PLACES_API_KEY', 'FAKE_TEST_KEY')
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => ({
+    json: async () => ({
+      status: 'REQUEST_DENIED',
+      error_message: 'API keys with referer restrictions cannot be used with this API.',
+    }),
+  })
+
+  const { req, res } = createMockReqRes({
+    body: { town: 'Uxbridge', category: 'Pizza' },
+  })
+
+  await handler(req, res)
+
+  assert.equal(res.statusCode, 502)
+  assert.equal(res.body?.error, 'Google Places error')
+  assert.equal(res.body?.googleStatus, 'REQUEST_DENIED')
+  assert.match(res.body?.googleMessage, /referer restrictions/)
+
+  globalThis.fetch = originalFetch
   restoreEnv()
 })
