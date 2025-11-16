@@ -22,6 +22,7 @@ import MediaPage        from "./MediaPage";
 import InsightsPage     from "./InsightsPage";
 import ReferralPartnersPage from "./ReferralPartnersPage";
 import TasteHubPage     from "./TasteHubPage";
+import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
@@ -66,6 +67,7 @@ function App() {
         <Route path="/community"    element={<CommunityPage />} />
         <Route path="/tastehub"     element={<TasteHubPage />} />
         <Route path="/tastehub/:slug" element={<TasteHubPage />} />
+        <Route path="/tastehub/smart-list" element={<TasteHubSmartListPage />} />
         <Route path="/community/events/archive" element={<EventsArchivePage />} />
         <Route path="/community/events/:slug" element={<EventDetailPage />} />
         <Route path="/events/:slug" element={<EventDetailPage />} />
