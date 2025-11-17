@@ -283,18 +283,20 @@ collections:
     identifier_field: 'slug'
     slug: '{{slug}}'
     fields:
-      - { name: 'title', label: 'Title' }
+      - name: 'title'
+        label: 'Poll Title'
+        hint: "This is the name of the poll. Used as the page title, SEO title, and social share title."
       - name: 'slug'
-        label: 'Slug'
+        label: 'Poll Slug (URL)'
         widget: 'string'
         pattern:
           - '^[a-z0-9-]+$'
           - 'Use lowercase letters, numbers, and dashes only'
-        hint: "Used in the poll URL (e.g. 'best-pizza-uxbridge')."
+        hint: "This determines the URL of the poll page (e.g., best-pizza-uxbridge). Keep it short, lowercase, and hyphenated."
       - name: 'town'
         label: 'Town'
         widget: 'select'
-        hint: 'Select where this poll belongs (appears as the location pill).'
+        hint: 'Select the town this poll belongs to. Used for filtering, SEO metadata, and structured data.'
         options:
           - 'Georgina'
           - 'East Gwillimbury'
@@ -304,9 +306,10 @@ collections:
           - 'Uxbridge'
           - 'Scugog'
       - name: 'category'
-        label: 'Category'
+        label: 'Food / Category Type'
         widget: 'select'
         required: true
+        hint: 'Select the category (e.g., Pizza, Sushi, Burgers). Used for filtering, SEO metadata, and structured data.'
         options:
           - 'Pizza'
           - 'Wings'
@@ -338,12 +341,12 @@ collections:
         widget: 'string'
         required: false
         hint: "If you need a category that isn’t in the list above, type it here and we’ll use this instead of the dropdown value."
-      - label: 'Town Area / Hamlet'
+      - label: 'Hamlet / Area (Optional)'
         name: 'town_area'
         widget: 'string'
         required: false
         hint: |
-          Optional area inside the town (hamlet or neighbourhood). Examples:
+          Optional. Select or enter the hamlet/area within the town. Used for structured data and local SEO.
           • Georgina – Keswick, Sutton, Jackson’s Point, Pefferlaw, Virginia, Udora, Baldwin, Roches Point
           • East Gwillimbury – Holland Landing, Sharon, Queensville, Mount Albert, River Drive Park, Brown Hill, Holt
           • Newmarket – Downtown/Main Street, Stonehaven, Glenway, Woodland Hill, Armitage, Summerhill, Bristol-London
@@ -361,18 +364,18 @@ collections:
           - { label: 'Draft', value: 'draft' }
         default: 'draft'
       - name: 'description'
-        label: 'Description'
+        label: 'Poll Description (SEO + Social Preview) (optional)'
         widget: 'text'
-        hint: "Short teaser shown on cards and in the modal (1–2 sentences)."
+        hint: "Optional. If provided, this becomes the SEO description and social preview text. If left empty, a high-engagement TasteHub-style description will be auto-generated from the poll title."
       - name: 'ranking_key'
         label: 'Ranking Key'
         widget: 'string'
         hint: "Unique key shared with Upstash for this poll (e.g. 'tastehub_uxbridge_pizza_2025')."
       - name: 'image'
-        label: 'Feature Image'
+        label: 'Featured Image (Hero + SEO + Social Sharing) (recommended)'
         widget: 'image'
         required: false
-        hint: 'Optional 1600×900 image used on cards and detail headers. Upload JPG/PNG for best quality.'
+        hint: 'Recommended. This image becomes the hero background on the poll page AND the SEO/OG/social preview image. If missing, the default TasteHub Poll fallback image will be used.'
       - name: 'featured'
         label: 'Featured'
         widget: 'boolean'
@@ -388,10 +391,10 @@ collections:
             widget: "hidden"
         hint: "Use the Smart Fill button injected below."
       - name: 'ballot_items'
-        label: 'Ballot Items'
+        label: 'Voting Options'
         widget: 'list'
         allow_add: true
-        hint: 'Add every option voters can choose from. Order is preserved in the voting UI.'
+        hint: 'The list of places users can vote for. These appear on the poll page and in the live rankings.'
         fields:
           - name: 'name'
             label: 'Name'
