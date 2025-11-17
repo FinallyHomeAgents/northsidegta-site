@@ -339,7 +339,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-8 backdrop-blur-sm md:py-12">
-      <div className="relative grid w-full max-w-5xl items-start gap-5 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid-cols-[minmax(0,1fr),minmax(0,1fr)] md:gap-8">
+      <div className="relative grid w-full max-w-5xl items-start gap-5 rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid-cols-[minmax(0,1fr),minmax(0,1fr)] md:gap-8 md:overflow-hidden">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -350,7 +350,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
         </button>
         <div className="order-1 md:order-1">
           <div
-            className="space-y-4 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 text-white sm:p-7 md:space-y-5 md:p-8"
+            className="space-y-4 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 pt-8 text-white sm:p-7 sm:pt-9 md:space-y-5 md:p-8"
             style={bannerStyles}
           >
             <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
@@ -360,7 +360,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
             <p className="text-sm text-emerald-50/90">{poll.description}</p>
           </div>
         </div>
-        <div className="order-2 max-h-[78vh] overflow-y-auto p-5 pb-16 sm:p-6 sm:pb-16 md:order-2 md:p-8 md:pb-10">
+        <div className="order-2 mt-4 max-h-[78vh] overflow-y-auto p-5 pb-16 sm:mt-5 sm:p-6 sm:pb-16 md:order-2 md:mt-0 md:p-8 md:pb-10">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
