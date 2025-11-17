@@ -1,5 +1,5 @@
 export const didYouKnowFacts = [
-  "Did you know you can grab a latte at Nexus Coffee on Main Street Uxbridge and be on the Trans Canada Trail in less than five minutes?",
+  "Did you know Georgina’s new Multi-Use Recreation Complex features an Olympic-sized pool, gymnasiums, and year-round community programs?,
   "Did you know Stouffville’s GO Train can get you to downtown Toronto in under an hour?",
   "Did you know the Riverwalk Commons in Newmarket turns into a free outdoor skating rink every winter, complete with lights and music?",
   "Did you know you can enjoy lake views year-round in Georgina, with beaches, marinas, and parks all along the Lake Simcoe shoreline?",
@@ -42,6 +42,5 @@ export const didYouKnowFacts = [
   "Did you know Dr. G.W. Williams Secondary School in Aurora scored 8.8/10 and ranked 28th out of 746 Ontario high schools in the 2024 Fraser Institute report?",
   "Did you know residents of Georgina can reach the south shore of Lake Simcoe in under 10 minutes from most neighbourhoods?",
   "Did you know Stouffville has more than 30 kilometres of public trails connecting parks, schools, and neighbourhoods across town?",
-  "Did you know Aurora’s St. Andrew’s College is one of Canada’s leading independent schools, with a 125-year history of academics and athletics?",
-  "Did you know Georgina’s new Multi-Use Recreation Complex features an Olympic-sized pool, gymnasiums, and year-round community programs?"
-];
+  "Did you know Aurora’s St. Andrew’s College is one of Canada’s leading independent schools, with a 125-year history of academics and athletics?"
+  ];
