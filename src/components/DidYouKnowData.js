@@ -1,5 +1,5 @@
 export const didYouKnowFacts = [
-  "Did you know Georgina’s new Multi-Use Recreation Complex features an Olympic-sized pool, gymnasiums, and year-round community programs?,
+  "Did you know Georgina’s new Multi-Use Recreation Complex features an Olympic-sized pool, gymnasiums, and year-round community programs?",
   "Did you know Stouffville’s GO Train can get you to downtown Toronto in under an hour?",
   "Did you know the Riverwalk Commons in Newmarket turns into a free outdoor skating rink every winter, complete with lights and music?",
   "Did you know you can enjoy lake views year-round in Georgina, with beaches, marinas, and parks all along the Lake Simcoe shoreline?",
