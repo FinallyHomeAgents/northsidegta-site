@@ -237,6 +237,43 @@ collections:
       - { name: 'address', label: 'Address', required: false }
       - { name: 'image', label: 'Image', widget: 'image', required: false, hint: 'Images are not used yet but can be uploaded for future updates.' }
 
+  - label: 'TasteHub Categories'
+    name: 'tastehub_categories'
+    folder: 'content/tastehub/categories'
+    create: true
+    extension: 'json'
+    format: 'json'
+    slug: '{{slug}}'
+    fields:
+      - { label: 'Category Name', name: 'name', widget: 'string' }
+      - { label: 'Slug', name: 'slug', widget: 'string', hint: 'Lowercase ID like pizza, chinese, sushi' }
+      - { label: 'Description', name: 'description', widget: 'text', required: false }
+      - { label: 'Active', name: 'active', widget: 'boolean', default: true }
+
+  - label: 'TasteHub Town Areas'
+    name: 'tastehub_town_areas'
+    folder: 'content/tastehub/town-areas'
+    create: true
+    extension: 'json'
+    format: 'json'
+    slug: '{{slug}}'
+    fields:
+      - label: 'Town'
+        name: 'town'
+        widget: 'select'
+        options:
+          - 'Georgina'
+          - 'East Gwillimbury'
+          - 'Newmarket'
+          - 'Aurora'
+          - 'Stouffville'
+          - 'Uxbridge'
+          - 'Scugog'
+      - { label: 'Area / Hamlet Name', name: 'name', widget: 'string', hint: 'e.g. Keswick, Pefferlaw, Sutton, Mount Albert, etc.' }
+      - { label: 'Slug', name: 'slug', widget: 'string', hint: 'Lowercase ID like keswick, pefferlaw' }
+      - { label: 'Description', name: 'description', widget: 'text', required: false }
+      - { label: 'Active', name: 'active', widget: 'boolean', default: true }
+
   - name: 'tastehub_polls'
     label: 'TasteHub Polls'
     folder: 'content/tastehub-polls'
@@ -269,18 +306,51 @@ collections:
       - name: 'category'
         label: 'Category'
         widget: 'select'
-        hint: "Food lane this poll belongs to (e.g. Pizza, Wings)."
+        required: true
         options:
           - 'Pizza'
           - 'Wings'
-          - 'Coffee'
           - 'Burgers'
-          - 'Breakfast'
-          - 'Takeout'
-          - 'Ice Cream'
-          - 'Bakery'
-          - 'Tacos'
           - 'Sushi'
+          - 'Chinese'
+          - 'Indian'
+          - 'Thai'
+          - 'Mexican'
+          - 'Italian (non-pizza)'
+          - 'Steakhouse'
+          - 'Breakfast & Brunch'
+          - 'Coffee & Cafés'
+          - 'Bakery & Pastries'
+          - 'Ice Cream & Dessert'
+          - 'Pub & Bar'
+          - 'Family Restaurant'
+          - 'Fine Dining'
+          - 'Patio & Drinks'
+          - 'Takeout & Fast Casual'
+          - 'Healthy / Salad / Bowls'
+          - 'Vegetarian & Vegan'
+          - 'Seafood'
+          - 'Food Trucks'
+          - 'Date Night Spot'
+          - 'Kid-Friendly Spot'
+      - label: 'Custom Category (optional)'
+        name: 'custom_category'
+        widget: 'string'
+        required: false
+        hint: "If you need a category that isn’t in the list above, type it here and we’ll use this instead of the dropdown value."
+      - label: 'Town Area / Hamlet'
+        name: 'town_area'
+        widget: 'string'
+        required: false
+        hint: |
+          Optional area inside the town (hamlet or neighbourhood). Examples:
+          • Georgina – Keswick, Sutton, Jackson’s Point, Pefferlaw, Virginia, Udora, Baldwin, Roches Point
+          • East Gwillimbury – Holland Landing, Sharon, Queensville, Mount Albert, River Drive Park, Brown Hill, Holt
+          • Newmarket – Downtown/Main Street, Stonehaven, Glenway, Woodland Hill, Armitage, Summerhill, Bristol-London
+          • Aurora – Aurora Village, Aurora Heights, Bayview Wellington, Bayview Northeast, Bayview Southeast, Aurora Grove, Aurora Highlands, Aurora Estates
+          • Stouffville – Stouffville, Ballantrae, Musselman’s Lake, Vandorf, Lemonville, Gormley, Bloomington
+          • Uxbridge – Uxbridge, Goodwood, Zephyr, Leaskdale, Sandford, Coppins Corners, Udora
+          • Scugog – Port Perry, Blackstock, Caesarea, Nestleton Station, Seagrave, Manchester, Greenbank.
       - name: 'status'
         label: 'Status'
         widget: 'select'

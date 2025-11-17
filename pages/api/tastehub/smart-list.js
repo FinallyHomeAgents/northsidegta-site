@@ -22,9 +22,10 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "GOOGLE_PLACES_API_KEY is not set" });
   }
 
-  const { town, category, limit = DEFAULT_LIMIT } = req.body || {};
+  const { town, area, category, limit = DEFAULT_LIMIT } = req.body || {};
 
   const trimmedTown = typeof town === "string" ? town.trim() : "";
+  const trimmedArea = typeof area === "string" ? area.trim() : "";
   const trimmedCategory = typeof category === "string" ? category.trim() : "";
 
   if (!trimmedTown || !trimmedCategory) {
@@ -37,7 +38,12 @@ export default async function handler(req, res) {
   }
   parsedLimit = Math.min(parsedLimit, MAX_LIMIT);
 
-  const query = encodeURIComponent(`${trimmedCategory} restaurants in ${trimmedTown} Ontario`);
+  let locationPart = trimmedTown;
+  if (trimmedArea) {
+    locationPart = `${trimmedArea}, ${trimmedTown}`;
+  }
+
+  const query = encodeURIComponent(`${trimmedCategory} restaurants in ${locationPart} Ontario`);
   const url = `${TEXT_SEARCH_URL}?query=${query}&key=${googleKey}`;
 
   try {
