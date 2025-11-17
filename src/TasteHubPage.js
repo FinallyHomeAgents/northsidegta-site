@@ -338,8 +338,8 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-12 backdrop-blur-sm">
-      <div className="relative grid w-full max-w-5xl gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid-cols-[minmax(0,1fr),minmax(0,1fr)]">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-8 backdrop-blur-sm md:py-12">
+      <div className="relative grid w-full max-w-5xl items-start gap-5 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid-cols-[minmax(0,1fr),minmax(0,1fr)] md:gap-8">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -348,23 +348,29 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
         >
           ×
         </button>
-        <div
-          className="space-y-5 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-8 text-white"
-          style={bannerStyles}
-        >
-          <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
-            {poll.town} • {poll.displayCategory}
-          </span>
-          <h2 className="text-3xl font-semibold leading-tight">{poll.title}</h2>
-          <p className="text-sm text-emerald-50/90">{poll.description}</p>
-          <PollShareControls poll={poll} shareUrl={shareUrl} />
+        <div className="order-1 md:order-1">
+          <div
+            className="space-y-4 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 text-white sm:p-7 md:space-y-5 md:p-8"
+            style={bannerStyles}
+          >
+            <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
+              {poll.town} • {poll.displayCategory}
+            </span>
+            <h2 className="text-3xl font-semibold leading-tight">{poll.title}</h2>
+            <p className="text-sm text-emerald-50/90">{poll.description}</p>
+          </div>
         </div>
-        <div className="max-h-[80vh] overflow-y-auto p-8">
+        <div className="order-2 max-h-[78vh] overflow-y-auto p-5 pb-16 sm:p-6 sm:pb-16 md:order-2 md:p-8 md:pb-10">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
             onLeaderboardUpdate={(payload) => onLeaderboardUpdate?.(poll, payload)}
           />
+        </div>
+        <div className="order-3 md:order-3 md:col-start-1 md:row-start-2 md:self-start">
+          <div className="mt-2 rounded-2xl border border-emerald-100/40 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-4 text-xs text-white/80 shadow-[0_18px_50px_rgba(16,107,48,0.18)] sm:p-5 md:mt-6 md:min-h-[170px]">
+            <PollShareControls poll={poll} shareUrl={shareUrl} />
+          </div>
         </div>
       </div>
     </div>

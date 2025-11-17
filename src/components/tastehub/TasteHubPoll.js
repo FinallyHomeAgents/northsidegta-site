@@ -267,16 +267,16 @@ export default function TasteHubPoll({
   return (
     <div className="space-y-6">
       <div className="space-y-4 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px]">
-        <div className="rounded-[28px] bg-white/98 p-6 shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <fieldset className="space-y-3" disabled={!canVote || submitting}>
+        <div className="rounded-[28px] bg-white/98 p-5 shadow-[0_18px_50px_rgba(16,107,48,0.18)] sm:p-6">
+          <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
+            <fieldset className="space-y-2.5 sm:space-y-3" disabled={!canVote || submitting}>
               <legend className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
                 Cast your vote
               </legend>
               {normalizedBallot.map((item) => (
                 <label
                   key={item.id}
-                  className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 text-sm transition ${
+                  className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-2.5 text-sm transition sm:p-3 ${
                     selected === item.id
                       ? "border-amber-400 bg-amber-50/70 shadow-sm"
                       : "border-emerald-100 bg-white hover:border-emerald-300"
