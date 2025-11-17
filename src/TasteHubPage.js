@@ -17,6 +17,10 @@ const TOWNS = [
   "Scugog",
 ];
 
+const PRODUCTION_ORIGIN = "https://northsidegta.ca";
+const DEFAULT_POLL_IMAGE = "/seo/tastehub-default-poll-share.jpg";
+const REGION_NAME = "NorthSide GTA";
+
 const SORT_OPTIONS = [
   { value: "trending", label: "Trending" },
   { value: "votes", label: "Most Votes" },
@@ -30,6 +34,39 @@ function slugify(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/-{2,}/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function getPollImagePath(poll) {
+  const value = poll?.image ? String(poll.image).trim() : "";
+  return value || DEFAULT_POLL_IMAGE;
+}
+
+function generatePollDescription(poll) {
+  const title = poll?.title ? String(poll.title).trim() : "";
+  const town = poll?.town ? String(poll.town).trim() : "";
+  const category = poll?.displayCategory || poll?.category || "";
+  const baseDescription = poll?.description ? String(poll.description).trim() : "";
+
+  if (baseDescription) return baseDescription;
+
+  const locationSnippet = [category, town].filter(Boolean).join(" in ");
+  const focus = locationSnippet || title || "this TasteHub poll";
+
+  return `Help crown ${focus}! Vote now and see live TasteHub community rankings across the ${REGION_NAME}.`;
+}
+
+function toAbsoluteUrl(pathOrUrl, origin = PRODUCTION_ORIGIN) {
+  const value = String(pathOrUrl || "").trim();
+  if (!value) return "";
+  if (/^https?:\/\//i.test(value)) return value;
+  const base = origin || PRODUCTION_ORIGIN;
+  if (value.startsWith("/")) return `${base}${value}`;
+  return `${base}/${value}`;
+}
+
+function getPreviewOrigin() {
+  if (typeof window === "undefined") return "";
+  return window.location?.origin || "";
 }
 
 function buildLeaderboardUrl(rankingKey, ballotItems = []) {
@@ -293,13 +330,12 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
     typeof window !== "undefined"
       ? `${window.location.origin}/tastehub/${poll.slug}`
       : `https://northsidegta.ca/tastehub/${poll.slug}`;
-  const bannerStyles = poll.image
-    ? {
-        backgroundImage: `linear-gradient(145deg, rgba(6, 78, 59, 0.94), rgba(217, 119, 6, 0.75)), url(${poll.image})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : undefined;
+  const heroImage = getPollImagePath(poll);
+  const bannerStyles = {
+    backgroundImage: `linear-gradient(145deg, rgba(6, 78, 59, 0.94), rgba(217, 119, 6, 0.75)), url(${heroImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-12 backdrop-blur-sm">
@@ -351,6 +387,11 @@ export default function TasteHubPage() {
   const navigate = useNavigate();
   const params = useParams();
   const slugParam = (params?.slug || "").toLowerCase();
+
+  const pollForSeo = useMemo(() => {
+    if (!slugParam) return null;
+    return polls.find((poll) => poll.slug === slugParam) || null;
+  }, [polls, slugParam]);
 
   useEffect(() => {
     let cancelled = false;
@@ -510,6 +551,92 @@ export default function TasteHubPage() {
     return scores;
   }, [polls, leaderboards]);
 
+  const pollSeoData = useMemo(() => {
+    if (!pollForSeo) return null;
+
+    const pollTitle = pollForSeo.title || "TasteHub Poll";
+    const documentTitle = `${pollTitle} | TasteHub | NorthSide GTA`;
+    const shareTitle = `${pollTitle} – TasteHub Community Rankings`;
+    const description = generatePollDescription(pollForSeo);
+    const canonicalUrl = `${PRODUCTION_ORIGIN}/tastehub/${pollForSeo.slug}`;
+    const previewOrigin = getPreviewOrigin();
+    const previewUrl = previewOrigin ? `${previewOrigin}/tastehub/${pollForSeo.slug}` : canonicalUrl;
+    const ogUrl = previewOrigin && !previewOrigin.includes("northsidegta.ca") ? previewUrl : canonicalUrl;
+    const imagePath = getPollImagePath(pollForSeo);
+    const absoluteImage = toAbsoluteUrl(imagePath, PRODUCTION_ORIGIN);
+    const townArea = pollForSeo.townArea ? String(pollForSeo.townArea).trim() : "";
+    const townName = pollForSeo.town ? String(pollForSeo.town).trim() : REGION_NAME;
+    const voteCount = leaderboards[pollForSeo.rankingKey]?.totalBallots;
+
+    const schemaObject = {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: pollTitle,
+      description,
+      url: canonicalUrl,
+      image: absoluteImage,
+      identifier: pollForSeo.slug,
+      genre: pollForSeo.displayCategory || pollForSeo.category || "TasteHub poll",
+      about: pollForSeo.displayCategory ? { "@type": "Thing", name: pollForSeo.displayCategory } : undefined,
+      inLanguage: "en-CA",
+      isPartOf: "TasteHub Community Rankings",
+      keywords: [
+        pollForSeo.displayCategory || pollForSeo.category,
+        pollForSeo.town,
+        townArea,
+        "TasteHub",
+        REGION_NAME,
+      ]
+        .filter(Boolean)
+        .join(", "),
+      areaServed: [
+        pollForSeo.town ? { "@type": "AdministrativeArea", name: pollForSeo.town } : null,
+        { "@type": "AdministrativeArea", name: REGION_NAME },
+      ].filter(Boolean),
+      spatialCoverage: {
+        "@type": "Place",
+        name: townArea ? `${townArea}, ${townName}` : townName,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: townArea || townName,
+          addressRegion: REGION_NAME,
+        },
+      },
+      audience: { "@type": "Audience", audienceType: `${REGION_NAME} food fans` },
+      creator: { "@type": "Organization", name: "TasteHub by NorthSide GTA" },
+    };
+
+    if (typeof voteCount === "number" && voteCount > 0) {
+      schemaObject.interactionStatistic = {
+        "@type": "InteractionCounter",
+        interactionType: "https://schema.org/VoteAction",
+        userInteractionCount: voteCount,
+      };
+    }
+
+    const schema = JSON.stringify(schemaObject, null, 2);
+
+    return {
+      meta: {
+        documentTitle,
+        title: documentTitle,
+        ogTitle: shareTitle,
+        twitterTitle: shareTitle,
+        description,
+        ogDescription: description,
+        twitterDescription: description,
+        canonicalUrl,
+        ogType: "website",
+        ogImage: imagePath,
+        twitterImage: imagePath,
+        siteName: REGION_NAME,
+        twitterCard: "summary_large_image",
+        additionalMeta: [{ property: "og:url", content: ogUrl }],
+      },
+      schema,
+    };
+  }, [leaderboards, pollForSeo]);
+
   const handleOpenPoll = (poll) => {
     setUnknownSlug("");
     setActivePoll(poll);
@@ -539,9 +666,14 @@ export default function TasteHubPage() {
     filtersRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const metaConfig = pollSeoData?.meta || getStaticRouteMeta("/tastehub");
+  const pollSchema = pollSeoData?.schema || "";
+
   return (
     <div className="flex min-h-screen flex-col bg-[#fbfdf8] text-slate-900">
-      <DynamicMetaTags {...getStaticRouteMeta("/tastehub")} />
+      <DynamicMetaTags {...metaConfig}>
+        {pollSchema && <script type="application/ld+json">{pollSchema}</script>}
+      </DynamicMetaTags>
       <HeaderShell />
 
       <main className="flex-1">
