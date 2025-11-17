@@ -67,7 +67,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
 }
 
 function LeaderboardList({ items, total, loading, error }) {
-  if (loading) {
+  if (loading && !items.length) {
     return (
       <div className="space-y-3">
         {Array.from({ length: 4 }).map((_, index) => (
@@ -329,7 +329,7 @@ export default function TasteHubPoll({
                     voteStatus === "success"
                       ? "inline-flex items-center rounded-full bg-emerald-900/90 px-3 py-1.5 font-semibold text-white shadow-[0_6px_18px_rgba(6,38,21,0.35)]"
                       : voteStatus === "duplicate"
-                      ? "text-emerald-700"
+                      ? "inline-flex items-center rounded-full bg-white/95 px-3 py-1.5 font-semibold text-emerald-900 shadow-[0_8px_24px_rgba(15,94,43,0.15)]"
                       : "text-rose-600"
                   }`}
                 >
