@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/stouffville-things-to-do-christmas-workshop.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/seasonal-cedar/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/seasonal-cedar/",
-  "lastSyncedAt": "2025-11-17T08:37:54.757Z",
-  "updatedAt": "2025-11-17T08:37:54.757Z",
-  "featured": false
+  "updatedAt": "2025-11-17T08:37:54Z"
 }
