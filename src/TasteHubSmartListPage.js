@@ -296,7 +296,7 @@ function TasteHubSmartListPage() {
                 }}
               />
             )}
-          </label>
+          </div>
 
           <label style={fieldStyle}>
             <span style={{ fontWeight: 600, color: "#0f172a" }}>Max results</span>
