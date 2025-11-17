@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/paday-ages-7-12-nov21-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002651-1763683200-1763769599@auroraculturalcentre.ca",
-  "updatedAt": "2025-11-15T08:30:50Z"
+  "lastSyncedAt": "2025-11-17T08:37:54.757Z",
+  "updatedAt": "2025-11-17T08:37:54.757Z",
+  "featured": false
 }
