@@ -1,0 +1,22 @@
+{
+  "ballot_items": [
+    {
+      "name": "Pizza Hut"
+    },
+    {
+      "name": "Pizzaville"
+    },
+    {
+      "name": "Quick Pizza"
+    }
+  ],
+  "slug": "test-best-pizza-keswick",
+  "featured": false,
+  "town": "Georgina",
+  "status": "live",
+  "ranking_key": "test-tastehub_keswick_pizza_2025",
+  "title": "Test Best Pizza in Keswick",
+  "town_area": "Keswick",
+  "description": "Test Best Pizza Keswick",
+  "category": "Pizza"
+}
