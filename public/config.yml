@@ -549,6 +549,50 @@ collections:
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
             media_folder: '/public/uploads'
             public_folder: '/uploads'
+
+      - label: 'Submit Event Page SEO'
+        name: 'community_submit_event'
+        file: 'public/data/seo/community-submit-event.json'
+        fields:
+          - label: 'Route'
+            name: 'route'
+            widget: 'hidden'
+            default: '/community/submit-event'
+          - label: 'SEO Title'
+            name: 'seo_title'
+            widget: 'string'
+          - label: 'SEO Description'
+            name: 'seo_description'
+            widget: 'text'
+          - label: 'SEO Image'
+            name: 'seo_image'
+            widget: 'image'
+            required: false
+            hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
+            media_folder: '/public/uploads'
+            public_folder: '/uploads'
+
+      - label: 'TasteHub CMS Page SEO'
+        name: 'cms_tastehub'
+        file: 'public/data/seo/cms-tastehub.json'
+        fields:
+          - label: 'Route'
+            name: 'route'
+            widget: 'hidden'
+            default: '/cms/tastehub'
+          - label: 'SEO Title'
+            name: 'seo_title'
+            widget: 'string'
+          - label: 'SEO Description'
+            name: 'seo_description'
+            widget: 'text'
+          - label: 'SEO Image'
+            name: 'seo_image'
+            widget: 'image'
+            required: false
+            hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
+            media_folder: '/public/uploads'
+            public_folder: '/uploads'
   - name: "socials"
     label: "Socials"
     editor: { preview: false }

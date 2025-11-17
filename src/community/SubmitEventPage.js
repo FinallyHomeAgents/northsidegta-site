@@ -1,10 +1,13 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Helmet } from 'react-helmet-async'
 import { DateTime } from 'luxon'
 import { upload } from '@vercel/blob/client'
 
 import CaptchaWidget from '../components/CaptchaWidget'
+import DynamicMetaTags from '../components/seo/DynamicMetaTags'
+import { getStaticRouteMeta } from '../components/seo/staticRouteMetaExports'
+
+const SUBMIT_EVENT_ROUTE_META = getStaticRouteMeta('/community/submit-event') || {}
 
 const TORONTO_ZONE = 'America/Toronto'
 const MAX_EVENT_DURATION_DAYS = 14
@@ -870,13 +873,7 @@ export default function SubmitEventPage() {
       : []
     return (
       <div className="min-h-screen bg-emerald-950/5 py-12">
-        <Helmet>
-          <title>Submit a Community Event | NorthSide GTA</title>
-          <meta
-            name="description"
-            content="Share your NorthSide GTA community event with Finally Home Agents. Submit your listing for review."
-          />
-        </Helmet>
+        <DynamicMetaTags {...SUBMIT_EVENT_ROUTE_META} />
         <div className="mx-auto max-w-4xl px-4">
           <div className="rounded-3xl border border-emerald-200 bg-white p-8 shadow-xl shadow-emerald-800/10">
             <h1 className="text-3xl font-semibold text-emerald-900">Thanks! Your event is pending review.</h1>
@@ -965,13 +962,7 @@ export default function SubmitEventPage() {
 
   return (
     <div className="min-h-screen bg-emerald-950/5 py-12">
-      <Helmet>
-        <title>Submit a Community Event | NorthSide GTA</title>
-        <meta
-          name="description"
-          content="Share upcoming events happening across Georgina, East Gwillimbury, Aurora, Stouffville, Uxbridge, Scugog, and nearby NorthSide GTA towns."
-        />
-      </Helmet>
+      <DynamicMetaTags {...SUBMIT_EVENT_ROUTE_META} />
       <div className="mx-auto max-w-5xl px-4">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">

@@ -116,6 +116,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/community/submit-event",
+    meta: {
+      route: "/community/submit-event",
+      documentTitle: "Submit a Community Event | NorthSide GTA",
+      title: "Submit a Community Event | NorthSide GTA",
+      description:
+        "Share your local event with the NorthSide GTA community. Submit your event details and we’ll help get the word out across our community calendar.",
+      canonicalUrl: "https://northsidegta.ca/community/submit-event",
+      ogType: "website",
+      ogImage: "/Images/hero-desktop.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/Images/hero-desktop.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/media",
     meta: {
       route: "/media",
@@ -200,6 +216,25 @@ const STATIC_ROUTE_META_CONFIGS = [
       twitterCard: "summary_large_image",
       twitterImage: "/Images/og-home.jpg",
       siteName: "NorthSide GTA",
+    },
+  },
+  {
+    route: "/cms/tastehub",
+    meta: {
+      route: "/cms/tastehub",
+      documentTitle: "TasteHub CMS | NorthSide GTA",
+      title: "TasteHub CMS | NorthSide GTA",
+      description:
+        "Access the TasteHub CMS to manage polls, ballots, and community-powered content for the NorthSide GTA.",
+      canonicalUrl: "https://northsidegta.ca/cms/tastehub",
+      ogType: "website",
+      ogImage: "/Images/og-home.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/Images/og-home.jpg",
+      siteName: "NorthSide GTA",
+      additionalMeta: [
+        { name: "robots", content: "noindex,nofollow" },
+      ],
     },
   },
 ];
