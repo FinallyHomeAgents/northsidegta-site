@@ -44,6 +44,9 @@ function buildLeaderboardUrl(rankingKey, ballotItems = []) {
 
 function normalizePoll(poll) {
   if (!poll) return null;
+  const category = poll.category || "";
+  const customCategory = poll.customCategory || poll.custom_category || "";
+  const displayCategory = customCategory || category;
   const ballotItems = Array.isArray(poll.ballotItems)
     ? poll.ballotItems.map((item) => ({
         ...item,
@@ -53,7 +56,9 @@ function normalizePoll(poll) {
   return {
     ...poll,
     status: String(poll.status || "draft").toLowerCase(),
-    category: poll.category || "",
+    category,
+    customCategory,
+    displayCategory,
     town: poll.town || "",
     rankingKey: poll.rankingKey || poll.ranking_key || poll.slug,
     ballotItems,
@@ -105,7 +110,7 @@ function PollCard({ poll, leaderboard, onOpen }) {
       )}
       <div className="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-600">
         <span>{poll.town}</span>
-        <span>{poll.category}</span>
+        <span>{poll.displayCategory}</span>
       </div>
       <h3 className="mt-4 text-xl font-semibold tracking-tight text-slate-900">{poll.title}</h3>
       <p className="mt-3 text-sm text-slate-600">{poll.description}</p>
@@ -161,7 +166,7 @@ function FeaturedPoll({ poll, onOpen }) {
         <div className="pointer-events-none absolute inset-0 opacity-40 mix-blend-screen" aria-hidden />
       )}
       <span className="text-xs font-semibold uppercase tracking-[0.32em] text-lime-200">
-        {poll.town} • {poll.category}
+        {poll.town} • {poll.displayCategory}
       </span>
       <span className="mt-3 text-lg font-semibold leading-tight">{poll.title}</span>
       <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-lime-100">
@@ -312,7 +317,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
           style={bannerStyles}
         >
           <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
-            {poll.town} • {poll.category}
+            {poll.town} • {poll.displayCategory}
           </span>
           <h2 className="text-3xl font-semibold leading-tight">{poll.title}</h2>
           <p className="text-sm text-emerald-50/90">{poll.description}</p>
@@ -443,7 +448,7 @@ export default function TasteHubPage() {
   const categories = useMemo(() => {
     const set = new Set();
     polls.forEach((poll) => {
-      if (poll.category) set.add(poll.category);
+      if (poll.displayCategory) set.add(poll.displayCategory);
     });
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [polls]);
@@ -451,7 +456,7 @@ export default function TasteHubPage() {
   const filteredPolls = useMemo(() => {
     return polls.filter((poll) => {
       const matchTown = selectedTown === "all" || poll.town === selectedTown;
-      const matchCategory = selectedCategory === "all" || poll.category === selectedCategory;
+      const matchCategory = selectedCategory === "all" || poll.displayCategory === selectedCategory;
       return matchTown && matchCategory;
     });
   }, [polls, selectedTown, selectedCategory]);
@@ -703,7 +708,7 @@ export default function TasteHubPage() {
                   >
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-600">
-                        {poll.town} • {poll.category}
+                        {poll.town} • {poll.displayCategory}
                       </p>
                       <p className="mt-2 text-lg font-semibold text-slate-900">{poll.title}</p>
                     </div>
