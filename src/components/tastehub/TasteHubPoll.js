@@ -341,7 +341,7 @@ export default function TasteHubPoll({
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div id="leaderboard" className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-emerald-900">
             <span role="img" aria-label="trophy">

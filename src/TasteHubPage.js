@@ -333,7 +333,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
   const heroImage = getPollImagePath(poll);
   const desktopHeroStyles = poll.image
     ? {
-        backgroundImage: `linear-gradient(140deg, rgba(7, 70, 39, 0.9) 10%, rgba(6, 95, 70, 0.8) 45%, rgba(245, 158, 11, 0.68)), url(${heroImage})`,
+        backgroundImage: `linear-gradient(140deg, rgba(7, 70, 39, 0.66) 10%, rgba(6, 95, 70, 0.64) 45%, rgba(245, 158, 11, 0.6)), url(${heroImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }
@@ -341,7 +341,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-emerald-950/80 px-3 py-6 backdrop-blur-sm sm:px-4 sm:py-10">
-      <div className="relative mx-auto flex w-full max-w-[1220px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,3.5fr)_minmax(0,2.5fr)] md:items-start md:gap-5 md:px-5 md:py-5 lg:gap-6 lg:px-6 lg:py-6">
+      <div className="relative mx-auto flex w-full max-w-[1220px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,3.5fr)_minmax(0,2.5fr)] md:items-start md:gap-4 md:px-4 md:py-5 lg:gap-5 lg:px-4 lg:py-5">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -375,7 +375,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
             className="relative hidden min-h-[520px] flex-col justify-between overflow-hidden rounded-[28px] border border-emerald-100/60 text-white shadow-[0_18px_50px_rgba(16,107,48,0.2)] md:flex"
             style={desktopHeroStyles}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/30 via-emerald-900/20 to-amber-500/20" aria-hidden />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/18 via-emerald-900/14 to-amber-500/14" aria-hidden />
             <div className="relative flex flex-col gap-4 p-7 lg:p-8">
               <span className="inline-flex w-fit items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
                 {poll.town} • {poll.displayCategory}
@@ -383,7 +383,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
               <h2 className="text-3xl font-semibold leading-tight lg:text-4xl">{poll.title}</h2>
               <p className="max-w-2xl text-sm text-emerald-50/90 lg:text-base">{poll.description}</p>
             </div>
-            <div className="relative p-7 lg:p-8">
+            <div className="relative flex flex-col gap-4 p-6 lg:gap-5 lg:p-7">
               <div className="max-w-xl rounded-2xl border border-white/25 bg-white/10 p-5 shadow-lg backdrop-blur-sm lg:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-lime-200">Spread the word</p>
                 <p className="mt-2 text-sm text-emerald-50/85">
@@ -393,11 +393,16 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
                   <PollShareControls poll={poll} shareUrl={shareUrl} showHeading={false} />
                 </div>
               </div>
+              <a href="#leaderboard" className="live-pill live-pill--northside">
+                <span className="live-dot" />
+                <span className="live-text">LIVE</span>
+                <span className="live-label">View leaderboard ↓</span>
+              </a>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 px-6 pb-16 sm:px-8 sm:pb-20 md:gap-5 md:px-5 md:pb-7 md:pt-1 md:[&>*+*]:mt-4 lg:px-5 lg:pb-6 lg:pt-1">
+        <div className="flex flex-col gap-6 px-6 pb-16 sm:px-8 sm:pb-20 md:gap-4 md:px-4 md:pb-5 md:pt-3 md:[&>*+*]:mt-4 lg:gap-4 lg:px-4 lg:pb-4 lg:pt-4">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
