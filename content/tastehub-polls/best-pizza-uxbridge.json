@@ -2,31 +2,45 @@
   "ballot_items": [
     {
       "id": "papas-pizzaland",
-      "name": "Papa’s Pizzaland"
+      "name": "Papa’s Pizzaland",
+      "link": "https://share.google/uHZ8aVVtJJoPESTBz",
+      "address": "28 Toronto St S #7, Uxbridge, ON"
     },
     {
       "id": "pizzaville-uxbridge",
-      "name": "Pizzaville – Uxbridge"
+      "name": "Pizzaville (Uxbridge)",
+      "address": "304 Toronto St S Unit 104, Uxbridge, ON",
+      "link": "https://share.google/0jgVsjfE1L6Pxjc0T"
     },
     {
       "id": "dominos-pizza-uxbridge",
-      "name": "Domino’s Pizza – Uxbridge"
+      "name": "Domino’s Pizza (Uxbridge)",
+      "address": "54 Brock St W, Uxbridge, ON",
+      "link": "https://share.google/NOnM9TN7KLrSkcIVe"
     },
     {
       "id": "pizza-pizza-uxbridge",
-      "name": "Pizza Pizza – Uxbridge"
+      "name": "Pizza Pizza (Uxbridge)",
+      "address": "6 Brock St W, Uxbridge, ON",
+      "link": "https://share.google/gThnqyCuznZvCgxZt"
     },
     {
       "id": "sandford-pizza-house",
-      "name": "Sandford Pizza House"
+      "name": "Sandford Pizza House",
+      "address": "403 Sandford Rd, Sandford, ON",
+      "link": "https://share.google/XVZaH80IyGErNzHHt"
     },
     {
       "id": "pizza-hut-uxbridge",
-      "name": "Pizza Hut – Uxbridge"
+      "name": "Pizza Hut (Uxbridge)",
+      "address": "2 Douglas Rd, Uxbridge, ON",
+      "link": "https://share.google/o8Mqf4t1bLbk7Hj8H"
     },
     {
       "id": "boston-pizza-uxbridge",
-      "name": "Boston Pizza – Uxbridge"
+      "name": "Boston Pizza (Uxbridge)",
+      "address": "284 Toronto St S, Uxbridge, ON",
+      "link": "https://share.google/s03007H6GI1KPl07D"
     }
   ],
   "slug": "best-pizza-uxbridge",
