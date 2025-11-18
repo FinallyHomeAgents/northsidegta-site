@@ -527,3 +527,34 @@ body {
     font-weight: 500;
   }
 }
+
+@media (min-width: 1024px) {
+  .tastehub-layout-desktop {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "hero poll"
+      "leaderboard poll";
+    column-gap: 1.25rem;
+    row-gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .tastehub-layout-desktop > .tastehub-right-col,
+  .tastehub-poll-shell {
+    display: contents;
+  }
+
+  .tastehub-hero {
+    grid-area: hero;
+  }
+
+  .tastehub-leader {
+    grid-area: leaderboard;
+  }
+
+  .tastehub-poll {
+    grid-area: poll;
+  }
+}

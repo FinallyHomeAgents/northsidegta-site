@@ -333,7 +333,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
   const heroImage = getPollImagePath(poll);
   const desktopHeroStyles = poll.image
     ? {
-        backgroundImage: `linear-gradient(140deg, rgba(7, 70, 39, 0.66) 10%, rgba(6, 95, 70, 0.64) 45%, rgba(245, 158, 11, 0.6)), url(${heroImage})`,
+        backgroundImage: `linear-gradient(140deg, rgba(7, 70, 39, 0.62) 10%, rgba(6, 95, 70, 0.6) 45%, rgba(245, 158, 11, 0.5)), url(${heroImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }
@@ -341,7 +341,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-emerald-950/80 px-3 py-6 backdrop-blur-sm sm:px-4 sm:py-10">
-      <div className="relative mx-auto flex w-full max-w-[1220px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,3.5fr)_minmax(0,2.5fr)] md:items-start md:gap-4 md:px-4 md:py-5 lg:gap-5 lg:px-4 lg:py-5">
+      <div className="tastehub-layout-desktop relative mx-auto flex w-full max-w-[1220px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:gap-0 md:border-0 md:bg-transparent md:p-0 md:shadow-none">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -351,7 +351,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
           ×
         </button>
 
-        <div className="flex flex-col gap-6 p-6 sm:p-8 md:gap-0 md:p-0">
+        <div className="tastehub-hero flex flex-col gap-6 p-6 sm:p-8 md:gap-0 md:p-0">
           <div className="space-y-4 rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 text-white shadow-[0_18px_50px_rgba(16,107,48,0.18)] md:hidden">
             <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
               {poll.town} • {poll.displayCategory}
@@ -402,7 +402,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 px-6 pb-16 sm:px-8 sm:pb-20 md:gap-4 md:px-4 md:pb-5 md:pt-3 md:[&>*+*]:mt-4 lg:gap-4 lg:px-4 lg:pb-4 lg:pt-4">
+        <div className="tastehub-right-col flex flex-col gap-6 px-6 pb-16 sm:px-8 sm:pb-20 md:gap-0 md:px-0 md:pb-0 md:pt-0">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
