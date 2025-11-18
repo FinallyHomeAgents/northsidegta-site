@@ -645,7 +645,29 @@ collections:
             media_folder: '/public/uploads'
             public_folder: '/uploads'
 
-      - label: 'TasteHub CMS Page SEO'
+      - label: 'TasteHub Page (Public) SEO'
+        name: 'tastehub'
+        file: 'public/data/seo/tastehub.json'
+        fields:
+          - label: 'Route'
+            name: 'route'
+            widget: 'hidden'
+            default: '/tastehub'
+          - label: 'SEO Title'
+            name: 'seo_title'
+            widget: 'string'
+          - label: 'SEO Description'
+            name: 'seo_description'
+            widget: 'text'
+          - label: 'SEO Image'
+            name: 'seo_image'
+            widget: 'image'
+            required: false
+            hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
+            media_folder: '/public/uploads'
+            public_folder: '/uploads'
+
+      - label: 'TasteHub CMS (Admin)'
         name: 'cms_tastehub'
         file: 'public/data/seo/cms-tastehub.json'
         fields:
