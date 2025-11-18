@@ -34,9 +34,6 @@ export default function Navigation() {
   const communitiesItems = [
     { to: "/tastehub", label: "NorthSide TasteHub™", badge: "NEW" },
     { to: "/community", label: "NorthSide Events Guide" },
-    { to: "/#town-guides", label: "Town Guides" },
-    { to: "/#northside-map", label: "NorthSide GTA Map" },
-    { to: "/insights", label: "Local Highlights" },
     { divider: true },
     { to: "/uxbridge", label: "Uxbridge" },
     { to: "/georgina", label: "Georgina" },
