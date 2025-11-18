@@ -1,5 +1,182 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
+const DEFAULT_TASTEHUB_IMAGE = "/seo/tastehub-default-poll-share.jpg";
+
+function normalizeTasteHubPoll(poll) {
+  if (!poll) return null;
+
+  const title = poll?.title ? String(poll.title).trim() : "";
+  const town = poll?.town ? String(poll.town).trim() : "";
+  const description = poll?.description ? String(poll.description).trim() : "";
+  const image = poll?.image ? String(poll.image).trim() : DEFAULT_TASTEHUB_IMAGE;
+  const category = poll?.category || "";
+  const customCategory = poll?.customCategory || poll?.custom_category || "";
+
+  return {
+    slug: poll?.slug || "",
+    title,
+    town,
+    description,
+    image,
+    displayCategory: customCategory || category,
+    status: String(poll?.status || "draft").toLowerCase(),
+  };
+}
+
+function TasteHubMiniCard({ poll }) {
+  if (!poll) return null;
+
+  const href = poll.slug ? `/tastehub/${poll.slug}` : "/tastehub";
+  const townLabel = poll.town ? poll.town.toUpperCase() : "TASTEHUB";
+  const categoryLabel = poll.displayCategory || "TasteHub poll";
+
+  return (
+    <Link
+      to={href}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-emerald-100/80 bg-white/95 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-amber-50">
+        <img
+          src={poll.image}
+          alt={`${poll.title || "TasteHub poll"} feature art`}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-emerald-900/10 to-transparent" aria-hidden />
+      </div>
+      <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-700/90">
+          {townLabel} • {categoryLabel}
+        </p>
+        <h3 className="mt-2 text-base font-semibold leading-snug text-emerald-950">
+          {poll.title || "NorthSide TasteHub poll"}
+        </h3>
+        {poll.description && (
+          <p className="mt-2 text-sm text-emerald-800/80">
+            {poll.description}
+          </p>
+        )}
+        <span className="mt-auto pt-4 text-sm font-semibold text-emerald-700 transition group-hover:text-emerald-800">
+          Vote or see results →
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function TasteHubTownSection({ townName }) {
+  const [polls, setPolls] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPolls = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/tastehub/polls", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Failed to load TasteHub polls");
+        }
+        const payload = await response.json();
+        const normalized = Array.isArray(payload?.polls)
+          ? payload.polls.map(normalizeTasteHubPoll).filter(Boolean)
+          : [];
+
+        if (!cancelled) {
+          setPolls(normalized);
+        }
+      } catch (error) {
+        console.warn("[TownPageLayout] unable to load TasteHub polls", error);
+        if (!cancelled) {
+          setPolls([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadPolls();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const townKey = (townName || "").toLowerCase();
+
+  const townPolls = useMemo(() => {
+    return polls
+      .filter((poll) => poll.status === "live" && poll.town.toLowerCase() === townKey)
+      .slice(0, 3);
+  }, [polls, townKey]);
+
+  const hasPolls = townPolls.length > 0;
+
+  return (
+    <section className="mx-auto max-w-6xl px-4 pb-16">
+      <style>{`
+        @keyframes tastehubLivePulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.65);
+          }
+          70% {
+            box-shadow: 0 0 0 7px rgba(52, 211, 153, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+          }
+        }
+      `}</style>
+
+      <div className="rounded-[28px] border border-emerald-100 bg-gradient-to-br from-emerald-50/95 via-white to-amber-50/90 p-6 shadow-lg backdrop-blur">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="space-y-2 text-emerald-950">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">NorthSide TasteHub™</p>
+            <h2 className="text-2xl font-bold leading-tight">Local Favourites in {townName}</h2>
+            <p className="max-w-3xl text-sm text-emerald-900/80 md:text-[15px]">
+              See which spots locals are loving in {townName} and cast your vote on NorthSide TasteHub™.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200 bg-white/70 px-3 py-1 text-xs font-semibold text-emerald-800 shadow-sm">
+            <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-[tastehubLivePulse_1.8s_ease-out_infinite] rounded-full bg-emerald-400/60" aria-hidden />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            LIVE
+          </div>
+        </div>
+
+        <div className="mt-6">
+          {hasPolls ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {townPolls.map((poll) => (
+                <TasteHubMiniCard key={poll.slug || poll.title} poll={poll} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-emerald-100 bg-white/85 p-5 text-emerald-900 shadow-sm">
+              <p className="text-sm font-semibold text-emerald-900">TasteHub polls for {townName} are coming soon.</p>
+              <p className="mt-2 text-sm text-emerald-800/80">
+                We’re curating the next round of community favourites. Until then, explore all live TasteHub polls across the NorthSide GTA.
+              </p>
+              <Link
+                to="/tastehub"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 underline-offset-4 transition hover:text-emerald-900 hover:underline"
+              >
+                See all TasteHub polls →
+              </Link>
+              {loading && <p className="mt-3 text-xs text-emerald-700/80">Loading live TasteHub polls…</p>}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function ButtonLink({ href, label, variant = "primary" }) {
   if (!href || !label) return null;
@@ -266,6 +443,8 @@ export default function TownPageLayout({
           </div>
         </div>
       </section>
+
+      <TasteHubTownSection townName={townName} />
 
       {/* Lifestyle */}
       {lifestyleHighlights.length > 0 && (

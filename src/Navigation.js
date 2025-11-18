@@ -1,11 +1,12 @@
 // src/Navigation.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const communitiesWrapperRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,12 +26,25 @@ export default function Navigation() {
     { to: "/about", label: "About" },
     { to: "/buyers", label: "Buyers" },
     { to: "/sellers", label: "Sellers" },
-    { to: "/community", label: "Community" },
     { to: "/insights", label: "Insights" },
     { to: "/media", label: "Videos + Reels" },
     { to: "/contact", label: "Contact" },
-    { to: "/vip", label: "VIP" },
   ];
+
+  const communitiesItems = [
+    { to: "/tastehub", label: "NorthSide TasteHub™", badge: "NEW" },
+    { to: "/community", label: "NorthSide Events Guide" },
+    { divider: true },
+    { to: "/uxbridge", label: "Uxbridge" },
+    { to: "/georgina", label: "Georgina" },
+    { to: "/stouffville", label: "Stouffville" },
+    { to: "/east-gwillimbury", label: "East Gwillimbury" },
+    { to: "/newmarket", label: "Newmarket" },
+    { to: "/aurora", label: "Aurora" },
+    { to: "/scugog", label: "Scugog" },
+  ];
+
+  const [communitiesOpen, setCommunitiesOpen] = useState(false);
 
   const toggleMenu = () => {
     if (menuOpen) {
@@ -43,6 +57,9 @@ export default function Navigation() {
       setMenuOpen(true);
     }
   };
+
+  const closeCommunitiesMenu = () => setCommunitiesOpen(false);
+  const openCommunitiesMenu = () => setCommunitiesOpen(true);
 
   return (
     <>
@@ -121,7 +138,75 @@ export default function Navigation() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex flex-1 items-center justify-end text-gray-700 font-medium md:ml-8">
-            <div className="flex items-center space-x-8 mr-4">
+            <div className="flex items-center space-x-6 lg:space-x-8 mr-4">
+              <div
+                ref={communitiesWrapperRef}
+                className="relative"
+                onMouseEnter={openCommunitiesMenu}
+                onMouseLeave={closeCommunitiesMenu}
+                onBlur={() => {
+                  setTimeout(() => {
+                    const wrapper = communitiesWrapperRef.current;
+                    if (wrapper && !wrapper.contains(document.activeElement)) {
+                      closeCommunitiesMenu();
+                    }
+                  }, 50);
+                }}
+              >
+                <button
+                  type="button"
+                  className="
+                    relative text-[15px] tracking-wide
+                    transition duration-200
+                    hover:text-brand-green
+                    after:content-[''] after:absolute after:-bottom-1 after:left-0
+                    after:w-0 after:h-[2px] after:bg-brand-green after:transition-all after:duration-200
+                    hover:after:w-full
+                  "
+                  aria-haspopup="true"
+                  aria-expanded={communitiesOpen}
+                  onFocus={openCommunitiesMenu}
+                  onClick={() => setCommunitiesOpen((prev) => !prev)}
+                >
+                  Communities
+                </button>
+
+                <div
+                  className={`
+                    absolute right-0 mt-3 w-[320px] rounded-2xl border border-slate-200 bg-white p-3 shadow-xl
+                    transition-all duration-200 ease-out
+                    ${communitiesOpen ? "visible opacity-100 translate-y-0" : "invisible opacity-0 -translate-y-1"}
+                  `}
+                >
+                  <div className="space-y-1">
+                    {communitiesItems.map((item, idx) => {
+                      if (item.divider) {
+                        return <div key={`divider-${idx}`} className="my-2 border-t border-slate-100" aria-hidden />;
+                      }
+
+                      return (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          className="
+                            flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-[15px]
+                            text-slate-700 transition hover:bg-emerald-50 hover:text-brand-green
+                          "
+                          onClick={closeCommunitiesMenu}
+                        >
+                          <span className="leading-tight">{item.label}</span>
+                          {item.badge && (
+                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -190,7 +275,7 @@ export default function Navigation() {
             <ul className="space-y-4 text-gray-700 font-medium">
               {navLinks.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} onClick={toggleMenu}>
+                  <Link to={l.to} onClick={toggleMenu} className="block text-[15px] leading-tight">
                     {l.label}
                   </Link>
                 </li>
@@ -205,6 +290,29 @@ export default function Navigation() {
                 </Link>
               </li>
             </ul>
+
+            <div className="mt-6 space-y-3 rounded-2xl border border-slate-100 bg-white/70 p-4 text-sm text-slate-700 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">Communities</p>
+              <ul className="space-y-2">
+                {communitiesItems.map((item, idx) => {
+                  if (item.divider) {
+                    return <li key={`divider-${idx}`} className="border-t border-slate-100 pt-2" aria-hidden />;
+                  }
+
+                  return (
+                    <li key={item.to}>
+                      <Link
+                        to={item.to}
+                        onClick={toggleMenu}
+                        className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 text-[15px] leading-tight hover:bg-emerald-50 hover:text-brand-green"
+                      >
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         )}
       </header>
