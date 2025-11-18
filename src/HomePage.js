@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeaderShell from "./components/HeaderShell";
 import MapHero from "./MapHero";
 import TownStrip from "./TownStrip";
@@ -20,26 +20,12 @@ const HOME_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
   date: review.date,
 }));
 
-const HERO_STATS = [
-  {
-    label: "Aurora Avg. Sale Price",
-    value: "$1.29",
-    suffix: "M",
-    description: "TRREB Oct 2023 detached average across Aurora.",
-  },
-  {
-    label: "North District DOM",
-    value: "21",
-    suffix: "days",
-    description: "Median time on market over the past 30 days (MLS®).",
-  },
-  {
-    label: "Union Station Commute",
-    value: "38",
-    suffix: "min",
-    description: "GO Express from Newmarket to Union Station at 7:10 a.m.",
-  },
-];
+// TODO: Replace with CMS-driven weekly town highlight.
+const TRENDING_TOWN = {
+  slug: "aurora",
+  name: "Aurora",
+  description: "Explore homes, lifestyle, and local highlights in Aurora.",
+};
 
 export default function HomePage() {
   return (
@@ -138,21 +124,7 @@ function HomeHero() {
           </p>
         </div>
 
-        <div className="mt-9 grid gap-4 sm:grid-cols-3">
-          {HERO_STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-left shadow-lg shadow-black/20 backdrop-blur"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/80">{stat.label}</p>
-              <div className="mt-2 flex items-baseline gap-1 text-2xl font-semibold text-white">
-                <span>{stat.value}</span>
-                {stat.suffix ? <span className="text-base text-emerald-100/90">{stat.suffix}</span> : null}
-              </div>
-              <p className="mt-2 text-xs text-emerald-100/80">{stat.description}</p>
-            </div>
-          ))}
-        </div>
+        <NorthSideThisWeek />
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
@@ -197,6 +169,165 @@ function TownBridge({ className = "" }) {
         <TownStrip id="town-guides" />
       </div>
     </div>
+  );
+}
+
+function NorthSideThisWeek() {
+  const [polls, setPolls] = useState([]);
+  const [latestInsight, setLatestInsight] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPolls = async () => {
+      try {
+        const response = await fetch("/api/tastehub/polls", { cache: "no-store" });
+        if (!response.ok) throw new Error("Request failed");
+        const payload = await response.json();
+        if (cancelled) return;
+        const entries = Array.isArray(payload?.polls) ? payload.polls : [];
+        setPolls(entries);
+      } catch (error) {
+        if (!cancelled) setPolls([]);
+      }
+    };
+
+    loadPolls();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadInsights = async () => {
+      try {
+        const response = await fetch("/content/insights/index.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Request failed");
+        const items = await response.json();
+        if (cancelled) return;
+        if (Array.isArray(items)) {
+          const sorted = [...items].sort((a, b) => {
+            const aDate = new Date(a.publishDate || 0).getTime();
+            const bDate = new Date(b.publishDate || 0).getTime();
+            return bDate - aDate;
+          });
+          setLatestInsight(sorted[0] || null);
+        }
+      } catch (error) {
+        if (!cancelled) setLatestInsight(null);
+      }
+    };
+
+    loadInsights();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const trendingPoll = useMemo(() => {
+    if (!polls.length) return null;
+    const featured = polls.find((poll) => poll.featured);
+    return featured || polls[0];
+  }, [polls]);
+
+  const cards = useMemo(
+    () => [
+      {
+        label: "Trending Town",
+        title: `People are checking out ${TRENDING_TOWN.name} this week.`,
+        description: TRENDING_TOWN.description,
+        href: `/communities/${TRENDING_TOWN.slug}`,
+      },
+      {
+        label: "Trending on NorthSide TasteHub™",
+        title: trendingPoll
+          ? `Trending poll: ${trendingPoll.title}.`
+          : "Trending poll: Best Pizza around the NorthSide.",
+        description: "Vote or see live results on TasteHub.",
+        href: trendingPoll ? `/tastehub/${trendingPoll.slug}` : "/tastehub",
+      },
+      {
+        label: "Latest NorthSide Insight",
+        title: latestInsight
+          ? `Buyers are reading our latest Insight: ${latestInsight.title}.`
+          : "Buyers are reading our latest Insight series.",
+        description:
+          latestInsight?.excerpt || "Get a deeper look at life and real estate in the NorthSide GTA.",
+        href: latestInsight ? `/insights/${latestInsight.slug}` : "/insights",
+      },
+      {
+        label: "Around the NorthSide",
+        title: "Events happening around the NorthSide this week.",
+        description: "See what’s going on in Uxbridge, Georgina, Stouffville and more.",
+        href: "/community",
+      },
+    ],
+    [latestInsight, trendingPoll],
+  );
+
+  return (
+    <section className="mt-9">
+      <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[radial-gradient(circle_at_10%_20%,rgba(255,255,255,0.08),transparent_45%),linear-gradient(135deg,rgba(10,35,20,0.85),rgba(8,30,18,0.92))] shadow-[0_30px_90px_rgba(4,17,12,0.55)]">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-emerald-300/10" aria-hidden />
+        <div className="pointer-events-none absolute -left-24 top-[-30%] h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -right-16 bottom-[-30%] h-56 w-56 rounded-full bg-emerald-200/15 blur-3xl" aria-hidden />
+
+        <div className="relative z-10 px-4 py-5 sm:px-6 sm:py-6 md:px-7 md:py-7">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-50">
+                <span
+                  className="relative inline-flex h-2.5 w-2.5 items-center justify-center"
+                  style={{ animation: "pulseLive 2s ease-in-out infinite" }}
+                  aria-hidden
+                >
+                  <span className="absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300/70 blur-[0.5px]" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+                </span>
+                <span className="text-emerald-100">Live in the NorthSide</span>
+              </span>
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-[1.65rem]">NorthSide This Week</h2>
+                <p className="max-w-2xl text-sm text-emerald-50/90 sm:text-base">
+                  A quick look at what people are exploring, reading, and talking about across the NorthSide GTA.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="/about"
+              className="inline-flex items-center justify-center self-start rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-emerald-50 shadow-sm transition hover:border-white/35 hover:bg-white/10"
+            >
+              Meet Your NorthSide Agents <span aria-hidden className="ml-2 text-base">→</span>
+            </a>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {cards.map((card) => (
+              <a
+                key={card.label}
+                href={card.href}
+                className="group flex h-full flex-col justify-between gap-3 rounded-2xl border border-white/12 bg-white/5 px-4 py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10"
+              >
+                <div className="space-y-2">
+                  <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-100/80">
+                    {card.label}
+                  </span>
+                  <h3 className="text-lg font-semibold leading-snug text-white sm:text-[1.05rem]">{card.title}</h3>
+                  <p className="text-sm text-emerald-50/85">{card.description}</p>
+                </div>
+                <span className="inline-flex items-center text-sm font-semibold text-emerald-100/90">
+                  Open
+                  <span aria-hidden className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
