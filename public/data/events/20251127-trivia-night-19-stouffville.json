@@ -7,7 +7,7 @@
   "endDate": "2025-11-28T02:00:00Z",
   "allDay": false,
   "use_daily_schedule": false,
-  "category": "Festivals",
+  "category": "Other",
   "town": "Stouffville",
   "locationName": "Lebovic Centre for Arts & Entertainment – Nineteen on the Park",
   "address": "19 Civic Avenue, Stouffville, L4A 1G5",
@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Trivia-Night-1.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/trivia-night-19/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/trivia-night-19/",
-  "updatedAt": "2025-11-17T08:37:54Z"
+  "lastSyncedAt": "2025-11-18T08:35:53.456Z",
+  "updatedAt": "2025-11-18T08:35:53.456Z",
+  "featured": false
 }

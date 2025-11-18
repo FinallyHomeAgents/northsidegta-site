@@ -1,55 +1,13 @@
 {
-  "slug": "20251115-richmond-hill-merry-marketplace-toronto-adjacent",
+  "slug": "20251122-richmond-hill-merry-marketplace-toronto-adjacent",
   "title": "Richmond Hill Merry Marketplace",
   "summary": "Richmond Hill Merry Marketplace",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. March Break at LEGOLAND® Discovery Centre Toronto Loading view. Today Now Now Select date. Nov 18 November 10 @ 9:30 am - November 18 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 11 @ 9:30 am - November 19 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 12 @ 9:30 am - November 20 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 13 @ 9:30 am - November 21 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 14 @ 9:30 am - November 22 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 15 @ 9:30 am - November 23 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 15 @ 4:00 pm - December 13 @ 8:00 pm Event Series Richmond Hill Merry Marketplace Nov 18 November 16 @ 9:30 am - November 24 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 17 @ 9:00 am - November 20 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 18 November 17 @ 9:30 am - November 25 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 18 November 18 @ 9:00 am - November 21 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 18 November 18 @ 9:30 am - November 26 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-15T21:00:00Z",
-  "endDate": "2025-12-14T01:00:00Z",
+  "startDate": "2025-11-22T21:00:00Z",
+  "endDate": "2025-12-21T01:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2025-11-15",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-16",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-17",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-18",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-19",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-20",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-21",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
     {
       "date": "2025-11-22",
       "all_day": false,
@@ -181,6 +139,48 @@
       "all_day": false,
       "start_time": "16:00",
       "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-14",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-15",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-16",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-17",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-18",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-19",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
+    },
+    {
+      "date": "2025-12-20",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "20:00"
     }
   ],
   "category": "Festivals",
@@ -188,7 +188,7 @@
   "locationName": "Richmond Green Park, 1300 Elgin Mills Rd E, Richmond Hill, L4S 1M5",
   "address": "Richmond Green Park, 1300 Elgin Mills Rd E, Richmond Hill, L4S 1M5",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/richmond-hill-merry-marketplace/2025-11-15/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/richmond-hill-merry-marketplace/2025-11-22/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -198,8 +198,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10014278-1763222400-1765656000@www.experienceyorkregion.com",
+  "sourceRef": "10014279-1763827200-1766260800@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-18T08:35:53.456Z",
+  "firstSeenAt": "2025-11-18T08:35:53.456Z",
   "updatedAt": "2025-11-18T08:35:53.456Z",
   "featured": false
 }
