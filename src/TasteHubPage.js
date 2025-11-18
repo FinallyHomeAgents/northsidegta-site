@@ -331,15 +331,10 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
       ? `${window.location.origin}/tastehub/${poll.slug}`
       : `https://northsidegta.ca/tastehub/${poll.slug}`;
   const heroImage = getPollImagePath(poll);
-  const bannerStyles = {
-    backgroundImage: `linear-gradient(145deg, rgba(6, 78, 59, 0.94), rgba(217, 119, 6, 0.75)), url(${heroImage})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-emerald-950/80 px-4 py-12 backdrop-blur-sm">
-      <div className="relative grid w-full max-w-5xl gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid-cols-[minmax(0,1fr),minmax(0,1fr)]">
+    <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-emerald-950/80 px-3 py-6 backdrop-blur-sm sm:px-4 sm:py-10">
+      <div className="relative flex w-full max-w-5xl flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,1fr),minmax(0,1fr)] md:gap-10">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -348,23 +343,46 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
         >
           ×
         </button>
-        <div
-          className="space-y-5 bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-8 text-white"
-          style={bannerStyles}
-        >
-          <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
-            {poll.town} • {poll.displayCategory}
-          </span>
-          <h2 className="text-3xl font-semibold leading-tight">{poll.title}</h2>
-          <p className="text-sm text-emerald-50/90">{poll.description}</p>
-          <PollShareControls poll={poll} shareUrl={shareUrl} />
+
+        <div className="flex flex-col gap-6 p-6 sm:p-8 md:p-10">
+          <div className="space-y-4 rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 text-white shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
+            <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
+              {poll.town} • {poll.displayCategory}
+            </span>
+            <h2 className="text-3xl font-semibold leading-tight sm:text-4xl">{poll.title}</h2>
+            <p className="text-sm text-emerald-50/90 sm:text-base">{poll.description}</p>
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border border-emerald-100 shadow-sm">
+            <img
+              src={heroImage}
+              alt={`${poll.title} feature art`}
+              className="block w-full object-contain"
+              style={{ height: "auto" }}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
-        <div className="max-h-[80vh] overflow-y-auto p-8">
+
+        <div className="flex flex-col gap-8 px-6 pb-16 sm:px-8 sm:pb-20 md:px-10 md:pb-10">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
             onLeaderboardUpdate={(payload) => onLeaderboardUpdate?.(poll, payload)}
           />
+
+          <div className="rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px] shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
+            <div className="h-full rounded-[26px] bg-emerald-950/85 p-6 text-white sm:p-8">
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold leading-tight sm:text-xl">Spread the word</h3>
+                <p className="text-sm text-emerald-50/80">
+                  Share this poll with friends so they can vote and watch the live leaderboard with you.
+                </p>
+                <PollShareControls poll={poll} shareUrl={shareUrl} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
