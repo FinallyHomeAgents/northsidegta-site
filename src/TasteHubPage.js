@@ -334,7 +334,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-emerald-950/80 px-3 py-6 backdrop-blur-sm sm:px-4 sm:py-10">
-      <div className="relative mx-auto flex w-full max-w-[1180px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,1fr),minmax(0,1fr)] md:items-start md:gap-8 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] lg:gap-10 lg:px-8 lg:py-6">
+      <div className="relative mx-auto flex w-full max-w-[1200px] flex-col gap-8 overflow-hidden rounded-[32px] border border-emerald-200/30 bg-white shadow-[0_40px_120px_rgba(6,55,24,0.55)] md:grid md:grid-cols-[minmax(0,3.5fr)_minmax(0,2.5fr)] md:items-start md:gap-6 md:px-6 md:py-6 lg:gap-7 lg:px-8 lg:py-7">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -344,7 +344,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
           ×
         </button>
 
-        <div className="flex flex-col gap-6 p-6 sm:p-8 md:p-10">
+        <div className="flex flex-col gap-6 p-6 sm:p-8 md:gap-5 md:p-8 lg:p-7">
           <div className="space-y-4 rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-500 p-6 text-white shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
             <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]">
               {poll.town} • {poll.displayCategory}
@@ -357,7 +357,7 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
             <img
               src={heroImage}
               alt={`${poll.title} feature art`}
-              className="block w-full object-contain"
+              className="block w-full object-contain md:aspect-[16/10] md:object-cover"
               style={{ height: "auto" }}
               loading="lazy"
               decoding="async"
@@ -365,16 +365,16 @@ function PollDetailModal({ poll, leaderboard, onClose, onLeaderboardUpdate }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 px-6 pb-16 sm:px-8 sm:pb-20 md:px-10 md:pb-10 lg:gap-5 lg:pb-10 lg:pt-1">
+        <div className="flex flex-col gap-8 px-6 pb-16 sm:px-8 sm:pb-20 md:gap-0 md:px-8 md:pb-8 md:pt-2 md:[&>*+*]:mt-5 lg:px-7 lg:pb-6 lg:pt-2">
           <TasteHubPoll
             poll={poll}
             initialLeaderboard={leaderboard}
             onLeaderboardUpdate={(payload) => onLeaderboardUpdate?.(poll, payload)}
           />
 
-          <div className="rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px] shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
-            <div className="h-full rounded-[26px] bg-emerald-950/85 p-6 text-white sm:p-8 lg:p-5">
-              <div className="space-y-3">
+          <div className="rounded-[28px] bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px] shadow-[0_18px_50px_rgba(16,107,48,0.18)] md:from-emerald-900/90 md:via-emerald-800/90 md:to-amber-600/85">
+            <div className="h-full rounded-[26px] bg-emerald-950/80 p-6 text-white sm:p-7 md:p-6 lg:p-4">
+              <div className="space-y-3 md:space-y-2.5">
                 <h3 className="text-lg font-semibold leading-tight sm:text-xl">Spread the word</h3>
                 <p className="text-sm text-emerald-50/80 lg:text-[15px]">
                   Share this poll with friends so they can vote and watch the live leaderboard with you.
