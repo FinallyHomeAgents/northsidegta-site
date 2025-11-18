@@ -265,9 +265,9 @@ export default function TasteHubPoll({
   );
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-4 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px]">
-        <div className="rounded-[28px] bg-white/98 p-6 shadow-[0_18px_50px_rgba(16,107,48,0.18)]">
+    <div className="tastehub-poll-shell space-y-6 md:space-y-0">
+      <div className="tastehub-poll space-y-4 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-amber-600 p-[1px] shadow-[0_22px_50px_rgba(16,107,48,0.18)]">
+        <div className="rounded-[28px] bg-white/98 p-6 shadow-[0_18px_50px_rgba(16,107,48,0.18)] lg:p-7">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <fieldset className="space-y-3" disabled={!canVote || submitting}>
               <legend className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
@@ -276,7 +276,7 @@ export default function TasteHubPoll({
               {normalizedBallot.map((item) => (
                 <label
                   key={item.id}
-                  className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 text-sm transition ${
+                  className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 text-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                     selected === item.id
                       ? "border-amber-400 bg-amber-50/70 shadow-sm"
                       : "border-emerald-100 bg-white hover:border-emerald-300"
@@ -341,7 +341,7 @@ export default function TasteHubPoll({
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div id="leaderboard" className="tastehub-leader space-y-4 rounded-3xl border border-emerald-100 bg-white/95 p-5 shadow-[0_18px_40px_rgba(16,107,48,0.12)] lg:p-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-emerald-900">
             <span role="img" aria-label="trophy">
@@ -354,12 +354,12 @@ export default function TasteHubPoll({
           </span>
         </div>
         <LeaderboardList items={sortedItems} total={totalVotes} loading={loading} error={error} />
-      </div>
 
-      <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-4 text-xs text-slate-600">
-        <p>
-          One vote per person per day. Share this poll with your NorthSide friends and keep the friendly rivalries rolling!
-        </p>
+        <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-4 text-xs text-slate-600">
+          <p>
+            One vote per person per day. Share this poll with your NorthSide friends and keep the friendly rivalries rolling!
+          </p>
+        </div>
       </div>
     </div>
   );

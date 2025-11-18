@@ -472,3 +472,89 @@ body {
   50%      { opacity: 1; }
 }
 .ns-animate-pulse-slow { animation: ns-pulse-slow 6s ease-in-out infinite; }
+
+.live-pill {
+  display: none;
+}
+
+@keyframes pulseLive {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    animation: pulseLive 1.6s infinite ease-in-out;
+  }
+
+  .live-pill--northside .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #5bea3b;
+    box-shadow: 0 0 0 4px rgba(91, 234, 59, 0.35);
+  }
+
+  .live-pill--northside .live-text {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .live-pill--northside .live-label {
+    opacity: 0.9;
+    font-weight: 500;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tastehub-layout-desktop {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "hero poll"
+      "leaderboard poll";
+    column-gap: 1.25rem;
+    row-gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .tastehub-layout-desktop > .tastehub-right-col,
+  .tastehub-poll-shell {
+    display: contents;
+  }
+
+  .tastehub-hero {
+    grid-area: hero;
+  }
+
+  .tastehub-leader {
+    grid-area: leaderboard;
+  }
+
+  .tastehub-poll {
+    grid-area: poll;
+  }
+}
