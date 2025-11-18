@@ -1137,7 +1137,7 @@ export default function MapHero({
     .join(" ");
 
   return (
-    <section className={sectionClasses}>
+    <section id="northside-map" className={sectionClasses}>
       <div className={containerClasses}>
         {/* Bordered hero box (map + inline quick-contact) */}
         <div className={frameClasses}>

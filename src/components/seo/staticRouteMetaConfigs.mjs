@@ -87,8 +87,8 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/community",
     meta: {
       route: "/community",
-      documentTitle: "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
-      title: "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
+      documentTitle: "NorthSide Events Guide | What's On Across Aurora, Uxbridge & Beyond",
+      title: "NorthSide Events Guide | What's On Across Aurora, Uxbridge & Beyond",
       description:
         "Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.",
       canonicalUrl: "https://northsidegta.ca/community",
@@ -103,8 +103,8 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/community/events",
     meta: {
       route: "/community/events",
-      documentTitle: "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
-      title: "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
+      documentTitle: "NorthSide Events Guide | What's On Across Aurora, Uxbridge & Beyond",
+      title: "NorthSide Events Guide | What's On Across Aurora, Uxbridge & Beyond",
       description:
         "Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.",
       canonicalUrl: "https://northsidegta.ca/community/events",
@@ -206,10 +206,10 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/tastehub",
     meta: {
       route: "/tastehub",
-      documentTitle: "NorthSide TasteHub | Community Food Rankings Across the NorthSide GTA",
-      title: "NorthSide TasteHub | Community Food Rankings Across the NorthSide GTA",
+      documentTitle: "NorthSide TasteHub™ | Community Food Rankings Across the NorthSide GTA",
+      title: "NorthSide TasteHub™ | Community Food Rankings Across the NorthSide GTA",
       description:
-        "Vote on the best local spots for pizza, wings, coffee and more in Uxbridge, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog with NorthSide TasteHub, powered by Finally Home Agents.",
+        "Vote on the best local spots for pizza, wings, coffee and more in Uxbridge, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog with NorthSide TasteHub™, powered by Finally Home Agents.",
       canonicalUrl: "https://northsidegta.ca/tastehub",
       ogType: "website",
       ogImage: "/Images/og-home.jpg",

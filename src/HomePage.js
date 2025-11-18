@@ -194,7 +194,7 @@ function TownBridge({ className = "" }) {
         </p>
       </div>
       <div className="w-full">
-        <TownStrip />
+        <TownStrip id="town-guides" />
       </div>
     </div>
   );

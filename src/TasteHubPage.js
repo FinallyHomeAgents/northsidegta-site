@@ -742,12 +742,12 @@ export default function TasteHubPage() {
               <span className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1 text-xs font-semibold uppercase tracking-[0.38em] text-lime-200">
                 Powered by Finally Home Agents
               </span>
-              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">NorthSide TasteHub</h1>
+              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">NorthSide TasteHub™</h1>
               <p className="text-lg text-emerald-50">
                 Vote on your favourite local spots, settle the food debates, and see who’s winning across the NorthSide GTA.
               </p>
               <p className="text-sm text-emerald-100/80">
-                From Uxbridge to Georgina, TasteHub is where the community comes together to rank pizza, wings, coffee, and more—just for fun.
+                From Uxbridge to Georgina, NorthSide TasteHub™ is where the community comes together to rank pizza, wings, coffee, and more—just for fun.
               </p>
               <div className="flex flex-wrap gap-3 pt-4">
                 <button
@@ -918,9 +918,9 @@ export default function TasteHubPage() {
 
         <section className="border-t border-emerald-100 bg-white/95 py-16">
           <div className="mx-auto max-w-5xl px-4">
-            <h2 className="text-2xl font-semibold text-emerald-900">What is NorthSide TasteHub?</h2>
+            <h2 className="text-2xl font-semibold text-emerald-900">What is NorthSide TasteHub™?</h2>
             <p className="mt-4 text-sm text-slate-600">
-              NorthSide TasteHub is a community-driven, just-for-fun way to celebrate local spots across the NorthSide GTA.
+              NorthSide TasteHub™ is a community-driven, just-for-fun way to celebrate local spots across the NorthSide GTA.
               Rankings are based on community votes and are not official reviews or professional recommendations. Always do your
               own research before deciding where to eat.
             </p>

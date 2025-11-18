@@ -40,7 +40,7 @@ function ordinal(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-export default function TownStrip() {
+export default function TownStrip({ id }) {
   const ordered = useMemo(() => {
     const map = new Map(TOWNS.map((t) => [t.id, t]));
     return CLOSEST_TO_FURTHEST.map((id) => map.get(id)).filter(Boolean);
@@ -57,7 +57,7 @@ export default function TownStrip() {
   const scrollByAmount = (px) => railRef.current?.scrollBy({ left: px, behavior: "smooth" });
 
   return (
-    <section aria-label="Closest to Toronto → Furthest">
+    <section id={id} aria-label="Closest to Toronto → Furthest">
       {/* Ribbon (text tweak requested) */}
       <div className="flex items-center justify-between mb-2 md:mb-3">
         <div className="relative inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 text-white shadow">

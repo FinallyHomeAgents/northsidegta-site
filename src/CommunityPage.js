@@ -268,9 +268,9 @@ export default function CommunityPage() {
         <section className="relative isolate overflow-hidden" style={heroStyles}>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-slate-900/50 to-slate-900/30" aria-hidden="true" />
           <div className="relative mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 py-24 text-center text-white">
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">What’s On Across the NorthSide GTA</h1>
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">NorthSide Events Guide</h1>
             <p className="max-w-3xl text-lg text-slate-100">
-              Events, festivals, family days, golf &amp; more — updated often.
+              What’s on across the NorthSide GTA — events, festivals, family days, golf &amp; more.
             </p>
           </div>
         </section>
