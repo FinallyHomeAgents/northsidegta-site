@@ -22,16 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/spark-sessions-november-21/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002696-1763733600-1763737200@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-18T08:35:53.456Z",
-  "updatedAt": "2025-11-18T08:35:53.456Z",
-  "featured": false
+  "updatedAt": "2025-11-18T08:35:53Z"
 }
