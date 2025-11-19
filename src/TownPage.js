@@ -7,7 +7,6 @@ import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import TownPageLayout from "./components/towns/TownPageLayout";
-import PizzaSection from "./components/community/PizzaSection";
 import {
   FiTrendingUp,
   FiClock,
@@ -167,7 +166,6 @@ export default function TownPage() {
               : null
           }
         />
-        {isUxbridge && <PizzaSection town={town.name} category="Pizza" />}
         {isUxbridge && (
           <section className="mx-auto mt-10 max-w-5xl px-4">
             <div className="rounded-3xl border border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 p-6 shadow-sm">
@@ -259,7 +257,6 @@ export default function TownPage() {
       </section>
 
       {/* Page body */}
-      {isUxbridge && <PizzaSection town={town.name} category="Pizza" />}
       <main className="mx-auto max-w-6xl px-4 pb-12">
         <div className="grid lg:grid-cols-3 gap-6">
           {/* LEFT column: Highlights, Ratings, Commute */}
