@@ -140,7 +140,7 @@ function ContactPageV2() {
               <TrustCard />
               <AgentCard
                 name="Matthew Mulhall"
-                teamRole="Real Estate Agent, Finally Home Agents"
+                teamRole="Real Estate Agent | Finally Home Agents"
                 brokerage="HomeLife Optimum Realty, Brokerage"
                 accent="Co-Founder, NorthSide GTA"
                 imageSrc="/Images/matthew.jpg"
@@ -148,7 +148,7 @@ function ContactPageV2() {
               />
               <AgentCard
                 name="Landon Mulhall"
-                teamRole="Real Estate Agent, Finally Home Agents"
+                teamRole="Real Estate Agent | Finally Home Agents"
                 brokerage="HomeLife Optimum Realty, Brokerage"
                 accent="Co-Founder, NorthSide GTA"
                 imageSrc="/Images/landon.jpg"
