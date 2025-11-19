@@ -43,35 +43,48 @@ export default function TownLiveStrip({ townSlug, townName, spotlightData }) {
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700/90">
           Live Around {townName}
         </p>
-        <p className="text-[10px] text-slate-400">Updated daily</p>
+        <p className="text-[11px] font-semibold text-emerald-800">Updated daily</p>
       </div>
-      <ul className="mt-2 space-y-2">
+      <ul className="mt-5 space-y-3">
         {thumbnails.map((place) => {
           const label = labelMap.get(place.placeId) || townName
           const ratingLine = formatRating(place)
           return (
             <li
               key={place.placeId}
-              className="flex items-center gap-3 rounded-xl bg-white/90 px-3 py-2 shadow-sm shadow-black/5"
+              className="group flex items-center gap-4 rounded-2xl border border-emerald-100 bg-white/95 px-4 py-4 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-green/10 text-[13px]">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-50 text-base">
                 <span aria-hidden>{getIconForPlace(place)}</span>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[11px] font-semibold text-slate-800">{label}</p>
-                <p className="truncate text-[11px] text-slate-600">{place.name}</p>
-                {ratingLine && <p className="text-[10px] text-slate-500">{ratingLine}</p>}
+                <p className="truncate text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700/90">
+                  {label}
+                </p>
+                <p className="mt-1 truncate text-sm font-semibold text-emerald-950">{place.name}</p>
+                {place.summary && (
+                  <p className="mt-0.5 truncate text-xs text-emerald-800/80">{place.summary}</p>
+                )}
+                {ratingLine && (
+                  <p className="mt-1 text-[11px] font-medium text-emerald-700/85">
+                    ⭐ {place.rating.toFixed(1)}{' '}
+                    <span className="text-emerald-800/70">
+                      ({place.userRatingsTotal.toLocaleString()} Google reviews)
+                    </span>
+                  </p>
+                )}
               </div>
+              <span className="text-lg text-emerald-500 transition-colors duration-200 group-hover:text-emerald-700" aria-hidden>
+                →
+              </span>
             </li>
           )
         })}
       </ul>
-      <p className="mt-1 text-[10px] text-slate-400">
-        Based on Google Maps data • Non-restaurant experiences only
-      </p>
+      <p className="mt-4 text-[11px] text-emerald-700/80">Based on Google Maps data</p>
     </div>
   )
 }

@@ -448,11 +448,13 @@ export default function TownPageLayout({
                 <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
               ))}
             </div>
-            <TownLiveStrip
-              townSlug={townSlug}
-              townName={townName}
-              spotlightData={spotlightData}
-            />
+            <div className="mt-6 border-t border-emerald-100 pt-5">
+              <TownLiveStrip
+                townSlug={townSlug}
+                townName={townName}
+                spotlightData={spotlightData}
+              />
+            </div>
           </div>
 
           <div className="rounded-[28px] border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur">
