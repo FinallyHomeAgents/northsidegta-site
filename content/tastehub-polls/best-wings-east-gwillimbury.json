@@ -1,0 +1,43 @@
+{
+  "ballot_items": [
+    {
+      "name": "Wing House",
+      "address": "19157 Centre St, Mount Albert, ON",
+      "link": "https://share.google/xmlgvsw893oUshlk5"
+    },
+    {
+      "name": "Beertown Public House",
+      "address": "18287 Yonge St #1, East Gwillimbury, ON",
+      "link": "https://share.google/j80kgNLnyMuGaIsvz"
+    },
+    {
+      "name": "Kelseys Original Roadhouse",
+      "address": "18158 Yonge St, East Gwillimbury, ON",
+      "link": "https://share.google/OZyGrvsUw3n7pDzxJ"
+    },
+    {
+      "name": "Sharon House Tap & Kitchen",
+      "link": "https://share.google/UKwh5Io8h5urq18qJ",
+      "address": "19103B Leslie St, East Gwillimbury, ON"
+    },
+    {
+      "name": "Tipsy Goose Holland Landing",
+      "address": "45 Grist Mill Rd, Holland Landing, ON",
+      "link": "https://share.google/aZRsMM0wHBaC9onHJ"
+    },
+    {
+      "name": "Coop's Holland Landing",
+      "address": "19415 Yonge St, Holland Landing, ON",
+      "link": "https://share.google/BtbV5MjBLIE79dzWr"
+    }
+  ],
+  "slug": "best-wings-east-gwillimbury",
+  "featured": false,
+  "town": "East Gwillimbury",
+  "status": "live",
+  "ranking_key": "tastehub_eastgwillimbury_wings_2025",
+  "title": "Best Wings in East Gwillimbury",
+  "image": "/uploads/eastgwillimburywings.jpg",
+  "description": "Help crown East Gwillimbury's go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}
