@@ -5,11 +5,11 @@ export default async function handler(req, res) {
     return
   }
 
-  const nameParam = Array.isArray(req.query?.name) ? req.query.name[0] : req.query?.name
-  const photoName = typeof nameParam === 'string' ? nameParam : null
+  const photoParam = Array.isArray(req.query?.photo) ? req.query.photo[0] : req.query?.photo
+  const photoPath = typeof photoParam === 'string' ? photoParam : null
 
-  if (!photoName) {
-    res.status(400).json({ ok: false, error: 'Missing photo name' })
+  if (!photoPath) {
+    res.status(400).json({ ok: false, error: 'Missing photo path' })
     return
   }
 
@@ -19,8 +19,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const encoded = encodeURIComponent(photoName)
-  const url = `https://places.googleapis.com/v1/${encoded}/media?maxWidthPx=800&key=${apiKey}`
+  const url = `https://places.googleapis.com/v1/${photoPath}/media?maxWidthPx=800&key=${apiKey}`
 
   try {
     const response = await fetch(url)
