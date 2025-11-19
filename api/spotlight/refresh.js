@@ -49,6 +49,7 @@ export default async function handler(req, res) {
 
   const summary = []
   const townsList = normalizeTowns(towns)
+  const assignedPlaceIds = new Map()
 
   for (const entry of townsList) {
     const slug = normalizeSlug(entry?.slug)
@@ -61,7 +62,14 @@ export default async function handler(req, res) {
       continue
     }
 
-    const data = await fetchSpotlightPlacesData(slug, name, configs)
+    for (const configEntry of configs) {
+      const placeId = String(configEntry?.placeId || '').trim()
+      if (placeId && !assignedPlaceIds.has(placeId)) {
+        assignedPlaceIds.set(placeId, slug)
+      }
+    }
+
+    const data = await fetchSpotlightPlacesData(slug, name, configs, assignedPlaceIds)
     if (!data.length) {
       summary.push({ slug, skipped: 'no-results' })
       continue

@@ -9,6 +9,11 @@ interface PlacesSearchResponse {
     displayName?: { text?: string | null } | null
     rating?: number | null
     userRatingCount?: number | null
+    addressComponents?: Array<{
+      longText?: string
+      shortText?: string
+      types?: string[]
+    }>
   }>
 }
 
@@ -17,6 +22,7 @@ export interface SpotlightSearchResult {
   name: string
   rating: number
   userRatingsTotal: number
+  addressComponents?: PlacesSearchResponse['places'][number]['addressComponents']
 }
 
 function pickBestCandidate(places: Required<SpotlightSearchResult>[]): SpotlightSearchResult | null {
@@ -48,7 +54,8 @@ export async function searchBestPlaceForQuery(
       headers: {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount',
+        'X-Goog-FieldMask':
+          'places.id,places.displayName,places.rating,places.userRatingCount,places.addressComponents',
       },
       body: JSON.stringify({ textQuery }),
       signal: controller.signal,
@@ -73,7 +80,13 @@ export async function searchBestPlaceForQuery(
       if (rating < MIN_RATING || reviews < MIN_REVIEWS) {
         continue
       }
-      candidates.push({ placeId: id, name, rating, userRatingsTotal: reviews })
+      candidates.push({
+        placeId: id,
+        name,
+        rating,
+        userRatingsTotal: reviews,
+        addressComponents: place.addressComponents,
+      })
     }
 
     return pickBestCandidate(candidates)

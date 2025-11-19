@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "aurora",
+    "localities": ["Aurora"]
+  },
+  {
+    "slug": "newmarket",
+    "localities": ["Newmarket"]
+  },
+  {
+    "slug": "georgina",
+    "localities": ["Georgina", "Keswick", "Sutton", "Jackson's Point", "Pefferlaw"]
+  },
+  {
+    "slug": "uxbridge",
+    "localities": ["Uxbridge"]
+  },
+  {
+    "slug": "stouffville",
+    "localities": ["Stouffville", "Whitchurch-Stouffville"]
+  },
+  {
+    "slug": "east-gwillimbury",
+    "localities": ["East Gwillimbury", "Sharon", "Queensville", "Holland Landing", "Mount Albert"]
+  },
+  {
+    "slug": "scugog",
+    "localities": ["Scugog", "Port Perry", "Caesarea", "Seagrave"]
+  }
+]
