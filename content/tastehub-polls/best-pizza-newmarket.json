@@ -1,0 +1,53 @@
+{
+  "ballot_items": [
+    {
+      "address": "1100 Davis Dr #5, Newmarket, ON",
+      "name": "Best Pizza",
+      "link": "https://thebestpizza.ca/menu"
+    },
+    {
+      "name": "90 Second Pizza",
+      "address": "16700 Bayview Ave #4, Newmarket, ON",
+      "link": "https://90secondpizza.carrd.co/"
+    },
+    {
+      "name": "Palace Pizza & Spaghetti House",
+      "link": "https://share.google/6bCxyFsjC6L3YaVue",
+      "address": "727 Davis Dr, Newmarket, ON"
+    },
+    {
+      "name": "Pizzaiolo",
+      "address": "730 Davis Dr, Newmarket, ON",
+      "link": "https://share.google/SyILyAnfgXerSGIiw"
+    },
+    {
+      "name": "Reginos Pizza (Newmarket)",
+      "address": "16610 Bayview Ave unit 1 & 2, Newmarket, ON",
+      "link": "https://share.google/VTjSRn5QTIsP1WZoN"
+    },
+    {
+      "name": "Il Bistro Cafe & Pizzeria",
+      "address": "16630 Bayview Ave, Newmarket, ON",
+      "link": "https://share.google/jH8cWOhZTpcXq3uYb"
+    },
+    {
+      "name": "Score Pizza",
+      "address": "17600 Yonge St Unit FM10, Newmarket, ON",
+      "link": "https://share.google/ZeOuj3y8xjWn80cqN"
+    },
+    {
+      "address": "237 Main St S, Newmarket, ON",
+      "name": "Econo Pizza & Wings Diner",
+      "link": "https://share.google/yaTfPTWKN81fRyxgc"
+    }
+  ],
+  "slug": "best-pizza-newmarket",
+  "featured": false,
+  "town": "Newmarket",
+  "status": "live",
+  "ranking_key": "tastehub_newmarket_pizza",
+  "title": "Best Pizza in Newmarket",
+  "image": "/uploads/newmarketpizza.jpg",
+  "description": "Help crown Newmarket's go-to pizza spot. Cast your vote and see who’s on top in real time.",
+  "category": "Pizza"
+}
