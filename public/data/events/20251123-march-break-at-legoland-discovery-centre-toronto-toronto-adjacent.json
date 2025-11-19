@@ -1,26 +1,76 @@
 {
-  "slug": "20251122-afternoon-tea-toronto-adjacent",
-  "title": "Afternoon Tea",
-  "summary": "Afternoon Tea",
+  "slug": "20251123-march-break-at-legoland-discovery-centre-toronto-toronto-adjacent",
+  "title": "March Break at LEGOLAND® Discovery Centre Toronto",
+  "summary": "March Break at LEGOLAND® Discovery Centre Toronto",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » March Break at LEGOLAND® Discovery Centre Toronto 2025 Summer Art Camp at Palette Art School The Heintzman House 2025 Art Show and Sale. Loading view. Today Now Now Select date. Nov 19 November 11 @ 9:30 am - November 19 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 12 @ 9:30 am - November 20 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 13 @ 9:30 am - November 21 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 14 @ 9:30 am - November 22 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 15 @ 9:30 am - November 23 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 15 @ 4:00 pm - December 13 @ 8:00 pm Event Series Richmond Hill Merry Marketplace Nov 19 November 16 @ 9:30 am - November 24 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 17 @ 9:00 am - November 20 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 19 November 17 @ 9:30 am - November 25 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 18 @ 9:00 am - November 21 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 19 November 18 @ 9:30 am - November 26 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 19 November 19 @ 9:00 am - November 22 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-22T05:00:00Z",
-  "endDate": "2025-11-23T04:59:59Z",
+  "startDate": "2025-11-23T14:30:00Z",
+  "endDate": "2025-12-01T22:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-22",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
+      "date": "2025-11-23",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-24",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-25",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-26",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-27",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-28",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-29",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-11-30",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-12-01",
+      "all_day": false,
+      "start_time": "09:30",
+      "end_time": "17:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
-  "address": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
+  "locationName": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
+  "address": "LEGOLAND Discovery Centre Toronto, 1 Bass Pro Mills Dr, Vaughan, L4K 5W4, Canada",
+  "lat": 43.8256383,
+  "lng": -79.5382147,
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/afternoon-tea/2025-11-22/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/march-break-at-legoland-discovery-centre-toronto/2025-11-23/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -30,8 +80,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10014159-1763816400-1763827200@www.experienceyorkregion.com",
+  "sourceRef": "10009052-1763890200-1764608400@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-19T08:35:41.031Z",
+  "firstSeenAt": "2025-11-19T08:35:41.031Z",
   "updatedAt": "2025-11-19T08:35:41.031Z",
   "featured": false
 }

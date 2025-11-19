@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/islandoysters-poster.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/island-oysters-pop-up/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/island-oysters-pop-up/",
-  "updatedAt": "2025-11-18T08:35:53Z"
+  "lastSyncedAt": "2025-11-19T08:35:41.031Z",
+  "updatedAt": "2025-11-19T08:35:41.031Z",
+  "featured": false
 }
