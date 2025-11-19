@@ -5,6 +5,7 @@ import path from 'node:path'
 
 import { TOWN_SPOTLIGHT_SEED_CONFIG, SpotlightSeedTag } from '../lib/spotlight/seedConfig'
 import { searchBestPlaceForQuery } from '../lib/spotlight/googleSearch'
+import { isLocalityAllowedForTown } from '../lib/spotlight/localityRules.js'
 
 interface SpotlightFileEntry {
   place_id: string
@@ -105,6 +106,8 @@ async function processTown() {
     return
   }
 
+  const assignedPlaceIds = new Map<string, string>()
+
   for (const town of TOWN_SPOTLIGHT_SEED_CONFIG) {
     const filePath = path.join(spotlightDir, `${town.townSlug}.json`)
     const existingData = (await readTownFile(filePath)) ?? {
@@ -117,6 +120,13 @@ async function processTown() {
       ? [...existingData.spotlight_places]
       : []
 
+    for (const entry of entries) {
+      const placeId = String(entry?.place_id || '').trim()
+      if (placeId && !assignedPlaceIds.has(placeId)) {
+        assignedPlaceIds.set(placeId, town.townSlug)
+      }
+    }
+
     let addedCount = 0
     let updatedCount = 0
 
@@ -125,9 +135,20 @@ async function processTown() {
       if (!result) {
         continue
       }
+
+      if (!isLocalityAllowedForTown(result.addressComponents, town.townSlug)) {
+        continue
+      }
+
+      const assignedTown = assignedPlaceIds.get(result.placeId)
+      if (assignedTown && assignedTown !== town.townSlug) {
+        continue
+      }
       const { added, updated } = upsertSpotlightEntry(entries, result.placeId, queryDef.tag)
       if (added) addedCount += 1
       if (updated) updatedCount += 1
+
+      assignedPlaceIds.set(result.placeId, town.townSlug)
     }
 
     if (addedCount === 0 && updatedCount === 0) {
