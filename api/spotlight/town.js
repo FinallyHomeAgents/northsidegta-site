@@ -1,9 +1,25 @@
 import { loadTownSpotlightData } from '../../lib/spotlight/cache'
+import { buildPhotoUrl, extractPhotoNameFromUrl } from '../../lib/spotlight/photos'
 
 function normalizeSlug(value) {
   return String(value || '')
     .trim()
     .toLowerCase()
+}
+
+function normalizeSpotlightItem(item) {
+  const photoName =
+    typeof item?.photoName === 'string' && item.photoName
+      ? item.photoName
+      : extractPhotoNameFromUrl(item?.photoUrl)
+
+  const photoUrl = photoName ? buildPhotoUrl(photoName) : undefined
+
+  return {
+    ...item,
+    photoName: photoName || null,
+    photoUrl,
+  }
 }
 
 export default async function handler(req, res) {
@@ -23,7 +39,7 @@ export default async function handler(req, res) {
 
   try {
     const cached = (await loadTownSpotlightData(slug)) || []
-    const items = Array.isArray(cached) ? cached : []
+    const items = Array.isArray(cached) ? cached.map(normalizeSpotlightItem) : []
     res.status(200).json({ ok: true, items })
   } catch (error) {
     console.warn('[spotlight] failed to load cached data', slug, error)
