@@ -148,6 +148,7 @@ export default function TownPage() {
         <HeaderShell />
         <TownPageLayout
           townName={town.name}
+          townSlug={slug}
           hero={town.hero}
           snapshot={town.snapshot}
           ratings={ratings}

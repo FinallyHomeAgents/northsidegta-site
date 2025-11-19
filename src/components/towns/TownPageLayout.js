@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import TownHeroSpotlight from "./TownHeroSpotlight";
+import TownLiveStrip from "./TownLiveStrip";
+import { useTownSpotlightData } from "./useTownSpotlightData";
+
 const DEFAULT_TASTEHUB_IMAGE = "/seo/tastehub-default-poll-share.jpg";
 
 function normalizeTasteHubPoll(poll) {
@@ -337,6 +341,7 @@ function FaqItem({ item, isOpen, onToggle, index }) {
 
 export default function TownPageLayout({
   townName,
+  townSlug = "",
   hero,
   snapshot = {},
   ratings = [],
@@ -349,6 +354,7 @@ export default function TownPageLayout({
   guide,
 }) {
   const [openFaq, setOpenFaq] = useState(null);
+  const spotlightData = useTownSpotlightData(townSlug);
 
   const snapshotFields = [
     { key: "population", label: "Population" },
@@ -377,32 +383,43 @@ export default function TownPageLayout({
           )}
           <div className="absolute inset-0 bg-emerald-950/70" />
         </div>
-        <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 py-20 sm:py-24 lg:py-28">
-          <div className="max-w-3xl text-white">
-            {hero?.tagline && (
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
-                {hero.tagline}
-              </p>
-            )}
-            <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-              {hero?.title || `Living in ${townName}`}
-            </h1>
-            {hero?.subtitle && (
-              <p className="mt-4 text-base text-emerald-50 sm:text-lg">
-                {hero.subtitle}
-              </p>
-            )}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <ButtonLink
-                href={hero?.primaryButton?.href || "#"}
-                label={hero?.primaryButton?.label}
-                variant="primary"
-              />
-              <ButtonLink
-                href={hero?.secondaryButton?.href || "#"}
-                label={hero?.secondaryButton?.label}
-                variant="secondary"
-              />
+        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24 lg:py-28">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-3xl text-white">
+              {hero?.tagline && (
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
+                  {hero.tagline}
+                </p>
+              )}
+              <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+                {hero?.title || `Living in ${townName}`}
+              </h1>
+              {hero?.subtitle && (
+                <p className="mt-4 text-base text-emerald-50 sm:text-lg">
+                  {hero.subtitle}
+                </p>
+              )}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <ButtonLink
+                  href={hero?.primaryButton?.href || "#"}
+                  label={hero?.primaryButton?.label}
+                  variant="primary"
+                />
+                <ButtonLink
+                  href={hero?.secondaryButton?.href || "#"}
+                  label={hero?.secondaryButton?.label}
+                  variant="secondary"
+                />
+              </div>
+            </div>
+            <div className="flex justify-start lg:justify-end">
+              <div className="w-full max-w-xs">
+                <TownHeroSpotlight
+                  townSlug={townSlug}
+                  townName={townName}
+                  spotlightData={spotlightData}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -431,6 +448,11 @@ export default function TownPageLayout({
                 <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
               ))}
             </div>
+            <TownLiveStrip
+              townSlug={townSlug}
+              townName={townName}
+              spotlightData={spotlightData}
+            />
           </div>
 
           <div className="rounded-[28px] border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur">

@@ -237,6 +237,49 @@ collections:
       - { name: 'address', label: 'Address', required: false }
       - { name: 'image', label: 'Image', widget: 'image', required: false, hint: 'Images are not used yet but can be uploaded for future updates.' }
 
+  - name: 'town_spotlights'
+    label: 'Town Spotlights'
+    folder: 'public/data/town-spotlights'
+    create: true
+    extension: 'json'
+    format: 'json'
+    identifier_field: 'slug'
+    slug: '{{slug}}'
+    summary: "{{name | default(slug)}} — {{spotlight_places.length | default(0)}} spotlight spots"
+    fields:
+      - name: 'slug'
+        label: 'Town Slug'
+        widget: 'string'
+        pattern:
+          - '^[a-z0-9-]+$'
+          - 'Use lowercase letters, numbers, and hyphens only.'
+        hint: 'Matches the slug used on /towns pages (e.g. uxbridge, aurora).'
+      - name: 'name'
+        label: 'Town Name'
+        widget: 'string'
+        required: false
+      - label: 'Spotlight Places'
+        name: 'spotlight_places'
+        widget: 'list'
+        collapsed: true
+        required: false
+        summary: "{{fields.place_id | default('Place ID missing')}} — {{fields.tags | default('no tags')}}"
+        fields:
+          - { label: 'Label (optional override)', name: 'label_override', widget: 'string', required: false }
+          - { label: 'Google Place ID', name: 'place_id', widget: 'string', required: true }
+          - label: 'Spotlight Categories'
+            name: 'tags'
+            widget: 'select'
+            multiple: true
+            options:
+              - { label: 'Perfect Park Day', value: 'perfect_park_day' }
+              - { label: 'Family Day Idea', value: 'family_day_idea' }
+              - { label: 'Active Day Idea', value: 'active_day_idea' }
+              - { label: 'Hidden Gem of Town', value: 'hidden_gem' }
+              - { label: 'Photo-Worthy Spot', value: 'photo_worthy' }
+              - { label: 'Where Locals Actually Go', value: 'where_locals_go' }
+          - { label: 'Enabled', name: 'enabled', widget: 'boolean', default: true, required: false }
+
   - label: 'TasteHub Categories'
     name: 'tastehub_categories'
     folder: 'content/tastehub/categories'

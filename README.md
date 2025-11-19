@@ -10,6 +10,8 @@
 - `BLOB_READ_WRITE_TOKEN` – Required when using the community event uploader. Create a Vercel Blob store and copy the read/write token so community images can be stored safely.
 - `TURNSTILE_SECRET_KEY` / `REACT_APP_TURNSTILE_SITE_KEY` – Cloudflare Turnstile credentials for spam protection on `/community/submit-event`. If you prefer hCaptcha, use `HCAPTCHA_SECRET_KEY` and `REACT_APP_HCAPTCHA_SITE_KEY` instead.
 - `SLACK_WEBHOOK_URL` – Optional incoming webhook to broadcast pending submissions to a Slack channel.
+- `GOOGLE_PLACES_API_KEY` – Server-side key for Google Places API v1. Used by the weekly spotlight refresh worker to fetch details, ratings, and photos for spotlight locations. Do not expose as a public env var.
+- `SPOTLIGHT_CRON_SECRET` – Optional secret token checked by `/api/spotlight/refresh` so only your Vercel cron (or trusted jobs) can trigger a refresh.
 
 ## Soft-delete setup for events admin
 

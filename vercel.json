@@ -10,5 +10,11 @@
     { "source": "/cms/(.*)", "destination": "/cms/$1" },
 
     { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "crons": [
+    {
+      "path": "/api/spotlight/refresh",
+      "schedule": "0 5 * * 1"
+    }
   ]
 }
