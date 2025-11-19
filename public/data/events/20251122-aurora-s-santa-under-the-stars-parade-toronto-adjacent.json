@@ -22,16 +22,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/auroras-santa-under-the-stars-parade/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014342-1763834400-1763841600@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-11-19T08:35:41.031Z",
-  "updatedAt": "2025-11-19T08:35:41.031Z",
-  "featured": false
+  "updatedAt": "2025-11-19T08:35:41Z"
 }

@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/Muddy-York-Candle-Dec-11-1.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/winter-scents-candle-workshop/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/winter-scents-candle-workshop/",
-  "lastSyncedAt": "2025-11-19T08:35:41.031Z",
-  "updatedAt": "2025-11-19T08:35:41.031Z",
-  "featured": false
+  "updatedAt": "2025-11-19T08:35:41Z"
 }
