@@ -34,6 +34,11 @@
       "name": "Kings Tavern",
       "address": "213 The Queensway S #14/15, Keswick, ON",
       "link": "https://kingstavern.ca/home/"
+    },
+    {
+      "address": "297 The Queensway S, Keswick, ON",
+      "name": " Chef Todd's kitchen",
+      "link": "https://cheftoddskitchen.com/"
     }
   ],
   "slug": "best-wings-keswick",
