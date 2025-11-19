@@ -1,5 +1,39 @@
 {
   "slug": "aurora",
   "name": "Aurora",
-  "spotlight_places": []
+  "spotlight_places": [
+    {
+      "place_id": "ChIJ8w93lEjRKogRUXMNm8Kl28I",
+      "tags": [
+        "perfect_park_day",
+        "family_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJn0fN-h7UKogRWroK_jwoKwA",
+      "tags": [
+        "active_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJn57yTO7TKogRBNIyfkaqAxg",
+      "tags": [
+        "photo_worthy"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJr7OjL8_TKogRBL4ztBRlQ8w",
+      "tags": [
+        "where_locals_go"
+      ],
+      "label_override": null,
+      "enabled": true
+    }
+  ]
 }

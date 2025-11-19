@@ -1,5 +1,54 @@
 {
   "slug": "east-gwillimbury",
   "name": "East Gwillimbury",
-  "spotlight_places": []
+  "spotlight_places": [
+    {
+      "place_id": "ChIJ34hGxhA01YkRdTpa3MTl_VM",
+      "tags": [
+        "perfect_park_day"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJjXFc1KXRKogREQGHBK8lvt4",
+      "tags": [
+        "family_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJnzaSXurf1IkRqOfPq0AWnqE",
+      "tags": [
+        "active_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJkc9VsMPRKogRUfap1XR3os0",
+      "tags": [
+        "hidden_gem"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJ218oYRAy1YkRjwmwoM3z-gU",
+      "tags": [
+        "photo_worthy"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJf3rDmQTNKogRlOAnkjIFu1o",
+      "tags": [
+        "where_locals_go"
+      ],
+      "label_override": null,
+      "enabled": true
+    }
+  ]
 }

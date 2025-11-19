@@ -1,5 +1,40 @@
 {
   "slug": "stouffville",
   "name": "Stouffville",
-  "spotlight_places": []
+  "spotlight_places": [
+    {
+      "place_id": "ChIJ218oYRAy1YkRjwmwoM3z-gU",
+      "tags": [
+        "perfect_park_day",
+        "active_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJaUVZ3Asv1YkR2jBnCf9Zzzs",
+      "tags": [
+        "family_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJC2AsUWPNKogRggoeQAbIaNI",
+      "tags": [
+        "hidden_gem",
+        "photo_worthy"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJo0p3csrN1IkRsP1dKISRd-o",
+      "tags": [
+        "where_locals_go"
+      ],
+      "label_override": null,
+      "enabled": true
+    }
+  ]
 }

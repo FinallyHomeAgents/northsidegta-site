@@ -1,5 +1,54 @@
 {
   "slug": "scugog",
   "name": "Scugog",
-  "spotlight_places": []
+  "spotlight_places": [
+    {
+      "place_id": "ChIJv3itl0cU1YkRKx2Hd8uRW9U",
+      "tags": [
+        "perfect_park_day"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJ62tycZMZ1YkR-aRiJd1abhE",
+      "tags": [
+        "family_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJnzaSXurf1IkRqOfPq0AWnqE",
+      "tags": [
+        "active_day_idea"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJ4XB_pnZr1YkRfV8wlhIEwo8",
+      "tags": [
+        "hidden_gem"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJv2-WjRIU1YkRP9o9cSPLg0A",
+      "tags": [
+        "photo_worthy"
+      ],
+      "label_override": null,
+      "enabled": true
+    },
+    {
+      "place_id": "ChIJBWoQQpEf1YkRMprz1MNv5Tg",
+      "tags": [
+        "where_locals_go"
+      ],
+      "label_override": null,
+      "enabled": true
+    }
+  ]
 }
