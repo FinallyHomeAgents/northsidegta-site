@@ -1,0 +1,38 @@
+{
+  "ballot_items": [
+    {
+      "name": "Cocelli Pizza",
+      "address": "18279 Yonge St #3, East Gwillimbury, ON",
+      "link": "https://share.google/rHCtDMLsi270CH3TD"
+    },
+    {
+      "name": "Papa D's Pizza & Variety",
+      "address": "1513 Mt Albert Rd, Sharon, ON",
+      "link": "https://share.google/YaDZnleD4YHSkEGXP"
+    },
+    {
+      "address": "19415 Yonge St, Holland Landing, ON",
+      "name": "Santa Fe Pizza",
+      "link": "https://share.google/6G1BCED0VWXAbMOCy"
+    },
+    {
+      "name": "Frano Pizza & Panini",
+      "address": "19364 ON-48, Mount Albert, ON",
+      "link": "https://share.google/RMjQPVA2LvMRTvnht"
+    },
+    {
+      "name": "Pizza Pizza (Sharon)",
+      "address": "19659 Leslie St, Sharon, ON",
+      "link": "https://share.google/5DIKPQRLBA4Pj9SIB"
+    }
+  ],
+  "slug": "best-pizza-east-gwillimbury",
+  "featured": false,
+  "town": "East Gwillimbury",
+  "status": "live",
+  "ranking_key": "tastehub_eastgwillimbury_pizza_2025",
+  "title": "Best Pizza in East Gwillimbury",
+  "image": "/uploads/eastgwillimburypizza.jpg",
+  "description": "Help crown East Gwillimbury’s go-to pizza spot. Cast your vote and see who’s on top in real time.",
+  "category": "Pizza"
+}
