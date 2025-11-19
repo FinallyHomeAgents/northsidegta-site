@@ -1,7 +1,4 @@
-import { createRequire } from 'module'
-
-const require = createRequire(import.meta.url)
-const towns = require('../../src/towns.json')
+import towns from "../../src/towns.json"
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,
