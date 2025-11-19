@@ -182,12 +182,12 @@ function ButtonLink({ href, label, variant = "primary" }) {
   if (!href || !label) return null;
 
   const baseClasses =
-    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
 
   const variantClasses =
     variant === "secondary"
-      ? "border border-brand-green/40 bg-white text-brand-green hover:bg-brand-green/10 focus:ring-brand-green/40 focus:ring-offset-emerald-900"
-      : "bg-brand-green text-white shadow transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:ring-brand-green/50 focus:ring-offset-emerald-900";
+      ? "border border-white/70 bg-white/10 text-white hover:border-white hover:bg-white hover:text-brand-green focus-visible:ring-white focus-visible:ring-offset-emerald-900"
+      : "bg-brand-green text-white shadow transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:ring-brand-green/50 focus-visible:ring-offset-emerald-900";
 
   const className = `${baseClasses} ${variantClasses}`;
 
@@ -359,6 +359,8 @@ export default function TownPageLayout({
     { key: "transitSummary", label: "Transit" },
   ];
 
+  const secondaryCtaLabel = cta?.secondaryButton?.label || "Tell Us What You’re Looking For";
+
   return (
     <main className="flex-1">
       {/* Hero */}
@@ -529,9 +531,9 @@ export default function TownPageLayout({
           <div className="absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%)" }} />
           <div className="relative mx-auto max-w-4xl px-4 text-center text-white">
             <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{cta.title}</h2>
-            {cta.description && (
-              <p className="mt-4 text-base text-emerald-50 sm:text-lg">{cta.description}</p>
-            )}
+            <p className="mt-4 mx-auto max-w-3xl text-center text-lg font-semibold text-white">
+              We live and work across the NorthSide GTA. Let’s talk about whether {townName} is the right fit for your commute, your budget, and your lifestyle.
+            </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <ButtonLink
                 href={cta?.primaryButton?.href || "#"}
@@ -539,8 +541,8 @@ export default function TownPageLayout({
                 variant="primary"
               />
               <ButtonLink
-                href={cta?.secondaryButton?.href || "#"}
-                label={cta?.secondaryButton?.label}
+                href="/contact#contact-form"
+                label={secondaryCtaLabel}
                 variant="secondary"
               />
             </div>
