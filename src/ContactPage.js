@@ -140,18 +140,39 @@ function ContactPageV2() {
               <TrustCard />
               <AgentCard
                 name="Matthew Mulhall"
-                role="Co-founder, Finally Home Agents"
-                summary="NorthSide GTA real estate advisor."
+                teamRole="Real Estate Agent | Finally Home Agents"
+                brokerage="HomeLife Optimum Realty, Brokerage"
+                accent="Co-Founder, NorthSide GTA"
                 imageSrc="/Images/matthew.jpg"
                 imageAlt="Headshot of Matthew Mulhall, co-founder of Finally Home Agents."
               />
               <AgentCard
                 name="Landon Mulhall"
-                role="Co-founder, Finally Home Agents"
-                summary="NorthSide GTA real estate advisor."
+                teamRole="Real Estate Agent | Finally Home Agents"
+                brokerage="HomeLife Optimum Realty, Brokerage"
+                accent="Co-Founder, NorthSide GTA"
                 imageSrc="/Images/landon.jpg"
                 imageAlt="Headshot of Landon Mulhall, co-founder of Finally Home Agents."
               />
+              <section className="mt-6">
+                <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
+                  <div className="flex flex-wrap items-center gap-3 text-[11px] font-medium tracking-[0.16em] uppercase text-emerald-700">
+                    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold">
+                      NorthSide GTA
+                    </span>
+                    <span className="hidden h-px flex-1 bg-emerald-200 sm:block" />
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] tracking-[0.18em]">
+                      <span>Uxbridge</span>
+                      <span>Stouffville</span>
+                      <span>East Gwillimbury</span>
+                      <span>Newmarket</span>
+                      <span>Georgina</span>
+                      <span>Aurora</span>
+                      <span>Scugog</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
           </section>
         </div>
@@ -402,7 +423,7 @@ function TrustCard() {
   );
 }
 
-function AgentCard({ name, role, summary, imageSrc, imageAlt }) {
+function AgentCard({ name, teamRole, brokerage, accent, imageSrc, imageAlt }) {
   return (
     <div className="flex flex-col gap-4 rounded-3xl border border-emerald-100 bg-white p-5 shadow-lg shadow-emerald-100">
       <div className="flex items-center gap-4">
@@ -414,10 +435,13 @@ function AgentCard({ name, role, summary, imageSrc, imageAlt }) {
         />
         <div>
           <h3 className="text-lg font-semibold text-emerald-950">{name}</h3>
-          <p className="text-sm text-emerald-700">{role}</p>
+          <p className="text-sm font-medium text-emerald-900">{teamRole}</p>
+          <p className="text-sm font-medium text-emerald-900">{brokerage}</p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            {accent}
+          </p>
         </div>
       </div>
-      <p className="text-sm text-slate-700">{summary}</p>
       <a
         href="#contact-form"
         onClick={() => trackEvent("agent_card_cta", { route: "/contact", agent: name })}
