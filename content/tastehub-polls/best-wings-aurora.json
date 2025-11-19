@@ -1,0 +1,48 @@
+{
+  "ballot_items": [
+    {
+      "name": "Mac N' Wings",
+      "address": "83 First Commerce Dr, Aurora, ON",
+      "link": "https://share.google/HnH6UOOVOWpnfPCNa"
+    },
+    {
+      "name": "Wild Wing (Aurora)",
+      "address": "650 Wellington St E, Aurora, ON",
+      "link": "https://share.google/p6FiXKjFBdQP8oVh1"
+    },
+    {
+      "name": "Coop's Aurora Bistro",
+      "address": "15408 Yonge St, Aurora, ON",
+      "link": "https://coopsaurora.ca/img/portfolio/Menu%20final.pdf"
+    },
+    {
+      "name": "BBQ Chicken (Aurora)",
+      "address": "16025 Bayview Ave Unit #C4, Aurora, ON",
+      "link": "https://share.google/ih0LWg45sW0Y6lise"
+    },
+    {
+      "name": "Tina's Grill",
+      "address": "330 McClellan Way, Aurora, ON",
+      "link": "https://tinasgrill.com/"
+    },
+    {
+      "name": "TJ's Bar & Grill (Aurora) ",
+      "address": "15531 Yonge St, Aurora, ON",
+      "link": "https://share.google/Yjl7qU3bmvDtndmYV"
+    },
+    {
+      "name": "St. Louis Bar & Grill (Aurora)",
+      "address": "444 Hollandview Trail Unit B7, Aurora, ON",
+      "link": "https://share.google/05iVsFmCaXjWIaPBX"
+    }
+  ],
+  "slug": "best-wings-aurora",
+  "featured": false,
+  "town": "Aurora",
+  "status": "live",
+  "ranking_key": "tastehub_aurora_wings_2025",
+  "title": "Best Wings in Aurora",
+  "image": "/uploads/aurorawings.jpg",
+  "description": "Help crown Aurora's go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}
