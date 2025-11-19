@@ -118,7 +118,7 @@ function ContactPageV2() {
           </section>
 
           <section className="mx-auto mt-16 flex max-w-6xl flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)] lg:items-start lg:gap-12">
-            <div className="order-2 space-y-6 lg:order-1" ref={formSectionRef} id="contact-form">
+            <section className="order-2 space-y-6 lg:order-1" ref={formSectionRef} id="contact-form">
               <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-6 pt-10 shadow-xl shadow-emerald-100 sm:p-9 sm:pt-12">
                 <span
                   aria-hidden
@@ -135,7 +135,7 @@ function ContactPageV2() {
                   {config.coverageLine}
                 </p>
               )}
-            </div>
+            </section>
             <div className="order-1 space-y-6 lg:order-2">
               <TrustCard />
               <AgentCard
