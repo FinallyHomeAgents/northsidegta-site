@@ -23,7 +23,7 @@ function formatRating(place) {
   return `⭐ ${place.rating.toFixed(1)} (${place.userRatingsTotal.toLocaleString()} reviews)`
 }
 
-export default function TownLiveStrip({ townSlug, townName, spotlightData }) {
+export default function TownLiveStrip({ townSlug, townName, spotlightData, className = "mt-6" }) {
   const items = Array.isArray(spotlightData?.items) ? spotlightData.items : []
   const selection = useMemo(() => {
     return selectTownSpotlight(townSlug, townName, items)
@@ -41,7 +41,7 @@ export default function TownLiveStrip({ townSlug, townName, spotlightData }) {
   }
 
   return (
-    <div className="mt-6">
+    <div className={className}>
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700/90">
           Live Around {townName}

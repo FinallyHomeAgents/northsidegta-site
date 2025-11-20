@@ -158,6 +158,7 @@ export default function TownPage() {
           neighbourhoods={town.neighbourhoods || []}
           faqs={town.faqs || []}
           cta={town.cta}
+          summary={town.summary}
           guide={
             town.pdf
               ? {

@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-import TownHeroSpotlight from "./TownHeroSpotlight";
 import TownLiveStrip from "./TownLiveStrip";
 import { useTownSpotlightData } from "./useTownSpotlightData";
+import TownHeroSpotlight from "./TownHeroSpotlight";
+import { selectTownSpotlight } from "../../lib/spotlight/selectSpotlight";
 
 const DEFAULT_TASTEHUB_IMAGE = "/seo/tastehub-default-poll-share.jpg";
 
@@ -70,7 +71,7 @@ function TasteHubMiniCard({ poll }) {
   );
 }
 
-function TasteHubTownSection({ townName }) {
+function TasteHubTownSection({ townName, variant = "full" }) {
   const [polls, setPolls] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -120,8 +121,19 @@ function TasteHubTownSection({ townName }) {
 
   const hasPolls = townPolls.length > 0;
 
+  const Wrapper = variant === "full" ? "section" : React.Fragment;
+  const wrapperProps =
+    variant === "full"
+      ? { className: "mx-auto max-w-6xl px-4 pb-16" }
+      : { className: "" };
+
+  const cardClasses =
+    variant === "full"
+      ? "rounded-[28px] border border-emerald-100 bg-gradient-to-br from-emerald-50/95 via-white to-amber-50/90 p-6 shadow-lg backdrop-blur"
+      : "rounded-2xl border border-emerald-50 bg-gradient-to-br from-emerald-50 via-white to-amber-50/70 p-4 shadow-sm";
+
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16">
+    <Wrapper {...wrapperProps}>
       <style>{`
         @keyframes tastehubLivePulse {
           0% {
@@ -136,11 +148,13 @@ function TasteHubTownSection({ townName }) {
         }
       `}</style>
 
-      <div className="rounded-[28px] border border-emerald-100 bg-gradient-to-br from-emerald-50/95 via-white to-amber-50/90 p-6 shadow-lg backdrop-blur">
+      <div className={cardClasses}>
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="space-y-2 text-emerald-950">
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">NorthSide TasteHub™</p>
-            <h2 className="text-2xl font-bold leading-tight">Local Favourites in {townName}</h2>
+            <h2 className={`font-bold leading-tight ${variant === "full" ? "text-2xl" : "text-lg"}`}>
+              Local Favourites in {townName}
+            </h2>
             <p className="max-w-3xl text-sm text-emerald-900/80 md:text-[15px]">
               See which spots locals are loving in {townName} and cast your vote on NorthSide TasteHub™.
             </p>
@@ -178,7 +192,7 @@ function TasteHubTownSection({ townName }) {
           )}
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 }
 
@@ -240,7 +254,7 @@ function SnapshotRow({ label, value }) {
   );
 }
 
-function RatingRow({ item, scaleMax = 10 }) {
+function RatingRow({ item, scaleMax = 10, animated = false }) {
   if (!item) return null;
   const { icon, label, score = 0, description } = item;
   const normalized = scaleMax > 0 ? (score / scaleMax) * 10 : 0;
@@ -250,9 +264,10 @@ function RatingRow({ item, scaleMax = 10 }) {
       : `${normalized.toFixed(1)} / 10`
     : "–";
   const barPercent = scaleMax > 0 ? Math.max(0, Math.min(100, (score / scaleMax) * 100)) : 0;
+  const widthValue = animated ? `${barPercent}%` : "0%";
 
   return (
-    <div className="rounded-2xl border border-emerald-50 bg-white/75 p-4 shadow-sm">
+    <div className="rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <IconBubble icon={icon} label={label} />
@@ -263,10 +278,10 @@ function RatingRow({ item, scaleMax = 10 }) {
         </div>
         <span className="text-sm font-semibold text-emerald-700">{displayScore}</span>
       </div>
-      <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-emerald-100">
+      <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-emerald-50">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400"
-          style={{ width: `${barPercent}%` }}
+          className="h-full rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 transition-[width] duration-700 ease-out"
+          style={{ width: widthValue }}
         />
       </div>
     </div>
@@ -352,9 +367,12 @@ export default function TownPageLayout({
   faqs = [],
   cta,
   guide,
+  summary,
 }) {
   const [openFaq, setOpenFaq] = useState(null);
   const spotlightData = useTownSpotlightData(townSlug);
+  const [ratingsInView, setRatingsInView] = useState(false);
+  const ratingsRef = useRef(null);
 
   const snapshotFields = [
     { key: "population", label: "Population" },
@@ -366,6 +384,38 @@ export default function TownPageLayout({
   ];
 
   const secondaryCtaLabel = cta?.secondaryButton?.label || "Tell Us What You’re Looking For";
+  const spotlightSelection = useMemo(() => {
+    const items = Array.isArray(spotlightData?.items) ? spotlightData.items : [];
+    return selectTownSpotlight(townSlug, townName, items);
+  }, [spotlightData?.items, townName, townSlug]);
+
+  useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setRatingsInView(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRatingsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+
+    if (ratingsRef.current) {
+      observer.observe(ratingsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <main className="flex-1">
@@ -384,93 +434,190 @@ export default function TownPageLayout({
           <div className="absolute inset-0 bg-emerald-950/70" />
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24 lg:py-28">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl text-white">
-              {hero?.tagline && (
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
-                  {hero.tagline}
-                </p>
-              )}
-              <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                {hero?.title || `Living in ${townName}`}
-              </h1>
-              {hero?.subtitle && (
-                <p className="mt-4 text-base text-emerald-50 sm:text-lg">
-                  {hero.subtitle}
-                </p>
-              )}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <ButtonLink
-                  href={hero?.primaryButton?.href || "#"}
-                  label={hero?.primaryButton?.label}
-                  variant="primary"
-                />
-                <ButtonLink
-                  href={hero?.secondaryButton?.href || "#"}
-                  label={hero?.secondaryButton?.label}
-                  variant="secondary"
-                />
-              </div>
-            </div>
-            <div className="flex justify-start lg:justify-end">
-              <div className="w-full max-w-xs">
-                <TownHeroSpotlight
-                  townSlug={townSlug}
-                  townName={townName}
-                  spotlightData={spotlightData}
-                />
-              </div>
+          <div className="flex max-w-4xl flex-col gap-6 text-white">
+            {hero?.tagline && (
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">{hero.tagline}</p>
+            )}
+            <h1 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+              {hero?.title || `Living in ${townName}`}
+            </h1>
+            {hero?.subtitle && <p className="text-base text-emerald-50 sm:text-lg">{hero.subtitle}</p>}
+            <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <ButtonLink
+                href={hero?.primaryButton?.href || "#"}
+                label={hero?.primaryButton?.label}
+                variant="primary"
+              />
+              <ButtonLink
+                href={hero?.secondaryButton?.href || "#"}
+                label={hero?.secondaryButton?.label}
+                variant="secondary"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Snapshot + Ratings */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-[28px] border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <h2 className="text-xl font-semibold text-gray-900">Town Snapshot</h2>
-              {guide?.href && guide?.label && (
-                <a
-                  href={guide.href}
-                  target={guide.target || "_blank"}
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-800"
-                >
-                  {guide.label}
-                  <span aria-hidden>→</span>
-                </a>
-              )}
+      {/* Living intro + Ratings */}
+      <section className="relative mx-auto -mt-10 max-w-6xl px-4 pb-14">
+        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]" ref={ratingsRef}>
+          <article className="rounded-[28px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Living in {townName}</p>
+            <h2 className="mt-3 text-2xl font-semibold text-emerald-950">{hero?.title || `Living in ${townName}`}</h2>
+            {(hero?.subtitle || summary) && (
+              <p className="mt-3 text-base leading-relaxed text-emerald-900/80">
+                {hero?.subtitle || summary}
+              </p>
+            )}
+            {guide?.href && guide?.label && (
+              <a
+                href={guide.href}
+                target={guide.target || "_blank"}
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 underline-offset-4 transition hover:text-emerald-900 hover:underline"
+              >
+                {guide.label}
+                <span aria-hidden>→</span>
+              </a>
+            )}
+          </article>
+          <div className="rounded-[28px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">NorthSide Town Ratings</h2>
+              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">Out of 10</span>
             </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {snapshotFields.map((field) => (
-                <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
+            <div className="mt-6 space-y-4">
+              {ratings.map((item, index) => (
+                <RatingRow key={item?.label || index} item={item} scaleMax={ratingScaleMax} animated={ratingsInView} />
               ))}
             </div>
-            <div className="mt-6 border-t border-emerald-100 pt-5">
+          </div>
+        </div>
+      </section>
+
+      {/* Spotlight */}
+      <section className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="rounded-[30px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Spotlight</p>
+              <h2 className="text-2xl font-semibold text-emerald-950">Curated daily for {townName}</h2>
+              <p className="text-sm text-emerald-900/80">
+                Updated place intel powered by Google data and NorthSide scouting. Tap into what’s trending now.
+              </p>
+            </div>
+            <div className="w-full max-w-md lg:max-w-sm">
+              <TownHeroSpotlight townSlug={townSlug} townName={townName} spotlightData={spotlightData} />
+            </div>
+          </div>
+          {spotlightSelection?.thumbnails?.length > 0 && (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {spotlightSelection.thumbnails.slice(0, 3).map((place) => (
+                <div
+                  key={place.placeId}
+                  className="group rounded-2xl border border-emerald-50 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700/90">
+                    {spotlightSelection.thumbnailLabels.find((meta) => meta.placeId === place.placeId)?.label || townName}
+                  </p>
+                  <h3 className="mt-2 text-base font-semibold text-emerald-950">{place.name}</h3>
+                  {place.summary && (
+                    <p className="mt-1 line-clamp-2 text-sm text-emerald-900/80">{place.summary}</p>
+                  )}
+                  {typeof place.rating === "number" && typeof place.userRatingsTotal === "number" && (
+                    <p className="mt-2 text-[12px] font-semibold text-emerald-700">⭐ {place.rating.toFixed(1)}
+                      <span className="text-emerald-800/70"> ({place.userRatingsTotal.toLocaleString()} reviews)</span>
+                    </p>
+                  )}
+                  <span className="mt-3 inline-flex items-center text-sm font-semibold text-emerald-700 transition group-hover:text-emerald-900">
+                    See details →
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Town Snapshot */}
+      <section className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="rounded-[30px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Town Snapshot</p>
+              <h2 className="mt-2 text-2xl font-semibold text-emerald-950">Key stats at a glance</h2>
+            </div>
+            {guide?.href && guide?.label && (
+              <a
+                href={guide.href}
+                target={guide.target || "_blank"}
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:border-emerald-200 hover:bg-white"
+              >
+                {guide.label}
+                <span aria-hidden>→</span>
+              </a>
+            )}
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {snapshotFields.map((field) => (
+              <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Live strip */}
+      <section className="mx-auto max-w-6xl px-4 pb-14">
+        <div className="rounded-[30px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Live in {townName}</p>
+              <h2 className="mt-2 text-2xl font-semibold text-emerald-950">What’s happening now</h2>
+            </div>
+            <Link
+              to="/community"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 underline-offset-4 transition hover:text-emerald-900 hover:underline"
+            >
+              Explore community →
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-2xl border border-emerald-50 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700/90">Daily picks</p>
               <TownLiveStrip
                 townSlug={townSlug}
                 townName={townName}
                 spotlightData={spotlightData}
+                className="mt-4"
               />
             </div>
-          </div>
-
-          <div className="rounded-[28px] border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">NorthSide Town Ratings</h2>
+            <div className="rounded-2xl border border-emerald-50 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg md:col-span-1 lg:col-span-1">
+              <TasteHubTownSection townName={townName} variant="compact" />
             </div>
-            <div className="mt-6 space-y-4">
-              {ratings.map((item, index) => (
-                <RatingRow key={item?.label || index} item={item} scaleMax={ratingScaleMax} />
-              ))}
+            <div className="rounded-2xl border border-emerald-50 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700/90">Stay curious</p>
+                <Link
+                  to="/insights"
+                  className="text-sm font-semibold text-emerald-800 underline-offset-4 transition hover:text-emerald-900 hover:underline"
+                >
+                  Insights →
+                </Link>
+              </div>
+              <p className="mt-3 text-sm text-emerald-900/80">
+                Explore the latest NorthSide research, market snapshots, and buyer guides crafted for movers across the GTA.
+              </p>
+              <Link
+                to="/buyers"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 underline-offset-4 transition hover:text-emerald-900 hover:underline"
+              >
+                NorthSide Buyers →
+              </Link>
             </div>
           </div>
         </div>
       </section>
-
-      <TasteHubTownSection townName={townName} />
 
       {/* Lifestyle */}
       {lifestyleHighlights.length > 0 && (
@@ -550,25 +697,23 @@ export default function TownPageLayout({
 
       {/* CTA */}
       {cta && (
-        <section className="relative isolate overflow-hidden py-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-600" />
-          <div className="absolute inset-0 opacity-70" style={{ backgroundImage: "radial-gradient(circle at top, rgba(255,255,255,0.2), transparent 55%)" }} />
-          <div className="relative mx-auto max-w-4xl px-4 text-center text-white">
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{cta.title}</h2>
-            <p className="mt-4 mx-auto max-w-3xl text-center text-lg font-semibold text-white">
-              We live and work across the NorthSide GTA. Let’s talk about whether {townName} is the right fit for your commute, your budget, and your lifestyle.
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <ButtonLink
-                href={cta?.primaryButton?.href || "#"}
-                label={cta?.primaryButton?.label}
-                variant="primary"
-              />
-              <ButtonLink
-                href="/contact#contact-form"
-                label={secondaryCtaLabel}
-                variant="secondary"
-              />
+        <section className="relative isolate overflow-hidden pb-20 pt-14">
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-50 via-white to-emerald-50" />
+          <div className="relative mx-auto max-w-5xl px-4">
+            <div className="rounded-[28px] border border-emerald-100 bg-white/90 p-8 text-center shadow-lg">
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Thinking about living in {townName}?</p>
+              <h2 className="mt-3 text-2xl font-semibold text-emerald-950">{cta.title}</h2>
+              <p className="mt-3 text-base text-emerald-900/80">
+                We live and work across the NorthSide GTA. Let’s talk about whether {townName} is the right fit for your commute, your budget, and your lifestyle.
+              </p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <ButtonLink
+                  href={cta?.primaryButton?.href || "#"}
+                  label={cta?.primaryButton?.label}
+                  variant="primary"
+                />
+                <ButtonLink href="/contact#contact-form" label={secondaryCtaLabel} variant="secondary" />
+              </div>
             </div>
           </div>
         </section>
