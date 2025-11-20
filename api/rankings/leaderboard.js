@@ -5,6 +5,8 @@ import { applyCommunityPlaceFallbacks } from '../../lib/communityRanking/place-f
 import { getRedisClient, isRedisConfigured } from '../../lib/communityRanking/kv-client'
 import { normalizeCategory, normalizeTown } from '../../lib/communityRanking/utils'
 
+const leaderboardCache = new Map()
+
 const QuerySchema = z.object({
   town: z.string().min(1),
   category: z.string().min(1),
@@ -51,15 +53,6 @@ export default async function handler(req, res) {
 
   const disabled = process.env.DISABLE_TASTEHUB_RANKINGS === 'true'
 
-  if (disabled) {
-    res.status(200).json({
-      rankings: [],
-      disabled: true,
-      message: 'TasteHub rankings disabled in this environment.',
-    })
-    return
-  }
-
   if (!isRedisConfigured()) {
     res.status(503).json({ ok: false, error: 'Leaderboard storage unavailable' })
     return
@@ -72,6 +65,15 @@ export default async function handler(req, res) {
 
   if (rankingKey) {
     await handleRankingKeyLeaderboard({ req, res, rankingKey, rawRankingKey })
+    return
+  }
+
+  if (disabled) {
+    res.status(200).json({
+      rankings: [],
+      disabled: true,
+      message: 'TasteHub rankings disabled in this environment.',
+    })
     return
   }
 
@@ -154,6 +156,31 @@ export default async function handler(req, res) {
 }
 
 async function handleRankingKeyLeaderboard({ req, res, rankingKey, rawRankingKey }) {
+  const key = String(rawRankingKey || rankingKey || '')
+  const THROTTLE_MS = 5000
+
+  if (process.env.DISABLE_TASTEHUB_RANKINGS === 'true') {
+    return res.status(200).json({
+      ok: true,
+      disabled: true,
+      rankingKey: key,
+      entries: [],
+    })
+  }
+
+  const now = Date.now()
+  const entry = leaderboardCache.get(key)
+
+  if (entry && now - entry.lastFetched < THROTTLE_MS) {
+    return res.status(200).json(entry.payload)
+  }
+
+  console.log('[tastehub-leaderboard-fetch]', {
+    rankingKey: key,
+    url: req.url,
+    userAgent: req.headers['user-agent'],
+  })
+
   const redis = getRedisClient()
   const cacheKey = `tastehub:${rankingKey}:cache`
 
@@ -161,6 +188,10 @@ async function handleRankingKeyLeaderboard({ req, res, rankingKey, rawRankingKey
     const cached = await redis.get(cacheKey)
     if (cached) {
       const payload = typeof cached === 'string' ? JSON.parse(cached) : cached
+      leaderboardCache.set(key, {
+        lastFetched: Date.now(),
+        payload,
+      })
       res.status(200).json(payload)
       return
     }
@@ -216,14 +247,21 @@ async function handleRankingKeyLeaderboard({ req, res, rankingKey, rawRankingKey
     })
 
     const payload = {
-      rankingKey: rawRankingKey || rankingKey,
+      ok: true,
+      rankingKey: key,
       normalizedRankingKey: rankingKey,
       updatedAt: new Date().toISOString(),
       totalBallots,
+      entries: items,
       items,
     }
 
     await redis.set(cacheKey, JSON.stringify(payload), { ex: CACHE_TTL_SECONDS })
+    leaderboardCache.set(key, {
+      lastFetched: Date.now(),
+      payload,
+    })
+
     res.status(200).json(payload)
   } catch (error) {
     console.error('[rankings/leaderboard] failed for rankingKey', rankingKey, error)
