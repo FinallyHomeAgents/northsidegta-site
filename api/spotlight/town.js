@@ -1,4 +1,4 @@
-import towns from "../../src/towns.json" assert { type: "json" }
+import towns from "../../src/towns.json"
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,
