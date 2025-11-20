@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const API_BASE = "/api/rankings";
 
@@ -38,6 +38,11 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
   const [data, setData] = useState(initialData || null);
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
+  const onUpdateRef = useRef(onUpdate);
+
+  useEffect(() => {
+    onUpdateRef.current = onUpdate;
+  }, [onUpdate]);
 
   const fetchData = useCallback(async () => {
     if (!rankingKey) return;
@@ -50,23 +55,65 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
       }
       const payload = await response.json();
       setData(payload);
-      onUpdate?.(payload);
+      onUpdateRef.current?.(payload);
     } catch (err) {
       console.error("[TasteHubPoll] leaderboard fetch failed", err);
       setError(err instanceof Error ? err.message : "Unable to load leaderboard");
     } finally {
       setLoading(false);
     }
-  }, [rankingKey, ballotItems, onUpdate]);
+  }, [rankingKey, ballotItems]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (!rankingKey) return;
+    let cancelled = false;
+
+    const load = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItems));
+        if (!response.ok) {
+          throw new Error("Failed to load leaderboard");
+        }
+        const payload = await response.json();
+        if (!cancelled) {
+          setData(payload);
+          onUpdateRef.current?.(payload);
+        }
+      } catch (err) {
+        console.error("[TasteHubPoll] leaderboard fetch failed", err);
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Unable to load leaderboard");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [rankingKey, ballotItems]);
 
   return { data, loading, error, refresh: fetchData };
 }
 
-function LeaderboardList({ items, total, loading, error }) {
+function LeaderboardList({ items, total, loading, error, disabled, disabledMessage }) {
+  if (disabled) {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-emerald-800">
+          Live rankings are disabled in this preview, but will be available on the main site.
+        </p>
+        {disabledMessage && <p className="text-xs text-slate-500">{disabledMessage}</p>}
+      </div>
+    );
+  }
+
   if (loading && !items.length) {
     return (
       <div className="space-y-3">
@@ -207,6 +254,8 @@ export default function TasteHubPoll({
       return a.name.localeCompare(b.name);
     });
   }, [leaderboardItems]);
+
+  const isLeaderboardDisabled = Boolean(data?.disabled);
 
   const canVote = status === "live" && normalizedBallot.length > 0;
 
@@ -353,7 +402,14 @@ export default function TasteHubPoll({
             Total votes: {totalVotes}
           </span>
         </div>
-        <LeaderboardList items={sortedItems} total={totalVotes} loading={loading} error={error} />
+        <LeaderboardList
+          items={sortedItems}
+          total={totalVotes}
+          loading={loading}
+          error={error}
+          disabled={isLeaderboardDisabled}
+          disabledMessage={data?.message}
+        />
 
         <div className="rounded-3xl border border-emerald-100 bg-emerald-50/60 p-4 text-xs text-slate-600">
           <p>

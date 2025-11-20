@@ -49,6 +49,17 @@ export default async function handler(req, res) {
     return
   }
 
+  const disabled = process.env.DISABLE_TASTEHUB_RANKINGS === 'true'
+
+  if (disabled) {
+    res.status(200).json({
+      rankings: [],
+      disabled: true,
+      message: 'TasteHub rankings disabled in this environment.',
+    })
+    return
+  }
+
   if (!isRedisConfigured()) {
     res.status(503).json({ ok: false, error: 'Leaderboard storage unavailable' })
     return
