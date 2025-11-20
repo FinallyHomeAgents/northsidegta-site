@@ -55,48 +55,50 @@ function App() {
     : [];
 
   return (
-    <Router>
-      <GlobalDefaultMeta />
-      <Routes>
-        {/* Core pages */}
-        <Route path="/"             element={<HomePage />} />
-        <Route path="/collections/:slug" element={<CuratedPage />} />
-        <Route path="/thank-you"     element={<ThankYouPage />} />
-        <Route path="/about"        element={<AboutPage />} />
-        <Route path="/buyers"       element={<BuyersPage />} />
-        <Route path="/sellers"      element={<SellersPage />} />
-        <Route path="/community"    element={<CommunityPage />} />
-        <Route path="/tastehub"     element={<TasteHubPage />} />
-        <Route path="/tastehub/:slug" element={<TasteHubPage />} />
-        <Route path="/tastehub/smart-list" element={<TasteHubSmartListPage />} />
-        <Route path="/community/events/archive" element={<EventsArchivePage />} />
-        <Route path="/community/events/:slug" element={<EventDetailPage />} />
-        <Route path="/events/:slug" element={<EventDetailPage />} />
-        <Route path="/cms/tastehub" element={<TasteHubCmsPage />} />
-        <Route path="/community/submit-event" element={<SubmitEventPage />} />
-        <Route path="/events/archive" element={<EventsArchivePage />} />
-        <Route path="/community/events-admin" element={<EventsIndexPage />} />
-        <Route path="/contact"      element={<ContactPage />} />
-        <Route path="/vip"          element={<VipPage />} />
-        <Route path="/sign"         element={<SignWithUsPage />} />
-        <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
-        <Route path="/insights"     element={<InsightsPage />} />
-        <Route path="/insights/:slug" element={<InsightPage />} />
-        <Route path="/media"        element={<MediaPage />} />
-        <Route path="/referral-partners" element={<ReferralPartnersPage />} />
+    <div data-test="app-shell">
+      <Router>
+        <GlobalDefaultMeta />
+        <Routes>
+          {/* Core pages */}
+          <Route path="/"             element={<HomePage />} />
+          <Route path="/collections/:slug" element={<CuratedPage />} />
+          <Route path="/thank-you"     element={<ThankYouPage />} />
+          <Route path="/about"        element={<AboutPage />} />
+          <Route path="/buyers"       element={<BuyersPage />} />
+          <Route path="/sellers"      element={<SellersPage />} />
+          <Route path="/community"    element={<CommunityPage />} />
+          <Route path="/tastehub"     element={<TasteHubPage />} />
+          <Route path="/tastehub/:slug" element={<TasteHubPage />} />
+          <Route path="/tastehub/smart-list" element={<TasteHubSmartListPage />} />
+          <Route path="/community/events/archive" element={<EventsArchivePage />} />
+          <Route path="/community/events/:slug" element={<EventDetailPage />} />
+          <Route path="/events/:slug" element={<EventDetailPage />} />
+          <Route path="/cms/tastehub" element={<TasteHubCmsPage />} />
+          <Route path="/community/submit-event" element={<SubmitEventPage />} />
+          <Route path="/events/archive" element={<EventsArchivePage />} />
+          <Route path="/community/events-admin" element={<EventsIndexPage />} />
+          <Route path="/contact"      element={<ContactPage />} />
+          <Route path="/vip"          element={<VipPage />} />
+          <Route path="/sign"         element={<SignWithUsPage />} />
+          <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
+          <Route path="/insights"     element={<InsightsPage />} />
+          <Route path="/insights/:slug" element={<InsightPage />} />
+          <Route path="/media"        element={<MediaPage />} />
+          <Route path="/referral-partners" element={<ReferralPartnersPage />} />
 
-        {/* Town pages — community slugs */}
-        <Route path="/communities/:slug" element={<TownPage />} />
+          {/* Town pages — community slugs */}
+          <Route path="/communities/:slug" element={<TownPage />} />
 
-        {/* Town pages — short URLs like /aurora */}
-        {TOWN_SLUGS.sort().map(slug => (
-          <Route key={slug} path={`/${slug}`} element={<TownPage />} />
-        ))}
+          {/* Town pages — short URLs like /aurora */}
+          {TOWN_SLUGS.sort().map(slug => (
+            <Route key={slug} path={`/${slug}`} element={<TownPage />} />
+          ))}
 
-        {/* Catch-all for any slug not yet in towns.json (optional) */}
-        <Route path="/:slug" element={<TownPage />} />
-      </Routes>
-    </Router>
+          {/* Catch-all for any slug not yet in towns.json (optional) */}
+          <Route path="/:slug" element={<TownPage />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
