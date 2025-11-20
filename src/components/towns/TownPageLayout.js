@@ -1,5 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  FiArrowUpRight,
+  FiClock,
+  FiGlobe,
+  FiHelpCircle,
+  FiMap,
+  FiNavigation,
+  FiTrendingUp,
+  FiUsers,
+} from "react-icons/fi";
 
 import TownLiveStrip from "./TownLiveStrip";
 import { useTownSpotlightData } from "./useTownSpotlightData";
@@ -170,7 +180,7 @@ function TasteHubTownSection({ townName, variant = "full" }) {
 
         <div className="mt-6">
           {hasPolls ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4">
               {townPolls.map((poll) => (
                 <TasteHubMiniCard key={poll.slug || poll.title} poll={poll} />
               ))}
@@ -200,12 +210,12 @@ function ButtonLink({ href, label, variant = "primary" }) {
   if (!href || !label) return null;
 
   const baseClasses =
-    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+    "inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 
   const variantClasses =
     variant === "secondary"
-      ? "border border-white/70 bg-white/10 text-white hover:border-white hover:bg-white hover:text-brand-green focus-visible:ring-white focus-visible:ring-offset-emerald-900"
-      : "bg-brand-green text-white shadow transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:ring-brand-green/50 focus-visible:ring-offset-emerald-900";
+      ? "border border-emerald-200 bg-white text-emerald-900 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-950"
+      : "bg-brand-green text-white shadow transition-colors hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:ring-brand-green/50";
 
   const className = `${baseClasses} ${variantClasses}`;
 
@@ -227,34 +237,41 @@ function ButtonLink({ href, label, variant = "primary" }) {
 }
 
 function IconBubble({ icon: Icon, label }) {
+  const baseClass =
+    "flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-800 shadow-[0_6px_20px_-16px_rgba(0,0,0,0.35)]";
+
   if (!Icon) {
     return (
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-green/10 font-semibold text-brand-green">
+      <div className={`${baseClass} text-base font-semibold`}>
         {label ? label.charAt(0) : ""}
       </div>
     );
   }
 
   return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-green/10">
-      <Icon className="h-6 w-6 text-brand-green" aria-hidden />
+    <div className={baseClass}>
+      <Icon className="h-5 w-5" aria-hidden />
     </div>
   );
 }
 
-function SnapshotRow({ label, value }) {
+function SnapshotRow({ label, value, icon }) {
   if (!value) return null;
+  const Icon = icon;
   return (
-    <div className="flex flex-col gap-1 rounded-xl border border-emerald-50 bg-white/80 p-4 shadow-sm">
-      <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
-        {label}
-      </span>
-      <span className="text-sm text-gray-800">{value}</span>
+    <div className="flex items-start gap-3 rounded-2xl border border-emerald-50 bg-white/85 p-4 shadow-sm">
+      <IconBubble icon={Icon} label={label} />
+      <div className="space-y-1">
+        <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+          {label}
+        </span>
+        <p className="text-sm font-semibold text-emerald-950">{value}</p>
+      </div>
     </div>
   );
 }
 
-function RatingRow({ item, scaleMax = 10, animated = false }) {
+function RatingRow({ item, scaleMax = 10, animated = false, showValue = false, reduceMotion = false }) {
   if (!item) return null;
   const { icon, label, score = 0, description } = item;
   const normalized = scaleMax > 0 ? (score / scaleMax) * 10 : 0;
@@ -264,10 +281,11 @@ function RatingRow({ item, scaleMax = 10, animated = false }) {
       : `${normalized.toFixed(1)} / 10`
     : "–";
   const barPercent = scaleMax > 0 ? Math.max(0, Math.min(100, (score / scaleMax) * 100)) : 0;
-  const widthValue = animated ? `${barPercent}%` : "0%";
+  const widthValue = showValue ? `${barPercent}%` : "0%";
+  const progressTransition = animated && !reduceMotion ? "transition-[width] duration-700 ease-out" : "transition-none";
 
   return (
-    <div className="rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+    <div className="rounded-2xl border border-emerald-100 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <IconBubble icon={icon} label={label} />
@@ -276,11 +294,11 @@ function RatingRow({ item, scaleMax = 10, animated = false }) {
             {description && <p className="text-sm text-gray-600">{description}</p>}
           </div>
         </div>
-        <span className="text-sm font-semibold text-emerald-700">{displayScore}</span>
+        <span className="text-sm font-semibold text-emerald-800">{displayScore}</span>
       </div>
       <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-emerald-50">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 transition-[width] duration-700 ease-out"
+          className={`h-full rounded-full bg-gradient-to-r from-emerald-700 to-emerald-500 ${progressTransition}`}
           style={{ width: widthValue }}
         />
       </div>
@@ -359,6 +377,7 @@ export default function TownPageLayout({
   townSlug = "",
   hero,
   snapshot = {},
+  livingIntro,
   ratings = [],
   ratingScaleMax = 10,
   lifestyleHighlights = [],
@@ -372,15 +391,18 @@ export default function TownPageLayout({
   const [openFaq, setOpenFaq] = useState(null);
   const spotlightData = useTownSpotlightData(townSlug);
   const [ratingsInView, setRatingsInView] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [questionText, setQuestionText] = useState("");
+  const [questionError, setQuestionError] = useState("");
   const ratingsRef = useRef(null);
 
   const snapshotFields = [
-    { key: "population", label: "Population" },
-    { key: "driveToToronto", label: "Drive to Toronto" },
-    { key: "goTrainTime", label: "GO Train" },
-    { key: "homePriceRange", label: "Typical Home Price" },
-    { key: "highways", label: "Highways" },
-    { key: "transitSummary", label: "Transit" },
+    { key: "population", label: "Population", icon: FiUsers },
+    { key: "driveToToronto", label: "Drive to Toronto", icon: FiClock },
+    { key: "goTrain", label: "GO Train", icon: FiNavigation },
+    { key: "homePriceRange", label: "Typical Home Price", icon: FiTrendingUp },
+    { key: "highways", label: "Highways", icon: FiMap },
+    { key: "transitSummary", label: "Transit", icon: FiGlobe },
   ];
 
   const secondaryCtaLabel = cta?.secondaryButton?.label || "Tell Us What You’re Looking For";
@@ -390,9 +412,22 @@ export default function TownPageLayout({
   }, [spotlightData?.items, townName, townSlug]);
 
   useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (typeof window === "undefined") return undefined;
 
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionChange = () => setPrefersReducedMotion(media.matches);
+    handleMotionChange();
+
+    if (media.addEventListener) {
+      media.addEventListener("change", handleMotionChange);
+      return () => media.removeEventListener("change", handleMotionChange);
+    }
+
+    media.addListener(handleMotionChange);
+    return () => media.removeListener(handleMotionChange);
+  }, []);
+
+  useEffect(() => {
     if (prefersReducedMotion) {
       setRatingsInView(true);
       return undefined;
@@ -415,7 +450,27 @@ export default function TownPageLayout({
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [prefersReducedMotion]);
+
+  const showRatings = ratingsInView || prefersReducedMotion;
+  const animateRatings = ratingsInView && !prefersReducedMotion;
+  const hasFaqs = Array.isArray(faqs) && faqs.length > 0;
+
+  const handleQuestionSubmit = (event) => {
+    event.preventDefault();
+    const trimmed = questionText.trim();
+    if (!trimmed) {
+      setQuestionError("Please enter a question.");
+      return;
+    }
+
+    setQuestionError("");
+    const params = new URLSearchParams();
+    if (townSlug) params.set("town", townSlug);
+    params.set("question", trimmed);
+    const targetUrl = `/contact?${params.toString()}`;
+    window.location.href = targetUrl;
+  };
 
   return (
     <main className="flex-1">
@@ -464,9 +519,9 @@ export default function TownPageLayout({
           <article className="rounded-[28px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-700">Living in {townName}</p>
             <h2 className="mt-3 text-2xl font-semibold text-emerald-950">{hero?.title || `Living in ${townName}`}</h2>
-            {(hero?.subtitle || summary) && (
-              <p className="mt-3 text-base leading-relaxed text-emerald-900/80">
-                {hero?.subtitle || summary}
+            {(livingIntro || hero?.subtitle || summary) && (
+              <p className="mt-4 text-[15px] leading-relaxed text-emerald-900/85">
+                {livingIntro || hero?.subtitle || summary}
               </p>
             )}
             {guide?.href && guide?.label && (
@@ -482,13 +537,24 @@ export default function TownPageLayout({
             )}
           </article>
           <div className="rounded-[28px] border border-emerald-100 bg-white/95 p-7 shadow-lg backdrop-blur">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-xl font-semibold text-gray-900">NorthSide Town Ratings</h2>
               <span className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">Out of 10</span>
             </div>
-            <div className="mt-6 space-y-4">
+            <p className="mt-2 flex items-center gap-2 text-xs text-emerald-800/80">
+              <FiHelpCircle className="h-4 w-4" aria-hidden />
+              Ratings are relative to other NorthSide GTA towns.
+            </p>
+            <div className="mt-6 space-y-3.5">
               {ratings.map((item, index) => (
-                <RatingRow key={item?.label || index} item={item} scaleMax={ratingScaleMax} animated={ratingsInView} />
+                <RatingRow
+                  key={item?.label || index}
+                  item={item}
+                  scaleMax={ratingScaleMax}
+                  animated={animateRatings}
+                  showValue={showRatings}
+                  reduceMotion={prefersReducedMotion}
+                />
               ))}
             </div>
           </div>
@@ -561,7 +627,12 @@ export default function TownPageLayout({
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {snapshotFields.map((field) => (
-              <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
+              <SnapshotRow
+                key={field.key}
+                label={field.label}
+                value={snapshot?.[field.key]}
+                icon={field.icon}
+              />
             ))}
           </div>
         </div>
@@ -673,27 +744,62 @@ export default function TownPageLayout({
         </section>
       )}
 
-      {/* FAQs */}
-      {faqs.length > 0 && (
-        <section>
-          <div className="mx-auto max-w-5xl px-4 py-16">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl font-bold text-gray-900">Key Questions About Living in {townName}</h2>
-            </div>
-            <div className="mt-8 space-y-4">
-              {faqs.map((item, index) => (
-                <FaqItem
-                  key={item?.question || index}
-                  item={item}
-                  index={index}
-                  isOpen={openFaq === index}
-                  onToggle={() => setOpenFaq(openFaq === index ? null : index)}
-                />
-              ))}
-            </div>
+      {/* FAQs + Question box */}
+      <section>
+        <div className="mx-auto max-w-5xl px-4 py-16">
+          <div className="max-w-3xl">
+            <h2 className="text-2xl font-bold text-gray-900">Key Questions About Living in {townName}</h2>
+            <p className="mt-2 text-sm text-gray-600">Ask us anything about neighbourhoods, commute, or fit for your lifestyle.</p>
           </div>
-        </section>
-      )}
+          <div className="mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+            <div className="rounded-2xl border border-emerald-100 bg-white/95 p-5 shadow-lg">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-700">Ask a question</p>
+              <h3 className="mt-2 text-lg font-semibold text-emerald-950">Have a question about living in {townName}?</h3>
+              <p className="mt-2 text-sm text-emerald-900/80">
+                Drop a quick note and we’ll route you to the contact page with your question prefilled.
+              </p>
+              <form className="mt-4 space-y-3" onSubmit={handleQuestionSubmit}>
+                <label className="text-sm font-semibold text-emerald-900" htmlFor="town-question">
+                  Your question
+                </label>
+                <textarea
+                  id="town-question"
+                  rows={2}
+                  value={questionText}
+                  onChange={(event) => setQuestionText(event.target.value)}
+                  className="w-full rounded-xl border border-emerald-100 bg-white px-3 py-2 text-sm text-emerald-900 shadow-inner focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/30"
+                  placeholder={`Ask us anything about ${townName}`}
+                  aria-invalid={Boolean(questionError)}
+                />
+                {questionError && <p className="text-xs text-red-600">{questionError}</p>}
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center gap-2 rounded-xl bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  >
+                    Send your question
+                    <FiArrowUpRight className="h-4 w-4" aria-hidden />
+                  </button>
+                  <span className="text-xs text-emerald-800/80">We’ll include your town so we can respond faster.</span>
+                </div>
+              </form>
+            </div>
+            {hasFaqs && (
+              <div className="space-y-4">
+                {faqs.map((item, index) => (
+                  <FaqItem
+                    key={item?.question || index}
+                    item={item}
+                    index={index}
+                    isOpen={openFaq === index}
+                    onToggle={() => setOpenFaq(openFaq === index ? null : index)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       {cta && (

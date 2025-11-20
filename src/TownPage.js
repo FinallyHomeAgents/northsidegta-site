@@ -1,7 +1,7 @@
 // src/TownPage.js
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import towns from "./towns.json";
+import townsData from "./towns.json";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
@@ -82,9 +82,27 @@ function DotRow({ value = 0 }) {
   );
 }
 
+function normalizeTowns(data) {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (Array.isArray(data?.towns)) {
+    return data.towns;
+  }
+
+  if (data && typeof data === "object") {
+    return Object.values(data);
+  }
+
+  return [];
+}
+
 export default function TownPage() {
   const params = useParams();
   const paramSlug = (params.slug || params["*"] || "").toLowerCase();
+
+  const towns = normalizeTowns(townsData);
 
   const town =
     towns.find((t) => (t.slug || "").toLowerCase() === paramSlug) ||
@@ -151,6 +169,7 @@ export default function TownPage() {
           townSlug={slug}
           hero={town.hero}
           snapshot={town.snapshot}
+          livingIntro={town.livingIntro}
           ratings={ratings}
           ratingScaleMax={5}
           lifestyleHighlights={lifestyleHighlights}

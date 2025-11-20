@@ -107,7 +107,13 @@ function main() {
     staticRoutes.push({ path: '/events/archive', changefreq: 'weekly', priority: '0.5' })
   }
 
-  const towns = loadJson(townsPath, []) || []
+  const townPayload = loadJson(townsPath, []) || []
+  const towns = Array.isArray(townPayload)
+    ? townPayload
+    : Array.isArray(townPayload.towns)
+      ? townPayload.towns
+      : Object.values(townPayload)
+
   towns
     .map((town) => (typeof town === 'object' ? town.slug : null))
     .filter((slug) => typeof slug === 'string' && slug.trim())

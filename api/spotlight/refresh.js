@@ -1,10 +1,14 @@
-import towns from '../../src/towns.json'
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const towns = require('../../src/towns.json')
 import { loadTownSpotlightConfig } from '../../lib/spotlight/loadTownSpotlightConfig'
 import { fetchSpotlightPlacesData } from '../../lib/spotlight/fetchSpotlightPlacesData'
 import { saveTownSpotlightData } from '../../lib/spotlight/cache'
 
 function normalizeTowns(raw) {
   if (Array.isArray(raw)) return raw
+  if (Array.isArray(raw?.towns)) return raw.towns
   if (raw && typeof raw === 'object') {
     return Object.values(raw)
   }

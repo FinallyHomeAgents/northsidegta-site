@@ -27,7 +27,23 @@ import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
-import towns from "./towns.json";
+import townsData from "./towns.json";
+
+function normalizeTowns(data) {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (Array.isArray(data?.towns)) {
+    return data.towns;
+  }
+
+  if (data && typeof data === "object") {
+    return Object.values(data);
+  }
+
+  return [];
+}
 
 function App() {
   // Global map resize nudge
@@ -50,9 +66,9 @@ function App() {
   }, []);
 
   // Normalize towns.json to an array of { slug }
-  const TOWN_SLUGS = Array.isArray(towns)
-    ? towns.map(t => t.slug).filter(Boolean)
-    : [];
+  const TOWN_SLUGS = normalizeTowns(townsData)
+    .map(t => t.slug)
+    .filter(Boolean);
 
   return (
     <div data-test="app-shell">

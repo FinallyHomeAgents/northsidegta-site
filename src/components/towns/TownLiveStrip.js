@@ -1,26 +1,39 @@
 import React, { useMemo } from 'react'
+import { FiActivity, FiCamera, FiCompass, FiHeart, FiMapPin, FiStar, FiUsers } from 'react-icons/fi'
 
 import { selectTownSpotlight } from '../../lib/spotlight/selectSpotlight'
 
 const TAG_ICON_MAP = {
-  perfect_park_day: '🌳',
-  family_day_idea: '👨‍👩‍👧',
-  active_day_idea: '🥾',
-  hidden_gem: '💎',
-  photo_worthy: '📷',
-  where_locals_go: '⭐',
+  perfect_park_day: FiCompass,
+  family_day_idea: FiUsers,
+  active_day_idea: FiActivity,
+  hidden_gem: FiStar,
+  photo_worthy: FiCamera,
+  where_locals_go: FiMapPin,
+}
+
+function IconBadge({ icon: Icon }) {
+  const Component = Icon || FiHeart
+  return (
+    <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-800 shadow-[0_6px_20px_-16px_rgba(0,0,0,0.35)]">
+      <Component className="h-5 w-5" aria-hidden />
+    </div>
+  )
 }
 
 function getIconForPlace(place) {
   const tag = Array.isArray(place?.tags) ? place.tags[0] : null
-  return TAG_ICON_MAP[tag] || '★'
+  return TAG_ICON_MAP[tag] || FiHeart
 }
 
 function formatRating(place) {
   if (typeof place?.rating !== 'number' || typeof place?.userRatingsTotal !== 'number') {
     return null
   }
-  return `⭐ ${place.rating.toFixed(1)} (${place.userRatingsTotal.toLocaleString()} reviews)`
+  return {
+    score: place.rating.toFixed(1),
+    total: place.userRatingsTotal.toLocaleString(),
+  }
 }
 
 export default function TownLiveStrip({ townSlug, townName, spotlightData, className = "mt-6" }) {
@@ -57,9 +70,7 @@ export default function TownLiveStrip({ townSlug, townName, spotlightData, class
               key={place.placeId}
               className="group flex items-center gap-4 rounded-2xl border border-emerald-100 bg-white/95 px-4 py-4 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-50 text-base">
-                <span aria-hidden>{getIconForPlace(place)}</span>
-              </div>
+              <IconBadge icon={getIconForPlace(place)} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700/90">
                   {label}
@@ -69,11 +80,10 @@ export default function TownLiveStrip({ townSlug, townName, spotlightData, class
                   <p className="mt-0.5 truncate text-xs text-emerald-800/80">{place.summary}</p>
                 )}
                 {ratingLine && (
-                  <p className="mt-1 text-[11px] font-medium text-emerald-700/85">
-                    ⭐ {place.rating.toFixed(1)}{' '}
-                    <span className="text-emerald-800/70">
-                      ({place.userRatingsTotal.toLocaleString()} Google reviews)
-                    </span>
+                  <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-emerald-700/85">
+                    <FiStar className="h-3.5 w-3.5" aria-hidden />
+                    <span>{ratingLine.score}</span>
+                    <span className="text-emerald-800/70">({ratingLine.total} Google reviews)</span>
                   </p>
                 )}
               </div>

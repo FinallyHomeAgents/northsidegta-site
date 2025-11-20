@@ -1,18 +1,22 @@
 // src/TownRouter.js
 import React from "react";
 import { Route } from "react-router-dom";
-import towns from "./towns.json";
+import townsData from "./towns.json";
 import TownPage from "./TownPage"; // exact casing
 
-// Works whether towns.json is an array or an object keyed by slug
+// Works whether towns.json is an array, keyed object, or wrapped under towns
+function normalizeTowns(data) {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.towns)) return data.towns;
+  if (data && typeof data === "object") return Object.values(data);
+  return [];
+}
+
 function getSlugs() {
-  if (Array.isArray(towns)) {
-    return towns
-      .map((t) => (t && t.slug ? String(t.slug).toLowerCase() : null))
-      .filter(Boolean)
-      .sort();
-  }
-  return Object.keys(towns).map((s) => s.toLowerCase()).sort();
+  return normalizeTowns(townsData)
+    .map((t) => (t && t.slug ? String(t.slug).toLowerCase() : null))
+    .filter(Boolean)
+    .sort();
 }
 
 export const TOWN_SLUGS = getSlugs();

@@ -1,4 +1,7 @@
-import towns from "../../src/towns.json"
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const towns = require('../../src/towns.json')
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,
@@ -15,6 +18,7 @@ function normalizeSlug(value) {
 
 function normalizeTownList(raw) {
   if (Array.isArray(raw)) return raw
+  if (Array.isArray(raw?.towns)) return raw.towns
   if (raw && typeof raw === 'object') {
     return Object.values(raw)
   }

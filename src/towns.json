@@ -1,989 +1,998 @@
-[
-  {
-    "slug": "georgina",
-    "name": "Georgina",
-    "heroImage": "/Images/georgina-banner.jpg",
-    "summary": "Lake life, beaches, and room to roam with easy escapes to the water.",
-    "highlights": [
-      "Lake Simcoe access",
-      "Beaches & marinas",
-      "Growing family neighbourhoods"
-    ],
-    "ratings": {
-      "housePrices": 5,
-      "commuterAccess": 4,
-      "localTraffic": 4,
-      "golf": 4,
-      "fishing": 5,
-      "trailsNature": 4,
-      "restaurants": 3,
-      "localEvents": 4
+{
+  "towns": [
+    {
+      "slug": "georgina",
+      "name": "Georgina",
+      "heroImage": "/Images/georgina-banner.jpg",
+      "summary": "Lake life, beaches, and room to roam with easy escapes to the water.",
+      "highlights": [
+        "Lake Simcoe access",
+        "Beaches & marinas",
+        "Growing family neighbourhoods"
+      ],
+      "ratings": {
+        "housePrices": 5,
+        "commuterAccess": 4,
+        "localTraffic": 4,
+        "golf": 4,
+        "fishing": 5,
+        "trailsNature": 4,
+        "restaurants": 3,
+        "localEvents": 4
+      },
+      "commute": {
+        "to404SteelesMinutes": 33
+      },
+      "pdf": "/PDF/Georgina-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Georgina",
+        "subtitle": "A NorthSide GTA lakeside community with relaxed shoreline living, marinas, and easy access to weekend escapes.",
+        "backgroundImage": "/Images/georgina-banner.jpg",
+        "backgroundAlt": "Lake Simcoe shoreline in Georgina",
+        "primaryButton": {
+          "label": "Explore Homes in Georgina",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
+      },
+      "snapshot": {
+        "population": "50,000+",
+        "driveToToronto": "55\u201375 minutes via Highway 404",
+        "homePriceRange": "Low $900s\u2013$1.2M",
+        "highways": "404, 48, Lake Drive",
+        "transitSummary": "GO bus links to Newmarket/Aurora plus local routes across Keswick and Sutton.",
+        "goTrain": "East Gwillimbury GO \u2013 ~55 minutes to Union"
+      },
+      "ratingDescriptions": {
+        "housePrices": "Detached homes, waterfront properties, and rural lots create a wide range of price points.",
+        "commuterAccess": "Highway 404 and regional roads connect residents south toward the GTA and neighbouring towns.",
+        "localTraffic": "Traffic stays manageable outside peak cottage weekends, with local corridors moving steadily.",
+        "golf": "Local courses and driving ranges provide a relaxed round close to home.",
+        "fishing": "Lake Simcoe access keeps fishing and boating options front and centre for residents.",
+        "trailsNature": "Waterfront parks, forest trails, and conservation areas keep nature close at hand.",
+        "restaurants": "Keswick, Sutton, and shoreline communities mix casual dining with everyday conveniences.",
+        "localEvents": "Lakeside festivals, farmers' markets, and seasonal events anchor the community calendar."
+      },
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Lake Simcoe, beaches, and nearby forests keep outdoor escapes just minutes away."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Recreation centres, marinas, and local programming welcome families year-round."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Keswick and Sutton provide everyday amenities alongside waterfront dining and shops."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, parks, and community activities make shoreline living family-friendly."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Commuters & Professionals",
+          "description": "Drivers connect south via Highway 404 while balancing a lakeside lifestyle."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Boating, fishing, and trail networks keep weekends adventurous."
+        },
+        {
+          "icon": "home",
+          "title": "Upsizers & Cottage Seekers",
+          "description": "Waterfront and rural properties appeal to those wanting space without leaving the GTA."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Keswick & Lake Drive",
+          "description": "Established neighbourhoods with marinas, parks, and everyday conveniences near the water."
+        },
+        {
+          "name": "Sutton & Jackson's Point",
+          "description": "Heritage streets, local shops, and beach access with a relaxed pace."
+        },
+        {
+          "name": "Pefferlaw & Rural Georgina",
+          "description": "Country properties and wooded lots for those seeking privacy and space."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Many residents drive south via Highway 404, with some using GO stations in nearby towns for train service."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Expect a mix of detached homes, waterfront cottages, and rural properties across Georgina."
+        },
+        {
+          "question": "Is Georgina good for families?",
+          "answer": "Yes\u2014schools, community centres, and shoreline recreation support family routines year-round."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Home prices vary widely between waterfront properties, suburban streets, and rural acreages\u2014connect with us for current guidance."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Georgina?",
+        "description": "We know the NorthSide GTA and can help you decide if Georgina\u2019s lakefront communities match your lifestyle, commute, and budget.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in Georgina means life on the lake without giving up the essentials. From Keswick to Sutton and Jackson\u2019s Point, each area offers its own mix of marinas, trails, and family-friendly streets. Weekends often start with a walk along the shoreline, a coffee from a local caf\u00e9, or a quick launch from one of the many boat ramps. In the summer, the town feels like a resort community, with beaches, parks, and patios all centred around Lake Simcoe. In the winter, things don\u2019t slow down \u2014 residents trade docks and bikes for snowshoes, ice-fishing huts, and local arenas. Schools, groceries, and day-to-day errands are close by, so you don\u2019t need to leave town for the basics. At the same time, Highway 404 and nearby GO connections keep you tied to the rest of the GTA when you need it. Many people move here for more space, quieter streets, and a stronger sense of community. If you\u2019re looking for lakeside living with real neighbourhood roots, Georgina is one of the most unique pockets in the NorthSide GTA."
     },
-    "commute": {
-      "to404SteelesMinutes": 33
+    {
+      "slug": "east-gwillimbury",
+      "name": "East Gwillimbury",
+      "heroImage": "/Images/eastgwillimbury-banner.jpg",
+      "summary": "New builds, schools and quick 404 access from Sharon, Queensville & Holland Landing.",
+      "highlights": [
+        "Newer homes",
+        "Schools & parks",
+        "Fast 404 access"
+      ],
+      "ratings": {
+        "housePrices": 4,
+        "commuterAccess": 4,
+        "localTraffic": 3,
+        "golf": 4,
+        "fishing": 3,
+        "trailsNature": 4,
+        "restaurants": 4,
+        "localEvents": 4
+      },
+      "commute": {
+        "to404SteelesMinutes": 27
+      },
+      "pdf": "/PDF/East-Gwillimbury-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in East Gwillimbury",
+        "subtitle": "A NorthSide GTA town blending growing neighbourhoods, parks, and quick access to Highway 404.",
+        "backgroundImage": "/Images/eastgwillimbury-banner.jpg",
+        "backgroundAlt": "Neighbourhood streetscape in East Gwillimbury",
+        "primaryButton": {
+          "label": "Explore Homes in East Gwillimbury",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
+      },
+      "snapshot": {
+        "population": "38,000+",
+        "driveToToronto": "45\u201365 minutes via Highway 404",
+        "homePriceRange": "High $900s\u2013$1.3M",
+        "highways": "404, Green Lane, Yonge Street",
+        "transitSummary": "GO Train and bus service with YRT routes through Sharon, Queensville, and Holland Landing.",
+        "goTrain": "East Gwillimbury GO \u2013 ~55 minutes to Union"
+      },
+      "ratingDescriptions": {
+        "housePrices": "Mix of newer subdivisions and established streets provides a range of housing options.",
+        "commuterAccess": "Residents rely on Highway 404 and GO services in nearby communities for downtown connections.",
+        "localTraffic": "Local traffic remains manageable with occasional peak-hour slowdowns on key arterials.",
+        "golf": "Nearby golf courses and driving ranges are popular warm-weather escapes.",
+        "fishing": "The Holland River system and nearby conservation areas offer relaxed fishing spots.",
+        "trailsNature": "Parks, wetlands, and trail networks weave through East Gwillimbury\u2019s villages.",
+        "restaurants": "Growing plazas and local favourites bring everyday dining and coffee shops close to home.",
+        "localEvents": "Farmers\u2019 markets and community celebrations highlight the town\u2019s village feel."
+      },
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Trails, conservation lands, and parks thread through Sharon, Queensville, and Holland Landing."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Recreation centres, schools, and local programs support a family-focused pace of life."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Growing retail hubs and quick drives to Newmarket keep errands simple."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, playgrounds, and newer homes attract families building roots."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Young Professionals",
+          "description": "Commutable access to the 404 appeals to professionals balancing work and suburban living."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Cycling routes, trails, and recreation facilities keep residents on the move."
+        },
+        {
+          "icon": "home",
+          "title": "Move-Up Buyers",
+          "description": "Detached homes and townhomes provide space to grow without leaving the GTA."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Sharon & Sharon Village",
+          "description": "Established streets and new builds with parks, schools, and community hubs."
+        },
+        {
+          "name": "Queensville & Holland Landing",
+          "description": "Growing neighbourhoods with easy 404 access and everyday amenities."
+        },
+        {
+          "name": "Mount Albert & Rural East Gwillimbury",
+          "description": "Small-town charm and country properties surrounded by rolling landscapes."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Most commuters drive to Highway 404 or connect to GO stations in East Gwillimbury and Newmarket for transit downtown."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Expect newer detached homes, townhomes, and established properties across the town\u2019s villages."
+        },
+        {
+          "question": "Is East Gwillimbury good for families?",
+          "answer": "Yes\u2014schools, parks, and recreation facilities are designed around family life."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Pricing varies by village and home type, so we\u2019ll walk you through current options for your budget."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in East Gwillimbury?",
+        "description": "We live and work across the NorthSide GTA and can help you decide if East Gwillimbury fits your commute, budget, and lifestyle.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in East Gwillimbury feels like getting ahead of the curve without giving up day-to-day convenience. New neighbourhoods in Sharon, Queensville, and Holland Landing offer modern homes, parks, and trails, while long-time streets still have that established, familiar feel. On a typical day you can grab a coffee locally, hit a nearby trail, and still be on Highway 404 or at the GO station in minutes. Families like the balance here: quieter streets and more space, but schools, groceries, and essentials are all close by. Weekends often revolve around local arenas, community centres, farmers\u2019 markets, and quick drives to Lake Simcoe or nearby conservation areas. As the town grows, new shops and services keep showing up, which makes staying put more appealing. For many people, East Gwillimbury is the step between city life and full country, with room to grow and a clear sense that the area is moving forward."
     },
-    "pdf": "/PDF/Georgina-Guide.pdf",
-    "hero": {
-      "tagline": "Town • NorthSide GTA",
-      "title": "Living in Georgina",
-      "subtitle": "A NorthSide GTA lakeside community with relaxed shoreline living, marinas, and easy access to weekend escapes.",
-      "backgroundImage": "/Images/georgina-banner.jpg",
-      "backgroundAlt": "Lake Simcoe shoreline in Georgina",
-      "primaryButton": {
-        "label": "Explore Homes in Georgina",
-        "href": "/buyers"
+    {
+      "slug": "newmarket",
+      "name": "Newmarket",
+      "heroImage": "/Images/newmarket-banner.jpg",
+      "summary": "Shops, dining and GO convenience with a vibrant Main Street.",
+      "highlights": [
+        "Historic Main Street",
+        "GO Train access",
+        "Shops & dining"
+      ],
+      "ratings": {
+        "housePrices": 3,
+        "commuterAccess": 5,
+        "localTraffic": 3,
+        "golf": 4,
+        "fishing": 3,
+        "trailsNature": 4,
+        "restaurants": 5,
+        "localEvents": 4
       },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
+      "commute": {
+        "to404SteelesMinutes": 25
+      },
+      "pdf": "/PDF/Newmarket-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Newmarket",
+        "subtitle": "A NorthSide GTA hub with a lively Main Street, established neighbourhoods, and GO Transit convenience.",
+        "backgroundImage": "/Images/newmarket-banner.jpg",
+        "backgroundAlt": "Newmarket Main Street at sunset",
+        "primaryButton": {
+          "label": "Explore Homes in Newmarket",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
+      },
+      "snapshot": {
+        "population": "90,000+",
+        "driveToToronto": "45\u201365 minutes via Highway 404",
+        "homePriceRange": "Mid $900s\u2013$1.2M",
+        "highways": "404, Davis Drive, Mulock Drive",
+        "transitSummary": "VIVA rapidway, GO Train/bus, and local transit covering all major corridors.",
+        "goTrain": "Newmarket GO \u2013 ~60 minutes to Union"
+      },
+      "ratingDescriptions": {
+        "housePrices": "Detached homes, townhomes, and some condos provide a variety of price points across Newmarket.",
+        "commuterAccess": "Residents benefit from Highway 404 access, Viva rapid transit, and GO Train service downtown.",
+        "localTraffic": "Main corridors see busy periods, especially along Yonge Street and Davis Drive during rush hour.",
+        "golf": "Local courses and nearby clubs give golfers multiple choices close to home.",
+        "fishing": "The Holland River and nearby lakes offer casual fishing and paddling spots.",
+        "trailsNature": "Fairy Lake, Riverwalk Commons, and surrounding parks connect neighbourhoods to green space.",
+        "restaurants": "Main Street restaurants, caf\u00e9s, and breweries pair with big-box conveniences throughout town.",
+        "localEvents": "Farmers\u2019 markets, concerts, and community events keep the calendar active year-round."
+      },
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Parks, trails, and riverfront spaces balance urban energy with outdoor escapes."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Recreation centres, schools, and family programs support residents in every season."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "A vibrant Main Street and regional shopping corridors keep amenities close."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, sports, and community events make Newmarket a perennial family favourite."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Young Professionals",
+          "description": "GO Transit, Highway 404, and coworking spots support busy professional schedules."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Fitness centres, arenas, and extensive trail systems keep residents moving."
+        },
+        {
+          "icon": "home",
+          "title": "Upsizers & Downsizers",
+          "description": "Varied housing types let residents scale up or right-size without leaving town."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Historic Downtown & Main Street",
+          "description": "Heritage homes and vibrant shops centred around Riverwalk Commons."
+        },
+        {
+          "name": "Stonehaven & Leslie Valley",
+          "description": "Established neighbourhoods with larger lots, parks, and quick 404 access."
+        },
+        {
+          "name": "Glenway & Southwest Newmarket",
+          "description": "Master-planned communities with townhomes, detached options, and everyday conveniences."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Residents commute via Highway 404, Viva buses, or GO Transit depending on their schedule."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Newmarket offers detached homes, semis, townhomes, and select condo buildings across its neighbourhoods."
+        },
+        {
+          "question": "Is Newmarket good for families?",
+          "answer": "Yes\u2014schools, recreation facilities, and community programs keep families connected and active."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Pricing varies by neighbourhood and property type, so we\u2019ll guide you through the latest market data."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Newmarket?",
+        "description": "Our NorthSide GTA team can help you discover Newmarket neighbourhoods that fit your lifestyle, commute, and budget.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in Newmarket means having a small-town main street and big-city convenience in the same place. Main Street and Riverwalk Commons give you patios, events, skating, and live music, all wrapped around a historic core that people actually use year-round. Just up the road, you\u2019ve got big-box shopping, restaurants, gyms, and services that save you trips down to the city. Families appreciate the schools, parks, and recreation programs, plus the ease of getting to neighbouring towns for sports and activities. The GO Train and Highway 404 make commuting realistic, whether you\u2019re going south into Toronto or just across York Region. On weekends, you\u2019ll see people walking the trails, stopping for brunch, or heading to local rinks and fields. Newmarket works well for people who want energy and amenities without living in a downtown condo. It\u2019s one of the NorthSide GTA\u2019s most complete \u201ceverything in one place\u201d communities."
     },
-    "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Closest GO station commute details (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes such as Highways 404 and 48 (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
+    {
+      "slug": "aurora",
+      "name": "Aurora",
+      "heroImage": "/Images/aurora-banner.jpg",
+      "summary": "Mature neighbourhoods, schools and quiet streets with fast commuter access.",
+      "highlights": [
+        "Top schools",
+        "Established streets",
+        "GO & 404 access"
+      ],
+      "ratings": {
+        "housePrices": 3,
+        "commuterAccess": 5,
+        "localTraffic": 3,
+        "golf": 4,
+        "fishing": 2,
+        "trailsNature": 4,
+        "restaurants": 4,
+        "localEvents": 4
+      },
+      "commute": {
+        "to404SteelesMinutes": 23
+      },
+      "pdf": "/PDF/Aurora-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Aurora",
+        "subtitle": "A NorthSide GTA community with strong schools, established neighbourhoods, and convenient access to Toronto.",
+        "backgroundImage": "/Images/aurora-banner.jpg",
+        "backgroundAlt": "Aurora streetscape at dusk",
+        "primaryButton": {
+          "label": "Explore Homes in Aurora",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
+      },
+      "snapshot": {
+        "population": "62,000+",
+        "driveToToronto": "40\u201355 minutes via Highway 404",
+        "homePriceRange": "$1.1M\u2013$1.6M",
+        "highways": "404, Wellington Street, St. John\u2019s Sideroad",
+        "transitSummary": "GO Train and bus options with Aurora Transit and YRT connections across town.",
+        "goTrain": "Aurora GO \u2013 ~55 minutes to Union"
+      },
+      "ratingDescriptions": {
+        "housePrices": "Aurora\u2019s established detached homes keep pricing on the higher side for the NorthSide GTA.",
+        "commuterAccess": "Direct Highway 404 access and frequent GO trains make downtown commutes manageable.",
+        "localTraffic": "Local roads move steadily, though Yonge Street and Bayview can back up during rush hour.",
+        "golf": "Magna Golf Club, St. Andrew\u2019s Valley, and nearby courses provide plenty of fairways.",
+        "fishing": "In-town fishing spots are limited, but Lake Simcoe and the Holland River are a quick drive away.",
+        "trailsNature": "The Aurora Arboretum, Sheppard\u2019s Bush, and Moraine trails weave green space throughout town.",
+        "restaurants": "Independent restaurants downtown mix with convenient chains along Bayview and Wellington.",
+        "localEvents": "Seasonal farmers\u2019 markets, concerts in the park, and community festivals keep the calendar full."
+      },
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Aurora sits along the Oak Ridges Moraine with trails, parks, and conservation areas linking neighbourhoods to the outdoors."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Established schools, recreation centres, and active minor sports make it easy for families to plug into the community."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Downtown boutiques, big-box conveniences, and growing dining options keep errands and evenings close to home."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Top-ranked public schools plus St. Andrew\u2019s College and St. Anne\u2019s School anchor education options."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Commuters & Professionals",
+          "description": "Highway 404 and regular GO service keep downtown Toronto commutes practical on weekdays."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Community centres, club sports, and nearby golf courses keep weekends busy."
+        },
+        {
+          "icon": "home",
+          "title": "Upsizers & Move-Up Buyers",
+          "description": "Larger lots and mature trees provide space for upsizing without leaving the GTA."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Aurora Village",
+          "description": "Historic downtown streets with century homes, caf\u00e9s, and quick GO Station access."
+        },
+        {
+          "name": "Bayview Wellington",
+          "description": "Family-friendly master-planned area with parks, schools, and everyday amenities."
+        },
+        {
+          "name": "Aurora Highlands",
+          "description": "Tree-lined streets of detached homes close to top schools and the town\u2019s recreation complex."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Highway 404 typically delivers a 40\u201350 minute drive to downtown Toronto, and GO trains run about 50\u201355 minutes to Union Station."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Aurora is dominated by detached homes and townhomes from the 1980s onward, with some newer infill and estate properties."
+        },
+        {
+          "question": "Is Aurora good for families?",
+          "answer": "Yes\u2014Aurora is known for its school network, community programs, and recreation facilities that cater to families year-round."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Detached homes often sell in the mid-to-high $1M range, with townhomes and semis offering slightly more attainable options."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Aurora?",
+        "description": "We live and work across the NorthSide GTA and can help you decide if Aurora fits your commute, your budget, and your lifestyle.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in Aurora feels a bit like living in a private club that happens to be a town. Tree-lined streets, established neighbourhoods, and several golf courses create a refined, settled atmosphere that still feels very family-friendly. You get quick access to Highway 404 and the GO Train, which keeps Bay Street, downtown offices, and university campuses within reach. In town, there\u2019s a good mix of independent restaurants, caf\u00e9s, and everyday essentials, plus parks and trails that run quietly behind the scenes. Schools and extracurricular programs are a major draw, especially for families planning long-term. Evenings often mean a quick run to the rink, a restaurant on Yonge, or a walk through local parks and conservation lands. Aurora suits people who want an elevated suburban lifestyle with strong connections to Toronto and the rest of York Region. It\u2019s a natural fit if you\u2019re ready to upgrade space and neighbourhood quality without leaving the GTA."
     },
-    "ratingDescriptions": {
-      "housePrices": "Detached homes, waterfront properties, and rural lots create a wide range of price points.",
-      "commuterAccess": "Highway 404 and regional roads connect residents south toward the GTA and neighbouring towns.",
-      "localTraffic": "Traffic stays manageable outside peak cottage weekends, with local corridors moving steadily.",
-      "golf": "Local courses and driving ranges provide a relaxed round close to home.",
-      "fishing": "Lake Simcoe access keeps fishing and boating options front and centre for residents.",
-      "trailsNature": "Waterfront parks, forest trails, and conservation areas keep nature close at hand.",
-      "restaurants": "Keswick, Sutton, and shoreline communities mix casual dining with everyday conveniences.",
-      "localEvents": "Lakeside festivals, farmers' markets, and seasonal events anchor the community calendar."
+    {
+      "slug": "stouffville",
+      "name": "Stouffville",
+      "heroImage": "/Images/stouffville-banner.jpg",
+      "summary": "Family streets, parks and a lively Main Street close to nature.",
+      "highlights": [
+        "Main Street vibe",
+        "Parks & rec",
+        "Family-friendly"
+      ],
+      "ratings": {
+        "housePrices": 4,
+        "commuterAccess": 4,
+        "localTraffic": 4,
+        "golf": 4,
+        "fishing": 3,
+        "trailsNature": 4,
+        "restaurants": 4,
+        "localEvents": 4
+      },
+      "commute": {
+        "to404SteelesMinutes": 26
+      },
+      "pdf": "/PDF/Stouffville-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Stouffville",
+        "subtitle": "A NorthSide GTA community that balances small-town main street energy with quick access to the city.",
+        "backgroundImage": "/Images/stouffville-banner.jpg",
+        "backgroundAlt": "Stouffville Main Street at dusk",
+        "primaryButton": {
+          "label": "Explore Homes in Stouffville",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
+      },
+      "snapshot": {
+        "population": "50,000+",
+        "driveToToronto": "45\u201365 minutes via Highway 404/407",
+        "homePriceRange": "High $900s\u2013$1.3M",
+        "highways": "404, 407, Highway 48",
+        "transitSummary": "Stouffville GO line with YRT and GO bus links to Markham, 404, and 407.",
+        "goTrain": "Stouffville GO \u2013 ~65 minutes to Union"
+      },
+      "ratingDescriptions": {
+        "housePrices": "Detached homes and newer builds keep pricing competitive within the GTA market.",
+        "commuterAccess": "Residents lean on Highway 404, 407, and GO service for commutes into Toronto.",
+        "localTraffic": "Local streets are generally manageable, with busier periods around Main Street and school zones.",
+        "golf": "Multiple nearby courses and clubs make it easy to schedule a round close to home.",
+        "fishing": "Surrounding lakes and reservoirs offer relaxed spots for casual fishing excursions.",
+        "trailsNature": "Rouge National Urban Park and local conservation areas keep trails and forests minutes away.",
+        "restaurants": "Main Street blends independent caf\u00e9s and restaurants with convenient everyday stops.",
+        "localEvents": "Seasonal festivals, markets, and community events keep the town calendar active."
+      },
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Neighbourhoods back onto trails, conservation lands, and parks that connect residents to the outdoors."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Arenas, community centres, and local programming create a family-focused rhythm year-round."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Main Street shops pair with everyday amenities and GO access for effortless daily routines."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, parks, and youth programs make it easy for families to settle in."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Young Professionals",
+          "description": "Commutable access to Toronto with a quieter hometown feel appeals to career-focused residents."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Trail networks, golf courses, and recreation complexes support busy, outdoorsy routines."
+        },
+        {
+          "icon": "home",
+          "title": "Empty Nesters & Retirees",
+          "description": "Low-maintenance homes near amenities keep day-to-day living convenient and connected."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Downtown & Main Street",
+          "description": "Established streets with heritage homes, shops, and cafes close to local events."
+        },
+        {
+          "name": "Ballantrae & Surrounding Communities",
+          "description": "Golf-course living and estate-style properties with a relaxed pace near nature."
+        },
+        {
+          "name": "New North Stouffville",
+          "description": "Newer subdivisions with modern homes, parks, and schools designed for growing families."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Drivers typically connect through Highways 404 or 407, and many riders make use of GO Train service for downtown trips."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Expect a mix of detached homes, townhomes, and low-rise communities with ongoing infill development."
+        },
+        {
+          "question": "Is Stouffville good for families?",
+          "answer": "Yes\u2014schools, recreation centres, and local programming are geared toward family life in every season."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Pricing shifts by neighbourhood and property type, so we recommend connecting with our team for the latest guidance."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Stouffville?",
+        "description": "We know the NorthSide GTA and can help you see if Stouffville matches your commute, budget, and day-to-day lifestyle.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in Stouffville gives you direct GO Train access to downtown Toronto, but day-to-day life feels much more relaxed. The core around Main Street mixes heritage buildings with newer shops, caf\u00e9s, and local businesses, so there\u2019s always a place to walk, eat, or meet friends. Just beyond that, newer neighbourhoods offer modern homes, parks, and playgrounds designed around family life. The surrounding farmland and forests mean you\u2019re never far from a trail, golf course, or country drive. Residents like that they can be on the train in minutes during the week, then be at a local market, kids\u2019 sports, or dinner close to home on weekends. As more people discover Stouffville, restaurants and services continue to grow with it. If you\u2019re looking for a community that balances small-town feel with real transit access, Stouffville is one of the most compelling options north of the city."
     },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Lake Simcoe, beaches, and nearby forests keep outdoor escapes just minutes away."
+    {
+      "slug": "uxbridge",
+      "name": "Uxbridge",
+      "heroImage": "/Images/uxbridge-banner.jpg",
+      "summary": "Trail capital charm, rolling hills and small-town feel with outdoor living.",
+      "highlights": [
+        "Trails & nature",
+        "Small-town charm",
+        "Active community"
+      ],
+      "ratings": {
+        "housePrices": 3,
+        "commuterAccess": 3,
+        "localTraffic": 5,
+        "golf": 5,
+        "fishing": 3,
+        "trailsNature": 5,
+        "restaurants": 4,
+        "localEvents": 4
       },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Recreation centres, marinas, and local programming welcome families year-round."
+      "commute": {
+        "to404SteelesMinutes": 37
       },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Keswick and Sutton provide everyday amenities alongside waterfront dining and shops."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, parks, and community activities make shoreline living family-friendly."
+      "pdf": "/PDF/Uxbridge-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Uxbridge",
+        "subtitle": "A NorthSide GTA town with a small-town feel, extensive trail networks, and access to nearby communities.",
+        "backgroundImage": "/Images/uxbridge-banner.jpg",
+        "backgroundAlt": "Uxbridge streetscape with historic buildings",
+        "primaryButton": {
+          "label": "Explore Homes in Uxbridge",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
       },
-      {
-        "icon": "briefcase",
-        "title": "Commuters & Professionals",
-        "description": "Drivers connect south via Highway 404 while balancing a lakeside lifestyle."
+      "snapshot": {
+        "population": "23,000+",
+        "driveToToronto": "55\u201375 minutes via 407/412 connectors",
+        "homePriceRange": "High $900s\u2013$1.3M",
+        "highways": "Highway 47, Durham 23, access to 407/412",
+        "transitSummary": "Durham Region Transit and GO buses connecting to Stouffville and Ajax/Pickering hubs.",
+        "goTrain": "Old Elm (Stouffville line) \u2013 ~70 minutes to Union"
       },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Boating, fishing, and trail networks keep weekends adventurous."
+      "ratingDescriptions": {
+        "housePrices": "Housing spans heritage homes, subdivisions, and rural properties with prices that vary by property type.",
+        "commuterAccess": "Regional roads connect to Highways 404, 407, and 401, with some residents using GO stations in nearby towns.",
+        "localTraffic": "Traffic stays relatively light in-town, with occasional congestion on main corridors during peak travel.",
+        "golf": "Multiple local courses and driving ranges give golfers options close to home.",
+        "fishing": "Nearby ponds, rivers, and lakes provide spots for casual fishing excursions.",
+        "trailsNature": "Uxbridge's Trail Capital reputation keeps forests and conservation areas within minutes of most neighbourhoods.",
+        "restaurants": "Independent caf\u00e9s and restaurants line the downtown core alongside convenient everyday stops.",
+        "localEvents": "Seasonal markets, fairs, and arts events draw the community together year-round."
       },
-      {
-        "icon": "home",
-        "title": "Upsizers & Cottage Seekers",
-        "description": "Waterfront and rural properties appeal to those wanting space without leaving the GTA."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Keswick & Lake Drive",
-        "description": "Established neighbourhoods with marinas, parks, and everyday conveniences near the water."
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Uxbridge is surrounded by forests, conservation areas, and rolling farmland that keep outdoor escapes close."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Recreation centres, local sports, and community events make it easy to plug into small-town life."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Historic downtown shops mix with practical amenities, keeping errands and weekend outings nearby."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, parks, and recreation programs support active family routines."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Commuters & Professionals",
+          "description": "Those working in the GTA balance quieter living with regional road and GO access."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Cycling, hiking, and equestrian trails cater to residents who love the outdoors."
+        },
+        {
+          "icon": "home",
+          "title": "Move-Up & Rural Seekers",
+          "description": "Larger lots and rural properties appeal to buyers looking for extra space without leaving the region."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Uxbridge Town Centre",
+          "description": "Heritage streets with shops, caf\u00e9s, and established homes near local amenities."
+        },
+        {
+          "name": "Coral Creek & Quaker Village",
+          "description": "Family neighbourhoods with parks, schools, and trail connections."
+        },
+        {
+          "name": "Rural Uxbridge & Hamlets",
+          "description": "Country properties and hamlets offering privacy, barns, and wide-open views."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Most residents drive via regional roads to Highways 404, 407, or 401, with some using GO stations in neighbouring towns for train service."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Expect a mix of century homes, newer subdivisions, townhomes, and rural properties with acreage."
+        },
+        {
+          "question": "Is Uxbridge good for families?",
+          "answer": "Yes\u2014recreation facilities, local schools, and small-town programming make it welcoming for families."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Home prices vary widely between in-town properties and rural acreages, so connect with us for the latest local trends."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Uxbridge?",
+        "description": "We live and work across the NorthSide GTA and can help you decide if Uxbridge fits your commute, your budget, and your lifestyle.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
       },
-      {
-        "name": "Sutton & Jackson's Point",
-        "description": "Heritage streets, local shops, and beach access with a relaxed pace."
+      "livingIntro": "Living in Uxbridge is about building everyday life around the outdoors. As the Trail Capital of Canada, the town is surrounded by forests, rolling hills, and conservation areas that locals actually use for hiking, biking, and winter sports. The downtown core has a growing collection of caf\u00e9s, restaurants, and small businesses, giving it a creative, independent feel. Families like the slower pace, strong minor sports culture, and the sense that people genuinely know each other. At the same time, you\u2019re still close enough to reach Highway 404, Durham Region, and the rest of the NorthSide GTA without feeling cut off. Weekends might mean a trail run, a round of golf, a local event, or a quick drive to neighbouring towns for shopping. Uxbridge works best for people who want more space and nature in their daily routine, while staying plugged into the broader GTA for work and school."
+    },
+    {
+      "slug": "scugog",
+      "name": "Scugog",
+      "heroImage": "/Images/scugog-banner.jpg",
+      "summary": "Port Perry heritage, lakefront sunsets and a relaxed pace by the water.",
+      "highlights": [
+        "Lakefront living",
+        "Main Street heritage",
+        "Community events"
+      ],
+      "ratings": {
+        "housePrices": 4,
+        "commuterAccess": 3,
+        "localTraffic": 4,
+        "golf": 4,
+        "fishing": 5,
+        "trailsNature": 4,
+        "restaurants": 4,
+        "localEvents": 5
       },
-      {
-        "name": "Pefferlaw & Rural Georgina",
-        "description": "Country properties and wooded lots for those seeking privacy and space."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Many residents drive south via Highway 404, with some using GO stations in nearby towns for train service."
+      "commute": {
+        "to404SteelesMinutes": 40
       },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Expect a mix of detached homes, waterfront cottages, and rural properties across Georgina."
+      "pdf": "/PDF/Scugog-Guide.pdf",
+      "hero": {
+        "tagline": "Town \u2022 NorthSide GTA",
+        "title": "Living in Scugog",
+        "subtitle": "A NorthSide GTA lakeside town where Port Perry\u2019s heritage Main Street meets relaxed waterfront living.",
+        "backgroundImage": "/Images/scugog-banner.jpg",
+        "backgroundAlt": "Port Perry waterfront in Scugog",
+        "primaryButton": {
+          "label": "Explore Homes in Scugog",
+          "href": "/buyers"
+        },
+        "secondaryButton": {
+          "label": "Match With a Local Agent",
+          "href": "/contact"
+        }
       },
-      {
-        "question": "Is Georgina good for families?",
-        "answer": "Yes—schools, community centres, and shoreline recreation support family routines year-round."
+      "snapshot": {
+        "population": "22,000+",
+        "driveToToronto": "60\u201380 minutes via Highway 7/12 and 407",
+        "homePriceRange": "Low $900s\u2013$1.2M",
+        "highways": "Highway 7/12, 407, Reach Street",
+        "transitSummary": "Durham Transit routes around Port Perry with GO connections in Whitby and Oshawa.",
+        "goTrain": "Whitby/Oshawa GO via short drive \u2013 ~70 minutes to Union"
       },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Home prices vary widely between waterfront properties, suburban streets, and rural acreages—connect with us for current guidance."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Georgina?",
-      "description": "We know the NorthSide GTA and can help you decide if Georgina’s lakefront communities match your lifestyle, commute, and budget.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
+      "ratingDescriptions": {
+        "housePrices": "Waterfront, in-town, and rural properties span a variety of price points across Scugog.",
+        "commuterAccess": "Residents often drive along regional roads to Highways 407 or 401, with GO stations in nearby towns.",
+        "localTraffic": "In-town traffic stays relaxed, with busier times on weekends and peak-season event days.",
+        "golf": "Local courses and driving ranges make tee times easy to find close to home.",
+        "fishing": "Lake Scugog keeps boating and fishing at the heart of day-to-day life.",
+        "trailsNature": "Waterfront parks, conservation areas, and rolling countryside support outdoor adventures.",
+        "restaurants": "Port Perry\u2019s historic core mixes independent dining with casual lakeside patios.",
+        "localEvents": "Seasonal markets, theatre, and waterfront festivals keep the calendar full."
       },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
+      "lifestyleHighlights": [
+        {
+          "icon": "leaf",
+          "title": "Nature & Green Space",
+          "description": "Lake Scugog, nearby trails, and conservation areas provide endless outdoor escapes."
+        },
+        {
+          "icon": "users",
+          "title": "Community & Family Life",
+          "description": "Small-town programming, marinas, and recreation centres make it easy to stay connected."
+        },
+        {
+          "icon": "map",
+          "title": "Local Spots & Convenience",
+          "description": "Port Perry\u2019s boutiques and cafes pair with practical amenities around town."
+        }
+      ],
+      "audiences": [
+        {
+          "icon": "family",
+          "title": "Families with Kids",
+          "description": "Schools, parks, and youth programs keep family life grounded near the lake."
+        },
+        {
+          "icon": "briefcase",
+          "title": "Commuters & Professionals",
+          "description": "Some residents commute to Durham and the GTA while enjoying slower-paced evenings by the water."
+        },
+        {
+          "icon": "activity",
+          "title": "Active Lifestyles",
+          "description": "Boating, fishing, hiking, and cycling routes keep weekends full of fresh air."
+        },
+        {
+          "icon": "home",
+          "title": "Empty Nesters & Retirees",
+          "description": "Lake views and heritage streets appeal to those seeking a relaxed, connected community."
+        }
+      ],
+      "neighbourhoods": [
+        {
+          "name": "Downtown Port Perry",
+          "description": "Historic Main Street living with shops, dining, and theatre along the waterfront."
+        },
+        {
+          "name": "Lakefront Communities",
+          "description": "Homes along the shoreline with marina access and scenic sunset views."
+        },
+        {
+          "name": "Rural Scugog & Hamlets",
+          "description": "Acreage properties, farms, and hamlet communities surrounded by rolling countryside."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How long is the commute to Toronto?",
+          "answer": "Most commuters drive to Highways 407 or 401, with some connecting to GO Transit in Whitby or Oshawa."
+        },
+        {
+          "question": "What types of homes are common here?",
+          "answer": "Scugog offers waterfront cottages, in-town heritage homes, and rural properties with extra space."
+        },
+        {
+          "question": "Is Scugog good for families?",
+          "answer": "Yes\u2014local schools, community events, and recreation programs create a family-friendly environment."
+        },
+        {
+          "question": "What\u2019s the general price point for homes?",
+          "answer": "Pricing ranges by proximity to the lake and property size\u2014we\u2019ll guide you through current opportunities."
+        }
+      ],
+      "cta": {
+        "title": "Ready to explore homes in Scugog?",
+        "description": "We live and work across the NorthSide GTA and can help you decide if Scugog\u2019s lakeside pace suits your lifestyle, commute, and budget.",
+        "primaryButton": {
+          "label": "Book a Discovery Call",
+          "href": "/contact"
+        },
+        "secondaryButton": {
+          "label": "Tell Us What You\u2019re Looking For",
+          "href": "/vip"
+        }
+      },
+      "livingIntro": "Living in Scugog usually starts with the lake. Port Perry\u2019s waterfront, marina, and main street create a true focal point for the community, with restaurants, patios, and shops all within walking distance. The surrounding rural areas offer larger lots, quieter roads, and a more relaxed rhythm of life. People who move here often do it for a combination of water access, small-town atmosphere, and room for kids, hobbies, or home-based work. Day-to-day needs are covered locally, and bigger shopping trips are an easy drive to nearby urban centres. Seasonal events, local markets, and community festivals keep the town feeling active without overwhelming it. Commuters use a mix of regional roads and GO connections from neighbouring towns, trading a bit more drive time for a lifestyle that feels lighter. If lake living with a real main street sounds appealing, Scugog is one of the strongest options in the NorthSide GTA."
     }
-  },
-  {
-    "slug": "east-gwillimbury",
-    "name": "East Gwillimbury",
-    "heroImage": "/Images/eastgwillimbury-banner.jpg",
-    "summary": "New builds, schools and quick 404 access from Sharon, Queensville & Holland Landing.",
-    "highlights": [
-      "Newer homes",
-      "Schools & parks",
-      "Fast 404 access"
-    ],
-    "ratings": {
-      "housePrices": 4,
-      "commuterAccess": 4,
-      "localTraffic": 3,
-      "golf": 4,
-      "fishing": 3,
-      "trailsNature": 4,
-      "restaurants": 4,
-      "localEvents": 4
-    },
-    "commute": {
-      "to404SteelesMinutes": 27
-    },
-    "pdf": "/PDF/East-Gwillimbury-Guide.pdf",
-    "hero": {
-      "tagline": "Town • NorthSide GTA",
-      "title": "Living in East Gwillimbury",
-      "subtitle": "A NorthSide GTA town blending growing neighbourhoods, parks, and quick access to Highway 404.",
-      "backgroundImage": "/Images/eastgwillimbury-banner.jpg",
-      "backgroundAlt": "Neighbourhood streetscape in East Gwillimbury",
-      "primaryButton": {
-        "label": "Explore Homes in East Gwillimbury",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "GO service from nearby stations (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes including Highway 404 and Green Lane (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Mix of newer subdivisions and established streets provides a range of housing options.",
-      "commuterAccess": "Residents rely on Highway 404 and GO services in nearby communities for downtown connections.",
-      "localTraffic": "Local traffic remains manageable with occasional peak-hour slowdowns on key arterials.",
-      "golf": "Nearby golf courses and driving ranges are popular warm-weather escapes.",
-      "fishing": "The Holland River system and nearby conservation areas offer relaxed fishing spots.",
-      "trailsNature": "Parks, wetlands, and trail networks weave through East Gwillimbury’s villages.",
-      "restaurants": "Growing plazas and local favourites bring everyday dining and coffee shops close to home.",
-      "localEvents": "Farmers’ markets and community celebrations highlight the town’s village feel."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Trails, conservation lands, and parks thread through Sharon, Queensville, and Holland Landing."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Recreation centres, schools, and local programs support a family-focused pace of life."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Growing retail hubs and quick drives to Newmarket keep errands simple."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, playgrounds, and newer homes attract families building roots."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Young Professionals",
-        "description": "Commutable access to the 404 appeals to professionals balancing work and suburban living."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Cycling routes, trails, and recreation facilities keep residents on the move."
-      },
-      {
-        "icon": "home",
-        "title": "Move-Up Buyers",
-        "description": "Detached homes and townhomes provide space to grow without leaving the GTA."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Sharon & Sharon Village",
-        "description": "Established streets and new builds with parks, schools, and community hubs."
-      },
-      {
-        "name": "Queensville & Holland Landing",
-        "description": "Growing neighbourhoods with easy 404 access and everyday amenities."
-      },
-      {
-        "name": "Mount Albert & Rural East Gwillimbury",
-        "description": "Small-town charm and country properties surrounded by rolling landscapes."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Most commuters drive to Highway 404 or connect to GO stations in East Gwillimbury and Newmarket for transit downtown."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Expect newer detached homes, townhomes, and established properties across the town’s villages."
-      },
-      {
-        "question": "Is East Gwillimbury good for families?",
-        "answer": "Yes—schools, parks, and recreation facilities are designed around family life."
-      },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Pricing varies by village and home type, so we’ll walk you through current options for your budget."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in East Gwillimbury?",
-      "description": "We live and work across the NorthSide GTA and can help you decide if East Gwillimbury fits your commute, budget, and lifestyle.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
-    }
-  },
-  {
-    "slug": "newmarket",
-    "name": "Newmarket",
-    "heroImage": "/Images/newmarket-banner.jpg",
-    "summary": "Shops, dining and GO convenience with a vibrant Main Street.",
-    "highlights": [
-      "Historic Main Street",
-      "GO Train access",
-      "Shops & dining"
-    ],
-    "ratings": {
-      "housePrices": 3,
-      "commuterAccess": 5,
-      "localTraffic": 3,
-      "golf": 4,
-      "fishing": 3,
-      "trailsNature": 4,
-      "restaurants": 5,
-      "localEvents": 4
-    },
-    "commute": {
-      "to404SteelesMinutes": 25
-    },
-    "pdf": "/PDF/Newmarket-Guide.pdf",
-    "hero": {
-      "tagline": "Town • NorthSide GTA",
-      "title": "Living in Newmarket",
-      "subtitle": "A NorthSide GTA hub with a lively Main Street, established neighbourhoods, and GO Transit convenience.",
-      "backgroundImage": "/Images/newmarket-banner.jpg",
-      "backgroundAlt": "Newmarket Main Street at sunset",
-      "primaryButton": {
-        "label": "Explore Homes in Newmarket",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Approx. GO Train time from Newmarket to Union Station (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes including Davis Drive, Leslie Street, and Highway 404 (update details).",
-      "transitSummary": "Short summary of GO/Viva transit options (update with accurate details)."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Detached homes, townhomes, and some condos provide a variety of price points across Newmarket.",
-      "commuterAccess": "Residents benefit from Highway 404 access, Viva rapid transit, and GO Train service downtown.",
-      "localTraffic": "Main corridors see busy periods, especially along Yonge Street and Davis Drive during rush hour.",
-      "golf": "Local courses and nearby clubs give golfers multiple choices close to home.",
-      "fishing": "The Holland River and nearby lakes offer casual fishing and paddling spots.",
-      "trailsNature": "Fairy Lake, Riverwalk Commons, and surrounding parks connect neighbourhoods to green space.",
-      "restaurants": "Main Street restaurants, cafés, and breweries pair with big-box conveniences throughout town.",
-      "localEvents": "Farmers’ markets, concerts, and community events keep the calendar active year-round."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Parks, trails, and riverfront spaces balance urban energy with outdoor escapes."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Recreation centres, schools, and family programs support residents in every season."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "A vibrant Main Street and regional shopping corridors keep amenities close."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, sports, and community events make Newmarket a perennial family favourite."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Young Professionals",
-        "description": "GO Transit, Highway 404, and coworking spots support busy professional schedules."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Fitness centres, arenas, and extensive trail systems keep residents moving."
-      },
-      {
-        "icon": "home",
-        "title": "Upsizers & Downsizers",
-        "description": "Varied housing types let residents scale up or right-size without leaving town."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Historic Downtown & Main Street",
-        "description": "Heritage homes and vibrant shops centred around Riverwalk Commons."
-      },
-      {
-        "name": "Stonehaven & Leslie Valley",
-        "description": "Established neighbourhoods with larger lots, parks, and quick 404 access."
-      },
-      {
-        "name": "Glenway & Southwest Newmarket",
-        "description": "Master-planned communities with townhomes, detached options, and everyday conveniences."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Residents commute via Highway 404, Viva buses, or GO Transit depending on their schedule."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Newmarket offers detached homes, semis, townhomes, and select condo buildings across its neighbourhoods."
-      },
-      {
-        "question": "Is Newmarket good for families?",
-        "answer": "Yes—schools, recreation facilities, and community programs keep families connected and active."
-      },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Pricing varies by neighbourhood and property type, so we’ll guide you through the latest market data."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Newmarket?",
-      "description": "Our NorthSide GTA team can help you discover Newmarket neighbourhoods that fit your lifestyle, commute, and budget.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
-    }
-  },
-  {
-    "slug": "aurora",
-    "name": "Aurora",
-    "heroImage": "/Images/aurora-banner.jpg",
-    "summary": "Mature neighbourhoods, schools and quiet streets with fast commuter access.",
-    "highlights": [
-      "Top schools",
-      "Established streets",
-      "GO & 404 access"
-    ],
-    "ratings": {
-      "housePrices": 3,
-      "commuterAccess": 5,
-      "localTraffic": 3,
-      "golf": 4,
-      "fishing": 2,
-      "trailsNature": 4,
-      "restaurants": 4,
-      "localEvents": 4
-    },
-    "commute": {
-      "to404SteelesMinutes": 23
-    },
-    "pdf": "/PDF/Aurora-Guide.pdf",
-    "hero": {
-      "tagline": "Town \u2022 NorthSide GTA",
-      "title": "Living in Aurora",
-      "subtitle": "A NorthSide GTA community with strong schools, established neighbourhoods, and convenient access to Toronto.",
-      "backgroundImage": "/Images/aurora-banner.jpg",
-      "backgroundAlt": "Aurora streetscape at dusk",
-      "primaryButton": {
-        "label": "Explore Homes in Aurora",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "~62,000 (2021 Census)",
-      "driveToToronto": "Approx 40\u201350 minutes via Highway 404",
-      "goTrainTime": "Approx 50\u201355 minutes to Union Station from Aurora GO",
-      "homePriceRange": "Detached homes often trade in the mid-to-high $1M range, with townhomes providing more entry options.",
-      "highways": "Easy access to Highway 404 with connections toward Highway 400 via nearby routes.",
-      "transitSummary": "Aurora GO and local YRT/Viva routes connect to Toronto and neighbouring towns."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Aurora\u2019s established detached homes keep pricing on the higher side for the NorthSide GTA.",
-      "commuterAccess": "Direct Highway 404 access and frequent GO trains make downtown commutes manageable.",
-      "localTraffic": "Local roads move steadily, though Yonge Street and Bayview can back up during rush hour.",
-      "golf": "Magna Golf Club, St. Andrew\u2019s Valley, and nearby courses provide plenty of fairways.",
-      "fishing": "In-town fishing spots are limited, but Lake Simcoe and the Holland River are a quick drive away.",
-      "trailsNature": "The Aurora Arboretum, Sheppard\u2019s Bush, and Moraine trails weave green space throughout town.",
-      "restaurants": "Independent restaurants downtown mix with convenient chains along Bayview and Wellington.",
-      "localEvents": "Seasonal farmers\u2019 markets, concerts in the park, and community festivals keep the calendar full."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Aurora sits along the Oak Ridges Moraine with trails, parks, and conservation areas linking neighbourhoods to the outdoors."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Established schools, recreation centres, and active minor sports make it easy for families to plug into the community."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Downtown boutiques, big-box conveniences, and growing dining options keep errands and evenings close to home."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Top-ranked public schools plus St. Andrew\u2019s College and St. Anne\u2019s School anchor education options."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Commuters & Professionals",
-        "description": "Highway 404 and regular GO service keep downtown Toronto commutes practical on weekdays."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Community centres, club sports, and nearby golf courses keep weekends busy."
-      },
-      {
-        "icon": "home",
-        "title": "Upsizers & Move-Up Buyers",
-        "description": "Larger lots and mature trees provide space for upsizing without leaving the GTA."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Aurora Village",
-        "description": "Historic downtown streets with century homes, caf\u00e9s, and quick GO Station access."
-      },
-      {
-        "name": "Bayview Wellington",
-        "description": "Family-friendly master-planned area with parks, schools, and everyday amenities."
-      },
-      {
-        "name": "Aurora Highlands",
-        "description": "Tree-lined streets of detached homes close to top schools and the town\u2019s recreation complex."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Highway 404 typically delivers a 40\u201350 minute drive to downtown Toronto, and GO trains run about 50\u201355 minutes to Union Station."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Aurora is dominated by detached homes and townhomes from the 1980s onward, with some newer infill and estate properties."
-      },
-      {
-        "question": "Is Aurora good for families?",
-        "answer": "Yes\u2014Aurora is known for its school network, community programs, and recreation facilities that cater to families year-round."
-      },
-      {
-        "question": "What\u2019s the general price point for homes?",
-        "answer": "Detached homes often sell in the mid-to-high $1M range, with townhomes and semis offering slightly more attainable options."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Aurora?",
-      "description": "We live and work across the NorthSide GTA and can help you decide if Aurora fits your commute, your budget, and your lifestyle.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You\u2019re Looking For",
-        "href": "/vip"
-      }
-    }
-  },
-  {
-    "slug": "stouffville",
-    "name": "Stouffville",
-    "heroImage": "/Images/stouffville-banner.jpg",
-    "summary": "Family streets, parks and a lively Main Street close to nature.",
-    "highlights": [
-      "Main Street vibe",
-      "Parks & rec",
-      "Family-friendly"
-    ],
-    "ratings": {
-      "housePrices": 4,
-      "commuterAccess": 4,
-      "localTraffic": 4,
-      "golf": 4,
-      "fishing": 3,
-      "trailsNature": 4,
-      "restaurants": 4,
-      "localEvents": 4
-    },
-    "commute": {
-      "to404SteelesMinutes": 26
-    },
-    "pdf": "/PDF/Stouffville-Guide.pdf",
-    "hero": {
-      "tagline": "Town • NorthSide GTA",
-      "title": "Living in Stouffville",
-      "subtitle": "A NorthSide GTA community that balances small-town main street energy with quick access to the city.",
-      "backgroundImage": "/Images/stouffville-banner.jpg",
-      "backgroundAlt": "Stouffville Main Street at dusk",
-      "primaryButton": {
-        "label": "Explore Homes in Stouffville",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Approx. GO Train time from Stouffville to Union Station (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Access via major routes / highways (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Detached homes and newer builds keep pricing competitive within the GTA market.",
-      "commuterAccess": "Residents lean on Highway 404, 407, and GO service for commutes into Toronto.",
-      "localTraffic": "Local streets are generally manageable, with busier periods around Main Street and school zones.",
-      "golf": "Multiple nearby courses and clubs make it easy to schedule a round close to home.",
-      "fishing": "Surrounding lakes and reservoirs offer relaxed spots for casual fishing excursions.",
-      "trailsNature": "Rouge National Urban Park and local conservation areas keep trails and forests minutes away.",
-      "restaurants": "Main Street blends independent cafés and restaurants with convenient everyday stops.",
-      "localEvents": "Seasonal festivals, markets, and community events keep the town calendar active."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Neighbourhoods back onto trails, conservation lands, and parks that connect residents to the outdoors."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Arenas, community centres, and local programming create a family-focused rhythm year-round."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Main Street shops pair with everyday amenities and GO access for effortless daily routines."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, parks, and youth programs make it easy for families to settle in."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Young Professionals",
-        "description": "Commutable access to Toronto with a quieter hometown feel appeals to career-focused residents."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Trail networks, golf courses, and recreation complexes support busy, outdoorsy routines."
-      },
-      {
-        "icon": "home",
-        "title": "Empty Nesters & Retirees",
-        "description": "Low-maintenance homes near amenities keep day-to-day living convenient and connected."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Downtown & Main Street",
-        "description": "Established streets with heritage homes, shops, and cafes close to local events."
-      },
-      {
-        "name": "Ballantrae & Surrounding Communities",
-        "description": "Golf-course living and estate-style properties with a relaxed pace near nature."
-      },
-      {
-        "name": "New North Stouffville",
-        "description": "Newer subdivisions with modern homes, parks, and schools designed for growing families."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Drivers typically connect through Highways 404 or 407, and many riders make use of GO Train service for downtown trips."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Expect a mix of detached homes, townhomes, and low-rise communities with ongoing infill development."
-      },
-      {
-        "question": "Is Stouffville good for families?",
-        "answer": "Yes—schools, recreation centres, and local programming are geared toward family life in every season."
-      },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Pricing shifts by neighbourhood and property type, so we recommend connecting with our team for the latest guidance."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Stouffville?",
-      "description": "We know the NorthSide GTA and can help you see if Stouffville matches your commute, budget, and day-to-day lifestyle.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
-    }
-  },
-  {
-    "slug": "uxbridge",
-    "name": "Uxbridge",
-    "heroImage": "/Images/uxbridge-banner.jpg",
-    "summary": "Trail capital charm, rolling hills and small-town feel with outdoor living.",
-    "highlights": [
-      "Trails & nature",
-      "Small-town charm",
-      "Active community"
-    ],
-    "ratings": {
-      "housePrices": 3,
-      "commuterAccess": 3,
-      "localTraffic": 5,
-      "golf": 5,
-      "fishing": 3,
-      "trailsNature": 5,
-      "restaurants": 4,
-      "localEvents": 4
-    },
-    "commute": {
-      "to404SteelesMinutes": 37
-    },
-    "pdf": "/PDF/Uxbridge-Guide.pdf",
-    "hero": {
-      "tagline": "Town \u2022 NorthSide GTA",
-      "title": "Living in Uxbridge",
-      "subtitle": "A NorthSide GTA town with a small-town feel, extensive trail networks, and access to nearby communities.",
-      "backgroundImage": "/Images/uxbridge-banner.jpg",
-      "backgroundAlt": "Uxbridge streetscape with historic buildings",
-      "primaryButton": {
-        "label": "Explore Homes in Uxbridge",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "To be updated with the latest census details.",
-      "driveToToronto": "Approximate drive into Toronto via regional routes and Highway 404.",
-      "goTrainTime": "GO service typically accessed through nearby Stouffville or Whitby stations.",
-      "homePriceRange": "Mix of detached homes, townhomes, and rural properties across varied price points.",
-      "highways": "Connections toward Highways 404, 407, and 401 via regional roads.",
-      "transitSummary": "Durham Region Transit and YRT services link to neighbouring towns with GO Transit access."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Housing spans heritage homes, subdivisions, and rural properties with prices that vary by property type.",
-      "commuterAccess": "Regional roads connect to Highways 404, 407, and 401, with some residents using GO stations in nearby towns.",
-      "localTraffic": "Traffic stays relatively light in-town, with occasional congestion on main corridors during peak travel.",
-      "golf": "Multiple local courses and driving ranges give golfers options close to home.",
-      "fishing": "Nearby ponds, rivers, and lakes provide spots for casual fishing excursions.",
-      "trailsNature": "Uxbridge's Trail Capital reputation keeps forests and conservation areas within minutes of most neighbourhoods.",
-      "restaurants": "Independent caf\u00e9s and restaurants line the downtown core alongside convenient everyday stops.",
-      "localEvents": "Seasonal markets, fairs, and arts events draw the community together year-round."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Uxbridge is surrounded by forests, conservation areas, and rolling farmland that keep outdoor escapes close."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Recreation centres, local sports, and community events make it easy to plug into small-town life."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Historic downtown shops mix with practical amenities, keeping errands and weekend outings nearby."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, parks, and recreation programs support active family routines."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Commuters & Professionals",
-        "description": "Those working in the GTA balance quieter living with regional road and GO access."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Cycling, hiking, and equestrian trails cater to residents who love the outdoors."
-      },
-      {
-        "icon": "home",
-        "title": "Move-Up & Rural Seekers",
-        "description": "Larger lots and rural properties appeal to buyers looking for extra space without leaving the region."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Uxbridge Town Centre",
-        "description": "Heritage streets with shops, caf\u00e9s, and established homes near local amenities."
-      },
-      {
-        "name": "Coral Creek & Quaker Village",
-        "description": "Family neighbourhoods with parks, schools, and trail connections."
-      },
-      {
-        "name": "Rural Uxbridge & Hamlets",
-        "description": "Country properties and hamlets offering privacy, barns, and wide-open views."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Most residents drive via regional roads to Highways 404, 407, or 401, with some using GO stations in neighbouring towns for train service."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Expect a mix of century homes, newer subdivisions, townhomes, and rural properties with acreage."
-      },
-      {
-        "question": "Is Uxbridge good for families?",
-        "answer": "Yes—recreation facilities, local schools, and small-town programming make it welcoming for families."
-      },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Home prices vary widely between in-town properties and rural acreages, so connect with us for the latest local trends."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Uxbridge?",
-      "description": "We live and work across the NorthSide GTA and can help you decide if Uxbridge fits your commute, your budget, and your lifestyle.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
-    }
-  },
-  {
-    "slug": "scugog",
-    "name": "Scugog",
-    "heroImage": "/Images/scugog-banner.jpg",
-    "summary": "Port Perry heritage, lakefront sunsets and a relaxed pace by the water.",
-    "highlights": [
-      "Lakefront living",
-      "Main Street heritage",
-      "Community events"
-    ],
-    "ratings": {
-      "housePrices": 4,
-      "commuterAccess": 3,
-      "localTraffic": 4,
-      "golf": 4,
-      "fishing": 5,
-      "trailsNature": 4,
-      "restaurants": 4,
-      "localEvents": 5
-    },
-    "commute": {
-      "to404SteelesMinutes": 40
-    },
-    "pdf": "/PDF/Scugog-Guide.pdf",
-    "hero": {
-      "tagline": "Town • NorthSide GTA",
-      "title": "Living in Scugog",
-      "subtitle": "A NorthSide GTA lakeside town where Port Perry’s heritage Main Street meets relaxed waterfront living.",
-      "backgroundImage": "/Images/scugog-banner.jpg",
-      "backgroundAlt": "Port Perry waterfront in Scugog",
-      "primaryButton": {
-        "label": "Explore Homes in Scugog",
-        "href": "/buyers"
-      },
-      "secondaryButton": {
-        "label": "Match With a Local Agent",
-        "href": "/contact"
-      }
-    },
-    "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "GO or commuter connections from nearby stations (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes toward Highways 407, 401, and 115 (update details).",
-      "transitSummary": "Short summary of Durham Region Transit/GO options (update with accurate details)."
-    },
-    "ratingDescriptions": {
-      "housePrices": "Waterfront, in-town, and rural properties span a variety of price points across Scugog.",
-      "commuterAccess": "Residents often drive along regional roads to Highways 407 or 401, with GO stations in nearby towns.",
-      "localTraffic": "In-town traffic stays relaxed, with busier times on weekends and peak-season event days.",
-      "golf": "Local courses and driving ranges make tee times easy to find close to home.",
-      "fishing": "Lake Scugog keeps boating and fishing at the heart of day-to-day life.",
-      "trailsNature": "Waterfront parks, conservation areas, and rolling countryside support outdoor adventures.",
-      "restaurants": "Port Perry’s historic core mixes independent dining with casual lakeside patios.",
-      "localEvents": "Seasonal markets, theatre, and waterfront festivals keep the calendar full."
-    },
-    "lifestyleHighlights": [
-      {
-        "icon": "leaf",
-        "title": "Nature & Green Space",
-        "description": "Lake Scugog, nearby trails, and conservation areas provide endless outdoor escapes."
-      },
-      {
-        "icon": "users",
-        "title": "Community & Family Life",
-        "description": "Small-town programming, marinas, and recreation centres make it easy to stay connected."
-      },
-      {
-        "icon": "map",
-        "title": "Local Spots & Convenience",
-        "description": "Port Perry’s boutiques and cafes pair with practical amenities around town."
-      }
-    ],
-    "audiences": [
-      {
-        "icon": "family",
-        "title": "Families with Kids",
-        "description": "Schools, parks, and youth programs keep family life grounded near the lake."
-      },
-      {
-        "icon": "briefcase",
-        "title": "Commuters & Professionals",
-        "description": "Some residents commute to Durham and the GTA while enjoying slower-paced evenings by the water."
-      },
-      {
-        "icon": "activity",
-        "title": "Active Lifestyles",
-        "description": "Boating, fishing, hiking, and cycling routes keep weekends full of fresh air."
-      },
-      {
-        "icon": "home",
-        "title": "Empty Nesters & Retirees",
-        "description": "Lake views and heritage streets appeal to those seeking a relaxed, connected community."
-      }
-    ],
-    "neighbourhoods": [
-      {
-        "name": "Downtown Port Perry",
-        "description": "Historic Main Street living with shops, dining, and theatre along the waterfront."
-      },
-      {
-        "name": "Lakefront Communities",
-        "description": "Homes along the shoreline with marina access and scenic sunset views."
-      },
-      {
-        "name": "Rural Scugog & Hamlets",
-        "description": "Acreage properties, farms, and hamlet communities surrounded by rolling countryside."
-      }
-    ],
-    "faqs": [
-      {
-        "question": "How long is the commute to Toronto?",
-        "answer": "Most commuters drive to Highways 407 or 401, with some connecting to GO Transit in Whitby or Oshawa."
-      },
-      {
-        "question": "What types of homes are common here?",
-        "answer": "Scugog offers waterfront cottages, in-town heritage homes, and rural properties with extra space."
-      },
-      {
-        "question": "Is Scugog good for families?",
-        "answer": "Yes—local schools, community events, and recreation programs create a family-friendly environment."
-      },
-      {
-        "question": "What’s the general price point for homes?",
-        "answer": "Pricing ranges by proximity to the lake and property size—we’ll guide you through current opportunities."
-      }
-    ],
-    "cta": {
-      "title": "Ready to explore homes in Scugog?",
-      "description": "We live and work across the NorthSide GTA and can help you decide if Scugog’s lakeside pace suits your lifestyle, commute, and budget.",
-      "primaryButton": {
-        "label": "Book a Discovery Call",
-        "href": "/contact"
-      },
-      "secondaryButton": {
-        "label": "Tell Us What You’re Looking For",
-        "href": "/vip"
-      }
-    }
-  }
-]
+  ]
+}

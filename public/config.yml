@@ -278,6 +278,149 @@ collections:
               - { label: 'Hidden Gem of Town', value: 'hidden_gem' }
               - { label: 'Photo-Worthy Spot', value: 'photo_worthy' }
               - { label: 'Where Locals Actually Go', value: 'where_locals_go' }
+
+  - name: 'towns'
+    label: 'Towns'
+    file: 'src/towns.json'
+    format: 'json'
+    editor:
+      preview: false
+    fields:
+      - label: 'Towns'
+        name: 'towns'
+        widget: 'list'
+        label_singular: 'Town'
+        summary: '{{name}} — {{slug}}'
+        fields:
+          - { name: 'slug', label: 'Slug', widget: 'string' }
+          - { name: 'name', label: 'Name', widget: 'string' }
+          - { name: 'summary', label: 'Summary', widget: 'text', required: false }
+          - { name: 'heroImage', label: 'Hero Image', widget: 'string', required: false }
+          - { name: 'livingIntro', label: 'Living Intro', widget: 'text', required: false }
+          - label: 'Highlights'
+            name: 'highlights'
+            widget: 'list'
+            required: false
+            field: { label: 'Highlight', name: 'item', widget: 'string' }
+          - label: 'Ratings'
+            name: 'ratings'
+            widget: 'object'
+            required: false
+            fields:
+              - { label: 'House Prices', name: 'housePrices', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Commuter Access', name: 'commuterAccess', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Local Traffic', name: 'localTraffic', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Golf', name: 'golf', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Fishing', name: 'fishing', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Trails & Nature', name: 'trailsNature', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Restaurants', name: 'restaurants', widget: 'number', min: 0, max: 5, required: false }
+              - { label: 'Local Events', name: 'localEvents', widget: 'number', min: 0, max: 5, required: false }
+          - label: 'Commute'
+            name: 'commute'
+            widget: 'object'
+            required: false
+            fields:
+              - { label: 'Minutes to 404/Steeles', name: 'to404SteelesMinutes', widget: 'number', required: false }
+          - { name: 'pdf', label: 'PDF Guide', widget: 'string', required: false }
+          - label: 'Hero'
+            name: 'hero'
+            widget: 'object'
+            required: false
+            fields:
+              - { name: 'tagline', label: 'Tagline', required: false }
+              - { name: 'title', label: 'Title', required: false }
+              - { name: 'subtitle', label: 'Subtitle', widget: 'text', required: false }
+              - { name: 'backgroundImage', label: 'Background Image', widget: 'string', required: false }
+              - { name: 'backgroundAlt', label: 'Background Alt', required: false }
+              - label: 'Primary Button'
+                name: 'primaryButton'
+                widget: 'object'
+                required: false
+                fields:
+                  - { name: 'label', label: 'Label', required: false }
+                  - { name: 'href', label: 'URL', required: false }
+              - label: 'Secondary Button'
+                name: 'secondaryButton'
+                widget: 'object'
+                required: false
+                fields:
+                  - { name: 'label', label: 'Label', required: false }
+                  - { name: 'href', label: 'URL', required: false }
+          - label: 'Snapshot'
+            name: 'snapshot'
+            widget: 'object'
+            required: false
+            fields:
+              - { name: 'population', label: 'Population', widget: 'string', required: false }
+              - { name: 'driveToToronto', label: 'Drive to Toronto', widget: 'string', required: false }
+              - { name: 'goTrain', label: 'GO Train', widget: 'string', required: false }
+              - { name: 'homePriceRange', label: 'Typical Home Price', widget: 'string', required: false }
+              - { name: 'highways', label: 'Highways', widget: 'string', required: false }
+              - { name: 'transitSummary', label: 'Transit Summary', widget: 'string', required: false }
+          - label: 'Rating Descriptions'
+            name: 'ratingDescriptions'
+            widget: 'object'
+            required: false
+            fields:
+              - { name: 'housePrices', label: 'House Prices', widget: 'text', required: false }
+              - { name: 'commuterAccess', label: 'Commuter Access', widget: 'text', required: false }
+              - { name: 'localTraffic', label: 'Local Traffic', widget: 'text', required: false }
+              - { name: 'golf', label: 'Golf', widget: 'text', required: false }
+              - { name: 'fishing', label: 'Fishing', widget: 'text', required: false }
+              - { name: 'trailsNature', label: 'Trails & Nature', widget: 'text', required: false }
+              - { name: 'restaurants', label: 'Restaurants', widget: 'text', required: false }
+              - { name: 'localEvents', label: 'Local Events', widget: 'text', required: false }
+          - label: 'Lifestyle Highlights'
+            name: 'lifestyleHighlights'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'icon', label: 'Icon', widget: 'string', required: false }
+              - { name: 'title', label: 'Title' }
+              - { name: 'description', label: 'Description', widget: 'text', required: false }
+          - label: 'Audiences'
+            name: 'audiences'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'icon', label: 'Icon', widget: 'string', required: false }
+              - { name: 'title', label: 'Title' }
+              - { name: 'description', label: 'Description', widget: 'text', required: false }
+          - label: 'Neighbourhoods'
+            name: 'neighbourhoods'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'name', label: 'Name' }
+              - { name: 'description', label: 'Description', widget: 'text', required: false }
+          - label: 'FAQs'
+            name: 'faqs'
+            widget: 'list'
+            required: false
+            fields:
+              - { name: 'question', label: 'Question' }
+              - { name: 'answer', label: 'Answer', widget: 'text' }
+          - label: 'CTA'
+            name: 'cta'
+            widget: 'object'
+            required: false
+            fields:
+              - { name: 'title', label: 'Title', required: false }
+              - { name: 'description', label: 'Description', widget: 'text', required: false }
+              - label: 'Primary Button'
+                name: 'primaryButton'
+                widget: 'object'
+                required: false
+                fields:
+                  - { name: 'label', label: 'Label', required: false }
+                  - { name: 'href', label: 'URL', required: false }
+              - label: 'Secondary Button'
+                name: 'secondaryButton'
+                widget: 'object'
+                required: false
+                fields:
+                  - { name: 'label', label: 'Label', required: false }
+                  - { name: 'href', label: 'URL', required: false }
           - { label: 'Enabled', name: 'enabled', widget: 'boolean', default: true, required: false }
 
   - label: 'TasteHub Categories'
