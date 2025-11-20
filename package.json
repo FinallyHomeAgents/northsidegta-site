@@ -18,6 +18,7 @@
     "events:recover": "node scripts/events-recover.mjs",
     "events:normalize": "node scripts/events-normalize.mjs",
     "test": "node --test",
+    "test:ios": "playwright test tests/ios-smoke.spec.ts --project=webkit",
     "generate:insights": "node scripts/generate-insights-data.js",
     "insights:migrate-images": "node scripts/migrate-insight-image-paths.js",
     "insights:check-images": "node scripts/check-insight-images.js",
@@ -67,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "ajv": "^8.17.1",
     "ts-node": "^10.9.2",
