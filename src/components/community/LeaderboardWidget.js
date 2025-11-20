@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { DateTime } from 'luxon'
 
 function SkeletonRow({ index }) {
@@ -37,32 +37,54 @@ export default function LeaderboardWidget({
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch(
-        `/api/rankings/leaderboard?town=${encodeURIComponent(town)}&category=${encodeURIComponent(category)}`
-      )
-      if (!response.ok) {
-        throw new Error('Failed to load leaderboard')
-      }
-      const payload = await response.json()
-      setData(payload)
-      onLoaded?.(payload)
-    } catch (err) {
-      console.error('[LeaderboardWidget] load failed', err)
-      setError(err)
-      onError?.(err)
-    } finally {
-      setLoading(false)
-    }
-  }, [town, category, onLoaded, onError])
+  const onLoadedRef = useRef(onLoaded)
+  const onErrorRef = useRef(onError)
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData, refreshToken])
+    onLoadedRef.current = onLoaded
+  }, [onLoaded])
+
+  useEffect(() => {
+    onErrorRef.current = onError
+  }, [onError])
+
+  useEffect(() => {
+    let cancelled = false
+
+    const load = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const response = await fetch(
+          `/api/rankings/leaderboard?town=${encodeURIComponent(town)}&category=${encodeURIComponent(category)}`
+        )
+        if (!response.ok) {
+          throw new Error('Failed to load leaderboard')
+        }
+        const payload = await response.json()
+        if (!cancelled) {
+          setData(payload)
+          onLoadedRef.current?.(payload)
+        }
+      } catch (err) {
+        console.error('[LeaderboardWidget] load failed', err)
+        if (!cancelled) {
+          setError(err)
+          onErrorRef.current?.(err)
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    load()
+
+    return () => {
+      cancelled = true
+    }
+  }, [town, category, refreshToken])
 
   const topItems = useMemo(() => {
     if (!data?.items) return []
