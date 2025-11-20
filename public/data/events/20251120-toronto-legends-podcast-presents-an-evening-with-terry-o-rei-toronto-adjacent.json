@@ -22,16 +22,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/toronto-legends-podcast-presents-an-evening-with-terry-oreilly/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014423-1763663400-1763668800@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-11-20T08:37:00.933Z",
-  "updatedAt": "2025-11-20T08:37:00.933Z",
-  "featured": false
+  "updatedAt": "2025-11-20T08:37:00Z"
 }
