@@ -1,194 +1,230 @@
 {
-  "slug": "20251115-richmond-hill-merry-marketplace-toronto-adjacent",
-  "title": "Richmond Hill Merry Marketplace",
-  "summary": "Richmond Hill Merry Marketplace",
+  "slug": "20251120-nights-of-lights-apres-shop-holiday-popup-experience-toronto-adjacent",
+  "title": "Nights of Lights: Apres Shop - Holiday Popup Experience",
+  "summary": "Nights of Lights: Apres Shop - Holiday Popup Experience",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » 2025 Summer Art Camp at Palette Art School March Break at LEGOLAND® Discovery Centre Toronto Toronto Legends Podcast presents: An Evening with Terry O’Reilly Loading view. Today Now Now Select date. Nov 20 November 12 @ 9:30 am - November 20 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 13 @ 9:30 am - November 21 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 14 @ 9:30 am - November 22 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 15 @ 9:30 am - November 23 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 15 @ 4:00 pm - December 13 @ 8:00 pm Event Series Richmond Hill Merry Marketplace Nov 20 November 16 @ 9:30 am - November 24 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 17 @ 9:00 am - November 20 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 20 November 17 @ 9:30 am - November 25 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 18 @ 9:00 am - November 21 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 20 November 18 @ 9:30 am - November 26 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 20 November 19 @ 9:00 am - November 22 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 20 November 19 @ 9:30 am - November 27 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-15T21:00:00Z",
-  "endDate": "2025-12-14T01:00:00Z",
+  "startDate": "2025-11-20T21:00:00Z",
+  "endDate": "2025-12-25T03:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-15",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-16",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-17",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-18",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
-      "date": "2025-11-19",
-      "all_day": false,
-      "start_time": "16:00",
-      "end_time": "20:00"
-    },
-    {
       "date": "2025-11-20",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-21",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-22",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-23",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-24",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-25",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-26",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-27",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-28",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-29",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-11-30",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-01",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-02",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-03",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-04",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-05",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-06",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-07",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-08",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-09",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-10",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-11",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-12",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
     },
     {
       "date": "2025-12-13",
       "all_day": false,
       "start_time": "16:00",
-      "end_time": "20:00"
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-14",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-15",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-16",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-17",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-18",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-19",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-20",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-21",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-22",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-23",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
+    },
+    {
+      "date": "2025-12-24",
+      "all_day": false,
+      "start_time": "16:00",
+      "end_time": "22:00"
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "Richmond Green Park, 1300 Elgin Mills Rd E, Richmond Hill, L4S 1M5",
-  "address": "Richmond Green Park, 1300 Elgin Mills Rd E, Richmond Hill, L4S 1M5",
+  "locationName": "Vaughan Mills, 1 Bass Pro Mills Drive, Vaughan, L4K 5W4, Canada",
+  "address": "Vaughan Mills, 1 Bass Pro Mills Drive, Vaughan, L4K 5W4, Canada",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/richmond-hill-merry-marketplace/2025-11-15/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/nights-of-lights-apres-shop-holiday-popup-experience/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -198,8 +234,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10014278-1763222400-1765656000@www.experienceyorkregion.com",
+  "sourceRef": "10014439-1763654400-1766613600@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-20T08:37:00.933Z",
+  "firstSeenAt": "2025-11-20T08:37:00.933Z",
   "updatedAt": "2025-11-20T08:37:00.933Z",
   "featured": false
 }

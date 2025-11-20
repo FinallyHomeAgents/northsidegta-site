@@ -17,11 +17,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Mayor-Council.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/mayor-and-councils-new-years-eve-levee-and-skate/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/mayor-and-councils-new-years-eve-levee-and-skate/",
-  "updatedAt": "2025-11-19T08:35:41Z"
+  "lastSyncedAt": "2025-11-20T08:37:00.933Z",
+  "updatedAt": "2025-11-20T08:37:00.933Z",
+  "featured": false
 }
