@@ -38,18 +38,23 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
   const [data, setData] = useState(initialData || null);
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
+  const ballotItemsRef = useRef(ballotItems);
   const onUpdateRef = useRef(onUpdate);
 
   useEffect(() => {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
 
+  useEffect(() => {
+    ballotItemsRef.current = ballotItems;
+  }, [ballotItems]);
+
   const fetchData = useCallback(async () => {
     if (!rankingKey) return;
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItems));
+      const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItemsRef.current));
       if (!response.ok) {
         throw new Error("Failed to load leaderboard");
       }
@@ -62,7 +67,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
     } finally {
       setLoading(false);
     }
-  }, [rankingKey, ballotItems]);
+  }, [rankingKey]);
 
   useEffect(() => {
     if (!rankingKey) return;
@@ -72,7 +77,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
       setLoading(true);
       setError("");
       try {
-        const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItems));
+        const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItemsRef.current));
         if (!response.ok) {
           throw new Error("Failed to load leaderboard");
         }
@@ -97,7 +102,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
     return () => {
       cancelled = true;
     };
-  }, [rankingKey, ballotItems]);
+  }, [rankingKey]);
 
   return { data, loading, error, refresh: fetchData };
 }
