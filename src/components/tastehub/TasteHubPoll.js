@@ -18,14 +18,14 @@ function computeBallotPayload(ballotItems = []) {
   }));
 }
 
-function buildLeaderboardUrl(rankingKey, ballotItems) {
+function buildLeaderboardParams(rankingKey, ballotItems) {
   const ballotPayload = computeBallotPayload(ballotItems);
   const params = new URLSearchParams();
   params.set("rankingKey", rankingKey);
   if (ballotPayload.length > 0) {
     params.set("ballot", JSON.stringify(ballotPayload));
   }
-  return `${API_BASE}/leaderboard?${params.toString()}`;
+  return params.toString();
 }
 
 function formatPercent(score, total) {
@@ -38,23 +38,23 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
   const [data, setData] = useState(initialData || null);
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
-  const ballotItemsRef = useRef(ballotItems);
   const onUpdateRef = useRef(onUpdate);
+
+  const leaderboardParams = useMemo(() => {
+    if (!rankingKey) return "";
+    return buildLeaderboardParams(rankingKey, ballotItems || []);
+  }, [rankingKey, ballotItems]);
 
   useEffect(() => {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
 
-  useEffect(() => {
-    ballotItemsRef.current = ballotItems;
-  }, [ballotItems]);
-
   const fetchData = useCallback(async () => {
-    if (!rankingKey) return;
+    if (!leaderboardParams) return;
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItemsRef.current));
+      const response = await fetch(`${API_BASE}/leaderboard?${leaderboardParams}`);
       if (!response.ok) {
         throw new Error("Failed to load leaderboard");
       }
@@ -67,17 +67,17 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
     } finally {
       setLoading(false);
     }
-  }, [rankingKey]);
+  }, [leaderboardParams]);
 
   useEffect(() => {
-    if (!rankingKey) return;
+    if (!leaderboardParams) return;
     let cancelled = false;
 
     const load = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await fetch(buildLeaderboardUrl(rankingKey, ballotItemsRef.current));
+        const response = await fetch(`${API_BASE}/leaderboard?${leaderboardParams}`);
         if (!response.ok) {
           throw new Error("Failed to load leaderboard");
         }
@@ -102,7 +102,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
     return () => {
       cancelled = true;
     };
-  }, [rankingKey]);
+  }, [leaderboardParams]);
 
   return { data, loading, error, refresh: fetchData };
 }
