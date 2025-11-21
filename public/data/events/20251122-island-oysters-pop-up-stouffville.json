@@ -11,17 +11,23 @@
   "town": "Stouffville",
   "locationName": "Muddy York Brewing Co",
   "address": "50 Innovator Ave Unit #1, Stouffville, L4A 0Y2",
-  "priceType": "Mixed",
+  "priceType": "Free",
+  "priceNote": "Free",
   "badges": [
     "Family-friendly"
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/islandoysters-poster.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/island-oysters-pop-up/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/island-oysters-pop-up/",
-  "updatedAt": "2025-11-20T08:37:00Z"
+  "lastSyncedAt": "2025-11-21T08:37:11.930Z",
+  "updatedAt": "2025-11-21T08:37:11.930Z",
+  "featured": false
 }
