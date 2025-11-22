@@ -861,6 +861,81 @@ function SupportStrip({ onContact }) {
   );
 }
 
+function CompactContactCards({ onContact }) {
+  const agents = [
+    {
+      name: "Matthew Mulhall",
+      title: "Real Estate Agent | Finally Home Agents",
+      brokerage: "HomeLife Optimum Realty, Brokerage",
+      accent: "Co-Founder, NorthSide GTA",
+      imageSrc: "/Images/matthew.jpg",
+      imageAlt: "Headshot of Matthew Mulhall, co-founder of Finally Home Agents.",
+    },
+    {
+      name: "Landon Mulhall",
+      title: "Real Estate Agent | Finally Home Agents",
+      brokerage: "HomeLife Optimum Realty, Brokerage",
+      accent: "Co-Founder, NorthSide GTA",
+      imageSrc: "/Images/landon.jpg",
+      imageAlt: "Headshot of Landon Mulhall, co-founder of Finally Home Agents.",
+    },
+  ];
+
+  return (
+    <section className="space-y-5" aria-labelledby="contact-team-heading">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 id="contact-team-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Prefer to Connect Directly?
+          </h3>
+          <p className="mt-1 text-base text-emerald-100/80 sm:text-lg">
+            Reach out to the team that hosted you at 209 Barrie St — we’re happy to talk next steps.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => onContact?.("contact-form")}
+          className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        >
+          Message Us
+        </button>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {agents.map((agent) => (
+          <CompactAgentCard key={agent.name} {...agent} onContact={onContact} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CompactAgentCard({ name, title, brokerage, accent, imageSrc, imageAlt, onContact }) {
+  return (
+    <article className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_18px_40px_rgba(4,17,12,0.35)]">
+      <img
+        src={imageSrc}
+        alt={imageAlt}
+        loading="lazy"
+        className="h-14 w-14 flex-none rounded-full object-cover shadow"
+      />
+      <div className="flex-1 space-y-1">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">{accent}</p>
+        <h4 className="text-lg font-semibold text-white">{name}</h4>
+        <p className="text-sm text-emerald-100/85">{title}</p>
+        <p className="text-xs text-emerald-100/70">{brokerage}</p>
+      </div>
+      <button
+        type="button"
+        onClick={() => onContact?.("contact-form")}
+        className="inline-flex items-center justify-center rounded-lg border border-white/50 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+      >
+        Contact
+      </button>
+    </article>
+  );
+}
+
 function BuyersReviewCarousel() {
   const grouped = useMemo(() => {
     const chunkSize = 3;
@@ -1170,9 +1245,12 @@ const BARRIE_ROUTE_META = {
 export default function ThankYou209BarriePage() {
   const scrollToId = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (!el) return;
+
+    const offset = 80;
+    const target = el.getBoundingClientRect().top + window.pageYOffset - offset;
+
+    window.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
   };
 
   const handleScroll = (id) => scrollToId(id);
@@ -1180,7 +1258,7 @@ export default function ThankYou209BarriePage() {
   const handleContactOpen = () => scrollToId("contact-form");
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#04110c] text-white">
       <HeaderShell />
       <DynamicMetaTags {...BARRIE_ROUTE_META}>
         <script type="application/ld+json">
@@ -1209,7 +1287,7 @@ export default function ThankYou209BarriePage() {
         </script>
       </DynamicMetaTags>
 
-      <main className="relative pb-24">
+      <main className="relative flex-1 pb-24">
         <BuyersHero
           onMoreInfo={() => handleScroll("contact-form")}
           onExploreHomes={() => handleScroll("how-can-we-help")}
@@ -1285,6 +1363,8 @@ export default function ThankYou209BarriePage() {
                 </div>
                 <BuyerSignupForm />
               </section>
+
+              <CompactContactCards onContact={handleContactClick} />
 
               <SupportStrip onContact={handleContactClick} />
             </div>
