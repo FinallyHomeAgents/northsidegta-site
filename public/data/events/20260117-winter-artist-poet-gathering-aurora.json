@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/winter-artist-poet-gathering-2026/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002711-1768647600-1768654800@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-22T08:32:32.281Z",
-  "firstSeenAt": "2025-11-22T08:32:32.281Z",
-  "updatedAt": "2025-11-22T08:32:32.281Z",
-  "featured": false
+  "updatedAt": "2025-11-22T08:32:32Z"
 }
