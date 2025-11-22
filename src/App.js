@@ -25,6 +25,7 @@ import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
+import ThankYou209BarriePage from "./ThankYou209BarriePage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -63,6 +64,7 @@ function App() {
           <Route path="/"             element={<HomePage />} />
           <Route path="/collections/:slug" element={<CuratedPage />} />
           <Route path="/thank-you"     element={<ThankYouPage />} />
+          <Route path="/thank-you-209-barrie-st" element={<ThankYou209BarriePage />} />
           <Route path="/about"        element={<AboutPage />} />
           <Route path="/buyers"       element={<BuyersPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
