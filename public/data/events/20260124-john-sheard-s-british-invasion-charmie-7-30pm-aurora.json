@@ -1,0 +1,38 @@
+{
+  "slug": "20260124-john-sheard-s-british-invasion-charmie-7-30pm-aurora",
+  "title": "John Sheard's British Invasion + Charmie - 7:30PM",
+  "summary": "John Sheard's British Invasion + Charmie - 7:30PM",
+  "description": "Pricing Regular: $55.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Cultural Centre Presents John Sheard’s British Invasion Supported by Charmie Aurora Town Square Performance Hall 50 Victoria Street, Aurora 6:45 pm Doors Open 7:30 pm Show Start Celebrate the unforgettable sounds of the ’60s as John Sheard, beloved pianist, producer, and long-time Music Director of The Vinyl Cafe, returns to the Aurora Cultural Centre with his hit concert The British Invasion! Backed by an all-star band—featuring the brilliant British guitarist and vocalist Greg Wyard—Sheard brings to life timeless hits by The Beatles, The Rolling Stones, Petula Clark, Dusty Springfield, The Kinks, and more. This high-energy, nostalgia-filled evening is a tribute to the artists who shaped a generation—and the soundtrack of a cultural revolution. Opening the night is rising R&B-pop sensation Charmie. Born in Haiti and raised in Toronto, Charmie is a powerhouse singer-songwriter whose soulful voice and magnetic stage presence have captivated audiences across Canada. A multi-instrumentalist and collaborator on Nelly Furtado’s latest album 7, she brings fresh energy, heartfelt lyrics, and undeniable talent to the stage. This presentation is made possible with the support of Season Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
+  "startDate": "2026-01-25T00:30:00Z",
+  "endDate": "2026-01-25T02:30:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2026-01-24",
+      "all_day": false,
+      "start_time": "19:30",
+      "end_time": "21:30"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/john-sheards-british-invasion-2-2526/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "status": "pending",
+  "hidden": false,
+  "archived": false,
+  "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
+  "sourceRef": "10002635-1769283000-1769290200@auroraculturalcentre.ca",
+  "lastSyncedAt": "2025-11-22T08:32:32.281Z",
+  "firstSeenAt": "2025-11-22T08:32:32.281Z",
+  "updatedAt": "2025-11-22T08:32:32.281Z",
+  "featured": false
+}
