@@ -1,8 +1,8 @@
-# Events Sync Report — 2025-11-22 03:32 EST
+# Events Sync Report — 2025-11-23 03:32 EST
 
-* Created: 4
-* Updated: 0
-* Unchanged: 42
+* Created: 3
+* Updated: 40
+* Unchanged: 0
 * Errors: 33
 
 ## URL Updates
@@ -27,10 +27,10 @@
 | Township of Uxbridge Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Township of Scugog Events | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Explore Georgina | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Discover Stouffville | 0 | 0 | 16 | 34 | ok | — |
+| Discover Stouffville | 0 | 13 | 0 | 28 | ok | — |
 | Discover Uxbridge | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Town Square | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Aurora Cultural Centre | 4 | 0 | 26 | 30 | ok | — |
+| Aurora Cultural Centre | 3 | 27 | 0 | 30 | ok | — |
 | NewRoads Performing Arts Centre | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Georgina Centre for Arts & Culture | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Sharon Temple National Historic Site | 0 | 0 | 0 | 0 | error | 2 error(s), No items |

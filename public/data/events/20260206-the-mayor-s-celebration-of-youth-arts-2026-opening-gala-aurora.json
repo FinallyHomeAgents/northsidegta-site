@@ -1,0 +1,38 @@
+{
+  "slug": "20260206-the-mayor-s-celebration-of-youth-arts-2026-opening-gala-aurora",
+  "title": "The Mayor's Celebration of Youth Arts 2026 Opening Gala",
+  "summary": "The Mayor's Celebration of Youth Arts 2026 Opening Gala",
+  "description": "The Mayor’s Celebration of Youth Arts 2026 Opening Gala Friday, February 6 | 6:30 – 8:30 PM Homeroom Galleries (Level 1) | 50 Victoria Street, Aurora Join us for the opening of The Mayor’s Celebration of Youth Arts #MCOYA26, an annual exhibition celebrating art by Grade 12 students in Aurora. #MCOYA26 brings together students across 7 local high schools, Aurora High School, Cardinal Carter Catholic High School, Dr G.W. Williams Secondary School, École secondaire catholique Renaissance, St. Andrew’s College, St. Anne’s School, and St. Maximilian Kolbe Catholic High School. The public reception is Friday, February 6, from 6:30 – 8:30 pm. Opening remarks commence at 7 pm. Light refreshments are provided, and all are welcome. View #MCOYA26",
+  "startDate": "2026-02-06T23:30:00Z",
+  "endDate": "2026-02-07T01:30:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2026-02-06",
+      "all_day": false,
+      "start_time": "18:30",
+      "end_time": "20:30"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/mcoya26-opening-gala/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "status": "pending",
+  "hidden": false,
+  "archived": false,
+  "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
+  "sourceRef": "10002707-1770402600-1770409800@auroraculturalcentre.ca",
+  "lastSyncedAt": "2025-11-23T08:32:43.858Z",
+  "firstSeenAt": "2025-11-23T08:32:43.858Z",
+  "updatedAt": "2025-11-23T08:32:43.858Z",
+  "featured": false
+}
