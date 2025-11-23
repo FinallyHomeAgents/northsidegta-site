@@ -1287,7 +1287,7 @@ export default function ThankYou209BarriePage() {
         </script>
       </DynamicMetaTags>
 
-      <main className="relative flex-1 pb-24">
+      <main className="relative flex-1 overflow-hidden pb-24">
         <BuyersHero
           onMoreInfo={() => handleScroll("contact-form")}
           onExploreHomes={() => handleScroll("how-can-we-help")}
