@@ -39,6 +39,8 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
   const onUpdateRef = useRef(onUpdate);
+  const lastLoadedParamsRef = useRef("");
+  const inFlightRef = useRef(false);
 
   const leaderboardParams = useMemo(() => {
     if (!rankingKey) return "";
@@ -49,62 +51,64 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
 
-  const fetchData = useCallback(async () => {
-    if (!leaderboardParams) return;
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch(`${API_BASE}/leaderboard?${leaderboardParams}`);
-      if (!response.ok) {
-        throw new Error("Failed to load leaderboard");
+  const fetchData = useCallback(
+    async (force = false, isCancelled) => {
+      if (!leaderboardParams) return;
+
+      // Guard against refetch loops if the component re-renders with the same
+      // leaderboard params (e.g., after CMS edits that change ballot ordering).
+      // We still allow manual refreshes (force === true) after someone votes.
+      const alreadyLoaded = lastLoadedParamsRef.current === leaderboardParams;
+      if (!force && (inFlightRef.current || alreadyLoaded)) {
+        return;
       }
-      const payload = await response.json();
-      setData(payload);
-      onUpdateRef.current?.(payload);
-    } catch (err) {
-      console.error("[TasteHubPoll] leaderboard fetch failed", err);
-      setError(err instanceof Error ? err.message : "Unable to load leaderboard");
-    } finally {
-      setLoading(false);
-    }
-  }, [leaderboardParams]);
 
-  useEffect(() => {
-    if (!leaderboardParams) return;
-    let cancelled = false;
-
-    const load = async () => {
+      inFlightRef.current = true;
       setLoading(true);
       setError("");
+
       try {
         const response = await fetch(`${API_BASE}/leaderboard?${leaderboardParams}`);
         if (!response.ok) {
           throw new Error("Failed to load leaderboard");
         }
         const payload = await response.json();
+        const cancelled = isCancelled?.();
         if (!cancelled) {
+          lastLoadedParamsRef.current = leaderboardParams;
           setData(payload);
           onUpdateRef.current?.(payload);
         }
       } catch (err) {
         console.error("[TasteHubPoll] leaderboard fetch failed", err);
-        if (!cancelled) {
+        if (!isCancelled?.()) {
           setError(err instanceof Error ? err.message : "Unable to load leaderboard");
         }
       } finally {
-        if (!cancelled) {
+        inFlightRef.current = false;
+        if (!isCancelled?.()) {
           setLoading(false);
         }
       }
+    },
+    [leaderboardParams]
+  );
+
+  useEffect(() => {
+    if (!leaderboardParams) return;
+    let cancelled = false;
+
+    const load = async () => {
+      await fetchData(false, () => cancelled);
     };
 
     load();
     return () => {
       cancelled = true;
     };
-  }, [leaderboardParams]);
+  }, [fetchData, leaderboardParams]);
 
-  return { data, loading, error, refresh: fetchData };
+  return { data, loading, error, refresh: () => fetchData(true) };
 }
 
 function LeaderboardList({ items, total, loading, error, disabled, disabledMessage }) {
