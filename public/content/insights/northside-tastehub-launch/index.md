@@ -1,7 +1,6 @@
 ---
 title: "Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA"
 slug: northside-tastehub-launch
-publishDate: 2025-11-24T09:00:00-05:00
 author: "Matthew & Landon Mulhall, Finally Home Agents"
 excerpt: >-
   NorthSide TasteHub is our new community-powered food hub for Uxbridge, Georgina,
