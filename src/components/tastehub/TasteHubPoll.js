@@ -40,7 +40,7 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
   const [error, setError] = useState("");
   const onUpdateRef = useRef(onUpdate);
   const lastLoadedParamsRef = useRef("");
-  const inFlightRef = useRef(false);
+  const inFlightParamsRef = useRef(new Set());
 
   const leaderboardParams = useMemo(() => {
     if (!rankingKey) return "";
@@ -59,11 +59,12 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
       // leaderboard params (e.g., after CMS edits that change ballot ordering).
       // We still allow manual refreshes (force === true) after someone votes.
       const alreadyLoaded = lastLoadedParamsRef.current === leaderboardParams;
-      if (!force && (inFlightRef.current || alreadyLoaded)) {
+      const inFlightForParams = inFlightParamsRef.current.has(leaderboardParams);
+      if (!force && (inFlightForParams || alreadyLoaded)) {
         return;
       }
 
-      inFlightRef.current = true;
+      inFlightParamsRef.current.add(leaderboardParams);
       setLoading(true);
       setError("");
 
@@ -85,9 +86,9 @@ function useLeaderboard({ rankingKey, ballotItems, initialData, onUpdate }) {
           setError(err instanceof Error ? err.message : "Unable to load leaderboard");
         }
       } finally {
-        inFlightRef.current = false;
+        inFlightParamsRef.current.delete(leaderboardParams);
         if (!isCancelled?.()) {
-          setLoading(false);
+          setLoading(inFlightParamsRef.current.size > 0 ? true : false);
         }
       }
     },
