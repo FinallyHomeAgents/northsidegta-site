@@ -15,6 +15,7 @@ const INLINE_MEDIA_PLACEMENTS = new Set(["after-h1", "after-p2", "after-p4", "en
 const DEFAULT_INLINE_PLACEMENT = "after-p2";
 const ALLOWED_ASPECT_RATIOS = new Set(["16:9", "4:3", "3:2", "1:1", "9:16"]);
 const DEFAULT_ASPECT_RATIO = "16:9";
+const TASTEHUB_POLLS_MODULE = path.join(rootDir, "lib", "tastehub", "getTasteHubPolls.js");
 
 function cleanupEmptyDirectories(...dirs) {
   dirs.forEach((dir) => {
@@ -157,6 +158,53 @@ function normalizeAssetPath(value) {
   const { path: uploadPath, suffix } = splitPathAndSuffix(normalized);
   if (!uploadPath) return "";
   return `${INSIGHTS_UPLOAD_WEB_PATH}${uploadPath}${suffix}`;
+}
+
+function normalizeEmbeddedPollSlugs(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry) => {
+      if (typeof entry === "string") return normalizeSlug(entry);
+      if (entry && typeof entry === "object") return normalizeSlug(entry.pollSlug || entry.slug || entry.value);
+      if (entry == null) return "";
+      return normalizeSlug(entry);
+    })
+    .filter(Boolean);
+}
+
+function normalizeEmbeddedPoll(poll) {
+  if (!poll || typeof poll !== "object") return null;
+  const slug = normalizeSlug(poll.slug || poll.id);
+  if (!slug) return null;
+
+  const ballotItems = Array.isArray(poll.ballotItems)
+    ? poll.ballotItems
+        .map((item) => {
+          if (!item) return null;
+          const name = safeString(item.name);
+          if (!name) return null;
+          const id = normalizeSlug(item.id || name) || name;
+          return { id, name, address: safeString(item.address), link: safeString(item.link) };
+        })
+        .filter(Boolean)
+    : [];
+
+  return {
+    slug,
+    title: safeString(poll.title) || "Untitled Poll",
+    description: safeString(poll.description),
+    town: safeString(poll.town),
+    category: safeString(poll.category),
+    customCategory: safeString(poll.customCategory || poll.custom_category),
+    displayCategory: safeString(poll.displayCategory || poll.customCategory || poll.custom_category || poll.category),
+    status: safeString(poll.status || "draft").toLowerCase(),
+    rankingKey: safeString(poll.rankingKey || poll.ranking_key || slug),
+    featured: Boolean(poll.featured),
+    ballotItems,
+    image: safeString(poll.image),
+    createdAt: safeString(poll.createdAt || poll.updatedAt),
+    updatedAt: safeString(poll.updatedAt || poll.createdAt),
+  };
 }
 
 function normalizeGallery(raw) {
@@ -302,13 +350,40 @@ function normalizeTags(raw) {
     .filter(Boolean);
 }
 
+async function loadTasteHubPolls() {
+  try {
+    const module = await import(TASTEHUB_POLLS_MODULE);
+    const loader = module.getTasteHubPolls || module.default;
+    if (typeof loader !== "function") return [];
+    const polls = await loader();
+    return Array.isArray(polls) ? polls : [];
+  } catch (error) {
+    console.warn(`[generate-insights-data] Unable to load TasteHub polls: ${error.message}`);
+    return [];
+  }
+}
+
+async function mapPollsBySlug() {
+  const polls = await loadTasteHubPolls();
+  const map = new Map();
+  polls.forEach((poll) => {
+    const slug = normalizeSlug(poll?.slug);
+    if (!slug) return;
+    const normalized = normalizeEmbeddedPoll(poll);
+    if (normalized) {
+      map.set(slug, normalized);
+    }
+  });
+  return map;
+}
+
 function writeJson(targetPath, data) {
   const json = `${JSON.stringify(data, null, 2)}\n`;
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.writeFileSync(targetPath, json, "utf8");
 }
 
-function main() {
+async function main() {
   if (!fs.existsSync(contentDir)) {
     console.warn(
       `[generate-insights-data] Skipping — content directory not found at ${path.relative(rootDir, contentDir)}`,
@@ -317,6 +392,8 @@ function main() {
   }
 
   moveNestedInsightAssets();
+
+  const pollsBySlug = await mapPollsBySlug();
 
   const entries = fs
     .readdirSync(contentDir, { withFileTypes: true })
@@ -371,6 +448,11 @@ function main() {
     const body = parsed.content.replace(/^\uFEFF/, "").replace(/^\n+/, "");
     const excerpt = collapseWhitespace(data.excerpt) || collapseWhitespace(body).slice(0, 150);
 
+    const embeddedPollSlugs = normalizeEmbeddedPollSlugs(data.embeddedPollSlugs);
+    const embeddedPolls = embeddedPollSlugs
+      .map((slug) => pollsBySlug.get(slug))
+      .filter(Boolean);
+
     const result = {
       slug: folderSlug,
       title: safeString(data.title),
@@ -389,6 +471,8 @@ function main() {
       inlineImages: normalizeInlineImages(data.inlineImages),
       pullQuote: normalizePullQuote(data.pullQuote),
       videos: normalizeVideos(data.videos),
+      embeddedPollSlugs,
+      embeddedPolls,
       body,
       sourcePath: relativeIndexPath,
     };
@@ -437,4 +521,7 @@ function main() {
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(`[generate-insights-data] Uncaught error: ${error.message}`);
+  process.exitCode = 1;
+});

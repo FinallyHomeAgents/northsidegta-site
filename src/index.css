@@ -461,6 +461,36 @@ body {
   }
 }
 
+.insight-embedded-polls {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.insight-embedded-polls h2 {
+  font-weight: 600;
+  color: var(--ns-green-dark);
+  font-size: clamp(1.8rem, 1.5vw + 1.2rem, 2.2rem);
+  margin-bottom: 1.75rem;
+}
+
+.insight-embedded-polls-grid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .insight-embedded-polls-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .insight-embedded-polls-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .ns-reveal {
   opacity: 0;
   transform: translateY(32px);

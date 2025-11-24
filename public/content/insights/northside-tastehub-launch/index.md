@@ -22,6 +22,10 @@ featureImage: /uploads/insights/northside-tastehub-feature.jpg
 featureImageAlt: NorthSide TasteHub voting screen showing local restaurant
   matchups in the NorthSide GTA
 inlineImages: []
+embeddedPollSlugs:
+  - best-pizza-uxbridge
+  - best-wings-newmarket
+  - best-date-aurora
 pullQuote:
   text: NorthSide TasteHub is a community-powered scoreboard where locals vote for
     their favourite spots and discover new ones.
