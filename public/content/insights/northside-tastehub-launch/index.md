@@ -1,11 +1,12 @@
 ---
 title: "Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA"
 slug: northside-tastehub-launch
-author: "Matthew & Landon Mulhall, Finally Home Agents"
-excerpt: >-
-  NorthSide TasteHub is our new community-powered food hub for Uxbridge, Georgina,
-  East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog. Vote for your favourite spots,
-  discover new places to eat, and finally settle all those “best pizza” debates north of Toronto.
+publishDate: 2025-11-24T13:00:00-05:00
+author: Matthew Mulhall & Landon Mulhall | Finally Home Agents |  NorthSideGTA.ca
+excerpt: NorthSide TasteHub is our new community-powered food hub for Uxbridge,
+  Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog. Vote
+  for your favourite spots, discover new places to eat, and finally settle all
+  those “best pizza” debates north of Toronto.
 tags:
   - NorthSide TasteHub
   - NorthSide GTA
@@ -17,24 +18,29 @@ tags:
   - Scugog restaurants
   - East Gwillimbury restaurants
   - where to eat north of Toronto
-featureImage: /uploads/insights/northside-tastehub-hero.jpg
-featureImageAlt: NorthSide TasteHub voting screen showing local restaurant matchups in the NorthSide GTA
+featureImage: /uploads/insights/northside-tastehub-feature.jpg
+featureImageAlt: NorthSide TasteHub voting screen showing local restaurant
+  matchups in the NorthSide GTA
 inlineImages: []
 pullQuote:
-  text: "NorthSide TasteHub is a community-powered scoreboard where locals vote for their favourite spots and discover new ones."
+  text: NorthSide TasteHub is a community-powered scoreboard where locals vote for
+    their favourite spots and discover new ones.
   portrait: ""
-gallery: []
+gallery:
+  - image: /uploads/insights/northside-tastehub-preview.jpg
+mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
+  4:3. Pull-quote portraits ≈800×1000 px.
+published: false
 videos: []
-mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or 4:3. Pull-quote portraits ≈800×1000 px.
-videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB with poster image + optional VTT captions.
+videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
+  with poster image + optional VTT captions.
 seo:
   title: "NorthSide TasteHub: Where to Eat in the NorthSide GTA"
-  description: >-
-    Discover NorthSide TasteHub, our community-powered food hub helping locals find the best pizza,
-    wings, date-night spots and family-friendly restaurants in Uxbridge, Georgina, Newmarket, Aurora,
-    Stouffville, Scugog and East Gwillimbury, all north of Toronto.
+  description: Discover NorthSide TasteHub, our community-powered food hub helping
+    locals find the best pizza, wings, date-night spots and family-friendly
+    restaurants in Uxbridge, Georgina, Newmarket, Aurora, Stouffville, Scugog
+    and East Gwillimbury, all north of Toronto.
   ogImage: /uploads/insights/northside-tastehub-og.jpg
-published: false
 ---
 
 # Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA
