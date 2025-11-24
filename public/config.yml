@@ -1205,6 +1205,15 @@ collections:
               - { label: 'After 2nd Paragraph', value: 'after-P2' }
               - { label: 'After 4th Paragraph', value: 'after-P4' }
               - { label: 'End of Article', value: 'end' }
+      - label: 'Embedded TasteHub Polls (optional)'
+        name: 'embeddedPollSlugs'
+        widget: 'list'
+        required: false
+        hint: 'Add TasteHub poll slugs to embed their cards at the bottom of this article (e.g. best-pizza-uxbridge).'
+        field:
+          label: 'Poll slug'
+          name: 'pollSlug'
+          widget: 'string'
       - name: 'pullQuote'
         label: 'Pull Quote'
         widget: 'object'

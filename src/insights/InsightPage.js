@@ -21,6 +21,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { HTMLElement, TextNode, parse } from "node-html-parser";
+import TasteHubPollCard from "../components/tastehub/TasteHubPollCard";
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const INSIGHT_UPLOAD_WEB_PATH = "/uploads/insights/";
@@ -249,6 +250,57 @@ function safeString(value) {
   return "";
 }
 
+function normalizeEmbeddedPollSlugs(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry) => {
+      if (typeof entry === "string") return normalizeSlug(entry);
+      if (entry && typeof entry === "object") return normalizeSlug(entry.pollSlug || entry.slug || entry.value);
+      return normalizeSlug(entry);
+    })
+    .filter(Boolean);
+}
+
+function normalizeEmbeddedPolls(raw, embeddedPollSlugs = []) {
+  if (!Array.isArray(raw)) return [];
+
+  const normalized = raw
+    .map((poll) => {
+      if (!poll || typeof poll !== "object") return null;
+      const slug = normalizeSlug(poll.slug || poll.id);
+      if (!slug) return null;
+
+      const ballotItems = Array.isArray(poll.ballotItems)
+        ? poll.ballotItems
+            .map((item) => {
+              if (!item) return null;
+              const name = safeString(item.name);
+              if (!name) return null;
+              const id = normalizeSlug(item.id || name) || name;
+              return { id, name, address: safeString(item.address), link: safeString(item.link) };
+            })
+            .filter(Boolean)
+        : [];
+
+      return {
+        slug,
+        title: safeString(poll.title) || "Untitled Poll",
+        description: safeString(poll.description),
+        town: safeString(poll.town),
+        displayCategory: safeString(poll.displayCategory || poll.customCategory || poll.custom_category || poll.category),
+        status: safeString(poll.status || "draft").toLowerCase() || "draft",
+        rankingKey: safeString(poll.rankingKey || poll.ranking_key || slug),
+        ballotItems,
+        image: safeString(poll.image),
+      };
+    })
+    .filter(Boolean);
+
+  if (embeddedPollSlugs.length === 0) return normalized;
+  const map = new Map(normalized.map((poll) => [poll.slug, poll]));
+  return embeddedPollSlugs.map((slug) => map.get(slug)).filter(Boolean);
+}
+
 function normalizeInsight(data, sourcePath = "") {
   if (!data || typeof data !== "object") {
     const error = new Error("Invalid insight payload.");
@@ -260,6 +312,9 @@ function normalizeInsight(data, sourcePath = "") {
   const tags = Array.isArray(data.tags)
     ? data.tags.map((tag) => safeString(tag)).filter(Boolean)
     : [];
+
+  const embeddedPollSlugs = normalizeEmbeddedPollSlugs(data.embeddedPollSlugs);
+  const embeddedPolls = normalizeEmbeddedPolls(data.embeddedPolls, embeddedPollSlugs);
 
   return {
     slug: safeString(data.slug),
@@ -281,6 +336,8 @@ function normalizeInsight(data, sourcePath = "") {
     inlineImages: normalizeInlineImages(data.inlineImages),
     pullQuote: normalizePullQuote(data.pullQuote),
     videos: normalizeVideos(data.videos),
+    embeddedPollSlugs,
+    embeddedPolls,
   };
 }
 
@@ -926,6 +983,26 @@ export default function InsightPage() {
               <div className="space-y-12 lg:order-2">
                 {contentSequence.length > 0 && (
                   <div className="insight-content">{contentSequence}</div>
+                )}
+
+                {insight.embeddedPolls?.length > 0 && (
+                  <section className="insight-embedded-polls">
+                    <h2>Featured TasteHub Polls</h2>
+                    <div className="insight-embedded-polls-inner">
+                      <div className="insight-embedded-polls-grid">
+                        {insight.embeddedPolls.map((poll) => (
+                          <TasteHubPollCard
+                            key={poll.slug}
+                            poll={poll}
+                            leaderboard={null}
+                            onOpen={() => {
+                              window.location.href = `/tastehub/${poll.slug}`;
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </section>
                 )}
 
                 {insight.gallery?.length > 0 && (
