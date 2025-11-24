@@ -1,6 +1,6 @@
 const GOOGLE_PLACES_SEARCH_ENDPOINT = 'https://places.googleapis.com/v1/places:searchText'
-const MIN_RATING = 4.4
-const MIN_REVIEWS = 40
+const MIN_RATING = 4.0
+const MIN_REVIEWS = 20
 const REQUEST_TIMEOUT_MS = 8000
 
 interface PlacesSearchResponse {
