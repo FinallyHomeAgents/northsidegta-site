@@ -1,8 +1,8 @@
 {
   "slug": "northside-tastehub-launch",
   "title": "Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA",
-  "publishDate": "2025-11-24T16:42:04.450Z",
-  "author": "Matthew & Landon Mulhall, Finally Home Agents",
+  "publishDate": "2025-11-24T18:00:00.000Z",
+  "author": "Matthew Mulhall & Landon Mulhall | Finally Home Agents |  NorthSideGTA.ca",
   "excerpt": "NorthSide TasteHub is our new community-powered food hub for Uxbridge, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog. Vote for your favourite spots, discover new places to eat, and finally settle all those “best pizza” debates north of Toronto.",
   "tags": [
     "NorthSide TasteHub",
@@ -16,14 +16,20 @@
     "East Gwillimbury restaurants",
     "where to eat north of Toronto"
   ],
-  "featureImage": "/uploads/insights/northside-tastehub-hero.jpg",
+  "featureImage": "/uploads/insights/northside-tastehub-feature.jpg",
   "featureImageAlt": "NorthSide TasteHub voting screen showing local restaurant matchups in the NorthSide GTA",
   "seo": {
     "title": "NorthSide TasteHub: Where to Eat in the NorthSide GTA",
     "description": "Discover NorthSide TasteHub, our community-powered food hub helping locals find the best pizza, wings, date-night spots and family-friendly restaurants in Uxbridge, Georgina, Newmarket, Aurora, Stouffville, Scugog and East Gwillimbury, all north of Toronto.",
     "ogImage": "/uploads/insights/northside-tastehub-og.jpg"
   },
-  "gallery": [],
+  "gallery": [
+    {
+      "image": "/uploads/insights/northside-tastehub-preview.jpg",
+      "alt": "",
+      "caption": ""
+    }
+  ],
   "inlineImages": [],
   "pullQuote": {
     "text": "NorthSide TasteHub is a community-powered scoreboard where locals vote for their favourite spots and discover new ones.",
