@@ -988,17 +988,19 @@ export default function InsightPage() {
                 {insight.embeddedPolls?.length > 0 && (
                   <section className="insight-embedded-polls">
                     <h2>Featured TasteHub Polls</h2>
-                    <div className="insight-embedded-polls-grid">
-                      {insight.embeddedPolls.map((poll) => (
-                        <TasteHubPollCard
-                          key={poll.slug}
-                          poll={poll}
-                          leaderboard={null}
-                          onOpen={() => {
-                            window.location.href = `/tastehub/${poll.slug}`;
-                          }}
-                        />
-                      ))}
+                    <div className="insight-embedded-polls-inner">
+                      <div className="insight-embedded-polls-grid">
+                        {insight.embeddedPolls.map((poll) => (
+                          <TasteHubPollCard
+                            key={poll.slug}
+                            poll={poll}
+                            leaderboard={null}
+                            onOpen={() => {
+                              window.location.href = `/tastehub/${poll.slug}`;
+                            }}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </section>
                 )}

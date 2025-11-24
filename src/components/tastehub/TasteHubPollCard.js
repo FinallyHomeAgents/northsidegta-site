@@ -38,7 +38,7 @@ export default function TasteHubPollCard({ poll, leaderboard, onOpen }) {
       : "bg-amber-100 text-amber-700";
 
   return (
-    <article className="flex h-full flex-col rounded-3xl border border-emerald-100 bg-white/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article className="tastehub-poll-card flex h-full flex-col rounded-3xl border border-emerald-100 bg-white/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
       {poll?.image && (
         <div className="-mt-2 mb-4 overflow-hidden rounded-2xl border border-emerald-100/70">
           <img
