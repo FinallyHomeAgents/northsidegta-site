@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/jack-de-keyzer-awbf-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002614-1772134200-1772143200@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-24T08:38:24.931Z",
-  "firstSeenAt": "2025-11-24T08:38:24.931Z",
-  "updatedAt": "2025-11-24T08:38:24.931Z",
-  "featured": false
+  "updatedAt": "2025-11-24T08:38:24Z"
 }
