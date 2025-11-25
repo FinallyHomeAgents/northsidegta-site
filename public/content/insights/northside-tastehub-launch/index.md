@@ -18,14 +18,10 @@ tags:
   - Scugog restaurants
   - East Gwillimbury restaurants
   - where to eat north of Toronto
-featureImage: /uploads/insights/northside-tastehub-feature.jpg
+featureImage: /uploads/insights/uxbridgedinein.png
 featureImageAlt: NorthSide TasteHub voting screen showing local restaurant
   matchups in the NorthSide GTA
 inlineImages: []
-embeddedPollSlugs:
-  - best-pizza-uxbridge
-  - best-wings-newmarket
-  - best-date-aurora
 pullQuote:
   text: NorthSide TasteHub is a community-powered scoreboard where locals vote for
     their favourite spots and discover new ones.
@@ -35,6 +31,10 @@ gallery:
 mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
   4:3. Pull-quote portraits ≈800×1000 px.
 published: false
+embeddedPollSlugs:
+  - best-pizza-uxbridge
+  - best-wings-newmarket
+  - best-date-aurora
 videos: []
 videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
   with poster image + optional VTT captions.
