@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/holidaypaintface.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/holiday-paint-pint/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/holiday-paint-pint/",
-  "lastSyncedAt": "2025-11-25T08:37:08.193Z",
-  "updatedAt": "2025-11-25T08:37:08.193Z",
-  "featured": false
+  "updatedAt": "2025-11-25T08:37:08Z"
 }

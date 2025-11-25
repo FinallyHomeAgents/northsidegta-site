@@ -226,16 +226,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/nights-of-lights-apres-shop-holiday-popup-experience/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014439-1763654400-1766613600@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-11-25T08:37:08.193Z",
-  "updatedAt": "2025-11-25T08:37:08.193Z",
-  "featured": false
+  "updatedAt": "2025-11-25T08:37:08Z"
 }
