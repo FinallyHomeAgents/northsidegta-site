@@ -18,6 +18,7 @@
     "events:recover": "node scripts/events-recover.mjs",
     "events:normalize": "node scripts/events-normalize.mjs",
     "test": "node --test",
+    "test:schema": "node --test tests/schema-*.test.cjs",
     "test:ios": "playwright test tests/ios-smoke.spec.ts --project=webkit",
     "generate:insights": "node scripts/generate-insights-data.js",
     "insights:migrate-images": "node scripts/migrate-insight-image-paths.js",

@@ -25,6 +25,7 @@ import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
+import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
@@ -58,6 +59,7 @@ function App() {
   return (
     <div data-test="app-shell">
       <Router>
+        <GlobalStructuredData />
         <GlobalDefaultMeta />
         <Routes>
           {/* Core pages */}
