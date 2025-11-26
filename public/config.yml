@@ -1151,6 +1151,11 @@ collections:
         widget: 'datetime'
         format: 'YYYY-MM-DDTHH:mm:ssZ'
         hint: 'Set when the insight should appear live; this date shows on the page and controls ordering.'
+      - name: 'draft'
+        label: 'Save as draft (do not publish)'
+        widget: 'boolean'
+        default: false
+        required: false
       - name: 'author'
         label: 'Author'
         hint: 'Name displayed below the title (e.g., Matthew Mulhall).'

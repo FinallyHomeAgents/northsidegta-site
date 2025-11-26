@@ -433,6 +433,15 @@ async function main() {
     const folderSlug = normalizeSlug(folderName);
     const frontMatterSlug = normalizeSlug(data.slug);
     const slug = frontMatterSlug || folderSlug;
+    const outputPath = path.join(outputDir, `${folderSlug}.json`);
+
+    if (data.draft === true) {
+      if (fs.existsSync(outputPath)) {
+        fs.rmSync(outputPath, { force: true });
+      }
+      console.log(`[generate-insights-data] Skipping draft insight: ${slug || folderSlug || folderName}`);
+      continue;
+    }
 
     if (!slug) {
       failures.push({ folderName, reason: `Unable to derive slug for ${relativeIndexPath}` });
@@ -499,7 +508,6 @@ async function main() {
       result.seo.ogImage = result.featureImage;
     }
 
-    const outputPath = path.join(outputDir, `${folderSlug}.json`);
     writeJson(outputPath, result);
     results.push(folderSlug);
   }

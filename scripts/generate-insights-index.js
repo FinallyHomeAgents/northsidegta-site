@@ -62,6 +62,11 @@ function main() {
     const { data } = matter(raw);
     const relativePath = path.relative(ROOT, file);
 
+    if (data?.draft === true) {
+      warnings.push(`Skipping draft: ${relativePath}`);
+      continue;
+    }
+
     const dirName = path.basename(path.dirname(file));
     const title = firstDefined(data.title);
     if (!title) {
