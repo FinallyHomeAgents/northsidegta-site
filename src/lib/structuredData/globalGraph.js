@@ -29,16 +29,6 @@ export const PLACE_IDS = {
   whitby: `${BASE_URL}/#whitby`,
 };
 
-const REGION_NODE = {
-  "@type": "AdministrativeArea",
-  "@id": PLACE_IDS.region,
-  name: "NorthSide GTA",
-  url: BASE_URL,
-  description:
-    "NorthSide GTA is the regional real estate and community hub connecting buyers, sellers, and locals across Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog.",
-  hasPart: CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
-};
-
 const CORE_TOWNS = [
   {
     slug: "uxbridge",
@@ -86,6 +76,16 @@ const CORE_TOWNS = [
   ...place,
   containedInPlace: { "@id": PLACE_IDS.region },
 }));
+
+const REGION_NODE = {
+  "@type": "AdministrativeArea",
+  "@id": PLACE_IDS.region,
+  name: "NorthSide GTA",
+  url: BASE_URL,
+  description:
+    "NorthSide GTA is the regional real estate and community hub connecting buyers, sellers, and locals across Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog.",
+  hasPart: CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+};
 
 const HAMLETS = [
   { slug: "keswick", name: "Keswick", parentSlug: "georgina" },
