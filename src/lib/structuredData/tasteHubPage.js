@@ -1,9 +1,14 @@
+const { PLACE_IDS } = require("./globalGraph");
+
 const BASE_URL = "https://northsidegta.ca";
 const WEBSITE_ID = "https://northsidegta.ca/#website";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const TASTEHUB_ID = "https://northsidegta.ca/#tastehub";
+const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
 
 function buildTasteHubPageSchema() {
+  const placeMentions = Object.values(PLACE_IDS).map((id) => ({ "@id": id }));
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -16,18 +21,9 @@ function buildTasteHubPageSchema() {
           "NorthSide TasteHub lets locals across Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog vote for their favourite food spots.",
         inLanguage: "en-CA",
         isPartOf: { "@id": WEBSITE_ID },
-        about: { "@id": TASTEHUB_ID },
+        about: [{ "@id": TASTEHUB_ID }, { "@id": NORTHSIDE_ID }, ...placeMentions],
         publisher: { "@id": PUBLISHER_ID },
-        mentions: [
-          { "@id": "https://northsidegta.ca/#northside-gta" },
-          { "@id": "https://northsidegta.ca/#uxbridge" },
-          { "@id": "https://northsidegta.ca/#georgina" },
-          { "@id": "https://northsidegta.ca/#east-gwillimbury" },
-          { "@id": "https://northsidegta.ca/#newmarket" },
-          { "@id": "https://northsidegta.ca/#aurora" },
-          { "@id": "https://northsidegta.ca/#stouffville" },
-          { "@id": "https://northsidegta.ca/#scugog" },
-        ],
+        mentions: [{ "@id": NORTHSIDE_ID }, ...placeMentions],
         keywords: [
           "NorthSide GTA food",
           "NorthSide GTA restaurants",

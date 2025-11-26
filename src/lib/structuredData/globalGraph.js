@@ -3,7 +3,7 @@
 
 const BASE_URL = "https://northsidegta.ca";
 
-const PLACE_IDS = {
+export const PLACE_IDS = {
   uxbridge: `${BASE_URL}/#uxbridge`,
   georgina: `${BASE_URL}/#georgina`,
   "east-gwillimbury": `${BASE_URL}/#east-gwillimbury`,
@@ -304,5 +304,3 @@ export function buildGlobalGraph() {
 export function getGlobalGraphJson() {
   return JSON.stringify(buildGlobalGraph(), null, 2);
 }
-
-export { PLACE_IDS };

@@ -29,6 +29,8 @@ test('community events schema contains webpage and item list', () => {
   const itemList = graph.find((node) => node['@type'] === 'ItemList')
 
   assert.ok(webPage, 'community webpage exists')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'webpage about includes brand')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#uxbridge'), 'webpage about includes place')
   assert.ok(itemList, 'item list exists')
   assert.equal(itemList.numberOfItems, 1)
 })
@@ -49,6 +51,7 @@ test('event detail schema includes core fields', () => {
   const json = JSON.parse(JSON.stringify(schema))
   assert.equal(json['@type'], 'Event')
   assert.equal(json.name, 'Harvest Festival')
-  assert.equal(json.location?.address?.addressLocality, 'Georgina')
+  assert.equal(json.areaServed?.['@id'], 'https://northsidegta.ca/#georgina')
+  assert.equal(json.location?.['@id'], 'https://northsidegta.ca/#georgina')
   assert.equal(json.image?.[0], 'https://northsidegta.ca/images/harvest.jpg')
 })

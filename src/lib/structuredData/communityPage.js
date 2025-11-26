@@ -1,9 +1,13 @@
+const { PLACE_IDS } = require("./globalGraph");
+
 const BASE_URL = "https://northsidegta.ca";
 const WEBSITE_ID = "https://northsidegta.ca/#website";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
 
 function buildCommunityEventsSchema({ events = [] }) {
+  const placeNodes = Object.values(PLACE_IDS).map((id) => ({ "@id": id }));
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -16,7 +20,7 @@ function buildCommunityEventsSchema({ events = [] }) {
           "Discover community events happening across the NorthSide GTA, including Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog.",
         inLanguage: "en-CA",
         isPartOf: { "@id": WEBSITE_ID },
-        about: { "@id": NORTHSIDE_ID },
+        about: [{ "@id": NORTHSIDE_ID }, ...placeNodes],
         publisher: { "@id": PUBLISHER_ID },
       },
       {

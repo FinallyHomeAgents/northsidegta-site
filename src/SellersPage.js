@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import ReactDOM from "react-dom";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
@@ -6,6 +7,7 @@ import Card from "./components/ui/Card";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
+import { buildSellersPageSchema } from "./lib/structuredData/sellersPage";
 
 // ===== Helpers (reused) =====
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -1403,6 +1405,7 @@ const SELLERS_ROUTE_META = getStaticRouteMeta("/sellers") || {};
 export default function SellersPage() {
   const [promoModalOpen, setPromoModalOpen] = useState(false);
   const [promoData, setPromoData] = useState(LOCAL_PROMO_VIDEO);
+  const sellersSchema = useMemo(() => buildSellersPageSchema(), []);
 
   useEffect(() => {
     let isMounted = true;
@@ -1496,6 +1499,12 @@ export default function SellersPage() {
           })}
         </script>
       </DynamicMetaTags>
+
+      {sellersSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(sellersSchema, null, 2)}</script>
+        </Helmet>
+      )}
 
       <main className="relative pb-24">
         <SellerHero onPrimaryClick={scrollToForm} onOpenPromo={() => setPromoModalOpen(true)} />
