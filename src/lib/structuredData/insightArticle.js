@@ -6,6 +6,7 @@ const DEFAULT_AUTHOR_ID = "https://northsidegta.ca/#matthew-mulhall";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const WEBSITE_ID = "https://northsidegta.ca/#website";
 const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
+const NORTHSIDE_REGION_ID = "https://northsidegta.ca/#northside-gta-region";
 const TASTEHUB_ID = "https://northsidegta.ca/#tastehub";
 
 function buildAbsoluteUrl(path) {
@@ -44,13 +45,19 @@ function buildKeywordList(title, clusterIds = []) {
 function buildAboutAndMentions(slug) {
   const clusters = getInsightClusters(slug);
   const placeMentions = getPlaceIdsFromClusters(clusters);
-  const mentions = [{ "@id": NORTHSIDE_ID }, ...placeMentions];
+  const mentions = [
+    { "@id": NORTHSIDE_ID },
+    { "@id": NORTHSIDE_REGION_ID },
+    ...placeMentions,
+  ];
 
   if (clusters.includes("tastehub")) {
     mentions.push({ "@id": TASTEHUB_ID });
   }
 
-  const about = placeMentions.length ? [...placeMentions] : [{ "@id": NORTHSIDE_ID }];
+  const about = placeMentions.length
+    ? [...placeMentions, { "@id": NORTHSIDE_REGION_ID }]
+    : [{ "@id": NORTHSIDE_REGION_ID }];
 
   if (clusters.includes("northside-gta") && !about.find((n) => n["@id"] === NORTHSIDE_ID)) {
     about.push({ "@id": NORTHSIDE_ID });

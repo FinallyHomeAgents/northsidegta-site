@@ -37,11 +37,60 @@ test('global graph includes core identities and reviews', async () => {
   assert.equal(business?.aggregateRating?.ratingValue, '5')
 })
 
-test('global graph exposes place ids for all towns', async () => {
+test('global graph exposes region, places, and relationships', async () => {
   const { getGlobalGraphJson, PLACE_IDS } = await loadGraphModule()
   const graph = loadGraph(getGlobalGraphJson)
   const ids = new Set(graph.map((node) => node['@id']))
+
   Object.values(PLACE_IDS).forEach((id) => {
     assert.ok(ids.has(id), `Place ${id} should be represented`)
+  })
+
+  const regionNode = graph.find((node) => node['@id'] === PLACE_IDS.region)
+  assert.ok(regionNode, 'Region node should exist in graph')
+  assert.equal(regionNode['@type'], 'AdministrativeArea')
+
+  const coreTownSlugs = [
+    'uxbridge',
+    'georgina',
+    'east-gwillimbury',
+    'newmarket',
+    'aurora',
+    'stouffville',
+    'scugog',
+  ]
+
+  coreTownSlugs.forEach((slug) => {
+    const node = graph.find((n) => n['@id'] === PLACE_IDS[slug])
+    assert.equal(
+      node?.containedInPlace?.['@id'],
+      PLACE_IDS.region,
+      `${slug} should link back to region`,
+    )
+  })
+
+  const hamlets = [
+    { slug: 'keswick', parent: 'georgina' },
+    { slug: 'sutton', parent: 'georgina' },
+    { slug: 'pefferlaw', parent: 'georgina' },
+    { slug: 'sharon', parent: 'east-gwillimbury' },
+    { slug: 'holland-landing', parent: 'east-gwillimbury' },
+    { slug: 'mount-albert', parent: 'east-gwillimbury' },
+    { slug: 'queensville', parent: 'east-gwillimbury' },
+    { slug: 'port-perry', parent: 'scugog' },
+  ]
+
+  hamlets.forEach(({ slug, parent }) => {
+    const node = graph.find((n) => n['@id'] === PLACE_IDS[slug])
+    assert.equal(
+      node?.containedInPlace?.['@id'],
+      PLACE_IDS[parent],
+      `${slug} should link to parent town`,
+    )
+  })
+
+  const borderCities = ['toronto', 'markham', 'vaughan', 'richmond-hill', 'pickering', 'ajax', 'whitby']
+  borderCities.forEach((slug) => {
+    assert.ok(ids.has(PLACE_IDS[slug]), `${slug} should be present as border city`)
   })
 })

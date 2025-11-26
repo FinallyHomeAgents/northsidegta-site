@@ -5,6 +5,7 @@ const BASE_URL = "https://northsidegta.ca";
 const WEBSITE_ID = "https://northsidegta.ca/#website";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
+const NORTHSIDE_REGION_ID = "https://northsidegta.ca/#northside-gta-region";
 
 function buildAbsoluteUrl(path) {
   if (!path) return "";
@@ -41,7 +42,11 @@ function buildTownPageSchema({ slug, name, url, heroImage, description }) {
   const faqEntries = getTownFaq(normalizedSlug);
   const faqSchema = buildFaqSchema({ safeUrl, faqEntries });
 
-  const about = [{ "@id": NORTHSIDE_ID }, { "@id": placeId }];
+  const about = [
+    { "@id": NORTHSIDE_REGION_ID },
+    { "@id": placeId },
+    { "@id": NORTHSIDE_ID },
+  ];
 
   const graph = [
     {
@@ -53,14 +58,17 @@ function buildTownPageSchema({ slug, name, url, heroImage, description }) {
       inLanguage: "en-CA",
       isPartOf: { "@id": WEBSITE_ID },
       about,
+      spatialCoverage: { "@id": placeId },
+      withinAdministrativeArea: { "@id": NORTHSIDE_REGION_ID },
       publisher: { "@id": PUBLISHER_ID },
       primaryImageOfPage: {
         "@type": "ImageObject",
         url: buildAbsoluteUrl(heroImage),
       },
       mentions: [
-        { "@id": NORTHSIDE_ID },
+        { "@id": NORTHSIDE_REGION_ID },
         { "@id": placeId },
+        { "@id": NORTHSIDE_ID },
       ],
       keywords: [
         `${name} real estate`,

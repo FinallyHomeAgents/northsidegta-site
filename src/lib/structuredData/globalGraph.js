@@ -4,6 +4,7 @@
 const BASE_URL = "https://northsidegta.ca";
 
 export const PLACE_IDS = {
+  region: `${BASE_URL}/#northside-gta-region`,
   uxbridge: `${BASE_URL}/#uxbridge`,
   georgina: `${BASE_URL}/#georgina`,
   "east-gwillimbury": `${BASE_URL}/#east-gwillimbury`,
@@ -11,9 +12,34 @@ export const PLACE_IDS = {
   aurora: `${BASE_URL}/#aurora`,
   stouffville: `${BASE_URL}/#stouffville`,
   scugog: `${BASE_URL}/#scugog`,
+  keswick: `${BASE_URL}/#keswick`,
+  sutton: `${BASE_URL}/#sutton`,
+  pefferlaw: `${BASE_URL}/#pefferlaw`,
+  sharon: `${BASE_URL}/#sharon`,
+  "holland-landing": `${BASE_URL}/#holland-landing`,
+  "mount-albert": `${BASE_URL}/#mount-albert`,
+  queensville: `${BASE_URL}/#queensville`,
+  "port-perry": `${BASE_URL}/#port-perry`,
+  toronto: `${BASE_URL}/#toronto`,
+  markham: `${BASE_URL}/#markham`,
+  vaughan: `${BASE_URL}/#vaughan`,
+  "richmond-hill": `${BASE_URL}/#richmond-hill`,
+  pickering: `${BASE_URL}/#pickering`,
+  ajax: `${BASE_URL}/#ajax`,
+  whitby: `${BASE_URL}/#whitby`,
 };
 
-const PLACE_NODES = [
+const REGION_NODE = {
+  "@type": "AdministrativeArea",
+  "@id": PLACE_IDS.region,
+  name: "NorthSide GTA",
+  url: BASE_URL,
+  description:
+    "NorthSide GTA is the regional real estate and community hub connecting buyers, sellers, and locals across Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog.",
+  hasPart: CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+};
+
+const CORE_TOWNS = [
   {
     slug: "uxbridge",
     name: "Uxbridge",
@@ -57,6 +83,40 @@ const PLACE_NODES = [
       "Scugog surrounds Lake Scugog with golf, boating, and rural space, giving NorthSide GTA residents a relaxed lakeside pace.",
   },
 ].map((place) => ({
+  ...place,
+  containedInPlace: { "@id": PLACE_IDS.region },
+}));
+
+const HAMLETS = [
+  { slug: "keswick", name: "Keswick", parentSlug: "georgina" },
+  { slug: "sutton", name: "Sutton", parentSlug: "georgina" },
+  { slug: "pefferlaw", name: "Pefferlaw", parentSlug: "georgina" },
+  { slug: "sharon", name: "Sharon", parentSlug: "east-gwillimbury" },
+  { slug: "holland-landing", name: "Holland Landing", parentSlug: "east-gwillimbury" },
+  { slug: "mount-albert", name: "Mount Albert", parentSlug: "east-gwillimbury" },
+  { slug: "queensville", name: "Queensville", parentSlug: "east-gwillimbury" },
+  { slug: "port-perry", name: "Port Perry", parentSlug: "scugog" },
+];
+
+const BORDER_CITIES = [
+  { slug: "toronto", name: "Toronto" },
+  { slug: "markham", name: "Markham" },
+  { slug: "vaughan", name: "Vaughan" },
+  { slug: "richmond-hill", name: "Richmond Hill" },
+  { slug: "pickering", name: "Pickering" },
+  { slug: "ajax", name: "Ajax" },
+  { slug: "whitby", name: "Whitby" },
+];
+
+const PLACE_NODES = [
+  ...CORE_TOWNS,
+  ...HAMLETS.map((hamlet) => ({
+    slug: hamlet.slug,
+    name: hamlet.name,
+    containedInPlace: { "@id": PLACE_IDS[hamlet.parentSlug] },
+  })),
+  ...BORDER_CITIES,
+].map((place) => ({
   "@type": "Place",
   "@id": PLACE_IDS[place.slug] || `${BASE_URL}/#${place.slug}`,
   name: place.name,
@@ -67,6 +127,7 @@ const PLACE_NODES = [
     addressRegion: "ON",
     addressCountry: "CA",
   },
+  containedInPlace: place.containedInPlace,
 }));
 
 const REVIEW_TEMPLATE = {
@@ -196,7 +257,15 @@ export function buildGlobalGraph() {
       postalCode: "L4K 0G7",
       addressCountry: "CA",
     },
-    areaServed: Object.values(PLACE_IDS).map((id) => ({ "@id": id })),
+    areaServed: [
+      { "@id": PLACE_IDS.region },
+      ...CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+    ],
+    knowsAbout: [
+      { "@id": PLACE_IDS.region },
+      ...CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+      ...HAMLETS.map((hamlet) => ({ "@id": PLACE_IDS[hamlet.slug] })),
+    ],
     sameAs: [
       "https://www.facebook.com/NorthSideGTA",
       "https://www.facebook.com/FinallyHomeAgents",
@@ -231,6 +300,15 @@ export function buildGlobalGraph() {
     description:
       "NorthSide GTA is the regional real estate and community hub connecting buyers, sellers, and locals across Uxbridge, Georgina, Newmarket, Aurora, East Gwillimbury, Stouffville, and Scugog.",
     logo: northsideLogo,
+    areaServed: [
+      { "@id": PLACE_IDS.region },
+      ...CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+    ],
+    knowsAbout: [
+      { "@id": PLACE_IDS.region },
+      ...CORE_TOWNS.map((place) => ({ "@id": PLACE_IDS[place.slug] })),
+      ...HAMLETS.map((hamlet) => ({ "@id": PLACE_IDS[hamlet.slug] })),
+    ],
     sameAs: [
       "https://www.facebook.com/NorthSideGTA",
       "https://www.instagram.com/northsidegta",
@@ -295,6 +373,7 @@ export function buildGlobalGraph() {
       website,
       matthewMulhall,
       landonMulhall,
+      REGION_NODE,
       ...PLACE_NODES,
       tasteHub,
     ],
