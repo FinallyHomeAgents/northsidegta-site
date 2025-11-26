@@ -4,7 +4,11 @@ const test = require('node:test')
 const assert = require('node:assert/strict')
 
 const { buildTasteHubPageSchema } = require('../src/lib/structuredData/tasteHubPage')
-const { buildTasteHubPollSchema } = require('../src/lib/structuredData/tasteHubPoll')
+
+async function loadTasteHubPollModule() {
+  const mod = await import('../src/lib/structuredData/tasteHubPoll.js')
+  return { buildTasteHubPollSchema: mod.buildTasteHubPollSchema }
+}
 
 test('tastehub page schema emits webpage and breadcrumb', () => {
   const schema = buildTasteHubPageSchema()
@@ -21,7 +25,9 @@ test('tastehub page schema emits webpage and breadcrumb', () => {
   assert.ok(breadcrumb, 'breadcrumb exists')
 })
 
-test('tastehub poll schema includes ranking list', () => {
+test('tastehub poll schema includes ranking list', async () => {
+  const { buildTasteHubPollSchema } = await loadTasteHubPollModule()
+
   const schema = buildTasteHubPollSchema({
     slug: 'best-pizza-uxbridge',
     title: 'Best Pizza in Uxbridge',

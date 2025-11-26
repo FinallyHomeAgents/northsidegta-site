@@ -9,7 +9,7 @@ import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import TasteHubPollCard from "./components/tastehub/TasteHubPollCard";
 import TasteHubPoll from "./components/tastehub/TasteHubPoll";
 import { buildTasteHubPageSchema } from "./lib/structuredData/tasteHubPage";
-const tasteHubPollSchema = require("./lib/structuredData/tasteHubPoll");
+import { buildTasteHubPollSchema } from "./lib/structuredData/tasteHubPoll";
 
 const TOWNS = [
   "Georgina",
@@ -685,7 +685,7 @@ export default function TasteHubPage() {
     const townSlug = schemaPoll.town ? slugify(schemaPoll.town) : "";
     const townName = schemaPoll.town || "";
 
-    return tasteHubPollSchema.buildTasteHubPollSchema({
+    return buildTasteHubPollSchema({
       slug: schemaPoll.slug,
       title: pollTitle,
       description: pollDescription,
