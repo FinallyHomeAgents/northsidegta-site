@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const matter = require("gray-matter");
 const { parse } = require("node-html-parser");
 
 const {
@@ -22,6 +23,35 @@ const { getMetaTagHtmlList } = require("../src/components/seo/metaTagUtils.js");
 
 const OG_FALLBACK_IMAGE = "/Images/og-home.jpg";
 const DESCRIPTION_LENGTH = 160;
+
+function isDraftInsight(slug, template) {
+  if (!slug) return false;
+
+  const candidates = [
+    template?.publicDir ? path.join(template.publicDir, "content", "insights", slug, "index.md") : null,
+    template?.rootDir ? path.join(template.rootDir, "public", "content", "insights", slug, "index.md") : null,
+  ].filter(Boolean);
+
+  const visited = new Set();
+
+  for (const candidate of candidates) {
+    const resolved = path.resolve(candidate);
+    if (visited.has(resolved)) continue;
+    visited.add(resolved);
+
+    if (!fs.existsSync(resolved)) continue;
+
+    try {
+      const { data } = matter(fs.readFileSync(resolved, "utf8"));
+      if (data?.draft === true) return true;
+    } catch (error) {
+      const relativePath = template?.rootDir ? path.relative(template.rootDir, resolved) : resolved;
+      console.warn(`[generate-insight-html] Unable to read ${relativePath}: ${error.message}`);
+    }
+  }
+
+  return false;
+}
 
 function main() {
   const template = loadTemplate();
@@ -77,6 +107,11 @@ function main() {
     const slug = sanitizeSlug(payload.slug, fallbackSlug);
     if (!slug) {
       failures.push({ file: fileName, reason: "Missing slug" });
+      return;
+    }
+
+    if (isDraftInsight(slug, template)) {
+      console.log(`[generate-insight-html] Skipping draft insight HTML for slug: ${slug}`);
       return;
     }
 
