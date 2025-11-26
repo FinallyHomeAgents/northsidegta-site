@@ -1,46 +1,26 @@
 {
-  "slug": "20251127-2025-summer-art-camp-at-palette-art-school-toronto-adjacent",
-  "title": "2025 Summer Art Camp at Palette Art School",
-  "summary": "2025 Summer Art Camp at Palette Art School",
+  "slug": "20251129-afternoon-tea-toronto-adjacent",
+  "title": "Afternoon Tea",
+  "summary": "Afternoon Tea",
   "description": "Events & Festivals Halloween on Main Get ready for a spooktacular time at Halloween on Main! Join us for a fun-filled... Read More » March Break at LEGOLAND® Discovery Centre Toronto The Heintzman House 2025 Art Show and Sale. 2025 Summer Art Camp at Palette Art School Loading view. Today Now Now Select date. Nov 26 November 15 @ 4:00 pm - December 13 @ 8:00 pm Event Series Richmond Hill Merry Marketplace Nov 26 November 18 @ 9:30 am - November 26 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 19 @ 9:30 am - November 27 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 20 @ 9:30 am - November 28 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 20 @ 4:00 pm - December 24 @ 10:00 pm Nights of Lights: Apres Shop – Holiday Popup Experience $8 Nov 26 November 21 @ 9:30 am - November 29 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 22 @ 9:30 am - November 30 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 22 @ 4:00 pm - December 20 @ 8:00 pm Event Series Richmond Hill Merry Marketplace Nov 26 November 23 @ 9:30 am - December 1 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 24 @ 9:00 am - November 27 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Nov 26 November 24 @ 9:30 am - December 2 @ 5:00 pm March Break at LEGOLAND® Discovery Centre Toronto $24.99 Nov 26 November 25 @ 9:00 am - November 28 @ 4:00 pm 2025 Summer Art Camp at Palette Art School Previous Events Today Next Events Subscribe to calendar Google Calendar iCalendar Outlook 365 Outlook Live Export .ics file Export Outlook .ics file",
-  "startDate": "2025-11-27T14:00:00Z",
-  "endDate": "2025-11-30T21:00:00Z",
+  "startDate": "2025-11-29T05:00:00Z",
+  "endDate": "2025-11-30T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-11-27",
-      "all_day": false,
-      "start_time": "09:00",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-28",
-      "all_day": false,
-      "start_time": "09:00",
-      "end_time": "16:00"
-    },
-    {
       "date": "2025-11-29",
-      "all_day": false,
-      "start_time": "09:00",
-      "end_time": "16:00"
-    },
-    {
-      "date": "2025-11-30",
-      "all_day": false,
-      "start_time": "09:00",
-      "end_time": "16:00"
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
     }
   ],
   "category": "Festivals",
   "town": "Toronto-adjacent",
-  "locationName": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
-  "address": "Palette Art School, 1600 Steeles Ave W, unit 2, Concord, L4K4M2",
-  "lat": 43.787474,
-  "lng": -79.4727017,
+  "locationName": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
+  "address": "Richmond Hill Heritage Centre, 19 Church St. N, Richmond Hill, L4C 3E6",
   "priceType": "Mixed",
-  "eventUrl": "https://www.experienceyorkregion.com/event/2025-summer-art-camp-at-palette-art-school/2025-11-27/",
+  "eventUrl": "https://www.experienceyorkregion.com/event/afternoon-tea/2025-11-29/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -50,8 +30,9 @@
   "sourceUrl": "https://www.experienceyorkregion.com/events",
   "sourceDomain": "experienceyorkregion.com",
   "sourcePriority": 35,
-  "sourceRef": "10011606-1764234000-1764518400@www.experienceyorkregion.com",
+  "sourceRef": "10014160-1764421200-1764432000@www.experienceyorkregion.com",
   "lastSyncedAt": "2025-11-26T08:36:31.793Z",
+  "firstSeenAt": "2025-11-26T08:36:31.793Z",
   "updatedAt": "2025-11-26T08:36:31.793Z",
   "featured": false
 }

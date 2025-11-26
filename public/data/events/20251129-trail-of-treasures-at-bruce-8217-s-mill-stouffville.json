@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/09/Trail-of-treasures-Nov-29_6iyD.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/trail-of-treasures-at-bruces-mill/",
-  "updatedAt": "2025-11-25T08:37:08Z"
+  "lastSyncedAt": "2025-11-26T08:36:31.793Z",
+  "updatedAt": "2025-11-26T08:36:31.793Z",
+  "featured": false
 }
