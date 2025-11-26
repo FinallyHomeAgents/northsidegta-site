@@ -392,28 +392,6 @@ export default function EventDetailPage() {
     [event, eventDescription, normalizedOrigin, truncatedDescription, occurrence],
   )
 
-  const structuredEventSchema = React.useMemo(() => {
-    if (!event) return null
-    const startDate = eventStartIso || event?.startDate || ''
-    const endDate = eventEndIso || event?.endDate || eventStartIso || ''
-    const townName = event.town || event.subArea || ''
-    const imageUrl = event.image
-      ? toAbsoluteUrl(event.image, normalizedOrigin)
-      : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
-
-    return buildEventDetailSchema({
-      title: event.title,
-      description: truncatedDescription || eventDescription,
-      startDate,
-      endDate,
-      townName,
-      venueName: event.locationName,
-      imageUrl,
-      url: canonicalUrl,
-      slug: event.slug,
-    })
-  }, [canonicalUrl, event, eventDescription, eventEndIso, eventStartIso, normalizedOrigin, truncatedDescription])
-
   const pageTitle = event ? `${event.title} | NorthSide GTA` : 'Event Details | NorthSide GTA'
   const defaultDescription = 'Explore community events across the NorthSide GTA.'
   const scheduleShareSnippet = selectedScheduleEntry
@@ -443,12 +421,34 @@ export default function EventDetailPage() {
   const emailBody = shareText ? `${shareText}\n\n${shareUrl}` : shareUrl
   const publishedTime = occurrence?.start
     ? new Date(occurrence.start).toISOString()
-    : event?.startDate
-      ? new Date(event.startDate).toISOString()
-      : ''
+      : event?.startDate
+        ? new Date(event.startDate).toISOString()
+        : ''
 
   const eventStartIso = occurrence?.start ? toIsoString(occurrence.start) : toIsoString(event?.startDate)
   const eventEndIso = occurrence?.end ? toIsoString(occurrence.end) : toIsoString(event?.endDate)
+
+  const structuredEventSchema = React.useMemo(() => {
+    if (!event) return null
+    const startDate = eventStartIso || event?.startDate || ''
+    const endDate = eventEndIso || event?.endDate || eventStartIso || ''
+    const townName = event.town || event.subArea || ''
+    const imageUrl = event.image
+      ? toAbsoluteUrl(event.image, normalizedOrigin)
+      : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
+
+    return buildEventDetailSchema({
+      title: event.title,
+      description: truncatedDescription || eventDescription,
+      startDate,
+      endDate,
+      townName,
+      venueName: event.locationName,
+      imageUrl,
+      url: canonicalUrl,
+      slug: event.slug,
+    })
+  }, [canonicalUrl, event, eventDescription, eventEndIso, eventStartIso, normalizedOrigin, truncatedDescription])
   const eventLocation = React.useMemo(() => {
     if (!event) return ''
     const parts = [event.locationName, event.address, event.subArea, event.town]

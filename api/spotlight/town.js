@@ -1,13 +1,8 @@
-import { createRequire } from 'module'
+import fs from 'fs'
+import path from 'path'
 
-const require = createRequire(import.meta.url)
-const rawTowns = require('../../src/towns.json')
-
-const towns = Array.isArray(rawTowns)
-  ? rawTowns
-  : Array.isArray(rawTowns?.default)
-  ? rawTowns.default
-  : rawTowns
+const townsPath = path.join(process.cwd(), 'src', 'towns.json')
+const towns = JSON.parse(fs.readFileSync(townsPath, 'utf8'))
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,
