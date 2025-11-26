@@ -1,4 +1,8 @@
-import towns from "../../src/towns.json"
+import fs from 'fs'
+import path from 'path'
+
+const townsPath = path.join(process.cwd(), 'src', 'towns.json')
+const towns = JSON.parse(fs.readFileSync(townsPath, 'utf8'))
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,

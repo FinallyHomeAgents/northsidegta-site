@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { marked } from "marked";
 import { DateTime } from "luxon";
+import { Helmet } from "react-helmet-async";
 import HeaderShell from "../components/HeaderShell";
 import Footer from "../Footer";
 import SmartContactForm from "../components/contact/SmartContactForm";
@@ -13,6 +14,7 @@ import { trackEvent } from "../utils/analytics";
 import { getSiteOrigin, toAbsoluteUrl } from "../community/shareUtils";
 import { getSocialLinks } from "../utils/socialLinks";
 import DynamicMetaTags from "../components/seo/DynamicMetaTags";
+import { buildInsightArticleSchema } from "../lib/structuredData/insightArticle";
 import {
   Facebook,
   Instagram,
@@ -883,9 +885,32 @@ export default function InsightPage() {
     ],
   );
 
+  const articleSchema = useMemo(() => {
+    if (!insight || !canonicalSlug) return null;
+    const authorName = (insight.author || "").toLowerCase();
+    const authorId = authorName.includes("landon")
+      ? "https://northsidegta.ca/#landon-mulhall"
+      : "https://northsidegta.ca/#matthew-mulhall";
+
+    return buildInsightArticleSchema({
+      slug: canonicalSlug,
+      title: insight.title || seoTitle,
+      summary: metaDescription,
+      image: featureImage || OG_FALLBACK_IMAGE,
+      published: publishedIso,
+      updated: publishedIso,
+      authorId,
+    });
+  }, [canonicalSlug, featureImage, insight, metaDescription, publishedIso, seoTitle]);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <DynamicMetaTags {...metaConfig} />
+      {articleSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(articleSchema, null, 2)}</script>
+        </Helmet>
+      )}
 
       <HeaderShell />
 

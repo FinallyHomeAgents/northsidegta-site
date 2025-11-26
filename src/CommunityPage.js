@@ -1,5 +1,6 @@
 // src/CommunityPage.js
 import React from 'react'
+import { Helmet } from 'react-helmet-async'
 import { CalendarDays, List, Map as MapIcon } from 'lucide-react'
 import HeaderShell from './components/HeaderShell'
 import Footer from './Footer'
@@ -18,6 +19,8 @@ import {
 } from './community/eventUtils'
 import DynamicMetaTags from './components/seo/DynamicMetaTags'
 import { getStaticRouteMeta } from './components/seo/staticRouteMetaExports'
+import { buildCommunityEventsSchema } from './lib/structuredData/communityPage'
+import { getCanonicalEventUrl, toAbsoluteUrl, getSiteOrigin } from './community/shareUtils'
 
 const VIEW_STORAGE_KEY = 'northside-community-view'
 const monthFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -148,6 +151,30 @@ export default function CommunityPage() {
 
   const structuredData = React.useMemo(() => getStructuredData(filteredEvents), [filteredEvents])
 
+  const siteOrigin = React.useMemo(() => getSiteOrigin(), [])
+  const communityEventsSchema = React.useMemo(() => {
+    if (!filteredEvents.length) return null
+
+    const eventsForSchema = filteredEvents.map((event) => {
+      const start = event.nextOccurrence?.start || event.startDateObj || event.startDate
+      const end = event.nextOccurrence?.end || event.endDateObj || event.endDate || start
+      const imageUrl = event.image ? toAbsoluteUrl(event.image, siteOrigin) : undefined
+
+      return {
+        title: event.title,
+        url: getCanonicalEventUrl(event.slug, siteOrigin),
+        startDate: start instanceof Date ? start.toISOString() : start,
+        endDate: end instanceof Date ? end.toISOString() : end,
+        townName: event.town || event.subArea || '',
+        venueName: event.locationName,
+        imageUrl,
+        description: event.summary || event.description || '',
+      }
+    })
+
+    return buildCommunityEventsSchema({ events: eventsForSchema })
+  }, [filteredEvents, siteOrigin])
+
   const pageDescription =
     COMMUNITY_ROUTE_META.description ||
     'Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.'
@@ -261,6 +288,11 @@ export default function CommunityPage() {
           <script type="application/ld+json">{structuredData}</script>
         )}
       </DynamicMetaTags>
+      {communityEventsSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(communityEventsSchema, null, 2)}</script>
+        </Helmet>
+      )}
 
       <HeaderShell />
 

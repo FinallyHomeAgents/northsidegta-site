@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 
 import HeaderShell from "./components/HeaderShell";
@@ -7,6 +8,8 @@ import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import TasteHubPollCard from "./components/tastehub/TasteHubPollCard";
 import TasteHubPoll from "./components/tastehub/TasteHubPoll";
+import { buildTasteHubPageSchema } from "./lib/structuredData/tasteHubPage";
+import { buildTasteHubPollSchema } from "./lib/structuredData/tasteHubPoll";
 
 const TOWNS = [
   "Georgina",
@@ -644,13 +647,69 @@ export default function TasteHubPage() {
   };
 
   const metaConfig = pollSeoData?.meta || getStaticRouteMeta("/tastehub");
-  const pollSchema = pollSeoData?.schema || "";
+  const pollCreativeSchema = pollSeoData?.schema || "";
+  const tasteHubSchema = useMemo(() => buildTasteHubPageSchema(), []);
+  const schemaPoll = activePoll || pollForSeo || null;
+
+  const pollRankingItems = useMemo(() => {
+    if (!schemaPoll) return [];
+    const leaderboard = leaderboards[schemaPoll.rankingKey];
+    const ballotItems = Array.isArray(schemaPoll.ballotItems) ? schemaPoll.ballotItems : [];
+
+    const scores = new Map();
+    if (leaderboard?.items) {
+      leaderboard.items.forEach((item) => {
+        const id = slugify(item.id || item.slug || item.name);
+        scores.set(id, Number(item.score || 0));
+      });
+    }
+
+    const itemsWithScores = ballotItems.map((item, index) => {
+      const id = slugify(item.id || item.name || String(index));
+      return { name: item.name || item.title || id, score: scores.get(id) || 0 };
+    });
+
+    return itemsWithScores
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.name.localeCompare(b.name);
+      })
+      .map((item) => ({ name: item.name }));
+  }, [leaderboards, schemaPoll]);
+
+  const pollStructuredData = useMemo(() => {
+    if (!schemaPoll) return null;
+    const pollTitle = schemaPoll.title || "TasteHub Poll";
+    const pollDescription = generatePollDescription(schemaPoll);
+    const pollImage = getPollImagePath(schemaPoll);
+    const townSlug = schemaPoll.town ? slugify(schemaPoll.town) : "";
+    const townName = schemaPoll.town || "";
+
+    return buildTasteHubPollSchema({
+      slug: schemaPoll.slug,
+      title: pollTitle,
+      description: pollDescription,
+      image: pollImage,
+      townSlug,
+      townName,
+      items: pollRankingItems,
+    });
+  }, [pollRankingItems, schemaPoll]);
+
+  const structuredDataForHelmet = slugParam && pollStructuredData ? pollStructuredData : tasteHubSchema;
 
   return (
     <div className="flex min-h-screen flex-col bg-[#fbfdf8] text-slate-900">
       <DynamicMetaTags {...metaConfig}>
-        {pollSchema && <script type="application/ld+json">{pollSchema}</script>}
+        {pollCreativeSchema && <script type="application/ld+json">{pollCreativeSchema}</script>}
       </DynamicMetaTags>
+      {structuredDataForHelmet && (
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(structuredDataForHelmet, null, 2)}
+          </script>
+        </Helmet>
+      )}
       <HeaderShell />
 
       <main className="flex-1">
@@ -670,6 +729,9 @@ export default function TasteHubPage() {
               </p>
               <p className="text-sm text-emerald-100/80">
                 From Uxbridge to Georgina, NorthSide TasteHub™ is where the community comes together to rank pizza, wings, coffee, and more—just for fun.
+              </p>
+              <p className="text-sm text-emerald-50/90">
+                NorthSide TasteHub is our community-powered food voting hub for NorthSide GTA towns. Locals vote for their favourite pizza, wings, and more so you can discover real favourites—not paid ads.
               </p>
               <div className="flex flex-wrap gap-3 pt-4">
                 <button

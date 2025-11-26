@@ -1,0 +1,43 @@
+'use strict'
+
+const test = require('node:test')
+const assert = require('node:assert/strict')
+
+const { buildTasteHubPageSchema } = require('../src/lib/structuredData/tasteHubPage')
+const { buildTasteHubPollSchema } = require('../src/lib/structuredData/tasteHubPoll')
+
+test('tastehub page schema emits webpage and breadcrumb', () => {
+  const schema = buildTasteHubPageSchema()
+  const json = JSON.parse(JSON.stringify(schema))
+  const graph = json['@graph']
+
+  const webPage = graph.find((node) => Array.isArray(node['@type']) && node['@type'].includes('WebPage'))
+  const breadcrumb = graph.find((node) => node['@type'] === 'BreadcrumbList')
+
+  assert.ok(webPage, 'webpage node exists')
+  assert.equal(webPage.name.includes('TasteHub'), true)
+  assert.ok(breadcrumb, 'breadcrumb exists')
+})
+
+test('tastehub poll schema includes ranking list', () => {
+  const schema = buildTasteHubPollSchema({
+    slug: 'best-pizza-uxbridge',
+    title: 'Best Pizza in Uxbridge',
+    description: 'Community pizza showdown.',
+    image: '/seo/pizza.jpg',
+    townSlug: 'uxbridge',
+    townName: 'Uxbridge',
+    items: [
+      { name: 'Slice House' },
+      { name: 'Crust Corner' },
+    ],
+  })
+
+  const json = JSON.parse(JSON.stringify(schema))
+  const graph = json['@graph']
+  const itemList = graph.find((node) => node['@type'] === 'ItemList')
+
+  assert.ok(itemList, 'item list exists')
+  assert.equal(itemList.numberOfItems, 2)
+  assert.equal(itemList.itemListElement?.[0]?.position, 1)
+})
