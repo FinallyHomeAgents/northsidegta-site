@@ -3,7 +3,7 @@
 
 const BASE_URL = "https://northsidegta.ca";
 
-const PLACE_IDS = {
+export const PLACE_IDS = {
   uxbridge: `${BASE_URL}/#uxbridge`,
   georgina: `${BASE_URL}/#georgina`,
   "east-gwillimbury": `${BASE_URL}/#east-gwillimbury`,
@@ -174,7 +174,7 @@ const FACEBOOK_RECOMMENDATIONS = [
 
 const REVIEWS = [...GOOGLE_REVIEWS, ...FACEBOOK_RECOMMENDATIONS];
 
-function buildGlobalGraph() {
+export function buildGlobalGraph() {
   const logoUrl = `${BASE_URL}/Images/newtoolbar.png`;
   const northsideLogo = logoUrl;
 
@@ -301,8 +301,6 @@ function buildGlobalGraph() {
   };
 }
 
-function getGlobalGraphJson() {
+export function getGlobalGraphJson() {
   return JSON.stringify(buildGlobalGraph(), null, 2);
 }
-
-module.exports = { buildGlobalGraph, getGlobalGraphJson, PLACE_IDS };
