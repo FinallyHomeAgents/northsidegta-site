@@ -1,4 +1,13 @@
-import towns from "../../src/towns.json" assert { type: "json" }
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const rawTowns = require('../../src/towns.json')
+
+const towns = Array.isArray(rawTowns)
+  ? rawTowns
+  : Array.isArray(rawTowns?.default)
+  ? rawTowns.default
+  : rawTowns
 import {
   loadTownSpotlightData,
   saveTownSpotlightData,
