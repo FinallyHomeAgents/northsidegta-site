@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -23,6 +24,7 @@ import {
   toAbsoluteUrl,
 } from './shareUtils'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
+import { buildEventDetailSchema } from '../lib/structuredData/eventDetail'
 
 const SITE_ORIGIN = 'https://northsidegta.ca'
 const FALLBACK_IMAGE = '/Images/hero-desktop.jpg'
@@ -390,6 +392,28 @@ export default function EventDetailPage() {
     [event, eventDescription, normalizedOrigin, truncatedDescription, occurrence],
   )
 
+  const structuredEventSchema = React.useMemo(() => {
+    if (!event) return null
+    const startDate = eventStartIso || event?.startDate || ''
+    const endDate = eventEndIso || event?.endDate || eventStartIso || ''
+    const townName = event.town || event.subArea || ''
+    const imageUrl = event.image
+      ? toAbsoluteUrl(event.image, normalizedOrigin)
+      : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
+
+    return buildEventDetailSchema({
+      title: event.title,
+      description: truncatedDescription || eventDescription,
+      startDate,
+      endDate,
+      townName,
+      venueName: event.locationName,
+      imageUrl,
+      url: canonicalUrl,
+      slug: event.slug,
+    })
+  }, [canonicalUrl, event, eventDescription, eventEndIso, eventStartIso, normalizedOrigin, truncatedDescription])
+
   const pageTitle = event ? `${event.title} | NorthSide GTA` : 'Event Details | NorthSide GTA'
   const defaultDescription = 'Explore community events across the NorthSide GTA.'
   const scheduleShareSnippet = selectedScheduleEntry
@@ -538,6 +562,11 @@ export default function EventDetailPage() {
       <DynamicMetaTags {...metaConfig}>
         {schema && <script type="application/ld+json">{schema}</script>}
       </DynamicMetaTags>
+      {structuredEventSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(structuredEventSchema, null, 2)}</script>
+        </Helmet>
+      )}
 
       <HeaderShell />
 

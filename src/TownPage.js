@@ -1,5 +1,6 @@
 // src/TownPage.js
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { useParams, Link } from "react-router-dom";
 import towns from "./towns.json";
 import HeaderShell from "./components/HeaderShell";
@@ -7,6 +8,7 @@ import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import TownPageLayout from "./components/towns/TownPageLayout";
+import { buildTownPageSchema } from "./lib/structuredData/townPage";
 import {
   FiTrendingUp,
   FiClock,
@@ -118,6 +120,18 @@ export default function TownPage() {
   const slug = (town.slug || "").toLowerCase();
   const isUxbridge = slug === "uxbridge";
 
+  const townSchema = React.useMemo(
+    () =>
+      buildTownPageSchema({
+        slug,
+        name: town.name,
+        url: `https://northsidegta.ca/${slug}`,
+        heroImage: town.hero?.backgroundImage || town.heroImage,
+        description: town.hero?.subtitle || town.summary,
+      }),
+    [slug, town.hero?.backgroundImage, town.hero?.subtitle, town.heroImage, town.name, town.summary],
+  );
+
   if (town.hero && town.snapshot) {
     const ratingDescriptions = town.ratingDescriptions || {};
     const ratings = CATEGORY_ORDER.filter((k) => town.ratings?.[k] != null).map((key) => ({
@@ -145,6 +159,11 @@ export default function TownPage() {
 
     return (
       <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
+        {townSchema && (
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(townSchema, null, 2)}</script>
+          </Helmet>
+        )}
         <HeaderShell />
         <TownPageLayout
           townName={town.name}
@@ -199,6 +218,11 @@ export default function TownPage() {
   return (
     // Keep horizontal overflow hidden at the page level to prevent accidental widening.
     <div className="bg-white text-gray-900 min-h-screen overflow-x-hidden">
+      {townSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(townSchema, null, 2)}</script>
+        </Helmet>
+      )}
       <HeaderShell />
 
       {/* Hero */}
