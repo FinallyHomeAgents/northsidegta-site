@@ -22,16 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/blain-milatz-duo-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002613-1770404400-1770413400@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-26T08:36:31.793Z",
-  "updatedAt": "2025-11-26T08:36:31.793Z",
-  "featured": false
+  "updatedAt": "2025-11-26T08:36:31Z"
 }
