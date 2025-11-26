@@ -25,6 +25,8 @@ test('town page schema includes webpage and breadcrumb', () => {
   assert.ok(webPage, 'webpage node present')
   assert.equal(webPage.name, 'Living in Uxbridge | NorthSide GTA Real Estate Guide')
   assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'webpage includes brand about')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'webpage references region')
+  assert.equal(webPage.withinAdministrativeArea?.['@id'], 'https://northsidegta.ca/#northside-gta-region')
   assert.ok(breadcrumb, 'breadcrumb present')
   assert.equal(breadcrumb.itemListElement?.[2]?.name, 'Uxbridge')
   assert.ok(faq, 'faq page exists when town faq entries present')

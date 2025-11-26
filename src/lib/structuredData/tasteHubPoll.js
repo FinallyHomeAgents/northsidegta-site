@@ -5,6 +5,7 @@ const WEBSITE_ID = "https://northsidegta.ca/#website";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const TASTEHUB_ID = "https://northsidegta.ca/#tastehub";
 const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
+const NORTHSIDE_REGION_ID = "https://northsidegta.ca/#northside-gta-region";
 
 function buildAbsoluteUrl(path) {
   if (!path) return "";
@@ -15,7 +16,11 @@ function buildAbsoluteUrl(path) {
 
 export function buildTasteHubPollSchema({ slug, title, description, image, townSlug, townName, items = [] }) {
   const pageUrl = `${BASE_URL}/tastehub/${encodeURIComponent(slug || "")}`;
-  const aboutNodes = [{ "@id": TASTEHUB_ID }, { "@id": NORTHSIDE_ID }];
+  const aboutNodes = [
+    { "@id": TASTEHUB_ID },
+    { "@id": NORTHSIDE_REGION_ID },
+    { "@id": NORTHSIDE_ID },
+  ];
   const placeId = PLACE_IDS[townSlug];
 
   if (placeId) {

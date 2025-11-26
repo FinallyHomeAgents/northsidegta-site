@@ -36,7 +36,9 @@ test('insight article schema includes article, breadcrumb, and town cluster abou
   assert.equal(article.datePublished, '2024-01-15T00:00:00Z')
   assert.equal(article.author['@id'], 'https://northsidegta.ca/#matthew-mulhall')
   assert.ok(article.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#uxbridge'), 'includes place about')
+  assert.ok(article.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'includes region about')
   assert.ok(article.mentions?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'mentions brand node')
+  assert.ok(article.mentions?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'mentions region node')
 
   const breadcrumb = getBreadcrumb(graph)
   assert.ok(breadcrumb, 'breadcrumb list exists')

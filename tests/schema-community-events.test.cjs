@@ -30,7 +30,9 @@ test('community events schema contains webpage and item list', () => {
 
   assert.ok(webPage, 'community webpage exists')
   assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'webpage about includes brand')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'webpage about includes region')
   assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#uxbridge'), 'webpage about includes place')
+  assert.ok(webPage.mentions?.some((node) => node['@id'] === 'https://northsidegta.ca/#tastehub'), 'webpage mentions tastehub')
   assert.ok(itemList, 'item list exists')
   assert.equal(itemList.numberOfItems, 1)
 })
@@ -53,5 +55,7 @@ test('event detail schema includes core fields', () => {
   assert.equal(json.name, 'Harvest Festival')
   assert.equal(json.areaServed?.['@id'], 'https://northsidegta.ca/#georgina')
   assert.equal(json.location?.['@id'], 'https://northsidegta.ca/#georgina')
+  assert.equal(json.organizer?.['@id'], 'https://northsidegta.ca/#northside-gta-region')
+  assert.ok(json.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'))
   assert.equal(json.image?.[0], 'https://northsidegta.ca/images/harvest.jpg')
 })

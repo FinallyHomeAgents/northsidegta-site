@@ -22,6 +22,8 @@ test('tastehub page schema emits webpage and breadcrumb', () => {
   assert.equal(webPage.name.includes('TasteHub'), true)
   assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#tastehub'), 'about references TasteHub id')
   assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'about references brand')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'about references region')
+  assert.ok(webPage.mentions?.some((node) => node['@id'] === 'https://northsidegta.ca/#tastehub'), 'mentions include TasteHub')
   assert.ok(breadcrumb, 'breadcrumb exists')
 })
 
@@ -51,4 +53,6 @@ test('tastehub poll schema includes ranking list', async () => {
   assert.equal(itemList.itemListElement?.[0]?.position, 1)
   assert.ok(pollPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#uxbridge'), 'poll about includes town id')
   assert.ok(pollPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#tastehub'), 'poll about includes tastehub id')
+  assert.ok(pollPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'poll about includes region')
+  assert.ok(pollPage.mentions?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta-region'), 'poll mentions region')
 })
