@@ -1,11 +1,13 @@
 // src/BuyersPage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import { getFormEndpoint } from "./components/contact/contactConfig";
+import { buildBuyersPageSchema } from "./lib/structuredData/buyersPage";
 
 /* ───────── helpers ───────── */
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -1069,6 +1071,7 @@ const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
 /* ───────── Page ───────── */
 export default function BuyersPage() {
   const [callbackOpen, setCallbackOpen] = useState(false);
+  const buyersSchema = useMemo(() => buildBuyersPageSchema(), []);
 
   const scrollToId = (id) => {
     const el = document.getElementById(id);
@@ -1115,6 +1118,12 @@ export default function BuyersPage() {
           })}
         </script>
       </DynamicMetaTags>
+
+      {buyersSchema && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(buyersSchema, null, 2)}</script>
+        </Helmet>
+      )}
 
       <main className="relative pb-24">
         <BuyersHero onStartSearch={handleStartSearch} onTalkToAgent={handleTalkToAgent} />

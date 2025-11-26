@@ -174,7 +174,7 @@ const FACEBOOK_RECOMMENDATIONS = [
 
 const REVIEWS = [...GOOGLE_REVIEWS, ...FACEBOOK_RECOMMENDATIONS];
 
-export function buildGlobalGraph() {
+function buildGlobalGraph() {
   const logoUrl = `${BASE_URL}/Images/newtoolbar.png`;
   const northsideLogo = logoUrl;
 
@@ -301,8 +301,8 @@ export function buildGlobalGraph() {
   };
 }
 
-export function getGlobalGraphJson() {
+function getGlobalGraphJson() {
   return JSON.stringify(buildGlobalGraph(), null, 2);
 }
 
-export { PLACE_IDS };
+module.exports = { buildGlobalGraph, getGlobalGraphJson, PLACE_IDS };

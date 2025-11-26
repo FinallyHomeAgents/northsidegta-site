@@ -20,9 +20,13 @@ test('town page schema includes webpage and breadcrumb', () => {
   assert.ok(Array.isArray(graph), 'graph exists')
   const webPage = graph.find((node) => Array.isArray(node['@type']) && node['@type'].includes('WebPage'))
   const breadcrumb = graph.find((node) => node['@type'] === 'BreadcrumbList')
+  const faq = graph.find((node) => node['@type'] === 'FAQPage')
 
   assert.ok(webPage, 'webpage node present')
   assert.equal(webPage.name, 'Living in Uxbridge | NorthSide GTA Real Estate Guide')
+  assert.ok(webPage.about?.some((node) => node['@id'] === 'https://northsidegta.ca/#northside-gta'), 'webpage includes brand about')
   assert.ok(breadcrumb, 'breadcrumb present')
   assert.equal(breadcrumb.itemListElement?.[2]?.name, 'Uxbridge')
+  assert.ok(faq, 'faq page exists when town faq entries present')
+  assert.ok(faq.mainEntity?.length > 0, 'faq has entries')
 })
