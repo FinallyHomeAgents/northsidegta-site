@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/pop-up-print-sale-2025/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002735-1764496800-1764522000@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-27T08:37:09.873Z",
-  "firstSeenAt": "2025-11-27T08:37:09.873Z",
-  "updatedAt": "2025-11-27T08:37:09.873Z",
-  "featured": false
+  "updatedAt": "2025-11-27T08:37:09Z"
 }
