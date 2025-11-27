@@ -1,8 +1,8 @@
 ---
-draft: true
 title: Where to Live in the NorthSide GTA (2026 Guide for Toronto Movers)
 slug: where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers
 publishDate: 2025-12-11T14:36:00-05:00
+draft: true
 author: Matthew Mulhall
 excerpt: Thinking about moving north of Toronto in 2026? Here’s how Uxbridge,
   Stouffville, East Gwillimbury, Newmarket, Aurora, Georgina, and Scugog compare
@@ -14,7 +14,7 @@ tags:
   - relocation
   - northside-gta
   - 2026-guide
-featureImage: /uploads/insights/fhlogohq.png
+featureImage: /uploads/insights/where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers-hero.jpg
 featureImageAlt: Placeholder image — will replace
 inlineImages: []
 pullQuote:
@@ -30,6 +30,7 @@ seo:
   description: A detailed 2026 guide for Toronto buyers comparing Uxbridge,
     Stouffville, East Gwillimbury, Newmarket, Aurora, Georgina, and Scugog —
     commute, lifestyle, housing, and who each town is best for.
+  ogImage: /uploads/insights/where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers-og.jpg
 ---
 If you’re in Toronto, feeling squeezed by space, traffic, and prices, but you’re not ready to disappear into the middle of nowhere, the NorthSide GTA is probably already on your radar — even if you don’t have the language for it yet.
 
