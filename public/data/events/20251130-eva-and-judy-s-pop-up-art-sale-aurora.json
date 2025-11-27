@@ -1,18 +1,18 @@
 {
-  "slug": "20251217-acc-public-board-meeting-december-2025-aurora",
-  "title": "ACC Public Board Meeting December 2025",
-  "summary": "ACC Public Board Meeting December 2025",
-  "description": "The Board of Directors warmly invites you to view our December Public meeting. Location: 50 Victoria Street, Aurora | Homeroom Gallery 1 Please register below to receive the meeting link. Register Here We look forward to welcoming you.",
-  "startDate": "2025-12-17T23:30:00Z",
-  "endDate": "2025-12-18T00:00:00Z",
+  "slug": "20251130-eva-and-judy-s-pop-up-art-sale-aurora",
+  "title": "Eva and Judy's Pop-Up Art Sale",
+  "summary": "Eva and Judy's Pop-Up Art Sale",
+  "description": "Eva & Judy’s Pop-Up Art Sale Sunday, November 30, 2025 10:00 AM – 5:00 PM Homeroom Galleries | 50 Victoria Street, Aurora Stop by the Homeroom Galleries to purchase limited edition prints from Eva and Judy! Learn more about Shifting Realities",
+  "startDate": "2025-11-30T15:00:00Z",
+  "endDate": "2025-11-30T22:00:00Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
     {
-      "date": "2025-12-17",
+      "date": "2025-11-30",
       "all_day": false,
-      "start_time": "18:30",
-      "end_time": "19:00"
+      "start_time": "10:00",
+      "end_time": "17:00"
     }
   ],
   "category": "Arts & Culture",
@@ -20,7 +20,7 @@
   "locationName": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/acc-public-board-meeting-december-2025/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/pop-up-print-sale-2025/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -30,8 +30,9 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002533-1765996200-1765998000@auroraculturalcentre.ca",
+  "sourceRef": "10002735-1764496800-1764522000@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-11-27T08:37:09.873Z",
+  "firstSeenAt": "2025-11-27T08:37:09.873Z",
   "updatedAt": "2025-11-27T08:37:09.873Z",
   "featured": false
 }
