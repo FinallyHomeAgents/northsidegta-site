@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Coig.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/coig-an-east-coast-christmas/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/coig-an-east-coast-christmas/",
-  "updatedAt": "2025-11-27T08:37:09Z"
+  "lastSyncedAt": "2025-11-28T08:37:03.332Z",
+  "updatedAt": "2025-11-28T08:37:03.332Z",
+  "featured": false
 }
