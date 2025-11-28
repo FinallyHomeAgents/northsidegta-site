@@ -42,7 +42,192 @@
     "best-wings-newmarket",
     "best-date-aurora"
   ],
-  "embeddedPolls": [],
+  "embeddedPolls": [
+    {
+      "slug": "best-pizza-uxbridge",
+      "title": "Best Pizza in Uxbridge",
+      "description": "Help crown Uxbridge’s go-to pizza spot. Cast your vote and see who’s on top in real time.",
+      "town": "Uxbridge",
+      "category": "Pizza",
+      "customCategory": "",
+      "displayCategory": "Pizza",
+      "status": "live",
+      "rankingKey": "tastehub_uxbridge_pizza_2025",
+      "featured": true,
+      "ballotItems": [
+        {
+          "id": "papas-pizzaland",
+          "name": "Papa’s Pizzaland",
+          "address": "28 Toronto St S #7, Uxbridge, ON",
+          "link": "https://share.google/uHZ8aVVtJJoPESTBz"
+        },
+        {
+          "id": "pizzaville-uxbridge",
+          "name": "Pizzaville (Uxbridge)",
+          "address": "304 Toronto St S Unit 104, Uxbridge, ON",
+          "link": "https://share.google/0jgVsjfE1L6Pxjc0T"
+        },
+        {
+          "id": "dominos-pizza-uxbridge",
+          "name": "Domino’s Pizza (Uxbridge)",
+          "address": "54 Brock St W, Uxbridge, ON",
+          "link": "https://share.google/NOnM9TN7KLrSkcIVe"
+        },
+        {
+          "id": "pizza-pizza-uxbridge",
+          "name": "Pizza Pizza (Uxbridge)",
+          "address": "6 Brock St W, Uxbridge, ON",
+          "link": "https://share.google/gThnqyCuznZvCgxZt"
+        },
+        {
+          "id": "sandford-pizza-house",
+          "name": "Sandford Pizza House",
+          "address": "403 Sandford Rd, Sandford, ON",
+          "link": "https://share.google/XVZaH80IyGErNzHHt"
+        },
+        {
+          "id": "pizza-hut-uxbridge",
+          "name": "Pizza Hut (Uxbridge)",
+          "address": "2 Douglas Rd, Uxbridge, ON",
+          "link": "https://share.google/o8Mqf4t1bLbk7Hj8H"
+        },
+        {
+          "id": "slabtown-cider-co",
+          "name": "Slabtown Cider Co.",
+          "address": "4559 Concession 6, Uxbridge, ON",
+          "link": "https://www.slabtowncider.com/eatery"
+        },
+        {
+          "id": "foundry-pi",
+          "name": "Foundry Pi",
+          "address": "14 Victoria St, Uxbridge, ON",
+          "link": "https://share.google/CnAAsAves2MKNI0hL"
+        }
+      ],
+      "image": "/uploads/uxbridgepizza.jpg",
+      "createdAt": "2025-11-28T18:54:14.730Z",
+      "updatedAt": "2025-11-28T18:54:14.730Z"
+    },
+    {
+      "slug": "best-wings-newmarket",
+      "title": "Best Wings in Newmarket",
+      "description": "Help crown Newmarket’s go-to Wing spot. Cast your vote and see who’s on top in real time.",
+      "town": "Newmarket",
+      "category": "Wings",
+      "customCategory": "",
+      "displayCategory": "Wings",
+      "status": "live",
+      "rankingKey": "tastehub_newmarket_wings_2025",
+      "featured": false,
+      "ballotItems": [
+        {
+          "id": "the-wings-hut",
+          "name": "The Wings Hut",
+          "address": "559 Steven Ct, Newmarket, ON",
+          "link": "https://share.google/jwboOMrm9m7cYyxXw"
+        },
+        {
+          "id": "the-wing-spot",
+          "name": "The Wing Spot",
+          "address": "540 Davis Dr, Newmarket, ON",
+          "link": "https://share.google/HHjMipcKbJsOomLBl"
+        },
+        {
+          "id": "wing-house-newmarket",
+          "name": "Wing House (Newmarket)",
+          "address": "16635 Yonge St #17, Newmarket, ON",
+          "link": "https://share.google/ZEXMa0UVWmgkIrOA1"
+        },
+        {
+          "id": "coop-s-smokin-wing-house",
+          "name": "Coop's Smokin' Wing House",
+          "address": "18077 Leslie St, Newmarket, ON",
+          "link": "https://share.google/53hTh45mNqjURwYdA"
+        },
+        {
+          "id": "wild-wing-newmarket",
+          "name": "Wild Wing (Newmarket)",
+          "address": "17205 Leslie St #4, Newmarket, ON",
+          "link": "https://share.google/c1nLCyTxRj4YKnY3z"
+        },
+        {
+          "id": "jack-astors-newmarket",
+          "name": "Jack Astors (Newmarket)",
+          "address": "7830 Yonge St, Newmarket, ON",
+          "link": "https://jackastors.com/?locationId=935"
+        },
+        {
+          "id": "crow-s-nest",
+          "name": "Crow's Nest",
+          "address": "115 Prospect St, Newmarket, ON",
+          "link": "https://share.google/lGPBmILMkS0qB18kO"
+        },
+        {
+          "id": "st-louis-bar-grill-newmarket",
+          "name": "St. Louis Bar & Grill (Newmarket)",
+          "address": "17074 Leslie St Unit 4, Newmarket, ON",
+          "link": "https://share.google/O8FwVKC5a29xlcicA"
+        }
+      ],
+      "image": "/uploads/newmarketwings.jpg",
+      "createdAt": "2025-11-28T18:54:14.730Z",
+      "updatedAt": "2025-11-28T18:54:14.730Z"
+    },
+    {
+      "slug": "best-date-aurora",
+      "title": "Best Date Night in Aurora",
+      "description": "Help crown Aurora’s go-to Date Night restaurant. Cast your vote and see who’s on top in real time.",
+      "town": "Aurora",
+      "category": "Date Night Spot",
+      "customCategory": "",
+      "displayCategory": "Date Night Spot",
+      "status": "live",
+      "rankingKey": "tastehub_aurora_date_2025",
+      "featured": false,
+      "ballotItems": [
+        {
+          "id": "fishbone-kitchen-bar",
+          "name": "Fishbone Kitchen + Bar",
+          "address": "302 Wellington St E #7, Aurora, ON",
+          "link": "https://share.google/rJBoMUzqSCpv9bceD"
+        },
+        {
+          "id": "locale-restaurant-bar-aurora",
+          "name": "LOCALE Restaurant & Bar (Aurora)",
+          "address": "14845 Yonge St, Aurora, ON",
+          "link": "https://share.google/bXXq6gCGTBBlU64hc"
+        },
+        {
+          "id": "state-main-aurora",
+          "name": "State & Main (Aurora)",
+          "address": "14760 Yonge St, Aurora, ON",
+          "link": "https://share.google/w4t9Qfe4bX9iGckB4"
+        },
+        {
+          "id": "the-keg-steakhouse-aurora",
+          "name": "The Keg Steakhouse (Aurora)",
+          "address": "106 First Commerce Dr, Aurora, ON",
+          "link": "https://share.google/3INOW27JKWyOV10Rq"
+        },
+        {
+          "id": "wicked-eats-kitchen-bar",
+          "name": "Wicked Eats Kitchen + Bar",
+          "address": "15570 Yonge St, Aurora, ON",
+          "link": "https://share.google/7iW8DnXnCITTzR3Dq"
+        },
+        {
+          "id": "sweet-dutchess-kitchen-caf",
+          "name": "Sweet Dutchess Kitchen + Café",
+          "address": "2 Orchard Heights Blvd Suite 23, Aurora, ON",
+          "link": "https://share.google/FxOD4kXJVOT8mgaGw"
+        }
+      ],
+      "image": "/uploads/auroradinein.jpg",
+      "createdAt": "2025-11-28T18:54:14.730Z",
+      "updatedAt": "2025-11-28T18:54:14.730Z"
+    }
+  ],
   "body": "# Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA\n\nIf you live in any of the towns we think of as the <span style=\"color:#32610E;\">NorthSide GTA</span> — places like [Uxbridge](/uxbridge), [Georgina](/georgina), [East Gwillimbury](/east-gwillimbury), [Newmarket](/newmarket), [Aurora](/aurora), [Stouffville](/stouffville), or [Scugog](/scugog) — you already know this:\n\n**Where you eat is a big part of why you love your town.**\n\nIt’s not just about having “somewhere” to grab food. It’s about:\n\n- the pizza place your family swears by  \n- the wings spot after a game  \n- the date-night restaurant you recommend to everyone  \n- the bakery you hit on Saturday mornings  \n\nSpend a bit of time in any of the local Facebook groups — Uxbridge, Newmarket, Aurora, Keswick/Georgina, Stouffville, Port Perry and surrounding areas — and you’ll see the same questions come up again and again:\n\n- “Who actually has the best pizza in town?”\n- “Where’s your go-to spot for wings?”\n- “Any suggestions for a good date-night restaurant?”\n- “What’s a good place to take the family?”\n\nThese posts get dozens (and sometimes hundreds) of comments.  \nEveryone has a favourite.  \nNobody agrees.  \nAnd honestly… we love that.\n\nWe’re Matthew and Landon — brothers, local real estate agents, and the team behind <span style=\"color:#32610E;\">Finally Home Agents</span> and <span style=\"color:#32610E;\">NorthSide GTA</span>.  \nWe live here. We work here. We’re raising our families here. And just like you…\n\n**We argue with our friends and family about where to eat.**\n\nAfter years of watching these debates in local groups (and jumping into them ourselves), we decided it was time to build something the NorthSide GTA didn’t have:\n\n**A community-powered hub where locals can actually vote on their favourite spots — and discover new ones.**\n\nThat’s how <span style=\"color:#32610E;\">NorthSide TasteHub</span> was born.\n\n---\n\n## 🍕 Why We Built NorthSide TasteHub (And Why It Matters Here)\n\nWe work in real estate, but our day-to-day life is much bigger than that.\n\nWe’re out in these towns every day:\n\n- grabbing a coffee between showings  \n- meeting clients at local bakeries  \n- taking our families out for pizza  \n- running our Thursday Night Golf League across the NorthSide GTA  \n- and constantly talking with people about where they love to eat  \n\nOver and over, the same themes kept popping up:\n\n### **1. Food is a huge part of small-town life.**\nWhen people think about moving from downtown Toronto or a bigger suburb to one of our towns, this question always comes up:\n\n**“Okay… but how’s the food here?”**\n\n### **2. Good information is scattered.**\nIn a big city, you have endless:\n\n- blogs  \n- TikToks  \n- listicles  \n\nIn smaller towns, the best information lives inside:\n\n- local Facebook groups  \n- Google reviews  \n- word-of-mouth  \n- the occasional article written by someone who may not even live here  \n\n### **3. Locals wanted one simple place to check.**\nWe kept seeing the same comments:\n\n- “Someone needs to write all these answers down.”  \n- “We need a place with all of this in one spot.”  \n- “We need a local list that isn’t just ads.”  \n\nSo we didn’t want a generic “Top 10” list.  \nWe wanted something that felt like the **town talking to itself**.\n\nThat’s the idea behind <span style=\"color:#32610E;\">NorthSide TasteHub</span>.\n\n---\n\n## ⭐ What Exactly *Is* NorthSide TasteHub?\n\n<span style=\"color:#32610E;\">NorthSide TasteHub</span> is a section of [NorthSideGTA.ca](/) where locals can:\n\n- **Vote** in live food polls  \n- **See** which restaurants are leading  \n- **Discover** new spots  \n- **Suggest** places we should add  \n\nIt’s a **community scoreboard for food across the NorthSide GTA** — powered by locals, not ads.\n\nIt’s built for the same towns we help buyers and sellers with every day:\n\n- **Uxbridge** – home to some of the fiercest pizza debates  \n- **Georgina** – lakeside patios, takeout favourites, and strong community loyalty  \n- **East Gwillimbury** – a fast-growing area with new restaurants popping up  \n- **Newmarket** – a great mix around Main Street and beyond  \n- **Aurora** – cozy pubs, date spots, and great takeout  \n- **Stouffville** – a growing GO-connected town with legit local food  \n- **Scugog** – especially Port Perry, full of charm and small-town favourites  \n\nWhen you land on [NorthSide TasteHub](/tastehub), polls are organized by **town** and **category**, so everything stays local and relevant.\n\n---\n\n## 🗳 How TasteHub Works (It’s Super Simple)\n\nWe wanted TasteHub to be something you can use while standing in your kitchen saying:\n\n**“Okay… where should we go?”**\n\nHere’s how it works:\n\n### **1. Pick a town + category**\nExamples:\n\n- “Uxbridge – Best Pizza”  \n- “Newmarket – Best Wings”  \n- “Aurora – Best Date-Night Spot”  \n- “Georgina – Best Family-Friendly Restaurant”\n\n### **2. Browse a curated list**\nEvery poll only includes spots **actually in that town**.\n\n### **3. Cast your vote**\nOne click. No account needed.\n\n### **4. Watch the rankings move**\nLive, real-time updates.\n\n### **5. Tell us what’s missing**\nLocals can suggest restaurants for future polls.\n\nThat’s it.  \nFast. Free. Fun. Useful.\n\n---\n\n## 🔥 The Debates That Started It All\n\nTasteHub was built from the same conversations we all have:\n\n- Uxbridge → “Who actually has the best pizza?”  \n- Newmarket → “Where are the best wings after a game?”  \n- Aurora → “Best date-night spot that isn’t a chain?”  \n- Georgina → “Best family-friendly restaurant?”  \n- Stouffville + Scugog → “What’s the best small-town go-to?”  \n\nIn local Facebook groups, the pattern repeats:\n\nSomeone asks.  \nDozens of comments roll in.  \nTwo or three favourites rise.  \nHidden gems surface.  \nSomeone asks again a week later.\n\nEven in our own families and friend groups, we’ve had full debates about:\n\n- best pizza in Uxbridge  \n- wings in Newmarket  \n- underrated spots in Georgina  \n\nTasteHub is simply a way to capture that energy — and put it somewhere useful.\n\n---\n\n## 🚫 What TasteHub Is *Not*\n\nIt’s important to be clear:\n\n**NorthSide TasteHub is not:**\n\n- a paid ranking system  \n- a sponsored list  \n- influenced by ads  \n- written by people outside our area  \n- a replacement for your personal favourites  \n\nRankings are powered by **real local votes**.  \nIf your community loves a place, it will show.\n\n---\n\n## 🎯 A Few of the First Live Polls\n\nHere are the polls already live on TasteHub:\n\n- **Best Pizza in Uxbridge**  \n- **Best Wings in Newmarket**  \n- **Best Date-Night Spot in Aurora**  \n- **Best Family-Friendly Restaurant in Georgina**  \n\nMore coming soon:\n\nburgers, brunch, bakeries, coffee, ice cream, sushi, pubs, patios, desserts — and more.\n\nIf there’s a category you want, let us know. We’re building this with you.\n\n---\n\n## 🏡 Why This Matters If You’re Thinking About Moving North of Toronto\n\nTasteHub isn’t a sales pitch.  \nIt’s a **window into what daily life feels like here**.\n\nIf you already live in one of our towns, TasteHub is a fun way to:\n\n- discover new spots  \n- support local restaurants  \n- settle some debates  \n\nIf you’re thinking about moving north, TasteHub gives you something real estate sites rarely offer:\n\nA look at a town’s **food culture** — the places locals actually love.\n\nWhen we’re showing homes, we’re talking about:\n\n- the pizza place trending at the top of the poll  \n- the café half the town visits on weekends  \n- the restaurant that just surged in votes  \n\nIt’s not just about houses.  \nIt’s about **Friday nights, traditions, and routines**.\n\n---\n\n## 👋 Who We Are — And Why We Built This as Real Estate Agents\n\nWe’re **Matthew and Landon Mulhall**, brothers behind the [Finally Home Agents](/about) team and <span style=\"color:#32610E;\">NorthSide GTA</span>.\n\nWe grew up playing hockey, soccer, baseball and golf across these towns.  \nNow we:\n\n- work here  \n- raise our families here  \n- run a travelling Thursday night golf league  \n- host community events  \n- and spend way too much time talking about food  \n\nWe didn’t want to talk *about* community — we wanted to build something that **serves** it.\n\nTasteHub does exactly that:\n\n- gives locals a voice  \n- gives restaurants visibility  \n- gives newcomers a real picture of life here  \n\n---\n\n## 🙌 How Locals Can Get Involved\n\n### If you live in the NorthSide GTA:\n- **Vote** in the polls  \n- **Share** TasteHub in local groups  \n- **Suggest** hidden gems  \n- **Try** new places  \n\n### If you own or manage a restaurant:\n- Make sure your listing is accurate  \n- Share your poll with regulars  \n- Message us if we missed you  \n- Celebrate your placement  \n\nTasteHub is **not pay-to-play**.  \nIf people love your place, your votes will show it.\n\n---\n\n## 📅 A Quick Note About Our Community Events Page\n\nAlong with TasteHub, we also run the [NorthSide GTA Community Events](/community-events) page — a place to find and share everything happening across our towns.\n\nIf you’re organizing something, you can submit your event and we’ll feature it for locals to find.\n\nJust another small way we’re helping the NorthSide GTA stay connected.\n\n---\n\n## 🚀 What’s Next for NorthSide TasteHub\n\nTasteHub is just getting started.\n\nWe plan to:\n\n- add new categories  \n- highlight seasonal favourites  \n- share poll results in future Insight articles  \n- and keep improving TasteHub based on your feedback  \n\nFollow our [Insights](/insights) for future updates — from early results to stories about local favourites.\n\n---\n\n## 💚 An Invitation to Locals\n\nWhether you’ve lived in the NorthSide GTA your whole life, or you’re just considering your next move, we’d love you to be part of <span style=\"color:#32610E;\">NorthSide TasteHub</span>.\n\nHead over to [TasteHub](/tastehub), cast your votes, explore a few new spots, and see what your neighbours are loving.\n\nAnd if somewhere between the pizza debates and the date-night suggestions you start thinking about your next move…\n\nYou know where to find us.\n\nWe’ll be right here — working, raising our families, trying to hit fairways, and having the same “best place in town” arguments you are.\n\n**Now it’s your turn to vote.**\n",
+  "bodyHtml": "<h1>Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA</h1>\n<p>If you live in any of the towns we think of as the <span style=\"color:#32610E;\">NorthSide GTA</span> — places like <a href=\"/uxbridge\">Uxbridge</a>, <a href=\"/georgina\">Georgina</a>, <a href=\"/east-gwillimbury\">East Gwillimbury</a>, <a href=\"/newmarket\">Newmarket</a>, <a href=\"/aurora\">Aurora</a>, <a href=\"/stouffville\">Stouffville</a>, or <a href=\"/scugog\">Scugog</a> — you already know this:</p>\n<p><strong>Where you eat is a big part of why you love your town.</strong></p>\n<p>It’s not just about having “somewhere” to grab food. It’s about:</p>\n<ul>\n<li>the pizza place your family swears by  </li>\n<li>the wings spot after a game  </li>\n<li>the date-night restaurant you recommend to everyone  </li>\n<li>the bakery you hit on Saturday mornings</li>\n</ul>\n<p>Spend a bit of time in any of the local Facebook groups — Uxbridge, Newmarket, Aurora, Keswick/Georgina, Stouffville, Port Perry and surrounding areas — and you’ll see the same questions come up again and again:</p>\n<ul>\n<li>“Who actually has the best pizza in town?”</li>\n<li>“Where’s your go-to spot for wings?”</li>\n<li>“Any suggestions for a good date-night restaurant?”</li>\n<li>“What’s a good place to take the family?”</li>\n</ul>\n<p>These posts get dozens (and sometimes hundreds) of comments.<br>Everyone has a favourite.<br>Nobody agrees.<br>And honestly… we love that.</p>\n<p>We’re Matthew and Landon — brothers, local real estate agents, and the team behind <span style=\"color:#32610E;\">Finally Home Agents</span> and <span style=\"color:#32610E;\">NorthSide GTA</span>.<br>We live here. We work here. We’re raising our families here. And just like you…</p>\n<p><strong>We argue with our friends and family about where to eat.</strong></p>\n<p>After years of watching these debates in local groups (and jumping into them ourselves), we decided it was time to build something the NorthSide GTA didn’t have:</p>\n<p><strong>A community-powered hub where locals can actually vote on their favourite spots — and discover new ones.</strong></p>\n<p>That’s how <span style=\"color:#32610E;\">NorthSide TasteHub</span> was born.</p>\n<hr>\n<h2>🍕 Why We Built NorthSide TasteHub (And Why It Matters Here)</h2>\n<p>We work in real estate, but our day-to-day life is much bigger than that.</p>\n<p>We’re out in these towns every day:</p>\n<ul>\n<li>grabbing a coffee between showings  </li>\n<li>meeting clients at local bakeries  </li>\n<li>taking our families out for pizza  </li>\n<li>running our Thursday Night Golf League across the NorthSide GTA  </li>\n<li>and constantly talking with people about where they love to eat</li>\n</ul>\n<p>Over and over, the same themes kept popping up:</p>\n<h3><strong>1. Food is a huge part of small-town life.</strong></h3>\n<p>When people think about moving from downtown Toronto or a bigger suburb to one of our towns, this question always comes up:</p>\n<p><strong>“Okay… but how’s the food here?”</strong></p>\n<h3><strong>2. Good information is scattered.</strong></h3>\n<p>In a big city, you have endless:</p>\n<ul>\n<li>blogs  </li>\n<li>TikToks  </li>\n<li>listicles</li>\n</ul>\n<p>In smaller towns, the best information lives inside:</p>\n<ul>\n<li>local Facebook groups  </li>\n<li>Google reviews  </li>\n<li>word-of-mouth  </li>\n<li>the occasional article written by someone who may not even live here</li>\n</ul>\n<h3><strong>3. Locals wanted one simple place to check.</strong></h3>\n<p>We kept seeing the same comments:</p>\n<ul>\n<li>“Someone needs to write all these answers down.”  </li>\n<li>“We need a place with all of this in one spot.”  </li>\n<li>“We need a local list that isn’t just ads.”</li>\n</ul>\n<p>So we didn’t want a generic “Top 10” list.<br>We wanted something that felt like the <strong>town talking to itself</strong>.</p>\n<p>That’s the idea behind <span style=\"color:#32610E;\">NorthSide TasteHub</span>.</p>\n<hr>\n<h2>⭐ What Exactly <em>Is</em> NorthSide TasteHub?</h2>\n<p><span style=\"color:#32610E;\">NorthSide TasteHub</span> is a section of <a href=\"/\">NorthSideGTA.ca</a> where locals can:</p>\n<ul>\n<li><strong>Vote</strong> in live food polls  </li>\n<li><strong>See</strong> which restaurants are leading  </li>\n<li><strong>Discover</strong> new spots  </li>\n<li><strong>Suggest</strong> places we should add</li>\n</ul>\n<p>It’s a <strong>community scoreboard for food across the NorthSide GTA</strong> — powered by locals, not ads.</p>\n<p>It’s built for the same towns we help buyers and sellers with every day:</p>\n<ul>\n<li><strong>Uxbridge</strong> – home to some of the fiercest pizza debates  </li>\n<li><strong>Georgina</strong> – lakeside patios, takeout favourites, and strong community loyalty  </li>\n<li><strong>East Gwillimbury</strong> – a fast-growing area with new restaurants popping up  </li>\n<li><strong>Newmarket</strong> – a great mix around Main Street and beyond  </li>\n<li><strong>Aurora</strong> – cozy pubs, date spots, and great takeout  </li>\n<li><strong>Stouffville</strong> – a growing GO-connected town with legit local food  </li>\n<li><strong>Scugog</strong> – especially Port Perry, full of charm and small-town favourites</li>\n</ul>\n<p>When you land on <a href=\"/tastehub\">NorthSide TasteHub</a>, polls are organized by <strong>town</strong> and <strong>category</strong>, so everything stays local and relevant.</p>\n<hr>\n<h2>🗳 How TasteHub Works (It’s Super Simple)</h2>\n<p>We wanted TasteHub to be something you can use while standing in your kitchen saying:</p>\n<p><strong>“Okay… where should we go?”</strong></p>\n<p>Here’s how it works:</p>\n<h3><strong>1. Pick a town + category</strong></h3>\n<p>Examples:</p>\n<ul>\n<li>“Uxbridge – Best Pizza”  </li>\n<li>“Newmarket – Best Wings”  </li>\n<li>“Aurora – Best Date-Night Spot”  </li>\n<li>“Georgina – Best Family-Friendly Restaurant”</li>\n</ul>\n<h3><strong>2. Browse a curated list</strong></h3>\n<p>Every poll only includes spots <strong>actually in that town</strong>.</p>\n<h3><strong>3. Cast your vote</strong></h3>\n<p>One click. No account needed.</p>\n<h3><strong>4. Watch the rankings move</strong></h3>\n<p>Live, real-time updates.</p>\n<h3><strong>5. Tell us what’s missing</strong></h3>\n<p>Locals can suggest restaurants for future polls.</p>\n<p>That’s it.<br>Fast. Free. Fun. Useful.</p>\n<hr>\n<h2>🔥 The Debates That Started It All</h2>\n<p>TasteHub was built from the same conversations we all have:</p>\n<ul>\n<li>Uxbridge → “Who actually has the best pizza?”  </li>\n<li>Newmarket → “Where are the best wings after a game?”  </li>\n<li>Aurora → “Best date-night spot that isn’t a chain?”  </li>\n<li>Georgina → “Best family-friendly restaurant?”  </li>\n<li>Stouffville + Scugog → “What’s the best small-town go-to?”</li>\n</ul>\n<p>In local Facebook groups, the pattern repeats:</p>\n<p>Someone asks.<br>Dozens of comments roll in.<br>Two or three favourites rise.<br>Hidden gems surface.<br>Someone asks again a week later.</p>\n<p>Even in our own families and friend groups, we’ve had full debates about:</p>\n<ul>\n<li>best pizza in Uxbridge  </li>\n<li>wings in Newmarket  </li>\n<li>underrated spots in Georgina</li>\n</ul>\n<p>TasteHub is simply a way to capture that energy — and put it somewhere useful.</p>\n<hr>\n<h2>🚫 What TasteHub Is <em>Not</em></h2>\n<p>It’s important to be clear:</p>\n<p><strong>NorthSide TasteHub is not:</strong></p>\n<ul>\n<li>a paid ranking system  </li>\n<li>a sponsored list  </li>\n<li>influenced by ads  </li>\n<li>written by people outside our area  </li>\n<li>a replacement for your personal favourites</li>\n</ul>\n<p>Rankings are powered by <strong>real local votes</strong>.<br>If your community loves a place, it will show.</p>\n<hr>\n<h2>🎯 A Few of the First Live Polls</h2>\n<p>Here are the polls already live on TasteHub:</p>\n<ul>\n<li><strong>Best Pizza in Uxbridge</strong>  </li>\n<li><strong>Best Wings in Newmarket</strong>  </li>\n<li><strong>Best Date-Night Spot in Aurora</strong>  </li>\n<li><strong>Best Family-Friendly Restaurant in Georgina</strong></li>\n</ul>\n<p>More coming soon:</p>\n<p>burgers, brunch, bakeries, coffee, ice cream, sushi, pubs, patios, desserts — and more.</p>\n<p>If there’s a category you want, let us know. We’re building this with you.</p>\n<hr>\n<h2>🏡 Why This Matters If You’re Thinking About Moving North of Toronto</h2>\n<p>TasteHub isn’t a sales pitch.<br>It’s a <strong>window into what daily life feels like here</strong>.</p>\n<p>If you already live in one of our towns, TasteHub is a fun way to:</p>\n<ul>\n<li>discover new spots  </li>\n<li>support local restaurants  </li>\n<li>settle some debates</li>\n</ul>\n<p>If you’re thinking about moving north, TasteHub gives you something real estate sites rarely offer:</p>\n<p>A look at a town’s <strong>food culture</strong> — the places locals actually love.</p>\n<p>When we’re showing homes, we’re talking about:</p>\n<ul>\n<li>the pizza place trending at the top of the poll  </li>\n<li>the café half the town visits on weekends  </li>\n<li>the restaurant that just surged in votes</li>\n</ul>\n<p>It’s not just about houses.<br>It’s about <strong>Friday nights, traditions, and routines</strong>.</p>\n<hr>\n<h2>👋 Who We Are — And Why We Built This as Real Estate Agents</h2>\n<p>We’re <strong>Matthew and Landon Mulhall</strong>, brothers behind the <a href=\"/about\">Finally Home Agents</a> team and <span style=\"color:#32610E;\">NorthSide GTA</span>.</p>\n<p>We grew up playing hockey, soccer, baseball and golf across these towns.<br>Now we:</p>\n<ul>\n<li>work here  </li>\n<li>raise our families here  </li>\n<li>run a travelling Thursday night golf league  </li>\n<li>host community events  </li>\n<li>and spend way too much time talking about food</li>\n</ul>\n<p>We didn’t want to talk <em>about</em> community — we wanted to build something that <strong>serves</strong> it.</p>\n<p>TasteHub does exactly that:</p>\n<ul>\n<li>gives locals a voice  </li>\n<li>gives restaurants visibility  </li>\n<li>gives newcomers a real picture of life here</li>\n</ul>\n<hr>\n<h2>🙌 How Locals Can Get Involved</h2>\n<h3>If you live in the NorthSide GTA:</h3>\n<ul>\n<li><strong>Vote</strong> in the polls  </li>\n<li><strong>Share</strong> TasteHub in local groups  </li>\n<li><strong>Suggest</strong> hidden gems  </li>\n<li><strong>Try</strong> new places</li>\n</ul>\n<h3>If you own or manage a restaurant:</h3>\n<ul>\n<li>Make sure your listing is accurate  </li>\n<li>Share your poll with regulars  </li>\n<li>Message us if we missed you  </li>\n<li>Celebrate your placement</li>\n</ul>\n<p>TasteHub is <strong>not pay-to-play</strong>.<br>If people love your place, your votes will show it.</p>\n<hr>\n<h2>📅 A Quick Note About Our Community Events Page</h2>\n<p>Along with TasteHub, we also run the <a href=\"/community-events\">NorthSide GTA Community Events</a> page — a place to find and share everything happening across our towns.</p>\n<p>If you’re organizing something, you can submit your event and we’ll feature it for locals to find.</p>\n<p>Just another small way we’re helping the NorthSide GTA stay connected.</p>\n<hr>\n<h2>🚀 What’s Next for NorthSide TasteHub</h2>\n<p>TasteHub is just getting started.</p>\n<p>We plan to:</p>\n<ul>\n<li>add new categories  </li>\n<li>highlight seasonal favourites  </li>\n<li>share poll results in future Insight articles  </li>\n<li>and keep improving TasteHub based on your feedback</li>\n</ul>\n<p>Follow our <a href=\"/insights\">Insights</a> for future updates — from early results to stories about local favourites.</p>\n<hr>\n<h2>💚 An Invitation to Locals</h2>\n<p>Whether you’ve lived in the NorthSide GTA your whole life, or you’re just considering your next move, we’d love you to be part of <span style=\"color:#32610E;\">NorthSide TasteHub</span>.</p>\n<p>Head over to <a href=\"/tastehub\">TasteHub</a>, cast your votes, explore a few new spots, and see what your neighbours are loving.</p>\n<p>And if somewhere between the pizza debates and the date-night suggestions you start thinking about your next move…</p>\n<p>You know where to find us.</p>\n<p>We’ll be right here — working, raising our families, trying to hit fairways, and having the same “best place in town” arguments you are.</p>\n<p><strong>Now it’s your turn to vote.</strong></p>\n",
   "sourcePath": "public/content/insights/northside-tastehub-launch/index.md"
 }

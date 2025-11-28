@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
+const { marked } = require("marked");
 
 const rootDir = path.resolve(__dirname, "..");
 const contentDir = path.join(rootDir, "public", "content", "insights");
@@ -16,6 +17,38 @@ const DEFAULT_INLINE_PLACEMENT = "after-p2";
 const ALLOWED_ASPECT_RATIOS = new Set(["16:9", "4:3", "3:2", "1:1", "9:16"]);
 const DEFAULT_ASPECT_RATIO = "16:9";
 const TASTEHUB_POLLS_MODULE = path.join(rootDir, "lib", "tastehub", "getTasteHubPolls.js");
+
+function createMarkdownRenderer() {
+  const renderer = new marked.Renderer();
+  renderer.image = (token) => {
+    const href = token && typeof token === "object" ? token.href : "";
+    const title = token && typeof token === "object" ? token.title : "";
+    const text = token && typeof token === "object" ? token.text : "";
+    const src = normalizeAssetPath(href || "");
+    const alt = text || "";
+    const titleAttr = title ? ` title="${title}"` : "";
+    return `<img src="${src}" alt="${alt}"${titleAttr}>`;
+  };
+  renderer.html = (token) => {
+    if (token && typeof token === "object" && typeof token.text === "string") {
+      return token.text;
+    }
+    return "";
+  };
+  return renderer;
+}
+
+function renderMarkdownToHtml(markdown) {
+  if (!markdown) return "";
+  return marked.parse(markdown, {
+    gfm: true,
+    breaks: true,
+    smartypants: true,
+    headerIds: false,
+    mangle: false,
+    renderer: createMarkdownRenderer(),
+  });
+}
 
 function cleanupEmptyDirectories(...dirs) {
   dirs.forEach((dir) => {
@@ -455,6 +488,7 @@ async function main() {
     }
 
     const body = parsed.content.replace(/^\uFEFF/, "").replace(/^\n+/, "");
+    const bodyHtml = renderMarkdownToHtml(body);
     const excerpt = collapseWhitespace(data.excerpt) || collapseWhitespace(body).slice(0, 150);
 
     const embeddedPollSlugs = normalizeEmbeddedPollSlugs(data.embeddedPollSlugs);
@@ -483,6 +517,7 @@ async function main() {
       embeddedPollSlugs,
       embeddedPolls,
       body,
+      bodyHtml,
       sourcePath: relativeIndexPath,
     };
 

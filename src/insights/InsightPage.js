@@ -744,9 +744,10 @@ export default function InsightPage() {
   }
 
   const bodyHtml = useMemo(() => {
+    if (insight?.bodyHtml) return insight.bodyHtml;
     if (!insight?.body) return "";
     return marked.parse(insight.body);
-  }, [insight?.body]);
+  }, [insight?.body, insight?.bodyHtml]);
 
   const bodyBlocks = useMemo(() => parseBodyHtmlToBlocks(bodyHtml), [bodyHtml]);
   const plainTextBody = useMemo(() => extractPlainText(bodyHtml), [bodyHtml]);
