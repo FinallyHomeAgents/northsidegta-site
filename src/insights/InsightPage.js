@@ -328,6 +328,7 @@ function normalizeInsight(data, sourcePath = "") {
     featureImage: ensureInsightUploadPath(data.featureImage),
     featureImageAlt: safeString(data.featureImageAlt),
     body: typeof data.body === "string" ? data.body : "",
+    bodyHtml: typeof data.bodyHtml === "string" ? data.bodyHtml : "",
     sourcePath: safeString(data.sourcePath) || sourcePath,
     seo: {
       title: safeString(data?.seo?.title),
