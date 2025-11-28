@@ -172,6 +172,14 @@ body {
   box-shadow: 0 30px 80px rgba(34, 68, 10, 0.2);
 }
 
+.insight-content .insight-body__image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 1.75rem;
+}
+
 .contact-hero {
   position: relative;
   display: flex;

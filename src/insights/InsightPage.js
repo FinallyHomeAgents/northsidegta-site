@@ -416,6 +416,20 @@ function convertNodeToReact(node, key) {
     }
   });
 
+  if (tagName === "img") {
+    const normalizedSrc = ensureInsightUploadPath(props.src || "");
+    if (normalizedSrc) {
+      props.src = normalizedSrc;
+    }
+    props.alt = props.alt || "";
+    props.loading = props.loading || "lazy";
+    props.decoding = props.decoding || "async";
+    props.className = props.className
+      ? `${props.className} insight-body__image`
+      : "insight-body__image";
+    return React.createElement(tagName, props);
+  }
+
   const children = node.childNodes
     .map((child, index) => convertNodeToReact(child, `${key}-${index}`))
     .filter((child) => child !== null && child !== undefined);
