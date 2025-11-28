@@ -22,16 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/winter-break-daily-art-camp-dec30-7-12-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002665-1767052800-1767139199@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-28T08:37:03.332Z",
-  "updatedAt": "2025-11-28T08:37:03.332Z",
-  "featured": false
+  "updatedAt": "2025-11-28T08:37:03Z"
 }

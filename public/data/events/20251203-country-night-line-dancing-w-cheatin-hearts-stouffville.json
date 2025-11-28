@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/Cheatin-Hearts-Dec3.jpeg",
   "eventUrl": "https://discoverstouffville.ca/event/country-night-line-dancing-w-cheatin-hearts/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/country-night-line-dancing-w-cheatin-hearts/",
-  "lastSyncedAt": "2025-11-28T08:37:03.332Z",
-  "updatedAt": "2025-11-28T08:37:03.332Z",
-  "featured": false
+  "updatedAt": "2025-11-28T08:37:03Z"
 }
