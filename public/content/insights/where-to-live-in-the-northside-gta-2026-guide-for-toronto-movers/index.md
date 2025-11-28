@@ -16,7 +16,27 @@ tags:
   - 2026-guide
 featureImage: /uploads/insights/where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers-hero.jpg
 featureImageAlt: Placeholder image — will replace
-inlineImages: []
+inlineImages:
+  - placement: after-P2
+    image: /uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg
+    alt: " A high-resolution aerial photo of a Uxbridge neighbourhood surrounded by
+      forest, farmland, and estate homes — used in the Where to Live in the
+      NorthSide GTA 2026 guide."
+    caption: Uxbridge offers a mix of forests, trails, and quiet neighbourhoods — a
+      top pick for buyers who want nature without losing access to the GTA.
+  - placement: after-P4
+    image: /uploads/insights/east-gwillimbury-queensville-aerial-2026.jpg
+    alt: A high-resolution aerial photo of Queensville in East Gwillimbury, showing
+      new family homes surrounded by green space and forests — featured in the
+      2026 NorthSide GTA guide.
+    caption: Queensville is one of East Gwillimbury’s fastest-growing areas — newer
+      homes, parks, and quick access to Hwy 404.
+  - placement: end
+    image: /uploads/insights/northside-gta-sunset-rural-landscape-2026.jpg.jpg
+    alt: A sunset over rolling fields and farmland in the NorthSide GTA, capturing
+      the peaceful rural lifestyle of the region
+    caption: Sunsets, open space, and quiet evenings — a big part of why so many
+      Toronto buyers look north.
 pullQuote:
   text: |
     Placeholder — will replace
