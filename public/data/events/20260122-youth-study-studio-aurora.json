@@ -58,16 +58,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/yar-youth-study-studio-january2026/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002710-1769040000-1769644799@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-11-29T08:34:31.914Z",
-  "updatedAt": "2025-11-29T08:34:31.914Z",
-  "featured": false
+  "updatedAt": "2025-11-29T08:34:31Z"
 }

@@ -22,17 +22,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/harrison-kennedy-awbf-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002618-1772373600-1772380800@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-12-01T08:40:20.399Z",
-  "firstSeenAt": "2025-12-01T08:40:20.399Z",
-  "updatedAt": "2025-12-01T08:40:20.399Z",
-  "featured": false
+  "updatedAt": "2025-12-01T08:40:20Z"
 }
