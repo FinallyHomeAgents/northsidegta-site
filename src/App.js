@@ -1,5 +1,6 @@
 // src/App.js
 import React, { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CuratedPage from "./CuratedPage";
 import HomePage         from "./HomePage";
@@ -102,6 +103,7 @@ function App() {
           <Route path="/:slug" element={<TownPage />} />
         </Routes>
       </Router>
+      <Analytics />
     </div>
   );
 }
