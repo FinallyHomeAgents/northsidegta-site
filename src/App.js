@@ -28,6 +28,7 @@ import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
+import MembershipCardPreviewPage from "./MembershipCardPreviewPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -90,6 +91,7 @@ function App() {
           <Route path="/insights/:slug" element={<InsightPage />} />
           <Route path="/media"        element={<MediaPage />} />
           <Route path="/referral-partners" element={<ReferralPartnersPage />} />
+          <Route path="/northside-pass-preview" element={<MembershipCardPreviewPage />} />
 
           {/* Town pages — community slugs */}
           <Route path="/communities/:slug" element={<TownPage />} />
