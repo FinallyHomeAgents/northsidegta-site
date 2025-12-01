@@ -25,42 +25,45 @@ const MembershipCardPreviewPage = () => {
             <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="fullName">
               Full Name
             </label>
-            <input
-              id="fullName"
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
-              placeholder="Full name"
-            />
+          <input
+            id="fullName"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value.slice(0, 26))}
+            maxLength={26}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
+            placeholder="Full name"
+          />
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="town">
               Town / Community
             </label>
-            <input
-              id="town"
-              type="text"
-              value={town}
-              onChange={(e) => setTown(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
-              placeholder="Town or community"
-            />
+          <input
+            id="town"
+            type="text"
+            value={town}
+            onChange={(e) => setTown(e.target.value.slice(0, 28))}
+            maxLength={28}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
+            placeholder="Town or community"
+          />
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="memberId">
               Member ID (optional)
             </label>
-            <input
-              id="memberId"
-              type="text"
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
-              placeholder="e.g. NS-48210"
-            />
+          <input
+            id="memberId"
+            type="text"
+            value={memberId}
+            onChange={(e) => setMemberId(e.target.value.slice(0, 12))}
+            maxLength={12}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
+            placeholder="e.g. NS-48210"
+          />
           </div>
         </div>
 
