@@ -2,41 +2,60 @@ import React from "react";
 import classNames from "classnames";
 import "./membership-card.css";
 
+const sanitizeValue = (value, maxLength) => {
+  const safeValue = (value ?? "").toString();
+  return safeValue.length > maxLength ? safeValue.slice(0, maxLength) : safeValue;
+};
+
 const MembershipCard = ({ fullName, town, memberId, className }) => {
-  const memberLabel = memberId ? `Member ID: ${memberId}` : "Member ID: Pending";
+  const trimmedName = sanitizeValue(fullName, 26);
+  const trimmedTown = sanitizeValue(town, 28);
+  const trimmedMemberId = sanitizeValue(memberId, 12);
+  const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
   return (
     <div className={classNames("membership-card", className)}>
-      <div className="membership-card__overlay" aria-hidden="true" />
+      <div className="holo-bar" aria-hidden="true" />
+      <div className="card-noise" aria-hidden="true" />
+      <div className="metal-rim" aria-hidden="true" />
+      <div className="card-gloss" aria-hidden="true" />
+      <div className="micro-strip" aria-hidden="true">
+        NORTHSIDE GTA • FINALLY HOME AGENTS • SINCE 2025 •
+      </div>
+      <div className="est-badge" aria-hidden="true">EST. 2025</div>
 
-      <div className="membership-card__header">
+      <div className="logo-row">
         <img
           src="/brand/northsidegta-card-logo.png"
           alt="NorthSide GTA"
-          className="membership-card__logo"
+          className="card-logo logo-left"
           loading="lazy"
         />
         <img
           src="/brand/finally-home-agents-card-logo.png"
           alt="Finally Home Agents"
-          className="membership-card__logo membership-card__logo--right"
+          className="card-logo logo-right"
           loading="lazy"
         />
       </div>
 
-      <div className="membership-card__chip" aria-hidden="true">
-        <div className="membership-card__chip-line" />
-        <div className="membership-card__chip-line" />
-        <div className="membership-card__chip-line" />
-        <div className="membership-card__chip-line" />
+      <div className="card-chip" aria-hidden="true">
+        <img src="/brand/membership-chip.svg" alt="Metallic chip" className="membership-chip" />
       </div>
 
-      <div className="membership-card__details">
-        <div className="membership-card__text">
-          <div className="membership-card__name">{fullName}</div>
-          <div className="membership-card__town">{town}</div>
+      <div className="member-details">
+        <div className="member-name-town">
+          <div className="member-title">Founding Member</div>
+          <div className="member-name" title={trimmedName}>
+            {trimmedName}
+          </div>
+          <div className="member-town" title={trimmedTown}>
+            {trimmedTown}
+          </div>
         </div>
-        <div className="membership-card__member">{memberLabel}</div>
+        <div className="member-id" title={memberIdDisplay}>
+          Member ID: {memberIdDisplay}
+        </div>
       </div>
     </div>
   );
