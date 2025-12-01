@@ -29,8 +29,8 @@ const MembershipCardPreviewPage = () => {
             id="fullName"
             type="text"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value.slice(0, 26))}
-            maxLength={26}
+            onChange={(e) => setFullName(e.target.value.slice(0, 22))}
+            maxLength={22}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
             placeholder="Full name"
           />
@@ -44,8 +44,8 @@ const MembershipCardPreviewPage = () => {
             id="town"
             type="text"
             value={town}
-            onChange={(e) => setTown(e.target.value.slice(0, 28))}
-            maxLength={28}
+            onChange={(e) => setTown(e.target.value.slice(0, 22))}
+            maxLength={22}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-base focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-200"
             placeholder="Town or community"
           />
@@ -68,7 +68,11 @@ const MembershipCardPreviewPage = () => {
         </div>
 
         <div className="flex justify-center">
-          <MembershipCard fullName={fullName || ""} town={town || ""} memberId={memberId || undefined} />
+          <MembershipCard
+            fullName={(fullName || "").trim()}
+            town={(town || "").trim()}
+            memberId={(memberId || "").trim() || undefined}
+          />
         </div>
       </div>
     </div>
