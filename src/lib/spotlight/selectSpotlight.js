@@ -1,4 +1,4 @@
-const { SPOTLIGHT_TAG_LABELS } = require('./config')
+const { SPOTLIGHT_TAG_LABELS } = require('./config.js')
 
 function seededRandom(seed) {
   const text = String(seed || '')
