@@ -67,3 +67,4 @@ function buildTasteHubPageSchema() {
 }
 
 module.exports = { buildTasteHubPageSchema };
+module.exports.default = module.exports;

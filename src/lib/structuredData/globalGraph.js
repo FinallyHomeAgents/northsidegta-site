@@ -389,3 +389,4 @@ module.exports = {
   getGlobalGraphJson,
   buildGlobalGraph,
 };
+module.exports.default = module.exports;

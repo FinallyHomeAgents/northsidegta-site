@@ -1,16 +1,20 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import * as globalGraph from "../../lib/structuredData/globalGraph";
 
-const { getGlobalGraphJson } = require("../../lib/structuredData/globalGraph.js");
+const { buildGlobalGraph } = globalGraph;
 
 export default function GlobalStructuredData() {
-  const graphJson = React.useMemo(() => getGlobalGraphJson(), []);
+  const graph = React.useMemo(() => buildGlobalGraph(), []);
 
-  if (!graphJson) return null;
+  if (!graph) return null;
 
   return (
     <Helmet>
-      <script type="application/ld+json">{graphJson}</script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+      />
     </Helmet>
   );
 }
