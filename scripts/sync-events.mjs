@@ -10,6 +10,7 @@ import { DateTime } from 'luxon'
 const require = createRequire(import.meta.url)
 const Parser = require('rss-parser')
 const ical = require('node-ical')
+const { parse } = require('node-html-parser')
 const { getAdapter } = require('../lib/event-source-adapters.js')
 const { expandIcsEvents } = require('../lib/events/ics.js')
 const { normalizeCmsEvent } = require('../lib/events/cms-normalizer.js')
@@ -35,6 +36,7 @@ const DEFAULT_RETRY_DELAY_MS = 400
 const MAX_RETRY_DELAY_MS = 5000
 const parser = new Parser()
 const WRITE_MODE = process.env.EVENTS_SYNC_WRITE === 'true'
+const pageImageCache = new Map()
 
 async function main() {
   const { feeds: loadedFeeds } = await loadConfig(configPath)
@@ -86,13 +88,15 @@ async function main() {
         try {
           const normalized = normalizeEvent(item, feed, now)
           if (!normalized) continue
-          const dedupKey = buildDedupKey(normalized)
+
+          const withImage = await enrichEventImage(normalized, feed, feedReport, syncState)
+          const dedupKey = buildDedupKey(withImage)
           if (dedupKey) {
             if (dedupe.has(dedupKey)) continue
             dedupe.set(dedupKey, true)
           }
 
-          const result = await mergeEvent(normalized, existing, now)
+          const result = await mergeEvent(withImage, existing, now)
           summary[result] = (summary[result] || 0) + 1
           if (result in feedReport) {
             feedReport[result] += 1
@@ -1090,6 +1094,82 @@ function resolveUrl(value, feed) {
   } catch (error) {
     return ''
   }
+}
+
+async function enrichEventImage(event, feed, feedReport, syncState) {
+  if (!event || event.image || !event.eventUrl) return event
+  if (String(feed?.type || '').toLowerCase() !== 'ics') return event
+
+  const targetUrl = resolveUrl(event.eventUrl, feed)
+  if (!targetUrl) return event
+
+  if (pageImageCache.has(targetUrl)) {
+    const cached = pageImageCache.get(targetUrl)
+    return cached ? { ...event, image: cached } : event
+  }
+
+  try {
+    const html = await fetchText(targetUrl, feed, {}, 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.1', {
+      feedReport,
+      state: syncState,
+      persistResolvedUrl: true,
+    })
+    const root = parseHtmlDocument(html)
+    const rawImage = root ? extractImageFromDocument(root) : ''
+    const resolvedImage = resolveUrl(rawImage, { ...feed, baseUrl: targetUrl })
+
+    if (resolvedImage) {
+      pageImageCache.set(targetUrl, resolvedImage)
+      return { ...event, image: resolvedImage }
+    }
+  } catch (error) {
+    if (feedReport) {
+      feedReport.errors.push(`[image] ${error.message || String(error)}`)
+    }
+    console.warn('[sync-events] Failed to enrich event image:', error.message)
+  }
+
+  pageImageCache.set(targetUrl, null)
+  return event
+}
+
+function parseHtmlDocument(html) {
+  const normalized = typeof html === 'string' ? html.trim() : ''
+  if (!normalized) return null
+  try {
+    return parse(normalized)
+  } catch (error) {
+    console.warn('[sync-events] Failed to parse HTML while enriching image:', error.message)
+    return null
+  }
+}
+
+function extractImageFromDocument(root) {
+  const metaSelectors = [
+    'meta[property="og:image:secure_url"]',
+    'meta[property="og:image"]',
+    'meta[name="og:image"]',
+    'meta[name="twitter:image"]',
+    'meta[name="twitter:image:src"]',
+  ]
+
+  for (const selector of metaSelectors) {
+    const node = root.querySelector(selector)
+    const content = typeof node?.getAttribute === 'function' ? node.getAttribute('content') : ''
+    if (content && isHttpLike(content)) return content
+  }
+
+  const imageNode =
+    root.querySelector('article img') || root.querySelector('main img') || root.querySelector('img')
+  const src = typeof imageNode?.getAttribute === 'function' ? imageNode.getAttribute('src') : ''
+  return isHttpLike(src) ? src : ''
+}
+
+function isHttpLike(value) {
+  if (!value) return false
+  const trimmed = String(value).trim()
+  if (!trimmed) return false
+  return /^https?:\/\//i.test(trimmed) || trimmed.startsWith('//') || trimmed.startsWith('/')
 }
 
 function normalizeEvent(item, feed, now) {
