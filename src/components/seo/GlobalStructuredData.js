@@ -1,8 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import * as globalGraph from "../../lib/structuredData/globalGraph";
 
-const { buildGlobalGraph } = globalGraph;
+const { buildGlobalGraph } = require("../../lib/structuredData/globalGraph.js");
 
 export default function GlobalStructuredData() {
   const graph = React.useMemo(() => buildGlobalGraph(), []);
