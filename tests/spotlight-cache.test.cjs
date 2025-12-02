@@ -1,15 +1,14 @@
 'use strict'
 const test = require('node:test')
 const assert = require('node:assert/strict')
-const { pathToFileURL } = require('node:url')
 const { createRequire } = require('node:module')
 
 const require_ = createRequire(__filename)
 
 async function loadCacheModule() {
-  const moduleUrl = pathToFileURL(require_.resolve('../lib/spotlight/cache.js')).href
-  const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
-  return namespace
+  const modulePath = require_.resolve('../lib/spotlight/cache.js')
+  delete require_.cache[modulePath]
+  return require(modulePath)
 }
 
 test('saving then loading spotlight data returns cached items when redis is unavailable', async () => {

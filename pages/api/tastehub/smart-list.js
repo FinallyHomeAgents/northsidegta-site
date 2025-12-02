@@ -11,7 +11,7 @@ async function getFetchImplementation() {
   return nodeFetch;
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -84,3 +84,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Smart List failed" });
   }
 }
+
+module.exports = handler;

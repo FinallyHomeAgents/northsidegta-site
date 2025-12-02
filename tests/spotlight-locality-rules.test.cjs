@@ -2,6 +2,7 @@
 
 const { test, afterEach } = require('node:test')
 const assert = require('node:assert/strict')
+const { fetchSpotlightPlacesData } = require('../lib/spotlight/fetchSpotlightPlacesData.js')
 
 const originalFetch = global.fetch
 const originalApiKey = process.env.GOOGLE_PLACES_API_KEY
@@ -37,7 +38,6 @@ test('filters out places outside the town locality list', async () => {
     }
   }
 
-  const { fetchSpotlightPlacesData } = await import('../lib/spotlight/fetchSpotlightPlacesData.js')
   const items = await fetchSpotlightPlacesData(
     'aurora',
     'Aurora',
@@ -91,7 +91,6 @@ test('applies the primary rating and review thresholds', async () => {
     }
   }
 
-  const { fetchSpotlightPlacesData } = await import('../lib/spotlight/fetchSpotlightPlacesData.js')
   const items = await fetchSpotlightPlacesData(
     'aurora',
     'Aurora',
@@ -176,7 +175,6 @@ test('fills remaining slots with fallback threshold results when needed', async 
     }
   }
 
-  const { fetchSpotlightPlacesData } = await import('../lib/spotlight/fetchSpotlightPlacesData.js')
   const items = await fetchSpotlightPlacesData(
     'uxbridge',
     'Uxbridge',
@@ -233,7 +231,6 @@ test('prevents reusing a place across different towns in one run', async () => {
     }
   }
 
-  const { fetchSpotlightPlacesData } = await import('../lib/spotlight/fetchSpotlightPlacesData.js')
   const assignedPlaceIds = new Map()
   const configs = [{ placeId: 'shared-place', tags: ['photo_worthy'] }]
 

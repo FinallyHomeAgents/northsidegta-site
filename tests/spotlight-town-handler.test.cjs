@@ -2,15 +2,14 @@
 
 const test = require('node:test')
 const assert = require('node:assert/strict')
-const { pathToFileURL } = require('node:url')
 const { createRequire } = require('node:module')
 
 const require_ = createRequire(__filename)
 
 async function loadHandlerModule() {
-  const moduleUrl = pathToFileURL(require_.resolve('../api/spotlight/town.js')).href
-  const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
-  return namespace
+  const modulePath = require_.resolve('../api/spotlight/town.js')
+  delete require_.cache[modulePath]
+  return require(modulePath)
 }
 
 function createMockResponse() {
