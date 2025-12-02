@@ -1,15 +1,15 @@
-import fs from 'fs'
-import path from 'path'
+const fs = require('fs')
+const path = require('path')
 
 const townsPath = path.join(process.cwd(), 'src', 'towns.json')
 const towns = JSON.parse(fs.readFileSync(townsPath, 'utf8'))
-import {
+const {
   loadTownSpotlightData,
   saveTownSpotlightData,
-} from '../../lib/spotlight/cache.js'
-import { loadTownSpotlightConfig } from '../../lib/spotlight/loadTownSpotlightConfig.js'
-import { fetchSpotlightPlacesData } from '../../lib/spotlight/fetchSpotlightPlacesData.js'
-import { buildPhotoUrl, extractPhotoNameFromUrl } from '../../lib/spotlight/photos.js'
+} = require('../../lib/spotlight/cache.js')
+const { loadTownSpotlightConfig } = require('../../lib/spotlight/loadTownSpotlightConfig.js')
+const { fetchSpotlightPlacesData } = require('../../lib/spotlight/fetchSpotlightPlacesData.js')
+const { buildPhotoUrl, extractPhotoNameFromUrl } = require('../../lib/spotlight/photos.js')
 
 function normalizeSlug(value) {
   return String(value || '')
@@ -46,7 +46,7 @@ function normalizeSpotlightItem(item) {
   }
 }
 
-export async function loadTownSpotlights(slug, overrides = {}) {
+async function loadTownSpotlights(slug, overrides = {}) {
   const loadData = overrides.loadTownSpotlightData || loadTownSpotlightData
   const loadConfig = overrides.loadTownSpotlightConfig || loadTownSpotlightConfig
   const fetchData = overrides.fetchSpotlightPlacesData || fetchSpotlightPlacesData
@@ -69,7 +69,7 @@ export async function loadTownSpotlights(slug, overrides = {}) {
   return fetched
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET')
     res.status(405).json({ ok: false, error: 'Method not allowed' })
@@ -93,3 +93,7 @@ export default async function handler(req, res) {
     res.status(200).json({ ok: true, items: [] })
   }
 }
+
+handler.loadTownSpotlights = loadTownSpotlights
+
+module.exports = handler

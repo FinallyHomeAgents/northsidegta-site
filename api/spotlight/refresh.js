@@ -1,7 +1,7 @@
-import towns from '../../src/towns.json'
-import { loadTownSpotlightConfig } from '../../lib/spotlight/loadTownSpotlightConfig'
-import { fetchSpotlightPlacesData } from '../../lib/spotlight/fetchSpotlightPlacesData'
-import { saveTownSpotlightData } from '../../lib/spotlight/cache'
+const towns = require('../../src/towns.json')
+const { loadTownSpotlightConfig } = require('../../lib/spotlight/loadTownSpotlightConfig.js')
+const { fetchSpotlightPlacesData } = require('../../lib/spotlight/fetchSpotlightPlacesData.js')
+const { saveTownSpotlightData } = require('../../lib/spotlight/cache.js')
 
 function normalizeTowns(raw) {
   if (Array.isArray(raw)) return raw
@@ -31,7 +31,7 @@ function getCronSecret(req) {
   return querySecret
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET')
     res.status(405).json({ ok: false, error: 'Method not allowed' })
@@ -81,3 +81,5 @@ export default async function handler(req, res) {
 
   res.status(200).json({ ok: true, summary })
 }
+
+module.exports = handler
