@@ -13,6 +13,7 @@ const ical = require('node-ical')
 const { getAdapter } = require('../lib/event-source-adapters.js')
 const { expandIcsEvents } = require('../lib/events/ics.js')
 const { normalizeCmsEvent } = require('../lib/events/cms-normalizer.js')
+const { fetchEventPageImage, DEFAULT_EVENT_USER_AGENT } = require('../lib/events/image-scraper.js')
 const {
   resolveStatusForSync,
   resolveSourceType,
@@ -27,7 +28,7 @@ const summaryPath = path.join(eventsDir, '_sync-summary.json')
 const reportsDir = path.join(rootDir, 'public', 'data', 'sync-reports')
 const urlUpdateLogPath = path.join(rootDir, 'logs', 'events-url-updates.log')
 
-const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
+const DEFAULT_USER_AGENT = DEFAULT_EVENT_USER_AGENT
 const DEFAULT_PRIORITY = 50
 const DEFAULT_TIMEOUT_MS = 15000
 const DEFAULT_RETRY_ATTEMPTS = 3
@@ -1507,6 +1508,13 @@ async function mergeEvent(event, existingMaps, now) {
 
   let normalizedEvent
   try {
+    if (!baseMerged.image) {
+      const enrichedImage = await fetchEventPageImage(baseMerged, { userAgent: DEFAULT_USER_AGENT })
+      if (enrichedImage) {
+        baseMerged.image = enrichedImage
+      }
+    }
+
     const normalization = normalizeCmsEvent(baseMerged)
     normalizedEvent = normalization.event
   } catch (error) {

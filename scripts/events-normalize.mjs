@@ -7,6 +7,7 @@ import { createRequire } from 'module'
 
 const require = createRequire(import.meta.url)
 const { normalizeCmsEvent, createEventValidator } = require('../lib/events/cms-normalizer.js')
+const { fetchEventPageImage, DEFAULT_EVENT_USER_AGENT } = require('../lib/events/image-scraper.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -95,9 +96,17 @@ async function processCollection(collection, validator, options, summary) {
     let normalized
     let changeNotes = []
     try {
+      if (!parsed.image) {
+        const enriched = await fetchEventPageImage(parsed, { userAgent: DEFAULT_EVENT_USER_AGENT })
+        if (enriched) {
+          parsed.image = enriched
+          changeNotes.push('enriched image')
+        }
+      }
+
       const result = normalizeCmsEvent(parsed)
       normalized = result.event
-      changeNotes = result.changes
+      changeNotes = [...(result.changes || []), ...changeNotes]
     } catch (error) {
       summary.errors.push({ file: relative, reason: error.message })
       continue
