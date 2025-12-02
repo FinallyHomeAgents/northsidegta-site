@@ -8,10 +8,12 @@ import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import TasteHubPollCard from "./components/tastehub/TasteHubPollCard";
 import TasteHubPoll from "./components/tastehub/TasteHubPoll";
-import { buildTasteHubPageSchema } from "./lib/structuredData/tasteHubPage";
-import * as tasteHubPollSchemaModule from "./lib/structuredData/tasteHubPoll";
-
-const { buildTasteHubPollSchema } = tasteHubPollSchemaModule || {};
+const {
+  buildTasteHubPageSchema,
+} = require("./lib/structuredData/tasteHubPage.js");
+const {
+  buildTasteHubPollSchema,
+} = require("./lib/structuredData/tasteHubPoll.js");
 
 const TOWNS = [
   "Georgina",
