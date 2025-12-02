@@ -1,7 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-const { default: handler } = await import('../pages/api/tastehub/smart-list.js')
+const handlerModule = await import('../pages/api/tastehub/smart-list.js')
+const handler = handlerModule.default || handlerModule
 
 function createMockReqRes({ method = 'POST', body = {} } = {}) {
   const req = { method, body }

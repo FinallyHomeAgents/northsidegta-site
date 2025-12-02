@@ -5,8 +5,8 @@ const assert = require('node:assert/strict')
 
 const { buildTasteHubPageSchema } = require('../src/lib/structuredData/tasteHubPage')
 
-async function loadTasteHubPollModule() {
-  const mod = await import('../src/lib/structuredData/tasteHubPoll.js')
+function loadTasteHubPollModule() {
+  const mod = require('../src/lib/structuredData/tasteHubPoll.js')
   return { buildTasteHubPollSchema: mod.buildTasteHubPollSchema }
 }
 

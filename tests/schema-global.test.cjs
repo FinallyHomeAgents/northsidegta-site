@@ -3,8 +3,8 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
 
-async function loadGraphModule() {
-  const mod = await import('../src/lib/structuredData/globalGraph.js')
+function loadGraphModule() {
+  const mod = require('../src/lib/structuredData/globalGraph.js')
   return {
     getGlobalGraphJson: mod.getGlobalGraphJson,
     PLACE_IDS: mod.PLACE_IDS,

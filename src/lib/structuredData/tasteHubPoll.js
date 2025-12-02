@@ -1,4 +1,4 @@
-import { PLACE_IDS } from "./globalGraph.js";
+const { PLACE_IDS } = require("./globalGraph.js");
 
 const BASE_URL = "https://northsidegta.ca";
 const WEBSITE_ID = "https://northsidegta.ca/#website";
@@ -14,7 +14,7 @@ function buildAbsoluteUrl(path) {
   return `${BASE_URL}${normalized}`;
 }
 
-export function buildTasteHubPollSchema({ slug, title, description, image, townSlug, townName, items = [] }) {
+function buildTasteHubPollSchema({ slug, title, description, image, townSlug, townName, items = [] }) {
   const pageUrl = `${BASE_URL}/tastehub/${encodeURIComponent(slug || "")}`;
   const aboutNodes = [
     { "@id": TASTEHUB_ID },
@@ -105,3 +105,5 @@ export function buildTasteHubPollSchema({ slug, title, description, image, townS
     ],
   };
 }
+
+module.exports = { buildTasteHubPollSchema };
