@@ -358,17 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002713-1768176000-1773100799@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-12-02T08:39:36.983Z",
-  "firstSeenAt": "2025-12-02T08:39:36.983Z",
-  "updatedAt": "2025-12-02T08:39:36.983Z",
-  "featured": false
+  "updatedAt": "2025-12-02T08:39:36Z"
 }
