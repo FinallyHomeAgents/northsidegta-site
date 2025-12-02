@@ -2,7 +2,7 @@
   "slug": "20251213-allison-lupton-s-celtic-christmas-aurora",
   "title": "Allison Lupton's Celtic Christmas",
   "summary": "Allison Lupton's Celtic Christmas",
-  "description": "Pricing Regular: $55.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Cultural Centre Presents Allison Lupton’s Celtic Christmas Aurora Town Square Performance Hall 50 Victoria Street, Aurora 6:45 pm Doors Open 7:30 pm Show Start Let the spirit of the season take hold with Allison Lupton’s Celtic Christmas—a cozy night of storytelling, music, and holiday magic. This heartwarming concert features festive favourites, traditional Celtic tunes, and dazzling step dancing. Enjoy toe-tapping medleys like Jingle Bells, Frosty the Snowman, and Ding Dong Merrily On High, alongside the stirring Wexford Carol and iconic Canadian fiddle tunes like Maple Sugar. A moving instrumental of Joy to the World leads into Allison’s original Bonnie and May—a touching true story from her family’s past. The Faria Sisters Highlights also include Hockey Night, a tribute to Canada’s national pastime, and The Eve of Christmas Day, paired with classic reels Big John MacNeil and Reel de Montebello, featuring the brilliant Faria sisters. Backed by internationally acclaimed musicians and dancers, Allison’s heartfelt vocals and storytelling make this concert a joyful way to welcome the holiday season. This presentation is made possible with the support of Season Sponsor Lead Sponsor Funders [/fusion_builder_column] The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
+  "description": "Pricing Regular: $55.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Cultural Centre Presents Allison Lupton’s Celtic Christmas Aurora Town Square Performance Hall 50 Victoria Street, Aurora 6:45 pm Doors Open 7:30 pm Show Start Let the spirit of the season take hold with Allison Lupton’s Celtic Christmas—a cozy night of storytelling, music, and holiday magic. This heartwarming concert features festive favourites, traditional Celtic tunes, and dazzling step dancing. Enjoy toe-tapping medleys like Jingle Bells, Frosty the Snowman, and Ding Dong Merrily On High, alongside the stirring Wexford Carol and iconic Canadian fiddle tunes like Maple Sugar. A moving instrumental of Joy to the World leads into Allison’s original Bonnie and May—a touching true story from her family’s past. The Faria Sisters Highlights also include Hockey Night, a tribute to Canada’s national pastime, and The Eve of Christmas Day, paired with classic reels Big John MacNeil and Reel de Montebello, featuring the brilliant Faria sisters. Backed by internationally acclaimed musicians and dancers, Allison’s heartfelt vocals and storytelling make this concert a joyful way to welcome the holiday season. This presentation is made possible with the support of Season Sponsor Lead Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
   "startDate": "2025-12-14T00:30:00Z",
   "endDate": "2025-12-14T02:30:00Z",
   "allDay": false,
@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/allison-lupton-christmas-show-2526/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002610-1765654200-1765661400@auroraculturalcentre.ca",
-  "updatedAt": "2025-11-29T08:34:31Z"
+  "lastSyncedAt": "2025-12-02T08:39:36.983Z",
+  "updatedAt": "2025-12-02T08:39:36.983Z",
+  "featured": false
 }

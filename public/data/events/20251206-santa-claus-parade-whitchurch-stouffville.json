@@ -18,11 +18,16 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Santa-Claus-Parade.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/santa-claus-parade-2/",
-  "featured": false,
+  "status": "approved",
   "hidden": false,
   "archived": false,
-  "status": "approved",
   "source": "feed",
+  "sourceName": "Discover Stouffville",
+  "sourceUrl": "https://discoverstouffville.ca/events",
+  "sourceDomain": "discoverstouffville.ca",
+  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/santa-claus-parade-2/",
-  "updatedAt": "2025-11-29T08:34:31Z"
+  "lastSyncedAt": "2025-12-02T08:39:36.983Z",
+  "updatedAt": "2025-12-02T08:39:36.983Z",
+  "featured": false
 }
