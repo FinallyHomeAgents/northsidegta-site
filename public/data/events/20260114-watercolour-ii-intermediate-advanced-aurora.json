@@ -316,17 +316,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-ii-intermediate-advanced-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002719-1768348800-1772668799@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-12-02T08:39:36.983Z",
-  "firstSeenAt": "2025-12-02T08:39:36.983Z",
-  "updatedAt": "2025-12-02T08:39:36.983Z",
-  "featured": false
+  "updatedAt": "2025-12-02T08:39:36Z"
 }
