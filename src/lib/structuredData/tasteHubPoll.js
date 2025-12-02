@@ -106,4 +106,4 @@ function buildTasteHubPollSchema({ slug, title, description, image, townSlug, to
   };
 }
 
-module.exports = { buildTasteHubPollSchema };
+module.exports.buildTasteHubPollSchema = buildTasteHubPollSchema;

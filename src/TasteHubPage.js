@@ -9,7 +9,9 @@ import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import TasteHubPollCard from "./components/tastehub/TasteHubPollCard";
 import TasteHubPoll from "./components/tastehub/TasteHubPoll";
 import { buildTasteHubPageSchema } from "./lib/structuredData/tasteHubPage";
-import { buildTasteHubPollSchema } from "./lib/structuredData/tasteHubPoll";
+import * as tasteHubPollSchemaModule from "./lib/structuredData/tasteHubPoll";
+
+const { buildTasteHubPollSchema } = tasteHubPollSchemaModule || {};
 
 const TOWNS = [
   "Georgina",

@@ -1,4 +1,4 @@
-import { SPOTLIGHT_TAG_LABELS } from './config'
+const { SPOTLIGHT_TAG_LABELS } = require('./config')
 
 function seededRandom(seed) {
   const text = String(seed || '')
@@ -21,7 +21,7 @@ function resolveLabel(place, townName) {
   return `Live Local Spotlight in ${townName}`
 }
 
-export function selectTownSpotlight(townSlug, townName, rawItems = []) {
+function selectTownSpotlight(townSlug, townName, rawItems = []) {
   const slug = String(townSlug || '').toLowerCase()
   const items = Array.isArray(rawItems)
     ? rawItems.filter((item) => item && item.placeId)
@@ -57,3 +57,5 @@ export function selectTownSpotlight(townSlug, townName, rawItems = []) {
 
   return { hero, thumbnails, heroLabel, thumbnailLabels }
 }
+
+module.exports = { selectTownSpotlight }

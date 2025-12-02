@@ -1,4 +1,4 @@
-export const SPOTLIGHT_TAGS = [
+const SPOTLIGHT_TAGS = [
   'perfect_park_day',
   'family_day_idea',
   'active_day_idea',
@@ -7,7 +7,7 @@ export const SPOTLIGHT_TAGS = [
   'where_locals_go',
 ]
 
-export const SPOTLIGHT_TAG_LABELS = {
+const SPOTLIGHT_TAG_LABELS = {
   perfect_park_day: (townName) => `Perfect Park Day in ${townName}`,
   family_day_idea: (townName) => `Family Day Idea in ${townName}`,
   active_day_idea: (townName) => `Active Day Idea in ${townName}`,
@@ -16,9 +16,11 @@ export const SPOTLIGHT_TAG_LABELS = {
   where_locals_go: (townName) => `Where Locals Actually Go in ${townName}`,
 }
 
-export function normalizeSpotlightTagList(value) {
+function normalizeSpotlightTagList(value) {
   if (!Array.isArray(value)) return []
   return value
     .map((tag) => String(tag || '').trim())
     .filter((tag) => SPOTLIGHT_TAGS.includes(tag))
 }
+
+module.exports = { SPOTLIGHT_TAGS, SPOTLIGHT_TAG_LABELS, normalizeSpotlightTagList }
