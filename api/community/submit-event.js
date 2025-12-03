@@ -431,12 +431,20 @@ function validateSubmission(payload) {
       errors.priceFrom = 'Tickets need a numeric price.'
     }
     data.ticketsUrl = normalizeText(payload.ticketsUrl)
-    if (!isHttpsUrl(data.ticketsUrl)) {
+    if (data.ticketsUrl && !isHttpsUrl(data.ticketsUrl)) {
       errors.ticketsUrl = 'Tickets URL must start with https://'
+    }
+    data.paymentDetails = normalizeText(payload.paymentDetails)
+    if (!data.paymentDetails) {
+      errors.paymentDetails = 'Share how guests should pay for this event.'
+    }
+    if (data.paymentDetails && data.paymentDetails.length > 200) {
+      errors.paymentDetails = 'Payment details should be 200 characters or fewer.'
     }
   } else {
     data.priceFrom = ''
     data.ticketsUrl = ''
+    data.paymentDetails = ''
   }
 
   data.registrationUrl = normalizeText(payload.registrationUrl)
@@ -549,6 +557,9 @@ async function sendEmailNotification(event) {
     if (event.ticketsUrl) {
       details.push(`<p>Tickets: <a href="${escapeHtml(event.ticketsUrl)}">${escapeHtml(event.ticketsUrl)}</a></p>`)
     }
+    if (event.paymentDetails) {
+      details.push(`<p>Payment: ${escapeHtml(event.paymentDetails)}</p>`)
+    }
     if (event.registrationUrl) {
       details.push(
         `<p>Registration: <a href="${escapeHtml(event.registrationUrl)}">${escapeHtml(event.registrationUrl)}</a></p>`
@@ -586,6 +597,15 @@ async function sendSlackNotification(event) {
   try {
     const start = DateTime.fromISO(event.startDate, { zone: TORONTO_ZONE })
     const end = DateTime.fromISO(event.endDate, { zone: TORONTO_ZONE })
+    const costFields = [
+      { type: 'mrkdwn', text: `*Cost:* ${event.priceType}${event.priceFrom ? ` from $${event.priceFrom}` : ''}` },
+      { type: 'mrkdwn', text: `*Organizer:* ${event.organizerName}` },
+    ]
+
+    if (event.paymentDetails) {
+      costFields.push({ type: 'mrkdwn', text: `*Payment:* ${event.paymentDetails}` })
+    }
+
     const blocks = [
       {
         type: 'section',
@@ -598,10 +618,7 @@ async function sendSlackNotification(event) {
       },
       {
         type: 'section',
-        fields: [
-          { type: 'mrkdwn', text: `*Cost:* ${event.priceType}${event.priceFrom ? ` from $${event.priceFrom}` : ''}` },
-          { type: 'mrkdwn', text: `*Organizer:* ${event.organizerName}` },
-        ],
+        fields: costFields,
       },
     ]
 
@@ -722,6 +739,7 @@ export default async function handler(req, res) {
     priceType: data.costType,
     priceFrom: data.priceFrom || '',
     priceNote: data.costType === 'Paid' && data.priceFrom ? `From $${data.priceFrom}` : '',
+    paymentDetails: data.paymentDetails || '',
     ticketsUrl: data.ticketsUrl || '',
     registrationUrl: data.registrationUrl || '',
     image: data.imageUrl || '',
