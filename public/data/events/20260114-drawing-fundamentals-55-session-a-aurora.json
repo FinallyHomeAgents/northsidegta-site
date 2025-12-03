@@ -1,19 +1,13 @@
 {
-  "slug": "20260113-watercolour-level-2-55-aurora",
-  "title": "Watercolour Level 2 (55+)",
-  "summary": "Watercolour Level 2 (55+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – March 24, 2026 [SKIP March 17 – March Break] Tuesdays | 9:30 am – 12:00 pm | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week watercolour program, tailored for ages 55+, is focused on seasoned watercolour artists wishing to further develop their style and learn new techniques. Participants will learn more about the importance of values and will have exposure to increased-complexity subject matter. Graphite paper can be used to trace images or participants may choose to draw their project with guidance from the instructor to practice drawing skill. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the materials to bring with you to the first class. Materials List",
-  "startDate": "2026-01-13T05:00:00Z",
-  "endDate": "2026-03-25T03:59:59Z",
+  "slug": "20260114-drawing-fundamentals-55-session-a-aurora",
+  "title": "Drawing Fundamentals (55+) - Session A",
+  "summary": "Drawing Fundamentals (55+) - Session A",
+  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – March 25, 2026 [SKIP March 18 – March Break] Wednesdays | 9:00 – 10:30 am | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora In this 10-week drawing program tailored for participants aged 55+, you will be introduced to fundamental technical and creative exercises to develop key drawing skills as you start your new art practice. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
+  "startDate": "2026-01-14T05:00:00Z",
+  "endDate": "2026-03-26T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2026-01-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
     {
       "date": "2026-01-14",
       "all_day": true,
@@ -433,6 +427,12 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
+    },
+    {
+      "date": "2026-03-25",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
@@ -440,7 +440,7 @@
   "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-level-2-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/drawing-fundamentals-session-a-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -450,7 +450,7 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002718-1768262400-1774396799@auroraculturalcentre.ca",
+  "sourceRef": "10002722-1768348800-1774483199@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-03T08:39:45.618Z",
   "updatedAt": "2025-12-03T08:39:45.618Z",
   "featured": false

@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acc-public-board-meeting-december-2025/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002533-1765996200-1765998000@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-02T08:39:36Z"
+  "lastSyncedAt": "2025-12-03T08:39:45.618Z",
+  "updatedAt": "2025-12-03T08:39:45.618Z",
+  "featured": false
 }

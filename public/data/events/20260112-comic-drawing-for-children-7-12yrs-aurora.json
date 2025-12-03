@@ -1,13 +1,19 @@
 {
-  "slug": "20260113-watercolour-level-2-55-aurora",
-  "title": "Watercolour Level 2 (55+)",
-  "summary": "Watercolour Level 2 (55+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – March 24, 2026 [SKIP March 17 – March Break] Tuesdays | 9:30 am – 12:00 pm | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week watercolour program, tailored for ages 55+, is focused on seasoned watercolour artists wishing to further develop their style and learn new techniques. Participants will learn more about the importance of values and will have exposure to increased-complexity subject matter. Graphite paper can be used to trace images or participants may choose to draw their project with guidance from the instructor to practice drawing skill. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the materials to bring with you to the first class. Materials List",
-  "startDate": "2026-01-13T05:00:00Z",
-  "endDate": "2026-03-25T03:59:59Z",
+  "slug": "20260112-comic-drawing-for-children-7-12yrs-aurora",
+  "title": "Comic Drawing for Children (7-12yrs)",
+  "summary": "Comic Drawing for Children (7-12yrs)",
+  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 4:30 – 5:30 pm | Ages 7-12 Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora In this fun-filled 8-week youth drawing program, learn the building blocks of the comic art form, with beginner steps to arrange characters, build settings, speech bubbles, and explosions in panels. Discover and explore drawing styles that illustrate and reflect your stories. All materials are provided!",
+  "startDate": "2026-01-12T05:00:00Z",
+  "endDate": "2026-03-10T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
+    {
+      "date": "2026-01-12",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
     {
       "date": "2026-01-13",
       "all_day": true,
@@ -343,104 +349,14 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
-    },
-    {
-      "date": "2026-03-10",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-11",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-12",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-14",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-15",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-16",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-17",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-18",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-19",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-20",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-21",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-22",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-23",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-24",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
   "town": "Aurora",
-  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-level-2-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/comic-drawing-for-children-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -450,7 +366,7 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002718-1768262400-1774396799@auroraculturalcentre.ca",
+  "sourceRef": "10002714-1768176000-1773100799@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-03T08:39:45.618Z",
   "updatedAt": "2025-12-03T08:39:45.618Z",
   "featured": false

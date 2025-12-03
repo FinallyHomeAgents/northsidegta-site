@@ -1,19 +1,13 @@
 {
-  "slug": "20260113-watercolour-level-2-55-aurora",
-  "title": "Watercolour Level 2 (55+)",
-  "summary": "Watercolour Level 2 (55+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – March 24, 2026 [SKIP March 17 – March Break] Tuesdays | 9:30 am – 12:00 pm | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week watercolour program, tailored for ages 55+, is focused on seasoned watercolour artists wishing to further develop their style and learn new techniques. Participants will learn more about the importance of values and will have exposure to increased-complexity subject matter. Graphite paper can be used to trace images or participants may choose to draw their project with guidance from the instructor to practice drawing skill. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the materials to bring with you to the first class. Materials List",
-  "startDate": "2026-01-13T05:00:00Z",
-  "endDate": "2026-03-25T03:59:59Z",
+  "slug": "20260114-you-can-uke-it-beginner-and-intermediate-8-14yrs-aurora",
+  "title": "You Can Uke It! Beginner and Intermediate (8-14yrs)",
+  "summary": "You Can Uke It! Beginner and Intermediate (8-14yrs)",
+  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – March 4, 2026 Wednesdays | 4:30 – 5:30 pm | Ages 8-14 Aurora Town Square – Shining Hill Visual Arts Studio B 50 Victoria Street, Aurora In this joyous, 8-week youth program, crafted for both beginners and intermediates, young students will learn and play weekly song selections on the ukelele together. Including common chords, scales, techniques, and foundational principles of diatonic music. While song selections will be curated to match weekly lessons, students will also have the opportunity to request songs to learn and play together. Participants are to provide their own instrument.",
+  "startDate": "2026-01-14T05:00:00Z",
+  "endDate": "2026-03-05T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2026-01-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
     {
       "date": "2026-01-14",
       "all_day": true,
@@ -313,134 +307,14 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
-    },
-    {
-      "date": "2026-03-05",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-06",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-07",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-08",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-09",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-10",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-11",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-12",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-14",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-15",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-16",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-17",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-18",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-19",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-20",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-21",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-22",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-23",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-03-24",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
   "town": "Aurora",
-  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-level-2-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/you-can-uke-it-beginner-and-intermediate-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -450,7 +324,7 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002718-1768262400-1774396799@auroraculturalcentre.ca",
+  "sourceRef": "10002727-1768348800-1772668799@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-03T08:39:45.618Z",
   "updatedAt": "2025-12-03T08:39:45.618Z",
   "featured": false
