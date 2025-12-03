@@ -504,6 +504,7 @@ export default function SubmitEventPage() {
   const [imageUploadProgress, setImageUploadProgress] = React.useState(0)
   const [imageError, setImageError] = React.useState('')
   const [uploadingImage, setUploadingImage] = React.useState(false)
+  const [paymentOption, setPaymentOption] = React.useState('free')
 
   const finalImageUrl = form.uploadedImageUrl || form.imageUrl.trim()
 
@@ -732,6 +733,7 @@ export default function SubmitEventPage() {
     setSubmitError('')
     setImageError('')
     setImageUploadProgress(0)
+    setPaymentOption('free')
   }
 
   const validateAll = () => {
@@ -1522,17 +1524,22 @@ export default function SubmitEventPage() {
                 <div>
                   <span className="text-sm font-semibold text-slate-900">Is this event free or paid?</span>
                   <div className="mt-3 flex flex-wrap gap-3">
-                    {['Free', 'Paid'].map((type) => {
-                      const active = form.costType === type
+                    {[
+                      { key: 'free', label: 'Free', costType: 'Free' },
+                      { key: 'paid-venue', label: 'Paid — pay at the venue', costType: 'Paid' },
+                      { key: 'paid-online', label: 'Paid — tickets sold online', costType: 'Paid' },
+                    ].map((option) => {
+                      const active = paymentOption === option.key
                       return (
                         <button
-                          key={type}
+                          key={option.key}
                           type="button"
                           onClick={() => {
-                            setField('costType', type)
+                            setPaymentOption(option.key)
+                            setField('costType', option.costType)
                             setErrors((prev) => ({
                               ...prev,
-                              costType: validateField('costType', { ...form, costType: type }),
+                              costType: validateField('costType', { ...form, costType: option.costType }),
                             }))
                           }}
                           className={classNames(
@@ -1542,7 +1549,7 @@ export default function SubmitEventPage() {
                               : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:text-emerald-800'
                           )}
                         >
-                          {type}
+                          {option.label}
                         </button>
                       )
                     })}
@@ -1590,7 +1597,9 @@ export default function SubmitEventPage() {
                         )}
                         placeholder="https://"
                       />
-                      <Hint>If guests buy tickets online (Eventbrite, website, etc.), add the link here.</Hint>
+                      <Hint>
+                        Only required if tickets are sold online. If people pay at the venue, you can leave this blank.
+                      </Hint>
                       <FormError
                         message={errors.ticketsUrl && (touched.ticketsUrl || touched.submitAttempted) ? errors.ticketsUrl : ''}
                       />
