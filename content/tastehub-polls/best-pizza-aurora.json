@@ -16,6 +16,11 @@
       "link": "https://share.google/6i20zaLLV8LYmAp8o"
     },
     {
+      "name": "Pizza Nova (Aurora)",
+      "address": "129 Pedersen Dr, Aurora, ON",
+      "link": "https://share.google/3dzi4X2nn2KeaNUUM"
+    },
+    {
       "link": "https://share.google/s3BUvsCyL04n0Vnnz",
       "name": "LOCALE Restaurant & Bar (Aurora)",
       "address": "14845 Yonge St, Aurora, ON"
@@ -31,9 +36,19 @@
       "address": "302 Wellington St E, Aurora, ON"
     },
     {
-      "name": "Pizza Nova (Aurora)",
-      "address": "129 Pedersen Dr, Aurora, ON",
-      "link": "https://share.google/3dzi4X2nn2KeaNUUM"
+      "name": "Casa Carbone Ristorante",
+      "address": "233 Earl Stewart Dr, Aurora, ON",
+      "link": "https://share.google/OOZ6PF04oEn7RGC0a"
+    },
+    {
+      "name": "Frankie Panini",
+      "address": "15117 Yonge St, Aurora, ON",
+      "link": "https://share.google/26gPEtjsVAjF3kGJB"
+    },
+    {
+      "name": "Pizzaville",
+      "address": "15408 Yonge St, Aurora, ON",
+      "link": "https://share.google/pX6UN7du2Xzw0PTWX"
     }
   ],
   "slug": "best-pizza-aurora",
