@@ -216,7 +216,11 @@ async function probeFeed(feed, options) {
 
 function buildCandidateUrls(feed) {
   const urls = []
-  if (feed?.url) urls.push({ role: 'primary', url: resolveUrl(feed.url, feed), method: 'HEAD' })
+  const primaryUrl = resolvePrimaryUrl(feed)
+  if (primaryUrl) {
+    const method = feed?.parser === 'wordpressTribe' ? 'GET' : 'HEAD'
+    urls.push({ role: 'primary', url: primaryUrl, method })
+  }
   const fallback = feed?.html?.url || feed?.sourceUrl
   if (fallback) urls.push({ role: 'fallback', url: resolveUrl(fallback, feed), method: 'HEAD' })
   return urls.filter((entry, index, list) => {
@@ -225,18 +229,39 @@ function buildCandidateUrls(feed) {
   })
 }
 
-function resolveUrl(value, feed) {
-  if (!value) return ''
-  if (/^https?:/i.test(value)) return value
-  if (feed && feed.url && /^https?:/i.test(feed.url)) {
+function resolvePrimaryUrl(feed) {
+  if (!feed) return ''
+  if (feed.url) {
+    if (/^https?:/i.test(feed.url)) return feed.url
     try {
-      const resolved = new URL(value, feed.url)
-      return resolved.toString()
+      return new URL(feed.url, feed.baseUrl || feed.sourceUrl || feed.url).toString()
     } catch {
-      return value
+      return feed.url
     }
   }
-  return value
+  if (feed.parser === 'wordpressTribe' && feed.baseUrl) {
+    try {
+      return new URL(feed.endpoint || '/wp-json/tribe/events/v1/events', feed.baseUrl).href
+    } catch {
+      return ''
+    }
+  }
+  return ''
+}
+
+function resolveUrl(value, feed) {
+  if (!value) return ''
+  const raw = String(value).trim()
+  if (!raw) return ''
+  if (/^https?:/i.test(raw)) return raw
+  if (raw.startsWith('//')) return `https:${raw}`
+  const base = resolvePrimaryUrl(feed) || feed?.baseUrl || feed?.sourceUrl || ''
+  if (!base) return raw
+  try {
+    return new URL(raw, base).toString()
+  } catch {
+    return raw
+  }
 }
 
 async function checkUrl(url, options = {}) {

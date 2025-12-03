@@ -245,6 +245,7 @@ function getSourceId(event) {
 
 async function fetchFeed(feed, feedReport, syncState, now) {
   if (!feed) return []
+  feed = ensurePrimaryUrl(feed)
 
   try {
     if (feed.parser) {
@@ -786,6 +787,7 @@ function captureHeaders(headers) {
 }
 
 function createFeedReport(feed) {
+  const primaryUrl = resolvePrimaryUrl(feed)
   return {
     id: feed?.id || '',
     name: feed?.sourceName || '',
@@ -793,7 +795,7 @@ function createFeedReport(feed) {
     parser: feed?.parser || '',
     town: feed?.town || '',
     category: feed?.category || '',
-    url: feed?.url || '',
+    url: primaryUrl || feed?.url || '',
     status: 'pending',
     created: 0,
     updated: 0,
@@ -1077,6 +1079,35 @@ function getNumericOption(value, fallback) {
   return Number.isFinite(numeric) && numeric > 0 ? numeric : fallback
 }
 
+function ensurePrimaryUrl(feed) {
+  if (!feed) return feed
+  const primaryUrl = resolvePrimaryUrl(feed)
+  if (primaryUrl && !feed.url) {
+    return { ...feed, url: primaryUrl }
+  }
+  return feed
+}
+
+function resolvePrimaryUrl(feed) {
+  if (!feed) return ''
+  if (feed.url) {
+    if (/^https?:/i.test(feed.url)) return feed.url
+    try {
+      return new URL(feed.url, feed.baseUrl || feed.sourceUrl || feed.url).toString()
+    } catch {
+      return feed.url
+    }
+  }
+  if (feed.parser === 'wordpressTribe' && feed.baseUrl) {
+    try {
+      return new URL(feed.endpoint || '/wp-json/tribe/events/v1/events', feed.baseUrl).href
+    } catch {
+      return ''
+    }
+  }
+  return ''
+}
+
 function resolveUrl(value, feed) {
   if (!value) return ''
   const raw = String(value).trim()
@@ -1084,7 +1115,7 @@ function resolveUrl(value, feed) {
   try {
     if (/^https?:/i.test(raw)) return raw
     if (raw.startsWith('//')) return `https:${raw}`
-    const base = feed?.baseUrl || feed?.sourceUrl || feed?.url
+    const base = feed?.baseUrl || feed?.sourceUrl || feed?.url || resolvePrimaryUrl(feed)
     if (!base) return raw
     return new URL(raw, base).toString()
   } catch (error) {
