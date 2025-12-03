@@ -109,7 +109,7 @@
   },
   {
     "id": "whitchurch-stouffville-community",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://calendar.townofws.ca/default/Download.ics",
     "slugPrefix": "ws-community",
