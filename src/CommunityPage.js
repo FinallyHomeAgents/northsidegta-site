@@ -456,10 +456,8 @@ export default function CommunityPage() {
         <section className="mx-auto max-w-6xl px-4 pb-16">
           <div className="space-y-6 rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-sm">
             <header className="space-y-2 text-center">
-              <h3 className="text-2xl font-semibold text-slate-900">Community Stories</h3>
-              <p className="text-sm text-slate-600">
-                Reader favourites, local guides and NorthSide happenings.
-              </p>
+              <h3 className="text-2xl font-semibold text-slate-900">Featured for NorthSide GTA</h3>
+              <p className="text-sm text-slate-600">Guides, rankings, and premium ways to spotlight your community.</p>
             </header>
             <CommunityStories />
           </div>
