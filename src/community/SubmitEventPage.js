@@ -79,6 +79,7 @@ function initialFormState() {
     postalCode: '',
     costType: 'Free',
     priceFrom: '',
+    paymentDetails: '',
     ticketsUrl: '',
     registrationUrl: '',
     imageUrl: '',
@@ -423,14 +424,19 @@ function validateField(name, form) {
       return ''
     }
     case 'ticketsUrl': {
-      if (form.costType === 'Paid') {
-        const trimmed = (value || '').trim()
-        if (!trimmed) {
-          return 'Add a ticket purchase link.'
-        }
-        if (!isHttpsUrl(trimmed)) {
-          return 'Tickets link must start with https://'
-        }
+      const trimmed = (value || '').trim()
+      if (trimmed && !isHttpsUrl(trimmed)) {
+        return 'Tickets link must start with https://'
+      }
+      return ''
+    }
+    case 'paymentDetails': {
+      const trimmed = (value || '').trim()
+      if (form.costType === 'Paid' && !trimmed) {
+        return 'Share how guests should pay for this event.'
+      }
+      if (trimmed.length > 200) {
+        return 'Payment details should be 200 characters or fewer.'
       }
       return ''
     }
@@ -744,6 +750,7 @@ export default function SubmitEventPage() {
       'postalCode',
       'costType',
       'priceFrom',
+      'paymentDetails',
       'ticketsUrl',
       'registrationUrl',
       'audienceTags',
@@ -808,6 +815,7 @@ export default function SubmitEventPage() {
       postalCode: form.postalCode,
       costType: form.costType,
       priceFrom: form.priceFrom,
+      paymentDetails: form.paymentDetails,
       ticketsUrl: form.ticketsUrl,
       registrationUrl: form.registrationUrl,
       imageUrl: finalImageUrl,
@@ -876,11 +884,19 @@ export default function SubmitEventPage() {
         <DynamicMetaTags {...SUBMIT_EVENT_ROUTE_META} />
         <div className="mx-auto max-w-4xl px-4">
           <div className="rounded-3xl border border-emerald-200 bg-white p-8 shadow-xl shadow-emerald-800/10">
-            <h1 className="text-3xl font-semibold text-emerald-900">Thanks! Your event is pending review.</h1>
+            <h1 className="text-3xl font-semibold text-emerald-900">Thanks for submitting your event!</h1>
             <p className="mt-2 text-slate-700">
-              Our team reviews community submissions quickly. If everything checks out, we’ll publish it to the NorthSide GTA
-              community calendar.
+              We’ve received your details. Our team will review it and, if approved, add it to the NorthSide GTA Community Calendar.
             </p>
+            <p className="mt-2 text-sm text-slate-600">
+              In the meantime, feel free to share our community calendar with your audience so they can discover more local events.
+            </p>
+            <a
+              href="/community"
+              className="mt-4 inline-flex items-center rounded-full border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:border-emerald-400 hover:text-emerald-900"
+            >
+              View the NorthSide GTA Community Calendar
+            </a>
             {submitResult.message && <p className="mt-3 text-sm text-slate-600">{submitResult.message}</p>}
 
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
@@ -913,6 +929,12 @@ export default function SubmitEventPage() {
                       : 'Free'}
                   </dd>
                 </div>
+                {summary.paymentDetails ? (
+                  <div>
+                    <dt className="text-xs uppercase tracking-wide text-slate-500">Payment Details</dt>
+                    <dd className="font-medium text-slate-900">{summary.paymentDetails}</dd>
+                  </div>
+                ) : null}
                 {summary.categoryTags?.length ? (
                   <div>
                     <dt className="text-xs uppercase tracking-wide text-slate-500">Categories</dt>
@@ -964,28 +986,40 @@ export default function SubmitEventPage() {
     <div className="min-h-screen bg-emerald-950/5 py-12">
       <DynamicMetaTags {...SUBMIT_EVENT_ROUTE_META} />
       <div className="mx-auto max-w-5xl px-4">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">
-            Community submission
+            NorthSide GTA Community
           </span>
-          <h1 className="mt-4 text-4xl font-semibold text-emerald-900">Submit a NorthSide GTA community event</h1>
-          <p className="mt-3 text-base text-slate-600">
-            Keep it detailed and accurate—titles, dates, and links are reviewed before publishing. We focus on family-friendly,
-            local experiences north of Toronto.
+          <h1 className="mt-4 text-4xl font-semibold text-emerald-900">Share Your Event with the NorthSide GTA</h1>
+          <p className="mt-3 text-base text-slate-700">
+            From festivals to fundraisers, live music to kids’ camps — if it brings people together north of Toronto, we want it on the calendar.
           </p>
-          <div className="mt-6 grid gap-4 rounded-3xl border border-emerald-200 bg-white/70 p-6 text-left shadow-sm md:grid-cols-3">
+          <p className="mt-2 text-sm text-emerald-900">
+            Powered by <span className="font-semibold">NorthSide GTA</span> &amp; <span className="font-semibold">Finally Home Agents</span> – a local real estate team that’s all-in on our community.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-8 max-w-4xl rounded-3xl border border-emerald-200 bg-white/80 p-6 shadow-sm">
+          <p className="text-base font-semibold text-emerald-900">Submit your event in a few quick steps.</p>
+          <p className="mt-2 text-sm text-slate-700">
+            Once approved, it will appear on our <span className="font-semibold text-emerald-900">NorthSide GTA Community Calendar</span> so locals can discover what’s happening in and around their town.
+          </p>
+          <p className="mt-3 text-xs text-slate-500">
+            We currently feature events across <span className="font-semibold text-emerald-900">Aurora, Stouffville, Georgina, East Gwillimbury, Newmarket, Uxbridge &amp; Scugog</span>.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
             {[1, 2, 3].map((step) => {
               const copy = [
-                'Fill in every field carefully — formatting matters.',
-                'Our team reviews new submissions quickly and may reach out if details are unclear.',
-                'Approved events are published to our community calendar and newsletter.',
+                'Share clear event details, images, and dates.',
+                'Our team reviews every submission to keep the calendar curated.',
+                'Approved events are added to the calendar locals rely on.',
               ]
               return (
-                <div key={step} className="space-y-2">
+                <div key={step} className="space-y-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white">
                     {step}
                   </span>
-                  <p className="text-sm text-slate-600">{copy[step - 1]}</p>
+                  <p className="text-sm text-slate-700">{copy[step - 1]}</p>
                 </div>
               )
             })}
@@ -996,10 +1030,19 @@ export default function SubmitEventPage() {
           onSubmit={handleSubmit}
           className="mx-auto mt-10 max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-emerald-900/10"
         >
-          <div className="space-y-6">
+          <div className="space-y-10">
             <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Event basics</h2>
-              <div className="mt-4 space-y-5">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-emerald-900">Event Details</h2>
+                  <p className="mt-1 text-sm text-slate-600">Give locals the essentials so they know why your event matters.</p>
+                </div>
+                <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  Step 1 of 4
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-8">
                 <div>
                   <label htmlFor="event-title" className="block text-sm font-semibold text-slate-900">
                     Event Title
@@ -1023,6 +1066,604 @@ export default function SubmitEventPage() {
                   <FormError message={errors.title && (touched.title || touched.submitAttempted) ? errors.title : ''} />
                 </div>
 
+                <div>
+                  <label htmlFor="event-type" className="block text-sm font-semibold text-slate-900">
+                    Event Type
+                  </label>
+                  <select
+                    id="event-type"
+                    value={form.eventType}
+                    onChange={(event) => setField('eventType', event.target.value)}
+                    onBlur={() => handleBlur('eventType')}
+                    className={classNames(
+                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                      errors.eventType
+                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                    )}
+                  >
+                    <option value="">Select event type…</option>
+                    {EVENT_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                  <FormError message={errors.eventType && (touched.eventType || touched.submitAttempted) ? errors.eventType : ''} />
+                </div>
+
+                <div className="space-y-5">
+                  <h3 className="text-base font-semibold text-emerald-900">Descriptions</h3>
+                  <div>
+                    <label htmlFor="short-description" className="block text-sm font-semibold text-slate-900">
+                      Short Description
+                    </label>
+                    <textarea
+                      id="short-description"
+                      rows={3}
+                      value={form.shortDescription}
+                      onChange={(event) => setField('shortDescription', event.target.value)}
+                      onBlur={() => handleBlur('shortDescription')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.shortDescription
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                      placeholder="A neighbourhood market with live music, artisan vendors, and family activities."
+                    />
+                    <Hint>Short summary (10–200 characters). No emojis.</Hint>
+                    <FormError
+                      message={
+                        errors.shortDescription && (touched.shortDescription || touched.submitAttempted)
+                          ? errors.shortDescription
+                          : ''
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="full-description" className="block text-sm font-semibold text-slate-900">
+                      Full Description (recommended)
+                    </label>
+                    <textarea
+                      id="full-description"
+                      rows={6}
+                      value={form.fullDescription}
+                      onChange={(event) => setField('fullDescription', event.target.value)}
+                      onBlur={() => handleBlur('fullDescription')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.fullDescription
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                      placeholder="Include key highlights, schedules, who should attend, and any registration details."
+                    />
+                    <Hint>Up to 4,000 characters. Plain text or simple sentences — we’ll format it for the listing.</Hint>
+                    <FormError
+                      message={
+                        errors.fullDescription && (touched.fullDescription || touched.submitAttempted)
+                          ? errors.fullDescription
+                          : ''
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold text-emerald-900">Date &amp; Time</h3>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="start-date" className="block text-sm font-semibold text-slate-900">
+                        Start Date &amp; Time
+                      </label>
+                      <input
+                        id="start-date"
+                        type="datetime-local"
+                        value={form.startDate}
+                        onChange={(event) => handleStartDateChange(event.target.value)}
+                        onBlur={() => handleBlur('startDate')}
+                        className={classNames(
+                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                          errors.startDate
+                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                        )}
+                      />
+                      <Hint>Use Toronto time (America/Toronto). Example: 2025-10-15 18:30.</Hint>
+                      <FormError
+                        message={errors.startDate && (touched.startDate || touched.submitAttempted) ? errors.startDate : ''}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="end-date" className="block text-sm font-semibold text-slate-900">
+                        End Date &amp; Time
+                      </label>
+                      <input
+                        id="end-date"
+                        type="datetime-local"
+                        value={form.endDate}
+                        onChange={(event) => handleEndDateChange(event.target.value)}
+                        onBlur={() => handleBlur('endDate')}
+                        className={classNames(
+                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                          errors.endDate
+                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                        )}
+                      />
+                      <Hint>Event end time or final day/time for multi-day events.</Hint>
+                      <FormError message={errors.endDate && (touched.endDate || touched.submitAttempted) ? errors.endDate : ''} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">Daily schedule (optional)</p>
+                        <p className="text-xs text-slate-600">Use this when hours differ on each day.</p>
+                      </div>
+                      <label className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800">
+                        <input
+                          type="checkbox"
+                          checked={form.useDailySchedule}
+                          onChange={handleUseDailyScheduleChange}
+                          className="h-4 w-4 rounded border-slate-300"
+                        />
+                        Enable daily schedule
+                      </label>
+                    </div>
+                    {errors.dailySchedule && (touched.dailySchedule || touched.submitAttempted) ? (
+                      <p className="text-sm font-medium text-rose-600">{errors.dailySchedule}</p>
+                    ) : null}
+                    {form.useDailySchedule ? (
+                      <div className="space-y-4">
+                        <p className="text-xs text-slate-600">
+                          Add start/end hours for each date in your range. Remove any day if the event isn’t running.
+                        </p>
+                        <div className="space-y-3">
+                          {orderedScheduleDays.map((day) => (
+                            <div
+                              key={day.id}
+                              className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center"
+                            >
+                              <div className="flex-1">
+                                <p className="text-xs uppercase tracking-wide text-slate-500">{formatScheduleDateLabel(day.date)}</p>
+                                <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                                  <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-800">
+                                    <input
+                                      type="checkbox"
+                                      checked={day.allDay}
+                                      onChange={(event) => handleDayAllDayChange(day.id, event.target.checked)}
+                                      className="h-4 w-4 rounded border-slate-300"
+                                    />
+                                    All day
+                                  </label>
+                                  {!day.allDay ? (
+                                    <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+                                      <div className="flex-1">
+                                        <label className="text-xs font-semibold text-slate-800">Start</label>
+                                        <input
+                                          type="time"
+                                          value={day.start || ''}
+                                          onChange={(event) => updateScheduleDay(day.id, { start: event.target.value })}
+                                          className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-emerald-200"
+                                        />
+                                      </div>
+                                      <div className="flex-1">
+                                        <label className="text-xs font-semibold text-slate-800">End</label>
+                                        <input
+                                          type="time"
+                                          value={day.end || ''}
+                                          onChange={(event) => updateScheduleDay(day.id, { end: event.target.value })}
+                                          className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-emerald-200"
+                                        />
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  onClick={() => setField('dailySchedule', form.dailySchedule.filter((d) => d.id !== day.id))}
+                                  className="text-xs font-semibold text-rose-600 hover:text-rose-700"
+                                >
+                                  Remove day
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/50 p-4 text-sm text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
+                          <p className="font-semibold">Need to adjust dates?</p>
+                          <p className="text-xs text-emerald-800">Update the start/end date above to refresh the daily schedule.</p>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold text-emerald-900">Images</h3>
+                  <div className="rounded-2xl border border-slate-200 p-4">
+                    <p className="text-sm font-semibold text-slate-900">Upload an image</p>
+                    <Hint>Upload JPG/PNG/WebP up to 5MB (1200×630+), or paste a public https:// image URL.</Hint>
+                    <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900">
+                        Upload image
+                        <input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFileUpload} />
+                      </label>
+                      {uploadingImage && (
+                        <span className="text-xs font-medium text-emerald-700">Uploading… {imageUploadProgress}%</span>
+                      )}
+                      {form.uploadedImageUrl && !uploadingImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setField('uploadedImageUrl', '')
+                            setImageUploadProgress(0)
+                          }}
+                          className="text-xs font-semibold text-rose-600 hover:text-rose-700"
+                        >
+                          Remove uploaded image
+                        </button>
+                      )}
+                    </div>
+                    {form.uploadedImageUrl && (
+                      <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200">
+                        <img src={form.uploadedImageUrl} alt="Uploaded event" className="w-full object-cover" />
+                      </div>
+                    )}
+                    {imageError && <p className="mt-2 text-sm font-medium text-rose-600">{imageError}</p>}
+                  </div>
+
+                  <div>
+                    <label htmlFor="image-url" className="block text-sm font-semibold text-slate-900">
+                      Image URL (optional)
+                    </label>
+                    <input
+                      id="image-url"
+                      type="url"
+                      value={form.imageUrl}
+                      onChange={handleImageUrlChange}
+                      onBlur={() => handleBlur('imageUrl')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.imageUrl
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                      placeholder="https://"
+                    />
+                    <FormError message={errors.imageUrl && (touched.imageUrl || touched.submitAttempted) ? errors.imageUrl : ''} />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold text-emerald-900">Audience &amp; Tags</h3>
+                  <div>
+                    <span className="text-sm font-semibold text-slate-900">Audience (choose up to 3)</span>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {AUDIENCE_OPTIONS.map((tag) => {
+                        const active = form.audienceTags.includes(tag)
+                        return (
+                          <button
+                            type="button"
+                            key={tag}
+                            onClick={() => toggleAudience(tag)}
+                            className={classNames(
+                              'rounded-full border px-4 py-2 text-xs font-semibold transition',
+                              active
+                                ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-800'
+                            )}
+                          >
+                            {tag}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <FormError
+                      message={errors.audienceTags && (touched.audienceTags || touched.submitAttempted) ? errors.audienceTags : ''}
+                    />
+                  </div>
+
+                  <div>
+                    <span className="text-sm font-semibold text-slate-900">Category tags (choose up to 4)</span>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {CATEGORY_TAGS.map((tag) => {
+                        const active = form.categoryTags.includes(tag)
+                        return (
+                          <button
+                            type="button"
+                            key={tag}
+                            onClick={() => toggleCategory(tag)}
+                            className={classNames(
+                              'rounded-full border px-4 py-2 text-xs font-semibold transition',
+                              active
+                                ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-800'
+                            )}
+                          >
+                            {tag}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <FormError
+                      message={errors.categoryTags && (touched.categoryTags || touched.submitAttempted) ? errors.categoryTags : ''}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-emerald-900">Location</h2>
+                  <p className="mt-1 text-sm text-slate-600">Where should people go? Share the exact spot.</p>
+                </div>
+                <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  Step 2 of 4
+                </span>
+              </div>
+              <div className="mt-5 space-y-5">
+                <div>
+                  <label htmlFor="venue-name" className="block text-sm font-semibold text-slate-900">
+                    Location / Venue Name
+                  </label>
+                  <input
+                    id="venue-name"
+                    type="text"
+                    value={form.venueName}
+                    onChange={(event) => setField('venueName', event.target.value)}
+                    onBlur={() => handleBlur('venueName')}
+                    className={classNames(
+                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                      errors.venueName
+                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                    )}
+                    placeholder="Community Centre, 123 Main St"
+                  />
+                  <Hint>Name of the venue or park.</Hint>
+                  <FormError message={errors.venueName && (touched.venueName || touched.submitAttempted) ? errors.venueName : ''} />
+                </div>
+
+                <div>
+                  <label htmlFor="street-address" className="block text-sm font-semibold text-slate-900">
+                    Street Address
+                  </label>
+                  <input
+                    id="street-address"
+                    type="text"
+                    value={form.streetAddress}
+                    onChange={(event) => setField('streetAddress', event.target.value)}
+                    onBlur={() => handleBlur('streetAddress')}
+                    className={classNames(
+                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                      errors.streetAddress
+                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                    )}
+                    placeholder="123 Main Street"
+                  />
+                  <FormError
+                    message={errors.streetAddress && (touched.streetAddress || touched.submitAttempted) ? errors.streetAddress : ''}
+                  />
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-3">
+                  <div className="md:col-span-2">
+                    <label htmlFor="city" className="block text-sm font-semibold text-slate-900">
+                      Town / City
+                    </label>
+                    <select
+                      id="city"
+                      value={form.city}
+                      onChange={(event) => setField('city', event.target.value)}
+                      onBlur={() => handleBlur('city')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.city
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                    >
+                      <option value="">Choose the closest option…</option>
+                      {CITY_OPTIONS.map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                    <FormError message={errors.city && (touched.city || touched.submitAttempted) ? errors.city : ''} />
+                  </div>
+                  <div>
+                    <label htmlFor="postal-code" className="block text-sm font-semibold text-slate-900">
+                      Postal Code
+                    </label>
+                    <input
+                      id="postal-code"
+                      type="text"
+                      value={form.postalCode}
+                      onChange={(event) => setField('postalCode', event.target.value)}
+                      onBlur={() => handleBlur('postalCode')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.postalCode
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                      placeholder="L4G 0G3"
+                    />
+                    <FormError
+                      message={errors.postalCode && (touched.postalCode || touched.submitAttempted) ? errors.postalCode : ''}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-emerald-900">Tickets &amp; Pricing</h2>
+                  <p className="mt-1 text-sm text-slate-600">Paid events can use online links or on-site payment details.</p>
+                </div>
+                <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  Step 3 of 4
+                </span>
+              </div>
+              <div className="mt-5 space-y-5">
+                <div>
+                  <span className="text-sm font-semibold text-slate-900">Is this event free or paid?</span>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    {['Free', 'Paid'].map((type) => {
+                      const active = form.costType === type
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => {
+                            setField('costType', type)
+                            setErrors((prev) => ({
+                              ...prev,
+                              costType: validateField('costType', { ...form, costType: type }),
+                            }))
+                          }}
+                          className={classNames(
+                            'rounded-full border px-4 py-2 text-sm font-semibold transition',
+                            active
+                              ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
+                              : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:text-emerald-800'
+                          )}
+                        >
+                          {type}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <FormError message={errors.costType && (touched.costType || touched.submitAttempted) ? errors.costType : ''} />
+                </div>
+
+                {form.costType === 'Paid' && (
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="price-from" className="block text-sm font-semibold text-slate-900">
+                        Price From
+                      </label>
+                      <input
+                        id="price-from"
+                        type="text"
+                        value={form.priceFrom}
+                        onChange={(event) => setField('priceFrom', event.target.value)}
+                        onBlur={() => handleBlur('priceFrom')}
+                        className={classNames(
+                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                          errors.priceFrom
+                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                        )}
+                        placeholder="20.00"
+                      />
+                      <FormError message={errors.priceFrom && (touched.priceFrom || touched.submitAttempted) ? errors.priceFrom : ''} />
+                    </div>
+                    <div>
+                      <label htmlFor="tickets-url" className="block text-sm font-semibold text-slate-900">
+                        Ticket link (optional)
+                      </label>
+                      <input
+                        id="tickets-url"
+                        type="url"
+                        value={form.ticketsUrl}
+                        onChange={(event) => setField('ticketsUrl', event.target.value)}
+                        onBlur={() => handleBlur('ticketsUrl')}
+                        className={classNames(
+                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                          errors.ticketsUrl
+                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                        )}
+                        placeholder="https://"
+                      />
+                      <Hint>If guests buy tickets online (Eventbrite, website, etc.), add the link here.</Hint>
+                      <FormError
+                        message={errors.ticketsUrl && (touched.ticketsUrl || touched.submitAttempted) ? errors.ticketsUrl : ''}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {form.costType === 'Paid' && (
+                  <div>
+                    <label htmlFor="payment-details" className="block text-sm font-semibold text-slate-900">
+                      How do guests pay?
+                    </label>
+                    <input
+                      id="payment-details"
+                      type="text"
+                      value={form.paymentDetails}
+                      onChange={(event) => setField('paymentDetails', event.target.value)}
+                      onBlur={() => handleBlur('paymentDetails')}
+                      className={classNames(
+                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                        errors.paymentDetails
+                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                      )}
+                      placeholder="e.g. “$25 • Pay at the door” or “$20 • Cash or debit at the venue”"
+                    />
+                    <Hint>If there’s no online ticket link, use this field to explain how people pay.</Hint>
+                    <FormError
+                      message={errors.paymentDetails && (touched.paymentDetails || touched.submitAttempted) ? errors.paymentDetails : ''}
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label htmlFor="registration-url" className="block text-sm font-semibold text-slate-900">
+                    Registration / Info URL (optional)
+                  </label>
+                  <input
+                    id="registration-url"
+                    type="url"
+                    value={form.registrationUrl}
+                    onChange={(event) => setField('registrationUrl', event.target.value)}
+                    onBlur={() => handleBlur('registrationUrl')}
+                    className={classNames(
+                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
+                      errors.registrationUrl
+                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
+                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
+                    )}
+                    placeholder="https://"
+                  />
+                  <FormError
+                    message={
+                      errors.registrationUrl && (touched.registrationUrl || touched.submitAttempted)
+                        ? errors.registrationUrl
+                        : ''
+                    }
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-emerald-900">Organizer Info</h2>
+                  <p className="mt-1 text-sm text-slate-600">Tell us who to contact about this listing.</p>
+                </div>
+                <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  Step 4 of 4
+                </span>
+              </div>
+              <div className="mt-5 space-y-5">
                 <div className="grid gap-5 md:grid-cols-2">
                   <div>
                     <label htmlFor="organizer-name" className="block text-sm font-semibold text-slate-900">
@@ -1074,565 +1715,6 @@ export default function SubmitEventPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label htmlFor="event-type" className="block text-sm font-semibold text-slate-900">
-                    Event Type
-                  </label>
-                  <select
-                    id="event-type"
-                    value={form.eventType}
-                    onChange={(event) => setField('eventType', event.target.value)}
-                    onBlur={() => handleBlur('eventType')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.eventType
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                  >
-                    <option value="">Select event type…</option>
-                    {EVENT_TYPES.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                  <FormError message={errors.eventType && (touched.eventType || touched.submitAttempted) ? errors.eventType : ''} />
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Descriptions</h2>
-              <div className="mt-4 space-y-5">
-                <div>
-                  <label htmlFor="short-description" className="block text-sm font-semibold text-slate-900">
-                    Short Description
-                  </label>
-                  <textarea
-                    id="short-description"
-                    rows={3}
-                    value={form.shortDescription}
-                    onChange={(event) => setField('shortDescription', event.target.value)}
-                    onBlur={() => handleBlur('shortDescription')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.shortDescription
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="A neighbourhood market with live music, artisan vendors, and family activities."
-                  />
-                  <Hint>Short summary (10–200 characters). No emojis.</Hint>
-                  <FormError
-                    message={
-                      errors.shortDescription && (touched.shortDescription || touched.submitAttempted)
-                        ? errors.shortDescription
-                        : ''
-                    }
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="full-description" className="block text-sm font-semibold text-slate-900">
-                    Full Description (recommended)
-                  </label>
-                  <textarea
-                    id="full-description"
-                    rows={6}
-                    value={form.fullDescription}
-                    onChange={(event) => setField('fullDescription', event.target.value)}
-                    onBlur={() => handleBlur('fullDescription')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.fullDescription
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="Include key highlights, schedules, who should attend, and any registration details."
-                  />
-                  <Hint>Up to 4,000 characters. Plain text or simple sentences — we’ll format it for the listing.</Hint>
-                  <FormError
-                    message={
-                      errors.fullDescription && (touched.fullDescription || touched.submitAttempted)
-                        ? errors.fullDescription
-                        : ''
-                    }
-                  />
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Date & Time</h2>
-              <div className="mt-4 grid gap-5 md:grid-cols-2">
-                <div>
-                  <label htmlFor="start-date" className="block text-sm font-semibold text-slate-900">
-                    Start Date & Time
-                  </label>
-                  <input
-                    id="start-date"
-                    type="datetime-local"
-                    value={form.startDate}
-                    onChange={(event) => handleStartDateChange(event.target.value)}
-                    onBlur={() => handleBlur('startDate')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.startDate
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                  />
-                  <Hint>Use Toronto time (America/Toronto). Example: 2025-10-15 18:30.</Hint>
-                  <FormError
-                    message={errors.startDate && (touched.startDate || touched.submitAttempted) ? errors.startDate : ''}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="end-date" className="block text-sm font-semibold text-slate-900">
-                    End Date & Time
-                  </label>
-                  <input
-                    id="end-date"
-                    type="datetime-local"
-                    value={form.endDate}
-                    onChange={(event) => handleEndDateChange(event.target.value)}
-                    onBlur={() => handleBlur('endDate')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.endDate
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                  />
-                  <Hint>End time must be after the start. Duration up to 14 days.</Hint>
-                  <FormError message={errors.endDate && (touched.endDate || touched.submitAttempted) ? errors.endDate : ''} />
-                </div>
-              </div>
-              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <label className="flex items-center gap-2 text-sm font-semibold text-emerald-900">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500"
-                      checked={form.useDailySchedule}
-                      onChange={handleUseDailyScheduleChange}
-                    />
-                    Use Daily Schedule (optional)
-                  </label>
-                  {form.useDailySchedule && (
-                    <span className="text-xs font-medium uppercase tracking-wide text-emerald-700">
-                      {orderedScheduleDays.length} day{orderedScheduleDays.length === 1 ? '' : 's'}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-2 text-sm text-slate-600">
-                  When enabled, set hours for each day between the start and end dates. Adjusting the range updates the list
-                  automatically.
-                </p>
-                {form.useDailySchedule ? (
-                  orderedScheduleDays.length ? (
-                    <div className="mt-4 space-y-4">
-                      {orderedScheduleDays.map((day) => (
-                        <div key={day.id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
-                          <div className="flex flex-wrap items-center justify-between gap-3">
-                            <div>
-                              <p className="text-sm font-semibold text-emerald-900">{formatScheduleDateLabel(day.date)}</p>
-                              <p className="text-xs text-slate-500">{day.date || 'Set date'}</p>
-                            </div>
-                            <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                                checked={Boolean(day.allDay)}
-                                onChange={(event) => handleDayAllDayChange(day.id, event.target.checked)}
-                              />
-                              All day
-                            </label>
-                          </div>
-                          {day.allDay ? (
-                            <p className="mt-3 text-xs text-slate-600">This day is marked as an all-day event.</p>
-                          ) : (
-                            <div className="mt-4 grid gap-3 md:grid-cols-2">
-                              <div className="min-w-[140px]">
-                                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                  Start time
-                                </label>
-                                <input
-                                  type="time"
-                                  value={day.start}
-                                  onChange={(event) => updateScheduleDay(day.id, { start: event.target.value })}
-                                  className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-                                />
-                              </div>
-                              <div className="min-w-[140px]">
-                                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                  End time
-                                </label>
-                                <input
-                                  type="time"
-                                  value={day.end}
-                                  onChange={(event) => updateScheduleDay(day.id, { end: event.target.value })}
-                                  className="mt-1 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="mt-4 text-sm font-medium text-emerald-800">
-                      Set both the start and end date to generate daily rows for editing.
-                    </p>
-                  )
-                ) : (
-                  <p className="mt-4 text-sm text-slate-500">
-                    Enable the daily schedule if the event spans multiple days or uses different hours each day.
-                  </p>
-                )}
-                <FormError
-                  message={
-                    errors.dailySchedule && (touched.dailySchedule || touched.submitAttempted)
-                      ? errors.dailySchedule
-                      : ''
-                  }
-                />
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Location</h2>
-              <div className="mt-4 space-y-5">
-                <div>
-                  <label htmlFor="venue-name" className="block text-sm font-semibold text-slate-900">
-                    Venue Name
-                  </label>
-                  <input
-                    id="venue-name"
-                    type="text"
-                    value={form.venueName}
-                    onChange={(event) => setField('venueName', event.target.value)}
-                    onBlur={() => handleBlur('venueName')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.venueName
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="Georgina Ice Palace"
-                  />
-                  <FormError message={errors.venueName && (touched.venueName || touched.submitAttempted) ? errors.venueName : ''} />
-                </div>
-
-                <div>
-                  <label htmlFor="street-address" className="block text-sm font-semibold text-slate-900">
-                    Street Address
-                  </label>
-                  <input
-                    id="street-address"
-                    type="text"
-                    value={form.streetAddress}
-                    onChange={(event) => setField('streetAddress', event.target.value)}
-                    onBlur={() => handleBlur('streetAddress')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.streetAddress
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="123 Main St"
-                  />
-                  <FormError
-                    message={errors.streetAddress && (touched.streetAddress || touched.submitAttempted) ? errors.streetAddress : ''}
-                  />
-                </div>
-
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="city" className="block text-sm font-semibold text-slate-900">
-                      City / Town
-                    </label>
-                    <select
-                      id="city"
-                      value={form.city}
-                      onChange={(event) => setField('city', event.target.value)}
-                      onBlur={() => handleBlur('city')}
-                      className={classNames(
-                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                        errors.city
-                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                      )}
-                    >
-                      <option value="">Select a town…</option>
-                      {CITY_OPTIONS.map((city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                    </select>
-                    <Hint>Pick the closest town in the NorthSide GTA.</Hint>
-                    <FormError message={errors.city && (touched.city || touched.submitAttempted) ? errors.city : ''} />
-                  </div>
-                  <div>
-                    <label htmlFor="postal-code" className="block text-sm font-semibold text-slate-900">
-                      Postal Code
-                    </label>
-                    <input
-                      id="postal-code"
-                      type="text"
-                      value={form.postalCode}
-                      onChange={(event) => setField('postalCode', event.target.value)}
-                      onBlur={() => handleBlur('postalCode')}
-                      className={classNames(
-                        'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                        errors.postalCode
-                          ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                          : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                      )}
-                      placeholder="L0E 1R0"
-                    />
-                    <Hint>Canadian format: A1A 1A1 (space optional).</Hint>
-                    <FormError message={errors.postalCode && (touched.postalCode || touched.submitAttempted) ? errors.postalCode : ''} />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Cost & Links</h2>
-              <div className="mt-4 space-y-5">
-                <div>
-                  <span className="block text-sm font-semibold text-slate-900">Cost</span>
-                  <Hint>Choose Free or Paid. If Paid, include your lowest ticket price and link.</Hint>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    {['Free', 'Paid'].map((option) => (
-                      <label
-                        key={option}
-                        className={classNames(
-                          'flex cursor-pointer items-center justify-between rounded-2xl border px-4 py-3 text-sm font-semibold shadow-sm transition',
-                          form.costType === option
-                            ? 'border-emerald-400 bg-emerald-50 text-emerald-900'
-                            : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300'
-                        )}
-                      >
-                        <span>{option}</span>
-                        <input
-                          type="radio"
-                          className="h-4 w-4"
-                          checked={form.costType === option}
-                          onChange={() => {
-                            setField('costType', option)
-                            setErrors((prev) => ({
-                              ...prev,
-                              priceFrom: option === 'Paid' ? validateField('priceFrom', { ...form, costType: option }) : '',
-                              ticketsUrl: option === 'Paid' ? validateField('ticketsUrl', { ...form, costType: option }) : '',
-                            }))
-                          }}
-                        />
-                      </label>
-                    ))}
-                  </div>
-                  <FormError message={errors.costType && (touched.costType || touched.submitAttempted) ? errors.costType : ''} />
-                </div>
-
-                {form.costType === 'Paid' && (
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <div>
-                      <label htmlFor="price-from" className="block text-sm font-semibold text-slate-900">
-                        Price From
-                      </label>
-                      <input
-                        id="price-from"
-                        type="text"
-                        value={form.priceFrom}
-                        onChange={(event) => setField('priceFrom', event.target.value)}
-                        onBlur={() => handleBlur('priceFrom')}
-                        className={classNames(
-                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                          errors.priceFrom
-                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                        )}
-                        placeholder="20.00"
-                      />
-                      <FormError message={errors.priceFrom && (touched.priceFrom || touched.submitAttempted) ? errors.priceFrom : ''} />
-                    </div>
-                    <div>
-                      <label htmlFor="tickets-url" className="block text-sm font-semibold text-slate-900">
-                        Tickets URL
-                      </label>
-                      <input
-                        id="tickets-url"
-                        type="url"
-                        value={form.ticketsUrl}
-                        onChange={(event) => setField('ticketsUrl', event.target.value)}
-                        onBlur={() => handleBlur('ticketsUrl')}
-                        className={classNames(
-                          'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                          errors.ticketsUrl
-                            ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                            : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                        )}
-                        placeholder="https://"
-                      />
-                      <FormError
-                        message={errors.ticketsUrl && (touched.ticketsUrl || touched.submitAttempted) ? errors.ticketsUrl : ''}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <label htmlFor="registration-url" className="block text-sm font-semibold text-slate-900">
-                    Registration / Info URL (optional)
-                  </label>
-                  <input
-                    id="registration-url"
-                    type="url"
-                    value={form.registrationUrl}
-                    onChange={(event) => setField('registrationUrl', event.target.value)}
-                    onBlur={() => handleBlur('registrationUrl')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.registrationUrl
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="https://"
-                  />
-                  <FormError
-                    message={
-                      errors.registrationUrl && (touched.registrationUrl || touched.submitAttempted)
-                        ? errors.registrationUrl
-                        : ''
-                    }
-                  />
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Images</h2>
-              <div className="mt-4 space-y-4">
-                <div className="rounded-2xl border border-slate-200 p-4">
-                  <p className="text-sm font-semibold text-slate-900">Upload an image</p>
-                  <Hint>Upload JPG/PNG/WebP up to 5MB (1200×630+), or paste a public https:// image URL.</Hint>
-                  <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900">
-                      Upload image
-                      <input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFileUpload} />
-                    </label>
-                    {uploadingImage && (
-                      <span className="text-xs font-medium text-emerald-700">Uploading… {imageUploadProgress}%</span>
-                    )}
-                    {form.uploadedImageUrl && !uploadingImage && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setField('uploadedImageUrl', '')
-                          setImageUploadProgress(0)
-                        }}
-                        className="text-xs font-semibold text-rose-600 hover:text-rose-700"
-                      >
-                        Remove uploaded image
-                      </button>
-                    )}
-                  </div>
-                  {form.uploadedImageUrl && (
-                    <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200">
-                      <img src={form.uploadedImageUrl} alt="Uploaded event" className="w-full object-cover" />
-                    </div>
-                  )}
-                  {imageError && <p className="mt-2 text-sm font-medium text-rose-600">{imageError}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="image-url" className="block text-sm font-semibold text-slate-900">
-                    Image URL (optional)
-                  </label>
-                  <input
-                    id="image-url"
-                    type="url"
-                    value={form.imageUrl}
-                    onChange={handleImageUrlChange}
-                    onBlur={() => handleBlur('imageUrl')}
-                    className={classNames(
-                      'mt-2 w-full rounded-2xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2',
-                      errors.imageUrl
-                        ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
-                    )}
-                    placeholder="https://"
-                  />
-                  <FormError message={errors.imageUrl && (touched.imageUrl || touched.submitAttempted) ? errors.imageUrl : ''} />
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Audience & Tags</h2>
-              <div className="mt-4 space-y-4">
-                <div>
-                  <span className="text-sm font-semibold text-slate-900">Audience (choose up to 3)</span>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {AUDIENCE_OPTIONS.map((tag) => {
-                      const active = form.audienceTags.includes(tag)
-                      return (
-                        <button
-                          type="button"
-                          key={tag}
-                          onClick={() => toggleAudience(tag)}
-                          className={classNames(
-                            'rounded-full border px-4 py-2 text-xs font-semibold transition',
-                            active
-                              ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-800'
-                          )}
-                        >
-                          {tag}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  <FormError
-                    message={errors.audienceTags && (touched.audienceTags || touched.submitAttempted) ? errors.audienceTags : ''}
-                  />
-                </div>
-
-                <div>
-                  <span className="text-sm font-semibold text-slate-900">Category tags (choose up to 4)</span>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {CATEGORY_TAGS.map((tag) => {
-                      const active = form.categoryTags.includes(tag)
-                      return (
-                        <button
-                          type="button"
-                          key={tag}
-                          onClick={() => toggleCategory(tag)}
-                          className={classNames(
-                            'rounded-full border px-4 py-2 text-xs font-semibold transition',
-                            active
-                              ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-800'
-                          )}
-                        >
-                          {tag}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  <FormError
-                    message={errors.categoryTags && (touched.categoryTags || touched.submitAttempted) ? errors.categoryTags : ''}
-                  />
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-semibold text-emerald-900">Final steps</h2>
-              <div className="mt-4 space-y-5">
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
                   <p className="font-semibold text-slate-900">Disclaimer &amp; Terms</p>
                   <p className="mt-3 text-xs leading-5 text-slate-600">
@@ -1671,6 +1753,13 @@ export default function SubmitEventPage() {
                   />
                 </div>
 
+                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-5 text-sm text-emerald-900">
+                  <p className="text-sm font-semibold text-emerald-900">What happens after you submit?</p>
+                  <p className="mt-2 text-sm text-emerald-900">
+                    Our team reviews every event to keep the calendar relevant and local. You’ll usually see approved events added within <span className="font-semibold">24–48 hours</span>.
+                  </p>
+                </div>
+
                 <div className="hidden">
                   <label htmlFor="website-field">Leave this field blank</label>
                   <input
@@ -1695,34 +1784,61 @@ export default function SubmitEventPage() {
                     />
                   </div>
                 )}
+
+                {submitError && (
+                  <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+                    {submitError}
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs text-slate-500">
+                    Submissions are moderated. Approval emails are sent to contact@finallyhomeagents.com and Slack when configured.
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className={classNames(
+                      'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-lg transition',
+                      submitting
+                        ? 'cursor-wait border border-emerald-200 bg-emerald-200 text-emerald-800'
+                        : 'border border-brand-green/60 bg-brand-green text-white hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2'
+                    )}
+                  >
+                    {submitting ? 'Submitting…' : 'Submit for review'}
+                  </button>
+                </div>
               </div>
             </section>
-
-            {submitError && (
-              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-                {submitError}
-              </div>
-            )}
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-slate-500">
-                Submissions are moderated. Approval emails are sent to contact@finallyhomeagents.com and Slack when configured.
-              </p>
-              <button
-                type="submit"
-                disabled={submitting}
-                className={classNames(
-                  'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow-lg transition',
-                  submitting
-                    ? 'cursor-wait border border-emerald-200 bg-emerald-200 text-emerald-800'
-                    : 'border border-brand-green/60 bg-brand-green text-white hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2'
-                )}
-              >
-                {submitting ? 'Submitting…' : 'Submit for review'}
-              </button>
-            </div>
           </div>
         </form>
+
+        <div className="mx-auto mt-8 max-w-4xl">
+          <div className="grid gap-4 rounded-3xl border border-emerald-100 bg-white/80 p-6 shadow-sm md:grid-cols-3">
+            {[{
+              title: 'Local & Independent',
+              description: 'Built by Finally Home Agents',
+            },
+            {
+              title: 'Community-First',
+              description: 'Focused on the NorthSide GTA',
+            },
+            {
+              title: 'Curated Calendar',
+              description: 'Every event is reviewed by a real person',
+            }].map((item) => (
+              <div key={item.title} className="flex items-start gap-3 rounded-2xl border border-emerald-50 bg-white/90 p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                  <span className="text-lg">★</span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-emerald-900">{item.title}</p>
+                  <p className="text-xs text-slate-600">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
