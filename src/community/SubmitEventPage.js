@@ -2,7 +2,13 @@ import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
 
-import { buildAcceptTypes, isAllowedImageFile, normalizeExtension, normalizeMimeType } from '../lib/uploadConstants'
+import {
+  buildAcceptTypes,
+  hasAllowedImageExtension,
+  hasAllowedImageMimeType,
+  normalizeExtension,
+  normalizeMimeType,
+} from '../lib/uploadConstants'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
@@ -15,15 +21,12 @@ const MAX_EVENT_DURATION_DAYS = 14
 const MAX_AUDIENCE_TAGS = 3
 const MAX_CATEGORY_TAGS = 4
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024
-const MIME_EXTENSIONS = {
+const ACCEPT_TYPES = buildAcceptTypes()
+const MIME_EXTENSION_MAP = {
   'image/jpeg': 'jpg',
-  'image/jpg': 'jpg',
-  'image/pjpeg': 'jpg',
   'image/png': 'png',
-  'image/x-png': 'png',
   'image/webp': 'webp',
 }
-const ACCEPT_TYPES = buildAcceptTypes()
 
 const EVENT_TYPES = [
   'Community',
@@ -662,14 +665,17 @@ export default function SubmitEventPage() {
   }
 
   const buildUploadPath = React.useCallback((file) => {
-    const extensionFromType = MIME_EXTENSIONS[normalizeMimeType(file.type)] || ''
-    const extensionFromName = typeof file.name === 'string' ? normalizeExtension(file.name) : ''
+    const name = typeof file?.name === 'string' ? file.name : ''
+    const normalizedMime = normalizeMimeType(file?.type)
+    const extensionFromType = MIME_EXTENSION_MAP[normalizedMime] || ''
+    const normalizedNameExt = normalizeExtension(name)
+    const extensionFromName = normalizedNameExt ? normalizedNameExt.replace('.', '') : ''
     const extension = (extensionFromType || extensionFromName || 'jpg').replace(/[^a-z0-9]/g, '')
     const uniqueId =
       typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
         ? crypto.randomUUID()
         : Math.random().toString(36).slice(2, 10)
-    return `community-events/${Date.now()}-${uniqueId}.${extension}`
+    return `community-events/${Date.now()}-${uniqueId}.${extension || 'jpg'}`
   }, [])
 
   const toggleCategory = (tag) => {
@@ -703,9 +709,12 @@ export default function SubmitEventPage() {
 
     if (!file) return
 
-    const { name = '', type = '' } = file
-    const normalizedMime = normalizeMimeType(type)
-    if (!isAllowedImageFile(normalizedMime, name)) {
+    const name = typeof file.name === 'string' ? file.name : ''
+    const type = typeof file.type === 'string' ? file.type : ''
+    const hasAllowedExt = hasAllowedImageExtension(name)
+    const hasAllowedMime = hasAllowedImageMimeType(type)
+
+    if (!hasAllowedExt || !hasAllowedMime) {
       setImageError('Upload a JPG, PNG, or WebP image.')
       return
     }

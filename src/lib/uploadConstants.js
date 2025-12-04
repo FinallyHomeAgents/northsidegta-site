@@ -1,13 +1,12 @@
 export const ALLOWED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-export const ALLOWED_IMAGE_MIME_ALIASES = ['image/jpg', 'image/pjpeg', 'image/x-png']
 export const ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
 
 function toLowerString(value = '') {
-  return typeof value === 'string' ? value.toLowerCase() : ''
+  return typeof value === 'string' ? value.toLowerCase().trim() : ''
 }
 
 export function normalizeMimeType(mime = '') {
-  return toLowerString(mime).trim()
+  return toLowerString(mime)
 }
 
 export function normalizeExtension(name = '') {
@@ -17,27 +16,20 @@ export function normalizeExtension(name = '') {
   return lastDot >= 0 ? lower.slice(lastDot) : ''
 }
 
-export function isAllowedImageMimeType(mime = '') {
+export function hasAllowedImageMimeType(mime = '') {
   const normalized = normalizeMimeType(mime)
-  return (
-    ALLOWED_IMAGE_MIME_TYPES.includes(normalized) ||
-    ALLOWED_IMAGE_MIME_ALIASES.includes(normalized)
-  )
+  return ALLOWED_IMAGE_MIME_TYPES.includes(normalized)
 }
 
-export function isAllowedImageExtension(name = '') {
+export function hasAllowedImageExtension(name = '') {
   const ext = normalizeExtension(name)
   return ALLOWED_IMAGE_EXTENSIONS.includes(ext)
 }
 
 export function isAllowedImageFile(mime = '', name = '') {
-  return isAllowedImageMimeType(mime) || isAllowedImageExtension(name)
+  return hasAllowedImageMimeType(mime) && hasAllowedImageExtension(name)
 }
 
 export function buildAcceptTypes() {
-  return [
-    ...ALLOWED_IMAGE_MIME_TYPES,
-    ...ALLOWED_IMAGE_MIME_ALIASES,
-    ...ALLOWED_IMAGE_EXTENSIONS,
-  ]
+  return [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_EXTENSIONS]
 }

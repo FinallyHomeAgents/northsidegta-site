@@ -3,9 +3,10 @@ import { put } from '@vercel/blob'
 import crypto from 'crypto'
 
 import {
-  ALLOWED_IMAGE_MIME_ALIASES,
+  ALLOWED_IMAGE_EXTENSIONS,
   ALLOWED_IMAGE_MIME_TYPES,
-  isAllowedImageFile,
+  hasAllowedImageExtension,
+  hasAllowedImageMimeType,
   normalizeExtension,
   normalizeMimeType,
 } from '../../src/lib/uploadConstants'
@@ -80,7 +81,7 @@ export default async function handler(req, res) {
   console.log('EVENT_UPLOAD_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('EVENT_UPLOAD_METHOD', req.method)
   console.log('EVENT_UPLOAD_CONTENT_TYPE', req.headers?.['content-type'])
-  console.log('EVENT_UPLOAD_ALLOWED_TYPES', [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_MIME_ALIASES])
+  console.log('EVENT_UPLOAD_ALLOWED_TYPES', [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_EXTENSIONS])
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -102,9 +103,12 @@ export default async function handler(req, res) {
     const { fileBuffer, mimeType, filename, fields } = await parseMultipartRequest(req)
     const normalizedMime = normalizeMimeType(mimeType)
     const fileExtension = normalizeExtension(filename)
+    const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)
+    const hasAllowedExt = hasAllowedImageExtension(filename)
+    console.log('UPLOAD_DEBUG name:', filename, 'type:', mimeType)
     console.log('EVENT_UPLOAD_FILE_INFO', { filename, mimeType, normalizedMime, fileExtension })
 
-    if (!isAllowedImageFile(normalizedMime, filename)) {
+    if (!hasAllowedMime || !hasAllowedExt) {
       res.status(400).json({ error: 'Upload a JPG, PNG, or WebP image.' })
       return
     }

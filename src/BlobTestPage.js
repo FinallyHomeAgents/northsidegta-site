@@ -1,6 +1,12 @@
 import React from 'react'
 
-import { buildAcceptTypes, isAllowedImageFile, normalizeMimeType } from './lib/uploadConstants'
+import {
+  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_IMAGE_MIME_TYPES,
+  buildAcceptTypes,
+  hasAllowedImageExtension,
+  hasAllowedImageMimeType,
+} from './lib/uploadConstants'
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const ACCEPT_TYPES = buildAcceptTypes()
@@ -18,9 +24,12 @@ export default function BlobTestPage() {
     setResultText('')
     if (!file) return
 
-    const { name = '', type = '' } = file
-    const normalizedMime = normalizeMimeType(type)
-    if (!isAllowedImageFile(normalizedMime, name)) {
+    const name = typeof file.name === 'string' ? file.name : ''
+    const type = typeof file.type === 'string' ? file.type : ''
+    const hasAllowedExt = hasAllowedImageExtension(name)
+    const hasAllowedMime = hasAllowedImageMimeType(type)
+
+    if (!hasAllowedExt || !hasAllowedMime) {
       setErrorText('Upload a JPG, PNG, or WebP image.')
       return
     }
@@ -80,6 +89,11 @@ export default function BlobTestPage() {
 
       <div className="p-3 rounded border bg-gray-900 text-green-100 whitespace-pre-wrap break-words">
         {resultText || 'No result yet.'}
+      </div>
+
+      <div className="text-sm text-gray-500">
+        <p>Allowed types: {ALLOWED_IMAGE_MIME_TYPES.join(', ')}</p>
+        <p>Allowed extensions: {ALLOWED_IMAGE_EXTENSIONS.join(', ')}</p>
       </div>
     </div>
   )
