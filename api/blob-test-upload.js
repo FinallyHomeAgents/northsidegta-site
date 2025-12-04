@@ -31,6 +31,8 @@ export default async function handler(req, res) {
     return
   }
 
+  res.setHeader('x-blob-token-defined', String(Boolean(process.env.BLOB_READ_WRITE_TOKEN)))
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST, OPTIONS')
     res.status(405).json({ error: 'Method Not Allowed' })
@@ -69,12 +71,18 @@ export default async function handler(req, res) {
       },
     })
 
-    res.status(200).json(result)
+    res.status(200).json({
+      ...result,
+      tokenDefined: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      runtime: process.env.NEXT_RUNTIME || 'node',
+    })
   } catch (error) {
     console.error('BLOB_TEST_UPLOAD_ERROR', error)
     res.status(500).json({
       error: error?.message || 'Upload failed',
       reason: 'handle-upload-failed',
+      tokenDefined: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      runtime: process.env.NEXT_RUNTIME || 'node',
     })
   }
 }
