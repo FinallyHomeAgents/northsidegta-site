@@ -1,45 +1,48 @@
 {
-  "title": "Finally Home Agents -NorthSide GTA Test2",
-  "slug": "2025-12-07-finally-home-agents-northside-gta-test2",
-  "status": "pending",
-  "startDate": "2025-12-07T14:30:00.000Z",
-  "endDate": "2025-12-08T22:00:00.000Z",
-  "allDay": false,
-  "recurrence": "",
+  "locationName": "Prince Lee Acres",
+  "priceType": "Paid",
+  "moderation": {
+    "ip": "173.35.217.208",
+    "submittedVia": "public-form"
+  },
+  "sourceName": "Finally Home Agents",
+  "summary": "Finally Home Test",
+  "ticketsUrl": "",
   "userEventType": "Community",
-  "category": "",
+  "endDate": "2025-12-08T22:00:00.000Z",
+  "slug": "2025-12-07-finally-home-agents-northside-gta-test2",
+  "organizerEmail": "matthewglmulhall@gmail.com",
+  "submittedAt": "2025-12-04T14:50:06.769Z",
+  "recurrence": "",
+  "startDate": "2025-12-07T14:30:00.000Z",
+  "town": "Uxbridge",
+  "status": "approved",
+  "priceFrom": "20",
+  "address": "10800 Concession 5",
+  "eventUrl": "",
+  "use_daily_schedule": true,
+  "registrationUrl": "",
   "categoryTags": [
     "Sports",
     "Family",
     "Holiday",
     "Charity"
   ],
+  "postalCode": "L9P1R1",
+  "title": "Finally Home Agents -NorthSide GTA Test2",
+  "organizerName": "Finally Home Agents",
+  "contactConsent": true,
+  "source": "user",
+  "priceNote": "From $20",
+  "image": "https://northsidegta.ca/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg",
+  "allDay": false,
+  "paymentDetails": "20 at door to charity",
+  "description": "Finally Home Test Full",
   "audienceTags": [
     "All ages",
     "Teens",
     "Adults"
   ],
-  "town": "Uxbridge",
-  "locationName": "Prince Lee Acres",
-  "address": "10800 Concession 5",
-  "postalCode": "L9P1R1",
-  "priceType": "Paid",
-  "priceFrom": "20",
-  "priceNote": "From $20",
-  "paymentDetails": "20 at door to charity",
-  "ticketsUrl": "",
-  "registrationUrl": "",
-  "image": "https://northsidegta.ca/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg",
-  "summary": "Finally Home Test",
-  "description": "Finally Home Test Full",
-  "organizerName": "Finally Home Agents",
-  "organizerEmail": "matthewglmulhall@gmail.com",
-  "eventUrl": "",
-  "source": "user",
-  "sourceName": "Finally Home Agents",
-  "submittedAt": "2025-12-04T14:50:06.769Z",
-  "contactConsent": true,
-  "use_daily_schedule": true,
   "daily_schedule": [
     {
       "date": "2025-12-07",
@@ -54,8 +57,5 @@
       "end_time": "17:00"
     }
   ],
-  "moderation": {
-    "ip": "173.35.217.208",
-    "submittedVia": "public-form"
-  }
+  "category": ""
 }
