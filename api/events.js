@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 const EVENTS_DIR = path.join(process.cwd(), 'public', 'data', 'events')
+const PENDING_EVENTS_DIR = path.join(process.cwd(), 'public', 'data', 'events-pending')
 const CACHE_MAX_AGE = 60 // seconds
 
 function safeParseJSON(filePath) {
@@ -15,19 +16,22 @@ function safeParseJSON(filePath) {
   }
 }
 
-function loadEvents() {
-  if (!fs.existsSync(EVENTS_DIR)) return []
+function loadEvents(directory, defaultStatus = '') {
+  if (!fs.existsSync(directory)) return []
   const files = fs
-    .readdirSync(EVENTS_DIR)
+    .readdirSync(directory)
     .filter((name) => name.toLowerCase().endsWith('.json'))
 
   const events = []
   for (const file of files) {
-    const fullPath = path.join(EVENTS_DIR, file)
+    const fullPath = path.join(directory, file)
     const event = safeParseJSON(fullPath)
     if (!event || typeof event !== 'object') continue
     if (!event.slug) {
       event.slug = file.replace(/\.json$/i, '')
+    }
+    if (defaultStatus && typeof event.status !== 'string') {
+      event.status = defaultStatus
     }
     events.push(event)
   }
@@ -66,7 +70,20 @@ export default function handler(req, res) {
 
   let events
   try {
-    events = loadEvents()
+    const liveEvents = loadEvents(EVENTS_DIR)
+    const pendingEvents = loadEvents(PENDING_EVENTS_DIR, 'pending')
+    const merged = new Map()
+
+    for (const event of liveEvents) {
+      merged.set(event.slug, event)
+    }
+    for (const event of pendingEvents) {
+      if (!merged.has(event.slug)) {
+        merged.set(event.slug, event)
+      }
+    }
+
+    events = Array.from(merged.values())
   } catch (error) {
     console.error('[events-api] failed to load events:', error)
     res.status(500).json({ error: 'Failed to load events.' })
