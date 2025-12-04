@@ -1,18 +1,9 @@
 import React from 'react'
 
-import {
-  ALLOWED_IMAGE_EXTENSIONS,
-  ALLOWED_IMAGE_MIME_TYPES,
-  isAllowedImageFile,
-  normalizeExtension,
-  normalizeMimeType,
-} from './lib/uploadConstants'
+import { buildAcceptTypes, isAllowedImageFile, normalizeMimeType } from './lib/uploadConstants'
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
-const ACCEPT_TYPES = [
-  ...ALLOWED_IMAGE_MIME_TYPES,
-  ...ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`),
-]
+const ACCEPT_TYPES = buildAcceptTypes()
 
 export default function BlobTestPage() {
   const [status, setStatus] = React.useState('Idle')
@@ -20,16 +11,16 @@ export default function BlobTestPage() {
   const [errorText, setErrorText] = React.useState('')
 
   const handleFileChange = async (event) => {
-    const file = event.target.files?.[0]
+    const file = event.target?.files?.[0]
     event.target.value = ''
 
     setErrorText('')
     setResultText('')
     if (!file) return
 
-    const normalizedMime = normalizeMimeType(file.type)
-    const normalizedExtension = normalizeExtension(file.name)
-    if (!isAllowedImageFile(normalizedMime, normalizedExtension)) {
+    const { name = '', type = '' } = file
+    const normalizedMime = normalizeMimeType(type)
+    if (!isAllowedImageFile(normalizedMime, name)) {
       setErrorText('Upload a JPG, PNG, or WebP image.')
       return
     }

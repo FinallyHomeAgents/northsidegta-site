@@ -3,6 +3,7 @@ import { put } from '@vercel/blob'
 import crypto from 'crypto'
 
 import {
+  ALLOWED_IMAGE_MIME_ALIASES,
   ALLOWED_IMAGE_MIME_TYPES,
   isAllowedImageFile,
   normalizeExtension,
@@ -18,9 +19,11 @@ export const config = {
 }
 
 function buildBlobKey(prefix, filename, mimeType) {
-  const safePrefix = prefix && prefix.startsWith(`${DEFAULT_PREFIX}`) ? prefix : DEFAULT_PREFIX
-  const extFromMime = mimeType?.split('/').pop() || ''
-  const extFromName = filename?.includes('.') ? filename.split('.').pop() : ''
+  const safePrefix = prefix && typeof prefix === 'string' && prefix.startsWith(`${DEFAULT_PREFIX}`)
+    ? prefix
+    : DEFAULT_PREFIX
+  const extFromMime = typeof mimeType === 'string' && mimeType.includes('/') ? mimeType.split('/').pop() : ''
+  const extFromName = typeof filename === 'string' && filename.includes('.') ? filename.split('.').pop() : ''
   const ext = (extFromMime || extFromName || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin'
   const unique = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(8).toString('hex')
   return `${safePrefix}/${Date.now()}-${unique}.${ext}`
@@ -79,7 +82,7 @@ export default async function handler(req, res) {
   console.log('BLOB_TEST_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('BLOB_TEST_METHOD', req.method)
   console.log('BLOB_TEST_CONTENT_TYPE', req.headers?.['content-type'])
-  console.log('BLOB_TEST_ALLOWED_TYPES', ALLOWED_IMAGE_MIME_TYPES)
+  console.log('BLOB_TEST_ALLOWED_TYPES', [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_MIME_ALIASES])
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -103,7 +106,7 @@ export default async function handler(req, res) {
     const fileExtension = normalizeExtension(filename)
     console.log('BLOB_TEST_FILE_INFO', { filename, mimeType, normalizedMime, fileExtension })
 
-    if (!isAllowedImageFile(normalizedMime, fileExtension)) {
+    if (!isAllowedImageFile(normalizedMime, filename)) {
       res.status(400).json({ error: 'Unsupported file type' })
       return
     }

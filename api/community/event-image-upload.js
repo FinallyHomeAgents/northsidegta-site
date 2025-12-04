@@ -3,6 +3,7 @@ import { put } from '@vercel/blob'
 import crypto from 'crypto'
 
 import {
+  ALLOWED_IMAGE_MIME_ALIASES,
   ALLOWED_IMAGE_MIME_TYPES,
   isAllowedImageFile,
   normalizeExtension,
@@ -19,8 +20,8 @@ export const config = {
 }
 
 function buildBlobKey(filename, mimeType) {
-  const extFromMime = mimeType?.split('/').pop() || ''
-  const extFromName = filename?.includes('.') ? filename.split('.').pop() : ''
+  const extFromMime = typeof mimeType === 'string' && mimeType.includes('/') ? mimeType.split('/').pop() : ''
+  const extFromName = typeof filename === 'string' && filename.includes('.') ? filename.split('.').pop() : ''
   const ext = (extFromMime || extFromName || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin'
   const unique = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(8).toString('hex')
   return `${ALLOWED_PREFIX}/${Date.now()}-${unique}.${ext}`
@@ -79,7 +80,7 @@ export default async function handler(req, res) {
   console.log('EVENT_UPLOAD_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('EVENT_UPLOAD_METHOD', req.method)
   console.log('EVENT_UPLOAD_CONTENT_TYPE', req.headers?.['content-type'])
-  console.log('EVENT_UPLOAD_ALLOWED_TYPES', ALLOWED_IMAGE_MIME_TYPES)
+  console.log('EVENT_UPLOAD_ALLOWED_TYPES', [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_MIME_ALIASES])
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -103,7 +104,7 @@ export default async function handler(req, res) {
     const fileExtension = normalizeExtension(filename)
     console.log('EVENT_UPLOAD_FILE_INFO', { filename, mimeType, normalizedMime, fileExtension })
 
-    if (!isAllowedImageFile(normalizedMime, fileExtension)) {
+    if (!isAllowedImageFile(normalizedMime, filename)) {
       res.status(400).json({ error: 'Upload a JPG, PNG, or WebP image.' })
       return
     }
