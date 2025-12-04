@@ -3,6 +3,31 @@ import { handleUpload } from '@vercel/blob/client'
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
+function resolveToken() {
+  const raw = (process.env.BLOB_READ_WRITE_TOKEN || '').trim()
+  if (!raw) {
+    return { token: '', error: 'missing' }
+  }
+  if (!raw.startsWith('vercel_blob_rw_')) {
+    return { token: '', error: 'invalid-format' }
+  }
+  return { token: raw, error: '' }
+}
+
+function buildCallbackUrl(req) {
+  const host = req.headers?.['x-forwarded-host'] || req.headers?.host
+  if (!host) return undefined
+  const protocol = req.headers?.['x-forwarded-proto'] || 'https'
+  const reqUrl = req.url || ''
+  try {
+    const parsed = new URL(reqUrl, `${protocol}://${host}`)
+    return `${protocol}://${host}${parsed.pathname}${parsed.search}`
+  } catch (error) {
+    console.warn('[event-image-upload] failed to derive callback URL', { error, reqUrl, host })
+    return undefined
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -22,9 +47,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const token = process.env.BLOB_READ_WRITE_TOKEN
-    if (!token) {
-      console.error('[event-image-upload] missing BLOB_READ_WRITE_TOKEN env var')
+    const { token, error: tokenError } = resolveToken()
+    if (tokenError) {
+      console.error('[event-image-upload] invalid BLOB_READ_WRITE_TOKEN', { tokenError })
       res.status(500).json({ error: 'Upload service is not configured.' })
       return
     }
@@ -42,6 +67,7 @@ export default async function handler(req, res) {
           maximumSizeInBytes: MAX_SIZE_BYTES,
           addRandomSuffix: true,
           cacheControlMaxAge: 60 * 60 * 24 * 30,
+          callbackUrl: buildCallbackUrl(req),
         }
       },
       onUploadCompleted: ({ blob }) => {
