@@ -1,7 +1,5 @@
 import { handleUpload } from '@vercel/blob/client'
 
-import { readJsonBody } from '../../lib/api-helpers'
-
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
@@ -18,10 +16,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await readJsonBody(req)
     const result = await handleUpload({
       request: req,
-      body,
       onBeforeGenerateToken: async (pathname) => {
         if (typeof pathname !== 'string' || !pathname.startsWith('community-events/')) {
           throw new Error('Invalid upload path')
@@ -40,4 +36,10 @@ export default async function handler(req, res) {
     console.error('[submit-event] failed to prepare upload', error)
     res.status(500).json({ error: 'Unable to prepare image upload.' })
   }
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 }

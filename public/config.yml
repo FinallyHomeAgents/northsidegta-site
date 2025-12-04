@@ -1004,6 +1004,45 @@ collections:
         widget: 'boolean'
         required: false
         default: false
+      - name: 'use_daily_schedule'
+        label: 'Enable Daily Schedule'
+        widget: 'boolean'
+        required: false
+        default: false
+        hint: 'If on, the per-day schedule below is used instead of the start/end fields.'
+      - name: 'daily_schedule'
+        label: 'Daily Schedule'
+        widget: 'list'
+        required: false
+        collapsed: false
+        hint: 'Captured from the public form. One row per day with optional start/end times.'
+        summary: "{{date}} — {{ all_day | ternary('All day', (start_time | default(''))) }} {{ end_time | default('') }}"
+        fields:
+          - name: 'date'
+            label: 'Date'
+            widget: 'datetime'
+            date_format: 'YYYY-MM-DD'
+            time_format: false
+            format: 'YYYY-MM-DD'
+          - name: 'all_day'
+            label: 'All day'
+            widget: 'boolean'
+            required: false
+            default: false
+          - name: 'start_time'
+            label: 'Start time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
+          - name: 'end_time'
+            label: 'End time'
+            widget: 'datetime'
+            required: false
+            date_format: false
+            time_format: 'HH:mm'
+            format: 'HH:mm'
       - name: 'userEventType'
         label: 'Submitted Event Type'
         widget: 'select'
