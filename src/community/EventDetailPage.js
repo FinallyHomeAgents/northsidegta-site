@@ -178,7 +178,9 @@ export default function EventDetailPage() {
     setLoading(true)
     setError('')
 
-    fetch(`/data/events/${encodeURIComponent(slug)}.json`, { cache: 'no-store' })
+    const params = new URLSearchParams({ slug, status: 'all' })
+
+    fetch(`/api/events?${params.toString()}`, { cache: 'no-store' })
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
@@ -190,7 +192,8 @@ export default function EventDetailPage() {
       })
       .then((payload) => {
         if (cancelled) return
-        const sanitized = sanitizeEvent(payload)
+        const rawEvent = payload?.event || (Array.isArray(payload?.events) ? payload.events.find((item) => item?.slug === slug) : null)
+        const sanitized = sanitizeEvent(rawEvent)
         if (!sanitized) {
           setError('not-found')
         } else {

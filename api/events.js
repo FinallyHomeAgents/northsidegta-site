@@ -91,11 +91,19 @@ export default function handler(req, res) {
   }
 
   const statusFilter = normalizeStatus(req.query?.status || 'published')
+  const slugParam = req.query?.slug
+  const slugFilter = Array.isArray(slugParam)
+    ? slugParam.map((value) => String(value).trim()).filter(Boolean)
+    : typeof slugParam === 'string'
+      ? [slugParam.trim()].filter(Boolean)
+      : []
+  const slugSet = new Set(slugFilter)
   const limitValue = Number.parseInt(req.query?.limit, 10)
   const hasLimit = Number.isFinite(limitValue) && limitValue > 0
 
   const filtered = events
     .filter((event) => withinStatuses(event, statusFilter))
+    .filter((event) => (slugSet.size ? slugSet.has(event.slug) : true))
     .filter((event) => !event?.hidden)
     .sort((a, b) => {
       const aDate = new Date(a.startDate || 0).getTime()
@@ -103,9 +111,14 @@ export default function handler(req, res) {
       return aDate - bDate
     })
 
+  if (slugSet.size && !filtered.length) {
+    res.status(404).json({ error: 'Event not found.' })
+    return
+  }
+
   const payload = hasLimit ? filtered.slice(0, limitValue) : filtered
 
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Cache-Control', `s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate`)
-  res.status(200).json({ events: payload })
+  res.status(200).json({ events: payload, event: slugSet.size === 1 ? payload[0] || null : undefined })
 }
