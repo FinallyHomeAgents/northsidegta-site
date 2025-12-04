@@ -40,14 +40,15 @@ export default async function handler(req, res) {
     return
   }
 
-  const body = await parseJsonBody(req)
-  if (!body || typeof body !== 'object' || !body.type) {
-    res.status(400).json({ error: 'Invalid upload request.' })
-    return
-  }
-
   try {
+    const body = await parseJsonBody(req)
+    if (!body || typeof body !== 'object' || !body.type) {
+      res.status(400).json({ error: 'Invalid upload request.' })
+      return
+    }
+
     const { token, error: tokenError } = resolveToken()
+    console.log('TOKEN_DEFINED?', Boolean(token))
     if (tokenError) {
       console.error('[event-image-upload] invalid BLOB_READ_WRITE_TOKEN', { tokenError })
       res.status(500).json({ error: 'Upload service is not configured.' })
