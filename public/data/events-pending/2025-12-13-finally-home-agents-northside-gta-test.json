@@ -1,0 +1,59 @@
+{
+  "title": "Finally Home Agents -NorthSide GTA Test",
+  "slug": "2025-12-13-finally-home-agents-northside-gta-test",
+  "status": "pending",
+  "startDate": "2025-12-13T14:00:00.000Z",
+  "endDate": "2025-12-15T01:00:00.000Z",
+  "allDay": false,
+  "recurrence": "",
+  "userEventType": "Community",
+  "category": "",
+  "categoryTags": [
+    "Community",
+    "Sports",
+    "Business/Networking",
+    "Charity"
+  ],
+  "audienceTags": [
+    "All ages"
+  ],
+  "town": "Uxbridge",
+  "locationName": "Prince Lee Acres",
+  "address": "10800 Concession 5",
+  "postalCode": "L9P1R1",
+  "priceType": "Paid",
+  "priceFrom": "0",
+  "priceNote": "From $0",
+  "paymentDetails": "$0. Dontation to Charity Is Optional.",
+  "ticketsUrl": "",
+  "registrationUrl": "",
+  "image": "https://northsidegta.ca/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg",
+  "summary": "This is a test event for Finally Home Agents NorthSide GTA.",
+  "description": "This is a test event for Finally Home Agents NorthSide GTA. Test Event Description.",
+  "organizerName": "Finally Home Agents",
+  "organizerEmail": "matthewglmulhall@gmail.com",
+  "eventUrl": "",
+  "source": "user",
+  "sourceName": "Finally Home Agents",
+  "submittedAt": "2025-12-04T14:20:28.403Z",
+  "contactConsent": true,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-12-13",
+      "all_day": false,
+      "start_time": "09:00",
+      "end_time": "17:00"
+    },
+    {
+      "date": "2025-12-14",
+      "all_day": false,
+      "start_time": "10:00",
+      "end_time": "20:00"
+    }
+  ],
+  "moderation": {
+    "ip": "173.35.217.208",
+    "submittedVia": "public-form"
+  }
+}
