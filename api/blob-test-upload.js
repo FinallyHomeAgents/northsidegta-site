@@ -1,7 +1,7 @@
 import { handleUpload } from '@vercel/blob/client'
 
-const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_SIZE_BYTES = 5 * 1024 * 1024
 
 async function readJsonBody(req) {
   const chunks = []
@@ -21,10 +21,10 @@ export const config = {
 }
 
 export default async function handler(req, res) {
-  console.log('EVENT_UPLOAD_TOKEN_DEFINED', Boolean(process.env.BLOB_READ_WRITE_TOKEN))
-  console.log('EVENT_UPLOAD_RUNTIME', process.env.NEXT_RUNTIME || 'node')
-  console.log('EVENT_UPLOAD_METHOD', req.method)
-  console.log('EVENT_UPLOAD_CONTENT_TYPE', req.headers?.['content-type'])
+  console.log('BLOB_TEST_TOKEN_DEFINED', Boolean(process.env.BLOB_READ_WRITE_TOKEN))
+  console.log('BLOB_TEST_RUNTIME', process.env.NEXT_RUNTIME || 'node')
+  console.log('BLOB_TEST_METHOD', req.method)
+  console.log('BLOB_TEST_CONTENT_TYPE', req.headers?.['content-type'])
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
       return
     }
   } catch (error) {
-    console.error('EVENT_UPLOAD_PARSE_ERROR', error)
+    console.error('BLOB_TEST_PARSE_ERROR', error)
     res.status(400).json({ error: 'Invalid upload request body' })
     return
   }
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
         cacheControlMaxAge: 60 * 60 * 24 * 30,
       }),
       onUploadCompleted: ({ blob }) => {
-        console.log('EVENT_UPLOAD_COMPLETED', {
+        console.log('BLOB_TEST_UPLOAD_COMPLETED', {
           url: blob?.url,
           path: blob?.pathname,
         })
@@ -71,7 +71,10 @@ export default async function handler(req, res) {
 
     res.status(200).json(result)
   } catch (error) {
-    console.error('EVENT_UPLOAD_ERROR', error)
-    res.status(500).json({ error: error?.message || 'Unable to prepare image upload.' })
+    console.error('BLOB_TEST_UPLOAD_ERROR', error)
+    res.status(500).json({
+      error: error?.message || 'Upload failed',
+      reason: 'handle-upload-failed',
+    })
   }
 }

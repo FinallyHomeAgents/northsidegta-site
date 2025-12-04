@@ -727,7 +727,9 @@ export default function SubmitEventPage() {
       setImageUploadProgress(100)
     } catch (error) {
       console.error('image upload failed', error)
-      setImageError('Image upload failed. Please try again.')
+      setImageUploadProgress(0)
+      const friendlyMessage = error?.message ? `Image upload failed: ${error.message}` : 'Image upload failed. Please try again.'
+      setImageError(friendlyMessage)
     } finally {
       setUploadingImage(false)
     }
