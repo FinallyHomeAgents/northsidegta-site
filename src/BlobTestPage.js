@@ -6,7 +6,7 @@ import {
   isAllowedImageFile,
   normalizeExtension,
   normalizeMimeType,
-} from '../lib/uploadConstants'
+} from './lib/uploadConstants'
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const ACCEPT_TYPES = [

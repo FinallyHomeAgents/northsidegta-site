@@ -8,7 +8,7 @@ import {
   isAllowedImageFile,
   normalizeExtension,
   normalizeMimeType,
-} from '../../lib/uploadConstants'
+} from '../lib/uploadConstants'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
