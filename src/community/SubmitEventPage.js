@@ -2,6 +2,14 @@ import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
 
+import {
+  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_IMAGE_MIME_TYPES,
+  isAllowedImageFile,
+  normalizeExtension,
+  normalizeMimeType,
+} from '../../lib/uploadConstants'
+
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
 import { getStaticRouteMeta } from '../components/seo/staticRouteMetaExports'
@@ -13,12 +21,18 @@ const MAX_EVENT_DURATION_DAYS = 14
 const MAX_AUDIENCE_TAGS = 3
 const MAX_CATEGORY_TAGS = 4
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024
-const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MIME_EXTENSIONS = {
   'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/pjpeg': 'jpg',
   'image/png': 'png',
+  'image/x-png': 'png',
   'image/webp': 'webp',
 }
+const ACCEPT_TYPES = [
+  ...ALLOWED_IMAGE_MIME_TYPES,
+  ...ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`),
+]
 
 const EVENT_TYPES = [
   'Community',
@@ -657,8 +671,8 @@ export default function SubmitEventPage() {
   }
 
   const buildUploadPath = React.useCallback((file) => {
-    const extensionFromType = MIME_EXTENSIONS[file.type] || ''
-    const extensionFromName = typeof file.name === 'string' ? file.name.split('.').pop()?.toLowerCase() : ''
+    const extensionFromType = MIME_EXTENSIONS[normalizeMimeType(file.type)] || ''
+    const extensionFromName = typeof file.name === 'string' ? normalizeExtension(file.name) : ''
     const extension = (extensionFromType || extensionFromName || 'jpg').replace(/[^a-z0-9]/g, '')
     const uniqueId =
       typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
@@ -698,7 +712,9 @@ export default function SubmitEventPage() {
 
     if (!file) return
 
-    if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
+    const normalizedMime = normalizeMimeType(file.type)
+    const normalizedExtension = normalizeExtension(file.name)
+    if (!isAllowedImageFile(normalizedMime, normalizedExtension)) {
       setImageError('Upload a JPG, PNG, or WebP image.')
       return
     }
@@ -1325,7 +1341,12 @@ export default function SubmitEventPage() {
                     <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
                       <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900">
                         Upload image
-                        <input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFileUpload} />
+                        <input
+                          type="file"
+                          accept={ACCEPT_TYPES.join(',')}
+                          className="hidden"
+                          onChange={handleFileUpload}
+                        />
                       </label>
                       {uploadingImage && (
                         <span className="text-xs font-medium text-emerald-700">Uploading… {imageUploadProgress}%</span>

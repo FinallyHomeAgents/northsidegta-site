@@ -1,7 +1,18 @@
 import React from 'react'
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+import {
+  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_IMAGE_MIME_TYPES,
+  isAllowedImageFile,
+  normalizeExtension,
+  normalizeMimeType,
+} from '../lib/uploadConstants'
+
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
+const ACCEPT_TYPES = [
+  ...ALLOWED_IMAGE_MIME_TYPES,
+  ...ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`),
+]
 
 export default function BlobTestPage() {
   const [status, setStatus] = React.useState('Idle')
@@ -16,7 +27,9 @@ export default function BlobTestPage() {
     setResultText('')
     if (!file) return
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    const normalizedMime = normalizeMimeType(file.type)
+    const normalizedExtension = normalizeExtension(file.name)
+    if (!isAllowedImageFile(normalizedMime, normalizedExtension)) {
       setErrorText('Upload a JPG, PNG, or WebP image.')
       return
     }
@@ -63,7 +76,7 @@ export default function BlobTestPage() {
       <p className="text-gray-700">Use this page to verify client → API → Blob uploads.</p>
 
       <div>
-        <input type="file" accept={ALLOWED_TYPES.join(',')} onChange={handleFileChange} />
+        <input type="file" accept={ACCEPT_TYPES.join(',')} onChange={handleFileChange} />
       </div>
 
       <div className="p-3 rounded border bg-gray-50">
