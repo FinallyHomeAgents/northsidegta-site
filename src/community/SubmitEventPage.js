@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
-import { upload } from '@vercel/blob/client'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
@@ -696,15 +695,27 @@ export default function SubmitEventPage() {
       setUploadingImage(true)
       const safeName = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-')
       const path = `community-events/${Date.now()}-${safeName}`
-      const result = await upload(path, file, {
-        access: 'public',
-        handleUploadUrl: '/api/community/event-image-upload',
-        contentType: file.type,
-        onUploadProgress: ({ percentage }) => {
-          setImageUploadProgress(Math.round(percentage))
-        },
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('pathname', path)
+
+      const response = await fetch('/api/community/event-image-upload', {
+        method: 'POST',
+        body: formData,
       })
-      setField('uploadedImageUrl', result.url || '')
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '')
+        throw new Error(errorText || `Upload failed with status ${response.status}`)
+      }
+
+      const result = await response.json()
+      const uploadedUrl = result?.url || result?.downloadUrl || ''
+      if (!uploadedUrl) {
+        throw new Error('Missing upload URL in response')
+      }
+
+      setField('uploadedImageUrl', uploadedUrl)
       setField('imageUrl', '')
       setImageUploadProgress(100)
     } catch (error) {
