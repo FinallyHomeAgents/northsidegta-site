@@ -2,7 +2,7 @@ import Busboy from 'busboy'
 import { put } from '@vercel/blob'
 import crypto from 'crypto'
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 const DEFAULT_PREFIX = 'blob-test'
 
@@ -74,6 +74,7 @@ export default async function handler(req, res) {
   console.log('BLOB_TEST_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('BLOB_TEST_METHOD', req.method)
   console.log('BLOB_TEST_CONTENT_TYPE', req.headers?.['content-type'])
+  console.log('BLOB_TEST_ALLOWED_TYPES', ALLOWED_TYPES)
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -93,6 +94,7 @@ export default async function handler(req, res) {
 
   try {
     const { fileBuffer, mimeType, filename, fields } = await parseMultipartRequest(req)
+    console.log('BLOB_TEST_DERIVED_MIME', mimeType)
 
     if (!ALLOWED_TYPES.includes(mimeType)) {
       res.status(400).json({ error: 'Unsupported file type' })

@@ -3,7 +3,7 @@ import { put } from '@vercel/blob'
 import crypto from 'crypto'
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const ALLOWED_PREFIX = 'community-events'
 
 export const config = {
@@ -73,6 +73,7 @@ export default async function handler(req, res) {
   console.log('EVENT_UPLOAD_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('EVENT_UPLOAD_METHOD', req.method)
   console.log('EVENT_UPLOAD_CONTENT_TYPE', req.headers?.['content-type'])
+  console.log('EVENT_UPLOAD_ALLOWED_TYPES', ALLOWED_TYPES)
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -92,6 +93,7 @@ export default async function handler(req, res) {
 
   try {
     const { fileBuffer, mimeType, filename, fields } = await parseMultipartRequest(req)
+    console.log('EVENT_UPLOAD_DERIVED_MIME', mimeType)
 
     if (!ALLOWED_TYPES.includes(mimeType)) {
       res.status(400).json({ error: 'Upload a JPG, PNG, or WebP image.' })

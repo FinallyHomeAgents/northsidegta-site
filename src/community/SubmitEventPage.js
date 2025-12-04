@@ -13,7 +13,7 @@ const MAX_EVENT_DURATION_DAYS = 14
 const MAX_AUDIENCE_TAGS = 3
 const MAX_CATEGORY_TAGS = 4
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024
-const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MIME_EXTENSIONS = {
   'image/jpeg': 'jpg',
   'image/png': 'png',

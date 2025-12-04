@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 
 export default function BlobTestPage() {
