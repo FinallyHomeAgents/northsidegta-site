@@ -22,7 +22,15 @@ export default async function handler(req, res) {
   }
 
   try {
+    const token = process.env.BLOB_READ_WRITE_TOKEN
+    if (!token) {
+      console.error('[event-image-upload] missing BLOB_READ_WRITE_TOKEN env var')
+      res.status(500).json({ error: 'Upload service is not configured.' })
+      return
+    }
+
     const result = await handleUpload({
+      token,
       request: req,
       body,
       onBeforeGenerateToken: async (pathname) => {
@@ -35,6 +43,12 @@ export default async function handler(req, res) {
           addRandomSuffix: true,
           cacheControlMaxAge: 60 * 60 * 24 * 30,
         }
+      },
+      onUploadCompleted: ({ blob }) => {
+        console.log('[event-image-upload] upload completed', {
+          url: blob?.url,
+          path: blob?.pathname,
+        })
       },
     })
 
