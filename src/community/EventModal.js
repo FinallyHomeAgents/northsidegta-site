@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { X, MapPin, ExternalLink, CalendarPlus, Share2 } from 'lucide-react'
 import { BADGE_LABELS, formatDateRange, generateIcsContent } from './eventUtils'
-import { getCanonicalEventUrl, shareEvent } from './shareUtils'
+import { buildEventSlug, getCanonicalEventUrl, shareEvent } from './shareUtils'
 
 function getModalRoot() {
   if (typeof document === 'undefined') return null
@@ -34,6 +34,7 @@ export default function EventModal({ event, onClose }) {
   const sourceTypeLabel = event?.source === 'feed' ? 'Feed' : 'Manual'
   const [shareToastVisible, setShareToastVisible] = React.useState(false)
   const shareToastTimeoutRef = React.useRef(null)
+  const eventSlug = event?.slug || buildEventSlug(event || {})
 
   React.useEffect(() => {
     if (typeof document === 'undefined') return undefined
@@ -74,7 +75,7 @@ export default function EventModal({ event, onClose }) {
     const url = URL.createObjectURL(blob)
     const anchor = document.createElement('a')
     anchor.href = url
-    anchor.download = `${event.slug || 'northside-event'}.ics`
+    anchor.download = `${eventSlug || 'northside-event'}.ics`
     anchor.rel = 'noopener'
     document.body.appendChild(anchor)
     anchor.click()
@@ -96,7 +97,7 @@ export default function EventModal({ event, onClose }) {
     : ''
 
   const descriptionParagraphs = splitParagraphs(event.description || event.summary || '')
-  const shareUrl = event.slug ? getCanonicalEventUrl(event.slug) : event.eventUrl || ''
+  const shareUrl = eventSlug ? getCanonicalEventUrl(eventSlug) : ''
   const shareText = event.summary || event.title
 
   const showShareToast = React.useCallback(() => {

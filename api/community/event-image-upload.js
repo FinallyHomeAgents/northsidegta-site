@@ -15,9 +15,16 @@ export default async function handler(req, res) {
     return
   }
 
+  const body = await parseJsonBody(req)
+  if (!body || typeof body !== 'object' || !body.type) {
+    res.status(400).json({ error: 'Invalid upload request.' })
+    return
+  }
+
   try {
     const result = await handleUpload({
       request: req,
+      body,
       onBeforeGenerateToken: async (pathname) => {
         if (typeof pathname !== 'string' || !pathname.startsWith('community-events/')) {
           throw new Error('Invalid upload path')
@@ -25,7 +32,7 @@ export default async function handler(req, res) {
         return {
           allowedContentTypes: ALLOWED_TYPES,
           maximumSizeInBytes: MAX_SIZE_BYTES,
-          addRandomSuffix: false,
+          addRandomSuffix: true,
           cacheControlMaxAge: 60 * 60 * 24 * 30,
         }
       },
@@ -33,8 +40,25 @@ export default async function handler(req, res) {
 
     res.status(200).json(result)
   } catch (error) {
-    console.error('[submit-event] failed to prepare upload', error)
+    console.error('[event-image-upload] failed to prepare upload', error)
     res.status(500).json({ error: 'Unable to prepare image upload.' })
+  }
+}
+
+async function parseJsonBody(req) {
+  try {
+    const chunks = []
+    for await (const chunk of req) {
+      chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+    }
+    if (!chunks.length) return {}
+    const buffer = Buffer.concat(chunks)
+    const text = buffer.toString('utf8')
+    if (!text) return {}
+    return JSON.parse(text)
+  } catch (error) {
+    console.warn('[event-image-upload] failed to parse request body', error)
+    return {}
   }
 }
 
