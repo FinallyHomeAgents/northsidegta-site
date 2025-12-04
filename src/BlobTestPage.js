@@ -1,18 +1,7 @@
 import React from 'react'
-import { upload } from '@vercel/blob/client'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
-
-function createUploadPath(file) {
-  const extensionFromType = file.type.split('/').pop() || 'bin'
-  const sanitizedExt = extensionFromType.replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin'
-  const uniqueId =
-    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2, 10)
-  return `blob-test/${Date.now()}-${uniqueId}.${sanitizedExt}`
-}
 
 export default function BlobTestPage() {
   const [status, setStatus] = React.useState('Idle')
@@ -38,15 +27,22 @@ export default function BlobTestPage() {
 
     setStatus('Uploading...')
     try {
-      const pathname = createUploadPath(file)
-      const response = await upload(pathname, file, {
-        access: 'public',
-        contentType: file.type,
-        handleUploadUrl: '/api/blob-test-upload',
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('pathPrefix', 'blob-test')
+
+      const response = await fetch('/api/blob-test-upload', {
+        method: 'POST',
+        body: formData,
       })
 
-      const uploadedUrl = response?.url || response?.downloadUrl || ''
-      setResultText(JSON.stringify({ uploadedUrl, response }, null, 2))
+      const json = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(json?.error || 'Upload failed')
+      }
+
+      const uploadedUrl = json?.url
+      setResultText(JSON.stringify({ uploadedUrl, response: json }, null, 2))
       setStatus('Success')
     } catch (error) {
       console.error('BLOB_TEST_UPLOAD_FAILED', error)

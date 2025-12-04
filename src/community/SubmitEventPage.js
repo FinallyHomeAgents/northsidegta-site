@@ -1,7 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
-import { upload } from '@vercel/blob/client'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
@@ -711,13 +710,22 @@ export default function SubmitEventPage() {
     try {
       setUploadingImage(true)
       const pathname = buildUploadPath(file)
-      const result = await upload(pathname, file, {
-        access: 'public',
-        contentType: file.type,
-        handleUploadUrl: '/api/community/event-image-upload',
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('pathPrefix', 'community-events')
+      formData.append('pathname', pathname)
+
+      const response = await fetch('/api/community/event-image-upload', {
+        method: 'POST',
+        body: formData,
       })
 
-      const uploadedUrl = result?.url || result?.downloadUrl || ''
+      const json = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(json?.error || 'Image upload failed. Please try again.')
+      }
+
+      const uploadedUrl = json?.url
       if (!uploadedUrl) {
         throw new Error('Missing upload URL in response')
       }
@@ -728,7 +736,9 @@ export default function SubmitEventPage() {
     } catch (error) {
       console.error('image upload failed', error)
       setImageUploadProgress(0)
-      const friendlyMessage = error?.message ? `Image upload failed: ${error.message}` : 'Image upload failed. Please try again.'
+      const friendlyMessage = error?.message
+        ? `Image upload failed: ${error.message}`
+        : 'Image upload failed. Please try again.'
       setImageError(friendlyMessage)
     } finally {
       setUploadingImage(false)
