@@ -7,7 +7,7 @@ import {
   Share2,
 } from 'lucide-react'
 import { BADGE_LABELS, formatDateRange, generateIcsContent } from './eventUtils'
-import { getCanonicalEventUrl, shareEvent } from './shareUtils'
+import { buildEventSlug, getCanonicalEventUrl, shareEvent } from './shareUtils'
 
 function PlaceholderImage({ variant }) {
   const isCompact = variant === 'compact'
@@ -58,7 +58,8 @@ export default function EventCard({ event, onSelect, highlighted = false, varian
       )}`
     : ''
 
-  const shareUrl = event.slug ? getCanonicalEventUrl(event.slug) : ''
+  const eventSlug = event.slug || buildEventSlug(event)
+  const shareUrl = eventSlug ? getCanonicalEventUrl(eventSlug) : ''
   const shareText = event.summary || event.title
 
   const [showToast, setShowToast] = React.useState(false)
@@ -88,8 +89,8 @@ export default function EventCard({ event, onSelect, highlighted = false, varian
     }
   }, [event.title, shareText, shareUrl, showCopiedToast])
 
-  const hasDetailPage = Boolean(event.slug)
-  const eventSiteHref = hasDetailPage ? `/events/${encodeURIComponent(event.slug)}` : event.eventUrl
+  const hasDetailPage = Boolean(eventSlug)
+  const eventSiteHref = hasDetailPage ? `/events/${encodeURIComponent(eventSlug)}` : event.eventUrl
   const eventSiteIsExternal = Boolean(event.eventUrl && !hasDetailPage)
   const EventSiteIcon = eventSiteIsExternal ? ExternalLink : ArrowRight
   const eventSiteLinkProps = eventSiteIsExternal
@@ -107,7 +108,7 @@ export default function EventCard({ event, onSelect, highlighted = false, varian
 
   return (
     <article
-      id={event.slug ? `event-${event.slug}` : undefined}
+      id={eventSlug ? `event-${eventSlug}` : undefined}
       className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow duration-200 hover:shadow-xl focus-within:shadow-xl ${
         highlighted ? 'border-emerald-300 ring-2 ring-emerald-200' : 'border-slate-200'
       }`}

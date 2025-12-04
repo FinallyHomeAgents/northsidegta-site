@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
+import { upload } from '@vercel/blob/client'
 
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
@@ -14,6 +15,11 @@ const MAX_AUDIENCE_TAGS = 3
 const MAX_CATEGORY_TAGS = 4
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024
 const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MIME_EXTENSIONS = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+}
 
 const EVENT_TYPES = [
   'Community',
@@ -651,6 +657,17 @@ export default function SubmitEventPage() {
     })
   }
 
+  const buildUploadPath = React.useCallback((file) => {
+    const extensionFromType = MIME_EXTENSIONS[file.type] || ''
+    const extensionFromName = typeof file.name === 'string' ? file.name.split('.').pop()?.toLowerCase() : ''
+    const extension = (extensionFromType || extensionFromName || 'jpg').replace(/[^a-z0-9]/g, '')
+    const uniqueId =
+      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2, 10)
+    return `community-events/${Date.now()}-${uniqueId}.${extension}`
+  }, [])
+
   const toggleCategory = (tag) => {
     setForm((prev) => {
       const existing = new Set(prev.categoryTags || [])
@@ -693,23 +710,13 @@ export default function SubmitEventPage() {
 
     try {
       setUploadingImage(true)
-      const safeName = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-')
-      const path = `community-events/${Date.now()}-${safeName}`
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('pathname', path)
-
-      const response = await fetch('/api/community/event-image-upload', {
-        method: 'POST',
-        body: formData,
+      const pathname = buildUploadPath(file)
+      const result = await upload(pathname, file, {
+        access: 'public',
+        contentType: file.type,
+        handleUploadUrl: '/api/community/event-image-upload',
       })
 
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => '')
-        throw new Error(errorText || `Upload failed with status ${response.status}`)
-      }
-
-      const result = await response.json()
       const uploadedUrl = result?.url || result?.downloadUrl || ''
       if (!uploadedUrl) {
         throw new Error('Missing upload URL in response')

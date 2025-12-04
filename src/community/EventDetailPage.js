@@ -18,6 +18,7 @@ import Footer from '../Footer'
 import { sanitizeEvent, formatDateRange, generateIcsContent } from './eventUtils'
 import {
   copyTextToClipboard,
+  buildEventSlug,
   getCanonicalEventUrl,
   getSiteOrigin,
   shareEvent,
@@ -80,7 +81,8 @@ function toIsoString(value) {
 function buildEventSchema(event, origin = SITE_ORIGIN, descriptionOverride = '', occurrenceOverride = null) {
   if (!event) return null
   const baseOrigin = typeof origin === 'string' && origin ? origin : SITE_ORIGIN
-  const canonical = getCanonicalEventUrl(event.slug, baseOrigin)
+  const slug = event.slug || buildEventSlug(event)
+  const canonical = getCanonicalEventUrl(slug, baseOrigin)
   const start =
     occurrenceOverride?.start || event.startDateObj || (event.startDate ? new Date(event.startDate) : null)
   const end = occurrenceOverride?.end || event.endDateObj || start
@@ -166,6 +168,7 @@ export default function EventDetailPage() {
   const [error, setError] = React.useState('')
   const [shareToastVisible, setShareToastVisible] = React.useState(false)
   const toastTimeoutRef = React.useRef(null)
+  const eventSlug = React.useMemo(() => (event ? event.slug || buildEventSlug(event) : ''), [event])
 
   React.useEffect(() => {
     if (!slug) {
@@ -408,7 +411,7 @@ export default function EventDetailPage() {
     : ''
   const baseDescription = truncatedDescription || eventDescription || defaultDescription
   const pageDescription = scheduleShareSnippet ? `${scheduleShareSnippet}. ${baseDescription}` : baseDescription
-  const canonicalUrl = event ? getCanonicalEventUrl(event.slug, normalizedOrigin) : `${normalizedOrigin}/events`
+  const canonicalUrl = eventSlug ? getCanonicalEventUrl(eventSlug, normalizedOrigin) : `${normalizedOrigin}/events`
   const ogImage = event?.image
     ? toAbsoluteUrl(event.image, normalizedOrigin)
     : toAbsoluteUrl(FALLBACK_IMAGE, normalizedOrigin)
@@ -449,9 +452,9 @@ export default function EventDetailPage() {
       venueName: event.locationName,
       imageUrl,
       url: canonicalUrl,
-      slug: event.slug,
+      slug: eventSlug,
     })
-  }, [canonicalUrl, event, eventDescription, eventEndIso, eventStartIso, normalizedOrigin, truncatedDescription])
+  }, [canonicalUrl, event, eventDescription, eventEndIso, eventSlug, eventStartIso, normalizedOrigin, truncatedDescription])
   const eventLocation = React.useMemo(() => {
     if (!event) return ''
     const parts = [event.locationName, event.address, event.subArea, event.town]
@@ -509,7 +512,7 @@ export default function EventDetailPage() {
     const url = URL.createObjectURL(blob)
     const anchor = document.createElement('a')
     anchor.href = url
-    anchor.download = `${event.slug || 'northside-event'}.ics`
+    anchor.download = `${eventSlug || 'northside-event'}.ics`
     anchor.rel = 'noopener'
     document.body.appendChild(anchor)
     anchor.click()
