@@ -1,4 +1,4 @@
-export const ALLOWED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+export const ALLOWED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 export const ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
 
 function toLowerString(value = '') {
@@ -6,7 +6,8 @@ function toLowerString(value = '') {
 }
 
 export function normalizeMimeType(mime = '') {
-  return toLowerString(mime)
+  const lower = toLowerString(mime)
+  return lower.includes(';') ? lower.split(';')[0].trim() : lower
 }
 
 export function normalizeExtension(name = '') {

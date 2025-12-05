@@ -107,8 +107,15 @@ export default async function handler(req, res) {
     const fileExtension = normalizeExtension(filename)
     const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)
     const hasAllowedExt = hasAllowedImageExtension(filename)
-    console.log('UPLOAD_DEBUG name:', filename, 'type:', mimeType)
-    console.log('BLOB_TEST_FILE_INFO', { filename, mimeType, normalizedMime, fileExtension })
+    console.log('UPLOAD_DEBUG file', { name: filename, type: mimeType, mimetype: mimeType })
+    console.log('BLOB_TEST_FILE_INFO', {
+      filename,
+      mimeType,
+      normalizedMime,
+      fileExtension,
+      hasAllowedMime,
+      hasAllowedExt,
+    })
 
     if (!hasAllowedMime || !hasAllowedExt) {
       res.status(400).json({ error: 'Unsupported file type' })
