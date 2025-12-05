@@ -703,11 +703,16 @@ export default function SubmitEventPage() {
 
   const handleFileUpload = async (event) => {
     const file = event.target?.files?.[0]
-    event.target.value = ''
     setImageError('')
     setImageUploadProgress(0)
 
-    if (!file) return
+    if (!file) {
+      setUploadingImage(false)
+      setImageError('No file selected')
+      return
+    }
+
+    console.log('CLIENT_UPLOAD_DEBUG', { name: file.name, type: file.type })
 
     const name = typeof file.name === 'string' ? file.name : ''
     const type = typeof file.type === 'string' ? file.type : ''

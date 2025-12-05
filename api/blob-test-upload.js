@@ -68,7 +68,7 @@ function parseMultipartRequest(req) {
     busboy.on('error', (error) => reject(error))
     busboy.on('finish', () => {
       if (!fileReceived || !fileBuffer) {
-        reject(new Error('No file provided'))
+        resolve({ fileBuffer: null, mimeType: '', filename: '', fields })
         return
       }
       resolve({ fileBuffer, mimeType, filename, fields })
@@ -103,6 +103,10 @@ export default async function handler(req, res) {
 
   try {
     const { fileBuffer, mimeType, filename, fields } = await parseMultipartRequest(req)
+    if (!fileBuffer) {
+      res.status(400).json({ error: 'No file received' })
+      return
+    }
     const normalizedMime = normalizeMimeType(mimeType)
     const fileExtension = normalizeExtension(filename)
     const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)

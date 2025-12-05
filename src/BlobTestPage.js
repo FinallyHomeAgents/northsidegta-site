@@ -18,11 +18,16 @@ export default function BlobTestPage() {
 
   const handleFileChange = async (event) => {
     const file = event.target?.files?.[0]
-    event.target.value = ''
 
     setErrorText('')
     setResultText('')
-    if (!file) return
+    if (!file) {
+      setStatus('Error')
+      setErrorText('No file selected')
+      return
+    }
+
+    console.log('CLIENT_UPLOAD_DEBUG', { name: file.name, type: file.type })
 
     const name = typeof file.name === 'string' ? file.name : ''
     const type = typeof file.type === 'string' ? file.type : ''
