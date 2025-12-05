@@ -35,11 +35,11 @@ function parseMultipartRequest(req) {
       limits: { files: 1, fileSize: MAX_SIZE_BYTES, fields: 5 },
     })
 
-    const fields = {}
-    let fileBuffer = null
-    let mimeType = ''
-    let filename = ''
-    let fileReceived = false
+  const fields = {}
+  let fileBuffer = null
+  let mimeType = ''
+  let filename = ''
+  let fileReceived = false
 
     busboy.on('file', (fieldname, file, name, _encoding, type) => {
       if (fileReceived || fieldname !== 'file') {
@@ -48,7 +48,7 @@ function parseMultipartRequest(req) {
       }
 
       fileReceived = true
-      mimeType = type || 'application/octet-stream'
+      mimeType = type || ''
       filename = name || 'upload.bin'
 
       const chunks = []
@@ -119,8 +119,13 @@ export default async function handler(req, res) {
       hasAllowedExt,
     })
 
-    if (!hasAllowedMime || !hasAllowedExt) {
+    if (!hasAllowedExt) {
       res.status(400).json({ error: 'Upload a JPG, PNG, or WebP image.' })
+      return
+    }
+
+    if (!hasAllowedMime && normalizedMime) {
+      res.status(400).json({ error: 'Unsupported file type' })
       return
     }
 

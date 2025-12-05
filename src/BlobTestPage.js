@@ -4,8 +4,7 @@ import {
   ALLOWED_IMAGE_EXTENSIONS,
   ALLOWED_IMAGE_MIME_TYPES,
   buildAcceptTypes,
-  hasAllowedImageExtension,
-  hasAllowedImageMimeType,
+  validateAllowedImageFile,
 } from './lib/uploadConstants'
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
@@ -28,14 +27,13 @@ export default function BlobTestPage() {
     }
 
     console.log('CLIENT_UPLOAD_DEBUG', { name: file.name, type: file.type })
-
     const name = typeof file.name === 'string' ? file.name : ''
     const type = typeof file.type === 'string' ? file.type : ''
-    const hasAllowedExt = hasAllowedImageExtension(name)
-    const hasAllowedMime = hasAllowedImageMimeType(type)
+    const validation = validateAllowedImageFile({ name, mime: type })
 
-    if (!hasAllowedExt || !hasAllowedMime) {
-      setErrorText('Upload a JPG, PNG, or WebP image.')
+    if (!validation.ok) {
+      setStatus('Error')
+      setErrorText(validation.error)
       return
     }
     if (file.size > MAX_SIZE_BYTES) {

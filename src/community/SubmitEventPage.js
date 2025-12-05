@@ -6,6 +6,7 @@ import {
   buildAcceptTypes,
   hasAllowedImageExtension,
   hasAllowedImageMimeType,
+  validateAllowedImageFile,
   normalizeExtension,
   normalizeMimeType,
 } from '../lib/uploadConstants'
@@ -716,11 +717,10 @@ export default function SubmitEventPage() {
 
     const name = typeof file.name === 'string' ? file.name : ''
     const type = typeof file.type === 'string' ? file.type : ''
-    const hasAllowedExt = hasAllowedImageExtension(name)
-    const hasAllowedMime = hasAllowedImageMimeType(type)
+    const validation = validateAllowedImageFile({ name, mime: type })
 
-    if (!hasAllowedExt || !hasAllowedMime) {
-      setImageError('Upload a JPG, PNG, or WebP image.')
+    if (!validation.ok) {
+      setImageError(validation.error)
       return
     }
     if (file.size > MAX_UPLOAD_SIZE) {

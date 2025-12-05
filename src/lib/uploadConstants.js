@@ -28,7 +28,25 @@ export function hasAllowedImageExtension(name = '') {
 }
 
 export function isAllowedImageFile(mime = '', name = '') {
-  return hasAllowedImageMimeType(mime) && hasAllowedImageExtension(name)
+  const normalizedMime = normalizeMimeType(mime)
+  const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)
+  const hasAllowedExt = hasAllowedImageExtension(name)
+  // Allow a missing/unknown mime if the extension is allowed to better tolerate
+  // environments that omit mime metadata while still blocking unexpected paths.
+  return hasAllowedExt && (hasAllowedMime || !normalizedMime)
+}
+
+export function validateAllowedImageFile({ mime = '', name = '' } = {}) {
+  const normalizedMime = normalizeMimeType(mime)
+  const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)
+  const hasAllowedExt = hasAllowedImageExtension(name)
+
+  if (!name) {
+    return { ok: false, error: 'No file name provided', hasAllowedMime, hasAllowedExt }
+  }
+
+  const ok = isAllowedImageFile(normalizedMime, name)
+  return { ok, error: ok ? '' : 'Upload a JPG, PNG, or WebP image.', hasAllowedMime, hasAllowedExt }
 }
 
 export function buildAcceptTypes() {
