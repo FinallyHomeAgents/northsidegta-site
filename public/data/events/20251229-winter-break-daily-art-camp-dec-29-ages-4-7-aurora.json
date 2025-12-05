@@ -2,7 +2,7 @@
   "slug": "20251229-winter-break-daily-art-camp-dec-29-ages-4-7-aurora",
   "title": "Winter Break Daily Art Camp (Dec 29) - Ages 4-7",
   "summary": "Winter Break Daily Art Camp (Dec 29) - Ages 4-7",
-  "description": "Register Here Starting August 11! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. Monday December 29, 2025 9:00 – 4:30 pm | Ages 4-7 Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora Kick off winter break with a fun-filled day of creativity! Young artists will explore various tools and materials through hands-on projects in painting, printmaking, sculpting, and mixed media. This special one-day camp is the perfect way to start the holiday season while making new friends. All materials are provided, plus a free Aurora Cultural Centre Artist T-Shirt for messy fun!",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. Monday December 29, 2025 9:00 – 4:30 pm | Ages 4-7 Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora Kick off winter break with a fun-filled day of creativity! Young artists will explore various tools and materials through hands-on projects in painting, printmaking, sculpting, and mixed media. This special one-day camp is the perfect way to start the holiday season while making new friends. All materials are provided, plus a free Aurora Cultural Centre Artist T-Shirt for messy fun!",
   "startDate": "2025-12-29T05:00:00Z",
   "endDate": "2025-12-30T04:59:59Z",
   "allDay": false,
@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/winter-break-daily-art-camp-dec29-4-7-fall25/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002662-1766966400-1767052799@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-03T08:39:45Z"
+  "lastSyncedAt": "2025-12-05T08:37:04.235Z",
+  "updatedAt": "2025-12-05T08:37:04.235Z",
+  "featured": false
 }

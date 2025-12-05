@@ -1,19 +1,13 @@
 {
-  "slug": "20260113-early-years-visual-art-2-4yrs-aurora",
-  "title": "Early Years' Visual Art (2-4yrs)",
-  "summary": "Early Years' Visual Art (2-4yrs)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – February 24, 2026 Tuesdays | 10:00 – 11:00 am | Ages 2-4 Aurora Town Square – Multipurpose Studio 50 Victoria Street, Aurora Spark creativity in your 2-4-year-old with this interactive visual art program! Through fun activities, they’ll explore colors, shapes, textures, and expressing themselves visually. Parents can join in for a meaningful bonding experience and learn easy techniques to try at home. All materials are safe and non-toxic. All materials are included!",
-  "startDate": "2026-01-13T05:00:00Z",
-  "endDate": "2026-02-25T04:59:59Z",
+  "slug": "20260114-learn-cartooning-11-17yrs-aurora",
+  "title": "Learn Cartooning (11-17yrs)",
+  "summary": "Learn Cartooning (11-17yrs)",
+  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – February 11, 2026 Wednesdays | 4:30 – 5:30 pm | Ages 11-17 Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora In this exciting, 5-week teen drawing program, learn the fundamentals of cartoon drawing! By breaking down different parts of cartoon and anime characters, students will learn how to draw hair, eyes, hands, faces, emotions, perspective, style, noses, body proportion and so much more! It is the perfect program to learn fun basic drawing skills needed to create anime and cartoons. Digital devices are welcome to the class. All materials are provided!",
+  "startDate": "2026-01-14T05:00:00Z",
+  "endDate": "2026-02-12T04:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2026-01-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
     {
       "date": "2026-01-14",
       "all_day": true,
@@ -187,92 +181,14 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
-    },
-    {
-      "date": "2026-02-12",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-14",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-15",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-16",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-17",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-18",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-19",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-20",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-21",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-22",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-23",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-02-24",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
   "town": "Aurora",
-  "locationName": "Aurora Town Square, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio B, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/early-years-visual-art-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/learn-cartooning-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -282,8 +198,9 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002742-1768262400-1771977599@auroraculturalcentre.ca",
+  "sourceRef": "10002726-1768348800-1770854399@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-05T08:37:04.235Z",
+  "firstSeenAt": "2025-12-05T08:37:04.235Z",
   "updatedAt": "2025-12-05T08:37:04.235Z",
   "featured": false
 }

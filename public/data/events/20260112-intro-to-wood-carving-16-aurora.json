@@ -358,11 +358,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/intro-to-wood-carving-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002715-1768176000-1773100799@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-03T08:39:45Z"
+  "lastSyncedAt": "2025-12-05T08:37:04.235Z",
+  "updatedAt": "2025-12-05T08:37:04.235Z",
+  "featured": false
 }

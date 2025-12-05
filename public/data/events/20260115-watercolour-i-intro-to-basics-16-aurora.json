@@ -1,31 +1,13 @@
 {
-  "slug": "20260112-acrylic-pouring-and-mediums-16-aurora",
-  "title": "Acrylic Pouring and Mediums (16+)",
-  "summary": "Acrylic Pouring and Mediums (16+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora Start your journey in paint pouring, a contemporary art form perfect for beginners! In this 8-week program, you will explore various paints, pastels, pigments and more to create beautiful, marbled art. Every week you will build on prior lessons and master colour mixing, selection, tool use, and mixing mediums to create art that is beautiful and unique. Supplementary Materials Fee: $50 payable in cash to the instructor on the first day of program. Please note the list of materials below to bring to the first class. Materials List",
-  "startDate": "2026-01-12T05:00:00Z",
-  "endDate": "2026-03-10T03:59:59Z",
+  "slug": "20260115-watercolour-i-intro-to-basics-16-aurora",
+  "title": "Watercolour I: Intro to Basics (16+)",
+  "summary": "Watercolour I: Intro to Basics (16+)",
+  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 15 – March 12, 2026 [SKIP February 19] Thursdays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora Formerly known as “Watercolours: Basics & Beyond”, this beginner 8-week program crafted for ages 16+, will introduce you to the beautiful and timeless medium of watercolours. You will learn essential techniques like washes and glazes, colour mixing, palette set-up, materials and more. You will build on a variety of skills each week with different subject matter, supported with demonstrations, exercises, and encouragement. Please note the list of materials to bring to the first class. Materials List",
+  "startDate": "2026-01-15T05:00:00Z",
+  "endDate": "2026-03-13T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2026-01-12",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-01-13",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
-    {
-      "date": "2026-01-14",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
     {
       "date": "2026-01-15",
       "all_day": true,
@@ -349,14 +331,32 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
+    },
+    {
+      "date": "2026-03-10",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-11",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-12",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
   "town": "Aurora",
-  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-i-intro-to-basics-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -366,8 +366,9 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002713-1768176000-1773100799@auroraculturalcentre.ca",
+  "sourceRef": "10002720-1768435200-1773359999@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-05T08:37:04.235Z",
+  "firstSeenAt": "2025-12-05T08:37:04.235Z",
   "updatedAt": "2025-12-05T08:37:04.235Z",
   "featured": false
 }

@@ -316,11 +316,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/expand-your-horizons-in-acrylics-2-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002716-1768262400-1772582399@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-03T08:39:45Z"
+  "lastSyncedAt": "2025-12-05T08:37:04.235Z",
+  "updatedAt": "2025-12-05T08:37:04.235Z",
+  "featured": false
 }
