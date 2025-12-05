@@ -1,81 +1,12 @@
-import Busboy from 'busboy'
-import { put } from '@vercel/blob'
-import crypto from 'crypto'
+import { handleUpload } from '@vercel/blob/client'
 
-import {
-  ALLOWED_IMAGE_EXTENSIONS,
-  ALLOWED_IMAGE_MIME_TYPES,
-  hasAllowedImageExtension,
-  hasAllowedImageMimeType,
-  normalizeExtension,
-  normalizeMimeType,
-} from '../src/lib/uploadConstants'
-const MAX_SIZE_BYTES = 5 * 1024 * 1024
-const DEFAULT_PREFIX = 'blob-test'
+import { ALLOWED_IMAGE_MIME_TYPES } from '../src/lib/uploadConstants'
 
 export const config = {
   api: {
+    // Allow the raw body so handleUpload can read the request directly.
     bodyParser: false,
   },
-}
-
-function buildBlobKey(prefix, filename, mimeType) {
-  const safePrefix = prefix && typeof prefix === 'string' && prefix.startsWith(`${DEFAULT_PREFIX}`)
-    ? prefix
-    : DEFAULT_PREFIX
-  const extFromMime = typeof mimeType === 'string' && mimeType.includes('/') ? mimeType.split('/').pop() : ''
-  const extFromName = typeof filename === 'string' && filename.includes('.') ? filename.split('.').pop() : ''
-  const ext = (extFromMime || extFromName || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin'
-  const unique = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(8).toString('hex')
-  return `${safePrefix}/${Date.now()}-${unique}.${ext}`
-}
-
-function parseMultipartRequest(req) {
-  return new Promise((resolve, reject) => {
-    const busboy = Busboy({
-      headers: req.headers,
-      limits: { files: 1, fileSize: MAX_SIZE_BYTES, fields: 5 },
-    })
-
-  const fields = {}
-  let fileBuffer = null
-  let mimeType = ''
-  let filename = ''
-  let fileReceived = false
-
-    busboy.on('file', (fieldname, file, name, _encoding, type) => {
-      if (fileReceived || fieldname !== 'file') {
-        file.resume()
-        return
-      }
-
-      fileReceived = true
-      mimeType = type || ''
-      filename = name || 'upload.bin'
-
-      const chunks = []
-      file.on('data', (data) => chunks.push(data))
-      file.on('limit', () => reject(new Error('File exceeds maximum size')))
-      file.on('end', () => {
-        fileBuffer = Buffer.concat(chunks)
-      })
-    })
-
-    busboy.on('field', (name, value) => {
-      fields[name] = value
-    })
-
-    busboy.on('error', (error) => reject(error))
-    busboy.on('finish', () => {
-      if (!fileReceived || !fileBuffer) {
-        resolve({ fileBuffer: null, mimeType: '', filename: '', fields })
-        return
-      }
-      resolve({ fileBuffer, mimeType, filename, fields })
-    })
-
-    req.pipe(busboy)
-  })
 }
 
 export default async function handler(req, res) {
@@ -83,7 +14,6 @@ export default async function handler(req, res) {
   console.log('BLOB_TEST_RUNTIME', process.env.NEXT_RUNTIME || 'node')
   console.log('BLOB_TEST_METHOD', req.method)
   console.log('BLOB_TEST_CONTENT_TYPE', req.headers?.['content-type'])
-  console.log('BLOB_TEST_ALLOWED_TYPES', [...ALLOWED_IMAGE_MIME_TYPES, ...ALLOWED_IMAGE_EXTENSIONS])
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -96,64 +26,37 @@ export default async function handler(req, res) {
     return
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    res.status(500).json({ error: 'Blob token missing on server' })
-    return
-  }
-
   try {
-    const { fileBuffer, mimeType, filename, fields } = await parseMultipartRequest(req)
-    if (!fileBuffer) {
-      res.status(400).json({ error: 'No file received' })
-      return
-    }
-    const normalizedMime = normalizeMimeType(mimeType)
-    const fileExtension = normalizeExtension(filename)
-    const hasAllowedMime = hasAllowedImageMimeType(normalizedMime)
-    const hasAllowedExt = hasAllowedImageExtension(filename)
-    console.log('UPLOAD_DEBUG file', { name: filename, type: mimeType, mimetype: mimeType })
-    console.log('BLOB_TEST_FILE_INFO', {
-      filename,
-      mimeType,
-      normalizedMime,
-      fileExtension,
-      hasAllowedMime,
-      hasAllowedExt,
+    const response = await handleUpload(req, {
+      onBeforeGenerateToken: async ({ filename, contentType }) => {
+        console.log('UPLOAD_DEBUG allowedTypes', ALLOWED_IMAGE_MIME_TYPES)
+        const normalizedContentType = (contentType || '').split(';')[0]
+        console.log('UPLOAD_DEBUG file', { name: filename, type: contentType })
+
+        if (!ALLOWED_IMAGE_MIME_TYPES.includes(normalizedContentType)) {
+          const error = new Error('Upload a JPG, PNG, or WebP image.')
+          error.statusCode = 415
+          throw error
+        }
+
+        const normalizedName = typeof filename === 'string' ? filename : 'upload'
+        const prefix = 'blob-test/'
+
+        return {
+          allowedContentTypes: ALLOWED_IMAGE_MIME_TYPES,
+          pathname: `${prefix}${normalizedName}`,
+          addRandomSuffix: true,
+        }
+      },
     })
 
-    if (!hasAllowedExt) {
-      res.status(400).json({ error: 'Upload a JPG, PNG, or WebP image.' })
-      return
-    }
+    const status = response instanceof Response ? response.status : 200
+    const body = response instanceof Response ? await response.json() : response
 
-    if (!hasAllowedMime && normalizedMime) {
-      res.status(400).json({ error: 'Unsupported file type' })
-      return
-    }
-
-    const requestedPrefix = typeof fields?.pathPrefix === 'string' ? fields.pathPrefix : DEFAULT_PREFIX
-    const blobKey = buildBlobKey(requestedPrefix, filename, mimeType)
-
-    if (!blobKey.startsWith(`${DEFAULT_PREFIX}/`)) {
-      res.status(400).json({ error: 'Invalid upload path' })
-      return
-    }
-
-    const uploadResult = await put(blobKey, fileBuffer, {
-      access: 'public',
-      contentType: mimeType,
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-      cacheControlMaxAge: 60 * 60 * 24 * 30,
-    })
-
-    res.status(200).json({
-      url: uploadResult?.url,
-      pathname: uploadResult?.pathname,
-      runtime: process.env.NEXT_RUNTIME || 'node',
-      tokenDefined: true,
-    })
+    res.status(status).json(body)
   } catch (error) {
     console.error('BLOB_TEST_UPLOAD_ERROR', error)
-    res.status(500).json({ error: error?.message || 'Upload failed', tokenDefined: Boolean(process.env.BLOB_READ_WRITE_TOKEN) })
+    const status = error?.statusCode || 400
+    res.status(status).json({ error: error?.message || 'Upload failed' })
   }
 }

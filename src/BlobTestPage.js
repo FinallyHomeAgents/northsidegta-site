@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { upload } from '@vercel/blob/client'
+
 import {
   ALLOWED_IMAGE_EXTENSIONS,
   ALLOWED_IMAGE_MIME_TYPES,
@@ -43,22 +45,14 @@ export default function BlobTestPage() {
 
     setStatus('Uploading...')
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('pathPrefix', 'blob-test')
-
-      const response = await fetch('/api/blob-test-upload', {
-        method: 'POST',
-        body: formData,
+      const pathname = `blob-test/${Date.now()}-${name}`
+      const uploaded = await upload(pathname, file, {
+        access: 'public',
+        contentType: type,
+        handleUploadUrl: '/api/blob-test-upload',
       })
 
-      const json = await response.json().catch(() => ({}))
-      if (!response.ok) {
-        throw new Error(json?.error || 'Upload failed')
-      }
-
-      const uploadedUrl = json?.url
-      setResultText(JSON.stringify({ uploadedUrl, response: json }, null, 2))
+      setResultText(JSON.stringify({ uploadedUrl: uploaded?.url, response: uploaded }, null, 2))
       setStatus('Success')
     } catch (error) {
       console.error('BLOB_TEST_UPLOAD_FAILED', error)
