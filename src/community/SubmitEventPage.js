@@ -1,12 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
-import { upload } from '@vercel/blob/client'
-
 import {
   buildAcceptTypes,
-  hasAllowedImageExtension,
-  hasAllowedImageMimeType,
   validateAllowedImageFile,
   normalizeExtension,
   normalizeMimeType,
@@ -732,13 +728,21 @@ export default function SubmitEventPage() {
     try {
       setUploadingImage(true)
       const pathname = buildUploadPath(file)
-      const uploaded = await upload(pathname, file, {
-        access: 'public',
-        contentType: type,
-        handleUploadUrl: '/api/community/event-image-upload',
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('pathname', pathname)
+
+      const response = await fetch('/api/community/event-image-upload', {
+        method: 'POST',
+        body: formData,
       })
 
-      const uploadedUrl = uploaded?.url
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data?.error || 'Image upload failed')
+      }
+
+      const uploadedUrl = data?.url
       if (!uploadedUrl) {
         throw new Error('Missing upload URL in response')
       }
