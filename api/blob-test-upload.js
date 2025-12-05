@@ -1,4 +1,4 @@
-import { handleUpload } from '@vercel/blob/client'
+import { handleUpload } from '@vercel/blob'
 
 import { ALLOWED_IMAGE_MIME_TYPES } from '../src/lib/uploadConstants'
 
@@ -27,7 +27,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await handleUpload(req, {
+    await handleUpload(req, res, {
+      token: process.env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async ({ filename, contentType }) => {
         console.log('UPLOAD_DEBUG allowedTypes', ALLOWED_IMAGE_MIME_TYPES)
         const normalizedContentType = (contentType || '').split(';')[0]
@@ -44,16 +45,11 @@ export default async function handler(req, res) {
 
         return {
           allowedContentTypes: ALLOWED_IMAGE_MIME_TYPES,
-          pathname: `${prefix}${normalizedName}`,
           addRandomSuffix: true,
+          pathname: `${prefix}${normalizedName}`,
         }
       },
     })
-
-    const status = response instanceof Response ? response.status : 200
-    const body = response instanceof Response ? await response.json() : response
-
-    res.status(status).json(body)
   } catch (error) {
     console.error('BLOB_TEST_UPLOAD_ERROR', error)
     const status = error?.statusCode || 400
