@@ -1,4 +1,4 @@
-import Busboy from 'busboy'
+import busboy from 'busboy'
 import crypto from 'crypto'
 import { put } from '@vercel/blob'
 
@@ -90,16 +90,16 @@ function parseSingleFile(req) {
     }
 
     const fields = {}
-    const busboy = new Busboy({ headers: req.headers, limits: { files: 1, fileSize: 5 * 1024 * 1024 } })
+    const bb = busboy({ headers: req.headers, limits: { files: 1, fileSize: 5 * 1024 * 1024 } })
     let fileBuffer = Buffer.alloc(0)
     let fileName = ''
     let mimeType = ''
 
-    busboy.on('field', (fieldname, val) => {
+    bb.on('field', (fieldname, val) => {
       fields[fieldname] = val
     })
 
-    busboy.on('file', (_fieldname, file, filename, _encoding, mimetype) => {
+    bb.on('file', (_fieldname, file, filename, _encoding, mimetype) => {
       fileName = filename
       mimeType = mimetype
       file.on('data', (data) => {
@@ -107,7 +107,7 @@ function parseSingleFile(req) {
       })
     })
 
-    busboy.on('finish', () => {
+    bb.on('finish', () => {
       if (!fileName || !fileBuffer.length) {
         resolve(null)
         return
@@ -115,8 +115,8 @@ function parseSingleFile(req) {
       resolve({ filename: fileName, mimeType, buffer: fileBuffer, fields })
     })
 
-    busboy.on('error', (err) => reject(err))
+    bb.on('error', (err) => reject(err))
 
-    req.pipe(busboy)
+    req.pipe(bb)
   })
 }
