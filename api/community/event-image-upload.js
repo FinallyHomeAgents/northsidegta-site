@@ -1,6 +1,11 @@
 import { handleUpload } from '@vercel/blob'
 
-import { ALLOWED_IMAGE_MIME_TYPES } from '../../src/lib/uploadConstants'
+import {
+  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_IMAGE_MIME_TYPES,
+  isAllowedImageFile,
+  normalizeMimeType,
+} from '../../src/lib/uploadConstants'
 
 const ALLOWED_PREFIX = 'community-events/'
 
@@ -27,25 +32,37 @@ export default async function handler(req, res) {
     return
   }
 
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    res.status(500).json({ error: 'Missing BLOB_READ_WRITE_TOKEN on server' })
+    return
+  }
+
   try {
     await handleUpload(req, res, {
       token: process.env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async ({ filename, contentType, pathname }) => {
-        console.log('UPLOAD_DEBUG allowedTypes', ALLOWED_IMAGE_MIME_TYPES)
-        const normalizedContentType = (contentType || '').split(';')[0]
-        console.log('UPLOAD_DEBUG file', { name: filename, type: contentType, pathname })
-
-        if (!ALLOWED_IMAGE_MIME_TYPES.includes(normalizedContentType)) {
-          const error = new Error('Upload a JPG, PNG, or WebP image.')
-          error.statusCode = 415
-          throw error
-        }
+        const normalizedContentType = normalizeMimeType(contentType)
+        console.log('UPLOAD_DEBUG file', {
+          name: filename,
+          type: contentType,
+          normalizedContentType,
+          pathname,
+          allowedTypes: ALLOWED_IMAGE_MIME_TYPES,
+          allowedExtensions: ALLOWED_IMAGE_EXTENSIONS,
+        })
 
         const normalizedName = typeof filename === 'string' ? filename : 'upload'
         const providedPath = typeof pathname === 'string' ? pathname : ''
         const safePath = providedPath.startsWith(ALLOWED_PREFIX)
           ? providedPath
           : `${ALLOWED_PREFIX}${normalizedName}`
+
+        const allowed = isAllowedImageFile(normalizedContentType, normalizedName)
+        if (!allowed) {
+          const error = new Error('Upload a JPG, PNG, or WebP image.')
+          error.statusCode = 415
+          throw error
+        }
 
         if (!safePath.startsWith(ALLOWED_PREFIX)) {
           const error = new Error('Invalid upload path')

@@ -1,6 +1,11 @@
 import { handleUpload } from '@vercel/blob'
 
-import { ALLOWED_IMAGE_MIME_TYPES } from '../src/lib/uploadConstants'
+import {
+  ALLOWED_IMAGE_EXTENSIONS,
+  ALLOWED_IMAGE_MIME_TYPES,
+  isAllowedImageFile,
+  normalizeMimeType,
+} from '../src/lib/uploadConstants'
 
 export const config = {
   api: {
@@ -26,22 +31,33 @@ export default async function handler(req, res) {
     return
   }
 
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    res.status(500).json({ error: 'Missing BLOB_READ_WRITE_TOKEN on server' })
+    return
+  }
+
   try {
     await handleUpload(req, res, {
       token: process.env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async ({ filename, contentType }) => {
-        console.log('UPLOAD_DEBUG allowedTypes', ALLOWED_IMAGE_MIME_TYPES)
-        const normalizedContentType = (contentType || '').split(';')[0]
-        console.log('UPLOAD_DEBUG file', { name: filename, type: contentType })
+        const normalizedContentType = normalizeMimeType(contentType)
+        console.log('UPLOAD_DEBUG file', {
+          name: filename,
+          type: contentType,
+          normalizedContentType,
+          allowedTypes: ALLOWED_IMAGE_MIME_TYPES,
+          allowedExtensions: ALLOWED_IMAGE_EXTENSIONS,
+        })
 
-        if (!ALLOWED_IMAGE_MIME_TYPES.includes(normalizedContentType)) {
+        const normalizedName = typeof filename === 'string' ? filename : 'upload'
+        const prefix = 'blob-test/'
+
+        const allowed = isAllowedImageFile(normalizedContentType, normalizedName)
+        if (!allowed) {
           const error = new Error('Upload a JPG, PNG, or WebP image.')
           error.statusCode = 415
           throw error
         }
-
-        const normalizedName = typeof filename === 'string' ? filename : 'upload'
-        const prefix = 'blob-test/'
 
         return {
           allowedContentTypes: ALLOWED_IMAGE_MIME_TYPES,
