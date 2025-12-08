@@ -1,9 +1,9 @@
-# Events Sync Report — 2025-12-07 03:33 EST
+# Events Sync Report — 2025-12-08 03:40 EST
 
-* Created: 25
-* Updated: 5
-* Unchanged: 37
-* Errors: 31
+* Created: 1
+* Updated: 0
+* Unchanged: 36
+* Errors: 32
 
 ## URL Updates
 
@@ -29,7 +29,7 @@
 | Discover Stouffville | 0 | 0 | 7 | 14 | ok | — |
 | Discover Uxbridge | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Aurora Town Square | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Aurora Cultural Centre | 0 | 0 | 30 | 30 | ok | — |
+| Aurora Cultural Centre | 1 | 0 | 29 | 30 | ok | — |
 | NewRoads Performing Arts Centre | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Georgina Centre for Arts & Culture | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Sharon Temple National Historic Site | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
@@ -48,6 +48,6 @@
 | Sutton BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Jackson's Point BIA | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Discover Port Perry | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
-| Experience York Region | 25 | 5 | 0 | 30 | ok | — |
+| Experience York Region | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | Universe | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
 | TicketScene | 0 | 0 | 0 | 0 | error | 2 error(s), No items |
