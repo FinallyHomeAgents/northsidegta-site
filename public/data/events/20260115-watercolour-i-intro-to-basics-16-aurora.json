@@ -358,17 +358,11 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/watercolour-i-intro-to-basics-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Aurora Cultural Centre",
-  "sourceUrl": "https://auroraculturalcentre.ca/events/",
-  "sourceDomain": "auroraculturalcentre.ca",
-  "sourcePriority": 20,
   "sourceRef": "10002720-1768435200-1773359999@auroraculturalcentre.ca",
-  "lastSyncedAt": "2025-12-05T08:37:04.235Z",
-  "firstSeenAt": "2025-12-05T08:37:04.235Z",
-  "updatedAt": "2025-12-05T08:37:04.235Z",
-  "featured": false
+  "updatedAt": "2025-12-05T08:37:04Z"
 }

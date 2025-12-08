@@ -24,17 +24,11 @@
   "priceType": "Mixed",
   "eventUrl": "https://www.experienceyorkregion.com/event/auroras-christmas-market-december-7/",
   "icsUrl": "https://www.experienceyorkregion.com/events/?ical=1",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Experience York Region",
-  "sourceUrl": "https://www.experienceyorkregion.com/events",
-  "sourceDomain": "experienceyorkregion.com",
-  "sourcePriority": 35,
   "sourceRef": "10014360-1765128600-1765139400@www.experienceyorkregion.com",
-  "lastSyncedAt": "2025-12-07T08:33:03.793Z",
-  "firstSeenAt": "2025-12-07T08:33:03.793Z",
-  "updatedAt": "2025-12-07T08:33:03.793Z",
-  "featured": false
+  "updatedAt": "2025-12-07T08:33:03Z"
 }
