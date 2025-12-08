@@ -25,7 +25,6 @@ import ReferralPartnersPage from "./ReferralPartnersPage";
 import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
-import BlobTestPage     from "./BlobTestPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
@@ -82,7 +81,6 @@ function App() {
           <Route path="/events/:slug" element={<EventDetailPage />} />
           <Route path="/cms/tastehub" element={<TasteHubCmsPage />} />
           <Route path="/community/submit-event" element={<SubmitEventPage />} />
-          <Route path="/blob-test" element={<BlobTestPage />} />
           <Route path="/events/archive" element={<EventsArchivePage />} />
           <Route path="/community/events-admin" element={<EventsIndexPage />} />
           <Route path="/contact"      element={<ContactPage />} />
