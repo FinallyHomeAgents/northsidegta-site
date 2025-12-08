@@ -1,8 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
-import { upload } from '@vercel/blob/client'
-
 import CaptchaWidget from '../components/CaptchaWidget'
 import DynamicMetaTags from '../components/seo/DynamicMetaTags'
 import { getStaticRouteMeta } from '../components/seo/staticRouteMetaExports'
@@ -13,14 +11,6 @@ const TORONTO_ZONE = 'America/Toronto'
 const MAX_EVENT_DURATION_DAYS = 14
 const MAX_AUDIENCE_TAGS = 3
 const MAX_CATEGORY_TAGS = 4
-const MAX_UPLOAD_SIZE = 5 * 1024 * 1024
-const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const MIME_EXTENSIONS = {
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/webp': 'webp',
-}
-
 const EVENT_TYPES = [
   'Community',
   'Sports',
@@ -88,7 +78,6 @@ function initialFormState() {
     ticketsUrl: '',
     registrationUrl: '',
     imageUrl: '',
-    uploadedImageUrl: '',
     audienceTags: [],
     categoryTags: [],
     contactConsent: false,
@@ -506,12 +495,9 @@ export default function SubmitEventPage() {
   const [submitting, setSubmitting] = React.useState(false)
   const [submitError, setSubmitError] = React.useState('')
   const [submitResult, setSubmitResult] = React.useState(null)
-  const [imageUploadProgress, setImageUploadProgress] = React.useState(0)
-  const [imageError, setImageError] = React.useState('')
-  const [uploadingImage, setUploadingImage] = React.useState(false)
   const [paymentOption, setPaymentOption] = React.useState('free')
 
-  const finalImageUrl = form.uploadedImageUrl || form.imageUrl.trim()
+  const finalImageUrl = form.imageUrl.trim()
 
   const markScheduleTouched = React.useCallback(() => {
     setTouched((prev) => ({ ...prev, dailySchedule: true }))
@@ -657,17 +643,6 @@ export default function SubmitEventPage() {
     })
   }
 
-  const buildUploadPath = React.useCallback((file) => {
-    const extensionFromType = MIME_EXTENSIONS[file.type] || ''
-    const extensionFromName = typeof file.name === 'string' ? file.name.split('.').pop()?.toLowerCase() : ''
-    const extension = (extensionFromType || extensionFromName || 'jpg').replace(/[^a-z0-9]/g, '')
-    const uniqueId =
-      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-        ? crypto.randomUUID()
-        : Math.random().toString(36).slice(2, 10)
-    return `community-events/${Date.now()}-${uniqueId}.${extension}`
-  }, [])
-
   const toggleCategory = (tag) => {
     setForm((prev) => {
       const existing = new Set(prev.categoryTags || [])
@@ -686,51 +661,7 @@ export default function SubmitEventPage() {
   }
 
   const handleImageUrlChange = (event) => {
-    setImageError('')
     setField('imageUrl', event.target.value)
-    setField('uploadedImageUrl', '')
-  }
-
-  const handleFileUpload = async (event) => {
-    const file = event.target.files?.[0]
-    event.target.value = ''
-    setImageError('')
-    setImageUploadProgress(0)
-
-    if (!file) return
-
-    if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
-      setImageError('Upload a JPG, PNG, or WebP image.')
-      return
-    }
-    if (file.size > MAX_UPLOAD_SIZE) {
-      setImageError('Uploads are limited to 5MB.')
-      return
-    }
-
-    try {
-      setUploadingImage(true)
-      const pathname = buildUploadPath(file)
-      const result = await upload(pathname, file, {
-        access: 'public',
-        contentType: file.type,
-        handleUploadUrl: '/api/community/event-image-upload',
-      })
-
-      const uploadedUrl = result?.url || result?.downloadUrl || ''
-      if (!uploadedUrl) {
-        throw new Error('Missing upload URL in response')
-      }
-
-      setField('uploadedImageUrl', uploadedUrl)
-      setField('imageUrl', '')
-      setImageUploadProgress(100)
-    } catch (error) {
-      console.error('image upload failed', error)
-      setImageError('Image upload failed. Please try again.')
-    } finally {
-      setUploadingImage(false)
-    }
   }
 
   const handleCaptcha = React.useCallback(
@@ -749,8 +680,6 @@ export default function SubmitEventPage() {
     setErrors({})
     setTouched({})
     setSubmitError('')
-    setImageError('')
-    setImageUploadProgress(0)
     setPaymentOption('free')
   }
 
@@ -1307,42 +1236,11 @@ export default function SubmitEventPage() {
 
                 <div className="space-y-4">
                   <h3 className="text-base font-semibold text-emerald-900">Images</h3>
-                  <div className="rounded-2xl border border-slate-200 p-4">
-                    <p className="text-sm font-semibold text-slate-900">Upload an image</p>
-                    <Hint>Upload JPG/PNG/WebP up to 5MB (1200×630+), or paste a public https:// image URL.</Hint>
-                    <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-emerald-300 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-400 hover:text-emerald-900">
-                        Upload image
-                        <input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFileUpload} />
-                      </label>
-                      {uploadingImage && (
-                        <span className="text-xs font-medium text-emerald-700">Uploading… {imageUploadProgress}%</span>
-                      )}
-                      {form.uploadedImageUrl && !uploadingImage && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setField('uploadedImageUrl', '')
-                            setImageUploadProgress(0)
-                          }}
-                          className="text-xs font-semibold text-rose-600 hover:text-rose-700"
-                        >
-                          Remove uploaded image
-                        </button>
-                      )}
-                    </div>
-                    {form.uploadedImageUrl && (
-                      <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200">
-                        <img src={form.uploadedImageUrl} alt="Uploaded event" className="w-full object-cover" />
-                      </div>
-                    )}
-                    {imageError && <p className="mt-2 text-sm font-medium text-rose-600">{imageError}</p>}
-                  </div>
-
                   <div>
                     <label htmlFor="image-url" className="block text-sm font-semibold text-slate-900">
                       Image URL (optional)
                     </label>
+                    <Hint>Paste a publicly accessible image link that begins with https://</Hint>
                     <input
                       id="image-url"
                       type="url"
@@ -1355,7 +1253,7 @@ export default function SubmitEventPage() {
                           ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-200'
                           : 'border-slate-200 focus:border-emerald-400 focus:ring-emerald-200'
                       )}
-                      placeholder="https://"
+                      placeholder="https://example.com/event-image.jpg"
                     />
                     <FormError message={errors.imageUrl && (touched.imageUrl || touched.submitAttempted) ? errors.imageUrl : ''} />
                   </div>
