@@ -204,11 +204,11 @@ function IconBubble({ icon: Icon, label }) {
 function SnapshotRow({ label, value }) {
   if (!value) return null;
   return (
-    <div className="flex flex-col gap-1 rounded-xl border border-emerald-50 bg-white/80 p-4 shadow-sm">
-      <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+    <div className="flex flex-col rounded-2xl border border-emerald-100/80 bg-emerald-50/90 px-5 py-4 shadow-sm md:px-6 md:py-5 md:shadow">
+      <span className="text-xs font-semibold uppercase tracking-wide text-emerald-700/90">
         {label}
       </span>
-      <span className="text-sm text-gray-800">{value}</span>
+      <span className="mt-1.5 text-base font-semibold text-emerald-950 md:text-lg">{value}</span>
     </div>
   );
 }
@@ -337,11 +337,13 @@ export default function TownPageLayout({
   );
 
   const primaryButton = hero?.primaryButton;
+  const driveLabel = snapshot?.driveLabel || "Drive to Toronto (404/DVP Entry)";
+  const goTrainLabel = snapshot?.goTrainLabel || "GO Train to Union Station";
 
   const snapshotFields = [
     { key: "population", label: "Population" },
-    { key: "driveToToronto", label: "Drive to Toronto" },
-    { key: "goTrainTime", label: "GO Train" },
+    { key: "driveToToronto", label: driveLabel },
+    { key: "goTrainTime", label: goTrainLabel },
     { key: "homePriceRange", label: "Typical Home Price" },
     { key: "highways", label: "Highways" },
     { key: "transitSummary", label: "Transit" },
