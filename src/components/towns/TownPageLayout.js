@@ -396,11 +396,13 @@ export default function TownPageLayout({
         </div>
         <div
           className={`relative z-10 mx-auto max-w-6xl px-4 ${
-            isUxbridge ? "py-12 sm:py-16 lg:py-20" : "py-20 sm:py-24 lg:py-28"
+            isUxbridge
+              ? "py-12 sm:py-16 lg:py-20 md:min-h-[420px] lg:min-h-[520px]"
+              : "py-20 sm:py-24 lg:py-28"
           }`}
         >
           {isUxbridge ? (
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] items-start lg:items-stretch">
+            <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.15fr)]">
               <div className="space-y-6 text-white">
                 {hero?.tagline && (
                   <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
@@ -471,18 +473,30 @@ export default function TownPageLayout({
       </section>
 
       {isUxbridge && (
-        <section className="mx-auto max-w-6xl px-4 mt-6">
-          <div className="flex flex-wrap items-center gap-4">
-            <ButtonLink
-              href={primaryButton?.href || "#"}
-              label={primaryButton?.label}
-              variant="primary"
-            />
-            <ButtonLink
-              href={secondaryButton?.href || "#"}
-              label={uxbridgeSecondaryLabel}
-              variant="secondary"
-            />
+        <section className="mx-auto mt-8 max-w-6xl px-4">
+          <div className="rounded-3xl border border-white/10 bg-emerald-950/95 px-5 py-6 text-white shadow-lg sm:px-6">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold sm:text-xl">Thinking about Uxbridge?</h2>
+              <p className="text-sm text-emerald-100/90 sm:text-base">
+                Explore homes on the market or connect with our team to talk about your move.
+              </p>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-4">
+              <div className="w-full sm:w-auto">
+                <ButtonLink
+                  href={primaryButton?.href || "#"}
+                  label={primaryButton?.label}
+                  variant="primary"
+                />
+              </div>
+              <div className="w-full sm:w-auto">
+                <ButtonLink
+                  href={secondaryButton?.href || "#"}
+                  label={uxbridgeSecondaryLabel}
+                  variant="secondary"
+                />
+              </div>
+            </div>
           </div>
         </section>
       )}
