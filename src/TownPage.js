@@ -24,6 +24,10 @@ import {
   FiHome,
   FiMap,
 } from "react-icons/fi";
+import {
+  UXBRIDGE_LIFESTYLE_COPY,
+  UXBRIDGE_LIFESTYLE_TEASER,
+} from "./data/townLifestyleCopy";
 
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
@@ -120,6 +124,14 @@ export default function TownPage() {
   const slug = (town.slug || "").toLowerCase();
   const isUxbridge = slug === "uxbridge";
 
+  const heroLifestyleCard = isUxbridge
+    ? {
+        title: "What It’s Like to Live in Uxbridge",
+        teaser: UXBRIDGE_LIFESTYLE_TEASER,
+        fullText: UXBRIDGE_LIFESTYLE_COPY,
+      }
+    : null;
+
   const townSchema = React.useMemo(
     () =>
       buildTownPageSchema({
@@ -185,6 +197,8 @@ export default function TownPage() {
                 }
               : null
           }
+          introContent={null}
+          heroLifestyleCard={heroLifestyleCard}
         />
         {isUxbridge && (
           <section className="mx-auto mt-10 max-w-5xl px-4">
