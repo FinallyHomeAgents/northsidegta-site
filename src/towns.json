@@ -39,12 +39,12 @@
       }
     },
     "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Closest GO station commute details (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes such as Highways 404 and 48 (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
+      "population": "~48,000",
+      "driveToToronto": "~35–45 minutes",
+      "goTrainTime": "~70–95 minutes (Bus to East Gwillimbury GO + Train)",
+      "homePriceRange": "~$800K–$950K",
+      "highways": "Hwy 404 north terminus; Hwy 48; Lake Simcoe regional connectors",
+      "transitSummary": "YRT/GO Bus routes linking to East Gwillimbury or Newmarket GO for trains into Toronto"
     },
     "ratingDescriptions": {
       "housePrices": "Detached homes, waterfront properties, and rural lots create a wide range of price points.",
@@ -180,12 +180,12 @@
       }
     },
     "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "GO service from nearby stations (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes including Highway 404 and Green Lane (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
+      "population": "~38,000",
+      "driveToToronto": "~35–55 minutes",
+      "goTrainTime": "~60–70 minutes",
+      "homePriceRange": "~$1.1M–$1.4M",
+      "highways": "Hwy 404 access; Green Lane and Queensville Sideroad as major corridors",
+      "transitSummary": "GO Barrie Line trains + GO Bus and YRT service"
     },
     "ratingDescriptions": {
       "housePrices": "Mix of newer subdivisions and established streets provides a range of housing options.",
@@ -321,12 +321,12 @@
       }
     },
     "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Approx. GO Train time from Newmarket to Union Station (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes including Davis Drive, Leslie Street, and Highway 404 (update details).",
-      "transitSummary": "Short summary of GO/Viva transit options (update with accurate details)."
+      "population": "~90,000",
+      "driveToToronto": "~25–40 minutes",
+      "goTrainTime": "~60–70 minutes",
+      "homePriceRange": "~$750K–$1.1M",
+      "highways": "Hwy 404; Davis Dr and Mulock Dr east–west; Yonge/Bathurst north–south",
+      "transitSummary": "GO Barrie Line; YRT/GO Bus; Viva Blue rapid transit connecting south toward the TTC"
     },
     "ratingDescriptions": {
       "housePrices": "Detached homes, townhomes, and some condos provide a variety of price points across Newmarket.",
@@ -462,12 +462,12 @@
       }
     },
     "snapshot": {
-      "population": "~62,000 (2021 Census)",
-      "driveToToronto": "Approx 40\u201350 minutes via Highway 404",
-      "goTrainTime": "Approx 50\u201355 minutes to Union Station from Aurora GO",
-      "homePriceRange": "Detached homes often trade in the mid-to-high $1M range, with townhomes providing more entry options.",
-      "highways": "Easy access to Highway 404 with connections toward Highway 400 via nearby routes.",
-      "transitSummary": "Aurora GO and local YRT/Viva routes connect to Toronto and neighbouring towns."
+      "population": "~66,000",
+      "driveToToronto": "~30\u201345 minutes",
+      "goTrainTime": "~45\u201355 minutes",
+      "homePriceRange": "~$1.1M–$1.6M",
+      "highways": "Hwy 404 access with quick links to 407/401 and west toward Hwy 400",
+      "transitSummary": "GO Barrie Line trains; YRT/GO Bus; Viva Blue along Yonge Street"
     },
     "ratingDescriptions": {
       "housePrices": "Aurora\u2019s established detached homes keep pricing on the higher side for the NorthSide GTA.",
@@ -603,12 +603,12 @@
       }
     },
     "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "Approx. GO Train time from Stouffville to Union Station (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Access via major routes / highways (update details).",
-      "transitSummary": "Short summary of GO/transit options (update with accurate details)."
+      "population": "~53,000–54,000",
+      "driveToToronto": "~30–45 minutes",
+      "goTrainTime": "~60–65 minutes",
+      "homePriceRange": "~$1.0M–$1.4M",
+      "highways": "Hwy 404 via Stouffville Rd/Bloomington; Hwy 48; 407",
+      "transitSummary": "GO Train and GO Bus service on the Stouffville Line; YRT routes connecting into Markham/Richmond Hill"
     },
     "ratingDescriptions": {
       "housePrices": "Detached homes and newer builds keep pricing competitive within the GTA market.",
@@ -744,12 +744,12 @@
       }
     },
     "snapshot": {
-      "population": "To be updated with the latest census details.",
-      "driveToToronto": "Approximate drive into Toronto via regional routes and Highway 404.",
-      "goTrainTime": "GO service typically accessed through nearby Stouffville or Whitby stations.",
-      "homePriceRange": "Mix of detached homes, townhomes, and rural properties across varied price points.",
-      "highways": "Connections toward Highways 404, 407, and 401 via regional roads.",
-      "transitSummary": "Durham Region Transit and YRT services link to neighbouring towns with GO Transit access."
+      "population": "~24,000",
+      "driveToToronto": "~50–70 minutes",
+      "goTrainTime": "~80–110 minutes (GO Bus + Train)",
+      "homePriceRange": "~$1.0M–$1.4M",
+      "highways": "Hwy 47 to Markham/404; Durham roads to Hwy 12, 7/7A, and 407",
+      "transitSummary": "GO Bus service with connections to Old Elm/Stouffville GO for rail into Toronto"
     },
     "ratingDescriptions": {
       "housePrices": "Housing spans heritage homes, subdivisions, and rural properties with prices that vary by property type.",
@@ -885,12 +885,12 @@
       }
     },
     "snapshot": {
-      "population": "Update with latest population in CMS.",
-      "driveToToronto": "Approx. drive time to Toronto (update with accurate range).",
-      "goTrainTime": "GO or commuter connections from nearby stations (update with accurate range).",
-      "homePriceRange": "Typical home price range (update with current data).",
-      "highways": "Key routes toward Highways 407, 401, and 115 (update details).",
-      "transitSummary": "Short summary of Durham Region Transit/GO options (update with accurate details)."
+      "population": "~22,000",
+      "driveToToronto": "~45–60 minutes",
+      "goTrainTime": "~90–110 minutes (DRT to Whitby/Oshawa GO + Train)",
+      "homePriceRange": "~$800K–$1.0M",
+      "highways": "Hwys 7/7A, 12, and 57 with access to 407/401",
+      "transitSummary": "Durham Region Transit connections to Whitby/Oshawa GO for train service"
     },
     "ratingDescriptions": {
       "housePrices": "Waterfront, in-town, and rural properties span a variety of price points across Scugog.",
