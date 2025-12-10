@@ -24,10 +24,7 @@ import {
   FiHome,
   FiMap,
 } from "react-icons/fi";
-import {
-  UXBRIDGE_LIFESTYLE_COPY,
-  UXBRIDGE_LIFESTYLE_TEASER,
-} from "./data/townLifestyleCopy";
+import { getTownLifestyleCopy } from "./content/towns/lifestyleCopy";
 
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
@@ -122,13 +119,14 @@ export default function TownPage() {
   }
 
   const slug = (town.slug || "").toLowerCase();
+  const lifestyleCopy = getTownLifestyleCopy(slug);
   const isUxbridge = slug === "uxbridge";
 
-  const heroLifestyleCard = isUxbridge
+  const heroLifestyleCard = lifestyleCopy
     ? {
-        title: "What It’s Like to Live in Uxbridge",
-        teaser: UXBRIDGE_LIFESTYLE_TEASER,
-        fullText: UXBRIDGE_LIFESTYLE_COPY,
+        title: lifestyleCopy.title,
+        teaser: lifestyleCopy.teaser,
+        fullText: lifestyleCopy.full,
       }
     : null;
 

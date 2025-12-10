@@ -1,6 +1,12 @@
 import React, { useId, useMemo, useState } from "react";
 
-export default function TownHeroLifestyleCard({ title, teaser, fullText }) {
+export default function TownHeroLifestyleCard({
+  title,
+  teaser,
+  fullText,
+  townName,
+  readMoreLabel,
+}) {
   const [expanded, setExpanded] = useState(false);
   const contentId = useId();
 
@@ -13,6 +19,10 @@ export default function TownHeroLifestyleCard({ title, teaser, fullText }) {
   }, [fullText]);
 
   if (!title && !teaser) return null;
+
+  const computedReadMoreLabel =
+    readMoreLabel ||
+    (townName ? `Read more about living in ${townName}` : "Read more about living here");
 
   return (
     <div className="max-w-2xl rounded-2xl border border-emerald-100 bg-[#f5f8f1] p-4 text-slate-900 shadow-lg sm:p-5 md:p-6">
@@ -45,7 +55,7 @@ export default function TownHeroLifestyleCard({ title, teaser, fullText }) {
           aria-controls={contentId}
           className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-emerald-800 hover:text-emerald-900"
         >
-          {expanded ? "Show less" : "Read more about living in Uxbridge"}
+          {expanded ? "Show less" : computedReadMoreLabel}
           <span className="text-xs">{expanded ? "▴" : "▾"}</span>
         </button>
       )}
