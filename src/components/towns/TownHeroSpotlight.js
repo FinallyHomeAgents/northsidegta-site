@@ -1,74 +1,59 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from "react";
 
-import { selectTownSpotlight } from '../../lib/spotlight/selectSpotlight'
+import { selectTownSpotlight } from "../../lib/spotlight/selectSpotlight";
 
 export default function TownHeroSpotlight({ townSlug, townName, spotlightData }) {
-  const items = Array.isArray(spotlightData?.items) ? spotlightData.items : []
-  const loaded = Boolean(spotlightData?.loaded)
+  const items = Array.isArray(spotlightData?.items) ? spotlightData.items : [];
+  const loaded = Boolean(spotlightData?.loaded);
   const { hero, heroLabel } = useMemo(() => {
-    return selectTownSpotlight(townSlug, townName, items)
-  }, [items, townName, townSlug])
+    return selectTownSpotlight(townSlug, townName, items);
+  }, [items, townName, townSlug]);
 
   if (!loaded || !hero || !heroLabel) {
-    return null
+    return null;
   }
 
   const ratingLine =
-    typeof hero.rating === 'number' && typeof hero.userRatingsTotal === 'number'
+    typeof hero.rating === "number" && typeof hero.userRatingsTotal === "number"
       ? `⭐ ${hero.rating.toFixed(1)} (${hero.userRatingsTotal.toLocaleString()} Google reviews)`
-      : null
+      : null;
 
   return (
-    <div className="relative w-full">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 translate-y-2 rounded-[32px] bg-gradient-to-b from-brand-green/35 via-brand-green/10 to-transparent blur-3xl opacity-70"
-      />
-      <aside className="pointer-events-auto flex w-full flex-col gap-3 rounded-[28px] border border-emerald-50/70 bg-white/95 p-4 sm:p-5 shadow-[0_18px_45px_rgba(15,32,12,0.35)] backdrop-blur-sm transition-transform transition-shadow duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_55px_rgba(15,32,12,0.45)] max-h-[440px] overflow-hidden min-h-0">
-        <style>{`
-          @keyframes spotlightPulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.35; }
-            100% { opacity: 1; }
-          }
-        `}</style>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-700/95">
-          NORTHSIDE GTA LOCAL SPOTLIGHT
-        </p>
-        <div className="flex flex-1 flex-col gap-2 text-slate-900 overflow-y-auto pr-1 min-h-0">
-          <span className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-100 bg-emerald-50/70 px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
+    <aside className="pointer-events-auto w-full max-w-sm rounded-3xl border border-emerald-100 bg-[#f7fbf5] p-4 shadow-lg sm:p-5">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-800">
+        NorthSide GTA Local Spotlight
+      </p>
+      <div className="mt-3 flex max-h-[430px] flex-col space-y-2 overflow-hidden text-sm leading-relaxed text-emerald-900">
+        <div className="flex flex-1 flex-col space-y-2 overflow-y-auto pr-1">
+          <span className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inset-0 rounded-full bg-emerald-400/70 animate-pulse" />
+              <span className="absolute inset-0 animate-pulse rounded-full bg-emerald-400/70" />
               <span className="m-auto h-1.5 w-1.5 rounded-full bg-emerald-700" />
             </span>
             Updated daily
           </span>
-          <h3 className="text-sm font-semibold text-emerald-900/90">{heroLabel}</h3>
+          <h3 className="text-[13px] font-semibold uppercase tracking-[0.14em] text-emerald-800/90">
+            {heroLabel}
+          </h3>
           <p className="text-lg font-semibold text-emerald-950 sm:text-xl">{hero.name}</p>
           {ratingLine && <p className="text-[12px] text-emerald-800/85">{ratingLine}</p>}
-          {hero.snippet && (
-            <p className="text-[12px] text-emerald-800/80">“{hero.snippet}”</p>
-          )}
+          {hero.snippet && <p className="text-[12px] text-emerald-800/80">“{hero.snippet}”</p>}
           {hero.photoUrl && (
-            <div className="mt-2 overflow-hidden rounded-2xl border border-emerald-50/80 bg-emerald-900/5">
+            <div className="mt-2 overflow-hidden rounded-2xl border border-emerald-50 bg-white">
               <div className="relative aspect-[4/3] w-full">
                 <img
                   src={hero.photoUrl}
                   alt="Spotlight location preview"
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-500 will-change-transform hover:scale-[1.03]"
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </div>
           )}
           <p className="text-[11px] text-emerald-800/80">Based on Google Maps data</p>
         </div>
-      </aside>
-    </div>
-  )
+      </div>
+    </aside>
+  );
 }

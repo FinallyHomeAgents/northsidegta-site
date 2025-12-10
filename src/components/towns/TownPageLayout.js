@@ -363,6 +363,9 @@ export default function TownPageLayout({
 
   const primaryButton = hero?.primaryButton;
   const secondaryButton = hero?.secondaryButton;
+  const uxbridgeSecondaryLabel = isUxbridge
+    ? "Connect With Our Team"
+    : secondaryButton?.label;
 
   const snapshotFields = [
     { key: "population", label: "Population" },
@@ -378,13 +381,7 @@ export default function TownPageLayout({
   return (
     <main className="flex-1">
       {/* Hero */}
-      <section
-        className={`relative isolate overflow-hidden ${
-          isUxbridge
-            ? "h-[420px] sm:h-[460px] md:h-[520px] lg:h-[560px]"
-            : ""
-        }`}
-      >
+      <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0">
           {hero?.backgroundImage ? (
             <img
@@ -398,38 +395,36 @@ export default function TownPageLayout({
           <div className="absolute inset-0 bg-emerald-950/70" />
         </div>
         <div
-          className={`relative mx-auto max-w-6xl px-4 ${
-            isUxbridge ? "h-full py-6 sm:py-8" : "py-20 sm:py-24 lg:py-28"
+          className={`relative z-10 mx-auto max-w-6xl px-4 ${
+            isUxbridge ? "py-12 sm:py-16 lg:py-20" : "py-20 sm:py-24 lg:py-28"
           }`}
         >
           {isUxbridge ? (
-            <div className="flex h-full flex-col">
-              <div className="max-w-3xl text-white">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] items-start lg:items-stretch">
+              <div className="space-y-6 text-white">
                 {hero?.tagline && (
                   <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
                     {hero.tagline}
                   </p>
                 )}
-                <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                  {hero?.title || `Living in ${townName}`}
-                </h1>
-                {hero?.subtitle && (
-                  <p className="mt-3 text-base text-emerald-50 sm:text-lg">
-                    {hero.subtitle}
-                  </p>
-                )}
+                <div className="space-y-3">
+                  <h1 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+                    {hero?.title || `Living in ${townName}`}
+                  </h1>
+                  {hero?.subtitle && (
+                    <p className="text-base text-emerald-50 sm:text-lg">
+                      {hero.subtitle}
+                    </p>
+                  )}
+                </div>
+                <TownHeroLifestyleCard {...heroLifestyleCard} />
               </div>
-              <div className="mt-auto flex flex-col gap-4 md:flex-row md:items-end md:justify-between pb-3 sm:pb-4">
-                <div className="w-full md:max-w-2xl lg:max-w-3xl">
-                  <TownHeroLifestyleCard {...heroLifestyleCard} />
-                </div>
-                <div className="hidden md:block md:w-[340px] lg:w-[380px]">
-                  <TownHeroSpotlight
-                    townSlug={townSlug}
-                    townName={townName}
-                    spotlightData={spotlightData}
-                  />
-                </div>
+              <div className="hidden md:block">
+                <TownHeroSpotlight
+                  townSlug={townSlug}
+                  townName={townName}
+                  spotlightData={spotlightData}
+                />
               </div>
             </div>
           ) : (
@@ -485,7 +480,7 @@ export default function TownPageLayout({
             />
             <ButtonLink
               href={secondaryButton?.href || "#"}
-              label={secondaryButton?.label}
+              label={uxbridgeSecondaryLabel}
               variant="secondary"
             />
           </div>
