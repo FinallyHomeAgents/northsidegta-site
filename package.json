@@ -26,6 +26,7 @@
     "seed:spotlights": "ts-node --transpile-only scripts/seedTownSpotlightsFromGoogle.ts"
   },
   "dependencies": {
+    "@fastify/busboy": "^3.2.0",
     "@marsidev/react-turnstile": "^1.1.0",
     "@upstash/redis": "^1.28.4",
     "@vercel/analytics": "^1.0.0",
@@ -54,6 +55,7 @@
     "resend": "^6.0.3",
     "rrule": "^2.8.1",
     "rss-parser": "^3.13.0",
+    "undici": "^7.16.0",
     "zod": "^3.23.8"
   },
   "browserslist": {

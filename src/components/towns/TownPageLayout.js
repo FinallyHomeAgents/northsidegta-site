@@ -352,6 +352,7 @@ export default function TownPageLayout({
   faqs = [],
   cta,
   guide,
+  introContent,
 }) {
   const [openFaq, setOpenFaq] = useState(null);
   const spotlightData = useTownSpotlightData(townSlug);
@@ -424,6 +425,8 @@ export default function TownPageLayout({
           </div>
         </div>
       </section>
+
+      {introContent}
 
       {/* Snapshot + Ratings */}
       <section className="mx-auto max-w-6xl px-4 py-16">

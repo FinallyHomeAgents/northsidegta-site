@@ -8,6 +8,7 @@ import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import TownPageLayout from "./components/towns/TownPageLayout";
+import TownLifestyleSection from "./components/towns/TownLifestyleSection";
 import { buildTownPageSchema } from "./lib/structuredData/townPage";
 import {
   FiTrendingUp,
@@ -24,6 +25,10 @@ import {
   FiHome,
   FiMap,
 } from "react-icons/fi";
+import {
+  UXBRIDGE_LIFESTYLE_COPY,
+  UXBRIDGE_LIFESTYLE_TEASER,
+} from "./data/townLifestyleCopy";
 
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
@@ -184,6 +189,15 @@ export default function TownPage() {
                   label: `Download ${town.name} Guide (PDF)`,
                 }
               : null
+          }
+          introContent={
+            isUxbridge ? (
+              <TownLifestyleSection
+                title="What It’s Like to Live in Uxbridge"
+                teaser={UXBRIDGE_LIFESTYLE_TEASER}
+                fullText={UXBRIDGE_LIFESTYLE_COPY}
+              />
+            ) : null
           }
         />
         {isUxbridge && (
