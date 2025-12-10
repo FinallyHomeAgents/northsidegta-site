@@ -361,6 +361,9 @@ export default function TownPageLayout({
 
   const isUxbridge = (townSlug || "").toLowerCase() === "uxbridge";
 
+  const primaryButton = hero?.primaryButton;
+  const secondaryButton = hero?.secondaryButton;
+
   const snapshotFields = [
     { key: "population", label: "Population" },
     { key: "driveToToronto", label: "Drive to Toronto" },
@@ -377,7 +380,9 @@ export default function TownPageLayout({
       {/* Hero */}
       <section
         className={`relative isolate overflow-hidden ${
-          isUxbridge ? "h-[420px] sm:h-[480px] md:h-[520px]" : ""
+          isUxbridge
+            ? "h-[420px] sm:h-[460px] md:h-[520px] lg:h-[560px]"
+            : ""
         }`}
       >
         <div className="absolute inset-0">
@@ -393,55 +398,111 @@ export default function TownPageLayout({
           <div className="absolute inset-0 bg-emerald-950/70" />
         </div>
         <div
-          className={`relative mx-auto max-w-6xl px-4 py-20 sm:py-24 lg:py-28 ${
-            isUxbridge ? "h-full" : ""
+          className={`relative mx-auto max-w-6xl px-4 ${
+            isUxbridge ? "h-full py-6 sm:py-8" : "py-20 sm:py-24 lg:py-28"
           }`}
         >
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl text-white">
-              {hero?.tagline && (
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
-                  {hero.tagline}
-                </p>
-              )}
-              <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                {hero?.title || `Living in ${townName}`}
-              </h1>
-              {hero?.subtitle && (
-                <p className="mt-4 text-base text-emerald-50 sm:text-lg">
-                  {hero.subtitle}
-                </p>
-              )}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <ButtonLink
-                  href={hero?.primaryButton?.href || "#"}
-                  label={hero?.primaryButton?.label}
-                  variant="primary"
-                />
-                <ButtonLink
-                  href={hero?.secondaryButton?.href || "#"}
-                  label={hero?.secondaryButton?.label}
-                  variant="secondary"
-                />
+          {isUxbridge ? (
+            <div className="flex h-full flex-col">
+              <div className="max-w-3xl text-white">
+                {hero?.tagline && (
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
+                    {hero.tagline}
+                  </p>
+                )}
+                <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+                  {hero?.title || `Living in ${townName}`}
+                </h1>
+                {hero?.subtitle && (
+                  <p className="mt-3 text-base text-emerald-50 sm:text-lg">
+                    {hero.subtitle}
+                  </p>
+                )}
+              </div>
+              <div className="mt-auto flex flex-col gap-4 md:flex-row md:items-end md:justify-between pb-3 sm:pb-4">
+                <div className="w-full md:max-w-2xl lg:max-w-3xl">
+                  <TownHeroLifestyleCard {...heroLifestyleCard} />
+                </div>
+                <div className="hidden md:block md:w-[340px] lg:w-[380px]">
+                  <TownHeroSpotlight
+                    townSlug={townSlug}
+                    townName={townName}
+                    spotlightData={spotlightData}
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex justify-start lg:justify-end">
-              <div className="w-full max-w-xs">
-                <TownHeroSpotlight
-                  townSlug={townSlug}
-                  townName={townName}
-                  spotlightData={spotlightData}
-                />
+          ) : (
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl text-white">
+                {hero?.tagline && (
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100">
+                    {hero.tagline}
+                  </p>
+                )}
+                <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+                  {hero?.title || `Living in ${townName}`}
+                </h1>
+                {hero?.subtitle && (
+                  <p className="mt-4 text-base text-emerald-50 sm:text-lg">
+                    {hero.subtitle}
+                  </p>
+                )}
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <ButtonLink
+                    href={primaryButton?.href || "#"}
+                    label={primaryButton?.label}
+                    variant="primary"
+                  />
+                  <ButtonLink
+                    href={secondaryButton?.href || "#"}
+                    label={secondaryButton?.label}
+                    variant="secondary"
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-          {isUxbridge && heroLifestyleCard && (
-            <div className="pointer-events-auto absolute bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-xl lg:max-w-2xl">
-              <TownHeroLifestyleCard {...heroLifestyleCard} />
+              <div className="flex justify-start lg:justify-end">
+                <div className="w-full max-w-xs">
+                  <TownHeroSpotlight
+                    townSlug={townSlug}
+                    townName={townName}
+                    spotlightData={spotlightData}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
       </section>
+
+      {isUxbridge && (
+        <section className="mx-auto max-w-6xl px-4 mt-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <ButtonLink
+              href={primaryButton?.href || "#"}
+              label={primaryButton?.label}
+              variant="primary"
+            />
+            <ButtonLink
+              href={secondaryButton?.href || "#"}
+              label={secondaryButton?.label}
+              variant="secondary"
+            />
+          </div>
+        </section>
+      )}
+
+      {isUxbridge && (
+        <section className="mx-auto max-w-6xl px-4 mt-4 md:hidden">
+          <div className="w-full sm:max-w-md">
+            <TownHeroSpotlight
+              townSlug={townSlug}
+              townName={townName}
+              spotlightData={spotlightData}
+            />
+          </div>
+        </section>
+      )}
 
       {introContent}
 

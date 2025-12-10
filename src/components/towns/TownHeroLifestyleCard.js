@@ -19,7 +19,7 @@ export default function TownHeroLifestyleCard({ title, teaser, fullText }) {
 
   return (
     <div
-      className="bg-white/90 backdrop-blur-sm shadow-lg rounded-xl p-4 sm:p-5 md:p-6 text-slate-800 flex flex-col max-h-[75%] md:max-h-[70%] overflow-hidden border border-emerald-50/70"
+      className="bg-white/92 backdrop-blur-sm shadow-xl rounded-2xl p-4 sm:p-5 text-slate-800 flex flex-col max-h-[70%] md:max-h-[75%] overflow-hidden border border-emerald-50/70 min-h-0"
     >
       <div className="space-y-2">
         {title && (
@@ -37,10 +37,10 @@ export default function TownHeroLifestyleCard({ title, teaser, fullText }) {
       <div
         id={contentId}
         aria-hidden={!expanded}
-        className={`mt-3 space-y-3 text-sm sm:text-base text-slate-800 leading-relaxed transition-all duration-300 ${
+        className={`mt-2 space-y-3 text-sm sm:text-base text-slate-800 leading-relaxed transition-all duration-300 min-h-0 ${
           expanded
-            ? "max-h-[340px] overflow-y-auto pr-1"
-            : "max-h-0 overflow-hidden opacity-0"
+            ? "overflow-y-auto max-h-[320px] sm:max-h-[360px] md:max-h-[420px] pr-1"
+            : "overflow-hidden max-h-0 opacity-0"
         }`}
       >
         {paragraphs.map((paragraph, idx) => (
