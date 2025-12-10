@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import TownHeroSpotlight from "./TownHeroSpotlight";
 import TownLiveStrip from "./TownLiveStrip";
 import { useTownSpotlightData } from "./useTownSpotlightData";
+import TownHeroLifestyleCard from "./TownHeroLifestyleCard";
 
 const DEFAULT_TASTEHUB_IMAGE = "/seo/tastehub-default-poll-share.jpg";
 
@@ -353,9 +354,12 @@ export default function TownPageLayout({
   cta,
   guide,
   introContent,
+  heroLifestyleCard,
 }) {
   const [openFaq, setOpenFaq] = useState(null);
   const spotlightData = useTownSpotlightData(townSlug);
+
+  const isUxbridge = (townSlug || "").toLowerCase() === "uxbridge";
 
   const snapshotFields = [
     { key: "population", label: "Population" },
@@ -371,7 +375,11 @@ export default function TownPageLayout({
   return (
     <main className="flex-1">
       {/* Hero */}
-      <section className="relative isolate overflow-hidden">
+      <section
+        className={`relative isolate overflow-hidden ${
+          isUxbridge ? "h-[420px] sm:h-[480px] md:h-[520px]" : ""
+        }`}
+      >
         <div className="absolute inset-0">
           {hero?.backgroundImage ? (
             <img
@@ -384,7 +392,11 @@ export default function TownPageLayout({
           )}
           <div className="absolute inset-0 bg-emerald-950/70" />
         </div>
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:py-24 lg:py-28">
+        <div
+          className={`relative mx-auto max-w-6xl px-4 py-20 sm:py-24 lg:py-28 ${
+            isUxbridge ? "h-full" : ""
+          }`}
+        >
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl text-white">
               {hero?.tagline && (
@@ -423,6 +435,11 @@ export default function TownPageLayout({
               </div>
             </div>
           </div>
+          {isUxbridge && heroLifestyleCard && (
+            <div className="pointer-events-auto absolute bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-xl lg:max-w-2xl">
+              <TownHeroLifestyleCard {...heroLifestyleCard} />
+            </div>
+          )}
         </div>
       </section>
 

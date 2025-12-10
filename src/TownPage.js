@@ -8,7 +8,6 @@ import Footer from "./Footer";
 import QuickContactCard from "./QuickContactCard";
 import TownStrip from "./TownStrip";
 import TownPageLayout from "./components/towns/TownPageLayout";
-import TownLifestyleSection from "./components/towns/TownLifestyleSection";
 import { buildTownPageSchema } from "./lib/structuredData/townPage";
 import {
   FiTrendingUp,
@@ -125,6 +124,14 @@ export default function TownPage() {
   const slug = (town.slug || "").toLowerCase();
   const isUxbridge = slug === "uxbridge";
 
+  const heroLifestyleCard = isUxbridge
+    ? {
+        title: "What It’s Like to Live in Uxbridge",
+        teaser: UXBRIDGE_LIFESTYLE_TEASER,
+        fullText: UXBRIDGE_LIFESTYLE_COPY,
+      }
+    : null;
+
   const townSchema = React.useMemo(
     () =>
       buildTownPageSchema({
@@ -190,15 +197,8 @@ export default function TownPage() {
                 }
               : null
           }
-          introContent={
-            isUxbridge ? (
-              <TownLifestyleSection
-                title="What It’s Like to Live in Uxbridge"
-                teaser={UXBRIDGE_LIFESTYLE_TEASER}
-                fullText={UXBRIDGE_LIFESTYLE_COPY}
-              />
-            ) : null
-          }
+          introContent={null}
+          heroLifestyleCard={heroLifestyleCard}
         />
         {isUxbridge && (
           <section className="mx-auto mt-10 max-w-5xl px-4">
