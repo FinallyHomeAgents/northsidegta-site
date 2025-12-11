@@ -2,7 +2,7 @@
   "slug": "20260112-intro-to-wood-carving-16-aurora",
   "title": "Intro to Wood Carving (16+)",
   "summary": "Intro to Wood Carving (16+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – ATS Art Activity Room 50 Victoria Street, Aurora Formerly known as “Wood Carving”, this adult 8-week wood-carving program is perfect whether you are a beginner or a seasoned wood turner. Unlock the artistry within wood and learn to create intricate reliefs to dynamic sculptural pieces in the round. All materials are to be provided upon payment of a $80.00 materials fee and a $120.00 refundable deposit for borrowed tools payable to the instructor on date of the workshop. Materials List",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – ATS Art Activity Room 50 Victoria Street, Aurora Formerly known as “Wood Carving”, this adult 8-week wood-carving program is perfect whether you are a beginner or a seasoned wood turner. Unlock the artistry within wood and learn to create intricate reliefs to dynamic sculptural pieces in the round. All materials are to be provided upon payment of a $80.00 materials fee and a $120.00 refundable deposit for borrowed tools payable to the instructor on date of the workshop. Materials List",
   "startDate": "2026-01-12T05:00:00Z",
   "endDate": "2026-03-10T03:59:59Z",
   "allDay": false,
@@ -358,11 +358,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/intro-to-wood-carving-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002715-1768176000-1773100799@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-05T08:37:04Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

@@ -2,7 +2,7 @@
   "slug": "20260115-acrylic-painting-55-beginner-aurora",
   "title": "Acrylic Painting (55+): Beginner",
   "summary": "Acrylic Painting (55+): Beginner",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 15 – March 26, 2026 [SKIP March 19 – March Break] Thursdays | 9:00 – 11:00 am | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week program is tailored for participants ages 55+, who want to discover the unique qualities of acrylic paint and experiment with a variety of techniques. Learn about choosing paints, painting surfaces and how to make the most of your tools. Basic colour theory and mixing will be explored as well as composition and mixed media. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 15 – March 26, 2026 [SKIP March 19 – March Break] Thursdays | 9:00 – 11:00 am | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week program is tailored for participants ages 55+, who want to discover the unique qualities of acrylic paint and experiment with a variety of techniques. Learn about choosing paints, painting surfaces and how to make the most of your tools. Basic colour theory and mixing will be explored as well as composition and mixed media. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
   "startDate": "2026-01-15T05:00:00Z",
   "endDate": "2026-03-27T03:59:59Z",
   "allDay": false,
@@ -442,11 +442,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-painting-beginner-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002728-1768435200-1774569599@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-08T08:40:33Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

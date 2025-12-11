@@ -22,11 +22,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/open-studio-2025b/2025-12-17/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002597-1765929600-1766015999@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-05T08:37:04Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

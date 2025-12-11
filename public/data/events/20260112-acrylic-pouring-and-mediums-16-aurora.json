@@ -2,7 +2,7 @@
   "slug": "20260112-acrylic-pouring-and-mediums-16-aurora",
   "title": "Acrylic Pouring and Mediums (16+)",
   "summary": "Acrylic Pouring and Mediums (16+)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora Start your journey in paint pouring, a contemporary art form perfect for beginners! In this 8-week program, you will explore various paints, pastels, pigments and more to create beautiful, marbled art. Every week you will build on prior lessons and master colour mixing, selection, tool use, and mixing mediums to create art that is beautiful and unique. Supplementary Materials Fee: $50 payable in cash to the instructor on the first day of program. Please note the list of materials below to bring to the first class. Materials List",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 12 – March 9, 2026 [SKIP February 16 – Family Day] Mondays | 6:30 – 9:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora Start your journey in paint pouring, a contemporary art form perfect for beginners! In this 8-week program, you will explore various paints, pastels, pigments and more to create beautiful, marbled art. Every week you will build on prior lessons and master colour mixing, selection, tool use, and mixing mediums to create art that is beautiful and unique. Supplementary Materials Fee: $50 payable in cash to the instructor on the first day of program. Please note the list of materials below to bring to the first class. Materials List",
   "startDate": "2026-01-12T05:00:00Z",
   "endDate": "2026-03-10T03:59:59Z",
   "allDay": false,
@@ -358,11 +358,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-pouring-and-mediums-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002713-1768176000-1773100799@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-05T08:37:04Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

@@ -2,7 +2,7 @@
   "slug": "20260114-drawing-fundamentals-55-session-a-aurora",
   "title": "Drawing Fundamentals (55+) - Session A",
   "summary": "Drawing Fundamentals (55+) - Session A",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – March 25, 2026 [SKIP March 18 – March Break] Wednesdays | 9:00 – 10:30 am | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora In this 10-week drawing program tailored for participants aged 55+, you will be introduced to fundamental technical and creative exercises to develop key drawing skills as you start your new art practice. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – March 25, 2026 [SKIP March 18 – March Break] Wednesdays | 9:00 – 10:30 am | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora In this 10-week drawing program tailored for participants aged 55+, you will be introduced to fundamental technical and creative exercises to develop key drawing skills as you start your new art practice. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
   "startDate": "2026-01-14T05:00:00Z",
   "endDate": "2026-03-26T03:59:59Z",
   "allDay": false,
@@ -442,11 +442,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/drawing-fundamentals-session-a-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002722-1768348800-1774483199@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-05T08:37:04Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

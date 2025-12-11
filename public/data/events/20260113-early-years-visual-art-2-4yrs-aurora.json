@@ -2,7 +2,7 @@
   "slug": "20260113-early-years-visual-art-2-4yrs-aurora",
   "title": "Early Years' Visual Art (2-4yrs)",
   "summary": "Early Years' Visual Art (2-4yrs)",
-  "description": "Register Here Starting December 8! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – February 24, 2026 Tuesdays | 10:00 – 11:00 am | Ages 2-4 Aurora Town Square – Multipurpose Studio 50 Victoria Street, Aurora Spark creativity in your 2-4-year-old with this interactive visual art program! Through fun activities, they’ll explore colors, shapes, textures, and expressing themselves visually. Parents can join in for a meaningful bonding experience and learn easy techniques to try at home. All materials are safe and non-toxic. All materials are included!",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 13 – February 24, 2026 Tuesdays | 10:00 – 11:00 am | Ages 2-4 Aurora Town Square – Multipurpose Studio 50 Victoria Street, Aurora Spark creativity in your 2-4-year-old with this interactive visual art program! Through fun activities, they’ll explore colors, shapes, textures, and expressing themselves visually. Parents can join in for a meaningful bonding experience and learn easy techniques to try at home. All materials are safe and non-toxic. All materials are included!",
   "startDate": "2026-01-13T05:00:00Z",
   "endDate": "2026-02-25T04:59:59Z",
   "allDay": false,
@@ -274,11 +274,16 @@
   "priceType": "Paid",
   "eventUrl": "https://auroraculturalcentre.ca/event/early-years-visual-art-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
-  "featured": false,
+  "status": "pending",
   "hidden": false,
   "archived": false,
-  "status": "pending",
   "source": "feed",
+  "sourceName": "Aurora Cultural Centre",
+  "sourceUrl": "https://auroraculturalcentre.ca/events/",
+  "sourceDomain": "auroraculturalcentre.ca",
+  "sourcePriority": 20,
   "sourceRef": "10002742-1768262400-1771977599@auroraculturalcentre.ca",
-  "updatedAt": "2025-12-05T08:37:04Z"
+  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "updatedAt": "2025-12-11T08:39:24.959Z",
+  "featured": false
 }

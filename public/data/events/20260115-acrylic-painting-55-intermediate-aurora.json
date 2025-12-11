@@ -1,19 +1,13 @@
 {
-  "slug": "20260114-guitar-intermediate-16-aurora",
-  "title": "Guitar Intermediate (16+)",
-  "summary": "Guitar Intermediate (16+)",
-  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 14 – March 4, 2026 Wednesdays | 7:30 – 8:45 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora Take your guitar skills to the next level in this 8-week adult intermediate program! Building on your knowledge of chords and strumming, you’ll explore more complex techniques such as fingerpicking, barre chords, and soloing. Learn to play more challenging songs, improve your rhythm, and develop a deeper understanding of music theory. This program is perfect for those who are ready to expand their playing and gain more confidence in their musical abilities. Participants are to provide their own instrument.",
-  "startDate": "2026-01-14T05:00:00Z",
-  "endDate": "2026-03-05T04:59:59Z",
+  "slug": "20260115-acrylic-painting-55-intermediate-aurora",
+  "title": "Acrylic Painting (55+): Intermediate",
+  "summary": "Acrylic Painting (55+): Intermediate",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. January 15 – March 26, 2026 [SKIP March 19 – March Break] Thursdays | 11:30 – 1:30 pm | Age 55+ Aurora Town Square – Shining Hill Visual Arts Studio 50 Victoria Street, Aurora This 10-week program is tailored for participants ages 55+, who want to expand and experiment with additional acrylic painting techniques. Learn about choosing paints, painting surfaces and how to make the most of your tools. Colour theory and mixing will be explored as well as composition and mixed media. Programs tailored for adults 55+ encourage discovery, creativity and social connection in an environment that supports effective learning strategies for mature learners. Please note the list of materials to bring to the first class. Materials List",
+  "startDate": "2026-01-15T05:00:00Z",
+  "endDate": "2026-03-27T03:59:59Z",
   "allDay": false,
   "use_daily_schedule": true,
   "daily_schedule": [
-    {
-      "date": "2026-01-14",
-      "all_day": true,
-      "start_time": "",
-      "end_time": ""
-    },
     {
       "date": "2026-01-15",
       "all_day": true,
@@ -307,14 +301,146 @@
       "all_day": true,
       "start_time": "",
       "end_time": ""
+    },
+    {
+      "date": "2026-03-05",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-06",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-07",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-08",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-09",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-10",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-11",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-12",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-13",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-14",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-15",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-16",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-17",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-18",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-19",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-20",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-21",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-22",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-23",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-24",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-25",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2026-03-26",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
     }
   ],
   "category": "Arts & Culture",
   "town": "Aurora",
-  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
-  "address": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
   "priceType": "Paid",
-  "eventUrl": "https://auroraculturalcentre.ca/event/guitar-intermediate-w26/",
+  "eventUrl": "https://auroraculturalcentre.ca/event/acrylic-painting-intermediate-w26/",
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "status": "pending",
   "hidden": false,
@@ -324,8 +450,9 @@
   "sourceUrl": "https://auroraculturalcentre.ca/events/",
   "sourceDomain": "auroraculturalcentre.ca",
   "sourcePriority": 20,
-  "sourceRef": "10002724-1768348800-1772668799@auroraculturalcentre.ca",
+  "sourceRef": "10002729-1768435200-1774569599@auroraculturalcentre.ca",
   "lastSyncedAt": "2025-12-11T08:39:24.959Z",
+  "firstSeenAt": "2025-12-11T08:39:24.959Z",
   "updatedAt": "2025-12-11T08:39:24.959Z",
   "featured": false
 }
