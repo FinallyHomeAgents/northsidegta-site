@@ -140,7 +140,8 @@
   {
     "id": "whitchurch-stouffville-community",
     "domain": "townofws.ca",
-    "enabled": true,
+    "enabled": false,
+    "disabledReason": "Municipal ICS feed currently offline; last successful pulls pre-2025",
     "strategy": "ics",
     "start_urls": [
       "https://calendar.townofws.ca/default/Download.ics"

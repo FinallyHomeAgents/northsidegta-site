@@ -65,6 +65,8 @@ async function main() {
 
   for (const feed of feeds) {
     if (feed.enabled === false) {
+      const reason = feed.disabledReason ? ` (${feed.disabledReason})` : ''
+      console.log(`[ingest-events] Skipping disabled feed ${feed.id || feed.url}${reason}`)
       summary.skipped += 1
       continue
     }

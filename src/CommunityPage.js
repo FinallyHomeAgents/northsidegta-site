@@ -377,77 +377,96 @@ export default function CommunityPage() {
 
           {!loading && !error && (
             <div className="space-y-12">
-              {featuredEvents.length > 0 && (
-                <section className="space-y-5">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="text-xl font-semibold text-slate-900">Featured This Week</h3>
-                    <p className="text-sm text-slate-500">
-                      Highlighted picks editors love right now.
-                    </p>
+              {!visibleEvents.length ? (
+                <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 px-6 py-12 text-center text-sm text-slate-600">
+                  <p className="font-medium text-slate-800">Community events are temporarily unavailable.</p>
+                  <p className="mt-2 text-slate-600">
+                    Our external event feeds are not responding right now. Please check back soon or submit your own event while we reconnect.
+                  </p>
+                  <div className="mt-4 flex justify-center">
+                    <a
+                      className="rounded-full bg-brand-green px-4 py-2 text-white shadow-sm transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
+                      href="/community/submit-event"
+                    >
+                      Submit an event
+                    </a>
                   </div>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    {featuredEvents.map((event) => (
-                      <EventCard
-                        key={event.slug}
-                        event={event}
-                        onSelect={setSelectedEvent}
-                        highlighted={highlightedSlug === event.slug}
-                      />
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {view === 'list' && (
-                <section className="space-y-10">
-                  {monthlyEvents.length ? (
-                    monthlyEvents.map((month) => (
-                      <section key={month.key} className="space-y-4">
-                        <div className="flex items-center gap-4">
-                          <h4 className="text-lg font-semibold text-slate-900 sm:text-xl">{month.label}</h4>
-                          <div className="hidden flex-1 border-t border-slate-200 sm:block" aria-hidden="true" />
-                        </div>
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                          {month.events.map((event) => (
-                            <EventCard
-                              key={event.slug}
-                              event={event}
-                              onSelect={setSelectedEvent}
-                              highlighted={highlightedSlug === event.slug}
-                              variant="compact"
-                            />
-                          ))}
-                        </div>
-                      </section>
-                    ))
-                  ) : (
-                    emptyState
+                </div>
+              ) : (
+                <>
+                  {featuredEvents.length > 0 && (
+                    <section className="space-y-5">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <h3 className="text-xl font-semibold text-slate-900">Featured This Week</h3>
+                        <p className="text-sm text-slate-500">
+                          Highlighted picks editors love right now.
+                        </p>
+                      </div>
+                      <div className="grid gap-6 md:grid-cols-2">
+                        {featuredEvents.map((event) => (
+                          <EventCard
+                            key={event.slug}
+                            event={event}
+                            onSelect={setSelectedEvent}
+                            highlighted={highlightedSlug === event.slug}
+                          />
+                        ))}
+                      </div>
+                    </section>
                   )}
-                </section>
-              )}
 
-              {view === 'calendar' && (
-                <section>
-                  {filteredEvents.length ? (
-                    <EventCalendar
-                      events={filteredEvents}
-                      initialMonth={rangeStart || new Date()}
-                      onSelectEvent={setSelectedEvent}
-                    />
-                  ) : (
-                    emptyState
+                  {view === 'list' && (
+                    <section className="space-y-10">
+                      {monthlyEvents.length ? (
+                        monthlyEvents.map((month) => (
+                          <section key={month.key} className="space-y-4">
+                            <div className="flex items-center gap-4">
+                              <h4 className="text-lg font-semibold text-slate-900 sm:text-xl">{month.label}</h4>
+                              <div className="hidden flex-1 border-t border-slate-200 sm:block" aria-hidden="true" />
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                              {month.events.map((event) => (
+                                <EventCard
+                                  key={event.slug}
+                                  event={event}
+                                  onSelect={setSelectedEvent}
+                                  highlighted={highlightedSlug === event.slug}
+                                  variant="compact"
+                                />
+                              ))}
+                            </div>
+                          </section>
+                        ))
+                      ) : (
+                        emptyState
+                      )}
+                    </section>
                   )}
-                </section>
-              )}
 
-              {view === 'map' && (
-                <section>
-                  {filteredEvents.length ? (
-                    <EventMap events={filteredEvents} onSelectEvent={setSelectedEvent} />
-                  ) : (
-                    emptyState
+                  {view === 'calendar' && (
+                    <section>
+                      {filteredEvents.length ? (
+                        <EventCalendar
+                          events={filteredEvents}
+                          initialMonth={rangeStart || new Date()}
+                          onSelectEvent={setSelectedEvent}
+                        />
+                      ) : (
+                        emptyState
+                      )}
+                    </section>
                   )}
-                </section>
+
+                  {view === 'map' && (
+                    <section>
+                      {filteredEvents.length ? (
+                        <EventMap events={filteredEvents} onSelectEvent={setSelectedEvent} />
+                      ) : (
+                        emptyState
+                      )}
+                    </section>
+                  )}
+                </>
               )}
             </div>
           )}

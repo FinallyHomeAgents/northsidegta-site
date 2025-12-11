@@ -65,7 +65,11 @@ async function main() {
   const syncState = { configChanged: false, urlUpdates: [], fallbacks: [] }
 
   for (const feed of feeds) {
-    if (!feed || feed.enabled === false) continue
+    if (!feed || feed.enabled === false) {
+      const reason = feed?.disabledReason ? ` (${feed.disabledReason})` : ''
+      console.log(`[sync-events] Skipping disabled feed ${feed?.id || feed?.url || 'unknown'}${reason}`)
+      continue
+    }
     const feedReport = createFeedReport(feed)
     feedReports.push(feedReport)
     const startedAt = Date.now()
