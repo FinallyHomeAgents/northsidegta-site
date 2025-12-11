@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/lol-playground-2.avif",
   "eventUrl": "https://discoverstouffville.ca/event/lol-playlab-grand-opening/",
-  "status": "pending",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "pending",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/lol-playlab-grand-opening/",
-  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
-  "updatedAt": "2025-12-11T08:39:24.959Z",
-  "featured": false
+  "updatedAt": "2025-12-11T08:39:24Z"
 }

@@ -18,16 +18,11 @@
   ],
   "image": "https://discoverstouffville.ca/wp-content/uploads/2025/11/santa-at-the-museum.jpg",
   "eventUrl": "https://discoverstouffville.ca/event/santa-visits-the-museum-3/",
-  "status": "approved",
+  "featured": false,
   "hidden": false,
   "archived": false,
+  "status": "approved",
   "source": "feed",
-  "sourceName": "Discover Stouffville",
-  "sourceUrl": "https://discoverstouffville.ca/events",
-  "sourceDomain": "discoverstouffville.ca",
-  "sourcePriority": 30,
   "sourceRef": "https://discoverstouffville.ca/event/santa-visits-the-museum-3/",
-  "lastSyncedAt": "2025-12-11T08:39:24.959Z",
-  "updatedAt": "2025-12-11T08:39:24.959Z",
-  "featured": false
+  "updatedAt": "2025-12-11T08:39:24Z"
 }
