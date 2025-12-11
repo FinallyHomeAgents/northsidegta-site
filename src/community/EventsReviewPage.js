@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { DateTime } from 'luxon'
 
 const PASSCODE = (process.env.REACT_APP_EVENTS_REVIEW_PASS || '').trim()
+const MODERATOR_SECRET = (process.env.REACT_APP_EVENTS_MODERATOR_SECRET || '').trim()
 const ACCESS_KEY = 'eventsReviewAccess'
 const TORONTO_ZONE = 'America/Toronto'
 
@@ -232,7 +233,7 @@ export default function EventsReviewPage() {
         const response = await fetch('/api/events/moderate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, action }),
+          body: JSON.stringify({ slug, action, secret: MODERATOR_SECRET }),
         })
         if (!response.ok) {
           throw new Error('moderation-failed')

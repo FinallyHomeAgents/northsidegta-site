@@ -1,6 +1,7 @@
-import {
-  sanitizeEventId,
-} from '../../../lib/admin-events.js'
+import fs from 'fs'
+import path from 'path'
+
+import { sanitizeEventId } from '../../../lib/admin-events.js'
 import { readJsonBody } from '../../../lib/api-helpers.js'
 import {
   applyRepoChanges as baseApplyRepoChanges,
@@ -21,6 +22,16 @@ const fetchEventFileFromGithub =
 const fetchPendingEventFileFromGithub =
   adminOverrides.fetchPendingEventFileFromGithub || baseFetchPendingEventFileFromGithub
 const getGithubEnvConfig = adminOverrides.getGithubEnvConfig || baseGetGithubEnvConfig
+
+const EVENTS_DIR = path.join(process.cwd(), 'public/data/events')
+const PENDING_DIR = path.join(process.cwd(), 'public/data/events-pending')
+
+function eventExists(slug) {
+  return (
+    fs.existsSync(path.join(EVENTS_DIR, `${slug}.json`)) ||
+    fs.existsSync(path.join(PENDING_DIR, `${slug}.json`))
+  )
+}
 
 function parseAction(value) {
   if (typeof value !== 'string') return ''
@@ -80,13 +91,9 @@ async function persistModerationChange({
     })
   }
 
-  const minimal = buildUpdatedEvent({}, slug, status)
-  const content = `${JSON.stringify(minimal, null, 2)}\n`
-  return applyRepoChanges({
-    message,
-    description,
-    changes: [{ path: livePath, content }],
-  })
+  const missing = new Error('Unable to locate event to update.')
+  missing.status = 404
+  throw missing
 }
 
 export default async function handler(req, res) {
@@ -104,10 +111,28 @@ export default async function handler(req, res) {
     return
   }
 
+  const secret = process.env.EVENTS_MODERATOR_SECRET
+  const providedSecret = body?.secret
+
+  if (!secret) {
+    res.status(500).json({ ok: false, error: 'Server missing moderator secret.' })
+    return
+  }
+
+  if (!providedSecret || providedSecret !== secret) {
+    res.status(401).json({ ok: false, error: 'Invalid or missing moderation secret.' })
+    return
+  }
+
   const slug = sanitizeEventId(body?.slug)
   const action = parseAction(body?.action)
   if (!slug || !action) {
     res.status(400).json({ ok: false, error: 'Missing slug or action.' })
+    return
+  }
+
+  if (!eventExists(slug)) {
+    res.status(404).json({ ok: false, error: 'Event does not exist.' })
     return
   }
 
@@ -133,11 +158,8 @@ export default async function handler(req, res) {
         })
 
     if (!existing && !pending) {
-      const pendingPath = buildPendingEventPath(slug)
-      if (!pendingPath || !buildEventPath(slug)) {
-        res.status(404).json({ ok: false, error: 'Event not found.' })
-        return
-      }
+      res.status(404).json({ ok: false, error: 'Event not found.' })
+      return
     }
 
     await persistModerationChange({ slug, status: targetStatus, existing, pending })

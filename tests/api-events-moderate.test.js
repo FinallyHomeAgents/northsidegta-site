@@ -2,11 +2,24 @@
 
 const test = require('node:test')
 const assert = require('node:assert/strict')
+const fs = require('node:fs')
+const path = require('node:path')
 const { pathToFileURL } = require('node:url')
 const { createRequire } = require('node:module')
 
 const require_ = createRequire(__filename)
 const handlerUrl = pathToFileURL(require_.resolve('../pages/api/events/moderate.js')).href
+const EVENTS_DIR = path.join(process.cwd(), 'public/data/events')
+
+function writeEventFile(dir, slug, data = {}) {
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, `${slug}.json`), JSON.stringify({ slug, ...data }, null, 2))
+}
+
+function removeEventFile(dir, slug) {
+  const target = path.join(dir, `${slug}.json`)
+  if (fs.existsSync(target)) fs.rmSync(target)
+}
 
 function createMockResponse() {
   return {
@@ -49,6 +62,7 @@ async function withGithubMock(overrides, fn) {
 }
 
 test('rejects non-POST methods', async () => {
+  process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
   const handler = await loadHandler()
   const res = createMockResponse()
   await handler(createRequest({ method: 'GET' }), res)
@@ -56,9 +70,12 @@ test('rejects non-POST methods', async () => {
 })
 
 test('validates required fields', async () => {
+  process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
   const handler = await loadHandler()
   const res = createMockResponse()
-  await handler(createRequest({ body: { action: 'approve' } }), res)
+  writeEventFile(EVENTS_DIR, 'sample')
+  await handler(createRequest({ body: { action: 'approve', secret: 'Northsidelando' } }), res)
+  removeEventFile(EVENTS_DIR, 'sample')
   assert.equal(res.statusCode, 400)
 })
 
@@ -73,14 +90,41 @@ test('returns config error when GitHub is not configured', async () => {
       fetchPendingEventFileFromGithub: async () => null,
     },
     async () => {
+      process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+      writeEventFile(EVENTS_DIR, 'sample')
       const handler = await loadHandler()
       const res = createMockResponse()
-      await handler(createRequest({ body: { slug: 'sample', action: 'approve' } }), res)
+      await handler(createRequest({ body: { slug: 'sample', action: 'approve', secret: 'Northsidelando' } }), res)
+      removeEventFile(EVENTS_DIR, 'sample')
 
       assert.equal(res.statusCode, 500)
       assert.equal(res.body?.error, 'GITHUB_CONFIG_MISSING')
     }
   )
+})
+
+test('requires a valid moderation secret', async () => {
+  process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+  writeEventFile(EVENTS_DIR, 'sample')
+  const handler = await loadHandler()
+
+  const missingSecretRes = createMockResponse()
+  await handler(createRequest({ body: { slug: 'sample', action: 'approve' } }), missingSecretRes)
+  assert.equal(missingSecretRes.statusCode, 401)
+
+  const wrongSecretRes = createMockResponse()
+  await handler(createRequest({ body: { slug: 'sample', action: 'approve', secret: 'nope' } }), wrongSecretRes)
+  assert.equal(wrongSecretRes.statusCode, 401)
+
+  removeEventFile(EVENTS_DIR, 'sample')
+})
+
+test('rejects moderation for unknown slugs', async () => {
+  process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+  const handler = await loadHandler()
+  const res = createMockResponse()
+  await handler(createRequest({ body: { slug: 'missing-event', action: 'deny', secret: 'Northsidelando' } }), res)
+  assert.equal(res.statusCode, 404)
 })
 
 test('approve action sets status to published', async () => {
@@ -105,9 +149,14 @@ test('approve action sets status to published', async () => {
       buildPendingEventPath: (slug) => `public/data/events-pending/${slug}.json`,
     },
     async () => {
+      process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+      writeEventFile(EVENTS_DIR, 'sample')
       const handler = await loadHandler()
       const res = createMockResponse()
-      await handler(createRequest({ body: { slug: 'sample', action: 'approve' } }), res)
+      await handler(
+        createRequest({ body: { slug: 'sample', action: 'approve', secret: 'Northsidelando' } }),
+        res
+      )
 
       if (res.statusCode !== 200) {
         // Surface the error payload to aid debugging in CI
@@ -120,6 +169,7 @@ test('approve action sets status to published', async () => {
       const saved = JSON.parse(recordedChanges[0].content)
       assert.equal(saved.status, 'published')
       assert.equal(saved.archived, undefined)
+      removeEventFile(EVENTS_DIR, 'sample')
     }
   )
 })
@@ -146,9 +196,14 @@ test('deny action archives the event', async () => {
       buildPendingEventPath: (slug) => `public/data/events-pending/${slug}.json`,
     },
     async () => {
+      process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+      writeEventFile(EVENTS_DIR, 'sample')
       const handler = await loadHandler()
       const res = createMockResponse()
-      await handler(createRequest({ body: { slug: 'sample', action: 'deny' } }), res)
+      await handler(
+        createRequest({ body: { slug: 'sample', action: 'deny', secret: 'Northsidelando' } }),
+        res
+      )
 
       if (res.statusCode !== 200) {
         // eslint-disable-next-line no-console
@@ -159,6 +214,7 @@ test('deny action archives the event', async () => {
       const saved = JSON.parse(recordedChanges[0].content)
       assert.equal(saved.status, 'archived')
       assert.equal(saved.archived, true)
+      removeEventFile(EVENTS_DIR, 'sample')
     }
   )
 })
