@@ -2,6 +2,11 @@
 import fs from 'fs'
 import path from 'path'
 
+import {
+  filterEventsByScope,
+  sortEventsByStartDate,
+} from '../lib/admin-events.js'
+
 const EVENTS_DIR = path.join(process.cwd(), 'public', 'data', 'events')
 const PENDING_EVENTS_DIR = path.join(process.cwd(), 'public', 'data', 'events-pending')
 const CACHE_MAX_AGE = 60 // seconds
@@ -61,6 +66,23 @@ function withinStatuses(event, statusFilter) {
   return false
 }
 
+function parseScopeParam(value) {
+  if (Array.isArray(value)) {
+    return value.length ? parseScopeParam(value[0]) : 'upcoming'
+  }
+  if (typeof value !== 'string') return 'upcoming'
+  const normalized = value.trim().toLowerCase()
+  if (normalized === 'past' || normalized === 'all') return normalized
+  return 'upcoming'
+}
+
+function shouldIncludeArchived(statusFilter) {
+  if (!statusFilter.length) return false
+  if (statusFilter.includes('archived')) return true
+  if (statusFilter.includes('all')) return true
+  return false
+}
+
 export default function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET')
@@ -91,6 +113,7 @@ export default function handler(req, res) {
   }
 
   const statusFilter = normalizeStatus(req.query?.status || 'published,pending')
+  const scopeParam = parseScopeParam(req.query?.scope)
   const slugParam = req.query?.slug
   const slugFilter = Array.isArray(slugParam)
     ? slugParam.map((value) => String(value).trim()).filter(Boolean)
@@ -98,25 +121,29 @@ export default function handler(req, res) {
       ? [slugParam.trim()].filter(Boolean)
       : []
   const slugSet = new Set(slugFilter)
+  const resolvedScope = slugSet.size ? 'all' : scopeParam
+  const includeArchived = shouldIncludeArchived(statusFilter)
   const limitValue = Number.parseInt(req.query?.limit, 10)
   const hasLimit = Number.isFinite(limitValue) && limitValue > 0
 
   const filtered = events
     .filter((event) => withinStatuses(event, statusFilter))
     .filter((event) => (slugSet.size ? slugSet.has(event.slug) : true))
-    .filter((event) => !event?.hidden)
-    .sort((a, b) => {
-      const aDate = new Date(a.startDate || 0).getTime()
-      const bDate = new Date(b.startDate || 0).getTime()
-      return aDate - bDate
+    .filter((event) => {
+      if (event?.archived) return includeArchived
+      if (event?.hidden) return false
+      return true
     })
 
-  if (slugSet.size && !filtered.length) {
+  const scoped = filterEventsByScope(filtered, resolvedScope)
+  const sorted = sortEventsByStartDate(scoped, 'asc')
+
+  if (slugSet.size && !sorted.length) {
     res.status(404).json({ error: 'Event not found.' })
     return
   }
 
-  const payload = hasLimit ? filtered.slice(0, limitValue) : filtered
+  const payload = hasLimit ? sorted.slice(0, limitValue) : sorted
 
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Cache-Control', `s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate`)

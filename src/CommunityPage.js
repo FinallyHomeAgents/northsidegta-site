@@ -57,7 +57,7 @@ export default function CommunityPage() {
   React.useEffect(() => {
     let cancelled = false
     setLoading(true)
-    fetch('/api/events?status=published,pending', { cache: 'no-store' })
+    fetch('/api/events?scope=upcoming&status=published&includeStatus=true', { cache: 'no-store' })
       .then((response) => {
         if (!response.ok) throw new Error('Failed to load events')
         return response.json()

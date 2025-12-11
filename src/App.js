@@ -29,6 +29,7 @@ import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 import MembershipCardPreviewPage from "./MembershipCardPreviewPage";
+import EventsReviewPage from "./community/EventsReviewPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -83,6 +84,7 @@ function App() {
           <Route path="/community/submit-event" element={<SubmitEventPage />} />
           <Route path="/events/archive" element={<EventsArchivePage />} />
           <Route path="/community/events-admin" element={<EventsIndexPage />} />
+          <Route path="/community/events-review" element={<EventsReviewPage />} />
           <Route path="/contact"      element={<ContactPage />} />
           <Route path="/vip"          element={<VipPage />} />
           <Route path="/sign"         element={<SignWithUsPage />} />
