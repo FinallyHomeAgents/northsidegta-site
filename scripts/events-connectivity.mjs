@@ -22,7 +22,13 @@ async function main() {
     return
   }
 
-  const results = await runWithConcurrency(feeds, options.concurrency, async (feed) => {
+  const activeFeeds = feeds.filter((feed) => feed?.enabled !== false)
+  const skippedFeeds = feeds.length - activeFeeds.length
+  if (skippedFeeds > 0) {
+    console.log(`[events-connectivity] Skipping ${skippedFeeds} disabled feed(s).`)
+  }
+
+  const results = await runWithConcurrency(activeFeeds, options.concurrency, async (feed) => {
     return probeFeed(feed, options)
   })
 
@@ -303,7 +309,15 @@ async function checkUrl(url, options = {}) {
   } catch (error) {
     result.ok = false
     result.status = null
-    result.error = error.code || error.name || error.message || 'fetch_failed'
+    const errorParts = []
+    if (error.code) errorParts.push(error.code)
+    if (error.name && !errorParts.includes(error.name)) errorParts.push(error.name)
+    if (error.message) errorParts.push(error.message)
+    if (error.cause?.code && !errorParts.includes(error.cause.code)) errorParts.push(error.cause.code)
+    if (error.cause?.message && !errorParts.includes(error.cause.message)) {
+      errorParts.push(error.cause.message)
+    }
+    result.error = errorParts.filter(Boolean).join(' | ') || 'fetch_failed'
     result.elapsedMs = Date.now() - startedAt
     if (method === 'HEAD') return checkUrl(url, { ...options, method: 'GET' })
   } finally {

@@ -32,6 +32,47 @@ npm run events:normalize -- --report logs/events-normalize-report.json
 
 The report contains the summary plus a per-file list of fixes that were applied or would be applied in dry-run/check mode.
 
+## Feed health snapshot
+
+When debugging upstream feeds, run a read/write health snapshot to see which sources are producing usable events and whether th
+ey surface through the API:
+
+```bash
+npm run events:health -- --json logs/events-health.json
+```
+
+- The command fetches every enabled feed, applies the same normalization and filters as `ingest-events`, and writes the events
+to `public/data/events` unless `--dry-run` is passed.
+- A console table shows counts plus earliest/latest dates per feed; the optional JSON report includes the raw records.
+- With writes enabled, the script also checks `/api/events` to confirm ingested slugs are visible to the frontend.
+
+### Interpreting `events:health` output
+
+- **Healthy** feeds should show a non-zero `usable` count with upcoming or recent dates.
+- **Warning** feeds might report `empty`/`filtered` or only very old dates (over ~12 months stale). These likely need manual review but are not outright broken.
+- **Broken** feeds show `failed` along with a fetch/parse error. Errors such as `ENETUNREACH` or `ENOTFOUND` are typically environment/network restrictions rather than true feed failures.
+
+### Current feed status (2025-12-11)
+
+The latest full snapshot (`logs/events-health.json`) showed only three feeds producing reliable, upcoming events that were also visible via `/api/events`:
+
+- Healthy: `discover-stouffville`, `aurora-cultural-centre`, `york-region-tourism`.
+- Broken (disabled in configs): `east-gwillimbury-community`, `east-gwillimbury-recreation`, `uxbridge-community`, `explore-georgina`, `discover-uxbridge`, `aurora-town-square`, `aurora-public-library`, `georgina-public-library`, `scugog-memorial-library`, `aurora-chamber`, `newmarket-main-street-bia`, `uxbridge-music-hall`, `jacksons-point-bia`, `universe-gta`, `georgina-arts-centre`, `ticketscene-ontario`.
+- Warning/monitor: feeds that were empty or had network/DNS failures (`georgina-community`, `newmarket-community`, `newroads-performing-arts`, `east-gwillimbury-public-library`, `stouffville-main-street-bia`, `sutton-bia`, `sharon-temple`, `newmarket-public-library`, `uxbridge-public-library`, `whitchurch-stouffville-public-library`, `uxbridge-bia`, `port-perry-bia`). Leave these enabled unless a future health check shows persistent HTTP errors.
+
+Re-run `npm run events:health -- --json logs/events-health.json` every few months (or after feed changes) to refresh this list, then apply the classifications with `npm run events:classify -- --input logs/events-health.json --apply`. Treat consistent HTTP 4xx/5xx responses as candidates for disabling; treat transient DNS/`ENETUNREACH` as an environment issue unless it repeats in production.
+
+You can generate a status roll-up (and optionally annotate configs) from a saved JSON snapshot:
+
+```bash
+npm run events:classify -- --input logs/events-health.json           # summarize only
+npm run events:classify -- --input logs/events-health.json --apply    # record health status/notes into configs
+```
+
+- The classifier groups feeds into Healthy/Warning/Broken/Disabled buckets based on `usable` counts and date ranges.
+- With `--apply`, `config/event-feeds.json` and `config/event-sources.json` are updated with `healthStatus`/`healthNote` markers; feeds that are clearly broken (non-network errors) are automatically disabled with a stored reason.
+- Keep warning feeds enabled if they merely look sparse; disable only when the snapshot shows consistent fetch/parse failures.
+
 ## What gets normalised?
 
 The tool enforces the authoritative schema defined in `public/config.yml` for the **Community Events** collection, including:

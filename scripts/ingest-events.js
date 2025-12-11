@@ -65,6 +65,8 @@ async function main() {
 
   for (const feed of feeds) {
     if (feed.enabled === false) {
+      const reason = feed.disabledReason ? ` (${feed.disabledReason})` : ''
+      console.log(`[ingest-events] Skipping disabled feed ${feed.id || feed.url}${reason}`)
       summary.skipped += 1
       continue
     }
@@ -376,9 +378,6 @@ function normalizeEvent(item, feed) {
 
   const description = cleanText(item.description || item.content || item.body || item.details || '')
   const summary = cleanText(item.summary || item.shortDescription || item.excerpt || '') || truncate(description, 180)
-
-  const slugBase = feed.slugPrefix ? `${feed.slugPrefix}-${title}` : title
-  const slug = slugify(slugBase)
 
   const eventUrl =
     resolveUrl(item.eventUrl || item.url || item.link, feed) ||
@@ -866,8 +865,28 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-main().catch((error) => {
-  console.error('[ingest-events] Fatal error', error)
-  process.exitCode = 1
-})
+if (require.main === module) {
+  main().catch((error) => {
+    console.error('[ingest-events] Fatal error', error)
+    process.exitCode = 1
+  })
+}
+
+module.exports = {
+  main,
+  loadConfig,
+  ensureDir,
+  loadExistingEvents,
+  fetchFeed,
+  normalizeEvent,
+  getDisqualifier,
+  upsertEvent,
+  pruneExistingEvents,
+  fetchText,
+  fetchJson,
+  fetchWithRateLimit,
+  createAdapterContext,
+  resolveUrl,
+  RUN_TIMESTAMP,
+}
 
