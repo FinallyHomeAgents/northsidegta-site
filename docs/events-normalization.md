@@ -41,10 +41,27 @@ ey surface through the API:
 npm run events:health -- --json logs/events-health.json
 ```
 
-- The command fetches every enabled feed, applies the same normalization and filters as `ingest-events`, and writes the events 
+- The command fetches every enabled feed, applies the same normalization and filters as `ingest-events`, and writes the events
 to `public/data/events` unless `--dry-run` is passed.
 - A console table shows counts plus earliest/latest dates per feed; the optional JSON report includes the raw records.
 - With writes enabled, the script also checks `/api/events` to confirm ingested slugs are visible to the frontend.
+
+### Interpreting `events:health` output
+
+- **Healthy** feeds should show a non-zero `usable` count with upcoming or recent dates.
+- **Warning** feeds might report `empty`/`filtered` or only very old dates (over ~12 months stale). These likely need manual review but are not outright broken.
+- **Broken** feeds show `failed` along with a fetch/parse error. Errors such as `ENETUNREACH` or `ENOTFOUND` are typically environment/network restrictions rather than true feed failures.
+
+You can generate a status roll-up (and optionally annotate configs) from a saved JSON snapshot:
+
+```bash
+npm run events:classify -- --input logs/events-health.json           # summarize only
+npm run events:classify -- --input logs/events-health.json --apply    # record health status/notes into configs
+```
+
+- The classifier groups feeds into Healthy/Warning/Broken/Disabled buckets based on `usable` counts and date ranges.
+- With `--apply`, `config/event-feeds.json` and `config/event-sources.json` are updated with `healthStatus`/`healthNote` markers; feeds that are clearly broken (non-network errors) are automatically disabled with a stored reason.
+- Keep warning feeds enabled if they merely look sparse; disable only when the snapshot shows consistent fetch/parse failures.
 
 ## What gets normalised?
 
