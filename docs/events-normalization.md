@@ -73,6 +73,11 @@ npm run events:classify -- --input logs/events-health.json --apply    # record h
 - With `--apply`, `config/event-feeds.json` and `config/event-sources.json` are updated with `healthStatus`/`healthNote` markers; feeds that are clearly broken (non-network errors) are automatically disabled with a stored reason.
 - Keep warning feeds enabled if they merely look sparse; disable only when the snapshot shows consistent fetch/parse failures.
 
+## CI/offline behavior
+
+- GitHub Actions and other CI runners set `CI=true` and usually block outbound HTTPS. Event scripts (`events:health`, `events:connectivity`, `events:audit`, `sync-events`) automatically skip network work in that environment unless `EVENTS_ALLOW_NETWORK=true` is provided.
+- Skipped runs record a short reason (for example, `network disabled in CI`) and should surface as warnings only. CI should still validate schema/formatting via `npm run events:normalize -- --check` without requiring remote calls.
+
 ## What gets normalised?
 
 The tool enforces the authoritative schema defined in `public/config.yml` for the **Community Events** collection, including:

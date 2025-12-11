@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 
 const require = createRequire(import.meta.url)
 const ingest = require('./ingest-events.js')
+const { allowNetworkInCi, networkBlockedReason } = require('../lib/events/env.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,6 +19,10 @@ const logsDir = path.join(rootDir, 'logs')
 
 async function main() {
   const options = parseArguments(process.argv.slice(2))
+  if (!allowNetworkInCi()) {
+    console.warn(`[events-health] Skipping network checks: ${networkBlockedReason() || 'network disabled in CI'}`)
+    return
+  }
   const feeds = ingest.loadConfig(configPath)
   const requested = filterFeeds(feeds, options)
   if (!requested.length) {

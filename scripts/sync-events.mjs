@@ -26,6 +26,7 @@ const eventsDir = path.join(rootDir, 'public', 'data', 'events')
 const summaryPath = path.join(eventsDir, '_sync-summary.json')
 const reportsDir = path.join(rootDir, 'public', 'data', 'sync-reports')
 const urlUpdateLogPath = path.join(rootDir, 'logs', 'events-url-updates.log')
+const { allowNetworkInCi, networkBlockedReason } = require('../lib/events/env.js')
 
 const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
@@ -63,6 +64,11 @@ async function main() {
   const summary = { created: 0, updated: 0, unchanged: 0, errors: 0 }
   const feedReports = []
   const syncState = { configChanged: false, urlUpdates: [], fallbacks: [] }
+
+  if (!allowNetworkInCi()) {
+    console.warn(`[sync-events] Skipping network ingestion: ${networkBlockedReason() || 'network disabled in CI'}`)
+    return
+  }
 
   for (const feed of feeds) {
     if (!feed || feed.enabled === false) {
