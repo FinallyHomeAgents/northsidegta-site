@@ -32,6 +32,20 @@ npm run events:normalize -- --report logs/events-normalize-report.json
 
 The report contains the summary plus a per-file list of fixes that were applied or would be applied in dry-run/check mode.
 
+## Feed health snapshot
+
+When debugging upstream feeds, run a read/write health snapshot to see which sources are producing usable events and whether th
+ey surface through the API:
+
+```bash
+npm run events:health -- --json logs/events-health.json
+```
+
+- The command fetches every enabled feed, applies the same normalization and filters as `ingest-events`, and writes the events 
+to `public/data/events` unless `--dry-run` is passed.
+- A console table shows counts plus earliest/latest dates per feed; the optional JSON report includes the raw records.
+- With writes enabled, the script also checks `/api/events` to confirm ingested slugs are visible to the frontend.
+
 ## What gets normalised?
 
 The tool enforces the authoritative schema defined in `public/config.yml` for the **Community Events** collection, including:
