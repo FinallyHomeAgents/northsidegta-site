@@ -12,7 +12,7 @@
       "Family-friendly"
     ],
     "priority": 10,
-    "sourceName": "Town of Aurora — Special Events",
+    "sourceName": "Town of Aurora \u2014 Special Events",
     "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/special-events.aspx",
     "sourceDomain": "aurora.ca",
     "__fallbackAttempted": true
@@ -30,14 +30,14 @@
       "Family-friendly"
     ],
     "priority": 10,
-    "sourceName": "Town of Aurora — Recreation & Culture",
+    "sourceName": "Town of Aurora \u2014 Recreation & Culture",
     "sourceUrl": "https://www.aurora.ca/en/recreation-arts-and-culture/events-calendar.aspx",
     "sourceDomain": "aurora.ca",
     "__fallbackAttempted": true
   },
   {
     "id": "east-gwillimbury-community",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://calendar.eastgwillimbury.ca/default/Download.ics?calendar=Community%20Events",
     "slugPrefix": "eg-community",
@@ -51,11 +51,12 @@
     "sourceName": "Town of East Gwillimbury Events",
     "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/events.aspx",
     "sourceDomain": "eastgwillimbury.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "east-gwillimbury-recreation",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://calendar.eastgwillimbury.ca/default/Download.ics?calendar=Recreation%20Programs",
     "slugPrefix": "eg-recreation",
@@ -69,7 +70,8 @@
     "sourceName": "EG Recreation Programs",
     "sourceUrl": "https://www.eastgwillimbury.ca/en/explore-and-play/recreation-programs.aspx",
     "sourceDomain": "eastgwillimbury.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "georgina-community",
@@ -110,6 +112,7 @@
   {
     "id": "whitchurch-stouffville-community",
     "enabled": false,
+    "disabledReason": "Municipal ICS feed currently offline; last successful pulls pre-2025",
     "type": "ics",
     "url": "https://calendar.townofws.ca/default/Download.ics",
     "slugPrefix": "ws-community",
@@ -127,7 +130,7 @@
   },
   {
     "id": "uxbridge-community",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://calendar.uxbridge.ca/default/Download.ics",
     "slugPrefix": "uxbridge",
@@ -141,7 +144,8 @@
     "sourceName": "Township of Uxbridge Events",
     "sourceUrl": "https://www.uxbridge.ca/en/explore-and-play/events.aspx",
     "sourceDomain": "uxbridge.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "scugog-community",
@@ -163,7 +167,7 @@
   },
   {
     "id": "explore-georgina",
-    "enabled": true,
+    "enabled": false,
     "parser": "wordpressTribe",
     "baseUrl": "https://www.exploregeorgina.ca",
     "endpoint": "/wp-json/tribe/events/v1/events",
@@ -179,7 +183,8 @@
     "sourceName": "Explore Georgina",
     "sourceUrl": "https://www.exploregeorgina.ca/events",
     "sourceDomain": "exploregeorgina.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "discover-stouffville",
@@ -202,7 +207,7 @@
   },
   {
     "id": "discover-uxbridge",
-    "enabled": true,
+    "enabled": false,
     "parser": "wordpressTribe",
     "baseUrl": "https://discoveruxbridge.ca",
     "endpoint": "/wp-json/tribe/events/v1/events",
@@ -216,11 +221,12 @@
     "sourceName": "Discover Uxbridge",
     "sourceUrl": "https://discoveruxbridge.ca/uxbridge-events",
     "sourceDomain": "discoveruxbridge.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "aurora-town-square",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://auroratownsquare.ca/events/?ical=1",
     "slugPrefix": "aurora-town-square",
@@ -234,7 +240,8 @@
     "sourceName": "Aurora Town Square",
     "sourceUrl": "https://auroratownsquare.ca/whats-on",
     "sourceDomain": "auroratownsquare.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "aurora-cultural-centre",
@@ -273,7 +280,7 @@
   },
   {
     "id": "georgina-arts-centre",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://www.theglen.ca/events/?ical=1",
     "slugPrefix": "georgina-arts",
@@ -287,7 +294,8 @@
     "sourceName": "Georgina Centre for Arts & Culture",
     "sourceUrl": "https://www.theglen.ca/events/",
     "sourceDomain": "theglen.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 403 in events:health on 2025-12-11"
   },
   {
     "id": "sharon-temple",
@@ -306,7 +314,7 @@
   },
   {
     "id": "uxbridge-music-hall",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://uxbridgemusichall.com/events/list/?ical=1",
     "slugPrefix": "uxbridge-music-hall",
@@ -317,11 +325,12 @@
     "sourceName": "Uxbridge Music Hall",
     "sourceUrl": "https://uxbridgemusichall.com/events/",
     "sourceDomain": "uxbridgemusichall.com",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "aurora-public-library",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://www.aurorapl.ca/events/?ical=1",
     "slugPrefix": "aurora-library",
@@ -335,7 +344,8 @@
     "sourceName": "Aurora Public Library",
     "sourceUrl": "https://www.aurorapl.ca/events",
     "sourceDomain": "aurorapl.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "newmarket-public-library",
@@ -357,7 +367,7 @@
   },
   {
     "id": "georgina-public-library",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://calendar.georginalibrary.ca/default/Download.ics",
     "slugPrefix": "georgina-library",
@@ -371,7 +381,8 @@
     "sourceName": "Georgina Public Library",
     "sourceUrl": "https://www.georginalibrary.ca/en/programs-and-events/events.aspx",
     "sourceDomain": "georginalibrary.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "east-gwillimbury-public-library",
@@ -429,7 +440,7 @@
   },
   {
     "id": "scugog-memorial-library",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://www.scugoglibrary.ca/events/?ical=1",
     "slugPrefix": "scugog-library",
@@ -443,11 +454,12 @@
     "sourceName": "Scugog Memorial Public Library",
     "sourceUrl": "https://www.scugoglibrary.ca/events/",
     "sourceDomain": "scugoglibrary.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "aurora-chamber",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://business.aurorachamber.org/events/ical",
     "slugPrefix": "aurora-chamber",
@@ -458,11 +470,12 @@
     "sourceName": "Aurora Chamber of Commerce",
     "sourceUrl": "https://business.aurorachamber.org/events",
     "sourceDomain": "aurorachamber.on.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "newmarket-main-street-bia",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://newmarketmainstreet.ca/events/?ical=1",
     "slugPrefix": "newmarket-bia",
@@ -473,7 +486,8 @@
     "sourceName": "Newmarket Main Street BIA",
     "sourceUrl": "https://newmarketmainstreet.ca/events",
     "sourceDomain": "newmarketmainstreet.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "stouffville-main-street-bia",
@@ -522,7 +536,7 @@
   },
   {
     "id": "jacksons-point-bia",
-    "enabled": true,
+    "enabled": false,
     "type": "ics",
     "url": "https://jacksonspointbia.com/events/?ical=1",
     "slugPrefix": "jacksons-point-bia",
@@ -533,13 +547,14 @@
     "sourceName": "Jackson's Point BIA",
     "sourceUrl": "https://jacksonspointbia.com/events",
     "sourceDomain": "jacksonspointbia.com",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "port-perry-bia",
     "enabled": true,
     "type": "ics",
-    "url": "https://portperrybia.ca",
+    "url": "https://discoverportperry.ca/events/?ical=1",
     "slugPrefix": "port-perry-bia",
     "town": "Scugog",
     "category": "Festivals",
@@ -566,7 +581,7 @@
   },
   {
     "id": "universe-gta",
-    "enabled": true,
+    "enabled": false,
     "parser": "universeSearch",
     "url": "https://www.universe.com/api/v2/events/search?lat=44.05&lng=-79.45&radius=65&per_page=50&sort=start_at",
     "town": "Toronto-adjacent",
@@ -579,11 +594,12 @@
     "sourceName": "Universe",
     "sourceUrl": "https://www.universe.com",
     "sourceDomain": "universe.com",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 404 in events:health on 2025-12-11"
   },
   {
     "id": "ticketscene-ontario",
-    "enabled": true,
+    "enabled": false,
     "type": "rss",
     "url": "https://www.ticketscene.ca/rss/?region=Ontario",
     "slugPrefix": "ticketscene",
@@ -597,6 +613,7 @@
     "sourceName": "TicketScene",
     "sourceUrl": "https://www.ticketscene.ca",
     "sourceDomain": "ticketscene.ca",
-    "__fallbackAttempted": true
+    "__fallbackAttempted": true,
+    "disabledReason": "Endpoint returning HTTP 403 in events:health on 2025-12-11"
   }
 ]

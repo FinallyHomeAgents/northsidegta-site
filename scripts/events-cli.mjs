@@ -3,6 +3,7 @@ import { createRequire } from 'module'
 
 const require = createRequire(import.meta.url)
 const { runAudit } = require('../lib/events/audit.js')
+const { allowNetworkInCi, networkBlockedReason } = require('../lib/events/env.js')
 
 async function main() {
   const options = parseArguments(process.argv.slice(2))
@@ -13,6 +14,10 @@ async function main() {
   }
 
   if (options.audit || options.mode === 'audit') {
+    if (!allowNetworkInCi()) {
+      console.log(`[events-cli] Skipping audit in CI: ${networkBlockedReason() || 'network disabled'}`)
+      return
+    }
     await runAudit({ domain: options.domain })
     return
   }

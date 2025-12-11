@@ -90,7 +90,7 @@ export default function handler(req, res) {
     return
   }
 
-  const statusFilter = normalizeStatus(req.query?.status || 'published')
+  const statusFilter = normalizeStatus(req.query?.status || 'published,pending')
   const slugParam = req.query?.slug
   const slugFilter = Array.isArray(slugParam)
     ? slugParam.map((value) => String(value).trim()).filter(Boolean)

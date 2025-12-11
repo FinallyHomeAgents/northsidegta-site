@@ -4,6 +4,10 @@ import '../lib/events/runtime.js'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const { allowNetworkInCi, networkBlockedReason } = require('../lib/events/env.js')
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -16,13 +20,41 @@ const DEFAULT_CONCURRENCY = 4
 
 async function main() {
   const options = parseArguments(process.argv.slice(2))
+  if (!allowNetworkInCi()) {
+    const reason = networkBlockedReason() || 'network disabled in CI'
+    const summaryPath = path.join(rootDir, 'public/data/events/_connectivity-summary.json')
+    await fs.mkdir(path.dirname(summaryPath), { recursive: true })
+    await fs.writeFile(
+      summaryPath,
+      JSON.stringify(
+        {
+          timestamp: new Date().toISOString(),
+          passed: 0,
+          failed: 0,
+          skipped: true,
+          reason,
+        },
+        null,
+        2
+      ) + '\n',
+      'utf8'
+    )
+    console.warn(`[events-connectivity] Skipping connectivity checks: ${reason}`)
+    return
+  }
   const feeds = await loadFeeds(options)
   if (!feeds.length) {
     console.log('[events-connectivity] No feeds matched the requested filters.')
     return
   }
 
-  const results = await runWithConcurrency(feeds, options.concurrency, async (feed) => {
+  const activeFeeds = feeds.filter((feed) => feed?.enabled !== false)
+  const skippedFeeds = feeds.length - activeFeeds.length
+  if (skippedFeeds > 0) {
+    console.log(`[events-connectivity] Skipping ${skippedFeeds} disabled feed(s).`)
+  }
+
+  const results = await runWithConcurrency(activeFeeds, options.concurrency, async (feed) => {
     return probeFeed(feed, options)
   })
 
@@ -303,7 +335,15 @@ async function checkUrl(url, options = {}) {
   } catch (error) {
     result.ok = false
     result.status = null
-    result.error = error.code || error.name || error.message || 'fetch_failed'
+    const errorParts = []
+    if (error.code) errorParts.push(error.code)
+    if (error.name && !errorParts.includes(error.name)) errorParts.push(error.name)
+    if (error.message) errorParts.push(error.message)
+    if (error.cause?.code && !errorParts.includes(error.cause.code)) errorParts.push(error.cause.code)
+    if (error.cause?.message && !errorParts.includes(error.cause.message)) {
+      errorParts.push(error.cause.message)
+    }
+    result.error = errorParts.filter(Boolean).join(' | ') || 'fetch_failed'
     result.elapsedMs = Date.now() - startedAt
     if (method === 'HEAD') return checkUrl(url, { ...options, method: 'GET' })
   } finally {
