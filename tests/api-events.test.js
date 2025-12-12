@@ -110,3 +110,39 @@ test('status filters are respected for pending moderation queries', async () => 
     fs.rmSync(tmp, { recursive: true, force: true })
   }
 })
+
+test('system events are excluded from api responses', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'events-api-'))
+  const originalCwd = process.cwd()
+  try {
+    process.chdir(tmp)
+    const eventsDir = path.join(tmp, 'public', 'data', 'events')
+
+    const futureDate = new Date()
+    futureDate.setDate(futureDate.getDate() + 2)
+
+    writeEvent(path.join(eventsDir, '_system.json'), {
+      slug: '_system',
+      status: 'published',
+      startDate: futureDate.toISOString(),
+    })
+    writeEvent(path.join(eventsDir, 'community.json'), {
+      slug: 'community',
+      status: 'published',
+      startDate: futureDate.toISOString(),
+    })
+
+    const moduleUrl = `${pathToFileURL(handlerPath).href}?t=${Date.now()}`
+    const { default: handler } = await import(moduleUrl)
+
+    const res = createMockResponse()
+    handler({ method: 'GET', query: { scope: 'upcoming', status: 'published', limit: '1' } }, res)
+
+    assert.equal(res.statusCode, 200)
+    const slugs = (res.body?.events || []).map((event) => event.slug)
+    assert.deepEqual(slugs, ['community'])
+  } finally {
+    process.chdir(originalCwd)
+    fs.rmSync(tmp, { recursive: true, force: true })
+  }
+})

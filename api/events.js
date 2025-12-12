@@ -83,6 +83,10 @@ function shouldIncludeArchived(statusFilter) {
   return false
 }
 
+function isSystemEvent(event) {
+  return Boolean(event?.slug?.startsWith('_'))
+}
+
 export default function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET')
@@ -112,6 +116,8 @@ export default function handler(req, res) {
     return
   }
 
+  const visibleEvents = events.filter((event) => !isSystemEvent(event))
+
   const statusFilter = normalizeStatus(req.query?.status || 'published,pending')
   const scopeParam = parseScopeParam(req.query?.scope)
   const slugParam = req.query?.slug
@@ -126,7 +132,7 @@ export default function handler(req, res) {
   const limitValue = Number.parseInt(req.query?.limit, 10)
   const hasLimit = Number.isFinite(limitValue) && limitValue > 0
 
-  const filtered = events
+  const filtered = visibleEvents
     .filter((event) => withinStatuses(event, statusFilter))
     .filter((event) => (slugSet.size ? slugSet.has(event.slug) : true))
     .filter((event) => {
