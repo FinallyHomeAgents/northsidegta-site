@@ -4,11 +4,6 @@ import { DateTime } from 'luxon'
 
 const PASSCODE = (process.env.REACT_APP_EVENTS_REVIEW_PASS || '').trim()
 const MODERATOR_SECRET = (process.env.REACT_APP_EVENTS_MODERATOR_SECRET || '').trim()
-
-if (!MODERATOR_SECRET) {
-  // eslint-disable-next-line no-console
-  console.warn('Missing REACT_APP_EVENTS_MODERATOR_SECRET env var.')
-}
 const ACCESS_KEY = 'eventsReviewAccess'
 const TORONTO_ZONE = 'America/Toronto'
 

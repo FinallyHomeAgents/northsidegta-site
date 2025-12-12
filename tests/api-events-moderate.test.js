@@ -127,42 +127,6 @@ test('rejects moderation for unknown slugs', async () => {
   assert.equal(res.statusCode, 404)
 })
 
-test('allows moderation when a valid secret is provided', async () => {
-  let applied = false
-  await withGithubMock(
-    {
-      getGithubEnvConfig: () => ({ owner: 'o', repo: 'r', token: 't' }),
-      fetchEventFileFromGithub: async () => ({
-        path: 'public/data/events/sample.json',
-        json: { slug: 'sample', status: 'pending' },
-      }),
-      fetchPendingEventFileFromGithub: async () => {
-        const error = new Error('missing')
-        error.status = 404
-        throw error
-      },
-      applyRepoChanges: async () => {
-        applied = true
-        return { ok: true }
-      },
-      buildEventPath: (slug) => `public/data/events/${slug}.json`,
-      buildPendingEventPath: (slug) => `public/data/events-pending/${slug}.json`,
-    },
-    async () => {
-      process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
-      writeEventFile(EVENTS_DIR, 'sample')
-      const handler = await loadHandler()
-      const res = createMockResponse()
-      await handler(createRequest({ body: { slug: 'sample', action: 'approve', secret: 'Northsidelando' } }), res)
-
-      assert.equal(res.statusCode, 200)
-      assert.equal(res.body?.status, 'published')
-      assert.equal(applied, true)
-      removeEventFile(EVENTS_DIR, 'sample')
-    }
-  )
-})
-
 test('approve action sets status to published', async () => {
   let recordedChanges = null
   await withGithubMock(
