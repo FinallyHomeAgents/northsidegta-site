@@ -360,8 +360,8 @@
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "featured": false,
   "hidden": false,
-  "archived": false,
-  "status": "pending",
+  "archived": true,
+  "status": "archived",
   "source": "feed",
   "sourceRef": "10002715-1768176000-1773100799@auroraculturalcentre.ca",
   "updatedAt": "2025-12-02T08:39:36Z"
