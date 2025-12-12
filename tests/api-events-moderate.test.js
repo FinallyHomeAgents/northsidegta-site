@@ -127,6 +127,23 @@ test('requires a valid moderation secret', async () => {
   removeEventFile(EVENTS_DIR, 'sample')
 })
 
+test('validate action succeeds with correct secret', async () => {
+  process.env.EVENTS_MODERATOR_SECRET = 'Northsidelando'
+  const handler = await loadHandler()
+  const res = createMockResponse()
+
+  await handler(
+    createRequest({
+      body: { action: 'validate' },
+      headers: { 'x-events-moderator-secret': 'Northsidelando' },
+    }),
+    res
+  )
+
+  assert.equal(res.statusCode, 200)
+  assert.equal(res.body?.ok, true)
+})
+
 test('returns 500 when moderator secret is not configured', async () => {
   delete process.env.EVENTS_MODERATOR_SECRET
   writeEventFile(EVENTS_DIR, 'sample')

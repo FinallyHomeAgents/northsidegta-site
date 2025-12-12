@@ -126,8 +126,14 @@ export default async function handler(req, res) {
     return
   }
 
+  const normalizedAction = typeof body?.action === 'string' ? body.action.trim().toLowerCase() : ''
+  if (normalizedAction === 'validate') {
+    res.status(200).json({ ok: true })
+    return
+  }
+
   const slug = sanitizeEventId(body?.slug)
-  const action = parseAction(body?.action)
+  const action = parseAction(normalizedAction)
   if (!slug || !action) {
     res.status(400).json({ ok: false, error: 'Missing slug or action.' })
     return

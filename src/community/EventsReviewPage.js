@@ -163,6 +163,7 @@ export default function EventsReviewPage() {
   const [loading, setLoading] = React.useState(false)
   const [loadError, setLoadError] = React.useState('')
   const [actionState, setActionState] = React.useState({})
+  const [validating, setValidating] = React.useState(false)
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
@@ -208,18 +209,54 @@ export default function EventsReviewPage() {
   }, [accessState, refreshLists])
 
   const handlePassSubmit = React.useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault()
       const trimmed = passInput.trim()
       if (!trimmed) {
         setPassError('Passcode is required.')
         return
       }
-      if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem(SESSION_SECRET_KEY, trimmed)
-      }
-      setAccessState('granted')
       setPassError('')
+      setValidating(true)
+      try {
+        const response = await fetch('/api/events/moderate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-events-moderator-secret': trimmed,
+          },
+          body: JSON.stringify({ action: 'validate', secret: trimmed }),
+        })
+
+        if (response.status === 401) {
+          setPassError('Incorrect passcode')
+          return
+        }
+
+        if (!response.ok) {
+          const text = await response.text()
+          let body = null
+          try {
+            body = text ? JSON.parse(text) : null
+          } catch (parseError) {
+            body = text
+          }
+          const message = (body && body.error) || (typeof body === 'string' ? body : 'Unable to validate passcode.')
+          setPassError(message)
+          return
+        }
+
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem(SESSION_SECRET_KEY, trimmed)
+        }
+        setAccessState('granted')
+        setPassError('')
+      } catch (error) {
+        console.error('[events-review] validation failed', error)
+        setPassError('Unable to validate passcode. Please try again.')
+      } finally {
+        setValidating(false)
+      }
     },
     [passInput]
   )
@@ -331,9 +368,9 @@ export default function EventsReviewPage() {
               <button
                 type="submit"
                 className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-400"
-                disabled={accessState === 'checking'}
+                disabled={accessState === 'checking' || validating}
               >
-                Unlock
+                {validating ? 'Validating…' : 'Unlock'}
               </button>
             </form>
           ) : null}
