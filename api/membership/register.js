@@ -1,5 +1,6 @@
 import { buildCardLabel } from '../../lib/membership/card-label.js'
 import { getRedisClient, isRedisConfigured } from '../../lib/membership/redis-client.js'
+import { upsertBrevoContact } from '../../lib/membership/brevo-client.js'
 
 const CARD_NUMBER_KEY = 'last_membership_card_number'
 const REGISTRATION_LOG_KEY = 'membership:registrations'
@@ -11,6 +12,16 @@ function isValidEmail(value) {
 function normalizeInterests(interests) {
   if (!Array.isArray(interests)) return []
   return interests.filter((item) => typeof item === 'string' && item.trim()).map((item) => item.trim())
+}
+
+function buildInterestFlags(interests) {
+  const normalized = interests.map((interest) => interest.toLowerCase())
+
+  return {
+    events: normalized.some((interest) => interest.includes('event')),
+    tasteHub: normalized.some((interest) => interest.includes('tastehub')),
+    marketInsights: normalized.some((interest) => interest.includes('market')),
+  }
 }
 
 export default async function handler(req, res) {
@@ -36,6 +47,7 @@ export default async function handler(req, res) {
   const primaryTown = (body.primaryTown || '').toString().trim()
   const memberType = (body.memberType || '').toString().trim()
   const interests = normalizeInterests(body.interests)
+  const interestFlags = buildInterestFlags(interests)
   const notUnderContract = body.notUnderContract ?? body.complianceConfirmed
   const hasValidEmail = isValidEmail(email)
 
@@ -83,7 +95,35 @@ export default async function handler(req, res) {
       redis.lpush(REGISTRATION_LOG_KEY, JSON.stringify(record)),
     ])
 
-    res.status(200).json({ success: true, cardNumber, cardLabel, fullName })
+    let brevoSynced = false
+
+    if (
+      process.env.BREVO_ENABLED !== 'false' &&
+      process.env.BREVO_API_KEY &&
+      process.env.BREVO_LIST_ID
+    ) {
+      try {
+        await upsertBrevoContact({
+          email,
+          fullName,
+          cardNumber,
+          cardLabel,
+          primaryTown,
+          memberType,
+          interests: interestFlags,
+          complianceConfirmed: true,
+        })
+        brevoSynced = true
+      } catch (error) {
+        console.error('[membership/register] Brevo sync failed', {
+          message: error?.message,
+          status: error?.responseStatus,
+          body: error?.responseBody,
+        })
+      }
+    }
+
+    res.status(200).json({ success: true, cardNumber, cardLabel, fullName, brevoSynced })
   } catch (error) {
     console.error('[membership/register] failed to create membership', error)
     res.status(500).json({ success: false, error: 'Unable to create membership at this time.' })
