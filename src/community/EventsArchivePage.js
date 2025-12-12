@@ -127,7 +127,7 @@ export default function EventsArchivePage() {
     setLoading(true)
     setError('')
 
-    fetch('/api/events?status=all', { cache: 'no-store' })
+    fetch('/api/events?status=all&scope=all&includeStatus=true', { cache: 'no-store' })
       .then((response) => {
         if (!response.ok) throw new Error('failed')
         return response.json()
