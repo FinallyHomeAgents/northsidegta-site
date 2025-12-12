@@ -2,9 +2,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { DateTime } from 'luxon'
 
-const PASSCODE = (process.env.REACT_APP_EVENTS_REVIEW_PASS || '').trim()
-const MODERATOR_SECRET = (process.env.REACT_APP_EVENTS_MODERATOR_SECRET || '').trim()
-const ACCESS_KEY = 'eventsReviewAccess'
+const SESSION_SECRET_KEY = 'eventsModeratorSecret'
 const TORONTO_ZONE = 'America/Toronto'
 
 function parseDate(value) {
@@ -87,10 +85,11 @@ function sortEvents(list) {
   return [...list].sort(compareEvents)
 }
 
-function EventCard({ event, mode, onApprove, onDeny, actionState }) {
+function EventCard({ event, mode, onApprove, onDeny, actionState, disableActions }) {
   const { dateLabel, timeLabel } = formatWhen(event)
   const sourceUrl = getSourceUrl(event)
   const isSaving = Boolean(actionState?.loading)
+  const disableButtons = disableActions || isSaving
   const error = actionState?.error || ''
 
   return (
@@ -122,7 +121,7 @@ function EventCard({ event, mode, onApprove, onDeny, actionState }) {
             <>
               <button
                 type="button"
-                disabled={isSaving}
+                disabled={disableButtons}
                 onClick={() => onApprove(event)}
                 className="rounded-lg bg-emerald-600 px-4 py-2 text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-400"
               >
@@ -130,7 +129,7 @@ function EventCard({ event, mode, onApprove, onDeny, actionState }) {
               </button>
               <button
                 type="button"
-                disabled={isSaving}
+                disabled={disableButtons}
                 onClick={() => onDeny(event)}
                 className="rounded-lg bg-rose-600 px-4 py-2 text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-rose-400"
               >
@@ -140,7 +139,7 @@ function EventCard({ event, mode, onApprove, onDeny, actionState }) {
           ) : (
             <button
               type="button"
-              disabled={isSaving}
+              disabled={disableButtons}
               onClick={() => onDeny(event)}
               className="rounded-lg bg-rose-600 px-4 py-2 text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-rose-400"
             >
@@ -155,7 +154,7 @@ function EventCard({ event, mode, onApprove, onDeny, actionState }) {
 }
 
 export default function EventsReviewPage() {
-  const [accessState, setAccessState] = React.useState(PASSCODE ? 'checking' : 'granted')
+  const [accessState, setAccessState] = React.useState('checking')
   const [passInput, setPassInput] = React.useState('')
   const [passError, setPassError] = React.useState('')
   const [activeTab, setActiveTab] = React.useState('pending')
@@ -164,12 +163,17 @@ export default function EventsReviewPage() {
   const [loading, setLoading] = React.useState(false)
   const [loadError, setLoadError] = React.useState('')
   const [actionState, setActionState] = React.useState({})
+  const [validating, setValidating] = React.useState(false)
 
   React.useEffect(() => {
-    if (!PASSCODE) return
     if (typeof window === 'undefined') return
-    const stored = window.localStorage.getItem(ACCESS_KEY)
-    setAccessState(stored === 'ok' ? 'granted' : 'prompt')
+    const stored = window.sessionStorage.getItem(SESSION_SECRET_KEY)
+    if (stored) {
+      setPassInput(stored)
+      setAccessState('granted')
+    } else {
+      setAccessState('prompt')
+    }
   }, [])
 
   const fetchList = React.useCallback(async (status) => {
@@ -205,20 +209,53 @@ export default function EventsReviewPage() {
   }, [accessState, refreshLists])
 
   const handlePassSubmit = React.useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault()
-      if (!PASSCODE) {
-        setAccessState('granted')
+      const trimmed = passInput.trim()
+      if (!trimmed) {
+        setPassError('Passcode is required.')
         return
       }
-      if (passInput.trim() === PASSCODE) {
+      setPassError('')
+      setValidating(true)
+      try {
+        const response = await fetch('/api/events/moderate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-events-moderator-secret': trimmed,
+          },
+          body: JSON.stringify({ action: 'validate', secret: trimmed }),
+        })
+
+        if (response.status === 401) {
+          setPassError('Incorrect passcode')
+          return
+        }
+
+        if (!response.ok) {
+          const text = await response.text()
+          let body = null
+          try {
+            body = text ? JSON.parse(text) : null
+          } catch (parseError) {
+            body = text
+          }
+          const message = (body && body.error) || (typeof body === 'string' ? body : 'Unable to validate passcode.')
+          setPassError(message)
+          return
+        }
+
         if (typeof window !== 'undefined') {
-          window.localStorage.setItem(ACCESS_KEY, 'ok')
+          window.sessionStorage.setItem(SESSION_SECRET_KEY, trimmed)
         }
         setAccessState('granted')
         setPassError('')
-      } else {
-        setPassError('Incorrect passcode. Please try again.')
+      } catch (error) {
+        console.error('[events-review] validation failed', error)
+        setPassError('Unable to validate passcode. Please try again.')
+      } finally {
+        setValidating(false)
       }
     },
     [passInput]
@@ -227,18 +264,34 @@ export default function EventsReviewPage() {
   const handleModeration = React.useCallback(
     async (event, action) => {
       const slug = event?.slug
-      if (!slug) return
+      if (!slug || accessState !== 'granted') return
       setActionState((prev) => ({ ...prev, [slug]: { loading: true, error: '' } }))
       try {
+        const secret = typeof window !== 'undefined' ? window.sessionStorage.getItem(SESSION_SECRET_KEY) || '' : ''
         const response = await fetch('/api/events/moderate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, action, secret: MODERATOR_SECRET }),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-events-moderator-secret': secret,
+          },
+          body: JSON.stringify({ slug, action, secret }),
         })
-        if (!response.ok) {
-          throw new Error('moderation-failed')
+        const text = await response.text()
+        let body = null
+        try {
+          body = text ? JSON.parse(text) : null
+        } catch (parseError) {
+          body = text
         }
-        await response.json()
+
+        if (!response.ok) {
+          console.error('[events-review] moderate failed', { status: response.status, body })
+          const message = (body && body.error) || (typeof body === 'string' ? body : 'Failed to update event.')
+          const error = new Error(message)
+          error.status = response.status
+          throw error
+        }
+
         setActionState((prev) => ({ ...prev, [slug]: { loading: false, error: '' } }))
 
         if (action === 'approve') {
@@ -253,14 +306,24 @@ export default function EventsReviewPage() {
           setLiveEvents((list) => list.filter((item) => item.slug !== slug))
         }
       } catch (error) {
-        console.error('[events-review] moderation failed', error)
+        if (error?.status === 401) {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.removeItem(SESSION_SECRET_KEY)
+          }
+          setAccessState('prompt')
+          setPassError('Passcode incorrect. Try again.')
+          setPassInput('')
+        }
         setActionState((prev) => ({
           ...prev,
-          [slug]: { loading: false, error: "Couldn't update this event. Please try again." },
+          [slug]: {
+            loading: false,
+            error: error?.message || "Couldn't update this event. Please try again.",
+          },
         }))
       }
     },
-    []
+    [accessState]
   )
 
   const currentEvents = activeTab === 'pending' ? pendingEvents : liveEvents
@@ -300,13 +363,14 @@ export default function EventsReviewPage() {
                 disabled={accessState === 'checking'}
                 placeholder="Passcode"
               />
+              <p className="text-sm text-slate-600">Enter passcode to approve/deny/remove events.</p>
               {passError ? <p className="text-sm text-rose-600">{passError}</p> : null}
               <button
                 type="submit"
                 className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-400"
-                disabled={accessState === 'checking'}
+                disabled={accessState === 'checking' || validating}
               >
-                Unlock
+                {validating ? 'Validating…' : 'Unlock'}
               </button>
             </form>
           ) : null}
@@ -366,6 +430,7 @@ export default function EventsReviewPage() {
                     onApprove={(item) => handleModeration(item, 'approve')}
                     onDeny={(item) => handleModeration(item, 'deny')}
                     actionState={actionState[event.slug || '']}
+                    disableActions={accessState !== 'granted'}
                   />
                 ))}
               </div>
