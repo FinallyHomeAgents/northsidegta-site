@@ -1,4 +1,3 @@
-import { readJsonBody } from '../../lib/api-helpers.js'
 import { buildCardLabel } from '../../lib/membership/card-label.js'
 import { getRedisClient, isRedisConfigured } from '../../lib/membership/redis-client.js'
 
@@ -25,28 +24,33 @@ export default async function handler(req, res) {
 
   let body
   try {
-    body = await readJsonBody(req)
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {}
   } catch (error) {
-    res.status(400).json({ success: false, error: error?.message || 'Invalid JSON body' })
+    res.status(400).json({ success: false, error: 'Invalid JSON body' })
     return
   }
 
-  const {
-    firstName,
-    email,
-    primaryTown,
-    memberType,
-    interests = [],
-    complianceConfirmed,
-  } = body || {}
+  const fullName =
+    (body.fullName || '').trim() || (body.firstName || '').trim() || (body.name || '').trim()
+  const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+  const primaryTown = (body.primaryTown || '').toString().trim()
+  const memberType = (body.memberType || '').toString().trim()
+  const interests = normalizeInterests(body.interests)
+  const notUnderContract = body.notUnderContract ?? body.complianceConfirmed
+  const hasValidEmail = isValidEmail(email)
 
-  if (!complianceConfirmed) {
-    res.status(400).json({ success: false, error: 'Compliance confirmation is required.' })
-    return
-  }
-
-  if (!firstName || !primaryTown || !memberType || !isValidEmail(email)) {
-    res.status(400).json({ success: false, error: 'Missing or invalid required fields.' })
+  if (!fullName || !hasValidEmail || !primaryTown || !memberType || notUnderContract !== true) {
+    res.status(400).json({
+      success: false,
+      error: 'Missing or invalid required fields.',
+      missing: {
+        fullName: !fullName,
+        email: !hasValidEmail,
+        primaryTown: !primaryTown,
+        memberType: !memberType,
+        notUnderContract: notUnderContract !== true,
+      },
+    })
     return
   }
 
@@ -63,11 +67,12 @@ export default async function handler(req, res) {
     const cardLabel = buildCardLabel(primaryTown)
 
     const record = {
-      firstName: firstName.toString().trim(),
-      email: email.toString().trim().toLowerCase(),
-      primaryTown: primaryTown.toString(),
-      memberType: memberType.toString(),
-      interests: normalizeInterests(interests),
+      fullName,
+      email,
+      primaryTown,
+      memberType,
+      interests,
+      notUnderContract: true,
       cardLabel,
       cardNumber,
       createdAt: new Date().toISOString(),
@@ -78,7 +83,7 @@ export default async function handler(req, res) {
       redis.lpush(REGISTRATION_LOG_KEY, JSON.stringify(record)),
     ])
 
-    res.status(200).json({ success: true, cardNumber, cardLabel })
+    res.status(200).json({ success: true, cardNumber, cardLabel, fullName })
   } catch (error) {
     console.error('[membership/register] failed to create membership', error)
     res.status(500).json({ success: false, error: 'Unable to create membership at this time.' })
