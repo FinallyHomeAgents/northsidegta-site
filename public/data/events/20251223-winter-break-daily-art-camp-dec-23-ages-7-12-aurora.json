@@ -24,8 +24,8 @@
   "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
   "featured": false,
   "hidden": false,
-  "archived": false,
-  "status": "pending",
+  "archived": true,
+  "status": "archived",
   "source": "feed",
   "sourceRef": "10002661-1766448000-1766534399@auroraculturalcentre.ca",
   "updatedAt": "2025-12-11T08:39:24Z"
