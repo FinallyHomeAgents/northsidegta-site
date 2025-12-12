@@ -7,10 +7,11 @@ const sanitizeValue = (value, maxLength) => {
   return safeValue.length > maxLength ? safeValue.slice(0, maxLength) : safeValue;
 };
 
-const MembershipCard = ({ fullName, town, memberId, className }) => {
+const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
   const trimmedName = sanitizeValue(fullName, 22);
   const trimmedTown = sanitizeValue(town, 22);
   const trimmedMemberId = sanitizeValue(memberId, 12);
+  const trimmedCardLabel = sanitizeValue(cardLabel, 28) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
   const nameClass = trimmedName.length > 16 ? "member-name member-name--tight" : "member-name";
@@ -84,7 +85,9 @@ const MembershipCard = ({ fullName, town, memberId, className }) => {
 
       <div className="member-details">
         <div className="member-name-town">
-          <div className="member-title">Founding Member</div>
+          <div className="member-title" title={trimmedCardLabel}>
+            {trimmedCardLabel}
+          </div>
           <div className={nameClass} title={trimmedName}>
             {trimmedName}
           </div>
