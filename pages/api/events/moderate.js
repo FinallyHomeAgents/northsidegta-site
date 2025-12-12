@@ -111,16 +111,18 @@ export default async function handler(req, res) {
     return
   }
 
-  const secret = process.env.EVENTS_MODERATOR_SECRET
-  const providedSecret = body?.secret
+  const providedSecret = req.headers['x-events-moderator-secret'] || body?.secret
+  const expectedSecret = process.env.EVENTS_MODERATOR_SECRET
 
-  if (!secret) {
-    res.status(500).json({ ok: false, error: 'Server missing moderator secret.' })
+  if (!expectedSecret) {
+    res
+      .status(500)
+      .json({ ok: false, error: 'Server misconfigured: missing EVENTS_MODERATOR_SECRET' })
     return
   }
 
-  if (!providedSecret || providedSecret !== secret) {
-    res.status(401).json({ ok: false, error: 'Invalid or missing moderation secret.' })
+  if (!providedSecret || providedSecret !== expectedSecret) {
+    res.status(401).json({ ok: false, error: 'Unauthorized' })
     return
   }
 

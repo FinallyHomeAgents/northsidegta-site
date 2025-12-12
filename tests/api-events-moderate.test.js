@@ -41,8 +41,8 @@ function createMockResponse() {
   }
 }
 
-function createRequest({ method = 'POST', body = {}, query = {} } = {}) {
-  return { method, body, query, headers: {} }
+function createRequest({ method = 'POST', body = {}, query = {}, headers = {} } = {}) {
+  return { method, body, query, headers }
 }
 
 async function loadHandler() {
@@ -111,12 +111,39 @@ test('requires a valid moderation secret', async () => {
   const missingSecretRes = createMockResponse()
   await handler(createRequest({ body: { slug: 'sample', action: 'approve' } }), missingSecretRes)
   assert.equal(missingSecretRes.statusCode, 401)
+  assert.equal(missingSecretRes.body?.error, 'Unauthorized')
 
   const wrongSecretRes = createMockResponse()
-  await handler(createRequest({ body: { slug: 'sample', action: 'approve', secret: 'nope' } }), wrongSecretRes)
+  await handler(
+    createRequest({
+      body: { slug: 'sample', action: 'approve' },
+      headers: { 'x-events-moderator-secret': 'nope' },
+    }),
+    wrongSecretRes
+  )
   assert.equal(wrongSecretRes.statusCode, 401)
+  assert.equal(wrongSecretRes.body?.error, 'Unauthorized')
 
   removeEventFile(EVENTS_DIR, 'sample')
+})
+
+test('returns 500 when moderator secret is not configured', async () => {
+  delete process.env.EVENTS_MODERATOR_SECRET
+  writeEventFile(EVENTS_DIR, 'sample')
+  const handler = await loadHandler()
+  const res = createMockResponse()
+
+  await handler(
+    createRequest({
+      body: { slug: 'sample', action: 'approve' },
+      headers: { 'x-events-moderator-secret': 'anything' },
+    }),
+    res
+  )
+
+  removeEventFile(EVENTS_DIR, 'sample')
+  assert.equal(res.statusCode, 500)
+  assert.equal(res.body?.error, 'Server misconfigured: missing EVENTS_MODERATOR_SECRET')
 })
 
 test('rejects moderation for unknown slugs', async () => {
@@ -154,7 +181,10 @@ test('approve action sets status to published', async () => {
       const handler = await loadHandler()
       const res = createMockResponse()
       await handler(
-        createRequest({ body: { slug: 'sample', action: 'approve', secret: 'Northsidelando' } }),
+        createRequest({
+          body: { slug: 'sample', action: 'approve' },
+          headers: { 'x-events-moderator-secret': 'Northsidelando' },
+        }),
         res
       )
 
@@ -201,7 +231,10 @@ test('deny action archives the event', async () => {
       const handler = await loadHandler()
       const res = createMockResponse()
       await handler(
-        createRequest({ body: { slug: 'sample', action: 'deny', secret: 'Northsidelando' } }),
+        createRequest({
+          body: { slug: 'sample', action: 'deny' },
+          headers: { 'x-events-moderator-secret': 'Northsidelando' },
+        }),
         res
       )
 
