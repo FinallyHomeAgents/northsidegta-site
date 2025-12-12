@@ -1,6 +1,6 @@
-import { readJsonBody } from '../../../lib/api-helpers.js'
-import { buildCardLabel } from '../../../lib/membership/card-label.js'
-import { getRedisClient, isRedisConfigured } from '../../../lib/membership/redis-client.js'
+import { readJsonBody } from '../../lib/api-helpers.js'
+import { buildCardLabel } from '../../lib/membership/card-label.js'
+import { getRedisClient, isRedisConfigured } from '../../lib/membership/redis-client.js'
 
 const CARD_NUMBER_KEY = 'last_membership_card_number'
 const REGISTRATION_LOG_KEY = 'membership:registrations'
