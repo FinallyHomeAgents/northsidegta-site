@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import MembershipCard from "./components/brand/MembershipCard";
+import { exportCardAsPng } from "./lib/membership/export-card";
 
 const PRIMARY_TOWNS = [
   "Uxbridge",
@@ -56,7 +57,16 @@ const buildTownDisplay = (primaryTown) => {
   return primaryTown;
 };
 
-const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNumber, form }) => (
+const CombinedHeroSection = ({
+  onCTAClick,
+  onDownloadCard,
+  cardRef,
+  cardLabel,
+  cardTown,
+  cardNumber,
+  form,
+  activated,
+}) => (
   <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
     <div
       className="absolute inset-0 opacity-60"
@@ -97,21 +107,30 @@ const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNum
 
         <div className="order-1 lg:order-2 lg:col-span-2 space-y-4">
           <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10 p-4 sm:p-6">
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
-              <span>Your official membership card</span>
-              <span className="text-[10px] text-emerald-50/80">Instant preview</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 text-emerald-50">
+                <span>Your official membership card</span>
+                <span className="text-[10px] text-emerald-50/80">Instant preview</span>
+              </div>
+              <button
+                type="button"
+                onClick={onDownloadCard}
+                className="inline-flex items-center justify-center rounded-full border border-emerald-200/30 bg-emerald-50/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-50 shadow-sm transition hover:border-emerald-100/50 hover:bg-emerald-50/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+              >
+                Download Card (PNG)
+              </button>
             </div>
-            <div
-              ref={cardRef}
-              className="bg-black/20 rounded-2xl p-4 sm:p-5 shadow-inner shadow-black/30 w-full flex justify-center"
-            >
-              <MembershipCard
-                className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
-                fullName={(form.fullName || "Your Name").trim()}
-                town={cardTown}
-                memberId={cardNumber}
-                cardLabel={cardLabel}
-              />
+            <div className="bg-black/20 rounded-2xl p-4 sm:p-5 shadow-inner shadow-black/30 w-full flex justify-center">
+              <div ref={cardRef} className="card-export-target">
+                <MembershipCard
+                  className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
+                  fullName={(form.fullName || "Your Name").trim()}
+                  town={cardTown}
+                  memberId={cardNumber}
+                  cardLabel={cardLabel}
+                  activated={activated}
+                />
+              </div>
             </div>
           </div>
 
@@ -138,6 +157,7 @@ const RegistrationSection = ({
   cardLabel,
   cardNumber,
   cardTown,
+  activated,
 }) => (
   <section className="bg-gray-50 text-slate-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" id="membership-register">
@@ -295,6 +315,7 @@ const RegistrationSection = ({
               town={cardTown}
               memberId={cardNumber}
               cardLabel={cardLabel}
+              activated={activated}
             />
           </div>
           <div className="space-y-3">
@@ -428,6 +449,19 @@ const MembershipCardPreviewPage = () => {
     });
   };
 
+  const handleDownloadCard = async () => {
+    if (!cardRef.current) return;
+
+    const safeId = (cardNumber || DEFAULT_CARD_NUMBER).toString().padStart(8, "0");
+
+    try {
+      await exportCardAsPng(cardRef.current, `northside-gta-membership-card-${safeId}.png`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Unable to download membership card", error);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStatus({ submitting: false, error: "" });
@@ -504,11 +538,13 @@ const MembershipCardPreviewPage = () => {
         <main className="relative">
           <CombinedHeroSection
             onCTAClick={handleScrollToRegistration}
+            onDownloadCard={handleDownloadCard}
             cardRef={cardRef}
             cardLabel={cardLabel}
             cardTown={cardTown}
             cardNumber={cardNumber}
             form={form}
+            activated={isSubmitted}
           />
 
         <section className="bg-gray-50 text-slate-900" id="membership-register">
@@ -527,7 +563,14 @@ const MembershipCardPreviewPage = () => {
                     onClick={handleViewCard}
                     className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-2.5 text-base font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
                   >
-                    View / Save Card
+                    View Card
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownloadCard}
+                    className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-5 py-2.5 text-base font-semibold text-emerald-800 shadow-sm transition hover:border-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+                  >
+                    Download Card (PNG)
                   </button>
                   <a
                     href="/"
@@ -547,6 +590,7 @@ const MembershipCardPreviewPage = () => {
                 cardLabel={cardLabel}
                 cardNumber={cardNumber}
                 cardTown={cardTown}
+                activated={isSubmitted}
               />
             )}
           </div>

@@ -23,18 +23,18 @@ const getLabelSizeClass = (label) => {
   return "member-label member-label--xs";
 };
 
-const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
-  const trimmedName = sanitizeValue(fullName, 52);
-  const trimmedTown = sanitizeValue(town, 48);
+const MembershipCard = ({ fullName, town, memberId, cardLabel, className, activated }) => {
+  const trimmedName = sanitizeValue(fullName, 64);
+  const trimmedTown = sanitizeValue(town, 54);
   const trimmedMemberId = sanitizeValue(memberId, 16);
-  const trimmedCardLabel = sanitizeValue(cardLabel, 44) || "Founding Member";
+  const trimmedCardLabel = sanitizeValue(cardLabel, 48) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
   const nameClass = getNameSizeClass(trimmedName);
   const labelClass = getLabelSizeClass(trimmedTown);
 
   return (
-    <div className={classNames("membership-card", className)}>
+    <div className={classNames("membership-card", className, { "membership-card--activated": activated })}>
       <div className="holo-bar" aria-hidden="true" />
       <div className="card-noise" aria-hidden="true" />
       <div className="metal-rim" aria-hidden="true" />
