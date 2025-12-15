@@ -7,15 +7,31 @@ const sanitizeValue = (value, maxLength) => {
   return safeValue.length > maxLength ? safeValue.slice(0, maxLength) : safeValue;
 };
 
+const getNameSizeClass = (name) => {
+  const length = (name ?? "").length;
+  if (length <= 20) return "member-name member-name--lg";
+  if (length <= 28) return "member-name member-name--md";
+  if (length <= 36) return "member-name member-name--sm";
+  return "member-name member-name--xs";
+};
+
+const getLabelSizeClass = (label) => {
+  const length = (label ?? "").length;
+  if (length <= 18) return "member-label member-label--lg";
+  if (length <= 26) return "member-label member-label--md";
+  if (length <= 32) return "member-label member-label--sm";
+  return "member-label member-label--xs";
+};
+
 const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
-  const trimmedName = sanitizeValue(fullName, 40);
-  const trimmedTown = sanitizeValue(town, 36);
-  const trimmedMemberId = sanitizeValue(memberId, 14);
-  const trimmedCardLabel = sanitizeValue(cardLabel, 40) || "Founding Member";
+  const trimmedName = sanitizeValue(fullName, 52);
+  const trimmedTown = sanitizeValue(town, 48);
+  const trimmedMemberId = sanitizeValue(memberId, 16);
+  const trimmedCardLabel = sanitizeValue(cardLabel, 44) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
-  const nameClass = trimmedName.length > 18 ? "member-name member-name--tight" : "member-name";
-  const townClass = trimmedTown.length > 18 ? "member-town member-town--tight" : "member-town";
+  const nameClass = getNameSizeClass(trimmedName);
+  const labelClass = getLabelSizeClass(trimmedTown);
 
   return (
     <div className={classNames("membership-card", className)}>
@@ -88,15 +104,22 @@ const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
           <div className="member-title" title={trimmedCardLabel}>
             {trimmedCardLabel}
           </div>
-          <div className={nameClass} title={trimmedName}>
-            {trimmedName}
+          <div className="member-name-row">
+            <div className={nameClass} title={trimmedName}>
+              {trimmedName}
+            </div>
           </div>
-          <div className={townClass} title={trimmedTown}>
-            {trimmedTown}
+          <div className="member-label-row">
+            <span className={labelClass} title={trimmedTown}>
+              {trimmedTown}
+            </span>
           </div>
         </div>
-        <div className="member-id" title={memberIdDisplay}>
-          Member ID: {memberIdDisplay}
+        <div className="member-meta">
+          <div className="member-divider" aria-hidden="true" />
+          <div className="member-id" title={memberIdDisplay}>
+            Member ID: {memberIdDisplay}
+          </div>
         </div>
       </div>
     </div>
