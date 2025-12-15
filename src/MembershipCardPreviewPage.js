@@ -56,7 +56,7 @@ const buildTownDisplay = (primaryTown) => {
   return primaryTown;
 };
 
-const HeroSection = ({ onCTAClick }) => (
+const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNumber, form }) => (
   <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
     <div
       className="absolute inset-0 opacity-60"
@@ -65,50 +65,48 @@ const HeroSection = ({ onCTAClick }) => (
           "radial-gradient(circle at 20% 20%, rgba(74,222,128,0.08), transparent 35%), radial-gradient(circle at 80% 0%, rgba(34,197,94,0.08), transparent 25%)",
       }}
     />
-    <div className="relative max-w-5xl mx-auto px-6 py-24 lg:py-32 min-h-[70vh] lg:min-h-screen flex items-center">
-      <div className="w-full max-w-3xl space-y-6">
-        <p className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-emerald-200">
-          NorthSide GTA Membership
-        </p>
-        <div className="space-y-3 text-center lg:text-left">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-            Become a NorthSide GTA Member
-          </h1>
-          <p className="text-lg sm:text-xl text-emerald-50/90 max-w-2xl">
-            A community for people who live here, love it here, or see themselves here next.
+    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-12 items-center">
+        <div className="order-2 lg:order-1 lg:col-span-3 space-y-4 text-center lg:text-left">
+          <p className="inline-flex items-center justify-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-emerald-200">
+            NorthSide GTA Membership
           </p>
-          <p className="text-base text-slate-200/80 max-w-2xl">
-            Free to join. Built on pride, connection, and insider access to everything that makes the NorthSide GTA special.
-          </p>
+          <div className="space-y-2">
+            <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight">
+              Become a NorthSide GTA Member
+            </h1>
+            <p className="text-lg sm:text-xl text-emerald-50/90 max-w-2xl mx-auto lg:mx-0">
+              A community for people who live here, love it here, or see themselves here next.
+            </p>
+            <p className="text-sm sm:text-base text-slate-200/80 max-w-2xl mx-auto lg:mx-0">
+              Free to join. Built on pride, connection, and insider access to everything that makes the NorthSide GTA special.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 justify-center lg:justify-start pt-1">
+            <button
+              type="button"
+              onClick={onCTAClick}
+              className="inline-flex items-center justify-center rounded-full bg-brand-green px-6 py-3 text-base sm:text-lg font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:-translate-y-0.5 hover:shadow-emerald-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              Join NorthSide GTA — Free
+            </button>
+            <span className="text-xs sm:text-sm text-slate-200/80">Identity-first membership for the NorthSide community.</span>
+          </div>
+          <p className="text-xs text-slate-300/80">No spam. No pressure. Just community, pride, and access.</p>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 justify-center lg:justify-start">
-          <button
-            type="button"
-            onClick={onCTAClick}
-            className="inline-flex items-center justify-center rounded-full bg-brand-green px-6 py-3 text-base sm:text-lg font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:-translate-y-0.5 hover:shadow-emerald-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-          >
-            Join NorthSide GTA — Free
-          </button>
-          <span className="text-sm text-slate-200/80">Identity-first membership for the NorthSide community.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
-const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }) => (
-  <section className="bg-slate-950 text-white">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="-mt-16 lg:-mt-24" />
-      <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-6 sm:px-10 py-12">
-          <div className="flex justify-center">
+        <div className="order-1 lg:order-2 lg:col-span-2 space-y-4">
+          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10 p-4 sm:p-6">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
+              <span>Your official membership card</span>
+              <span className="text-[10px] text-emerald-50/80">Instant preview</span>
+            </div>
             <div
               ref={cardRef}
-              className="bg-black/30 rounded-3xl p-4 sm:p-6 shadow-inner shadow-black/30 w-full max-w-lg flex justify-center"
+              className="bg-black/20 rounded-2xl p-4 sm:p-5 shadow-inner shadow-black/30 w-full flex justify-center"
             >
               <MembershipCard
-                className="scale-[1.02] sm:scale-[1.08] drop-shadow-2xl"
+                className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
                 fullName={(form.fullName || "Your Name").trim()}
                 town={cardTown}
                 memberId={cardNumber}
@@ -117,22 +115,13 @@ const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200 font-semibold">Membership Identity</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">Your official NorthSide GTA Membership Card.</h2>
-              <p className="text-base text-slate-100/80 max-w-xl">
-                The symbol of belonging for the NorthSide GTA — centered, elevated, and ready the moment you join.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {KEY_BENEFITS.map((benefit) => (
-                <div key={benefit.title} className="rounded-2xl bg-white/5 border border-white/10 p-4 shadow-sm shadow-black/10">
-                  <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
-                  <p className="mt-2 text-sm text-slate-100/80">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {KEY_BENEFITS.slice(0, 4).map((benefit) => (
+              <div key={benefit.title} className="rounded-2xl bg-white/5 border border-white/10 p-4 shadow-sm shadow-black/10">
+                <h3 className="text-base font-semibold text-white">{benefit.title}</h3>
+                <p className="mt-1.5 text-sm text-slate-100/80 leading-relaxed">{benefit.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -151,8 +140,8 @@ const RegistrationSection = ({
   cardTown,
 }) => (
   <section className="bg-gray-50 text-slate-900">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" id="membership-register">
-      <div className="mt-16 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" id="membership-register">
+        <div className="mt-12 sm:mt-14 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
         <div className="xl:col-span-2 bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-10 space-y-6">
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership registration</p>
@@ -512,15 +501,15 @@ const MembershipCardPreviewPage = () => {
 
       <HeaderShell />
 
-      <main className="relative">
-        <HeroSection onCTAClick={handleScrollToRegistration} />
-        <CardStatementSection
-          cardRef={cardRef}
-          cardLabel={cardLabel}
-          cardTown={cardTown}
-          cardNumber={cardNumber}
-          form={form}
-        />
+        <main className="relative">
+          <CombinedHeroSection
+            onCTAClick={handleScrollToRegistration}
+            cardRef={cardRef}
+            cardLabel={cardLabel}
+            cardTown={cardTown}
+            cardNumber={cardNumber}
+            form={form}
+          />
 
         <section className="bg-gray-50 text-slate-900" id="membership-register">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">

@@ -147,29 +147,35 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 12px;
   padding: 0 26px 26px;
   font-family: var(--font-heading, "Blinker", system-ui, -apple-system, sans-serif);
   color: #ffffff;
+  min-width: 0;
 }
 
 .membership-card .member-name-town {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 72%;
 }
 
 .membership-card .member-title {
-  font-size: 11px;
+  font-size: clamp(10px, 2.4vw, 11px);
   letter-spacing: 0.14em;
   font-variant: small-caps;
   opacity: 0.8;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  line-height: 1.15;
 }
 
 .membership-card .member-name {
-  font-size: 19px;
+  font-size: clamp(16px, 3.6vw, 19px);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -177,20 +183,23 @@
   overflow: hidden;
   white-space: nowrap;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  max-width: 100%;
+  line-height: 1.1;
 }
 
 .membership-card .member-name--tight {
-  font-size: 17px;
+  font-size: clamp(15px, 3.2vw, 17px);
 }
 
 .membership-card .member-town {
-  font-size: 12px;
+  font-size: clamp(11px, 2.8vw, 12px);
   opacity: 0.9;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  line-height: 1.1;
 }
 
 .membership-card .member-town--tight {
@@ -199,7 +208,7 @@
 }
 
 .membership-card .member-id {
-  font-size: 12px;
+  font-size: clamp(11px, 2.9vw, 12px);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   opacity: 0.9;
@@ -208,6 +217,9 @@
   white-space: nowrap;
   padding-right: 4px;
   text-align: right;
+  flex-shrink: 0;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 768px) {
@@ -228,5 +240,14 @@
 
   .membership-card .member-details {
     padding: 0 18px 20px;
+    gap: 10px;
+  }
+
+  .membership-card .member-name-town {
+    max-width: 100%;
+  }
+
+  .membership-card .member-id {
+    font-size: 11px;
   }
 }
