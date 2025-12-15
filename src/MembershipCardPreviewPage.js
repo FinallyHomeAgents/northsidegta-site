@@ -57,16 +57,7 @@ const buildTownDisplay = (primaryTown) => {
   return primaryTown;
 };
 
-const CombinedHeroSection = ({
-  onCTAClick,
-  onDownloadCard,
-  cardRef,
-  cardLabel,
-  cardTown,
-  cardNumber,
-  form,
-  activated,
-}) => (
+const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNumber, form, activated }) => (
   <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
     <div
       className="absolute inset-0 opacity-60"
@@ -106,21 +97,14 @@ const CombinedHeroSection = ({
         </div>
 
         <div className="order-1 lg:order-2 lg:col-span-2 space-y-4">
-          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10 p-4 sm:p-6">
+          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-xl shadow-emerald-500/10 ring-1 ring-white/10 p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
               <div className="flex items-center gap-2 text-emerald-50">
                 <span>Your official membership card</span>
                 <span className="text-[10px] text-emerald-50/80">Instant preview</span>
               </div>
-              <button
-                type="button"
-                onClick={onDownloadCard}
-                className="inline-flex items-center justify-center rounded-full border border-emerald-200/30 bg-emerald-50/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-50 shadow-sm transition hover:border-emerald-100/50 hover:bg-emerald-50/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-              >
-                Download Card (PNG)
-              </button>
             </div>
-            <div className="bg-black/20 rounded-2xl p-4 sm:p-5 shadow-inner shadow-black/30 w-full flex justify-center">
+            <div className="bg-black/25 rounded-2xl p-4 sm:p-5 shadow-[0_18px_42px_rgba(0,0,0,0.36)] ring-1 ring-white/10 w-full flex justify-center overflow-visible">
               <div ref={cardRef} className="card-export-target">
                 <MembershipCard
                   className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
@@ -308,8 +292,8 @@ const RegistrationSection = ({
           </form>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col gap-6">
-          <div className="w-full flex justify-center">
+        <div className="bg-white rounded-3xl shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-100/70 border border-emerald-50 p-6 sm:p-8 flex flex-col gap-6 overflow-visible">
+          <div className="w-full flex justify-center pt-2 overflow-visible">
             <MembershipCard
               fullName={(form.fullName || "Your Name").trim()}
               town={cardTown}
@@ -538,7 +522,6 @@ const MembershipCardPreviewPage = () => {
         <main className="relative">
           <CombinedHeroSection
             onCTAClick={handleScrollToRegistration}
-            onDownloadCard={handleDownloadCard}
             cardRef={cardRef}
             cardLabel={cardLabel}
             cardTown={cardTown}
