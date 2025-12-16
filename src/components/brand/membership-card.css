@@ -110,40 +110,41 @@
 
 .membership-card .micro-strip {
   position: absolute;
-  top: 32%;
+  top: 28%;
   left: 52%;
   transform: translateX(-50%);
   width: 76%;
   height: 14px;
-  font-size: 7.5px;
-  font-weight: 600;
+  font-size: 8px;
+  font-weight: 700;
   line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
   letter-spacing: 0.2em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   z-index: 4;
 }
 
 .membership-card .card-shell {
   position: relative;
   z-index: 5;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   height: 100%;
-  padding: 18px 20px 18px;
+  padding: 18px 18px 20px 18px;
 }
 
 .membership-card .logo-row {
-  position: relative;
-  z-index: 5;
+  position: absolute;
+  z-index: 6;
+  top: 14px;
+  left: 14px;
+  right: 14px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
-  padding: 6px 2px 8px;
 }
 
 .membership-card .card-logo {
@@ -162,54 +163,37 @@
   margin-left: auto;
 }
 
-.membership-card .card-body {
-  position: relative;
-  z-index: 5;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 12px 14px 16px 8px;
-  padding-right: 144px;
-  min-width: 0;
-}
-
-.membership-card .card-grid {
-  display: grid;
-  grid-template-columns: 78px 1fr;
-  gap: 10px 16px;
-  align-items: start;
-  min-height: 126px;
-  margin-top: 6px;
-}
-
 .membership-card .card-chip {
-  position: relative;
+  position: absolute;
   z-index: 5;
+  left: 18px;
+  top: 96px;
   width: 62px;
   height: 46px;
-  margin-left: 6px;
 }
 
 .membership-card .membership-chip {
   width: 62px;
   height: auto;
-  margin-top: 8px;
+  margin-top: 6px;
   margin-bottom: 2px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
 .membership-card .member-details {
+  position: absolute;
+  z-index: 6;
+  top: 148px;
+  left: 112px;
+  right: 136px;
+  width: auto;
+  max-width: 228px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  max-width: 260px;
-  width: 100%;
   font-family: var(--font-heading, "Blinker", system-ui, -apple-system, sans-serif);
   color: #ffffff;
-  padding-top: 10px;
 }
 
 .membership-card .member-label-row {
@@ -220,27 +204,24 @@
 }
 
 .membership-card .member-label {
-  display: inline-flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  gap: 4px;
+  display: inline-block;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   white-space: nowrap;
   max-width: 100%;
-  line-height: 1.1;
-  min-height: 22px;
+  line-height: 1.05;
+  min-height: 20px;
   overflow: hidden;
   text-overflow: clip;
-  padding-right: 6px;
   color: #f8fafc;
+  padding-right: 4px;
 }
 
 .membership-card .member-name-row {
   display: flex;
   max-width: 100%;
-  min-height: 32px;
+  min-height: 30px;
   min-width: 0;
 }
 
@@ -249,10 +230,10 @@
   width: 100%;
   max-width: 100%;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
-  line-height: 1.05;
+  line-height: 1.04;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;
@@ -260,8 +241,8 @@
 
 .membership-card .member-meta {
   position: absolute;
-  right: 22px;
-  bottom: 20px;
+  right: 18px;
+  bottom: 18px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -271,7 +252,7 @@
 
 .membership-card .member-id {
   font-size: 12px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   opacity: 0.98;
   white-space: nowrap;
@@ -283,20 +264,12 @@
   font-family: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.membership-card .member-est {
+.membership-card .member-since {
   font-size: 10px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.9;
   white-space: nowrap;
-}
-
-.membership-card .member-divider {
-  width: 58px;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.46));
-  border-radius: 999px;
-  opacity: 0.9;
 }
 
 @media (max-width: 768px) {
@@ -304,34 +277,32 @@
     padding: 14px 16px 16px;
   }
 
-  .membership-card .logo-row {
-    padding: 2px 0 4px;
-  }
-
   .membership-card .card-logo {
     max-width: 74px;
     max-height: 40px;
   }
 
-  .membership-card .card-body {
-    padding: 6px 10px 12px 2px;
-    padding-right: 124px;
-    gap: 10px;
-  }
-
-  .membership-card .card-grid {
-    grid-template-columns: 68px 1fr;
-    gap: 6px 10px;
-  }
-
   .membership-card .card-chip {
+    left: 14px;
+    top: 92px;
     width: 56px;
     height: 40px;
-    margin-left: 4px;
   }
 
   .membership-card .membership-chip {
     width: 56px;
+  }
+
+  .membership-card .member-details {
+    top: 142px;
+    left: 98px;
+    right: 122px;
+    max-width: 214px;
+    gap: 6px;
+  }
+
+  .membership-card .member-label {
+    letter-spacing: 0.12em;
   }
 
   .membership-card .member-meta {

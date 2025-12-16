@@ -32,6 +32,8 @@ const MembershipCard = ({ fullName, town, memberId, className, activated }) => {
   const trimmedTown = sanitizeValue(town, 64);
   const trimmedMemberId = sanitizeValue(memberId, 16);
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
+  const formattedMemberId = /^\d+$/.test(memberIdDisplay) ? memberIdDisplay.padStart(8, "0") : memberIdDisplay;
+  const memberSinceDisplay = "MAR 2025";
 
   const nameRef = useRef(null);
   const labelRef = useRef(null);
@@ -70,70 +72,50 @@ const MembershipCard = ({ fullName, town, memberId, className, activated }) => {
           />
         </div>
 
-        <div className="card-body">
-          <div className="card-grid">
-            <div className="card-chip" aria-hidden="true">
-              <svg
-                className="membership-chip"
-                viewBox="0 0 120 88"
-                role="presentation"
-                focusable="false"
-                aria-hidden="true"
-              >
-                <defs>
-                  <linearGradient id="chip-metal" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#f4f4f5" />
-                    <stop offset="45%" stopColor="#d5d7db" />
-                    <stop offset="100%" stopColor="#afb3ba" />
-                  </linearGradient>
-                  <linearGradient id="chip-sheen" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.65" />
-                    <stop offset="35%" stopColor="#ffffff" stopOpacity="0.08" />
-                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.2" />
-                  </linearGradient>
-                </defs>
-                <rect
-                  x="4"
-                  y="4"
-                  width="112"
-                  height="80"
-                  rx="12"
-                  fill="url(#chip-metal)"
-                  stroke="#d6d8dc"
-                  strokeWidth="1.5"
-                />
-                <g opacity="0.9" stroke="#c1c4c9" strokeWidth="3" strokeLinecap="round">
-                  <path d="M18 30h84" />
-                  <path d="M18 58h84" />
-                </g>
-                <rect x="30" y="18" width="60" height="52" rx="8" fill="url(#chip-sheen)" opacity="0.5" />
-                <rect x="52" y="12" width="16" height="64" rx="4" fill="rgba(0,0,0,0.04)" />
-                <rect x="8" y="8" width="104" height="72" rx="10" stroke="rgba(0,0,0,0.08)" strokeWidth="1" fill="none" />
-              </svg>
-            </div>
+        <div className="card-chip" aria-hidden="true">
+          <svg className="membership-chip" viewBox="0 0 120 88" role="presentation" focusable="false" aria-hidden="true">
+            <defs>
+              <linearGradient id="chip-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f4f4f5" />
+                <stop offset="45%" stopColor="#d5d7db" />
+                <stop offset="100%" stopColor="#afb3ba" />
+              </linearGradient>
+              <linearGradient id="chip-sheen" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.65" />
+                <stop offset="35%" stopColor="#ffffff" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0.2" />
+              </linearGradient>
+            </defs>
+            <rect x="4" y="4" width="112" height="80" rx="12" fill="url(#chip-metal)" stroke="#d6d8dc" strokeWidth="1.5" />
+            <g opacity="0.9" stroke="#c1c4c9" strokeWidth="3" strokeLinecap="round">
+              <path d="M18 30h84" />
+              <path d="M18 58h84" />
+            </g>
+            <rect x="30" y="18" width="60" height="52" rx="8" fill="url(#chip-sheen)" opacity="0.5" />
+            <rect x="52" y="12" width="16" height="64" rx="4" fill="rgba(0,0,0,0.04)" />
+            <rect x="8" y="8" width="104" height="72" rx="10" stroke="rgba(0,0,0,0.08)" strokeWidth="1" fill="none" />
+          </svg>
+        </div>
 
-            <div className="member-details" aria-label="Member identity">
-              <div className="member-label-row" title={trimmedTown}>
-                <span ref={labelRef} className="member-label">
-                  {trimmedTown.toUpperCase()}
-                </span>
-              </div>
-              <div className="member-name-row" title={trimmedName}>
-                <span ref={nameRef} className="member-name">
-                  {trimmedName.toUpperCase()}
-                </span>
-              </div>
-            </div>
+        <div className="member-details" aria-label="Member identity">
+          <div className="member-label-row" title={trimmedTown}>
+            <span ref={labelRef} className="member-label">
+              {trimmedTown.toUpperCase()}
+            </span>
           </div>
+          <div className="member-name-row" title={trimmedName}>
+            <span ref={nameRef} className="member-name">
+              {trimmedName.toUpperCase()}
+            </span>
+          </div>
+        </div>
 
-          <div className="member-meta" aria-label="Membership identifier">
-            <div className="member-divider" aria-hidden="true" />
-            <div className="member-id" title={memberIdDisplay}>
-              MEMBER ID: {memberIdDisplay}
-            </div>
-            <div className="member-est" aria-hidden="true">
-              EST. 2025
-            </div>
+        <div className="member-meta" aria-label="Membership identifier">
+          <div className="member-id" title={memberIdDisplay}>
+            MEMBER ID · {formattedMemberId}
+          </div>
+          <div className="member-since" aria-hidden="true">
+            MEMBER SINCE · {memberSinceDisplay}
           </div>
         </div>
       </div>
