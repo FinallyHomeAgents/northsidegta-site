@@ -3,7 +3,6 @@ import MembershipCardPreview from "./MembershipCardPreview";
 import {
   DEFAULT_CARD_NUMBER,
   INTERESTS,
-  KEY_BENEFITS,
   MEMBER_TYPES,
   PRIMARY_TOWNS,
   buildCardLabel,
@@ -341,7 +340,9 @@ const MembershipRegistrationBlock = ({
               </form>
             </div>
 
-            <div className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col gap-6 ${previewWrapperClassName}`}>
+            <div
+              className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col items-center ${previewWrapperClassName}`}
+            >
               <MembershipCardPreview
                 ref={cardRef}
                 fullName={(form.fullName || "Your Name").trim()}
@@ -349,31 +350,9 @@ const MembershipRegistrationBlock = ({
                 memberId={cardNumber}
                 cardLabel={cardLabel}
               />
-              <div className="space-y-3">
-                <h2 className="text-lg font-semibold text-slate-900">Live Card Preview</h2>
-                <ul className="space-y-2 text-sm text-slate-700">
-                  <li>
-                    <span className="font-semibold">Card label:</span> {cardLabel}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Member name:</span> {form.fullName || "Your Name"}
-                  </li>
-                  <li>
-                    <span className="font-semibold">Card number:</span> {cardNumber || DEFAULT_CARD_NUMBER}
-                  </li>
-                </ul>
-                <p className="text-xs text-slate-500">
-                  The card updates automatically as you fill in the form. Card numbers are zero-padded (00000001, 00000002, ...).
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {KEY_BENEFITS.slice(0, 2).map((benefit) => (
-                  <div key={benefit.title} className="rounded-2xl bg-emerald-50 border border-emerald-100 p-3 shadow-inner shadow-emerald-100/40">
-                    <h3 className="text-sm font-semibold text-emerald-900">{benefit.title}</h3>
-                    <p className="mt-1 text-xs text-emerald-800/90">{benefit.description}</p>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-4 text-sm text-slate-600 text-center max-w-md">
+                Your membership card updates live as you type.
+              </p>
             </div>
           </div>
         )}

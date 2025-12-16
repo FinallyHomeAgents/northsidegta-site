@@ -101,12 +101,12 @@ const OptionTwoPage = () => {
                     The form and live preview sit together inside a luxe container. Benefits wrap the experience on desktop, while mobile stacks the registration first.
                   </p>
                 </div>
-                <div className="relative mx-auto w-full max-w-xl">
-                  <div className="relative max-h-[85vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
+                <div className="relative mx-auto w-full max-w-[480px] lg:max-w-[420px]">
+                  <div className="relative aspect-[9/16] max-h-[80vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
                     {!prefersReducedMotion ? (
                       <video
                         ref={videoRef}
-                        className="w-full max-h-[85vh] object-contain rounded-2xl"
+                        className="h-full w-full object-contain rounded-2xl"
                         src="/videos/northside-pass.mp4"
                         autoPlay
                         muted
