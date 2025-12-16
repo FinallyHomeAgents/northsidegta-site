@@ -65,8 +65,8 @@ const HeroSection = ({ onCTAClick }) => (
           "radial-gradient(circle at 20% 20%, rgba(74,222,128,0.08), transparent 35%), radial-gradient(circle at 80% 0%, rgba(34,197,94,0.08), transparent 25%)",
       }}
     />
-    <div className="relative max-w-5xl mx-auto px-6 py-24 lg:py-32 min-h-[70vh] lg:min-h-screen flex items-center">
-      <div className="w-full max-w-3xl space-y-6">
+    <div className="relative max-w-5xl mx-auto px-6 py-16 lg:py-20 min-h-[60vh] flex items-center">
+      <div className="w-full max-w-3xl space-y-5">
         <p className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-emerald-200">
           NorthSide GTA Membership
         </p>
@@ -99,9 +99,9 @@ const HeroSection = ({ onCTAClick }) => (
 const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }) => (
   <section className="bg-slate-950 text-white">
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="-mt-16 lg:-mt-24" />
+      <div className="-mt-10 lg:-mt-14" />
       <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-6 sm:px-10 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-6 sm:px-10 py-10">
           <div className="flex justify-center">
             <div
               ref={cardRef}
@@ -151,8 +151,8 @@ const RegistrationSection = ({
   cardTown,
 }) => (
   <section className="bg-gray-50 text-slate-900">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" id="membership-register">
-      <div className="mt-16 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16" id="membership-register">
+      <div className="mt-12 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
         <div className="xl:col-span-2 bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-10 space-y-6">
           <div className="space-y-2">
             <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership registration</p>
@@ -525,7 +525,7 @@ const MembershipCardPreviewPage = () => {
         <section className="bg-gray-50 text-slate-900" id="membership-register">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
             {isSubmitted ? (
-              <div className="-mt-14 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-10 text-center flex flex-col items-center gap-6">
+              <div className="-mt-10 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-10 text-center flex flex-col items-center gap-6">
                 <div className="space-y-2 max-w-2xl">
                   <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership Created</p>
                   <h2 className="text-4xl font-bold text-slate-900">Welcome to NorthSide GTA</h2>
