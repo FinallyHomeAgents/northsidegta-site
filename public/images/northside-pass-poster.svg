@@ -1,0 +1,19 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">NorthSide GTA Membership Video Poster</title>
+  <desc id="desc">Poster fallback for the NorthSide GTA membership background and reward videos.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#0b1223" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25" />
+      <stop offset="80%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)" />
+  <rect width="1600" height="900" fill="url(#glow)" />
+  <rect x="100" y="100" width="1400" height="700" rx="32" ry="32" stroke="#10b981" stroke-opacity="0.35" fill="none" stroke-width="4" />
+  <text x="50%" y="45%" fill="#e2e8f0" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="64" font-weight="700" text-anchor="middle">NorthSide GTA Membership</text>
+  <text x="50%" y="55%" fill="#a5f3fc" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="28" font-weight="500" text-anchor="middle" letter-spacing="2">Video loading…</text>
+</svg>

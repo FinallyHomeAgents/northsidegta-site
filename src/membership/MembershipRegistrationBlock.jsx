@@ -132,6 +132,24 @@ const MembershipRegistrationBlock = ({
                 Continue to NorthSide GTA
               </a>
             </div>
+
+            <div className="w-full max-w-4xl rounded-3xl border border-emerald-100 bg-emerald-50/40 shadow-inner shadow-emerald-100/60 p-6 space-y-4 text-left">
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-emerald-800">Welcome to NorthSide GTA</p>
+                <p className="text-base text-slate-700">Your membership is official.</p>
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-slate-900/80">
+                <video
+                  className="w-full h-full"
+                  src="/videos/northside-pass.mp4"
+                  controls
+                  playsInline
+                  preload="none"
+                  poster="/images/northside-pass-poster.svg"
+                  muted
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <div className="mt-12 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
