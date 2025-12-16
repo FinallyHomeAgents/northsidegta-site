@@ -13,6 +13,7 @@ const fitTextToWidth = (ref, { max, min }) => {
   let fontSize = max;
   const el = ref.current;
   el.style.fontSize = `${fontSize}px`;
+  el.style.textOverflow = "clip";
 
   while (el.scrollWidth > el.clientWidth && fontSize > min) {
     fontSize -= 1;
@@ -21,18 +22,15 @@ const fitTextToWidth = (ref, { max, min }) => {
 
   if (el.scrollWidth > el.clientWidth) {
     el.style.textOverflow = "ellipsis";
-  } else {
-    el.style.textOverflow = "clip";
   }
 
   return fontSize;
 };
 
-const MembershipCard = ({ fullName, town, memberId, cardLabel, className, activated }) => {
+const MembershipCard = ({ fullName, town, memberId, className, activated }) => {
   const trimmedName = sanitizeValue(fullName, 80);
   const trimmedTown = sanitizeValue(town, 64);
   const trimmedMemberId = sanitizeValue(memberId, 16);
-  const trimmedCardLabel = sanitizeValue(cardLabel, 48) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
   const nameRef = useRef(null);
@@ -114,22 +112,16 @@ const MembershipCard = ({ fullName, town, memberId, cardLabel, className, activa
               </svg>
             </div>
 
-            <div className="member-details">
-              <div className="member-title" title={trimmedCardLabel}>
-                {trimmedCardLabel}
-              </div>
+            <div className="member-details" aria-label="Member identity">
               <div className="member-label-row" title={trimmedTown}>
                 <span ref={labelRef} className="member-label">
-                  {trimmedTown}
+                  {trimmedTown.toUpperCase()}
                 </span>
               </div>
               <div className="member-name-row" title={trimmedName}>
                 <span ref={nameRef} className="member-name">
                   {trimmedName.toUpperCase()}
                 </span>
-              </div>
-              <div className="community-line" aria-hidden="true">
-                NORTHSIDE GTA COMMUNITY MEMBER
               </div>
             </div>
           </div>

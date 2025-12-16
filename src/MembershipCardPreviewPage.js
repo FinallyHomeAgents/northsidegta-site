@@ -97,14 +97,14 @@ const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNum
         </div>
 
         <div className="order-1 lg:order-2 lg:col-span-2 space-y-4">
-          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-xl shadow-emerald-500/10 ring-1 ring-white/10 p-4 sm:p-6">
+          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-xl shadow-emerald-500/10 ring-1 ring-white/10 p-5 sm:p-6 md:p-7">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
               <div className="flex items-center gap-2 text-emerald-50">
                 <span>Your official membership card</span>
                 <span className="text-[10px] text-emerald-50/80">Instant preview</span>
               </div>
             </div>
-            <div className="bg-black/25 rounded-2xl p-4 sm:p-5 shadow-[0_18px_42px_rgba(0,0,0,0.36)] ring-1 ring-white/10 w-full flex justify-center overflow-visible">
+            <div className="bg-black/25 rounded-2xl p-5 sm:p-6 shadow-[0_18px_42px_rgba(0,0,0,0.36)] ring-1 ring-white/10 w-full flex justify-center overflow-visible">
               <div ref={cardRef} className="card-export-target">
                 <MembershipCard
                   className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
@@ -292,8 +292,8 @@ const RegistrationSection = ({
           </form>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-100/70 border border-emerald-50 p-6 sm:p-8 flex flex-col gap-6 overflow-visible">
-          <div className="w-full flex justify-center pt-2 overflow-visible">
+        <div className="bg-white rounded-3xl shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-100/70 border border-emerald-50 p-7 sm:p-9 md:p-10 flex flex-col gap-6 overflow-visible">
+          <div className="w-full flex justify-center pt-2 pb-2 overflow-visible">
             <MembershipCard
               fullName={(form.fullName || "Your Name").trim()}
               town={cardTown}
