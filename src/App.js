@@ -30,6 +30,10 @@ import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 import MembershipCardPreviewPage from "./MembershipCardPreviewPage";
 import EventsReviewPage from "./community/EventsReviewPage";
+import OptionOnePage from "./membership/OptionOnePage";
+import OptionTwoPage from "./membership/OptionTwoPage";
+import OptionThreePage from "./membership/OptionThreePage";
+import OptionFourPage from "./membership/OptionFourPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -94,6 +98,10 @@ function App() {
           <Route path="/media"        element={<MediaPage />} />
           <Route path="/referral-partners" element={<ReferralPartnersPage />} />
           <Route path="/northside-pass-preview" element={<MembershipCardPreviewPage />} />
+          <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />
+          <Route path="/northside-pass-preview/option-2" element={<OptionTwoPage />} />
+          <Route path="/northside-pass-preview/option-3" element={<OptionThreePage />} />
+          <Route path="/northside-pass-preview/option-4" element={<OptionFourPage />} />
 
           {/* Town pages — community slugs */}
           <Route path="/communities/:slug" element={<TownPage />} />
