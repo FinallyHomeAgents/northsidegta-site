@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import MembershipCard from "../components/brand/MembershipCard";
+import MembershipCardPreview from "./MembershipCardPreview";
 import {
   DEFAULT_CARD_NUMBER,
   INTERESTS,
@@ -9,6 +9,11 @@ import {
   buildCardLabel,
   buildTownDisplay,
 } from "./membershipContent";
+
+const COMPLIANCE_ERROR_MESSAGE =
+  "Unfortunately we can’t add you to the list until you confirm you’re not currently under contract with another real estate brokerage.";
+
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
 const MembershipRegistrationBlock = ({
   id = "membership-register",
@@ -28,6 +33,7 @@ const MembershipRegistrationBlock = ({
   });
   const [cardNumber, setCardNumber] = useState(DEFAULT_CARD_NUMBER);
   const [status, setStatus] = useState({ submitting: false, error: "" });
+  const [errors, setErrors] = useState({ email: "", compliance: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const cardRef = useRef(null);
 
@@ -53,13 +59,22 @@ const MembershipRegistrationBlock = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStatus({ submitting: false, error: "" });
+    setErrors({ email: "", compliance: "" });
 
-    if (!form.compliance) {
-      setStatus({ submitting: false, error: "Please confirm you are not under contract with another brokerage." });
+    const trimmedEmail = form.email.trim();
+
+    if (!validateEmail(trimmedEmail)) {
+      setErrors((prev) => ({ ...prev, email: "A valid email address is required." }));
       return;
     }
 
-    if (!form.fullName || !form.email || !form.primaryTown || !form.memberType) {
+    if (!form.compliance) {
+      setErrors((prev) => ({ ...prev, compliance: COMPLIANCE_ERROR_MESSAGE }));
+      setStatus({ submitting: false, error: COMPLIANCE_ERROR_MESSAGE });
+      return;
+    }
+
+    if (!form.fullName || !trimmedEmail || !form.primaryTown || !form.memberType) {
       setStatus({ submitting: false, error: "Please complete all required fields." });
       return;
     }
@@ -72,7 +87,7 @@ const MembershipRegistrationBlock = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: form.fullName,
-          email: form.email,
+          email: trimmedEmail,
           primaryTown: form.primaryTown,
           memberType: form.memberType,
           interests: form.interests,
@@ -181,17 +196,33 @@ const MembershipRegistrationBlock = ({
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="email">
-                      Email
+                      Email (valid email required)
                     </label>
                     <input
                       id="email"
                       type="email"
                       required
                       value={form.email}
-                      onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+                      onChange={(e) => {
+                        const nextEmail = e.target.value;
+                        setForm((prev) => ({ ...prev, email: nextEmail }));
+                        if (errors.email && validateEmail(nextEmail)) {
+                          setErrors((prev) => ({ ...prev, email: "" }));
+                        }
+                      }}
+                      onBlur={() => {
+                        if (!validateEmail(form.email)) {
+                          setErrors((prev) => ({ ...prev, email: "A valid email address is required." }));
+                        }
+                      }}
                       className="w-full rounded-xl border border-slate-200 px-3 py-3 text-base bg-white focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
-                      placeholder="you@example.com"
+                      placeholder="Valid email required — you@example.com"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600" role="alert">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -266,7 +297,14 @@ const MembershipRegistrationBlock = ({
                     <input
                       type="checkbox"
                       checked={form.compliance}
-                      onChange={(e) => setForm((prev) => ({ ...prev, compliance: e.target.checked }))}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setForm((prev) => ({ ...prev, compliance: checked }));
+                        if (checked && errors.compliance) {
+                          setErrors((prev) => ({ ...prev, compliance: "" }));
+                          setStatus((prev) => ({ ...prev, error: "" }));
+                        }
+                      }}
                       className="mt-1 h-4 w-4 text-emerald-700 focus:ring-emerald-600"
                       required
                     />
@@ -277,6 +315,11 @@ const MembershipRegistrationBlock = ({
                   <p className="text-xs text-slate-500">
                     We occasionally share real estate–related updates. This helps ensure we only send that content to people who are free to receive it and that we respect existing brokerage relationships.
                   </p>
+                  {errors.compliance && (
+                    <p className="text-sm text-red-600" role="alert">
+                      {errors.compliance}
+                    </p>
+                  )}
                 </div>
 
                 {status.error && (
@@ -299,14 +342,13 @@ const MembershipRegistrationBlock = ({
             </div>
 
             <div className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col gap-6 ${previewWrapperClassName}`}>
-              <div className="w-full flex justify-center" ref={cardRef}>
-                <MembershipCard
-                  fullName={(form.fullName || "Your Name").trim()}
-                  town={cardTown}
-                  memberId={cardNumber}
-                  cardLabel={cardLabel}
-                />
-              </div>
+              <MembershipCardPreview
+                ref={cardRef}
+                fullName={(form.fullName || "Your Name").trim()}
+                town={cardTown}
+                memberId={cardNumber}
+                cardLabel={cardLabel}
+              />
               <div className="space-y-3">
                 <h2 className="text-lg font-semibold text-slate-900">Live Card Preview</h2>
                 <ul className="space-y-2 text-sm text-slate-700">

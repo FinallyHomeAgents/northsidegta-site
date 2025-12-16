@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
-import MembershipCard from "./components/brand/MembershipCard";
+import MembershipCardPreview from "./membership/MembershipCardPreview";
 import MembershipRegistrationBlock from "./membership/MembershipRegistrationBlock";
 import {
   DEFAULT_CARD_NUMBER,
@@ -57,18 +57,13 @@ const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }
       <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-6 sm:px-10 py-10">
           <div className="flex justify-center">
-            <div
+            <MembershipCardPreview
               ref={cardRef}
-              className="bg-black/30 rounded-3xl p-4 sm:p-6 shadow-inner shadow-black/30 w-full max-w-lg flex justify-center"
-            >
-              <MembershipCard
-                className="scale-[1.02] sm:scale-[1.08] drop-shadow-2xl"
-                fullName={(form.fullName || "Your Name").trim()}
-                town={cardTown}
-                memberId={cardNumber}
-                cardLabel={cardLabel}
-              />
-            </div>
+              fullName={(form.fullName || "Your Name").trim()}
+              town={cardTown}
+              memberId={cardNumber}
+              cardLabel={cardLabel}
+            />
           </div>
 
           <div className="space-y-6">
