@@ -1,9 +1,10 @@
 .membership-card {
   position: relative;
-  width: 100%;
-  max-width: 420px;
+  width: 420px;
+  max-width: 100%;
   aspect-ratio: 420 / 260;
   border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(115deg, #3b7a24 0%, #2e6317 38%, #1f420d 78%, #19360b 100%);
   background-blend-mode: multiply;
   color: #ffffff;
@@ -18,7 +19,7 @@
 
 .card-export-target {
   display: inline-flex;
-  width: 100%;
+  width: min(420px, 100%);
   justify-content: center;
 }
 
@@ -110,20 +111,20 @@
 
 .membership-card .micro-strip {
   position: absolute;
-  top: 28%;
+  top: 30%;
   left: 52%;
   transform: translateX(-50%);
-  width: 76%;
-  height: 14px;
-  font-size: 8px;
-  font-weight: 700;
+  width: 80%;
+  height: 16px;
+  font-size: 8.25px;
+  font-weight: 800;
   line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(248, 250, 252, 0.96);
   text-align: center;
-  letter-spacing: 0.2em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.18em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
   z-index: 4;
 }
 
@@ -138,17 +139,18 @@
 .membership-card .logo-row {
   position: absolute;
   z-index: 6;
-  top: 14px;
-  left: 14px;
-  right: 14px;
+  top: 16px;
+  left: 18px;
+  right: 18px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
+  pointer-events: none;
 }
 
 .membership-card .card-logo {
-  max-width: 82px;
+  max-width: 88px;
   max-height: 44px;
   object-fit: contain;
   display: block;
@@ -166,14 +168,15 @@
 .membership-card .card-chip {
   position: absolute;
   z-index: 5;
-  left: 18px;
+  left: 22px;
   top: 96px;
-  width: 62px;
-  height: 46px;
+  width: 64px;
+  height: 48px;
+  pointer-events: none;
 }
 
 .membership-card .membership-chip {
-  width: 62px;
+  width: 64px;
   height: auto;
   margin-top: 6px;
   margin-bottom: 2px;
@@ -183,11 +186,11 @@
 .membership-card .member-details {
   position: absolute;
   z-index: 6;
-  top: 148px;
+  top: 146px;
   left: 112px;
-  right: 136px;
+  right: 96px;
   width: auto;
-  max-width: 228px;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -206,12 +209,12 @@
 .membership-card .member-label {
   display: inline-block;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
   max-width: 100%;
-  line-height: 1.05;
-  min-height: 20px;
+  line-height: 1.1;
+  min-height: 18px;
   overflow: hidden;
   text-overflow: clip;
   color: #f8fafc;
@@ -230,7 +233,7 @@
   width: 100%;
   max-width: 100%;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
   line-height: 1.04;
@@ -248,11 +251,12 @@
   align-items: flex-end;
   gap: 6px;
   min-width: 0;
+  pointer-events: none;
 }
 
 .membership-card .member-id {
   font-size: 12px;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.98;
   white-space: nowrap;
@@ -266,7 +270,7 @@
 
 .membership-card .member-since {
   font-size: 10px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.9;
   white-space: nowrap;
@@ -295,8 +299,8 @@
 
   .membership-card .member-details {
     top: 142px;
-    left: 98px;
-    right: 122px;
+    left: 90px;
+    right: 70px;
     max-width: 214px;
     gap: 6px;
   }

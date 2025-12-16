@@ -14,6 +14,7 @@ const fitTextToWidth = (ref, { max, min }) => {
   const el = ref.current;
   el.style.fontSize = `${fontSize}px`;
   el.style.textOverflow = "clip";
+  el.style.whiteSpace = "nowrap";
 
   while (el.scrollWidth > el.clientWidth && fontSize > min) {
     fontSize -= 1;
@@ -39,11 +40,11 @@ const MembershipCard = ({ fullName, town, memberId, className, activated }) => {
   const labelRef = useRef(null);
 
   useLayoutEffect(() => {
-    fitTextToWidth(nameRef, { max: 28, min: 16 });
+    fitTextToWidth(nameRef, { max: 28, min: 12 });
   }, [trimmedName]);
 
   useLayoutEffect(() => {
-    fitTextToWidth(labelRef, { max: 14, min: 10 });
+    fitTextToWidth(labelRef, { max: 14, min: 9 });
   }, [trimmedTown]);
 
   return (

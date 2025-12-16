@@ -97,14 +97,14 @@ const CombinedHeroSection = ({ onCTAClick, cardRef, cardLabel, cardTown, cardNum
         </div>
 
         <div className="order-1 lg:order-2 lg:col-span-2 space-y-4">
-          <div className="rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-[0_18px_42px_rgba(0,0,0,0.24)] ring-1 ring-white/10 p-5 sm:p-6 md:p-7">
+          <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_14px_32px_rgba(0,0,0,0.26)] ring-1 ring-white/15 p-6 sm:p-7 md:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs uppercase tracking-[0.12em] text-emerald-100 mb-3 sm:mb-4">
               <div className="flex items-center gap-2 text-emerald-50">
                 <span>Your official membership card</span>
                 <span className="text-[10px] text-emerald-50/80">Instant preview</span>
               </div>
             </div>
-            <div className="bg-black/25 rounded-2xl p-6 sm:p-7 shadow-[0_12px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/15 border border-white/10 w-full flex justify-center overflow-visible relative">
+            <div className="bg-black/20 rounded-2xl p-7 sm:p-8 shadow-[0_12px_26px_rgba(0,0,0,0.24)] ring-1 ring-white/20 border border-white/15 w-full flex justify-center overflow-visible relative">
               <div ref={cardRef} className="card-export-target">
                 <MembershipCard
                   className="scale-[1.02] sm:scale-[1.05] drop-shadow-2xl"
