@@ -9,6 +9,7 @@ import {
   buildCardLabel,
   buildTownDisplay,
 } from "./membershipContent";
+import { clampFullName, MAX_FULL_NAME_LENGTH } from "./nameSizing";
 
 const COMPLIANCE_ERROR_MESSAGE =
   "Unfortunately we can’t add you to the list until you confirm you’re not currently under contract with another real estate brokerage.";
@@ -198,7 +199,8 @@ const MembershipRegistrationBlock = ({
                       type="text"
                       required
                       value={form.fullName}
-                      onChange={(e) => setForm((prev) => ({ ...prev, fullName: e.target.value.slice(0, 30) }))}
+                      maxLength={MAX_FULL_NAME_LENGTH}
+                      onChange={(e) => setForm((prev) => ({ ...prev, fullName: clampFullName(e.target.value) }))}
                       className="w-full rounded-xl border border-slate-200 px-3 py-3 text-base bg-white focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
                       placeholder="Example: Matthew Mulhall"
                     />

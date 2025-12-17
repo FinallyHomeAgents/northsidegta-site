@@ -147,12 +147,16 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 12px;
   padding: 0 26px 26px;
   font-family: var(--font-heading, "Blinker", system-ui, -apple-system, sans-serif);
   color: #ffffff;
 }
 
 .membership-card .member-name-town {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: calc(100% - 150px);
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -208,6 +212,7 @@
   white-space: nowrap;
   padding-right: 4px;
   text-align: right;
+  flex-shrink: 0;
 }
 
 .membership-card--fixed {

@@ -1,20 +1,45 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import "./membership-card.css";
+import {
+  BASE_NAME_FONT_SIZE,
+  NAME_LETTER_SPACING_EM,
+  clampFullName,
+  getNameScale,
+} from "../../membership/nameSizing";
 
 const sanitizeValue = (value, maxLength) => {
   const safeValue = (value ?? "").toString().trim();
-  return safeValue.length > maxLength ? safeValue.slice(0, maxLength) : safeValue;
+  return maxLength ? safeValue.slice(0, maxLength) : safeValue;
 };
 
 const MembershipCard = ({ fullName, town, memberId, cardLabel, className, style }) => {
-  const trimmedName = sanitizeValue(fullName, 22);
+  const nameAreaRef = useRef(null);
+  const [nameAreaWidth, setNameAreaWidth] = useState(0);
+
+  useEffect(() => {
+    const node = nameAreaRef.current;
+    if (!node || typeof ResizeObserver === "undefined") return undefined;
+
+    const updateWidth = () => setNameAreaWidth(node.clientWidth);
+    updateWidth();
+
+    const resizeObserver = new ResizeObserver(updateWidth);
+    resizeObserver.observe(node);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  const trimmedName = clampFullName(fullName);
   const trimmedTown = sanitizeValue(town, 22);
   const trimmedMemberId = sanitizeValue(memberId, 12);
   const trimmedCardLabel = sanitizeValue(cardLabel, 28) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
-  const nameClass = trimmedName.length > 16 ? "member-name member-name--tight" : "member-name";
+  const nameScale = getNameScale(trimmedName, nameAreaWidth);
+  const nameFontSize = BASE_NAME_FONT_SIZE * nameScale;
+  const nameLetterSpacing = Math.max(0.03, NAME_LETTER_SPACING_EM * nameScale);
+  const nameClass = nameScale < 1 ? "member-name member-name--tight" : "member-name";
   const townClass = trimmedTown.length > 16 ? "member-town member-town--tight" : "member-town";
 
   return (
@@ -84,11 +109,15 @@ const MembershipCard = ({ fullName, town, memberId, cardLabel, className, style 
       </div>
 
       <div className="member-details">
-        <div className="member-name-town">
+        <div className="member-name-town" ref={nameAreaRef}>
           <div className="member-title" title={trimmedCardLabel}>
             {trimmedCardLabel}
           </div>
-          <div className={nameClass} title={trimmedName}>
+          <div
+            className={nameClass}
+            title={trimmedName}
+            style={{ fontSize: `${nameFontSize}px`, letterSpacing: `${nameLetterSpacing}em` }}
+          >
             {trimmedName}
           </div>
           <div className={townClass} title={trimmedTown}>
