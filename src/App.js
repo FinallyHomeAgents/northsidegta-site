@@ -28,7 +28,6 @@ import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
-import MembershipCardPreviewPage from "./MembershipCardPreviewPage";
 import EventsReviewPage from "./community/EventsReviewPage";
 import OptionOnePage from "./membership/OptionOnePage";
 import OptionTwoPage from "./membership/OptionTwoPage";
@@ -98,7 +97,7 @@ function App() {
           <Route path="/insights/:slug" element={<InsightPage />} />
           <Route path="/media"        element={<MediaPage />} />
           <Route path="/referral-partners" element={<ReferralPartnersPage />} />
-          <Route path="/northside-pass-preview" element={<MembershipCardPreviewPage />} />
+          <Route path="/northside-pass-preview" element={<OptionFivePage />} />
           <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />
           <Route path="/northside-pass-preview/option-2" element={<OptionTwoPage />} />
           <Route path="/northside-pass-preview/option-3" element={<OptionThreePage />} />

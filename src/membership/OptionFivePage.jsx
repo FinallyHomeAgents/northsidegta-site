@@ -1,15 +1,14 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "../components/HeaderShell";
-import LayoutSwitcher from "./LayoutSwitcher";
 import MembershipRegistrationBlock from "./MembershipRegistrationBlock";
 import MembershipCard from "../components/brand/MembershipCard";
 import { DEFAULT_CARD_NUMBER, buildCardLabel, buildTownDisplay } from "./membershipContent";
 
 const heroBullets = [
-  "Live preview, instant member ID, zero fluff.",
   "What’s happening, without the noise.",
   "Built by local agents who put community first.",
+  "Belonging in the NorthSide GTA.",
 ];
 
 const cinematicBenefits = [
@@ -44,8 +43,8 @@ const OptionFivePage = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <Helmet>
-        <title>NorthSide Pass — Option 5</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview/option-5" />
+        <title>NorthSide Pass — Membership</title>
+        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview" />
       </Helmet>
 
       <HeaderShell />
@@ -64,13 +63,6 @@ const OptionFivePage = () => {
           </div>
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-            <div className="flex items-center justify-between gap-3 mb-10">
-              <LayoutSwitcher active="/northside-pass-preview/option-5" />
-              <span className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                Option 5 · Cinematic
-              </span>
-            </div>
-
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
               <div className="space-y-6">
                 <div className="space-y-3">
@@ -115,17 +107,18 @@ const OptionFivePage = () => {
                 <div className="relative rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-900 via-slate-950 to-black p-6 shadow-[0_30px_120px_rgba(0,0,0,0.6)]">
                   <div className="absolute inset-x-10 -top-3 h-10 bg-emerald-400/30 blur-xl rounded-full" aria-hidden="true" />
                   <div className="relative grid place-items-center">
-                    <div className="rounded-3xl bg-black/70 border border-white/5 shadow-[0_30px_120px_rgba(16,185,129,0.4)] transition duration-700 ease-out">
-                      <MembershipCard
-                        className="scale-[1.06] drop-shadow-[0_20px_80px_rgba(16,185,129,0.25)]"
-                        fullName="NorthSide GTA Member"
-                        town={sampleTown}
-                        memberId={DEFAULT_CARD_NUMBER}
-                        cardLabel={sampleLabel}
-                      />
+                    <div className="w-full max-w-[520px] aspect-[420/265] grid place-items-center">
+                      <div className="rounded-3xl bg-black/70 border border-white/5 shadow-[0_30px_120px_rgba(16,185,129,0.4)] transition duration-700 ease-out w-full h-full grid place-items-center">
+                        <MembershipCard
+                          className="membership-card--fluid drop-shadow-[0_20px_80px_rgba(16,185,129,0.25)]"
+                          fullName="NorthSide GTA Member"
+                          town={sampleTown}
+                          memberId={DEFAULT_CARD_NUMBER}
+                          cardLabel={sampleLabel}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <p className="mt-6 text-sm text-white/70 text-center">Live card preview updates as you type.</p>
                 </div>
               </div>
             </div>
@@ -136,10 +129,10 @@ const OptionFivePage = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(74,222,128,0.08),transparent_25%)]" aria-hidden="true" />
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-3 mb-6">
-              <p className="text-xs uppercase tracking-[0.22em] text-emerald-200 font-semibold">Claim flow</p>
-              <h2 className="text-3xl font-bold text-white">Scroll down and claim your card instantly.</h2>
+              <p className="text-xs uppercase tracking-[0.22em] text-emerald-200 font-semibold">NorthSide Pass</p>
+              <h2 className="text-3xl font-bold text-white">Claim your NorthSide GTA membership.</h2>
               <p className="text-base text-white/70 max-w-3xl">
-                The form, validation, and live preview remain unchanged — now wrapped in a cinematic shell with clear focus and hierarchy.
+                Free to join. Built on pride, connection, and local access.
               </p>
             </div>
 
@@ -147,7 +140,7 @@ const OptionFivePage = () => {
               <div className="border-b border-white/5 px-6 sm:px-8 py-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-emerald-200 font-semibold">NorthSide Pass</p>
-                  <p className="text-base text-white/80">Live preview, instant member ID, zero fluff.</p>
+                  <p className="text-base text-white/80">Free to join. Built on pride, connection, and local access.</p>
                 </div>
                 <button
                   type="button"
@@ -160,6 +153,7 @@ const OptionFivePage = () => {
 
               <MembershipRegistrationBlock
                 className="bg-transparent text-white"
+                tone="dark"
                 innerClassName="p-0"
                 contentWrapperClassName="p-4 sm:p-6 lg:p-8"
                 previewWrapperClassName="bg-slate-950/70 border border-white/10 text-white shadow-[0_25px_80px_rgba(16,185,129,0.25)]"
@@ -172,8 +166,8 @@ const OptionFivePage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-[0.22em] text-emerald-200 font-semibold">Membership benefits</p>
-              <h3 className="text-3xl font-bold text-white">Cinematic, clear, and built to convert.</h3>
-              <p className="text-base text-white/70 max-w-3xl">The same benefits — framed in high-contrast panels for quick scanning.</p>
+              <h3 className="text-3xl font-bold text-white">What you get as a member.</h3>
+              <p className="text-base text-white/70 max-w-3xl">The same benefits — now presented in a focused, high-contrast layout.</p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

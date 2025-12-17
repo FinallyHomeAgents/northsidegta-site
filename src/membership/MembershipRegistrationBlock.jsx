@@ -11,7 +11,9 @@ import {
 } from "./membershipContent";
 
 const COMPLIANCE_ERROR_MESSAGE =
-  "Unfortunately we can’t add you to the list until you confirm you’re not currently under contract with another real estate brokerage.";
+  "To claim a membership, we need to confirm you’re not currently under a buyer or listing agreement with another real estate brokerage.";
+const COMPLIANCE_HELPER_MESSAGE =
+  "If you’re already represented, we’re happy to share community resources — but we can’t add you to this membership list right now.";
 
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
@@ -22,6 +24,7 @@ const MembershipRegistrationBlock = ({
   innerClassName = "max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8",
   previewWrapperClassName = "",
   onRegistrationStateChange,
+  tone = "light",
 }) => {
   const [form, setForm] = useState({
     fullName: "",
@@ -36,6 +39,23 @@ const MembershipRegistrationBlock = ({
   const [errors, setErrors] = useState({ email: "", compliance: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const cardRef = useRef(null);
+
+  const isDark = tone === "dark";
+  const autofillClass = isDark
+    ? "autofill:bg-slate-900/80 autofill:text-white autofill:shadow-[inset_0_0_0px_1000px_rgba(15,23,42,0.8)]"
+    : "autofill:bg-white autofill:text-slate-900 autofill:shadow-[inset_0_0_0px_1000px_rgba(255,255,255,1)]";
+  const inputBaseClass =
+    `w-full rounded-xl border px-3 py-3 text-base transition focus:outline-none focus:ring-2 ${autofillClass} ` +
+    (isDark
+      ? "bg-slate-900/80 border-white/15 text-white placeholder:text-white/60 focus:border-emerald-400 focus:ring-emerald-500/30"
+      : "bg-white border-slate-200 text-slate-900 placeholder:text-slate-500 focus:border-emerald-600 focus:ring-emerald-100");
+  const cardSurfaceClass = isDark
+    ? "bg-slate-900/80 border border-white/10 text-white shadow-[0_25px_80px_rgba(16,185,129,0.25)]"
+    : "bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50";
+  const labelClass = isDark
+    ? "block text-sm font-semibold text-white mb-2"
+    : "block text-sm font-semibold text-slate-800 mb-2";
+  const helperTextClass = isDark ? "text-sm text-white/70" : "text-sm text-slate-600";
 
   const cardLabel = useMemo(() => buildCardLabel(form.primaryTown), [form.primaryTown]);
   const cardTown = useMemo(() => buildTownDisplay(form.primaryTown), [form.primaryTown]);
@@ -70,7 +90,7 @@ const MembershipRegistrationBlock = ({
 
     if (!form.compliance) {
       setErrors((prev) => ({ ...prev, compliance: COMPLIANCE_ERROR_MESSAGE }));
-      setStatus({ submitting: false, error: COMPLIANCE_ERROR_MESSAGE });
+      setStatus((prev) => ({ ...prev, submitting: false, error: "" }));
       return;
     }
 
@@ -126,24 +146,40 @@ const MembershipRegistrationBlock = ({
       {id !== "membership-register" && <div id="membership-register" className="absolute -top-24 h-px w-px" aria-hidden="true" />}
       <div className={`${innerClassName} ${contentWrapperClassName}`}>
         {isSubmitted ? (
-          <div className="-mt-10 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-8 sm:p-10 space-y-8">
+          <div
+            className={`-mt-10 rounded-3xl p-8 sm:p-10 space-y-8 ${
+              isDark
+                ? "bg-slate-950/80 border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.55)]"
+                : "bg-white border border-emerald-50 shadow-lg shadow-emerald-500/5"
+            }`}
+          >
             <div className="space-y-2 max-w-2xl text-center mx-auto">
-              <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership Created</p>
-              <h2 className="text-4xl font-bold text-slate-900">Welcome to NorthSide GTA</h2>
-              <p className="text-base text-slate-600">Your official membership card has been created.</p>
+              <p className={`text-xs uppercase tracking-[0.2em] font-semibold ${isDark ? "text-emerald-200" : "text-emerald-600"}`}>
+                Membership Created
+              </p>
+              <h2 className={`text-4xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}>Welcome to NorthSide GTA</h2>
+              <p className={isDark ? "text-base text-white/75" : "text-base text-slate-600"}>
+                Your official membership card has been created.
+              </p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={handleViewCard}
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-2.5 text-base font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+                className={`inline-flex items-center justify-center rounded-full px-5 py-2.5 text-base font-semibold shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 ${
+                  isDark
+                    ? "border border-white/20 bg-white/10 text-white hover:bg-white/15"
+                    : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300"
+                }`}
               >
                 View / Save Card
               </button>
               <a
                 href="/"
-                className="inline-flex items-center justify-center rounded-full border border-transparent bg-slate-900 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+                className={`inline-flex items-center justify-center rounded-full border border-transparent px-5 py-2.5 text-base font-semibold text-white shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2 ${
+                  isDark ? "bg-emerald-600 hover:bg-emerald-500" : "bg-slate-900 hover:bg-slate-800"
+                }`}
               >
                 Continue to NorthSide GTA
               </a>
@@ -174,23 +210,33 @@ const MembershipRegistrationBlock = ({
                   memberId={cardNumber}
                   cardLabel={cardLabel}
                 />
-                <CardIdentityContent tone="light" />
+                <CardIdentityContent tone={isDark ? "dark" : "light"} />
               </div>
             </div>
           </div>
         ) : (
           <div className="mt-8 grid grid-cols-1 xl:grid-cols-[minmax(0,1.65fr)_minmax(440px,1fr)] gap-8 xl:gap-10 items-start">
-            <div className="xl:col-span-1 bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 space-y-5 xl:max-w-3xl">
+            <div
+              className={`xl:col-span-1 rounded-3xl p-6 sm:p-8 space-y-5 xl:max-w-3xl ${
+                isDark ? "bg-slate-950/80 border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.55)]" : "bg-white shadow-lg shadow-emerald-500/5 border border-emerald-50"
+              }`}
+            >
               <div className="space-y-1.5">
-                <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-600 font-semibold">Membership registration</p>
-                <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Claim your NorthSide GTA pass</h2>
-                <p className="text-base text-slate-600 max-w-2xl">Live preview, instant member ID, zero fluff.</p>
+                <p className={`text-[11px] uppercase tracking-[0.22em] font-semibold ${isDark ? "text-emerald-200" : "text-emerald-600"}`}>
+                  Membership registration
+                </p>
+                <h2 className={`text-3xl sm:text-4xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
+                  Claim your NorthSide GTA pass
+                </h2>
+                <p className={`${helperTextClass} max-w-2xl`}>
+                  Free to join. Built on pride, connection, and local access.
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="fullName">
+                    <label className={labelClass} htmlFor="fullName">
                       Full Name
                     </label>
                     <input
@@ -199,13 +245,13 @@ const MembershipRegistrationBlock = ({
                       required
                       value={form.fullName}
                       onChange={(e) => setForm((prev) => ({ ...prev, fullName: e.target.value.slice(0, 30) }))}
-                      className="w-full rounded-xl border border-slate-200 px-3 py-3 text-base bg-white focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                      className={inputBaseClass}
                       placeholder="Example: Matthew Mulhall"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="email">
+                    <label className={labelClass} htmlFor="email">
                       Email (valid email required)
                     </label>
                     <input
@@ -225,11 +271,11 @@ const MembershipRegistrationBlock = ({
                           setErrors((prev) => ({ ...prev, email: "A valid email address is required." }));
                         }
                       }}
-                      className="w-full rounded-xl border border-slate-200 px-3 py-3 text-base bg-white focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                      className={inputBaseClass}
                       placeholder="Valid email required — you@example.com"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600" role="alert">
+                      <p className={`mt-1 text-sm ${isDark ? "text-red-200" : "text-red-600"}`} role="alert">
                         {errors.email}
                       </p>
                     )}
@@ -238,7 +284,7 @@ const MembershipRegistrationBlock = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-800 mb-2" htmlFor="primaryTown">
+                    <label className={labelClass} htmlFor="primaryTown">
                       Primary Town of Interest
                     </label>
                     <select
@@ -246,7 +292,7 @@ const MembershipRegistrationBlock = ({
                       required
                       value={form.primaryTown}
                       onChange={(e) => setForm((prev) => ({ ...prev, primaryTown: e.target.value }))}
-                      className="w-full rounded-xl border border-slate-200 px-3 py-3 text-base bg-white focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                      className={inputBaseClass}
                     >
                       <option value="">Select a town</option>
                       {PRIMARY_TOWNS.map((town) => (
@@ -258,12 +304,16 @@ const MembershipRegistrationBlock = ({
                   </div>
 
                   <div>
-                    <span className="block text-sm font-semibold text-slate-800 mb-2">Member Type</span>
+                    <span className={labelClass}>Member Type</span>
                     <div className="grid grid-cols-2 gap-2">
                       {MEMBER_TYPES.map((type) => (
                         <label
                           key={type}
-                          className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-3 cursor-pointer hover:border-emerald-600 bg-white"
+                          className={`flex items-center gap-2 rounded-xl border px-3 py-3 cursor-pointer transition ${
+                            isDark
+                              ? "border-white/15 bg-slate-900/80 hover:border-emerald-400/70"
+                              : "border-slate-200 bg-white hover:border-emerald-600"
+                          }`}
                         >
                           <input
                             type="radio"
@@ -271,10 +321,10 @@ const MembershipRegistrationBlock = ({
                             value={type}
                             checked={form.memberType === type}
                             onChange={(e) => setForm((prev) => ({ ...prev, memberType: e.target.value }))}
-                            className="text-emerald-700 focus:ring-emerald-600"
+                            className={`focus:ring-emerald-600 ${isDark ? "text-emerald-300" : "text-emerald-700"}`}
                             required
                           />
-                          <span className="text-sm text-slate-800">{type}</span>
+                          <span className={`text-sm ${isDark ? "text-white" : "text-slate-800"}`}>{type}</span>
                         </label>
                       ))}
                     </div>
@@ -282,28 +332,32 @@ const MembershipRegistrationBlock = ({
                 </div>
 
                 <div>
-                  <span className="block text-sm font-semibold text-slate-800 mb-2">Interests (optional)</span>
+                  <span className={labelClass}>Interests (optional)</span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {INTERESTS.map((interest) => (
                       <label
                         key={interest}
-                        className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-3 cursor-pointer hover:border-emerald-600 bg-white"
+                        className={`flex items-center gap-2 rounded-xl border px-3 py-3 cursor-pointer transition ${
+                          isDark
+                            ? "border-white/15 bg-slate-900/80 hover:border-emerald-400/70"
+                            : "border-slate-200 bg-white hover:border-emerald-600"
+                        }`}
                       >
                         <input
                           type="checkbox"
                           value={interest}
                           checked={form.interests.includes(interest)}
                           onChange={() => handleCheckboxChange(interest)}
-                          className="text-emerald-700 focus:ring-emerald-600"
+                          className={`focus:ring-emerald-600 ${isDark ? "text-emerald-300" : "text-emerald-700"}`}
                         />
-                        <span className="text-sm text-slate-800">{interest}</span>
+                        <span className={`text-sm ${isDark ? "text-white" : "text-slate-800"}`}>{interest}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="flex items-start gap-3 text-sm text-slate-800">
+                  <label className={`flex items-start gap-3 text-sm ${isDark ? "text-white" : "text-slate-800"}`}>
                     <input
                       type="checkbox"
                       checked={form.compliance}
@@ -315,25 +369,32 @@ const MembershipRegistrationBlock = ({
                           setStatus((prev) => ({ ...prev, error: "" }));
                         }
                       }}
-                      className="mt-1 h-4 w-4 text-emerald-700 focus:ring-emerald-600"
-                      required
+                      aria-required="true"
+                      className={`mt-1 h-4 w-4 focus:ring-emerald-600 ${isDark ? "text-emerald-300" : "text-emerald-700"}`}
                     />
                     <span>
                       I confirm that I am not currently under contract with another real estate brokerage.
                     </span>
                   </label>
-                  <p className="text-xs text-slate-500">
-                    We occasionally share real estate–related updates. This helps ensure we only send that content to people who are free to receive it and that we respect existing brokerage relationships.
+                  <p className={`text-xs ${isDark ? "text-white/70" : "text-slate-500"}`}>
+                    {COMPLIANCE_HELPER_MESSAGE}
                   </p>
                   {errors.compliance && (
-                    <p className="text-sm text-red-600" role="alert">
+                    <p className={`text-sm ${isDark ? "text-red-200" : "text-red-600"}`} role="alert">
                       {errors.compliance}
                     </p>
                   )}
                 </div>
 
                 {status.error && (
-                  <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+                  <div
+                    className={`rounded-xl border px-3 py-2 text-sm ${
+                      isDark
+                        ? "border-red-500/40 bg-red-900/40 text-red-100"
+                        : "border-red-200 bg-red-50 text-red-700"
+                    }`}
+                    role="alert"
+                  >
                     {status.error}
                   </div>
                 )}
@@ -346,13 +407,13 @@ const MembershipRegistrationBlock = ({
                   >
                     {status.submitting ? "Creating your card..." : "Create my membership"}
                   </button>
-              <p className="text-sm text-slate-600">Card number is assigned instantly on submission.</p>
+                  <p className={helperTextClass}>Card number is assigned instantly on submission.</p>
               </div>
             </form>
           </div>
 
           <div
-              className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col items-center xl:sticky xl:top-6 ${previewWrapperClassName}`}
+              className={`${cardSurfaceClass} rounded-3xl p-6 sm:p-8 flex flex-col items-center xl:sticky xl:top-6 ${previewWrapperClassName}`}
             >
               <MembershipCardPreview
                 ref={cardRef}
@@ -361,8 +422,8 @@ const MembershipRegistrationBlock = ({
                 memberId={cardNumber}
                 cardLabel={cardLabel}
               />
-              <p className="mt-4 text-sm text-slate-600 text-center max-w-md">
-                Your membership card updates live as you type.
+              <p className={`mt-4 text-sm text-center max-w-md ${isDark ? "text-white/75" : "text-slate-600"}`}>
+                Your membership card is ready to display with your details.
               </p>
             </div>
           </div>
