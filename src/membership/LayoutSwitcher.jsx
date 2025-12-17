@@ -6,6 +6,7 @@ const OPTIONS = [
   { label: "Option 2", path: "/northside-pass-preview/option-2" },
   { label: "Option 3", path: "/northside-pass-preview/option-3" },
   { label: "Option 4", path: "/northside-pass-preview/option-4" },
+  { label: "Option 5", path: "/northside-pass-preview/option-5" },
 ];
 
 const LayoutSwitcher = ({ active, tone = "dark" }) => {

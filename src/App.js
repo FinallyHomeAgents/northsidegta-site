@@ -34,6 +34,7 @@ import OptionOnePage from "./membership/OptionOnePage";
 import OptionTwoPage from "./membership/OptionTwoPage";
 import OptionThreePage from "./membership/OptionThreePage";
 import OptionFourPage from "./membership/OptionFourPage";
+import OptionFivePage from "./membership/OptionFivePage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -102,6 +103,7 @@ function App() {
           <Route path="/northside-pass-preview/option-2" element={<OptionTwoPage />} />
           <Route path="/northside-pass-preview/option-3" element={<OptionThreePage />} />
           <Route path="/northside-pass-preview/option-4" element={<OptionFourPage />} />
+          <Route path="/northside-pass-preview/option-5" element={<OptionFivePage />} />
 
           {/* Town pages — community slugs */}
           <Route path="/communities/:slug" element={<TownPage />} />
