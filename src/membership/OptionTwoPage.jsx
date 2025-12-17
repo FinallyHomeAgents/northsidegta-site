@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import HeaderShell from "../components/HeaderShell";
 import LayoutSwitcher from "./LayoutSwitcher";
 import MembershipRegistrationBlock from "./MembershipRegistrationBlock";
+import CardIdentityContent from "./CardIdentityContent";
 import { KEY_BENEFITS } from "./membershipContent";
 
 const OptionTwoPage = () => {
@@ -93,35 +94,36 @@ const OptionTwoPage = () => {
               </button>
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur rounded-3xl shadow-xl shadow-emerald-100/70 border border-emerald-100 p-4 sm:p-7 space-y-6">
-              <div className="grid lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-8 lg:gap-10 items-center">
-                <div className="space-y-4 text-center lg:text-left">
-                  <div className="flex flex-col items-center lg:items-start gap-2">
-                    <p className="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">Option 2 · Framed registration</p>
-                    <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-800 px-4 py-2 text-sm font-semibold shadow-sm">
-                      Claim Your Pass
-                      <span aria-hidden="true">⬇</span>
-                    </div>
-                  </div>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">Registration centered in a premium card.</h1>
-                  <p className="text-base text-slate-600 max-w-2xl mx-auto lg:mx-0">
-                    A tight, two-column layout that keeps the live preview elevated while you claim your NorthSide GTA Pass.
-                  </p>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center lg:justify-start">
-                    <button
-                      type="button"
-                      onClick={handleScrollToForm}
-                      className="inline-flex items-center gap-2 rounded-full bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:shadow-emerald-500/40"
-                    >
-                      Claim Your NorthSideGTA Pass
-                    </button>
-                    <span className="text-sm text-emerald-800/80 flex items-center gap-1">
-                      <span aria-hidden="true">▾</span> Scroll to registration
-                    </span>
+            <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur rounded-3xl shadow-xl shadow-emerald-100/70 border border-emerald-100 p-4 sm:p-7 space-y-8">
+              <div className="flex flex-col gap-3 text-center lg:text-left">
+                <div className="flex flex-col items-center lg:items-start gap-2">
+                  <p className="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">Option 2 · Framed registration</p>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-800 px-4 py-2 text-sm font-semibold shadow-sm">
+                    Claim Your Pass
+                    <span aria-hidden="true">⬇</span>
                   </div>
                 </div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">Registration centered in a premium card.</h1>
+                <p className="text-base text-slate-600 max-w-2xl mx-auto lg:mx-0">
+                  A tight, two-column layout that keeps the live preview elevated while you claim your NorthSide GTA Pass.
+                </p>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center lg:justify-start">
+                  <button
+                    type="button"
+                    onClick={handleScrollToForm}
+                    className="inline-flex items-center gap-2 rounded-full bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:shadow-emerald-500/40"
+                  >
+                    Claim Your NorthSideGTA Pass
+                  </button>
+                  <span className="text-sm text-emerald-800/80 flex items-center gap-1">
+                    <span aria-hidden="true">▾</span> Scroll to registration
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] gap-8 lg:gap-10 items-center">
                 <div className="relative mx-auto w-full max-w-[460px]">
-                  <div className="relative aspect-[9/16] max-h-[78vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
+                  <div className="relative aspect-[9/16] max-h-[76vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
                     {!prefersReducedMotion ? (
                       <video
                         ref={videoRef}
@@ -167,6 +169,18 @@ const OptionTwoPage = () => {
                       </div>
                     )}
                   </div>
+                </div>
+
+                <div className="space-y-4">
+                  <CardIdentityContent tone="light" />
+                  <button
+                    type="button"
+                    onClick={handleScrollToForm}
+                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:border-emerald-300"
+                  >
+                    Fill this out
+                    <span aria-hidden="true">↓</span>
+                  </button>
                 </div>
               </div>
 

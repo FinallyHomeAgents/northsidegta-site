@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import MembershipCardPreview from "./MembershipCardPreview";
+import CardIdentityContent from "./CardIdentityContent";
 import {
   DEFAULT_CARD_NUMBER,
   INTERESTS,
@@ -125,8 +126,8 @@ const MembershipRegistrationBlock = ({
       {id !== "membership-register" && <div id="membership-register" className="absolute -top-24 h-px w-px" aria-hidden="true" />}
       <div className={`${innerClassName} ${contentWrapperClassName}`}>
         {isSubmitted ? (
-          <div className="-mt-10 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-10 text-center flex flex-col items-center gap-6">
-            <div className="space-y-2 max-w-2xl">
+          <div className="-mt-10 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-8 sm:p-10 space-y-8">
+            <div className="space-y-2 max-w-2xl text-center mx-auto">
               <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership Created</p>
               <h2 className="text-4xl font-bold text-slate-900">Welcome to NorthSide GTA</h2>
               <p className="text-base text-slate-600">Your official membership card has been created.</p>
@@ -148,21 +149,32 @@ const MembershipRegistrationBlock = ({
               </a>
             </div>
 
-            <div className="w-full max-w-4xl rounded-3xl border border-emerald-100 bg-emerald-50/40 shadow-inner shadow-emerald-100/60 p-6 space-y-4 text-left">
-              <div className="space-y-1">
-                <p className="text-sm font-semibold text-emerald-800">Welcome to NorthSide GTA</p>
-                <p className="text-base text-slate-700">Your membership is official.</p>
+            <div className="grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] gap-6 lg:gap-10 items-start">
+              <div className="relative w-full max-w-[460px] mx-auto">
+                <div className="relative aspect-[9/16] max-h-[74vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/80 p-3 shadow-inner shadow-emerald-500/10">
+                  <video
+                    className="h-full w-full object-contain rounded-2xl"
+                    src="/videos/northside-pass.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    controls
+                    poster="/images/northside-pass-poster.svg"
+                  />
+                </div>
               </div>
-              <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-slate-900/80">
-                <video
-                  className="w-full h-full"
-                  src="/videos/northside-pass.mp4"
-                  controls
-                  playsInline
-                  preload="none"
-                  poster="/images/northside-pass-poster.svg"
-                  muted
+
+              <div className="space-y-4">
+                <MembershipCardPreview
+                  ref={cardRef}
+                  fullName={(form.fullName || "Your Name").trim()}
+                  town={cardTown}
+                  memberId={cardNumber}
+                  cardLabel={cardLabel}
                 />
+                <CardIdentityContent tone="light" />
               </div>
             </div>
           </div>

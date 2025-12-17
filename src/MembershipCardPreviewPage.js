@@ -3,12 +3,8 @@ import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import MembershipCardPreview from "./membership/MembershipCardPreview";
 import MembershipRegistrationBlock from "./membership/MembershipRegistrationBlock";
-import {
-  DEFAULT_CARD_NUMBER,
-  KEY_BENEFITS,
-  buildCardLabel,
-  buildTownDisplay,
-} from "./membership/membershipContent";
+import CardIdentityContent from "./membership/CardIdentityContent";
+import { DEFAULT_CARD_NUMBER, buildCardLabel, buildTownDisplay } from "./membership/membershipContent";
 
 const HeroSection = ({ onCTAClick }) => (
   <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
@@ -66,23 +62,7 @@ const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }
             />
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200 font-semibold">Membership Identity</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">Your official NorthSide GTA Membership Card.</h2>
-              <p className="text-base text-slate-100/80 max-w-xl">
-                The symbol of belonging for the NorthSide GTA — centered, elevated, and ready the moment you join.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {KEY_BENEFITS.map((benefit) => (
-                <div key={benefit.title} className="rounded-2xl bg-white/5 border border-white/10 p-4 shadow-sm shadow-black/10">
-                  <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
-                  <p className="mt-2 text-sm text-slate-100/80">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <CardIdentityContent />
         </div>
       </div>
     </div>
