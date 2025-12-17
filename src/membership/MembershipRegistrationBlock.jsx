@@ -121,7 +121,8 @@ const MembershipRegistrationBlock = ({
   };
 
   return (
-    <section className={`${className}`} id={id}>
+    <section className={`${className} relative`} id={id}>
+      {id !== "membership-register" && <div id="membership-register" className="absolute -top-24 h-px w-px" aria-hidden="true" />}
       <div className={`${innerClassName} ${contentWrapperClassName}`}>
         {isSubmitted ? (
           <div className="-mt-10 bg-white border border-emerald-50 rounded-3xl shadow-lg shadow-emerald-500/5 p-10 text-center flex flex-col items-center gap-6">
@@ -166,14 +167,12 @@ const MembershipRegistrationBlock = ({
             </div>
           </div>
         ) : (
-          <div className="mt-12 grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
-            <div className="xl:col-span-2 bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-10 space-y-6">
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.2em] text-emerald-600 font-semibold">Membership registration</p>
-                <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Claim your NorthSide GTA membership</h2>
-                <p className="text-base text-slate-600 max-w-2xl">
-                  Fill in your details to generate your membership identity. Your card number is assigned instantly, and your preview updates live.
-                </p>
+          <div className="mt-8 grid grid-cols-1 xl:grid-cols-[minmax(0,1.65fr)_minmax(440px,1fr)] gap-8 xl:gap-10 items-start">
+            <div className="xl:col-span-1 bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 space-y-5 xl:max-w-3xl">
+              <div className="space-y-1.5">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-600 font-semibold">Membership registration</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Claim your NorthSide GTA pass</h2>
+                <p className="text-base text-slate-600 max-w-2xl">Live preview, instant member ID, zero fluff.</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -335,13 +334,13 @@ const MembershipRegistrationBlock = ({
                   >
                     {status.submitting ? "Creating your card..." : "Create my membership"}
                   </button>
-                  <p className="text-sm text-slate-600">Card number is assigned instantly on submission.</p>
-                </div>
-              </form>
-            </div>
+              <p className="text-sm text-slate-600">Card number is assigned instantly on submission.</p>
+              </div>
+            </form>
+          </div>
 
-            <div
-              className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col items-center ${previewWrapperClassName}`}
+          <div
+              className={`bg-white rounded-3xl shadow-lg shadow-emerald-500/5 border border-emerald-50 p-6 sm:p-8 flex flex-col items-center xl:sticky xl:top-6 ${previewWrapperClassName}`}
             >
               <MembershipCardPreview
                 ref={cardRef}

@@ -50,7 +50,8 @@ const OptionTwoPage = () => {
   }, [prefersReducedMotion]);
 
   const handleScrollToForm = () => {
-    document.getElementById("membership-register")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const target = document.getElementById("claim") || document.getElementById("membership-register");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleEnableSound = async () => {
@@ -76,12 +77,12 @@ const OptionTwoPage = () => {
       </Helmet>
       <HeaderShell />
 
-      <main className="pb-16">
+      <main className="pb-14">
         <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 to-white border-b border-emerald-100/60">
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/75 to-white/85 mix-blend-multiply" aria-hidden="true" />
 
-          <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 space-y-8">
-            <div className="flex items-center justify-between gap-4">
+          <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10 space-y-6">
+            <div className="flex items-center justify-between gap-3">
               <LayoutSwitcher active="/northside-pass-preview/option-2" tone="light" />
               <button
                 type="button"
@@ -92,17 +93,35 @@ const OptionTwoPage = () => {
               </button>
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur rounded-3xl shadow-xl shadow-emerald-100/70 border border-emerald-100 p-4 sm:p-8 space-y-8">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-3 text-center lg:text-left">
-                  <p className="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">Option 2 · Framed registration</p>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">Registration centered in a premium card.</h1>
+            <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur rounded-3xl shadow-xl shadow-emerald-100/70 border border-emerald-100 p-4 sm:p-7 space-y-6">
+              <div className="grid lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-8 lg:gap-10 items-center">
+                <div className="space-y-4 text-center lg:text-left">
+                  <div className="flex flex-col items-center lg:items-start gap-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold">Option 2 · Framed registration</p>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-800 px-4 py-2 text-sm font-semibold shadow-sm">
+                      Claim Your Pass
+                      <span aria-hidden="true">⬇</span>
+                    </div>
+                  </div>
+                  <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">Registration centered in a premium card.</h1>
                   <p className="text-base text-slate-600 max-w-2xl mx-auto lg:mx-0">
-                    The form and live preview sit together inside a luxe container. Benefits wrap the experience on desktop, while mobile stacks the registration first.
+                    A tight, two-column layout that keeps the live preview elevated while you claim your NorthSide GTA Pass.
                   </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center lg:justify-start">
+                    <button
+                      type="button"
+                      onClick={handleScrollToForm}
+                      className="inline-flex items-center gap-2 rounded-full bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:shadow-emerald-500/40"
+                    >
+                      Claim Your NorthSideGTA Pass
+                    </button>
+                    <span className="text-sm text-emerald-800/80 flex items-center gap-1">
+                      <span aria-hidden="true">▾</span> Scroll to registration
+                    </span>
+                  </div>
                 </div>
-                <div className="relative mx-auto w-full max-w-[480px] lg:max-w-[420px]">
-                  <div className="relative aspect-[9/16] max-h-[80vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
+                <div className="relative mx-auto w-full max-w-[460px]">
+                  <div className="relative aspect-[9/16] max-h-[78vh] lg:max-h-[70vh] grid place-items-center rounded-3xl border border-emerald-100 bg-slate-900/70 p-3 shadow-lg shadow-emerald-500/10">
                     {!prefersReducedMotion ? (
                       <video
                         ref={videoRef}
@@ -151,15 +170,17 @@ const OptionTwoPage = () => {
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-2">
                 <MembershipRegistrationBlock
+                  id="claim"
                   className="bg-transparent text-slate-900"
                   innerClassName="w-full"
                   contentWrapperClassName="p-0"
+                  previewWrapperClassName="xl:min-w-[440px] xl:max-w-[520px] xl:shrink-0"
                 />
               </div>
 
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {KEY_BENEFITS.map((benefit) => (
                   <div
                     key={benefit.title}

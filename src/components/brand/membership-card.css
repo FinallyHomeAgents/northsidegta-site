@@ -210,23 +210,48 @@
   text-align: right;
 }
 
+.membership-card--fixed {
+  max-width: none;
+  width: 420px;
+  height: 260px;
+}
+
+.membership-card--fixed .logo-row {
+  padding: 28px 24px 14px;
+}
+
+.membership-card--fixed .card-logo {
+  max-width: 82px;
+  max-height: 44px;
+}
+
+.membership-card--fixed .card-chip {
+  margin: 8px 0 6px 24px;
+  width: 56px;
+  height: 38px;
+}
+
+.membership-card--fixed .member-details {
+  padding: 0 26px 26px;
+}
+
 @media (max-width: 768px) {
-  .membership-card .logo-row {
-    padding: 18px 18px 8px;
+  .membership-card--fixed .logo-row {
+    padding: 28px 24px 14px;
   }
 
-  .membership-card .card-logo {
-    max-width: 74px;
-    max-height: 40px;
+  .membership-card--fixed .card-logo {
+    max-width: 82px;
+    max-height: 44px;
   }
 
-  .membership-card .card-chip {
-    margin: 8px 0 10px 20px;
-    width: 52px;
-    height: 36px;
+  .membership-card--fixed .card-chip {
+    margin: 8px 0 6px 24px;
+    width: 56px;
+    height: 38px;
   }
 
-  .membership-card .member-details {
-    padding: 0 18px 20px;
+  .membership-card--fixed .member-details {
+    padding: 0 26px 26px;
   }
 }
