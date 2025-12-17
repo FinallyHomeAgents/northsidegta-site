@@ -7,7 +7,7 @@ const sanitizeValue = (value, maxLength) => {
   return safeValue.length > maxLength ? safeValue.slice(0, maxLength) : safeValue;
 };
 
-const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
+const MembershipCard = ({ fullName, town, memberId, cardLabel, className, style }) => {
   const trimmedName = sanitizeValue(fullName, 22);
   const trimmedTown = sanitizeValue(town, 22);
   const trimmedMemberId = sanitizeValue(memberId, 12);
@@ -18,7 +18,7 @@ const MembershipCard = ({ fullName, town, memberId, cardLabel, className }) => {
   const townClass = trimmedTown.length > 16 ? "member-town member-town--tight" : "member-town";
 
   return (
-    <div className={classNames("membership-card", className)}>
+    <div className={classNames("membership-card", className)} style={style}>
       <div className="holo-bar" aria-hidden="true" />
       <div className="card-noise" aria-hidden="true" />
       <div className="metal-rim" aria-hidden="true" />

@@ -1,14 +1,10 @@
 import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
-import MembershipCard from "./components/brand/MembershipCard";
+import MembershipCardPreview from "./membership/MembershipCardPreview";
 import MembershipRegistrationBlock from "./membership/MembershipRegistrationBlock";
-import {
-  DEFAULT_CARD_NUMBER,
-  KEY_BENEFITS,
-  buildCardLabel,
-  buildTownDisplay,
-} from "./membership/membershipContent";
+import CardIdentityContent from "./membership/CardIdentityContent";
+import { DEFAULT_CARD_NUMBER, buildCardLabel, buildTownDisplay } from "./membership/membershipContent";
 
 const HeroSection = ({ onCTAClick }) => (
   <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
@@ -57,37 +53,16 @@ const CardStatementSection = ({ cardRef, cardLabel, cardTown, cardNumber, form }
       <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-6 sm:px-10 py-10">
           <div className="flex justify-center">
-            <div
+            <MembershipCardPreview
               ref={cardRef}
-              className="bg-black/30 rounded-3xl p-4 sm:p-6 shadow-inner shadow-black/30 w-full max-w-lg flex justify-center"
-            >
-              <MembershipCard
-                className="scale-[1.02] sm:scale-[1.08] drop-shadow-2xl"
-                fullName={(form.fullName || "Your Name").trim()}
-                town={cardTown}
-                memberId={cardNumber}
-                cardLabel={cardLabel}
-              />
-            </div>
+              fullName={(form.fullName || "Your Name").trim()}
+              town={cardTown}
+              memberId={cardNumber}
+              cardLabel={cardLabel}
+            />
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.2em] text-emerald-200 font-semibold">Membership Identity</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">Your official NorthSide GTA Membership Card.</h2>
-              <p className="text-base text-slate-100/80 max-w-xl">
-                The symbol of belonging for the NorthSide GTA — centered, elevated, and ready the moment you join.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {KEY_BENEFITS.map((benefit) => (
-                <div key={benefit.title} className="rounded-2xl bg-white/5 border border-white/10 p-4 shadow-sm shadow-black/10">
-                  <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
-                  <p className="mt-2 text-sm text-slate-100/80">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <CardIdentityContent />
         </div>
       </div>
     </div>
