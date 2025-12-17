@@ -39,6 +39,7 @@ const OptionFivePage = () => {
 
   const sampleTown = buildTownDisplay("Aurora");
   const sampleLabel = buildCardLabel("Aurora");
+  const mapGhostUrl = `${process.env.PUBLIC_URL}/images/backgrounds/northside-map-ghost.webp`;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -50,7 +51,10 @@ const OptionFivePage = () => {
       <HeaderShell />
 
       <main className="relative">
-        <section className="pass-preview-hero relative overflow-hidden bg-slate-950">
+        <section
+          className="pass-preview-hero relative overflow-hidden bg-slate-950"
+          style={{ "--hero-map-ghost": `url(${mapGhostUrl})` }}
+        >
           <div className="absolute inset-0 opacity-60 z-10" aria-hidden="true">
             <div
               className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-emerald-500/15 blur-3xl"

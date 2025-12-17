@@ -162,7 +162,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--hero-map-ghost, url("/images/backgrounds/northside-map-ghost.webp"));
+  background-image: var(--hero-map-ghost);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 140% auto;
