@@ -150,6 +150,39 @@ body {
   box-shadow: 0 45px 100px rgba(34, 68, 10, 0.24);
 }
 
+/* NorthSide Pass preview hero */
+.pass-preview-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #0f172a;
+}
+
+.pass-preview-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-map-ghost, url("/images/backgrounds/northside-map-ghost.webp"));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 140% auto;
+  opacity: 0.05;
+  filter: blur(1.5px) saturate(0.6) contrast(0.9);
+  pointer-events: none;
+  z-index: 0;
+  transform: translateZ(0);
+}
+
+.pass-preview-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 140% at 12% 20%, rgba(2, 6, 23, 0.8), transparent 55%),
+    linear-gradient(160deg, rgba(2, 6, 23, 0.75) 0%, rgba(2, 6, 23, 0.35) 60%, rgba(2, 6, 23, 0.2) 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
 .insight-content .insight-figure__caption {
   font-size: 0.9rem;
   color: #475569;
