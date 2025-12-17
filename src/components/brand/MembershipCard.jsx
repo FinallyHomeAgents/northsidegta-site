@@ -14,7 +14,12 @@ const MembershipCard = ({ fullName, town, memberId, cardLabel, className, style 
   const trimmedCardLabel = sanitizeValue(cardLabel, 28) || "Founding Member";
   const memberIdDisplay = trimmedMemberId ? trimmedMemberId : "Pending";
 
-  const nameClass = trimmedName.length > 16 ? "member-name member-name--tight" : "member-name";
+  const nameClass =
+    trimmedName.length > 20
+      ? "member-name member-name--compressed"
+      : trimmedName.length > 16
+        ? "member-name member-name--tight"
+        : "member-name";
   const townClass = trimmedTown.length > 16 ? "member-town member-town--tight" : "member-town";
 
   return (

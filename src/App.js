@@ -28,12 +28,12 @@ import TasteHubCmsPage  from "./TasteHubCmsPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
-import MembershipCardPreviewPage from "./MembershipCardPreviewPage";
 import EventsReviewPage from "./community/EventsReviewPage";
 import OptionOnePage from "./membership/OptionOnePage";
 import OptionTwoPage from "./membership/OptionTwoPage";
 import OptionThreePage from "./membership/OptionThreePage";
 import OptionFourPage from "./membership/OptionFourPage";
+import OptionFivePage from "./membership/OptionFivePage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -97,11 +97,12 @@ function App() {
           <Route path="/insights/:slug" element={<InsightPage />} />
           <Route path="/media"        element={<MediaPage />} />
           <Route path="/referral-partners" element={<ReferralPartnersPage />} />
-          <Route path="/northside-pass-preview" element={<MembershipCardPreviewPage />} />
+          <Route path="/northside-pass-preview" element={<OptionFivePage />} />
           <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />
           <Route path="/northside-pass-preview/option-2" element={<OptionTwoPage />} />
           <Route path="/northside-pass-preview/option-3" element={<OptionThreePage />} />
           <Route path="/northside-pass-preview/option-4" element={<OptionFourPage />} />
+          <Route path="/northside-pass-preview/option-5" element={<OptionFivePage />} />
 
           {/* Town pages — community slugs */}
           <Route path="/communities/:slug" element={<TownPage />} />
