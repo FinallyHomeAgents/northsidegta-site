@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import MembershipCardPreview from "./MembershipCardPreview";
 import CardIdentityContent from "./CardIdentityContent";
+import { useMembershipCardSync } from "./useMembershipCardSync";
 import {
   DEFAULT_CARD_NUMBER,
   INTERESTS,
@@ -25,6 +26,7 @@ const MembershipRegistrationBlock = ({
   previewWrapperClassName = "",
   onRegistrationStateChange,
   tone = "light",
+  brevoSource = "pass-preview",
 }) => {
   const [form, setForm] = useState({
     fullName: "",
@@ -59,6 +61,15 @@ const MembershipRegistrationBlock = ({
 
   const cardLabel = useMemo(() => buildCardLabel(form.primaryTown), [form.primaryTown]);
   const cardTown = useMemo(() => buildTownDisplay(form.primaryTown), [form.primaryTown]);
+
+  useMembershipCardSync({
+    isSubmitted,
+    cardNumber,
+    cardLabel,
+    formValues: form,
+    cardRef,
+    source: brevoSource,
+  });
 
   React.useEffect(() => {
     if (typeof onRegistrationStateChange === "function") {
@@ -113,6 +124,8 @@ const MembershipRegistrationBlock = ({
           interests: form.interests,
           complianceConfirmed: form.compliance,
           cardLabel,
+          brevoSync: false,
+          brevoSource,
         }),
       });
 

@@ -188,6 +188,7 @@ const NorthsidePassPreviewV2Page = () => {
               innerClassName="w-full"
               contentWrapperClassName="[&>.mt-8]:w-full lg:[&>.mt-8]:grid lg:[&>.mt-8]:grid-cols-[1.05fr_0.95fr] lg:[&>.mt-8]:gap-8 lg:[&>.mt-8]:items-start lg:[&>.mt-8>*]:min-w-0 lg:[&>.mt-8>*:last-child]:flex lg:[&>.mt-8>*:last-child]:justify-center"
               previewWrapperClassName="bg-slate-950/80 border border-white/10 w-full max-w-[520px] xl:static xl:top-auto xl:relative"
+              brevoSource="pass-preview-v2"
             />
           </div>
         </section>

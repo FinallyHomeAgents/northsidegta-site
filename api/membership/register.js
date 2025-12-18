@@ -1,27 +1,13 @@
 import { buildCardLabel } from '../../lib/membership/card-label.js'
 import { getRedisClient, isRedisConfigured } from '../../lib/membership/redis-client.js'
 import { upsertBrevoContact } from '../../lib/membership/brevo-client.js'
+import { buildInterestFlags, normalizeInterests } from '../../lib/membership/interests.js'
 
 const CARD_NUMBER_KEY = 'last_membership_card_number'
 const REGISTRATION_LOG_KEY = 'membership:registrations'
 
 function isValidEmail(value) {
   return typeof value === 'string' && /.+@.+\..+/.test(value)
-}
-
-function normalizeInterests(interests) {
-  if (!Array.isArray(interests)) return []
-  return interests.filter((item) => typeof item === 'string' && item.trim()).map((item) => item.trim())
-}
-
-function buildInterestFlags(interests) {
-  const normalized = interests.map((interest) => interest.toLowerCase())
-
-  return {
-    events: normalized.some((interest) => interest.includes('event')),
-    tasteHub: normalized.some((interest) => interest.includes('tastehub')),
-    marketInsights: normalized.some((interest) => interest.includes('market')),
-  }
 }
 
 export default async function handler(req, res) {
@@ -49,6 +35,10 @@ export default async function handler(req, res) {
   const interests = normalizeInterests(body.interests)
   const interestFlags = buildInterestFlags(interests)
   const notUnderContract = body.notUnderContract ?? body.complianceConfirmed
+  const shouldSyncBrevo = body.brevoSync !== false
+  const brevoSource =
+    typeof body.brevoSource === 'string' && body.brevoSource.trim() ? body.brevoSource.trim() : undefined
+  const cardUrl = typeof body.cardUrl === 'string' && body.cardUrl.trim() ? body.cardUrl.trim() : undefined
   const hasValidEmail = isValidEmail(email)
 
   if (!fullName || !hasValidEmail || !primaryTown || !memberType || notUnderContract !== true) {
@@ -98,6 +88,7 @@ export default async function handler(req, res) {
     let brevoSynced = false
 
     if (
+      shouldSyncBrevo &&
       process.env.BREVO_ENABLED !== 'false' &&
       process.env.BREVO_API_KEY &&
       process.env.BREVO_LIST_ID
@@ -112,6 +103,9 @@ export default async function handler(req, res) {
           memberType,
           interests: interestFlags,
           complianceConfirmed: true,
+          cardUrl,
+          source: brevoSource,
+          passId: cardNumber,
         })
         brevoSynced = true
       } catch (error) {
