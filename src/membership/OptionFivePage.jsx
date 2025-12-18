@@ -161,6 +161,7 @@ const OptionFivePage = () => {
                 innerClassName="p-0"
                 contentWrapperClassName="p-4 sm:p-6 lg:p-8"
                 previewWrapperClassName="bg-slate-950/70 border border-white/10 text-white shadow-[0_25px_80px_rgba(16,185,129,0.25)]"
+                brevoSource="pass-preview"
               />
             </div>
           </div>

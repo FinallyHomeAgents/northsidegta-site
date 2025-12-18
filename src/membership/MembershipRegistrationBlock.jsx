@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import MembershipCardPreview from "./MembershipCardPreview";
 import CardIdentityContent from "./CardIdentityContent";
+import { useMembershipCardSync } from "./useMembershipCardSync";
 import {
   DEFAULT_CARD_NUMBER,
   INTERESTS,
@@ -25,6 +26,7 @@ const MembershipRegistrationBlock = ({
   previewWrapperClassName = "",
   onRegistrationStateChange,
   tone = "light",
+  brevoSource = "pass-preview",
 }) => {
   const [form, setForm] = useState({
     fullName: "",
@@ -35,6 +37,7 @@ const MembershipRegistrationBlock = ({
     interests: [],
   });
   const [cardNumber, setCardNumber] = useState(DEFAULT_CARD_NUMBER);
+  const [passUploadToken, setPassUploadToken] = useState(null);
   const [status, setStatus] = useState({ submitting: false, error: "" });
   const [errors, setErrors] = useState({ email: "", compliance: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -59,6 +62,16 @@ const MembershipRegistrationBlock = ({
 
   const cardLabel = useMemo(() => buildCardLabel(form.primaryTown), [form.primaryTown]);
   const cardTown = useMemo(() => buildTownDisplay(form.primaryTown), [form.primaryTown]);
+
+  useMembershipCardSync({
+    isSubmitted,
+    cardNumber,
+    cardLabel,
+    formValues: form,
+    cardRef,
+    passUploadToken,
+    source: brevoSource,
+  });
 
   React.useEffect(() => {
     if (typeof onRegistrationStateChange === "function") {
@@ -113,6 +126,8 @@ const MembershipRegistrationBlock = ({
           interests: form.interests,
           complianceConfirmed: form.compliance,
           cardLabel,
+          brevoSync: false,
+          brevoSource,
         }),
       });
 
@@ -127,6 +142,7 @@ const MembershipRegistrationBlock = ({
       }
 
       setCardNumber(result.cardNumber || DEFAULT_CARD_NUMBER);
+      setPassUploadToken(result.passUploadToken || null);
       setIsSubmitted(true);
       setStatus({ submitting: false, error: "" });
     } catch (error) {
