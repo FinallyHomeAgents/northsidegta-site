@@ -84,7 +84,7 @@ const MembershipRegistrationBlockV2 = ({
     const trimmedEmail = form.email.trim();
 
     if (!validateEmail(trimmedEmail)) {
-      setErrors((prev) => ({ ...prev, email: "A valid email address is required." }));
+      setErrors((prev) => ({ ...prev, email: "Valid email address is required." }));
       return;
     }
 
@@ -268,7 +268,7 @@ const MembershipRegistrationBlockV2 = ({
                       }}
                       onBlur={() => {
                         if (!validateEmail(form.email)) {
-                          setErrors((prev) => ({ ...prev, email: "A valid email address is required." }));
+                          setErrors((prev) => ({ ...prev, email: "Valid email address is required." }));
                         }
                       }}
                       className={inputBaseClass}
