@@ -171,9 +171,7 @@ const NorthsidePassPreviewV2Page = () => {
               {tierCards.map((_, index) => (
                 <span
                   key={index}
-                  className={`h-2.5 w-2.5 rounded-full transition ${
-                    activeIndex === index ? "bg-emerald-400" : "bg-white/30"
-                  }`}
+                  className={`h-2.5 w-2.5 rounded-full transition ${activeIndex === index ? "bg-emerald-400" : "bg-white/30"}`}
                 />
               ))}
             </div>
@@ -240,7 +238,9 @@ const NorthsidePassPreviewV2Page = () => {
         </section>
 
         <section className="px-4 pb-14">
-          <div className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4">
+          <div
+            className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}
+          >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl text-emerald-200">
               ⚡
             </div>
