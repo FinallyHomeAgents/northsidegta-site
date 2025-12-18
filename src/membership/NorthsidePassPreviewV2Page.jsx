@@ -80,6 +80,8 @@ const NorthsidePassPreviewV2Page = () => {
   }, []);
 
   const maxWidthClass = "max-w-[560px] mx-auto";
+  const registrationWrapperClass =
+    "mx-auto max-w-[1100px] px-0 lg:px-6 flex flex-col gap-6";
 
   return (
     <div className="min-h-screen bg-[#05070d] text-white">
@@ -179,13 +181,13 @@ const NorthsidePassPreviewV2Page = () => {
         </section>
 
         <section className="px-4 pb-12">
-          <div className={`${maxWidthClass}`}>
+          <div className={registrationWrapperClass}>
             <MembershipRegistrationBlockV2
               className="bg-transparent text-white"
               tone="dark"
-              innerClassName="px-0"
-              contentWrapperClassName=""
-              previewWrapperClassName="bg-slate-950/80 border border-white/10"
+              innerClassName="w-full"
+              contentWrapperClassName="[&>.mt-8]:w-full lg:[&>.mt-8]:grid lg:[&>.mt-8]:grid-cols-[1.05fr_0.95fr] lg:[&>.mt-8]:gap-8 lg:[&>.mt-8]:items-start lg:[&>.mt-8>*]:min-w-0 lg:[&>.mt-8>*:last-child]:flex lg:[&>.mt-8>*:last-child]:justify-center"
+              previewWrapperClassName="bg-slate-950/80 border border-white/10 w-full max-w-[520px] xl:static xl:top-auto xl:relative"
             />
           </div>
         </section>
