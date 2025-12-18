@@ -37,6 +37,7 @@ const MembershipRegistrationBlock = ({
     interests: [],
   });
   const [cardNumber, setCardNumber] = useState(DEFAULT_CARD_NUMBER);
+  const [passUploadToken, setPassUploadToken] = useState(null);
   const [status, setStatus] = useState({ submitting: false, error: "" });
   const [errors, setErrors] = useState({ email: "", compliance: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -68,6 +69,7 @@ const MembershipRegistrationBlock = ({
     cardLabel,
     formValues: form,
     cardRef,
+    passUploadToken,
     source: brevoSource,
   });
 
@@ -140,6 +142,7 @@ const MembershipRegistrationBlock = ({
       }
 
       setCardNumber(result.cardNumber || DEFAULT_CARD_NUMBER);
+      setPassUploadToken(result.passUploadToken || null);
       setIsSubmitted(true);
       setStatus({ submitting: false, error: "" });
     } catch (error) {

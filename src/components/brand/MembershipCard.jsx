@@ -23,7 +23,12 @@ const MembershipCard = forwardRef(({ fullName, town, memberId, cardLabel, classN
   const townClass = trimmedTown.length > 16 ? "member-town member-town--tight" : "member-town";
 
   return (
-    <div ref={ref} className={classNames("membership-card", className)} style={style}>
+    <div
+      ref={ref}
+      className={classNames("membership-card", className)}
+      style={style}
+      data-card-export="true"
+    >
       <div className="holo-bar" aria-hidden="true" />
       <div className="card-noise" aria-hidden="true" />
       <div className="metal-rim" aria-hidden="true" />

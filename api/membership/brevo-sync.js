@@ -15,6 +15,11 @@ export default async function handler(req, res) {
     return
   }
 
+  if (!process.env.BREVO_ENABLED || process.env.BREVO_ENABLED === 'false') {
+    res.status(200).json({ ok: true, skipped: true })
+    return
+  }
+
   let body
   try {
     body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {}

@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import { buildCardLabel } from '../../lib/membership/card-label.js'
 import { getRedisClient, isRedisConfigured } from '../../lib/membership/redis-client.js'
 import { upsertBrevoContact } from '../../lib/membership/brevo-client.js'
@@ -5,9 +6,27 @@ import { buildInterestFlags, normalizeInterests } from '../../lib/membership/int
 
 const CARD_NUMBER_KEY = 'last_membership_card_number'
 const REGISTRATION_LOG_KEY = 'membership:registrations'
+const TOKEN_TTL_MS = 10 * 60 * 1000
 
 function isValidEmail(value) {
   return typeof value === 'string' && /.+@.+\..+/.test(value)
+}
+
+function createPassUploadToken(cardNumber) {
+  const secret = process.env.PASS_UPLOAD_SECRET
+  if (typeof secret !== 'string' || secret.length < 32) {
+    throw new Error('PASS_UPLOAD_SECRET is not configured')
+  }
+
+  const payload = {
+    cardNumber,
+    exp: Date.now() + TOKEN_TTL_MS,
+  }
+
+  const payloadBase = Buffer.from(JSON.stringify(payload)).toString('base64url')
+  const signature = crypto.createHmac('sha256', secret).update(payloadBase).digest('base64url')
+
+  return `${payloadBase}.${signature}`
 }
 
 export default async function handler(req, res) {
@@ -67,6 +86,7 @@ export default async function handler(req, res) {
     const nextNumber = await redis.incr(CARD_NUMBER_KEY)
     const cardNumber = String(nextNumber).padStart(8, '0')
     const cardLabel = buildCardLabel(primaryTown)
+    const passUploadToken = createPassUploadToken(cardNumber)
 
     const record = {
       fullName,
@@ -117,7 +137,14 @@ export default async function handler(req, res) {
       }
     }
 
-    res.status(200).json({ success: true, cardNumber, cardLabel, fullName, brevoSynced })
+    res.status(200).json({
+      success: true,
+      cardNumber,
+      cardLabel,
+      fullName,
+      brevoSynced,
+      passUploadToken,
+    })
   } catch (error) {
     console.error('[membership/register] failed to create membership', error)
     res.status(500).json({ success: false, error: 'Unable to create membership at this time.' })

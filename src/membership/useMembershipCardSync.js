@@ -16,11 +16,11 @@ async function exportCardAsDataUrl(node) {
   return toPng(node, { pixelRatio: 2 });
 }
 
-async function uploadCardImage(membershipId, dataUrl) {
+async function uploadCardImage(membershipId, dataUrl, passUploadToken) {
   const response = await fetch("/api/northside-pass-card-upload", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ membershipId, imageDataUrl: dataUrl }),
+    body: JSON.stringify({ membershipId, imageDataUrl: dataUrl, passUploadToken }),
   });
 
   const result = await response.json().catch(() => ({}));
@@ -54,13 +54,19 @@ export function useMembershipCardSync({
   cardLabel,
   formValues,
   cardRef,
+  passUploadToken,
   source = "pass-preview",
 }) {
   const lastSyncedRef = useRef(null);
 
   useEffect(() => {
-    const node = cardRef?.current;
-    if (!isSubmitted || !node || !cardNumber) return undefined;
+    const rootNode = cardRef?.current;
+    if (!isSubmitted || !rootNode || !cardNumber) return undefined;
+
+    const node =
+      typeof rootNode.querySelector === "function"
+        ? rootNode.querySelector('[data-card-export="true"]') || rootNode
+        : rootNode;
 
     const fullName = (formValues.fullName || "").trim();
     const email = (formValues.email || "").trim().toLowerCase();
@@ -75,9 +81,11 @@ export function useMembershipCardSync({
     const runSync = async () => {
       let cardUrl;
       try {
-        const dataUrl = await exportCardAsDataUrl(node);
-        if (typeof dataUrl === "string" && dataUrl.startsWith("data:image/png")) {
-          cardUrl = await uploadCardImage(cardNumber, dataUrl);
+        if (passUploadToken) {
+          const dataUrl = await exportCardAsDataUrl(node);
+          if (typeof dataUrl === "string" && dataUrl.startsWith("data:image/png")) {
+            cardUrl = await uploadCardImage(cardNumber, dataUrl, passUploadToken);
+          }
         }
       } catch (error) {
         console.error("[membership] card export/upload failed", error);
@@ -110,5 +118,5 @@ export function useMembershipCardSync({
     return () => {
       cancelled = true;
     };
-  }, [isSubmitted, cardNumber, cardLabel, formValues, cardRef, source]);
+  }, [isSubmitted, cardNumber, cardLabel, formValues, cardRef, passUploadToken, source]);
 }
