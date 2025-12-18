@@ -23,13 +23,14 @@ const MembershipCardPreview = forwardRef(({ fullName, town, memberId, cardLabel,
   }, []);
 
   return (
-    <div ref={ref} className={`w-full max-w-2xl ${className}`} data-card-preview="northside-pass">
+    <div className={`w-full max-w-2xl ${className}`} data-card-preview="northside-pass">
       <div className="bg-black/30 rounded-3xl p-4 sm:p-5 shadow-inner shadow-black/30">
         <div
           ref={containerRef}
           className="relative w-full max-w-[520px] mx-auto aspect-[420/265] flex items-center justify-center"
         >
           <MembershipCard
+            ref={ref}
             className="drop-shadow-2xl membership-card--fluid"
             fullName={fullName}
             town={town}
