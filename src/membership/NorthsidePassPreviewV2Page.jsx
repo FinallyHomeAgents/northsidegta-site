@@ -55,6 +55,7 @@ const faqItems = [
   },
 ];
 
+// NOTE: Your file is in public/Images/... (capital I), so the public URL must be /Images/...
 const HERO_IMAGE_SRC = "/Images/northside-pass-hero-v2.webp";
 
 const NorthsidePassPreviewV2Page = () => {
@@ -94,13 +95,11 @@ const NorthsidePassPreviewV2Page = () => {
       <HeaderShell />
 
       <main className="pb-16">
+        {/* ORIGINAL HERO LAYOUT (full-bleed media + centered content) */}
         <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-6 pb-10">
-          {/* HERO IMAGE (1080x1920) */}
-          <div
-            className="absolute inset-2 overflow-hidden rounded-[32px] bg-black"
-            aria-label="NorthSide Pass Hero Image"
-          >
-            {/* Image layer */}
+          {/* Hero media container */}
+          <div className="absolute inset-2 rounded-[32px] overflow-hidden" aria-hidden="true">
+            {/* Background image */}
             <div
               className="absolute inset-0"
               style={{
@@ -111,13 +110,12 @@ const NorthsidePassPreviewV2Page = () => {
               }}
             />
 
-            {/* Soft contrast overlay (lighter so the image stays visible) */}
-            <div className="absolute inset-0 bg-black/35" />
-
-            {/* Subtle brand glow (single radial, not overpowering) */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_55%)]" />
+            {/* ORIGINAL overlays from your layout */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/90" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.16),transparent_40%),radial-gradient(circle_at_70%_10%,rgba(59,130,246,0.12),transparent_40%)]" />
           </div>
 
+          {/* Hero content */}
           <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass}`}>
             <div className="flex w-full items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80">
               <span className="text-white/70">NorthSide GTA</span>
@@ -204,7 +202,7 @@ const NorthsidePassPreviewV2Page = () => {
               className="bg-transparent text-white"
               tone="dark"
               innerClassName="w-full"
-              contentWrapperClassName="[&>.mt-8]:w-full lg:[&>.mt-8]:grid lg:[&>.mt-8]:grid-cols-[1.05fr_0.95fr] lg:[&>.mt-8]:gap-8 lg:[&>.mt-8]:items-start lg:[&>.mt-8]:min-w-0 lg:[&>.mt-8>*:last-child]:flex lg:[&>.mt-8>*:last-child]:justify-center"
+              contentWrapperClassName="[&>.mt-8]:w-full lg:[&>.mt-8]:grid lg:[&>.mt-8]:grid-cols-[1.05fr_0.95fr] lg:[&>.mt-8]:gap-8 lg:[&>.mt-8]:items-start lg:[&>.mt-8]:min-w-0 lg:[&>.mt-8>*]:min-w-0 lg:[&>.mt-8>*:last-child]:flex lg:[&>.mt-8>*:last-child]:justify-center"
               previewWrapperClassName="bg-slate-950/80 border border-white/10 w-full max-w-[520px] xl:static xl:top-auto xl:relative"
               brevoSource="pass-preview-v2"
             />
@@ -255,7 +253,9 @@ const NorthsidePassPreviewV2Page = () => {
         </section>
 
         <section className="px-4 pb-14">
-          <div className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}>
+          <div
+            className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}
+          >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl text-emerald-200">
               ⚡
             </div>
