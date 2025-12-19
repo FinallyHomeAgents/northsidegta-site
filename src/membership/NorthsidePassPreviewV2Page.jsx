@@ -55,8 +55,9 @@ const faqItems = [
   },
 ];
 
-// NOTE: Your file is in public/Images/... (capital I), so the public URL must be /Images/...
-const HERO_IMAGE_SRC = "/Images/northside-pass-hero-v2.webp";
+// IMPORTANT: you're using public/Images (capital I), so the URL must be /Images/...
+const HERO_IMAGE_MOBILE = "/Images/northside-pass-hero-v2.webp"; // 1080x1920
+const HERO_IMAGE_DESKTOP = "/Images/northside-pass-hero-v2-desktop.webp"; // 1920x1080 (add this)
 
 const NorthsidePassPreviewV2Page = () => {
   const carouselRef = useRef(null);
@@ -95,54 +96,167 @@ const NorthsidePassPreviewV2Page = () => {
       <HeaderShell />
 
       <main className="pb-16">
-        {/* ORIGINAL HERO LAYOUT (full-bleed media + centered content) */}
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-6 pb-10">
-          {/* Hero media container */}
-          <div className="absolute inset-2 rounded-[32px] overflow-hidden" aria-hidden="true">
-            {/* Background image */}
+        {/* HERO (mobile keeps original full-bleed feel; desktop becomes presentation-style split layout) */}
+        <section className="relative overflow-hidden px-4 pt-6 pb-10">
+          {/* Ambient background */}
+          <div className="absolute inset-0 bg-[#05070d]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(16,185,129,0.20),transparent_38%),radial-gradient(circle_at_75%_10%,rgba(59,130,246,0.14),transparent_40%),radial-gradient(circle_at_70%_85%,rgba(16,185,129,0.10),transparent_45%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/60" />
+
+          {/* MOBILE: keep the original full-bleed hero image under text */}
+          <div className="absolute inset-2 overflow-hidden rounded-[32px] lg:hidden" aria-hidden="true">
             <div
               className="absolute inset-0"
               style={{
-                backgroundImage: `url(${HERO_IMAGE_SRC})`,
+                backgroundImage: `url(${HERO_IMAGE_MOBILE})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
               }}
             />
-
-            {/* ORIGINAL overlays from your layout */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/90" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.16),transparent_40%),radial-gradient(circle_at_70%_10%,rgba(59,130,246,0.12),transparent_40%)]" />
           </div>
 
-          {/* Hero content */}
-          <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass}`}>
-            <div className="flex w-full items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80">
-              <span className="text-white/70">NorthSide GTA</span>
-              <span className="text-white font-semibold">NORTHSIDE PASS</span>
+          {/* Content wrapper */}
+          <div className="relative mx-auto max-w-[1200px]">
+            {/* top microline (desktop presentation vibe) */}
+            <div className="hidden lg:flex items-center justify-between px-2 pb-6">
+              <div className="flex items-center gap-3 text-[12px] tracking-[0.32em] uppercase text-white/60">
+                <span>( MAIN SCREEN )</span>
+                <span>( NORTHSIDE PASS )</span>
+                <span>( PREVIEW )</span>
+              </div>
+
+              <div className="flex items-center gap-3 text-[13px] tracking-[0.24em] uppercase text-white/80">
+                <span className="text-white/70">NorthSide GTA</span>
+                <span className="text-white font-semibold">NORTHSIDE PASS</span>
+              </div>
             </div>
 
-            <div className="flex flex-col items-center text-center gap-3">
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Claim your NorthSide Pass</h1>
-              <p className="text-base sm:text-lg text-white/85 max-w-2xl">
-                Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct access to Finally Home Agents.
-              </p>
-              <button
-                type="button"
-                onClick={scrollToForm}
-                className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-6 py-3 text-base font-semibold text-black shadow-[0_18px_60px_rgba(16,185,129,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(16,185,129,0.5)]"
-              >
-                Claim your Pass
-              </button>
+            {/* Desktop split layout */}
+            <div className="hidden lg:grid grid-cols-12 gap-10 items-center min-h-[78vh]">
+              {/* Left: content */}
+              <div className="col-span-5">
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80 lg:hidden">
+                    <span className="text-white/70">NorthSide GTA</span>
+                    <span className="text-white font-semibold">NORTHSIDE PASS</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-xs tracking-[0.28em] uppercase text-white/70">
+                      <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1">
+                        NorthSide GTA
+                      </span>
+                      <span className="inline-flex items-center rounded-full bg-emerald-500/15 text-emerald-200 px-3 py-1">
+                        Claim your Pass
+                      </span>
+                    </div>
+
+                    <h1 className="text-[52px] leading-[1.05] font-black tracking-tight">
+                      Claim your <span className="text-white">NorthSide Pass</span>
+                    </h1>
+
+                    <p className="text-base text-white/80 leading-relaxed max-w-[520px]">
+                      Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct
+                      access to Finally Home Agents.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={scrollToForm}
+                      className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-7 py-3 text-base font-semibold text-black shadow-[0_18px_60px_rgba(16,185,129,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(16,185,129,0.5)]"
+                    >
+                      Claim your Pass
+                    </button>
+
+                    <div className="hidden xl:flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-white/55">
+                      <span className="text-white/60">Scroll</span>
+                      <span className="text-white/60">⌄</span>
+                    </div>
+                  </div>
+
+                  {/* optional small “task/solution” vibe without clutter */}
+                  <div className="pt-8 grid grid-cols-2 gap-6">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.26em] text-white/55">Today</p>
+                      <p className="mt-2 text-sm text-white/75 leading-relaxed">
+                        TasteHub, Local Events, Insights, and direct updates.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.26em] text-white/55">Next</p>
+                      <p className="mt-2 text-sm text-white/75 leading-relaxed">
+                        Partner perks roll out as we add local businesses across the region.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: framed 16:9 hero panel */}
+              <div className="col-span-7">
+                <div className="relative">
+                  {/* glow halo */}
+                  <div className="absolute -inset-10 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.20),transparent_55%)] blur-2xl" />
+                  <div className="absolute -inset-10 bg-[radial-gradient(circle_at_65%_25%,rgba(59,130,246,0.12),transparent_55%)] blur-2xl" />
+
+                  {/* frame */}
+                  <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-black shadow-[0_28px_110px_rgba(0,0,0,0.70)]">
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/55" />
+
+                    {/* True 16:9 area */}
+                    <div className="relative aspect-video w-full">
+                      <img
+                        src={HERO_IMAGE_DESKTOP}
+                        alt="NorthSide Pass hero"
+                        className="absolute inset-0 h-full w-full object-cover"
+                        decoding="async"
+                        loading="eager"
+                      />
+                    </div>
+
+                    {/* subtle vignette for readability/premium depth */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_40%)]" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/40" />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/70">
-              <span className="text-lg">⌄</span>
-              <span>Scroll</span>
+            {/* Mobile hero content (keeps your original centered vibe) */}
+            <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass} lg:hidden min-h-screen justify-center`}>
+              <div className="flex w-full items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80">
+                <span className="text-white/70">NorthSide GTA</span>
+                <span className="text-white font-semibold">NORTHSIDE PASS</span>
+              </div>
+
+              <div className="flex flex-col items-center text-center gap-3">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Claim your NorthSide Pass</h1>
+                <p className="text-base sm:text-lg text-white/85 max-w-2xl">
+                  Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct access to Finally Home Agents.
+                </p>
+                <button
+                  type="button"
+                  onClick={scrollToForm}
+                  className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-emerald-500 px-6 py-3 text-base font-semibold text-black shadow-[0_18px_60px_rgba(16,185,129,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(16,185,129,0.5)]"
+                >
+                  Claim your Pass
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/70">
+                <span className="text-lg">⌄</span>
+                <span>Scroll</span>
+              </div>
             </div>
           </div>
         </section>
 
+        {/* Everything below this stays exactly the same */}
         <section className="px-4 py-12 sm:py-14">
           <div className={`${maxWidthClass} space-y-4`}>
             <div className="space-y-2 text-center">
@@ -187,9 +301,7 @@ const NorthsidePassPreviewV2Page = () => {
               {tierCards.map((_, index) => (
                 <span
                   key={index}
-                  className={`h-2.5 w-2.5 rounded-full transition ${
-                    activeIndex === index ? "bg-emerald-400" : "bg-white/30"
-                  }`}
+                  className={`h-2.5 w-2.5 rounded-full transition ${activeIndex === index ? "bg-emerald-400" : "bg-white/30"}`}
                 />
               ))}
             </div>
