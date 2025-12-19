@@ -110,9 +110,12 @@ const NorthsidePassPreviewV2Page = () => {
                 backgroundRepeat: "no-repeat",
               }}
             />
-            {/* Contrast overlays (keep your existing look) */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/90" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.16),transparent_40%),radial-gradient(circle_at_70%_10%,rgba(59,130,246,0.12),transparent_40%)]" />
+
+            {/* Soft contrast overlay (lighter so the image stays visible) */}
+            <div className="absolute inset-0 bg-black/35" />
+
+            {/* Subtle brand glow (single radial, not overpowering) */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.18),transparent_55%)]" />
           </div>
 
           <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass}`}>
@@ -311,8 +314,7 @@ const FaqRow = ({ item, isLast }) => {
           {item.answer}
         </div>
       )}
-      {!isLast && <div className="mx-5 h-px bg-white/10" aria-hidden="true" />
-      }
+      {!isLast && <div className="mx-5 h-px bg-white/10" aria-hidden="true" />}
     </div>
   );
 };
