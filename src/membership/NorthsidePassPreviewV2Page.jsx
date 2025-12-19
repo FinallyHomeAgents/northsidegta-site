@@ -33,7 +33,8 @@ const features = [
 const faqItems = [
   {
     question: "What is the NorthSide Pass?",
-    answer: "A free membership for NorthSide GTA locals and future movers that unlocks our intel, events, and TasteHub access.",
+    answer:
+      "A free membership for NorthSide GTA locals and future movers that unlocks our intel, events, and TasteHub access.",
   },
   {
     question: "Does it cost anything?",
@@ -55,9 +56,9 @@ const faqItems = [
   },
 ];
 
-// public/Images/... must be referenced as /Images/...
-const HERO_IMAGE_MOBILE = "/Images/northside-pass-hero-v2.webp"; // 1080x1920
-const HERO_IMAGE_DESKTOP = "/Images/northside-pass-hero-v2-desktop.webp"; // 1920x1080
+// IMPORTANT: images are in public/Images (capital I), so URLs must be /Images/...
+const HERO_IMAGE_MOBILE = "/Images/northside-pass-hero-v2.webp"; // mobile asset
+const HERO_IMAGE_DESKTOP = "/Images/northside-pass-hero-v2-desktop.webp"; // desktop asset
 
 const NorthsidePassPreviewV2Page = () => {
   const carouselRef = useRef(null);
@@ -96,14 +97,14 @@ const NorthsidePassPreviewV2Page = () => {
       <HeaderShell />
 
       <main className="pb-16">
-        {/* HERO (mobile full-bleed; desktop presentation-style split layout) */}
+        {/* HERO */}
         <section className="relative overflow-hidden px-4 pt-6 pb-10">
           {/* Ambient background */}
           <div className="absolute inset-0 bg-[#05070d]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(16,185,129,0.20),transparent_38%),radial-gradient(circle_at_75%_10%,rgba(59,130,246,0.14),transparent_40%),radial-gradient(circle_at_70%_85%,rgba(16,185,129,0.10),transparent_45%)]" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/60" />
 
-          {/* MOBILE: full-bleed hero background */}
+          {/* MOBILE: full-bleed hero image behind text */}
           <div className="absolute inset-2 overflow-hidden rounded-[32px] lg:hidden" aria-hidden="true">
             <div
               className="absolute inset-0"
@@ -120,9 +121,21 @@ const NorthsidePassPreviewV2Page = () => {
 
           {/* Content wrapper */}
           <div className="relative mx-auto max-w-[1200px]">
+            {/* Desktop topline */}
+            <div className="hidden lg:flex items-center justify-between px-2 pb-6">
+              <div className="flex items-center gap-3 text-[12px] tracking-[0.32em] uppercase text-white/60">
+                {/* removed ( MAIN SCREEN ) / ( NORTHSIDE PASS ) / ( PREVIEW ) */}
+              </div>
+
+              <div className="flex items-center gap-3 text-[13px] tracking-[0.24em] uppercase text-white/80">
+                <span className="text-white/70">NorthSide GTA</span>
+                <span className="text-white font-semibold">NORTHSIDE PASS</span>
+              </div>
+            </div>
+
             {/* Desktop split layout */}
             <div className="hidden lg:grid grid-cols-12 gap-10 items-center min-h-[78vh]">
-              {/* Left: content */}
+              {/* Left: copy */}
               <div className="col-span-5">
                 <div className="space-y-5">
                   <div className="space-y-3">
@@ -138,7 +151,8 @@ const NorthsidePassPreviewV2Page = () => {
                     </h1>
 
                     <p className="text-base text-white/80 leading-relaxed max-w-[520px]">
-                      Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct access to Finally Home Agents.
+                      Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct
+                      access to Finally Home Agents.
                     </p>
                   </div>
 
@@ -160,7 +174,9 @@ const NorthsidePassPreviewV2Page = () => {
                   <div className="pt-8 grid grid-cols-2 gap-6">
                     <div>
                       <p className="text-xs uppercase tracking-[0.26em] text-white/55">Today</p>
-                      <p className="mt-2 text-sm text-white/75 leading-relaxed">TasteHub, Local Events, Insights, and direct updates.</p>
+                      <p className="mt-2 text-sm text-white/75 leading-relaxed">
+                        TasteHub, Local Events, Insights, and direct updates.
+                      </p>
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-[0.26em] text-white/55">Next</p>
@@ -175,12 +191,14 @@ const NorthsidePassPreviewV2Page = () => {
               {/* Right: framed 16:9 hero panel */}
               <div className="col-span-7">
                 <div className="relative">
+                  {/* glow halo */}
                   <div className="absolute -inset-10 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.20),transparent_55%)] blur-2xl" />
                   <div className="absolute -inset-10 bg-[radial-gradient(circle_at_65%_25%,rgba(59,130,246,0.12),transparent_55%)] blur-2xl" />
 
+                  {/* frame */}
                   <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-black shadow-[0_28px_110px_rgba(0,0,0,0.70)]">
-                    {/* Image */}
-                    <div className="relative aspect-video w-full">
+                    {/* NOTE: we intentionally do NOT rely on `aspect-video` here */}
+                    <div className="relative w-full pt-[56.25%]">
                       <img
                         src={HERO_IMAGE_DESKTOP}
                         alt="NorthSide Pass hero"
@@ -188,7 +206,6 @@ const NorthsidePassPreviewV2Page = () => {
                         decoding="async"
                         loading="eager"
                         onError={(e) => {
-                          // Hide broken image and show overlay fallback.
                           e.currentTarget.style.opacity = "0";
                           const el = document.getElementById("ns-pass-desktop-hero-fallback");
                           if (el) el.style.display = "flex";
@@ -197,27 +214,28 @@ const NorthsidePassPreviewV2Page = () => {
                         }}
                       />
 
-                      {/* Fallback overlay (hidden unless image fails) */}
                       <div
                         id="ns-pass-desktop-hero-fallback"
                         style={{ display: "none" }}
-                        className="absolute inset-0 items-center justify-center bg-black/60 text-xs uppercase tracking-[0.2em] text-white/70"
+                        className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs uppercase tracking-[0.2em] text-white/70"
                       >
                         Missing desktop hero image: {HERO_IMAGE_DESKTOP}
                       </div>
-                    </div>
 
-                    {/* Overlays (pointer-events none so they never block image rendering) */}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/55" />
-                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_40%)]" />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/40" />
+                      {/* overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/55" />
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_40%)]" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/40" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Mobile hero content */}
-            <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass} lg:hidden min-h-screen justify-center`}>
+            {/* Mobile hero content (centered) */}
+            <div
+              className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass} lg:hidden min-h-screen justify-center`}
+            >
               <div className="flex w-full items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80">
                 <span className="text-white/70">NorthSide GTA</span>
                 <span className="text-white font-semibold">NORTHSIDE PASS</span>
@@ -226,7 +244,8 @@ const NorthsidePassPreviewV2Page = () => {
               <div className="flex flex-col items-center text-center gap-3">
                 <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Claim your NorthSide Pass</h1>
                 <p className="text-base sm:text-lg text-white/85 max-w-2xl">
-                  Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct access to Finally Home Agents.
+                  Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct
+                  access to Finally Home Agents.
                 </p>
                 <button
                   type="button"
@@ -245,7 +264,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* Membership tiers */}
+        {/* Everything below this stays the same */}
         <section className="px-4 py-12 sm:py-14">
           <div className={`${maxWidthClass} space-y-4`}>
             <div className="space-y-2 text-center">
@@ -299,7 +318,6 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* Registration */}
         <section className="px-4 pb-12">
           <div className={registrationWrapperClass}>
             <MembershipRegistrationBlockV2
@@ -313,7 +331,6 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* Features */}
         <section className="px-4 pb-12 sm:pb-14">
           <div className={`${maxWidthClass} space-y-6`}>
             <div className="space-y-2 text-center">
@@ -328,7 +345,11 @@ const NorthsidePassPreviewV2Page = () => {
                   className="rounded-[26px] border border-white/10 bg-gradient-to-br from-slate-900 via-slate-950 to-black p-5 shadow-[0_18px_70px_rgba(0,0,0,0.55)]"
                 >
                   <div className="flex items-center gap-4">
-                    <PlaceholderMedia shape="circle" label="CIRCLE PHOTO (1000x1000)" className="flex-none w-24 h-24" />
+                    <PlaceholderMedia
+                      shape="circle"
+                      label="CIRCLE PHOTO (1000x1000)"
+                      className="flex-none w-24 h-24"
+                    />
                     <div className="space-y-1">
                       <h4 className="text-xl font-semibold">{feature.title}</h4>
                       <p className="text-sm text-white/75 leading-relaxed">{feature.description}</p>
@@ -340,7 +361,6 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* CTA + banner */}
         <section className="px-4 pb-12 sm:pb-14">
           <div className={`${maxWidthClass} space-y-5`}>
             <button
@@ -358,17 +378,15 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* How it works */}
         <section className="px-4 pb-14">
-          <div
-            className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}
-          >
+          <div className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}>
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl text-emerald-200">
               ⚡
             </div>
             <h3 className="text-3xl font-bold">How it works</h3>
             <p className="text-base text-white/80 leading-relaxed">
-              Claim your pass, get your member number, and start using the tools now. Perks and partners roll out over time with community input.
+              Claim your pass, get your member number, and start using the tools now. Perks and partners roll out over
+              time with community input.
             </p>
             <div className="mx-auto inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-sm font-semibold tracking-[0.18em] uppercase text-white/80">
               northsidegta.ca
@@ -376,7 +394,6 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* FAQ */}
         <section className="px-4 pb-14">
           <div className={`${maxWidthClass} space-y-6`}>
             <div className="space-y-2 text-center">
@@ -400,7 +417,9 @@ const NorthsidePassPreviewV2Page = () => {
 
 const FaqRow = ({ item, isLast }) => {
   const [open, setOpen] = useState(false);
+
   const toggle = () => setOpen((prev) => !prev);
+
   const contentId = useMemo(() => item.question.replace(/\s+/g, "-").toLowerCase(), [item.question]);
 
   return (
