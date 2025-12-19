@@ -55,9 +55,9 @@ const faqItems = [
   },
 ];
 
-// IMPORTANT: you're using public/Images (capital I), so the URL must be /Images/...
+// public/Images/... must be referenced as /Images/...
 const HERO_IMAGE_MOBILE = "/Images/northside-pass-hero-v2.webp"; // 1080x1920
-const HERO_IMAGE_DESKTOP = "/Images/northside-pass-hero-v2-desktop.webp"; // 1920x1080 (add this)
+const HERO_IMAGE_DESKTOP = "/Images/northside-pass-hero-v2-desktop.webp"; // 1920x1080
 
 const NorthsidePassPreviewV2Page = () => {
   const carouselRef = useRef(null);
@@ -96,14 +96,14 @@ const NorthsidePassPreviewV2Page = () => {
       <HeaderShell />
 
       <main className="pb-16">
-        {/* HERO (mobile keeps original full-bleed feel; desktop becomes presentation-style split layout) */}
+        {/* HERO (mobile full-bleed; desktop presentation-style split layout) */}
         <section className="relative overflow-hidden px-4 pt-6 pb-10">
           {/* Ambient background */}
           <div className="absolute inset-0 bg-[#05070d]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(16,185,129,0.20),transparent_38%),radial-gradient(circle_at_75%_10%,rgba(59,130,246,0.14),transparent_40%),radial-gradient(circle_at_70%_85%,rgba(16,185,129,0.10),transparent_45%)]" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/60" />
 
-          {/* MOBILE: keep the original full-bleed hero image under text */}
+          {/* MOBILE: full-bleed hero background */}
           <div className="absolute inset-2 overflow-hidden rounded-[32px] lg:hidden" aria-hidden="true">
             <div
               className="absolute inset-0"
@@ -120,35 +120,14 @@ const NorthsidePassPreviewV2Page = () => {
 
           {/* Content wrapper */}
           <div className="relative mx-auto max-w-[1200px]">
-            {/* top microline (desktop presentation vibe) */}
-            <div className="hidden lg:flex items-center justify-between px-2 pb-6">
-              <div className="flex items-center gap-3 text-[12px] tracking-[0.32em] uppercase text-white/60">
-                <span>( MAIN SCREEN )</span>
-                <span>( NORTHSIDE PASS )</span>
-                <span>( PREVIEW )</span>
-              </div>
-
-              <div className="flex items-center gap-3 text-[13px] tracking-[0.24em] uppercase text-white/80">
-                <span className="text-white/70">NorthSide GTA</span>
-                <span className="text-white font-semibold">NORTHSIDE PASS</span>
-              </div>
-            </div>
-
             {/* Desktop split layout */}
             <div className="hidden lg:grid grid-cols-12 gap-10 items-center min-h-[78vh]">
               {/* Left: content */}
               <div className="col-span-5">
                 <div className="space-y-5">
-                  <div className="flex items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80 lg:hidden">
-                    <span className="text-white/70">NorthSide GTA</span>
-                    <span className="text-white font-semibold">NORTHSIDE PASS</span>
-                  </div>
-
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-xs tracking-[0.28em] uppercase text-white/70">
-                      <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1">
-                        NorthSide GTA
-                      </span>
+                      <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1">NorthSide GTA</span>
                       <span className="inline-flex items-center rounded-full bg-emerald-500/15 text-emerald-200 px-3 py-1">
                         Claim your Pass
                       </span>
@@ -159,8 +138,7 @@ const NorthsidePassPreviewV2Page = () => {
                     </h1>
 
                     <p className="text-base text-white/80 leading-relaxed max-w-[520px]">
-                      Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct
-                      access to Finally Home Agents.
+                      Free membership for locals and future NorthSide GTA movers. Get our best community finds and direct access to Finally Home Agents.
                     </p>
                   </div>
 
@@ -179,13 +157,10 @@ const NorthsidePassPreviewV2Page = () => {
                     </div>
                   </div>
 
-                  {/* optional small “task/solution” vibe without clutter */}
                   <div className="pt-8 grid grid-cols-2 gap-6">
                     <div>
                       <p className="text-xs uppercase tracking-[0.26em] text-white/55">Today</p>
-                      <p className="mt-2 text-sm text-white/75 leading-relaxed">
-                        TasteHub, Local Events, Insights, and direct updates.
-                      </p>
+                      <p className="mt-2 text-sm text-white/75 leading-relaxed">TasteHub, Local Events, Insights, and direct updates.</p>
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-[0.26em] text-white/55">Next</p>
@@ -200,15 +175,11 @@ const NorthsidePassPreviewV2Page = () => {
               {/* Right: framed 16:9 hero panel */}
               <div className="col-span-7">
                 <div className="relative">
-                  {/* glow halo */}
                   <div className="absolute -inset-10 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.20),transparent_55%)] blur-2xl" />
                   <div className="absolute -inset-10 bg-[radial-gradient(circle_at_65%_25%,rgba(59,130,246,0.12),transparent_55%)] blur-2xl" />
 
-                  {/* frame */}
                   <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-black shadow-[0_28px_110px_rgba(0,0,0,0.70)]">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/55" />
-
-                    {/* True 16:9 area */}
+                    {/* Image */}
                     <div className="relative aspect-video w-full">
                       <img
                         src={HERO_IMAGE_DESKTOP}
@@ -216,18 +187,36 @@ const NorthsidePassPreviewV2Page = () => {
                         className="absolute inset-0 h-full w-full object-cover"
                         decoding="async"
                         loading="eager"
+                        onError={(e) => {
+                          // Hide broken image and show overlay fallback.
+                          e.currentTarget.style.opacity = "0";
+                          const el = document.getElementById("ns-pass-desktop-hero-fallback");
+                          if (el) el.style.display = "flex";
+                          // eslint-disable-next-line no-console
+                          console.warn("Desktop hero image failed to load:", HERO_IMAGE_DESKTOP);
+                        }}
                       />
+
+                      {/* Fallback overlay (hidden unless image fails) */}
+                      <div
+                        id="ns-pass-desktop-hero-fallback"
+                        style={{ display: "none" }}
+                        className="absolute inset-0 items-center justify-center bg-black/60 text-xs uppercase tracking-[0.2em] text-white/70"
+                      >
+                        Missing desktop hero image: {HERO_IMAGE_DESKTOP}
+                      </div>
                     </div>
 
-                    {/* subtle vignette for readability/premium depth */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_40%)]" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/40" />
+                    {/* Overlays (pointer-events none so they never block image rendering) */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/55" />
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_40%)]" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/40" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Mobile hero content (keeps your original centered vibe) */}
+            {/* Mobile hero content */}
             <div className={`relative z-10 flex w-full flex-col items-center gap-12 ${maxWidthClass} lg:hidden min-h-screen justify-center`}>
               <div className="flex w-full items-center justify-between text-[13px] tracking-[0.24em] uppercase text-white/80">
                 <span className="text-white/70">NorthSide GTA</span>
@@ -256,7 +245,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
-        {/* Everything below this stays exactly the same */}
+        {/* Membership tiers */}
         <section className="px-4 py-12 sm:py-14">
           <div className={`${maxWidthClass} space-y-4`}>
             <div className="space-y-2 text-center">
@@ -301,13 +290,16 @@ const NorthsidePassPreviewV2Page = () => {
               {tierCards.map((_, index) => (
                 <span
                   key={index}
-                  className={`h-2.5 w-2.5 rounded-full transition ${activeIndex === index ? "bg-emerald-400" : "bg-white/30"}`}
+                  className={`h-2.5 w-2.5 rounded-full transition ${
+                    activeIndex === index ? "bg-emerald-400" : "bg-white/30"
+                  }`}
                 />
               ))}
             </div>
           </div>
         </section>
 
+        {/* Registration */}
         <section className="px-4 pb-12">
           <div className={registrationWrapperClass}>
             <MembershipRegistrationBlockV2
@@ -321,6 +313,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
+        {/* Features */}
         <section className="px-4 pb-12 sm:pb-14">
           <div className={`${maxWidthClass} space-y-6`}>
             <div className="space-y-2 text-center">
@@ -347,6 +340,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
+        {/* CTA + banner */}
         <section className="px-4 pb-12 sm:pb-14">
           <div className={`${maxWidthClass} space-y-5`}>
             <button
@@ -364,6 +358,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
+        {/* How it works */}
         <section className="px-4 pb-14">
           <div
             className={`${maxWidthClass} rounded-[30px] border border-blue-200/10 bg-gradient-to-br from-sky-900 via-slate-900 to-black p-8 shadow-[0_28px_100px_rgba(14,165,233,0.25)] text-center space-y-4`}
@@ -381,6 +376,7 @@ const NorthsidePassPreviewV2Page = () => {
           </div>
         </section>
 
+        {/* FAQ */}
         <section className="px-4 pb-14">
           <div className={`${maxWidthClass} space-y-6`}>
             <div className="space-y-2 text-center">
@@ -404,9 +400,7 @@ const NorthsidePassPreviewV2Page = () => {
 
 const FaqRow = ({ item, isLast }) => {
   const [open, setOpen] = useState(false);
-
   const toggle = () => setOpen((prev) => !prev);
-
   const contentId = useMemo(() => item.question.replace(/\s+/g, "-").toLowerCase(), [item.question]);
 
   return (
