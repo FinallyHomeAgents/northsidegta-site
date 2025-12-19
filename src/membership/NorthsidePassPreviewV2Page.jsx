@@ -55,7 +55,7 @@ const faqItems = [
   },
 ];
 
-const HERO_IMAGE_SRC = "/images/northside-pass-hero-v2.webp";
+const HERO_IMAGE_SRC = "/Images/northside-pass-hero-v2.webp";
 
 const NorthsidePassPreviewV2Page = () => {
   const carouselRef = useRef(null);
