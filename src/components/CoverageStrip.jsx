@@ -27,15 +27,15 @@ export default function CoverageStrip({ className = "" }) {
         key={t.slug}
         href={t.href}
         aria-label={`Explore ${t.name}`}
-        className={`ns-townchip${isActive ? " is-active" : ""}`}
+        className={`ns-townitem${isActive ? " is-active" : ""}`}
       >
-        <span className="ns-townchip__badge">
+        <span className="ns-townitem__badge">
           <img
             src={t.icon}
             alt={`${t.name} badge`}
-            width={38}
-            height={38}
-            className="ns-townchip__icon"
+            width={36}
+            height={36}
+            className="ns-townitem__icon"
             onError={(e) => {
               const el = e.currentTarget;
               const p = el.parentElement;
@@ -44,8 +44,7 @@ export default function CoverageStrip({ className = "" }) {
             }}
           />
         </span>
-        <span className="ns-townchip__dot" aria-hidden />
-        <span className="ns-townchip__name">{t.name}</span>
+        <span className="ns-townitem__name">{t.name}</span>
       </a>
     );
   };
@@ -59,8 +58,8 @@ export default function CoverageStrip({ className = "" }) {
           </span>
           <span className="ns-townsbar__label">NORTHSIDE GTA TOWNS</span>
         </div>
-        <span className="ns-townsbar__rail" aria-hidden />
-        <div className="ns-townsbar__scroller">{towns.map(item)}</div>
+        <div className="ns-townsbar__rail" aria-hidden />
+        <div className="ns-townsbar__items">{towns.map(item)}</div>
       </div>
     </div>
   );
