@@ -43,9 +43,10 @@
   padding: 0 18px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .ns-townsbar__title{
@@ -82,14 +83,15 @@
   flex: 1 1 auto;
   background: linear-gradient(to right, var(--rail), var(--rail-fade));
   opacity: .9;
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 
 .ns-townsbar__scroller{
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 20px;
   overflow-x: auto;
+  overflow-y: visible;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0 2px;
@@ -98,19 +100,20 @@
 
 .ns-townchip{
   display: grid;
-  grid-template-columns: 46px;
-  grid-template-rows: 46px 10px auto;
+  grid-template-columns: 42px;
+  grid-template-rows: 42px 9px auto;
   justify-items: center;
-  gap: 2px;
+  gap: 1px;
   text-decoration: none;
   color: var(--muted);
   position: relative;
-  min-width: 86px;
+  min-width: 80px;
+  transform: translateY(2px);
 }
 
 .ns-townchip__badge{
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 999px;
   background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.22), rgba(255,255,255,0) 58%),
               linear-gradient(to bottom, rgba(255,255,255,.14), rgba(0,0,0,.10));
@@ -140,16 +143,16 @@
 }
 
 .ns-townchip__icon{
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
   object-fit: cover;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .ns-townchip__dot{
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 999px;
   background: rgba(255,255,255,.55);
   box-shadow: 0 6px 14px rgba(0,0,0,.35);
@@ -157,11 +160,11 @@
 }
 
 .ns-townchip__name{
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 650;
   letter-spacing: .01em;
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.05;
   white-space: nowrap;
 }
 
@@ -198,5 +201,5 @@
   .ns-townsbar__rail{ display:none; }
   .ns-townsbar__inner{ gap: 12px; }
   .ns-townchip{ min-width: 74px; gap: 1px; }
-  .ns-townchip__name{ font-size: 12.5px; }
+  .ns-townchip__name{ font-size: 12px; }
 }
