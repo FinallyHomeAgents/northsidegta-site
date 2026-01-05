@@ -1,0 +1,202 @@
+/* src/styles/townsbar.css */
+.ns-townsbar{
+  --townbar-h: 64px; /* MUST match current bar height */
+  --bg-top: #2b5a12;
+  --bg-mid: #204b0e;
+  --bg-bot: #183b0b;
+
+  --rail: rgba(255,255,255,.20);
+  --rail-fade: rgba(255,255,255,0);
+
+  --text: rgba(255,255,255,.90);
+  --muted: rgba(255,255,255,.72);
+
+  --ring: #e8e0c9;
+  --ring-inner: rgba(0,0,0,.20);
+  --shadow: rgba(0,0,0,.35);
+
+  height: var(--townbar-h);
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 140% at 50% 120%, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%),
+    linear-gradient(to bottom, var(--bg-top), var(--bg-mid) 55%, var(--bg-bot));
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(0,0,0,.35);
+}
+
+.ns-townsbar::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:0; bottom:0;
+  pointer-events:none;
+  background-image: radial-gradient(rgba(255,255,255,.04) 1px, rgba(255,255,255,0) 1px);
+  background-size: 6px 6px;
+  opacity: .25;
+}
+
+.ns-townsbar__inner{
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.ns-townsbar__title{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.ns-townsbar__mark{
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.10);
+  box-shadow: 0 6px 16px var(--shadow);
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.ns-townsbar__label{
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .92;
+}
+
+.ns-townsbar__rail{
+  height: 1px;
+  flex: 1 1 auto;
+  background: linear-gradient(to right, var(--rail), var(--rail-fade));
+  opacity: .9;
+  transform: translateY(-10px);
+}
+
+.ns-townsbar__scroller{
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 2px;
+}
+.ns-townsbar__scroller::-webkit-scrollbar{ display:none; }
+
+.ns-townchip{
+  display: grid;
+  grid-template-columns: 46px;
+  grid-template-rows: 46px 10px auto;
+  justify-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--muted);
+  position: relative;
+  min-width: 86px;
+}
+
+.ns-townchip__badge{
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.22), rgba(255,255,255,0) 58%),
+              linear-gradient(to bottom, rgba(255,255,255,.14), rgba(0,0,0,.10));
+  box-shadow: 0 10px 22px var(--shadow);
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.ns-townchip__badge::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius: 999px;
+  background: var(--ring);
+  z-index: -1;
+  box-shadow: 0 10px 22px rgba(0,0,0,.28);
+}
+
+.ns-townchip__badge::after{
+  content:"";
+  position:absolute;
+  inset: -4px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--ring-inner);
+  pointer-events:none;
+}
+
+.ns-townchip__icon{
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  object-fit: cover;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.ns-townchip__dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  box-shadow: 0 6px 14px rgba(0,0,0,.35);
+  transform: translateY(-2px);
+}
+
+.ns-townchip__name{
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: .01em;
+  text-align: center;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.ns-townchip:hover{
+  color: rgba(255,255,255,.92);
+}
+.ns-townchip:hover .ns-townchip__badge{
+  transform: translateY(-1px);
+  transition: transform 160ms ease, filter 160ms ease;
+  filter: saturate(1.05) brightness(1.02);
+}
+.ns-townchip:hover .ns-townchip__dot{
+  background: rgba(255,255,255,.75);
+}
+
+.ns-townchip.is-active{
+  color: rgba(255,255,255,.96);
+}
+.ns-townchip.is-active .ns-townchip__badge{
+  filter: saturate(1.08) brightness(1.04);
+}
+.ns-townchip.is-active .ns-townchip__badge::before{
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.28),
+    0 0 0 2px rgba(255,255,255,.10),
+    0 0 24px rgba(120, 220, 90, .25);
+}
+.ns-townchip.is-active .ns-townchip__dot{
+  background: rgba(180,255,160,.85);
+  box-shadow: 0 0 18px rgba(120, 220, 90, .35);
+}
+
+@media (max-width: 980px){
+  .ns-townsbar__rail{ display:none; }
+  .ns-townsbar__inner{ gap: 12px; }
+  .ns-townchip{ min-width: 74px; gap: 1px; }
+  .ns-townchip__name{ font-size: 12.5px; }
+}
