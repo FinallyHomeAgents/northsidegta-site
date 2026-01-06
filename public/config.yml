@@ -2,6 +2,7 @@ backend:
   name: github
   repo: FinallyHomeAgents/northsidegta-site
   branch: main
+  auth_endpoint: /api/auth
 
 media_folder: 'public/uploads'
 public_folder: '/uploads'
