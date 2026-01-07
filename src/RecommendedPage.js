@@ -2,9 +2,9 @@ import React, { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
-import ReviewsCarousel from "./components/contact/ReviewsCarousel";
 import { getFormEndpoint } from "./components/contact/contactConfig";
-import { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
+import SellerMediaSection from "./components/sellers/SellerMediaSection";
+import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,8 +30,6 @@ const TIMELINE_OPTIONS = [
   "6+ months",
   "Just exploring",
 ];
-const AGENT_MEETING_OPTIONS = ["Yes", "No"];
-
 const INITIAL_FORM = {
   name: "",
   phone: "",
@@ -42,7 +40,6 @@ const INITIAL_FORM = {
   bathrooms: "",
   condition: "",
   timeline: "",
-  metAgents: "",
   notes: "",
   honeypot: "",
 };
@@ -78,11 +75,8 @@ function SellerIntakeForm() {
     } else if (!phoneOk(form.phone)) {
       errs.phone = "Enter a valid phone number.";
     }
-    if (!form.address.trim()) {
-      errs.address = "Property address is required.";
-    }
     return errs;
-  }, [form.name, form.email, form.phone, form.address]);
+  }, [form.name, form.email, form.phone]);
 
   const visibleErrors = showErrors ? validations : {};
 
@@ -125,7 +119,6 @@ function SellerIntakeForm() {
       if (form.bathrooms) payload.append("bathrooms", form.bathrooms);
       if (form.condition) payload.append("condition", form.condition);
       if (form.timeline) payload.append("timeline", form.timeline);
-      if (form.metAgents) payload.append("met_agents", form.metAgents);
       if (form.notes.trim()) payload.append("notes", form.notes.trim());
 
       if (typeof window !== "undefined") {
@@ -237,7 +230,7 @@ function SellerIntakeForm() {
 
       <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="address">
-          Property Address<span className="text-rose-500">*</span>
+          Property Address
         </label>
         <input
           id="address"
@@ -246,9 +239,6 @@ function SellerIntakeForm() {
           onChange={updateField}
           className="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
-        {visibleErrors.address && (
-          <p className="mt-1 text-xs text-rose-600">{visibleErrors.address}</p>
-        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -333,51 +323,24 @@ function SellerIntakeForm() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="timeline">
-            Timeline
-          </label>
-          <select
-            id="timeline"
-            name="timeline"
-            value={form.timeline}
-            onChange={updateField}
-            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >
-            <option value="">Select timeline</option>
-            {TIMELINE_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-        <fieldset>
-          <legend className="text-sm font-medium text-slate-700">Have you met any agents yet?</legend>
-          <div className="mt-3 flex flex-wrap gap-3">
-            {AGENT_MEETING_OPTIONS.map((option) => (
-              <label
-                key={option}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
-                  form.metAgents === option
-                    ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                    : "border-slate-200 text-slate-600 hover:border-emerald-300"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="metAgents"
-                  value={option}
-                  checked={form.metAgents === option}
-                  onChange={updateField}
-                  className="h-4 w-4"
-                />
-                <span>{option}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
+      <div>
+        <label className="block text-sm font-medium text-slate-700" htmlFor="timeline">
+          Timeline
+        </label>
+        <select
+          id="timeline"
+          name="timeline"
+          value={form.timeline}
+          onChange={updateField}
+          className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          <option value="">Select timeline</option>
+          {TIMELINE_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -421,7 +384,6 @@ function SellerIntakeForm() {
 }
 
 export default function RecommendedPage() {
-  const reviews = useMemo(() => GOOGLE_REVIEWS.slice(0, 4), []);
   const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
 
   return (
@@ -494,8 +456,22 @@ export default function RecommendedPage() {
                     <div className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">
                       Family-run. Local. NorthSide GTA focused.
                     </div>
-                    <div className="text-sm font-semibold text-slate-900">
-                      HomeLife Optimum Realty, Brokerage
+                    <div className="flex items-center justify-between text-sm font-semibold text-slate-900">
+                      <span>HomeLife Optimum Realty, Brokerage</span>
+                      <span className="flex items-center gap-2">
+                        <img
+                          src="/Images/fha-badge.png"
+                          alt="Finally Home Agents"
+                          className="h-7 w-7 object-contain"
+                          loading="lazy"
+                        />
+                        <img
+                          src="/Images/brand/northside-mark.svg"
+                          alt="NorthSide GTA"
+                          className="h-7 w-7 object-contain"
+                          loading="lazy"
+                        />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -577,9 +553,18 @@ export default function RecommendedPage() {
                 ))}
               </ul>
             </div>
-            <div className="mt-10">
-              <ReviewsCarousel reviews={reviews} disclaimer="Verified client reviews" />
-            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <SellerReviewsSection />
+          </div>
+        </section>
+
+        <section className="bg-white py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <SellerMediaSection heading="See Our Listings in Action" />
           </div>
         </section>
 
