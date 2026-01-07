@@ -9,26 +9,14 @@ import teamMembers from "./data/teamMembers";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const TOWN_OPTIONS = [
-  "Uxbridge",
-  "Stouffville",
-  "Georgina",
-  "East Gwillimbury",
-  "Newmarket",
-  "Aurora",
-  "Scugog",
-];
-
 const PROPERTY_TYPES = ["Detached", "Semi", "Town", "Condo", "Rural"];
 const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5+"];
 const BATHROOM_OPTIONS = ["1", "2", "3", "4+"];
 const CONDITION_OPTIONS = ["Updated", "Good", "Needs work"];
 const TIMELINE_OPTIONS = [
-  "ASAP",
-  "0–3 months",
-  "3–6 months",
-  "6+ months",
-  "Just exploring",
+  { label: "Ready Soon (0–3 months)", value: "0–3 months" },
+  { label: "Planning Ahead (3+ months)", value: "3+ months" },
+  { label: "Just Exploring", value: "Just exploring" },
 ];
 const INITIAL_FORM = {
   name: "",
@@ -75,8 +63,11 @@ function SellerIntakeForm() {
     } else if (!phoneOk(form.phone)) {
       errs.phone = "Enter a valid phone number.";
     }
+    if (!form.address.trim()) {
+      errs.address = "Property address is required.";
+    }
     return errs;
-  }, [form.name, form.email, form.phone]);
+  }, [form.name, form.email, form.phone, form.address]);
 
   const visibleErrors = showErrors ? validations : {};
 
@@ -230,7 +221,7 @@ function SellerIntakeForm() {
 
       <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="address">
-          Property Address
+          Property Address<span className="text-rose-500">*</span>
         </label>
         <input
           id="address"
@@ -239,6 +230,9 @@ function SellerIntakeForm() {
           onChange={updateField}
           className="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
+        {visibleErrors.address && (
+          <p className="mt-1 text-xs text-rose-600">{visibleErrors.address}</p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -336,8 +330,8 @@ function SellerIntakeForm() {
         >
           <option value="">Select timeline</option>
           {TIMELINE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>
@@ -451,8 +445,13 @@ export default function RecommendedPage() {
                       ))}
                     </div>
                     <div className="text-sm text-slate-600">
-                      We’re a hands-on team that guides you through pricing, prep, and launch with clear next steps.
+                      We’re brothers who grew up in the area, now raising our families here and helping others make the move north of Toronto. Whether
+                      you’re in Uxbridge, Stouffville, Georgina, or anywhere across the NorthSide GTA, we bring local insight and a hands-on process to
+                      every sale.
                     </div>
+                    <p className="text-sm text-slate-600">
+                      We built Finally Home Agents to give families a better real estate experience — guided, personal, and rooted in the community.
+                    </p>
                     <div className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">
                       Family-run. Local. NorthSide GTA focused.
                     </div>
@@ -479,16 +478,21 @@ export default function RecommendedPage() {
 
               <div
                 id="leadForm"
-                className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-8"
+                className="rounded-[32px] border border-emerald-200 bg-white p-6 shadow-2xl shadow-emerald-200/70 sm:p-8"
               >
                 <div className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
                     Step 1: Tell us about your home sale
                   </p>
                   <p className="text-xs text-slate-500">No pressure. No obligation.</p>
-                  <h2 className="text-2xl font-semibold text-slate-900">Share your details</h2>
+                  <h2 className="text-2xl font-semibold text-slate-900">
+                    Tell us about your home — and we’ll start building your plan.
+                  </h2>
                   <p className="text-sm text-slate-600">
                     We’ll review everything and reach out with the best next steps.
+                  </p>
+                  <p className="text-sm text-slate-600">
+                    You’ll hear directly from Matthew or Landon — never an assistant.
                   </p>
                 </div>
                 <div className="mt-6">
@@ -501,13 +505,9 @@ export default function RecommendedPage() {
 
         <section className="bg-white pb-12">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-600/80">
-              {TOWN_OPTIONS.map((town) => (
-                <span key={town} className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
-                  {town}
-                </span>
-              ))}
-            </div>
+            <p className="text-sm text-slate-600">
+              Serving Uxbridge, Stouffville, Georgina, Newmarket, Aurora, East Gwillimbury, Scugog — and the wider NorthSide GTA.
+            </p>
           </div>
         </section>
 
