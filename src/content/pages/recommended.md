@@ -1,5 +1,7 @@
 ---
-seoTitle: "Start Your Home Sale | NorthSide GTA"
-seoDescription: "Start your home sale with Matthew & Landon Mulhall — Sales Representatives helping sellers across Uxbridge, Stouffville, Georgina, Newmarket, Aurora, and the wider NorthSide GTA."
-seoImage: "/Images/og-northside-default.webp"
+seoTitle: Sell Your Home in the NorthSide GTA | Start with a Local Plan
+seoDescription: Start your home sale with Matthew & Landon Mulhall, Sales
+  Representatives at HomeLife Optimum Realty. Complimentary listing prep
+  consult, clear plan, and local NorthSide GTA expertise.
+seoImage: /uploads/og-launch-home-sale-northside-gta.webp
 ---
