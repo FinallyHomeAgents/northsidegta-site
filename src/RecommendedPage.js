@@ -466,26 +466,50 @@ export default function RecommendedPage() {
                 <p className="text-sm text-slate-500">
                   Serving Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, Scugog, and the wider NorthSide GTA.
                 </p>
-                <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-600/80">
-                  {TOWN_OPTIONS.map((town) => (
-                    <span key={town} className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
-                      {town}
-                    </span>
-                  ))}
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                  <p className="font-semibold text-slate-900">
-                    Matthew &amp; Landon Mulhall — Sales Representatives
-                  </p>
-                  <p className="mt-1">HomeLife Optimum Realty, Brokerage</p>
+
+                <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-emerald-100/60">
+                  <div className="space-y-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                      Meet Matthew &amp; Landon
+                    </p>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                      {featuredTeam.map((member) => (
+                        <div key={member.name} className="flex items-center gap-4">
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="h-16 w-16 rounded-2xl object-cover shadow"
+                            loading="lazy"
+                          />
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900">{member.name}</p>
+                            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Sales Representative</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-sm text-slate-600">
+                      We’re a hands-on team that guides you through pricing, prep, and launch with clear next steps.
+                    </div>
+                    <div className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">
+                      Family-run. Local. NorthSide GTA focused.
+                    </div>
+                    <div className="text-sm font-semibold text-slate-900">
+                      HomeLife Optimum Realty, Brokerage
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div id="leadForm" className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-8">
+              <div
+                id="leadForm"
+                className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-8"
+              >
                 <div className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    Step 1: Tell Us About Your Home Sale
+                    Step 1: Tell us about your home sale
                   </p>
+                  <p className="text-xs text-slate-500">No pressure. No obligation.</p>
                   <h2 className="text-2xl font-semibold text-slate-900">Share your details</h2>
                   <p className="text-sm text-slate-600">
                     We’ll review everything and reach out with the best next steps.
@@ -499,36 +523,14 @@ export default function RecommendedPage() {
           </div>
         </section>
 
-        <section className="bg-slate-50 py-12 sm:py-16">
+        <section className="bg-white pb-12">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-              <div className="flex flex-col gap-6 sm:flex-row">
-                {featuredTeam.map((member) => (
-                  <div key={member.name} className="flex flex-col items-center gap-4 sm:items-start">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="h-44 w-44 rounded-3xl object-cover shadow-lg"
-                      loading="lazy"
-                    />
-                    <div className="text-center sm:text-left">
-                      <h3 className="text-xl font-semibold text-slate-900">{member.name}</h3>
-                      <p className="text-sm font-semibold text-emerald-700">Sales Representative</p>
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500">HomeLife Optimum Realty</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-4 text-slate-700">
-                <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Who we are</h2>
-                <p className="text-base">
-                  Matthew and Landon Mulhall lead Finally Home Agents and NorthSide GTA. We live and work in the communities north of Toronto, helping sellers
-                  move confidently with a blend of local insight and modern marketing.
-                </p>
-                <p className="text-base">
-                  Expect direct access to us, honest pricing advice, and a clear plan built around your goals and timeline.
-                </p>
-              </div>
+            <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-600/80">
+              {TOWN_OPTIONS.map((town) => (
+                <span key={town} className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                  {town}
+                </span>
+              ))}
             </div>
           </div>
         </section>
@@ -557,13 +559,16 @@ export default function RecommendedPage() {
         <section className="bg-slate-50 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600/80">
+                Here’s what you can expect
+              </p>
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900">What happens next</h2>
               <ul className="space-y-3 text-base text-slate-700">
                 {[
-                  "Confirm receipt the same day (often within the hour).",
-                  "Review your property details and timeline.",
-                  "Schedule a call or visit to discuss strategy.",
-                  "Create a custom plan for pricing, prep, and launch.",
+                  "We confirm your form submission (same day — often within the hour).",
+                  "We review your home and goals.",
+                  "We schedule a short call or visit.",
+                  "We build a custom plan around your timeline.",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-emerald-500" />
@@ -590,6 +595,12 @@ export default function RecommendedPage() {
             >
               Share My Details
             </a>
+          </div>
+        </section>
+        <section className="bg-white py-8">
+          <div className="mx-auto max-w-6xl px-4 text-center text-sm text-slate-600 sm:px-6 lg:px-8">
+            <p className="font-semibold text-slate-900">Matthew &amp; Landon Mulhall — Sales Representatives</p>
+            <p className="mt-1">HomeLife Optimum Realty, Brokerage</p>
           </div>
         </section>
       </main>
