@@ -6,7 +6,7 @@ import { getFormEndpoint } from "./components/contact/contactConfig";
 import SellerMediaSection from "./components/sellers/SellerMediaSection";
 import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
-import recommendedPageData from "../content/pages/recommended.md";
+import recommendedPageData from "./content/pages/recommended.md";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

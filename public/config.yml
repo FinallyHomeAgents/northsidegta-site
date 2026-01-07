@@ -194,7 +194,7 @@ collections:
     files:
       - name: 'recommended'
         label: 'Recommended Seller Page'
-        file: 'content/pages/recommended.md'
+        file: 'src/content/pages/recommended.md'
         extension: 'md'
         format: 'frontmatter'
         fields:
