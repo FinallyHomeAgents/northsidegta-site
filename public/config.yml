@@ -181,13 +181,13 @@ collections:
                 field:
                   name: 'url'
                   label: 'URL'
-              - name: 'areaServed'
-                label: 'Areas Served'
-                widget: 'list'
-                required: false
-                field:
-                  name: 'area'
-                  label: 'Area'
+          - name: 'areaServed'
+            label: 'Areas Served'
+            widget: 'list'
+            required: false
+            field:
+              name: 'area'
+              label: 'Area'
 
   - name: 'communityPlaces'
     label: 'Community Places'
@@ -534,6 +534,14 @@ collections:
             hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
             media_folder: '/public/uploads'
             public_folder: '/uploads'
+
+      - label: 'Recommended Page SEO'
+        name: 'recommended_page'
+        file: 'src/content/pages/recommended.md'
+        fields:
+          - { name: 'seoTitle', label: 'SEO Title', widget: 'string' }
+          - { name: 'seoDescription', label: 'SEO Description', widget: 'text' }
+          - { name: 'seoImage', label: 'SEO Image', widget: 'image', required: false }
 
       - label: 'Community Page SEO'
         name: 'community'

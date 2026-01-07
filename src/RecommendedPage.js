@@ -6,6 +6,7 @@ import { getFormEndpoint } from "./components/contact/contactConfig";
 import SellerMediaSection from "./components/sellers/SellerMediaSection";
 import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
+import recommendedPageData from "./content/pages/recommended.md";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -385,24 +386,34 @@ function SellerIntakeForm() {
 
 export default function RecommendedPage() {
   const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
+  const pageMeta = recommendedPageData?.attributes || recommendedPageData || {};
+  const metaTitle =
+    pageMeta.seoTitle ||
+    pageMeta.title ||
+    "Sell Your Home in the NorthSide GTA — Start Here";
+  const metaDescription =
+    pageMeta.seoDescription ||
+    pageMeta.description ||
+    "Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA.";
+  const metaOgImage =
+    pageMeta.seoImage || pageMeta.ogImage || "/Images/og-home.jpg";
 
   return (
     <>
       <Helmet>
-        <title>Sell Your Home in the NorthSide GTA — Start Here</title>
-        <meta
-          name="description"
-          content="Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA."
-        />
-        <meta property="og:title" content="Sell Your Home in the NorthSide GTA — Start Here" />
-        <meta
-          property="og:description"
-          content="Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA."
-        />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.northsidegta.ca/recommended" />
-        <meta property="og:image" content="/Images/og-home.jpg" />
-        <meta property="og:image:alt" content="NorthSide GTA map with service areas" />
+        {metaOgImage && <meta property="og:image" content={metaOgImage} />}
+        {metaOgImage && (
+          <meta
+            property="og:image:alt"
+            content="NorthSide GTA map with service areas"
+          />
+        )}
         <link rel="canonical" href="https://www.northsidegta.ca/recommended" />
       </Helmet>
 
