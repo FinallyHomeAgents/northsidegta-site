@@ -22,6 +22,7 @@ import InsightPage      from "./insights/InsightPage";
 import MediaPage        from "./MediaPage";
 import InsightsPage     from "./InsightsPage";
 import ReferralPartnersPage from "./ReferralPartnersPage";
+import RecommendedPage from "./RecommendedPage";
 import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
@@ -98,6 +99,7 @@ function App() {
           <Route path="/insights/:slug" element={<InsightPage />} />
           <Route path="/media"        element={<MediaPage />} />
           <Route path="/referral-partners" element={<ReferralPartnersPage />} />
+          <Route path="/recommended" element={<RecommendedPage />} />
           <Route path="/northside-pass-preview" element={<OptionFivePage />} />
           <Route path="/northside-pass-preview-v2" element={<NorthsidePassPreviewV2Page />} />
           <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />
