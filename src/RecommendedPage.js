@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
 import { getFormEndpoint } from "./components/contact/contactConfig";
 import { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
+import teamMembers from "./data/teamMembers";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -39,6 +40,20 @@ const TIMELINE_OPTIONS = [
   "Just browsing",
 ];
 
+const PROPERTY_TYPES = [
+  "Detached",
+  "Townhome",
+  "Condo",
+  "Rural property",
+  "Not sure yet",
+];
+
+const READINESS_OPTIONS = [
+  "Pre-approved",
+  "Need a lender referral",
+  "Exploring options",
+];
+
 const INITIAL_FORM = {
   name: "",
   phone: "",
@@ -46,6 +61,8 @@ const INITIAL_FORM = {
   town: "",
   intent: "Buying",
   timeline: "",
+  propertyType: "",
+  readiness: "",
   notes: "",
   honeypot: "",
 };
@@ -122,6 +139,8 @@ function RecommendedLeadForm() {
       if (form.town) payload.append("town", form.town);
       if (form.intent) payload.append("intent", form.intent);
       if (form.timeline) payload.append("timeline", form.timeline);
+      if (form.propertyType) payload.append("property_type", form.propertyType);
+      if (form.readiness) payload.append("readiness", form.readiness);
       if (form.notes.trim()) payload.append("notes", form.notes.trim());
 
       if (typeof window !== "undefined") {
@@ -157,9 +176,15 @@ function RecommendedLeadForm() {
     return (
       <div className="space-y-6 transition-all duration-700">
         <div className="rounded-3xl border border-emerald-200 bg-emerald-50/80 p-8 text-emerald-900 shadow-lg shadow-emerald-100/60">
-          <h3 className="text-2xl font-semibold">Thanks — your details are in.</h3>
+          <div className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-700/80">
+            Step 2 complete
+          </div>
+          <h3 className="mt-2 text-2xl font-semibold">Thanks — your details are in.</h3>
           <p className="mt-3 text-emerald-800">
             We’ll review and follow up shortly to confirm a time to talk.
+          </p>
+          <p className="mt-3 text-sm text-emerald-700">
+            Step 3 is up next: a quick call to tailor your plan.
           </p>
         </div>
         <button
@@ -281,6 +306,53 @@ function RecommendedLeadForm() {
         </div>
       </fieldset>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-slate-700" htmlFor="propertyType">
+            Property Type
+          </label>
+          <select
+            id="propertyType"
+            name="propertyType"
+            value={form.propertyType}
+            onChange={updateField}
+            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">Select a property type</option>
+            {PROPERTY_TYPES.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <fieldset>
+          <legend className="text-sm font-medium text-slate-700">Readiness</legend>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {READINESS_OPTIONS.map((option) => (
+              <label
+                key={option}
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${
+                  form.readiness === option
+                    ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                    : "border-slate-200 text-slate-600 hover:border-emerald-300"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="readiness"
+                  value={option}
+                  checked={form.readiness === option}
+                  onChange={updateField}
+                  className="h-4 w-4"
+                />
+                <span>{option}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
       <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="timeline">
           Timeline
@@ -340,6 +412,7 @@ function RecommendedLeadForm() {
 
 export default function RecommendedPage() {
   const reviews = useMemo(() => GOOGLE_REVIEWS.slice(0, 4), []);
+  const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
 
   return (
     <>
@@ -375,24 +448,39 @@ export default function RecommendedPage() {
           />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_60%)]" aria-hidden />
           <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+            <div className="mb-8 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100">
+              Start Here • Step 1 of 3
+            </div>
             <div className="grid gap-10 lg:min-h-[80vh] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
               <div className="space-y-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100/80">
-                  Recommended by Facebook
+                  Start Here
                 </p>
                 <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                  NorthSide GTA real estate advice you can trust.
+                  Start here for NorthSide GTA real estate guidance.
                 </h1>
                 <p className="text-lg text-emerald-100/90 sm:text-xl">
-                  If you were tagged in a Facebook thread, you’re in the right place. We help buyers and sellers across Uxbridge, Stouffville, Georgina,
-                  Newmarket, Aurora, and the broader NorthSide GTA.
+                  Whether you were referred in a group chat or are exploring on your own, we’ll match you with the right plan for Uxbridge, Stouffville,
+                  Georgina, Newmarket, Aurora, and the NorthSide GTA.
                 </p>
                 <p className="text-base text-emerald-100/80">
                   Trusted local specialists with concierge-level care and rapid response.
                 </p>
                 <p className="text-sm font-medium uppercase tracking-[0.3em] text-emerald-200/80">
-                  We’ll reply quickly and guide you step-by-step.
+                  Step 1: Share the essentials. Step 2: Tell us more. Step 3: Get a plan.
                 </p>
+                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200/80">
+                    Towns we cover
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-sm text-emerald-100">
+                    {TOWN_OPTIONS.slice(0, -1).map((town) => (
+                      <span key={town} className="rounded-full border border-white/20 bg-white/5 px-3 py-1">
+                        {town}
+                      </span>
+                    ))}
+                  </div>
+                </div>
                 <div className="rounded-2xl bg-white/10 p-4 sm:p-5 lg:bg-white/15">
                   <div className="flex flex-col gap-3 text-sm text-emerald-100 sm:flex-row sm:flex-wrap">
                     <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-2">
@@ -420,9 +508,16 @@ export default function RecommendedPage() {
                 className="rounded-[32px] border border-emerald-100 bg-white p-6 text-slate-900 shadow-2xl shadow-emerald-900/20 sm:p-8"
               >
                 <div className="space-y-3">
+                  <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                    Step 2 • Tell us about you
+                    <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                  </div>
                   <h3 className="text-2xl font-semibold">Get connected fast</h3>
                   <p className="text-sm text-slate-600">
                     Share a few details and we’ll follow up with the right next steps.
+                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">
+                    Matthew &amp; Landon Mulhall, Sales Representatives • HomeLife Optimum Realty, Brokerage
                   </p>
                 </div>
                 <div className="mt-6">
@@ -431,10 +526,67 @@ export default function RecommendedPage() {
                 <p className="mt-6 text-xs text-slate-500">
                   Your information is confidential and never shared.
                 </p>
-                <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-slate-400">
-                  Matthew &amp; Landon Mulhall • HomeLife Optimum Realty
-                </p>
+                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                  <p className="font-semibold text-slate-800">Step 2 isn’t the end.</p>
+                  <p className="mt-2">
+                    After you submit, we’ll confirm the best time for a quick intro and send a tailored next-step plan.
+                  </p>
+                </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-6 rounded-[32px] border border-emerald-100 bg-emerald-50/40 p-6 text-slate-900 shadow-lg shadow-emerald-100/60 sm:grid-cols-3">
+              {[
+                {
+                  step: "Step 1",
+                  title: "Start Here",
+                  detail: "Know the towns we serve and what to expect.",
+                },
+                {
+                  step: "Step 2",
+                  title: "Share Details",
+                  detail: "Tell us about your goals, property, and timing.",
+                },
+                {
+                  step: "Step 3",
+                  title: "Get a Plan",
+                  detail: "We review and book a quick call to align next steps.",
+                },
+              ].map((item) => (
+                <div key={item.title} className="space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                    {item.step}
+                  </p>
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
+                  <p className="text-sm text-slate-600">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {featuredTeam.map((member) => (
+                <article
+                  key={member.name}
+                  className="flex flex-col gap-6 rounded-[28px] border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60 sm:flex-row sm:items-center"
+                >
+                  <div className="flex-shrink-0">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="h-28 w-28 rounded-2xl object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-semibold text-slate-900">{member.name}</h3>
+                    <p className="text-sm font-semibold text-emerald-700">{member.title}</p>
+                    <p className="text-sm text-slate-600">{member.awards}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
