@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import ReviewsCarousel from "./components/contact/ReviewsCarousel";
@@ -18,58 +17,39 @@ const TOWN_OPTIONS = [
   "Newmarket",
   "Aurora",
   "Scugog",
-  "Other",
 ];
 
-const TOWN_LINKS = [
-  { label: "Uxbridge", slug: "uxbridge" },
-  { label: "Stouffville", slug: "stouffville" },
-  { label: "Georgina", slug: "georgina" },
-  { label: "East Gwillimbury", slug: "east-gwillimbury" },
-  { label: "Newmarket", slug: "newmarket" },
-  { label: "Aurora", slug: "aurora" },
-  { label: "Scugog", slug: "scugog" },
-];
-
-const INTENT_OPTIONS = ["Buying", "Selling", "Exploring"];
-
+const PROPERTY_TYPES = ["Detached", "Semi", "Town", "Condo", "Rural"];
+const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5+"];
+const BATHROOM_OPTIONS = ["1", "2", "3", "4+"];
+const CONDITION_OPTIONS = ["Updated", "Good", "Needs work"];
 const TIMELINE_OPTIONS = [
   "ASAP",
   "0–3 months",
   "3–6 months",
-  "Just browsing",
+  "6+ months",
+  "Just exploring",
 ];
-
-const PROPERTY_TYPES = [
-  "Detached",
-  "Townhome",
-  "Condo",
-  "Rural property",
-  "Not sure yet",
-];
-
-const READINESS_OPTIONS = [
-  "Pre-approved",
-  "Need a lender referral",
-  "Exploring options",
-];
+const AGENT_MEETING_OPTIONS = ["Yes", "No"];
 
 const INITIAL_FORM = {
   name: "",
   phone: "",
   email: "",
-  town: "",
-  intent: "Buying",
-  timeline: "",
+  address: "",
   propertyType: "",
-  readiness: "",
+  bedrooms: "",
+  bathrooms: "",
+  condition: "",
+  timeline: "",
+  metAgents: "",
   notes: "",
   honeypot: "",
 };
 
 const phoneOk = (value) => value.replace(/\D/g, "").length >= 10;
 
-function RecommendedLeadForm() {
+function SellerIntakeForm() {
   const [form, setForm] = useState(() => ({ ...INITIAL_FORM }));
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -98,8 +78,11 @@ function RecommendedLeadForm() {
     } else if (!phoneOk(form.phone)) {
       errs.phone = "Enter a valid phone number.";
     }
+    if (!form.address.trim()) {
+      errs.address = "Property address is required.";
+    }
     return errs;
-  }, [form.name, form.email, form.phone]);
+  }, [form.name, form.email, form.phone, form.address]);
 
   const visibleErrors = showErrors ? validations : {};
 
@@ -129,18 +112,20 @@ function RecommendedLeadForm() {
 
     try {
       const payload = new FormData();
-      payload.append("form_name", "Recommended Lead");
-      payload.append("_subject", "Recommended Lead Submission");
+      payload.append("form_name", "Seller Intake");
+      payload.append("_subject", "Seller Intake Submission");
       payload.append("page_route", "/recommended");
-      payload.append("lead_name", form.name.trim());
-      payload.append("lead_phone", form.phone.trim());
-      payload.append("lead_email", form.email.trim());
+      payload.append("seller_name", form.name.trim());
+      payload.append("seller_phone", form.phone.trim());
+      payload.append("seller_email", form.email.trim());
       payload.append("_replyto", form.email.trim());
-      if (form.town) payload.append("town", form.town);
-      if (form.intent) payload.append("intent", form.intent);
-      if (form.timeline) payload.append("timeline", form.timeline);
+      payload.append("property_address", form.address.trim());
       if (form.propertyType) payload.append("property_type", form.propertyType);
-      if (form.readiness) payload.append("readiness", form.readiness);
+      if (form.bedrooms) payload.append("bedrooms", form.bedrooms);
+      if (form.bathrooms) payload.append("bathrooms", form.bathrooms);
+      if (form.condition) payload.append("condition", form.condition);
+      if (form.timeline) payload.append("timeline", form.timeline);
+      if (form.metAgents) payload.append("met_agents", form.metAgents);
       if (form.notes.trim()) payload.append("notes", form.notes.trim());
 
       if (typeof window !== "undefined") {
@@ -174,29 +159,19 @@ function RecommendedLeadForm() {
 
   if (success) {
     return (
-      <div className="space-y-6 transition-all duration-700">
+      <div className="space-y-6">
         <div className="rounded-3xl border border-emerald-200 bg-emerald-50/80 p-8 text-emerald-900 shadow-lg shadow-emerald-100/60">
-          <div className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-700/80">
-            Step 2 complete
-          </div>
-          <h3 className="mt-2 text-2xl font-semibold">Thanks — your details are in.</h3>
+          <h3 className="text-2xl font-semibold">Thanks — your details are in.</h3>
           <p className="mt-3 text-emerald-800">
             We’ll review and follow up shortly to confirm a time to talk.
           </p>
-          <p className="mt-3 text-sm text-emerald-700">
-            Step 3 is up next: a quick call to tailor your plan.
-          </p>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setSuccess(false);
-            resetForm();
-          }}
+        <a
+          href="#leadForm"
           className="inline-flex items-center justify-center rounded-2xl border border-emerald-200 bg-white px-5 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-800"
         >
-          Submit another request
-        </button>
+          Back to the top
+        </a>
       </div>
     );
   }
@@ -261,50 +236,20 @@ function RecommendedLeadForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700" htmlFor="town">
-          Town
+        <label className="block text-sm font-medium text-slate-700" htmlFor="address">
+          Property Address<span className="text-rose-500">*</span>
         </label>
-        <select
-          id="town"
-          name="town"
-          value={form.town}
+        <input
+          id="address"
+          name="address"
+          value={form.address}
           onChange={updateField}
-          className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        >
-          <option value="">Select a town</option>
-          {TOWN_OPTIONS.map((town) => (
-            <option key={town} value={town}>
-              {town}
-            </option>
-          ))}
-        </select>
+          className="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        />
+        {visibleErrors.address && (
+          <p className="mt-1 text-xs text-rose-600">{visibleErrors.address}</p>
+        )}
       </div>
-
-      <fieldset>
-        <legend className="text-sm font-medium text-slate-700">Buying / Selling / Exploring</legend>
-        <div className="mt-3 flex flex-wrap gap-3">
-          {INTENT_OPTIONS.map((option) => (
-            <label
-              key={option}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
-                form.intent === option
-                  ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                  : "border-slate-200 text-slate-600 hover:border-emerald-300"
-              }`}
-            >
-              <input
-                type="radio"
-                name="intent"
-                value={option}
-                checked={form.intent === option}
-                onChange={updateField}
-                className="h-4 w-4"
-              />
-              <span>{option}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -318,7 +263,7 @@ function RecommendedLeadForm() {
             onChange={updateField}
             className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
-            <option value="">Select a property type</option>
+            <option value="">Select property type</option>
             {PROPERTY_TYPES.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -326,23 +271,105 @@ function RecommendedLeadForm() {
             ))}
           </select>
         </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700" htmlFor="condition">
+            Condition
+          </label>
+          <select
+            id="condition"
+            name="condition"
+            value={form.condition}
+            onChange={updateField}
+            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">Select condition</option>
+            {CONDITION_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-slate-700" htmlFor="bedrooms">
+            Bedrooms
+          </label>
+          <select
+            id="bedrooms"
+            name="bedrooms"
+            value={form.bedrooms}
+            onChange={updateField}
+            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">Select bedrooms</option>
+            {BEDROOM_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700" htmlFor="bathrooms">
+            Bathrooms
+          </label>
+          <select
+            id="bathrooms"
+            name="bathrooms"
+            value={form.bathrooms}
+            onChange={updateField}
+            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">Select bathrooms</option>
+            {BATHROOM_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium text-slate-700" htmlFor="timeline">
+            Timeline
+          </label>
+          <select
+            id="timeline"
+            name="timeline"
+            value={form.timeline}
+            onChange={updateField}
+            className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">Select timeline</option>
+            {TIMELINE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
         <fieldset>
-          <legend className="text-sm font-medium text-slate-700">Readiness</legend>
+          <legend className="text-sm font-medium text-slate-700">Have you met any agents yet?</legend>
           <div className="mt-3 flex flex-wrap gap-3">
-            {READINESS_OPTIONS.map((option) => (
+            {AGENT_MEETING_OPTIONS.map((option) => (
               <label
                 key={option}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${
-                  form.readiness === option
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+                  form.metAgents === option
                     ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                     : "border-slate-200 text-slate-600 hover:border-emerald-300"
                 }`}
               >
                 <input
                   type="radio"
-                  name="readiness"
+                  name="metAgents"
                   value={option}
-                  checked={form.readiness === option}
+                  checked={form.metAgents === option}
                   onChange={updateField}
                   className="h-4 w-4"
                 />
@@ -354,28 +381,8 @@ function RecommendedLeadForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700" htmlFor="timeline">
-          Timeline
-        </label>
-        <select
-          id="timeline"
-          name="timeline"
-          value={form.timeline}
-          onChange={updateField}
-          className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        >
-          <option value="">Select timeline</option>
-          {TIMELINE_OPTIONS.map((timeline) => (
-            <option key={timeline} value={timeline}>
-              {timeline}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="notes">
-          Tell us anything else (optional)
+          Anything else? (optional)
         </label>
         <textarea
           id="notes"
@@ -403,8 +410,11 @@ function RecommendedLeadForm() {
           disabled={submitting}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus-visible:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
         >
-          {submitting ? "Sending…" : "Send My Details"}
+          {submitting ? "Sending…" : "Share My Details"}
         </button>
+        <p className="mt-3 text-xs text-slate-500">
+          Your information is confidential and never shared.
+        </p>
       </div>
     </form>
   );
@@ -417,18 +427,15 @@ export default function RecommendedPage() {
   return (
     <>
       <Helmet>
-        <title>Recommended Realtor in Uxbridge, Stouffville, Georgina & the NorthSide GTA</title>
+        <title>Sell Your Home in the NorthSide GTA — Start Here</title>
         <meta
           name="description"
-          content="Tagged in a Facebook thread? Connect with Matthew & Landon Mulhall — trusted NorthSide GTA Sales Representatives serving Uxbridge, Stouffville, Georgina, Newmarket, Aurora and more."
+          content="Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA."
         />
-        <meta
-          property="og:title"
-          content="Recommended Realtor in Uxbridge, Stouffville, Georgina & the NorthSide GTA"
-        />
+        <meta property="og:title" content="Sell Your Home in the NorthSide GTA — Start Here" />
         <meta
           property="og:description"
-          content="Tagged in a Facebook thread? Connect with Matthew & Landon Mulhall — trusted NorthSide GTA Sales Representatives serving Uxbridge, Stouffville, Georgina, Newmarket, Aurora and more."
+          content="Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.northsidegta.ca/recommended" />
@@ -440,175 +447,109 @@ export default function RecommendedPage() {
       <HeaderShell />
 
       <main className="bg-white text-slate-900">
-        <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-emerald-950 to-emerald-700 text-white">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-soft-light"
-            style={{ backgroundImage: "url('/Images/northsidegta-map-bg.jpg')" }}
-            aria-hidden
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_60%)]" aria-hidden />
-          <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-            <div className="mb-8 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100">
-              Start Here • Step 1 of 3
-            </div>
-            <div className="grid gap-10 lg:min-h-[80vh] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
+        <section className="bg-white">
+          <div className="mx-auto max-w-6xl px-4 pb-12 pt-16 sm:px-6 lg:px-8 lg:pt-20">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
               <div className="space-y-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100/80">
-                  Start Here
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-600/80">
+                  Start Your Home Sale
                 </p>
-                <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                  Start here for NorthSide GTA real estate guidance.
+                <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                  Start your home sale with a local NorthSide GTA team.
                 </h1>
-                <p className="text-lg text-emerald-100/90 sm:text-xl">
-                  Whether you were referred in a group chat or are exploring on your own, we’ll match you with the right plan for Uxbridge, Stouffville,
-                  Georgina, Newmarket, Aurora, and the NorthSide GTA.
+                <h3 className="text-xl font-semibold text-slate-700 sm:text-2xl">
+                  Pricing, prep, and a clear plan — built around your timeline.
+                </h3>
+                <p className="text-sm text-slate-500">
+                  We reply fast and guide you through every step.
                 </p>
-                <p className="text-base text-emerald-100/80">
-                  Trusted local specialists with concierge-level care and rapid response.
+                <p className="text-sm text-slate-500">
+                  Serving Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, Scugog, and the wider NorthSide GTA.
                 </p>
-                <p className="text-sm font-medium uppercase tracking-[0.3em] text-emerald-200/80">
-                  Step 1: Share the essentials. Step 2: Tell us more. Step 3: Get a plan.
-                </p>
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200/80">
-                    Towns we cover
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2 text-sm text-emerald-100">
-                    {TOWN_OPTIONS.slice(0, -1).map((town) => (
-                      <span key={town} className="rounded-full border border-white/20 bg-white/5 px-3 py-1">
-                        {town}
-                      </span>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-600/80">
+                  {TOWN_OPTIONS.map((town) => (
+                    <span key={town} className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                      {town}
+                    </span>
+                  ))}
                 </div>
-                <div className="rounded-2xl bg-white/10 p-4 sm:p-5 lg:bg-white/15">
-                  <div className="flex flex-col gap-3 text-sm text-emerald-100 sm:flex-row sm:flex-wrap">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-2">
-                      <span className="inline-flex items-center gap-1 text-[#FBBC05]">
-                        <StarIcon />
-                        <StarIcon />
-                        <StarIcon />
-                        <StarIcon />
-                        <StarIcon />
-                      </span>
-                      Google ★★★★★
-                    </span>
-                    <span className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-2">
-                      Serving the NorthSide GTA
-                    </span>
-                    <span className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-2">
-                      HomeLife Optimum Realty
-                    </span>
-                  </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                  <p className="font-semibold text-slate-900">
+                    Matthew &amp; Landon Mulhall — Sales Representatives
+                  </p>
+                  <p className="mt-1">HomeLife Optimum Realty, Brokerage</p>
                 </div>
               </div>
 
-              <div
-                id="leadForm"
-                className="rounded-[32px] border border-emerald-100 bg-white p-6 text-slate-900 shadow-2xl shadow-emerald-900/20 sm:p-8"
-              >
+              <div id="leadForm" className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-100/60 sm:p-8">
                 <div className="space-y-3">
-                  <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    Step 2 • Tell us about you
-                    <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-                  </div>
-                  <h3 className="text-2xl font-semibold">Get connected fast</h3>
-                  <p className="text-sm text-slate-600">
-                    Share a few details and we’ll follow up with the right next steps.
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                    Step 1: Tell Us About Your Home Sale
                   </p>
-                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">
-                    Matthew &amp; Landon Mulhall, Sales Representatives • HomeLife Optimum Realty, Brokerage
+                  <h2 className="text-2xl font-semibold text-slate-900">Share your details</h2>
+                  <p className="text-sm text-slate-600">
+                    We’ll review everything and reach out with the best next steps.
                   </p>
                 </div>
                 <div className="mt-6">
-                  <RecommendedLeadForm />
-                </div>
-                <p className="mt-6 text-xs text-slate-500">
-                  Your information is confidential and never shared.
-                </p>
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                  <p className="font-semibold text-slate-800">Step 2 isn’t the end.</p>
-                  <p className="mt-2">
-                    After you submit, we’ll confirm the best time for a quick intro and send a tailored next-step plan.
-                  </p>
+                  <SellerIntakeForm />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-white py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-6 rounded-[32px] border border-emerald-100 bg-emerald-50/40 p-6 text-slate-900 shadow-lg shadow-emerald-100/60 sm:grid-cols-3">
-              {[
-                {
-                  step: "Step 1",
-                  title: "Start Here",
-                  detail: "Know the towns we serve and what to expect.",
-                },
-                {
-                  step: "Step 2",
-                  title: "Share Details",
-                  detail: "Tell us about your goals, property, and timing.",
-                },
-                {
-                  step: "Step 3",
-                  title: "Get a Plan",
-                  detail: "We review and book a quick call to align next steps.",
-                },
-              ].map((item) => (
-                <div key={item.title} className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    {item.step}
-                  </p>
-                  <h3 className="text-xl font-semibold">{item.title}</h3>
-                  <p className="text-sm text-slate-600">{item.detail}</p>
-                </div>
-              ))}
-            </div>
-            <div className="grid gap-6 lg:grid-cols-2">
-              {featuredTeam.map((member) => (
-                <article
-                  key={member.name}
-                  className="flex flex-col gap-6 rounded-[28px] border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60 sm:flex-row sm:items-center"
-                >
-                  <div className="flex-shrink-0">
+        <section className="bg-slate-50 py-12 sm:py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+              <div className="flex flex-col gap-6 sm:flex-row">
+                {featuredTeam.map((member) => (
+                  <div key={member.name} className="flex flex-col items-center gap-4 sm:items-start">
                     <img
                       src={member.image}
                       alt={member.name}
-                      className="h-28 w-28 rounded-2xl object-cover"
+                      className="h-44 w-44 rounded-3xl object-cover shadow-lg"
                       loading="lazy"
                     />
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-xl font-semibold text-slate-900">{member.name}</h3>
+                      <p className="text-sm font-semibold text-emerald-700">Sales Representative</p>
+                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500">HomeLife Optimum Realty</p>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-semibold text-slate-900">{member.name}</h3>
-                    <p className="text-sm font-semibold text-emerald-700">{member.title}</p>
-                    <p className="text-sm text-slate-600">{member.awards}</p>
-                  </div>
-                </article>
-              ))}
+                ))}
+              </div>
+              <div className="space-y-4 text-slate-700">
+                <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Who we are</h2>
+                <p className="text-base">
+                  Matthew and Landon Mulhall lead Finally Home Agents and NorthSide GTA. We live and work in the communities north of Toronto, helping sellers
+                  move confidently with a blend of local insight and modern marketing.
+                </p>
+                <p className="text-base">
+                  Expect direct access to us, honest pricing advice, and a clear plan built around your goals and timeline.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         <section className="bg-white py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4">
-              <h3 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                Local expertise without the local limits
-              </h3>
-              <ul className="space-y-3 text-base text-slate-700">
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">Why sellers choose us</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
                 {[
-                  "Born-and-raised NorthSide GTA knowledge paired with modern market data.",
-                  "Personalized guidance for buyers, sellers, and those just exploring.",
-                  "Trusted by Facebook communities for clear, human answers.",
+                  "Local expertise with region-wide reach.",
+                  "Professional staging and standout media.",
+                  "Smart pricing strategy and clear process.",
+                  "Personal representation with no hand-offs.",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
+                  <div key={item} className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                     <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                    <span>{item}</span>
-                  </li>
+                    <span className="text-sm text-slate-700">{item}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -616,109 +557,44 @@ export default function RecommendedPage() {
         <section className="bg-slate-50 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4">
-              <h3 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Where we work</h3>
-              <p className="text-base text-slate-600 sm:max-w-3xl">
-                We focus on the NorthSide GTA towns you see in Facebook recommendations, plus nearby neighbourhoods and rural pockets.
-              </p>
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">What happens next</h2>
+              <ul className="space-y-3 text-base text-slate-700">
+                {[
+                  "Confirm receipt the same day (often within the hour).",
+                  "Review your property details and timeline.",
+                  "Schedule a call or visit to discuss strategy.",
+                  "Create a custom plan for pricing, prep, and launch.",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-emerald-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {TOWN_LINKS.map((town) => (
-                <Link
-                  key={town.slug}
-                  to={`/${town.slug}`}
-                  className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50"
-                >
-                  {town.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-8 space-y-3 text-center sm:text-left">
-              <h3 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">What clients say</h3>
-              <p className="text-base text-slate-600">A handful of recent reviews from NorthSide GTA clients.</p>
-            </div>
-            <ReviewsCarousel reviews={reviews} disclaimer="Verified client reviews" />
-          </div>
-        </section>
-
-        <section className="bg-white py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="space-y-4">
-              <h3 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">How we work</h3>
-              <p className="text-base text-slate-600 sm:max-w-3xl">
-                Clear steps, quick follow-up, and no pressure — just answers that help you decide what’s next.
-              </p>
-            </div>
-            <div className="mt-8 grid gap-6 lg:grid-cols-3">
-              {[
-                {
-                  title: "Listen first",
-                  detail: "We start by learning your goals, timeline, and what prompted the recommendation.",
-                },
-                {
-                  title: "Share a plan",
-                  detail: "We map out options across towns, pricing, and next steps tailored to you.",
-                },
-                {
-                  title: "Stay available",
-                  detail: "You get direct access to Matthew or Landon for follow-ups and updates.",
-                },
-              ].map((item) => (
-                <article
-                  key={item.title}
-                  className="rounded-[28px] border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60"
-                >
-                  <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
-                  <p className="mt-3 text-sm text-slate-600">{item.detail}</p>
-                </article>
-              ))}
+            <div className="mt-10">
+              <ReviewsCarousel reviews={reviews} disclaimer="Verified client reviews" />
             </div>
           </div>
         </section>
 
         <section className="bg-emerald-950 py-14 text-white">
           <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 text-center sm:px-6 lg:px-8">
-            <h3 className="text-3xl font-semibold tracking-tight sm:text-4xl">Ready for a quick intro call?</h3>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Ready to start?</h2>
             <p className="text-base text-emerald-100/90">
-              We’ll confirm timing, answer any questions, and point you in the right direction.
+              Tell us about your property and we’ll take it from there.
             </p>
             <a
               href="#leadForm"
               className="inline-flex items-center justify-center rounded-full bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
             >
-              Send My Details
+              Share My Details
             </a>
-          </div>
-        </section>
-
-        <section className="bg-slate-50 py-10">
-          <div className="mx-auto max-w-6xl px-4 text-center text-sm text-slate-600 sm:px-6 lg:px-8">
-            <p className="font-semibold text-slate-900">
-              Finally Home Agents, a NorthSide GTA brand
-            </p>
-            <p className="mt-2">Matthew &amp; Landon Mulhall, Sales Representatives</p>
-            <p className="mt-1">HomeLife Optimum Realty, Brokerage</p>
           </div>
         </section>
       </main>
 
       <Footer />
     </>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      className="h-4 w-4 fill-current"
-    >
-      <path d="M10 1.6l2.5 5.06 5.58.81-4.04 3.94.95 5.55L10 14.6l-4.99 2.36.95-5.55L1.92 7.47l5.58-.81L10 1.6z" />
-    </svg>
   );
 }
