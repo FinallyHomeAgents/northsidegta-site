@@ -181,13 +181,26 @@ collections:
                 field:
                   name: 'url'
                   label: 'URL'
-              - name: 'areaServed'
-                label: 'Areas Served'
-                widget: 'list'
-                required: false
-                field:
-                  name: 'area'
-                  label: 'Area'
+          - name: 'areaServed'
+            label: 'Areas Served'
+            widget: 'list'
+            required: false
+            field:
+              name: 'area'
+              label: 'Area'
+
+  - name: 'pages'
+    label: 'Pages'
+    files:
+      - name: 'recommended'
+        label: 'Recommended Seller Page'
+        file: 'content/pages/recommended.md'
+        extension: 'md'
+        format: 'frontmatter'
+        fields:
+          - { label: 'Page Title', name: 'title', widget: 'string', default: 'Start Your Home Sale | NorthSide GTA' }
+          - { label: 'Meta Description', name: 'description', widget: 'text', default: 'Start your home sale with Matthew & Landon Mulhall — Sales Representatives helping sellers in Uxbridge, Stouffville, Georgina, Newmarket, Aurora and the wider NorthSide GTA.' }
+          - { label: 'OG Image', name: 'ogImage', widget: 'image', allow_multiple: false, required: false }
 
   - name: 'communityPlaces'
     label: 'Community Places'
