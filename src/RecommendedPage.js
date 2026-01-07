@@ -388,11 +388,15 @@ export default function RecommendedPage() {
   const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
   const pageMeta = recommendedPageData?.attributes || recommendedPageData || {};
   const metaTitle =
-    pageMeta.title || "Sell Your Home in the NorthSide GTA — Start Here";
+    pageMeta.seoTitle ||
+    pageMeta.title ||
+    "Sell Your Home in the NorthSide GTA — Start Here";
   const metaDescription =
+    pageMeta.seoDescription ||
     pageMeta.description ||
     "Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA.";
-  const metaOgImage = pageMeta.ogImage || "/Images/og-home.jpg";
+  const metaOgImage =
+    pageMeta.seoImage || pageMeta.ogImage || "/Images/og-home.jpg";
 
   return (
     <>
