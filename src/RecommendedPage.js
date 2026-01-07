@@ -8,6 +8,11 @@ import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
 import recommendedPageData from "./content/pages/recommended.md";
 
+const { seoTitle, seoDescription, seoImage } =
+  (recommendedPageData && recommendedPageData.attributes) ||
+  recommendedPageData.frontmatter ||
+  {};
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const PROPERTY_TYPES = ["Detached", "Semi", "Town", "Condo", "Rural"];
@@ -386,35 +391,36 @@ function SellerIntakeForm() {
 
 export default function RecommendedPage() {
   const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
-  const pageMeta = recommendedPageData?.attributes || recommendedPageData || {};
-  const metaTitle =
-    pageMeta.seoTitle ||
-    pageMeta.title ||
-    "Sell Your Home in the NorthSide GTA — Start Here";
-  const metaDescription =
-    pageMeta.seoDescription ||
-    pageMeta.description ||
-    "Start your home sale with Matthew & Landon Mulhall — Sales Representatives serving Uxbridge, Stouffville, Newmarket, Aurora, Georgina, and the entire NorthSide GTA.";
-  const metaOgImage =
-    pageMeta.seoImage || pageMeta.ogImage || "/Images/og-home.jpg";
+  const defaultTitle =
+    "Sell Your Home in the NorthSide GTA | Start with a Local Plan";
+  const defaultDescription =
+    "Start your home sale with Matthew & Landon Mulhall, Sales Representatives at HomeLife Optimum Realty, Brokerage. Complimentary listing prep consult, clear plan, and local NorthSide GTA expertise.";
 
   return (
     <>
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
+        <title>{seoTitle || defaultTitle}</title>
+        <meta name="description" content={seoDescription || defaultDescription} />
+
+        <meta property="og:title" content={seoTitle || defaultTitle} />
+        <meta
+          property="og:description"
+          content={seoDescription || defaultDescription}
+        />
+        {seoImage && <meta property="og:image" content={seoImage} />}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/recommended" />
-        {metaOgImage && <meta property="og:image" content={metaOgImage} />}
-        {metaOgImage && (
-          <meta
-            property="og:image:alt"
-            content="NorthSide GTA map with service areas"
-          />
-        )}
-        <link rel="canonical" href="https://www.northsidegta.ca/recommended" />
+        <meta property="og:url" content="https://northsidegta.ca/recommended" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle || defaultTitle} />
+        <meta
+          name="twitter:description"
+          content={seoDescription || defaultDescription}
+        />
+        {seoImage && <meta name="twitter:image" content={seoImage} />}
+        <link rel="canonical" href="https://northsidegta.ca/recommended" />
       </Helmet>
 
       <HeaderShell />
