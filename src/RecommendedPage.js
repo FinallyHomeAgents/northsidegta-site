@@ -372,6 +372,12 @@ function SellerIntakeForm() {
         <p className="mt-3 text-xs text-slate-500">
           Your information is confidential and never shared.
         </p>
+        <p className="mt-2 text-xs text-slate-500">
+          Your home deserves a smart launch, not a rushed listing.
+        </p>
+        <p className="mt-2 text-xs text-slate-500">
+          Prefer to chat now? Call or text 647-668-4646
+        </p>
       </div>
     </form>
   );
@@ -484,6 +490,9 @@ export default function RecommendedPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
                     Step 1: Tell us about your home sale
                   </p>
+                  <p className="text-xs text-slate-500">
+                    Complimentary listing preparation consult included.
+                  </p>
                   <p className="text-xs text-slate-500">No pressure. No obligation.</p>
                   <h2 className="text-2xl font-semibold text-slate-900">
                     Tell us about your home — and we’ll start building your plan.
@@ -538,13 +547,13 @@ export default function RecommendedPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600/80">
                 Here’s what you can expect
               </p>
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">What happens next</h2>
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">What Happens Next</h2>
               <ul className="space-y-3 text-base text-slate-700">
                 {[
-                  "We confirm your form submission (same day — often within the hour).",
-                  "We review your home and goals.",
-                  "We schedule a short call or visit.",
-                  "We build a custom plan around your timeline.",
+                  "We confirm your form.",
+                  "We review your details.",
+                  "We connect by phone or visit.",
+                  "We build a listing plan tailored to your timing.",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-emerald-500" />
