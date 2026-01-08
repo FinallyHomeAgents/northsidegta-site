@@ -84,6 +84,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/recommended",
+    meta: {
+      route: "/recommended",
+      documentTitle: "Sell Your Home in the NorthSide GTA | Start with a Local Plan",
+      title: "Sell Your Home in the NorthSide GTA | Start with a Local Plan",
+      description:
+        "Start your home sale with Matthew & Landon Mulhall, Sales Representatives at HomeLife Optimum Realty. Complimentary listing prep consult, clear plan, and local NorthSide GTA expertise.",
+      canonicalUrl: "https://northsidegta.ca/recommended",
+      ogType: "website",
+      ogImage: "/uploads/og-launch-home-sale-northside-gta.webp",
+      twitterCard: "summary_large_image",
+      twitterImage: "/uploads/og-launch-home-sale-northside-gta.webp",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/community",
     meta: {
       route: "/community",

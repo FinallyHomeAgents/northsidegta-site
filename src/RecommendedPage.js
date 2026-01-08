@@ -1,17 +1,14 @@
 import React, { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
+import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import SellerMediaSection from "./components/sellers/SellerMediaSection";
 import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
-import recommendedPageData from "./content/pages/recommended.md";
 
-const { seoTitle, seoDescription, seoImage } =
-  (recommendedPageData && recommendedPageData.attributes) ||
-  recommendedPageData.frontmatter ||
-  {};
+const RECOMMENDED_ROUTE_META = getStaticRouteMeta("/recommended") || {};
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -391,37 +388,10 @@ function SellerIntakeForm() {
 
 export default function RecommendedPage() {
   const featuredTeam = useMemo(() => teamMembers.slice(0, 2), []);
-  const defaultTitle =
-    "Sell Your Home in the NorthSide GTA | Start with a Local Plan";
-  const defaultDescription =
-    "Start your home sale with Matthew & Landon Mulhall, Sales Representatives at HomeLife Optimum Realty, Brokerage. Complimentary listing prep consult, clear plan, and local NorthSide GTA expertise.";
 
   return (
     <>
-      <Helmet>
-        <title>{seoTitle || defaultTitle}</title>
-        <meta name="description" content={seoDescription || defaultDescription} />
-
-        <meta property="og:title" content={seoTitle || defaultTitle} />
-        <meta
-          property="og:description"
-          content={seoDescription || defaultDescription}
-        />
-        {seoImage && <meta property="og:image" content={seoImage} />}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://northsidegta.ca/recommended" />
-        {seoImage && <meta property="og:image:width" content="1200" />}
-        {seoImage && <meta property="og:image:height" content="630" />}
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle || defaultTitle} />
-        <meta
-          name="twitter:description"
-          content={seoDescription || defaultDescription}
-        />
-        {seoImage && <meta name="twitter:image" content={seoImage} />}
-        <link rel="canonical" href="https://northsidegta.ca/recommended" />
-      </Helmet>
+      <DynamicMetaTags {...RECOMMENDED_ROUTE_META} />
 
       <HeaderShell />
 
