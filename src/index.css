@@ -198,6 +198,19 @@ body {
   align-items: center;
 }
 
+.hero.choose-path-hero {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("https://northsidegta.ca/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg")
+      center bottom / cover no-repeat;
+}
+
+@media (max-width: 768px) {
+  .hero.choose-path-hero {
+    background-position: center 60%;
+  }
+}
+
 .insight-content .insight-inline-media img {
   width: 100%;
   height: auto;
