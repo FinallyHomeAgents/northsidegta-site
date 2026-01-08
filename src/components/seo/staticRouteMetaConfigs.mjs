@@ -100,6 +100,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/choose-your-path",
+    meta: {
+      route: "/choose-your-path",
+      documentTitle: "Choose Your Path | Finally Home Agents",
+      title: "Choose Your Path | Finally Home Agents",
+      description:
+        "A friendly, low-pressure way to start your home buying conversation — choose how you want to connect with Finally Home Agents.",
+      canonicalUrl: "https://northsidegta.ca/choose-your-path",
+      ogType: "website",
+      ogImage: "/Images/og-home.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/Images/og-home.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/community",
     meta: {
       route: "/community",
