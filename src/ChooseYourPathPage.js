@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
-import { getFormEndpoint, useContactConfig } from "./components/contact/contactConfig";
+import { getFormEndpoint } from "./components/contact/contactConfig";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
@@ -18,6 +18,16 @@ const CONNECT_OPTIONS = [
   "In-person at your home",
 ];
 
+const TOWN_OPTIONS = [
+  "Uxbridge",
+  "Georgina",
+  "Scugog",
+  "Stouffville",
+  "East Gwillimbury",
+  "Newmarket",
+  "Aurora",
+];
+
 const TIMEFRAME_OPTIONS = [
   "Just browsing",
   "0–3 months",
@@ -29,13 +39,13 @@ const TIMEFRAME_OPTIONS = [
 const TEAM_BIOS = [
   {
     name: "Matthew Mulhall",
-    title: "Sales Representative, Finally Home Agents",
-    bio: "Matthew brings a strategic, calm, and confident presence to every buyer’s journey — guiding families through pricing, offers, and timing with clear next steps and thoughtful planning.",
+    title: "Buyer Strategy & NorthSide GTA Expert",
+    bio: "Matthew brings a strategic, calm, and confident presence to every buyer’s journey. He believes buying should feel empowering, not rushed — shaped by both his professional experience and his perspective as a parent. With deep NorthSide GTA insight and a focus on clear communication, Matthew helps buyers see opportunities clearly, plan with intention, and move forward with assurance.",
   },
   {
     name: "Landon Mulhall",
-    title: "Sales Representative, Finally Home Agents",
-    bio: "Landon brings a thoughtful, people-first energy to helping buyers feel at ease, balancing neighborhood insight with a human touch that makes the process feel approachable from day one.",
+    title: "Buyer Advocate & Experience-Driven Partner",
+    bio: "Landon brings a thoughtful, people-first energy to helping buyers navigate one of the most important decisions of their lives. He’s passionate about making the process less overwhelming and more empowering. With a clear communication style that anticipates questions and explains what matters next, Landon keeps buyers informed and confident from first step to closing.",
   },
 ];
 
@@ -44,7 +54,8 @@ const INITIAL_FORM = {
   email: "",
   phone: "",
   preferredConnect: [],
-  areas: "",
+  towns: [],
+  otherTown: "",
   timeframe: "",
   honeypot: "",
 };
@@ -94,12 +105,27 @@ function ChooseYourPathForm({ selectedPath }) {
       const nextPreferences = exists
         ? prev.preferredConnect.filter((item) => item !== option)
         : [...prev.preferredConnect, option];
-      trackEvent("Preferred Contact", {
+      trackEvent("Preferred Way to Connect", {
         route: "/choose-your-path",
         option,
         selected: !exists,
       });
       return { ...prev, preferredConnect: nextPreferences };
+    });
+  };
+
+  const toggleTown = (town) => {
+    setForm((prev) => {
+      const exists = prev.towns.includes(town);
+      const nextTowns = exists
+        ? prev.towns.filter((item) => item !== town)
+        : [...prev.towns, town];
+      trackEvent("Town Selection", {
+        route: "/choose-your-path",
+        town,
+        selected: !exists,
+      });
+      return { ...prev, towns: nextTowns };
     });
   };
 
@@ -134,7 +160,8 @@ function ChooseYourPathForm({ selectedPath }) {
       if (form.preferredConnect.length > 0) {
         payload.append("preferred_way_to_connect", form.preferredConnect.join(", "));
       }
-      if (form.areas.trim()) payload.append("areas_considering", form.areas.trim());
+      if (form.towns.length > 0) payload.append("towns_interested", form.towns.join(", "));
+      if (form.otherTown.trim()) payload.append("other_town", form.otherTown.trim());
       if (form.timeframe) payload.append("timeframe_to_buy", form.timeframe);
       if (selectedPath) payload.append("chosen_path", selectedPath);
 
@@ -161,6 +188,7 @@ function ChooseYourPathForm({ selectedPath }) {
       trackEvent("Form Submit", {
         route: "/choose-your-path",
         preferred_connect: form.preferredConnect.join(", "),
+        towns: form.towns.join(", "),
       });
 
       setSuccess(true);
@@ -201,7 +229,7 @@ function ChooseYourPathForm({ selectedPath }) {
 
       <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="name">
-          Name<span className="text-rose-500">*</span>
+          Full Name<span className="text-rose-500">*</span>
         </label>
         <input
           id="name"
@@ -266,19 +294,38 @@ function ChooseYourPathForm({ selectedPath }) {
         </div>
       </fieldset>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-700" htmlFor="areas">
-          Areas you’re considering
-        </label>
-        <input
-          id="areas"
-          name="areas"
-          value={form.areas}
-          onChange={updateField}
-          placeholder="Uxbridge, Newmarket, Stouffville..."
-          className="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      <fieldset>
+        <legend className="text-sm font-medium text-slate-700">Towns you’re interested in</legend>
+        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          {TOWN_OPTIONS.map((town) => (
+            <label
+              key={town}
+              className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm"
+            >
+              <input
+                type="checkbox"
+                checked={form.towns.includes(town)}
+                onChange={() => toggleTown(town)}
+                className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+              />
+              <span>{town}</span>
+            </label>
+          ))}
+        </div>
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-slate-700" htmlFor="otherTown">
+            Other
+          </label>
+          <input
+            id="otherTown"
+            name="otherTown"
+            value={form.otherTown}
+            onChange={updateField}
+            placeholder="Tell us another town..."
+            className="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+        </div>
+      </fieldset>
 
       <div>
         <label className="block text-sm font-medium text-slate-700" htmlFor="timeframe">
@@ -328,12 +375,9 @@ function ChooseYourPathForm({ selectedPath }) {
 
 export default function ChooseYourPathPage() {
   const [selectedPath, setSelectedPath] = useState("");
-  const contactConfig = useContactConfig();
-  const schedulingUrl = contactConfig?.schedulingUrl || "/contact";
-  const schedulingIsExternal = /^https?:\/\//i.test(schedulingUrl);
 
   useEffect(() => {
-    trackEventOnce("Page View – Choose Your Path", { route: "/choose-your-path" });
+    trackEventOnce("Page View — choose-your-path", { route: "/choose-your-path" });
   }, []);
 
   const teamWithImages = useMemo(
@@ -346,13 +390,13 @@ export default function ChooseYourPathPage() {
   );
 
   const handleUsClick = () => {
-    setSelectedPath("Finally Home Agents");
-    trackEvent("Click – US CTA", { route: "/choose-your-path" });
+    setSelectedPath("Tell Us More");
+    trackEvent("Click — Tell Us More", { route: "/choose-your-path" });
   };
 
   const handleThemClick = () => {
-    setSelectedPath("Other Agent Options");
-    trackEvent("Click – THEM CTA", { route: "/choose-your-path" });
+    setSelectedPath("Start the Conversation");
+    trackEvent("Click — Start the Conversation", { route: "/choose-your-path" });
   };
 
   return (
@@ -369,7 +413,7 @@ export default function ChooseYourPathPage() {
                 Buy With Clarity. Connect With Confidence.
               </h1>
               <p className="mx-auto max-w-3xl text-base text-slate-600 sm:text-lg">
-                A friendly, low-pressure way to start your home buying conversation — choose how you want to connect.
+                Choose how you’d like to start the conversation — phone, video, coffee, or in person. No pressure.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
@@ -377,14 +421,14 @@ export default function ChooseYourPathPage() {
                   onClick={handleUsClick}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] sm:w-auto"
                 >
-                  Work with Finally Home Agents
+                  Tell Us More
                 </a>
                 <a
-                  href="#choice"
+                  href="#connect"
                   onClick={handleThemClick}
                   className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 sm:w-auto"
                 >
-                  Explore Other Agent Options
+                  Start the Conversation
                 </a>
               </div>
             </div>
@@ -394,22 +438,19 @@ export default function ChooseYourPathPage() {
         <section id="choice" className="bg-slate-50 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600/80">
-                Your Next Step
-              </p>
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                Choose the path that feels right.
+                Choose the way you’d prefer to connect.
               </h2>
             </div>
             <div className="mt-8 grid gap-6 lg:grid-cols-2">
               <div className="flex flex-col justify-between rounded-[32px] border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60">
                 <div className="space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    Us — Finally Home Agents
+                    Get to Know You First
                   </p>
                   <p className="text-base text-slate-600">
-                    Partner with a team that brings clarity, strategy, and purposeful planning to your buyer journey. We start with your goals, keep
-                    communication clear, and help you feel confident as you move forward.
+                    Start by telling us a bit about what you’re looking for — where you want to buy and what matters most to you. This helps us connect
+                    with the right context.
                   </p>
                 </div>
                 <a
@@ -417,17 +458,17 @@ export default function ChooseYourPathPage() {
                   onClick={handleUsClick}
                   className="mt-6 inline-flex items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                 >
-                  Work with Finally Home Agents
+                  Tell Us More
                 </a>
               </div>
               <div className="flex flex-col justify-between rounded-[32px] border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/70">
                 <div className="space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                    Them — Other Agent Options
+                    Start With a Conversation
                   </p>
                   <p className="text-base text-slate-600">
-                    If you prefer to explore agent options independently or at your own pace, keep going — you can decide what feels right for you
-                    without structured guidance.
+                    Prefer to begin with a chat? Choose how you’d like to connect — phone, video, coffee, or in person — and we’ll reach out to set it
+                    up. Low pressure, human, supportive.
                   </p>
                 </div>
                 <a
@@ -435,7 +476,7 @@ export default function ChooseYourPathPage() {
                   onClick={handleThemClick}
                   className="mt-6 inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
                 >
-                  Explore Other Agent Options
+                  Start the Conversation
                 </a>
               </div>
             </div>
@@ -446,7 +487,7 @@ export default function ChooseYourPathPage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center sm:text-left">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                About Us
+                Meet Your Local Buyer Partners
               </h2>
               <p className="text-base text-slate-600 sm:max-w-3xl">
                 We’re Matthew and Landon Mulhall — the Finally Home Agents team focused on helping buyers move with clarity, confidence, and local
@@ -497,11 +538,10 @@ export default function ChooseYourPathPage() {
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
               <div className="space-y-4">
                 <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                  Let’s Talk About Your Home Goals
+                  Let’s Connect and Learn What Matters Most
                 </h2>
                 <p className="text-base text-slate-600">
-                  We’ll reach out to connect in the way that works best for you — phone, video, coffee, or in person. No pressure, just a
-                  conversation.
+                  Tell us a bit about what you’re looking for — we’ll reach out in the way you prefer. No pressure, just a conversation.
                 </p>
                 <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
@@ -522,6 +562,12 @@ export default function ChooseYourPathPage() {
                 </div>
               </div>
               <div className="rounded-[32px] border border-emerald-200 bg-white p-6 shadow-2xl shadow-emerald-200/70 sm:p-8">
+                <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                  Prefer to schedule time directly?{" "}
+                  <a href="#connect" className="font-semibold text-emerald-700 hover:text-emerald-800">
+                    Choose how you’d like to connect.
+                  </a>
+                </div>
                 <ChooseYourPathForm selectedPath={selectedPath} />
               </div>
             </div>
@@ -530,29 +576,19 @@ export default function ChooseYourPathPage() {
 
         <section className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600/80">
-              Prefer to schedule time directly?
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900">
-              Book a Buyer Strategy Call
-            </h2>
-            <p className="mt-3 text-base text-slate-600">
-              Pick a time that fits your schedule and we’ll bring the plan.
-            </p>
             <a
-              href={schedulingUrl}
-              target={schedulingIsExternal ? "_blank" : undefined}
-              rel={schedulingIsExternal ? "noopener noreferrer" : undefined}
+              href="#connect"
+              onClick={handleThemClick}
               className="mt-6 inline-flex items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-100"
             >
-              Book a Buyer Strategy Call
+              Start the Conversation
             </a>
           </div>
         </section>
 
         <section className="bg-emerald-950 py-14 text-white">
           <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Ready to connect?</h2>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Ready to Connect?</h2>
             <p className="text-base text-emerald-100/90">
               Tell us what you’re looking for and we’ll make the next step feel easy.
             </p>
