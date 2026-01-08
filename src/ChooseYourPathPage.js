@@ -39,13 +39,13 @@ const TIMEFRAME_OPTIONS = [
 const TEAM_BIOS = [
   {
     name: "Matthew Mulhall",
-    title: "Buyer Strategy & NorthSide GTA Expert",
-    bio: "Matthew brings a strategic, calm, and confident presence to every buyer’s journey. He believes buying should feel empowering, not rushed — shaped by both his professional experience and his perspective as a parent. With deep NorthSide GTA insight and a focus on clear communication, Matthew helps buyers see opportunities clearly, plan with intention, and move forward with assurance.",
+    title: "Real Estate Agent | HomeLife Optimum Realty",
+    bio: "With a thoughtful, human-centered approach, Matthew helps buyers feel confident and informed at every step. He listens to your priorities and supports clear decisions as you explore the NorthSide GTA market.",
   },
   {
     name: "Landon Mulhall",
-    title: "Buyer Advocate & Experience-Driven Partner",
-    bio: "Landon brings a thoughtful, people-first energy to helping buyers navigate one of the most important decisions of their lives. He’s passionate about making the process less overwhelming and more empowering. With a clear communication style that anticipates questions and explains what matters next, Landon keeps buyers informed and confident from first step to closing.",
+    title: "Real Estate Agent | HomeLife Optimum Realty",
+    bio: "Landon brings supportive communication and presence to the home buying experience. He focuses on understanding what matters to you and helping you feel comfortable and engaged throughout the process.",
   },
 ];
 
@@ -210,7 +210,7 @@ function ChooseYourPathForm({ selectedPath }) {
           </p>
         </div>
         <a
-          href="#connect"
+          href="#connect-form"
           className="inline-flex items-center justify-center rounded-2xl border border-emerald-200 bg-white px-5 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-800"
         >
           Back to the form
@@ -366,7 +366,7 @@ function ChooseYourPathForm({ selectedPath }) {
           {submitting ? "Sending…" : "Connect With Us"}
         </button>
         <p className="mt-3 text-xs text-slate-500">
-          We respect your privacy — we’ll contact you in the way you selected.
+          We respect your privacy — we’ll contact you based on your preferences.
         </p>
       </div>
     </form>
@@ -377,7 +377,7 @@ export default function ChooseYourPathPage() {
   const [selectedPath, setSelectedPath] = useState("");
 
   useEffect(() => {
-    trackEventOnce("Page View — choose-your-path", { route: "/choose-your-path" });
+    trackEventOnce("Page View — /choose-your-path", { route: "/choose-your-path" });
   }, []);
 
   const teamWithImages = useMemo(
@@ -390,13 +390,13 @@ export default function ChooseYourPathPage() {
   );
 
   const handleUsClick = () => {
-    setSelectedPath("Tell Us More");
-    trackEvent("Click — Tell Us More", { route: "/choose-your-path" });
+    setSelectedPath("Work with Finally Home Agents");
+    trackEvent("Click — Work with Finally Home Agents", { route: "/choose-your-path" });
   };
 
   const handleThemClick = () => {
-    setSelectedPath("Start the Conversation");
-    trackEvent("Click — Start the Conversation", { route: "/choose-your-path" });
+    setSelectedPath("Other Agent Options");
+    trackEvent("Click — Other Agent Options", { route: "/choose-your-path" });
   };
 
   return (
@@ -413,22 +413,23 @@ export default function ChooseYourPathPage() {
                 Buy With Clarity. Connect With Confidence.
               </h1>
               <p className="mx-auto max-w-3xl text-base text-slate-600 sm:text-lg">
-                Choose how you’d like to start the conversation — phone, video, coffee, or in person. No pressure.
+                Start your journey with a team that knows NorthSide GTA and supports you every step. Choose how you’d like to connect — no pressure,
+                just a conversation.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
-                  href="#connect"
+                  href="#connect-form"
                   onClick={handleUsClick}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] sm:w-auto"
                 >
-                  Tell Us More
+                  Work with Finally Home Agents
                 </a>
                 <a
-                  href="#connect"
+                  href="#connect-form"
                   onClick={handleThemClick}
-                  className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 sm:w-auto"
+                  className="inline-flex w-full items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-3 text-base font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-100 sm:w-auto"
                 >
-                  Start the Conversation
+                  Learn About Other Agent Options
                 </a>
               </div>
             </div>
@@ -439,150 +440,115 @@ export default function ChooseYourPathPage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                Choose the way you’d prefer to connect.
+                Choose the experience that feels right.
               </h2>
             </div>
             <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="flex flex-col justify-between rounded-[32px] border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60">
+              <div className="flex flex-col justify-between rounded-[32px] border border-emerald-200 bg-emerald-950 p-6 text-white shadow-2xl shadow-emerald-900/40">
                 <div className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    Get to Know You First
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">
+                    US — Finally Home Agents
                   </p>
-                  <p className="text-base text-slate-600">
-                    Start by telling us a bit about what you’re looking for — where you want to buy and what matters most to you. This helps us connect
-                    with the right context.
+                  <p className="text-base text-emerald-100/90">
+                    Work with Matthew and Landon Mulhall at Finally Home Agents of HomeLife Optimum Realty — supported by NorthSide GTA expertise and a
+                    human-centered approach. We focus on understanding your priorities and guiding you with clear communication and supportive
+                    engagement as you navigate the buying process.
                   </p>
                 </div>
                 <a
-                  href="#connect"
+                  href="#connect-form"
                   onClick={handleUsClick}
-                  className="mt-6 inline-flex items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
+                  className="mt-6 inline-flex items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                 >
-                  Tell Us More
+                  Work with Finally Home Agents
                 </a>
               </div>
               <div className="flex flex-col justify-between rounded-[32px] border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/70">
                 <div className="space-y-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                    Start With a Conversation
+                    THEM — Other Agent Options
                   </p>
                   <p className="text-base text-slate-600">
-                    Prefer to begin with a chat? Choose how you’d like to connect — phone, video, coffee, or in person — and we’ll reach out to set it
-                    up. Low pressure, human, supportive.
+                    If you’re exploring your options with other real estate agents, you can still tell us a bit about what you’re looking for and how
+                    you’d like to be contacted. We’ll be ready to follow up.
                   </p>
                 </div>
                 <a
-                  href="#connect"
+                  href="#connect-form"
                   onClick={handleThemClick}
                   className="mt-6 inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
                 >
-                  Start the Conversation
+                  Other Agent Options
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-white py-12 sm:py-16">
+        <section id="connect-form" className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="space-y-4 text-center sm:text-left">
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                Meet Your Local Buyer Partners
-              </h2>
-              <p className="text-base text-slate-600 sm:max-w-3xl">
-                We’re Matthew and Landon Mulhall — the Finally Home Agents team focused on helping buyers move with clarity, confidence, and local
-                insight across the NorthSide GTA.
-              </p>
-            </div>
-            <div className="mt-8 grid gap-8 lg:grid-cols-2">
-              {teamWithImages.map((member) => (
-                <article
-                  key={member.name}
-                  className="grid grid-cols-1 items-center gap-8 rounded-[32px] border border-emerald-100 bg-white/90 p-6 shadow-2xl shadow-emerald-100/60 backdrop-blur-sm sm:p-8 lg:grid-cols-[auto,1fr]"
-                >
-                  <div className="flex justify-center">
-                    <div className="relative w-full max-w-[220px] rounded-[30px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-lg shadow-emerald-200/60">
-                      <div className="rounded-[24px] border border-emerald-100 bg-white p-3">
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="h-auto w-full rounded-[20px] object-cover"
-                          loading="lazy"
-                        />
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+              <div className="space-y-6">
+                <div className="space-y-4 text-center sm:text-left">
+                  <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                    Meet Your Local Buyer Partners
+                  </h2>
+                  <p className="text-base text-slate-600 sm:max-w-3xl">
+                    We’re Matthew and Landon Mulhall — the Finally Home Agents team focused on helping buyers move with clarity, confidence, and local
+                    insight across the NorthSide GTA.
+                  </p>
+                </div>
+                <div className="grid gap-6 lg:grid-cols-1">
+                  {teamWithImages.map((member) => (
+                    <article
+                      key={member.name}
+                      className="grid grid-cols-1 items-center gap-6 rounded-[28px] border border-emerald-100 bg-white/90 p-5 shadow-2xl shadow-emerald-100/60 backdrop-blur-sm sm:p-6 lg:grid-cols-[auto,1fr]"
+                    >
+                      <div className="flex justify-center">
+                        <div className="relative w-full max-w-[200px] rounded-[26px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-lg shadow-emerald-200/60">
+                          <div className="rounded-[22px] border border-emerald-100 bg-white p-3">
+                            <img
+                              src={member.image}
+                              alt={member.name}
+                              className="h-auto w-full rounded-[18px] object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="space-y-4 text-center lg:text-left">
-                    <div className="space-y-1">
-                      <h3 className="text-2xl font-semibold text-emerald-900">{member.name}</h3>
-                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                        {member.title}
-                      </p>
-                    </div>
-                    <p className="text-sm leading-relaxed text-slate-700">{member.bio}</p>
-                  </div>
-                </article>
-              ))}
+                      <div className="space-y-3 text-center lg:text-left">
+                        <div className="space-y-1">
+                          <h3 className="text-2xl font-semibold text-emerald-900">{member.name}</h3>
+                          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                            {member.title}
+                          </p>
+                        </div>
+                        <p className="text-sm leading-relaxed text-slate-700">{member.bio}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+                    Let’s Connect — Your Way
+                  </h2>
+                  <p className="mt-3 text-base text-slate-600">
+                    Tell us a bit about what you’re looking for — we’ll reach out in the way you prefer. No pressure, just a conversation.
+                  </p>
+                </div>
+                <div className="rounded-[32px] border border-emerald-200 bg-slate-50 p-6 shadow-2xl shadow-emerald-200/70 sm:p-8">
+                  <ChooseYourPathForm selectedPath={selectedPath} />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-white py-12 sm:py-16">
+        <section className="bg-slate-50 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <SellerReviewsSection />
-          </div>
-        </section>
-
-        <section id="connect" className="bg-slate-50 py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
-              <div className="space-y-4">
-                <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                  Let’s Connect and Learn What Matters Most
-                </h2>
-                <p className="text-base text-slate-600">
-                  Tell us a bit about what you’re looking for — we’ll reach out in the way you prefer. No pressure, just a conversation.
-                </p>
-                <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-lg shadow-emerald-100/60">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                    What to expect
-                  </p>
-                  <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                    {[
-                      "We respond quickly with the next best step.",
-                      "Your preferred connection style stays front and center.",
-                      "You’ll always speak directly with Matthew or Landon.",
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="mt-2 h-2 w-2 rounded-full bg-emerald-500" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="rounded-[32px] border border-emerald-200 bg-white p-6 shadow-2xl shadow-emerald-200/70 sm:p-8">
-                <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                  Prefer to schedule time directly?{" "}
-                  <a href="#connect" className="font-semibold text-emerald-700 hover:text-emerald-800">
-                    Choose how you’d like to connect.
-                  </a>
-                </div>
-                <ChooseYourPathForm selectedPath={selectedPath} />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white py-12 sm:py-16">
-          <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-            <a
-              href="#connect"
-              onClick={handleThemClick}
-              className="mt-6 inline-flex items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-100"
-            >
-              Start the Conversation
-            </a>
           </div>
         </section>
 
@@ -593,7 +559,7 @@ export default function ChooseYourPathPage() {
               Tell us what you’re looking for and we’ll make the next step feel easy.
             </p>
             <a
-              href="#connect"
+              href="#connect-form"
               onClick={handleUsClick}
               className="inline-flex items-center justify-center rounded-full bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
             >
