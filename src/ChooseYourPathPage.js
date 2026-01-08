@@ -40,12 +40,12 @@ const TEAM_BIOS = [
   {
     name: "Matthew Mulhall",
     title: "Real Estate Agent | HomeLife Optimum Realty",
-    bio: "With a thoughtful, human-centered approach, Matthew helps buyers feel confident and informed at every step. He listens to your priorities and supports clear decisions as you explore the NorthSide GTA market.",
+    bio: "Matthew brings a thoughtful, human-centered approach to buyer conversations in the NorthSide GTA. He listens to what matters most, prioritizes clarity in every exchange, and supports buyers so decisions feel informed and comfortable.",
   },
   {
     name: "Landon Mulhall",
     title: "Real Estate Agent | HomeLife Optimum Realty",
-    bio: "Landon brings supportive communication and presence to the home buying experience. He focuses on understanding what matters to you and helping you feel comfortable and engaged throughout the process.",
+    bio: "Landon focuses on clear communication and supportive engagement. He helps buyers articulate their needs and keeps conversations grounded, straightforward, and reassuring throughout the journey.",
   },
 ];
 
@@ -390,13 +390,8 @@ export default function ChooseYourPathPage() {
   );
 
   const handleUsClick = () => {
-    setSelectedPath("Work with Finally Home Agents");
-    trackEvent("Click — Work with Finally Home Agents", { route: "/choose-your-path" });
-  };
-
-  const handleThemClick = () => {
-    setSelectedPath("Other Agent Options");
-    trackEvent("Click — Other Agent Options", { route: "/choose-your-path" });
+    setSelectedPath("Talk With Finally Home Agents");
+    trackEvent("Click — Talk With Finally Home Agents", { route: "/choose-your-path" });
   };
 
   return (
@@ -406,15 +401,14 @@ export default function ChooseYourPathPage() {
       <HeaderShell />
 
       <main className="bg-white text-slate-900">
-        <section className="bg-white">
+        <section className="bg-gradient-to-br from-emerald-50 via-white to-white">
           <div className="mx-auto max-w-6xl px-4 pb-12 pt-16 sm:px-6 lg:px-8 lg:pt-20">
             <div className="space-y-6 text-center">
               <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
                 Buy With Clarity. Connect With Confidence.
               </h1>
               <p className="mx-auto max-w-3xl text-base text-slate-600 sm:text-lg">
-                Start your journey with a team that knows NorthSide GTA and supports you every step. Choose how you’d like to connect — no pressure,
-                just a conversation.
+                A buyer experience built around your priorities — start with a conversation that feels human.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
@@ -422,63 +416,52 @@ export default function ChooseYourPathPage() {
                   onClick={handleUsClick}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] sm:w-auto"
                 >
-                  Work with Finally Home Agents
-                </a>
-                <a
-                  href="#connect-form"
-                  onClick={handleThemClick}
-                  className="inline-flex w-full items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-3 text-base font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-100 sm:w-auto"
-                >
-                  Learn About Other Agent Options
+                  Talk With Finally Home Agents
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="choice" className="bg-slate-50 py-12 sm:py-16">
+        <section className="bg-slate-50 py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="space-y-4 text-center">
               <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                Choose the experience that feels right.
+                Why Work With Finally Home Agents
               </h2>
             </div>
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="flex flex-col justify-between rounded-[32px] border border-emerald-200 bg-emerald-950 p-6 text-white shadow-2xl shadow-emerald-900/40">
-                <div className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">
-                    US — Finally Home Agents
-                  </p>
-                  <p className="text-base text-emerald-100/90">
-                    Work with Matthew and Landon Mulhall at Finally Home Agents of HomeLife Optimum Realty — supported by NorthSide GTA expertise and a
-                    human-centered approach. We focus on understanding your priorities and guiding you with clear communication and supportive
-                    engagement as you navigate the buying process.
-                  </p>
-                </div>
+            <div className="mt-8">
+              <div className="rounded-[36px] border border-emerald-200 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 p-8 text-white shadow-2xl shadow-emerald-900/40">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">
+                  Finally Home Agents • HomeLife Optimum Realty
+                </p>
+                <p className="mt-4 text-base text-emerald-100/90">
+                  Work with Matthew &amp; Landon Mulhall of Finally Home Agents at HomeLife Optimum Realty — serving the NorthSide GTA. Experience
+                  includes:
+                </p>
+                <ul className="mt-6 grid gap-4 text-sm text-emerald-50 sm:grid-cols-2">
+                  {[
+                    "Listening first: We begin by understanding what matters most to you — your goals, priorities, and comfort levels.",
+                    "Clear communication: You’ll always know what’s happening, what comes next, and why — no silence or guesswork.",
+                    "Human-centered support: Your needs guide each step; the process feels supportive, not pressured.",
+                    "NorthSide GTA focused: We bring real community awareness — how neighbourhoods feel, not just how listings read.",
+                    "Flexible connection: Choose how to connect — phone, video, coffee, or in-person — and we’ll follow your lead.",
+                    "No obligation conversation: The first step is always a human conversation — not a contract.",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-200">
+                        ✓
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
                 <a
                   href="#connect-form"
                   onClick={handleUsClick}
-                  className="mt-6 inline-flex items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
+                  className="mt-8 inline-flex items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                 >
-                  Work with Finally Home Agents
-                </a>
-              </div>
-              <div className="flex flex-col justify-between rounded-[32px] border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/70">
-                <div className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-                    THEM — Other Agent Options
-                  </p>
-                  <p className="text-base text-slate-600">
-                    If you’re exploring your options with other real estate agents, you can still tell us a bit about what you’re looking for and how
-                    you’d like to be contacted. We’ll be ready to follow up.
-                  </p>
-                </div>
-                <a
-                  href="#connect-form"
-                  onClick={handleThemClick}
-                  className="mt-6 inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-                >
-                  Other Agent Options
+                  Talk With Finally Home Agents
                 </a>
               </div>
             </div>
@@ -546,7 +529,7 @@ export default function ChooseYourPathPage() {
           </div>
         </section>
 
-        <section className="bg-slate-50 py-12 sm:py-16">
+        <section className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <SellerReviewsSection />
           </div>
