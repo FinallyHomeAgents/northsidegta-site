@@ -1,154 +1,183 @@
-// src/BuyersPage.js
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
-import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
-import { getFormEndpoint } from "./components/contact/contactConfig";
 import { buildBuyersPageSchema } from "./lib/structuredData/buyersPage";
+import { trackEvent } from "./utils/analytics";
 
-/* ───────── helpers ───────── */
-const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
-const phoneOk = (v) => v.replace(/\D/g, "").length >= 10;
+const emailOk = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+const phoneOk = (value) => value.replace(/\D/g, "").length >= 10;
 
-const TOWNS = [
-  "Georgina",
-  "East Gwillimbury",
-  "Newmarket",
-  "Aurora",
-  "Stouffville",
-  "Uxbridge",
-  "Scugog",
-  "None",
+const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
+
+const US_PATH = [
+  "Start with your goals and priorities before we open any doors.",
+  "Build a focused plan with NorthSide GTA market insight.",
+  "Get clear next steps for tours, offers, and timing.",
+  "Move forward with confidence and calm communication.",
 ];
 
-const TOWN_QUICK_PICKS = [
-  { name: "Uxbridge", href: "/uxbridge", hint: "Trails & forests" },
-  { name: "Stouffville", href: "/stouffville", hint: "Main street energy" },
-  { name: "Georgina", href: "/georgina", hint: "Lake Simcoe life" },
-  { name: "East Gwillimbury", href: "/east-gwillimbury", hint: "New builds & 404" },
-  { name: "Newmarket", href: "/newmarket", hint: "Shops & GO train" },
-  { name: "Scugog", href: "/scugog", hint: "Heritage & harbour" },
+const THEM_PATH = [
+  "Explore agent options independently.",
+  "Rely on broad listing feeds and general outreach.",
+  "Create your own approach without a defined strategy.",
+  "Decide next steps as you go.",
 ];
 
-const PROCESS_STEPS = [
-  { title: "Clarify", description: "Goals, budget, neighborhoods" },
-  { title: "Tour", description: "Curated homes, fast scheduling" },
-  { title: "Offer", description: "Comps, strategy, negotiations" },
-  { title: "Close", description: "Lawyers, keys, move-in plan" },
+const BENEFITS = [
+  {
+    title: "Goal-first clarity",
+    detail: "We align on budget, lifestyle, and timeline so every decision serves your plan.",
+  },
+  {
+    title: "NorthSide GTA intelligence",
+    detail: "Local pricing context, neighbourhood nuance, and honest guidance for buyers moving north.",
+  },
+  {
+    title: "Offer strategy",
+    detail: "Clear paths for negotiation, conditions, and timing—before you submit anything.",
+  },
+  {
+    title: "Communication you can count on",
+    detail: "Structured updates, fast answers, and an agent who plays the long game with you.",
+  },
 ];
 
+const TESTIMONIALS = [
+  {
+    quote:
+      "We finally felt clear on where to buy. The strategy call turned our wish list into a real plan.",
+    name: "Natalie & Amir, first-time buyers",
+  },
+  {
+    quote:
+      "Every step felt intentional. We knew why we were touring a home and what the next move was.",
+    name: "Samantha P., NorthSide GTA move-up buyer",
+  },
+  {
+    quote:
+      "The process was calm and organized. We never felt rushed or unsure.",
+    name: "Priya K., relocation buyer",
+  },
+];
 
-/* ───────── Little inline icons (used in UI labels/headers) ───────── */
-const CheckIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M20 6L9 17l-5-5" />
-  </svg>
-);
-const XIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M6 6l12 12M18 6L6 18" />
-  </svg>
-);
-/* ───────── Comparison: Buying on Your Own vs With Finally Home Agents (kept) ───────── */
-function ComparisonGrid() {
-  const solo = [
-    "Guesswork on where to live",
-    "You hunt listings… and miss off-market",
-    "No early alerts or pricing context",
-    "DIY negotiation risks overpaying",
-    "Tiring weekend tours with little focus",
-    "Paperwork + deadlines = stress",
-    "No trusted pros when issues appear",
-    "Decisions made without a second set of eyes",
-    "Generic info — not tailored to you",
-  ];
-  const withUs = [
-    "Town Match: Top-3 areas based on your lifestyle & budget",
-    "VIP alerts + off-market conversations",
-    "Real-time price comps & micro-neighbourhood intel",
-    "Offer strategy that wins without overpaying",
-    "Planned, efficient tours — no time wasted",
-    "We quarterback the process, you stay calm",
-    "Inspector, lawyer, mortgage — vetted partners",
-    "Walk-away confidence with data-driven advice",
-    "AI-assisted insights tailored to your criteria",
-  ];
+const FAQS = [
+  {
+    question: "What happens after I submit the Buyer Brief?",
+    answer:
+      "We review your goals and follow up to confirm priorities, timing, and the right next steps for your search.",
+  },
+  {
+    question: "Do I need to be pre-approved before we start?",
+    answer:
+      "Not required, but it helps. We can connect you with trusted lenders if you want a clearer budget range.",
+  },
+  {
+    question: "How do you help me choose the right NorthSide GTA area?",
+    answer:
+      "We match lifestyle needs to local insights—commute, schools, price trends, and the feel of each town.",
+  },
+  {
+    question: "Is there any pressure to buy right away?",
+    answer:
+      "No. The goal is clarity and a plan so you can move when the timing is right for you.",
+  },
+];
+
+function BuyersHero({ onStartBrief, onBookCall }) {
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_45px_130px_rgba(34,68,10,0.5)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/15 via-emerald-500/10 to-emerald-700/5" aria-hidden />
-      <div className="relative z-10 grid overflow-hidden md:grid-cols-2">
-        {/* Left: On your own */}
-        <div className="border-b border-white/10 bg-slate-900/60 backdrop-blur-sm md:border-b-0 md:border-r">
-          <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4 text-rose-200/90">
-            <XIcon className="h-5 w-5" />
-            <h3 className="text-[12px] font-semibold uppercase tracking-[0.28em]">Buying On Your Own</h3>
-          </div>
-          <ul className="space-y-3 px-5 py-6">
-            {solo.map((t, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-emerald-100/80">
-                <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-rose-400/80" />
-                <span className="leading-6">{t}</span>
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_70%)]" aria-hidden />
+      <div className="absolute -top-24 right-[-10%] h-80 w-80 rounded-full bg-emerald-400/30 blur-3xl" aria-hidden />
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-14 pt-20 sm:px-6 lg:px-8 lg:pt-24">
+        <div className="max-w-3xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">Finally Home Agents</p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+            Buy with purpose. Plan to win.
+          </h1>
+          <p className="mt-4 text-lg text-emerald-100/80">
+            A focused buyer strategy built on clarity, confidence, and NorthSide GTA expertise. Winners focus on winning—
+            strategy first, action second.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <button
+            type="button"
+            onClick={onStartBrief}
+            className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.4)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-300"
+          >
+            Start Your Buyer Brief
+          </button>
+          <button
+            type="button"
+            onClick={onBookCall}
+            className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+          >
+            Book a Buyer Strategy Call
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ChoiceArchitecture() {
+  return (
+    <section className="rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-[0_32px_90px_rgba(4,17,12,0.45)]">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">Two Ways to Proceed</p>
+          <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">A clear choice for serious buyers</h2>
+          <p className="mt-3 text-base text-emerald-100/80">
+            Choose the path that matches how you want to buy—structured strategy with Finally Home Agents, or a more
+            independent route.
+          </p>
+        </div>
+      </div>
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/15 p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">US — Our Buyer Strategy Path</p>
+          <ul className="mt-4 space-y-3 text-sm text-white">
+            {US_PATH.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
-
-        {/* Right: With Finally Home Agents */}
-        <div className="bg-gradient-to-br from-emerald-500/40 via-emerald-500/20 to-emerald-600/30">
-          <div className="flex items-center gap-2 border-b border-white/20 px-5 py-4 text-white">
-            <CheckIcon className="h-5 w-5" />
-            <h3 className="text-[12px] font-semibold uppercase tracking-[0.28em]">Buying With Finally Home Agents</h3>
-          </div>
-          <ul className="space-y-3 px-5 py-6">
-            {withUs.map((t, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-white">
-                <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-white/70" />
-                <span className="leading-6">{t}</span>
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100/70">THEM — Independent Buyer Path</p>
+          <ul className="mt-4 space-y-3 text-sm text-emerald-100/80">
+            {THEM_PATH.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-/* ───────── Detailed Buyer Sign-Up form (map background, more fields) ───────── */
-function BuyerSignupForm() {
+function BuyerBriefForm() {
   const [form, setForm] = useState({
-    // Contact
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     phone: "",
-    // Buyer basics
-    budgetMin: "",
-    budgetMax: "",
-    bedrooms: "",
-    bathrooms: "",
-    propertyType: "",
-    timeline: "",
-    towns: [],
-    mustHaves: "",
-    niceToHaves: "",
-    // Confirmations
-    notUnderContract: false,
-    consent: false,
-    // honeypot
+    preferredAreas: "",
+    budgetRange: "",
+    timeframe: "",
     nickname: "",
   });
-
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({ email: "", phone: "" });
   const errorRef = useRef(null);
-
-  const utm = useMemo(() => new URLSearchParams(window.location.search), []);
-  const device = useMemo(() => (/Mobi/i.test(navigator.userAgent) ? "mobile" : "desktop"), []);
 
   const formspreeId = useMemo(() => {
     const fromEnv = (process.env.REACT_APP_FORMSPREE_BUYERS_ID || "").trim();
@@ -156,771 +185,55 @@ function BuyerSignupForm() {
   }, []);
 
   const requiredChecks = {
-    firstName: !!form.firstName.trim(),
-    lastName: !!form.lastName.trim(),
+    fullName: !!form.fullName.trim(),
     email: !!form.email.trim() && emailOk(form.email),
     phone: !!form.phone.trim() && phoneOk(form.phone),
-    timeline: !!form.timeline,
-    notUnderContract: !!form.notUnderContract,
-    consent: !!form.consent,
+    preferredAreas: !!form.preferredAreas.trim(),
+    budgetRange: !!form.budgetRange.trim(),
+    timeframe: !!form.timeframe.trim(),
   };
+
   const requiredOk = Object.values(requiredChecks).every(Boolean);
 
-  const progressPct = Math.max(
-    6,
-    Math.round(
-      (Object.values(requiredChecks).filter(Boolean).length /
-        Object.keys(requiredChecks).length) * 100
-    )
-  );
-
-  function update(e) {
-    const { name, value, type, checked } = e.target;
-    setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
-
-    if (name === "email") {
-      setFieldErrors((fe) => ({ ...fe, email: value && !emailOk(value) ? "Enter a valid email" : "" }));
-    }
-    if (name === "phone") {
-      setFieldErrors((fe) => ({ ...fe, phone: value && !phoneOk(value) ? "Enter a 10-digit phone number" : "" }));
-    }
+  function updateField(event) {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function toggleTown(town) {
-    setForm((f) => {
-      const exists = f.towns.includes(town);
-      let next = exists ? f.towns.filter((t) => t !== town) : [...f.towns, town];
-      if (next.length > 7) next = next.slice(0, 7);
-      if (town === "None" && !exists) next = ["None"];
-      if (town !== "None" && next.includes("None")) next = next.filter((t) => t !== "None");
-      return { ...f, towns: next };
-    });
-  }
+  async function onSubmit(event) {
+    event.preventDefault();
 
-  async function onSubmit(e) {
-    e.preventDefault();
-    setError("");
-
-    const emailErr = form.email ? (emailOk(form.email) ? "" : "Enter a valid email") : "Email is required";
-    const phoneErr = form.phone ? (phoneOk(form.phone) ? "" : "Enter a 10-digit phone number") : "Phone is required";
-    setFieldErrors({ email: emailErr, phone: phoneErr });
-
-    if (!formspreeId) {
-      setError("Formspree Form ID is missing. Add REACT_APP_FORMSPREE_BUYERS_ID to your .env file.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-      return;
-    }
-    if (!requiredOk) {
-      setError("Please complete all required fields and fix the highlighted errors.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-      return;
-    }
     if (form.nickname) return;
 
-    try {
-      setSending(true);
-      const endpoint = `https://formspree.io/f/${formspreeId}`;
-
-      const payload = {
-        first_name: form.firstName.trim(),
-        last_name: form.lastName.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        budget_min: form.budgetMin,
-        budget_max: form.budgetMax,
-        desired_bedrooms: form.bedrooms,
-        desired_bathrooms: form.bathrooms,
-        property_type: form.propertyType,
-        timeline: form.timeline,
-        towns: form.towns.join(", "),
-        must_haves: form.mustHaves,
-        nice_to_haves: form.niceToHaves,
-        not_under_contract: form.notUnderContract ? "Yes" : "No",
-        consent: form.consent ? "Yes" : "No",
-        utm_source: utm.get("utm_source") || "",
-        utm_campaign: utm.get("utm_campaign") || "",
-        device,
-        source_url: window.location.href,
-        submitted_at: new Date().toLocaleString(),
-        _subject: `New Buyer Sign-Up — ${form.firstName} ${form.lastName}`,
-        _replyto: form.email || undefined,
-      };
-
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        const msg = body?.errors?.[0]?.message || body?.message || `Request failed (${res.status})`;
-        throw new Error(msg);
-      }
-
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "buyer_signup_submit" });
-        if (window.fbq) window.fbq("trackCustom", "BuyerSignupSubmit");
-      } catch {}
-
-      setDone(true);
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong sending your request. Please try again.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-    } finally {
-      setSending(false);
-    }
-  }
-
-  if (done) {
-    return (
-      <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_45px_130px_rgba(34,68,10,0.55)]">
-        <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 px-6 py-10 text-white backdrop-blur-xl sm:px-10">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_70%)]" aria-hidden />
-          <div className="relative z-10 flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-              <CheckIcon className="h-4 w-4" />
-              Match Concierge
-            </span>
-            <h3 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              You’re in — we’ll reach out within 24 hours
-            </h3>
-            <p className="max-w-2xl text-sm text-emerald-100/85 sm:text-base">
-              Thanks! A NorthSide GTA specialist will contact you via email or phone within 24 hours to kick off your personalized town match and search plan.
-            </p>
-            <p className="text-xs uppercase tracking-[0.3em] text-emerald-100/70">Private &amp; secure. We never spam.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_55px_140px_rgba(34,68,10,0.55)]">
-      <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 p-6 backdrop-blur-xl sm:p-8 md:p-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(50,97,14,0.4),_transparent_70%)]" aria-hidden />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
-          style={{ backgroundImage: "url('/Images/northside-map-grid.png')", backgroundSize: "cover" }}
-          aria-hidden
-        />
-
-        <div className="relative z-10 space-y-6">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-500/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100 shadow-sm backdrop-blur">
-              VIP
-            </div>
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <h3 className="text-3xl font-semibold tracking-tight text-white md:text-[2.35rem]">Match Concierge</h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {[
-                  { icon: "⏱️", text: "Takes ~1 minute" },
-                  { icon: "✅", text: "No spam, no obligation" },
-                  { icon: "🔒", text: "Secure & private" },
-                  { icon: "📍", text: "Local market experts" },
-                ].map((p) => (
-                  <span
-                    key={p.text}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[12px] font-semibold text-white shadow-sm backdrop-blur"
-                  >
-                    <span>{p.icon}</span> {p.text}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <p className="max-w-xl text-sm text-emerald-100/85 md:text-base">
-              Tell us how you live — we’ll match you to the right town, street, and home.
-            </p>
-          </div>
-
-          <div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 transition-all"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-            <div className="mt-1 text-right text-[11px] font-medium text-emerald-100/70">
-              {progressPct}% complete
-            </div>
-          </div>
-
-          {error && (
-            <div
-              ref={errorRef}
-              tabIndex={-1}
-              role="alert"
-              aria-live="assertive"
-              className="mt-2 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100"
-            >
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={onSubmit} className="grid grid-cols-1 gap-5">
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  First Name <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  autoComplete="given-name"
-                  required
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Last Name <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  autoComplete="family-name"
-                  required
-                />
-              </label>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Email <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.email
-                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/60"
-                      : "border-white/10 focus:border-emerald-400 focus:ring-emerald-400/40"
-                  }`}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                />
-                {fieldErrors.email && <p className="mt-1 text-xs text-red-200">{fieldErrors.email}</p>}
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Phone <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.phone
-                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/60"
-                      : "border-white/10 focus:border-emerald-400 focus:ring-emerald-400/40"
-                  }`}
-                  placeholder="(###) ###-####"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  required
-                />
-                {fieldErrors.phone && <p className="mt-1 text-xs text-red-200">{fieldErrors.phone}</p>}
-              </label>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">Budget (min)</span>
-                <input
-                  name="budgetMin"
-                  value={form.budgetMin}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="$800,000"
-                  inputMode="decimal"
-                  autoComplete="off"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Budget (max)</span>
-                <input
-                  name="budgetMax"
-                  value={form.budgetMax}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="$1,200,000"
-                  inputMode="decimal"
-                  autoComplete="off"
-                />
-              </label>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-3">
-              <label className="block">
-                <span className="text-sm font-medium text-white">Bedrooms (desired)</span>
-                <select
-                  name="bedrooms"
-                  value={form.bedrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Bathrooms (desired)</span>
-                <select
-                  name="bathrooms"
-                  value={form.bathrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Property type</span>
-                <select
-                  name="propertyType"
-                  value={form.propertyType}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Any</option>
-                  <option>Detached</option>
-                  <option>Semi-Detached</option>
-                  <option>Townhouse</option>
-                  <option>Condo</option>
-                  <option>Rural</option>
-                </select>
-              </label>
-            </div>
-
-            <div>
-              <span className="block text-sm font-medium text-white">
-                When are you hoping to buy? <span className="text-red-300">*</span>
-              </span>
-              <div className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
-                {["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"].map((label, idx) => (
-                  <label
-                    key={label}
-                    className={`group flex cursor-pointer items-center gap-2 rounded-2xl border px-3 py-2 transition ${
-                      form.timeline === label
-                        ? "border-white/30 bg-white/15 text-white shadow-lg shadow-emerald-900/30"
-                        : "border-white/10 bg-white/5 text-emerald-100/80 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="timeline"
-                      value={label}
-                      checked={form.timeline === label}
-                      onChange={update}
-                      required={idx === 0}
-                      className="h-4 w-4 border-white/40 text-emerald-400 focus:ring-emerald-400/60"
-                    />
-                    <span className="leading-snug">{label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <span className="text-sm font-medium text-white">Which NorthSide GTA towns interest you most?</span>
-              <p className="mt-1 text-xs text-emerald-100/70">Select up to 7.</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {TOWNS.map((town) => {
-                  const active = form.towns.includes(town);
-                  return (
-                    <button
-                      type="button"
-                      key={town}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] transition backdrop-blur ${
-                        active
-                          ? "border-white/25 bg-white/15 text-white shadow-lg shadow-emerald-900/20"
-                          : "border-white/15 bg-white/5 text-emerald-100/80 hover:border-white/25 hover:bg-white/10 hover:text-white"
-                      }`}
-                      onClick={() => toggleTown(town)}
-                    >
-                      {town}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Must-haves <span className="text-emerald-100/70">(optional)</span>
-                </span>
-                <textarea
-                  name="mustHaves"
-                  value={form.mustHaves}
-                  onChange={update}
-                  rows={3}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="E.g., garage, yard, quiet street, near GO Station…"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Nice-to-haves <span className="text-emerald-100/70">(optional)</span>
-                </span>
-                <textarea
-                  name="niceToHaves"
-                  value={form.niceToHaves}
-                  onChange={update}
-                  rows={3}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="E.g., finished basement, newer roof, south-facing yard…"
-                />
-              </label>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg shadow-emerald-900/30 backdrop-blur">
-              <h4 className="text-sm font-semibold text-white">Before You Submit</h4>
-              <p className="text-xs text-emerald-100/80">Please confirm the following to help us respond faster.</p>
-              <div className="mt-3 space-y-2 text-sm">
-                <label className="flex items-start gap-2 text-emerald-100/80">
-                  <input
-                    type="checkbox"
-                    name="notUnderContract"
-                    checked={form.notUnderContract}
-                    onChange={update}
-                    className="mt-1 h-4 w-4 rounded border border-white/40 text-emerald-500 focus:ring-emerald-400/80"
-                    required
-                  />
-                  <span>
-                    I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
-                  </span>
-                </label>
-                <label className="flex items-start gap-2 text-emerald-100/80">
-                  <input
-                    type="checkbox"
-                    name="consent"
-                    checked={form.consent}
-                    onChange={update}
-                    className="mt-1 h-4 w-4 rounded border border-white/40 text-emerald-500 focus:ring-emerald-400/80"
-                    required
-                  />
-                  <span>
-                    I agree to be contacted by Finally Home Agents about my buyer match and search plan.
-                    <span className="block text-emerald-100/60 text-xs">You can unsubscribe anytime. We respect your privacy.</span>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <button
-                type="submit"
-                disabled={!requiredOk || sending}
-                className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {sending ? "Sending…" : "Start Your Match"}
-              </button>
-
-              <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
-            </div>
-
-            <input
-              type="text"
-              name="nickname"
-              value={form.nickname}
-              onChange={update}
-              className="hidden"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </form>
-
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-emerald-100/70">
-            <span>★★★★★ Google reviews</span>
-            <span>•</span>
-            <span>AI-assisted town matching &amp; VIP listing alerts</span>
-            <span>•</span>
-            <span>Local team. Personal guidance.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function BuyersHero({ onStartSearch, onTalkToAgent }) {
-  return (
-    <section className="relative isolate">
-      <figure className="relative h-[60vh] w-full overflow-hidden lg:h-[75vh] lg:max-h-[820px]">
-       <img
-  src={`${process.env.PUBLIC_URL || ''}/uploads/buyers-hero-northside-family.jpg`}
-  alt="Young family exploring a NorthSide GTA neighborhood with stone and brick homes at sunset — representing the lifestyle of buying north of Toronto."
-  loading="eager"
-  decoding="async"
-  className="w-full h-[75vh] object-cover"
-/>
-      </figure>
-
-      <div className="absolute inset-0">
-        <div className="mx-auto flex h-full w-full max-w-6xl items-end px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-16">
-          <div className="relative max-w-xl">
-            <div
-              className="absolute -inset-6 rounded-[32px] bg-gradient-to-br from-[#32610E]/70 via-[#244c0b]/60 to-transparent"
-              aria-hidden
-            />
-            <div className="relative rounded-[32px] border border-white/15 bg-white/10 p-6 shadow-[0_30px_120px_rgba(4,17,12,0.55)] backdrop-blur lg:p-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-                BUYERS • NORTHSIDE GTA
-              </div>
-              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.9rem]">
-                Find your NorthSide home.
-              </h1>
-              <p className="mt-3 max-w-lg text-base text-emerald-50/90 sm:text-lg">
-                Space, community, and lifestyle north of Toronto — with Finally Home Agents.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button
-                  type="button"
-                  onClick={() => onStartSearch?.()}
-                  className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-300"
-                >
-                  Start Your Home Search
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onTalkToAgent?.()}
-                  className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
-                >
-                  Talk to an Agent
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WhyBuyWithUsBand() {
-  const items = [
-    { icon: "✅", text: "Local intel you can’t Google — schools, micro-neighborhoods, commutes." },
-    { icon: "🧭", text: "Concierge search — we shortlist and book tours for you." },
-    { icon: "🛡️", text: "Offer strategy that wins — clean terms, timing, and comps that matter." },
-    { icon: "🤝", text: "From offer to keys — financing, lawyers, inspections, movers." },
-  ];
-
-  return (
-    <section aria-label="Why buy with Finally Home Agents">
-      <div className="rounded-[28px] border border-white/10 bg-white/10 p-5 shadow-[0_24px_70px_rgba(4,17,12,0.45)] backdrop-blur">
-        <div className="grid gap-4 text-sm text-emerald-50 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ icon, text }) => (
-            <div key={text} className="flex items-start gap-3">
-              <span className="text-lg leading-none">{icon}</span>
-              <p className="leading-6 text-emerald-50/90">{text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TownQuickPicksStrip() {
-  return (
-    <section aria-labelledby="town-quick-picks-heading" className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_24px_70px_rgba(4,17,12,0.4)] backdrop-blur">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 id="town-quick-picks-heading" className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            Town quick-picks
-          </h2>
-          <p className="mt-1 text-sm text-emerald-100/80">Tap a town to jump straight into listings and local intel.</p>
-        </div>
-      </div>
-      <div className="mt-5 flex flex-wrap gap-3">
-        {TOWN_QUICK_PICKS.map((town) => (
-          <a
-            key={town.name}
-            href={town.href}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-white/60 hover:bg-white/20"
-          >
-            <span>{town.name}</span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-100/70 group-hover:text-white/90">
-              {town.hint}
-            </span>
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function BuyersReviewCarousel() {
-  const grouped = useMemo(() => {
-    const chunkSize = 3;
-    const acc = [];
-    for (let i = 0; i < GOOGLE_REVIEWS.length; i += chunkSize) {
-      acc.push(GOOGLE_REVIEWS.slice(i, i + chunkSize));
-    }
-    return acc;
-  }, []);
-
-  const totalSlides = grouped.length || 1;
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || totalSlides <= 1) return;
-    const id = setInterval(() => {
-      setActive((prev) => (prev + 1) % totalSlides);
-    }, 6000);
-    return () => clearInterval(id);
-  }, [paused, totalSlides]);
-
-  useEffect(() => {
-    if (active >= totalSlides) {
-      setActive(0);
-    }
-  }, [active, totalSlides]);
-
-  if (grouped.length === 0) {
-    return null;
-  }
-
-  return (
-    <section className="space-y-6" aria-labelledby="buyers-reviews-heading">
-      <div className="text-center">
-        <h2 id="buyers-reviews-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Real buyers. Real reviews.
-        </h2>
-        <p className="mt-2 text-base text-emerald-100/80">Verified Google reviews from NorthSide GTA clients.</p>
-      </div>
-
-      <div
-        className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-4 shadow-[0_24px_80px_rgba(4,17,12,0.45)] backdrop-blur"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-      >
-        <div
-          className="flex transition-transform duration-700 ease-out"
-          style={{ transform: `translateX(-${active * 100}%)` }}
-        >
-          {grouped.map((group, index) => (
-            <div key={index} className="w-full shrink-0 px-1 sm:px-2">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.map((review) => (
-                  <article
-                    key={review.name}
-                    className="flex h-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/12 p-5 text-left text-emerald-50 shadow-[0_14px_40px_rgba(4,17,12,0.35)] backdrop-blur"
-                  >
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/80">
-                      <img src="/Images/google-logo.png" alt="Google" className="h-5 w-5" loading="lazy" />
-                      Finally Home Agents
-                    </div>
-                    <p className="text-sm leading-6 text-emerald-50/90 sm:text-base">{review.quote}</p>
-                    <div className="mt-auto text-sm font-semibold text-white/90">— {review.name}</div>
-                    <span className="text-[11px] uppercase tracking-[0.3em] text-emerald-100/60">Verified Client Review</span>
-                  </article>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {totalSlides > 1 && (
-          <div className="mt-6 flex items-center justify-center gap-2">
-            {Array.from({ length: totalSlides }).map((_, index) => (
-              <span
-                key={index}
-                className={`h-1.5 w-6 rounded-full transition ${index === active ? "bg-emerald-300" : "bg-white/25"}`}
-                aria-hidden="true"
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function ProcessSection() {
-  return (
-    <section aria-labelledby="buyers-process-heading" className="space-y-6">
-      <div className="text-center">
-        <h2 id="buyers-process-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Buying with Finally Home Agents is simple
-        </h2>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {PROCESS_STEPS.map((step) => (
-          <div key={step.title} className="rounded-3xl border border-white/10 bg-white/8 p-5 text-left shadow-[0_18px_50px_rgba(4,17,12,0.4)] backdrop-blur">
-            <h3 className="text-lg font-semibold text-white">{step.title}</h3>
-            <p className="mt-1 text-sm text-emerald-100/80">{step.description}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CallbackDrawer({ expanded, onExpandedChange }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [notes, setNotes] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
-  const [showErrors, setShowErrors] = useState(false);
-
-  const formEndpoint = useMemo(() => getFormEndpoint(), []);
-
-  const validations = useMemo(() => {
-    const issues = {};
-    if (!name.trim()) issues.name = "Name is required.";
-    if (!phone.trim()) issues.phone = "Phone number is required.";
-    return issues;
-  }, [name, phone]);
-
-  const visibleErrors = showErrors ? validations : {};
-
-  const submit = async (event) => {
-    event.preventDefault();
-    if (submitting) return;
-
-    if (Object.keys(validations).length > 0) {
-      setShowErrors(true);
+    if (!requiredOk) {
+      setError("Please complete the required fields.");
+      errorRef.current?.focus();
       return;
     }
 
-    setSubmitting(true);
-    setShowErrors(false);
-    setError(null);
+    if (!formspreeId) {
+      setError("Form configuration is missing. Please try again later.");
+      errorRef.current?.focus();
+      return;
+    }
+
+    setSending(true);
+    setError("");
+
+    trackEvent("Buyer Brief Submitted", { route: "/buyers" });
 
     try {
+      const endpoint = `https://formspree.io/f/${formspreeId}`;
       const payload = new FormData();
-      payload.append("name", name.trim());
-      payload.append("phone", phone.trim());
-      if (notes.trim()) {
-        payload.append("message", notes.trim());
-      }
-      payload.append("source", "callback");
+      payload.append("fullName", form.fullName.trim());
+      payload.append("email", form.email.trim());
+      payload.append("phone", form.phone.trim());
+      payload.append("preferredAreas", form.preferredAreas.trim());
+      payload.append("budgetRange", form.budgetRange.trim());
+      payload.append("timeframe", form.timeframe.trim());
+      payload.append("source", "buyer-brief");
 
-      const response = await fetch(formEndpoint, {
+      const response = await fetch(endpoint, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -930,90 +243,237 @@ function CallbackDrawer({ expanded, onExpandedChange }) {
         throw new Error("Request failed");
       }
 
-      setSuccess(true);
+      setDone(true);
+      setForm({
+        fullName: "",
+        email: "",
+        phone: "",
+        preferredAreas: "",
+        budgetRange: "",
+        timeframe: "",
+        nickname: "",
+      });
     } catch (err) {
       setError("Something went wrong. Please try again.");
+      errorRef.current?.focus();
     } finally {
-      setSubmitting(false);
+      setSending(false);
     }
-  };
+  }
 
-  const panelId = "buyers-callback-panel";
-  const titleId = "buyers-callback-title";
-
-  if (success) {
+  if (done) {
     return (
       <div className="rounded-[28px] border border-white/15 bg-white/10 p-6 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
-        <h3 className="text-xl font-semibold">We’ll be in touch shortly</h3>
-        <p className="mt-2 text-sm text-emerald-100/85">Thanks for your request! A NorthSide GTA advisor will call you between 9am–9pm.</p>
+        <h3 className="text-xl font-semibold">Thanks! Your buyer plan is in motion.</h3>
+        <p className="mt-2 text-sm text-emerald-100/85">
+          We’ll review your brief and follow up with next steps for a focused NorthSide GTA plan.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-[28px] border border-white/15 bg-white/8 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
-      <button
-        type="button"
-        onClick={() => onExpandedChange(!expanded)}
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold uppercase tracking-[0.32em] text-emerald-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
-        aria-expanded={expanded}
-        aria-controls={panelId}
-        aria-labelledby={titleId}
-      >
-        <span id={titleId}>Premium callback (9am–9pm)</span>
-        <span aria-hidden className="text-lg">{expanded ? "–" : "+"}</span>
-      </button>
-      <div id={panelId} hidden={!expanded} className="border-t border-white/10 px-6 py-6 sm:px-8">
-        <form className="space-y-4" onSubmit={submit}>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Name *</span>
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-              required
-            />
-            {visibleErrors.name && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.name}</span>}
-          </label>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Phone *</span>
-            <input
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-              required
-            />
-            {visibleErrors.phone && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.phone}</span>}
-          </label>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Notes <span className="text-emerald-100/60">(optional)</span></span>
-            <textarea
-              value={notes}
-              onChange={(event) => setNotes(event.target.value)}
-              rows={3}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-            />
-          </label>
+    <form className="space-y-5" onSubmit={onSubmit}>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Full Name *</span>
+        <input
+          name="fullName"
+          value={form.fullName}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          required
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Email *</span>
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          required
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Phone *</span>
+        <input
+          type="tel"
+          name="phone"
+          value={form.phone}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          required
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Preferred Area(s) *</span>
+        <input
+          name="preferredAreas"
+          value={form.preferredAreas}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          placeholder="Uxbridge, Stouffville, Georgina…"
+          required
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Budget Range *</span>
+        <input
+          name="budgetRange"
+          value={form.budgetRange}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          placeholder="$750k–$950k"
+          required
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="text-emerald-100/80">Timeframe to Buy *</span>
+        <select
+          name="timeframe"
+          value={form.timeframe}
+          onChange={updateField}
+          className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          required
+        >
+          <option value="">Select one</option>
+          <option value="0-3 months">0–3 months</option>
+          <option value="3-6 months">3–6 months</option>
+          <option value="6-12 months">6–12 months</option>
+          <option value="12+ months">12+ months</option>
+        </select>
+      </label>
+      <label className="hidden">
+        <span>Nickname</span>
+        <input name="nickname" value={form.nickname} onChange={updateField} />
+      </label>
 
-          {error && <p className="text-sm text-red-200">{error}</p>}
+      {error && (
+        <p ref={errorRef} tabIndex={-1} className="text-sm text-rose-200">
+          {error}
+        </p>
+      )}
 
-          <div className="flex flex-col gap-2">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_35px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {submitting ? "Sending…" : "Request callback"}
-            </button>
-            <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
-          </div>
-        </form>
+      <div className="flex flex-col gap-2">
+        <button
+          type="submit"
+          disabled={sending}
+          className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_35px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {sending ? "Submitting…" : "Begin My Buyer Plan"}
+        </button>
+        <p className="text-xs text-emerald-100/70">
+          Your information is private. We follow best practice standards and only contact you about your buyer goals.
+        </p>
       </div>
-    </div>
+    </form>
   );
 }
 
-function StickyCtaBar({ onStartSearch, onCallBack }) {
+function PhilosophySection() {
+  return (
+    <section className="grid gap-8 rounded-[32px] border border-white/10 bg-white/5 p-8 md:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">Strategic Philosophy</p>
+        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">
+          The athlete–agent mindset: plan with purpose before action.
+        </h2>
+        <p className="mt-4 text-base text-emerald-100/80">
+          We treat your buying process like preparing for a championship — strategy first, clarity always. Winners
+          focus on winning, and your plan is built before you step into competition.
+        </p>
+      </div>
+      <div className="rounded-2xl border border-white/10 bg-emerald-500/10 p-6 text-sm text-emerald-100/85">
+        <p className="text-base font-semibold text-white">"Plan with purpose before action."</p>
+        <p className="mt-3">
+          That means clear goals, confident timelines, and a structured game plan tailored to the NorthSide GTA market.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function BenefitsSection() {
+  return (
+    <section className="space-y-8">
+      <div className="max-w-2xl">
+        <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">How we help buyers</p>
+        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">Clarity, strategy, and local insight</h2>
+      </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        {BENEFITS.map((benefit) => (
+          <div key={benefit.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h3 className="text-lg font-semibold text-white">{benefit.title}</h3>
+            <p className="mt-2 text-sm text-emerald-100/80">{benefit.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  return (
+    <section className="space-y-6">
+      <div className="max-w-2xl">
+        <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">Buyer testimonials</p>
+        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">Clarity and confidence from real buyers</h2>
+      </div>
+      <div className="grid gap-6 md:grid-cols-3">
+        {TESTIMONIALS.map((item) => (
+          <div key={item.name} className="rounded-2xl border border-white/10 bg-white/5 p-6 text-sm text-emerald-100/85">
+            <p className="text-base text-white">“{item.quote}”</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-emerald-100/70">{item.name}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FaqSection() {
+  return (
+    <section className="space-y-6">
+      <div className="max-w-2xl">
+        <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">FAQ</p>
+        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">Process questions, answered</h2>
+      </div>
+      <div className="space-y-4">
+        {FAQS.map((item) => (
+          <div key={item.question} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h3 className="text-base font-semibold text-white">{item.question}</h3>
+            <p className="mt-2 text-sm text-emerald-100/80">{item.answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function StrategyCallSection({ onBookCall }) {
+  return (
+    <section id="strategy-call" className="rounded-[28px] border border-white/10 bg-white/5 p-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold text-white">Prefer a live strategy session?</h2>
+          <p className="mt-2 text-sm text-emerald-100/80">
+            Get guided clarity before you submit a brief. We’ll confirm a time that works for you.
+          </p>
+        </div>
+        <a
+          href="/contact?intent=buyer-strategy-call"
+          onClick={onBookCall}
+          className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+        >
+          Schedule a Buyer Strategy Call
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function StickyCtaBar({ onStartBrief, onBookCall }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -1025,7 +485,7 @@ function StickyCtaBar({ onStartSearch, onCallBack }) {
         setVisible(false);
         return;
       }
-      setVisible(scrollTop >= maxScroll * 0.25);
+      setVisible(scrollTop >= maxScroll * 0.2);
     };
 
     handleScroll();
@@ -1037,28 +497,26 @@ function StickyCtaBar({ onStartSearch, onCallBack }) {
     };
   }, []);
 
-  if (!visible) {
-    return null;
-  }
+  if (!visible) return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-6">
       <div className="pointer-events-auto mx-auto flex max-w-3xl flex-col gap-3 rounded-2xl border border-white/10 bg-[#05180f]/95 p-4 text-white shadow-[0_20px_60px_rgba(4,17,12,0.55)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-emerald-50/90 sm:text-base">Looking north of Toronto? We’ll guide you.</p>
+        <p className="text-sm font-semibold text-emerald-50/90 sm:text-base">Ready for a focused buyer plan?</p>
         <div className="flex flex-col gap-2 sm:flex-row">
           <button
             type="button"
-            onClick={onStartSearch}
+            onClick={onStartBrief}
             className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400"
           >
-            Start Your Search
+            Start Your Buyer Plan
           </button>
           <button
             type="button"
-            onClick={onCallBack}
+            onClick={onBookCall}
             className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
           >
-            Call Back
+            Book Strategy Call
           </button>
         </div>
       </div>
@@ -1066,11 +524,7 @@ function StickyCtaBar({ onStartSearch, onCallBack }) {
   );
 }
 
-const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
-
-/* ───────── Page ───────── */
 export default function BuyersPage() {
-  const [callbackOpen, setCallbackOpen] = useState(false);
   const buyersSchema = useMemo(() => buildBuyersPageSchema(), []);
 
   const scrollToId = (id) => {
@@ -1080,10 +534,16 @@ export default function BuyersPage() {
     }
   };
 
-  const handleStartSearch = () => scrollToId("match-concierge");
-  const handleTalkToAgent = () => {
-    setCallbackOpen(true);
-    scrollToId("buyers-contact");
+  const handleStartBrief = () => {
+    trackEvent("Buyer Brief Started", { route: "/buyers" });
+    scrollToId("buyer-brief");
+  };
+
+  const handleBookCall = (event) => {
+    trackEvent("Buyer Strategy Call Clicked", { route: "/buyers" });
+    if (event?.currentTarget?.tagName !== "A") {
+      scrollToId("strategy-call");
+    }
   };
 
   return (
@@ -1099,7 +559,7 @@ export default function BuyersPage() {
               "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
             url: BUYERS_ROUTE_META.canonicalUrl || "https://northsidegta.ca/buyers",
             description:
-              "Personalized town match, VIP listing alerts, and expert guidance for buyers in the NorthSide GTA.",
+              "Focused buyer strategy, NorthSide GTA expertise, and clarity-first planning from Finally Home Agents.",
             about: {
               "@type": "RealEstateAgent",
               name: "Finally Home Agents",
@@ -1126,80 +586,37 @@ export default function BuyersPage() {
       )}
 
       <main className="relative pb-24">
-        <BuyersHero onStartSearch={handleStartSearch} onTalkToAgent={handleTalkToAgent} />
-
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.25),_transparent_65%)]" aria-hidden />
-        <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute bottom-[-40%] right-[-20%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/20 blur-3xl" aria-hidden />
+        <BuyersHero onStartBrief={handleStartBrief} onBookCall={handleBookCall} />
 
         <div className="relative z-10">
-          <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-12 sm:px-6 lg:px-8 lg:pb-24">
-            <div className="space-y-16 sm:space-y-20">
-              <WhyBuyWithUsBand />
+          <div className="mx-auto w-full max-w-6xl space-y-16 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-24">
+            <ChoiceArchitecture />
 
-              <section id="match-concierge" className="scroll-mt-28 space-y-8">
-                <div className="max-w-3xl">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Match Concierge / Home Search
-                  </h2>
-                  <p className="mt-3 text-base text-emerald-100/80 sm:text-lg">
-                    Register to get your NorthSide GTA match, insider strategies, and VIP alerts — the unfair advantage other buyers don’t have.
-                  </p>
-                </div>
-                <BuyerSignupForm />
-              </section>
+            <section id="buyer-brief" className="scroll-mt-28 space-y-6">
+              <div className="max-w-3xl">
+                <p className="text-sm uppercase tracking-[0.3em] text-emerald-100/70">Primary Buyer Brief</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+                  We start with your goals so we can tailor your plan.
+                </h2>
+              </div>
+              <div className="rounded-[28px] border border-white/15 bg-white/8 p-6 shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur sm:p-8">
+                <BuyerBriefForm />
+              </div>
+            </section>
 
-              <BuyersReviewCarousel />
+            <StrategyCallSection onBookCall={handleBookCall} />
 
-              <TownQuickPicksStrip />
+            <PhilosophySection />
 
-              <section className="space-y-6">
-                <div className="mx-auto max-w-3xl text-center">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Buying on your own vs with Finally Home Agents
-                  </h2>
-                  <p className="mt-3 text-base text-emerald-100/80">
-                    See how concierge-level strategy, intel, and execution change your outcome in the NorthSide GTA.
-                  </p>
-                </div>
-                <ComparisonGrid />
-                <p className="text-center text-sm text-emerald-100/80">
-                  Join NorthSide GTA buyers who found the right town — and won the right home — with Finally Home Agents.
-                </p>
-              </section>
+            <BenefitsSection />
 
-              <ProcessSection />
+            <TestimonialsSection />
 
-              <section className="space-y-6">
-                <div className="mx-auto max-w-3xl text-center">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Featured Google love</h2>
-                  <p className="mt-2 text-base text-emerald-100/80">
-                    A quick spotlight from the buyers we’ve guided north of Toronto.
-                  </p>
-                </div>
-                <GoogleGradientReviews />
-              </section>
-
-              <section className="space-y-6">
-                <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-12 text-center shadow-[0_45px_130px_rgba(34,68,10,0.6)]">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_transparent_70%)]" aria-hidden />
-                  <div className="relative z-10 space-y-4">
-                    <h3 className="text-3xl font-semibold md:text-4xl">Don’t Leave Power on the Table</h3>
-                    <p className="text-lg text-emerald-100/90 md:text-xl">
-                      Register now to unlock your Match and move forward with confidence.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section id="buyers-contact" className="scroll-mt-28">
-                <CallbackDrawer expanded={callbackOpen} onExpandedChange={setCallbackOpen} />
-              </section>
-            </div>
+            <FaqSection />
           </div>
         </div>
 
-        <StickyCtaBar onStartSearch={handleStartSearch} onCallBack={handleTalkToAgent} />
+        <StickyCtaBar onStartBrief={handleStartBrief} onBookCall={handleBookCall} />
       </main>
 
       <Footer />
