@@ -410,8 +410,8 @@ export default function RecommendedPage() {
         {seoImage && <meta property="og:image" content={seoImage} />}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://northsidegta.ca/recommended" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        {seoImage && <meta property="og:image:width" content="1200" />}
+        {seoImage && <meta property="og:image:height" content="630" />}
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={seoTitle || defaultTitle} />
