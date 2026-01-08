@@ -105,7 +105,7 @@ function ChooseYourPathForm({ selectedPath }) {
       const nextPreferences = exists
         ? prev.preferredConnect.filter((item) => item !== option)
         : [...prev.preferredConnect, option];
-      trackEvent("Preferred Way to Connect", {
+      trackEvent("Preferred Connect Method", {
         route: "/choose-your-path",
         option,
         selected: !exists,
@@ -120,7 +120,7 @@ function ChooseYourPathForm({ selectedPath }) {
       const nextTowns = exists
         ? prev.towns.filter((item) => item !== town)
         : [...prev.towns, town];
-      trackEvent("Town Selection", {
+      trackEvent("Town Selections", {
         route: "/choose-your-path",
         town,
         selected: !exists,
@@ -185,7 +185,7 @@ function ChooseYourPathForm({ selectedPath }) {
         throw new Error("Request failed");
       }
 
-      trackEvent("Form Submit", {
+      trackEvent("Form Submission — Connect Form", {
         route: "/choose-your-path",
         preferred_connect: form.preferredConnect.join(", "),
         towns: form.towns.join(", "),
@@ -377,7 +377,7 @@ export default function ChooseYourPathPage() {
   const [selectedPath, setSelectedPath] = useState("");
 
   useEffect(() => {
-    trackEventOnce("Page View — /choose-your-path", { route: "/choose-your-path" });
+    trackEventOnce("Page View", { route: "/choose-your-path" });
   }, []);
 
   const teamWithImages = useMemo(
@@ -389,9 +389,19 @@ export default function ChooseYourPathPage() {
     [],
   );
 
+  const handleHeroClick = () => {
+    setSelectedPath("Talk With Finally Home Agents");
+    trackEvent("Click — Hero CTA", { route: "/choose-your-path" });
+  };
+
   const handleUsClick = () => {
     setSelectedPath("Talk With Finally Home Agents");
-    trackEvent("Click — Talk With Finally Home Agents", { route: "/choose-your-path" });
+    trackEvent("Click — US Advantage CTA", { route: "/choose-your-path" });
+  };
+
+  const handleFooterClick = () => {
+    setSelectedPath("Talk With Finally Home Agents");
+    trackEvent("Click — Footer CTA", { route: "/choose-your-path" });
   };
 
   return (
@@ -401,19 +411,25 @@ export default function ChooseYourPathPage() {
       <HeaderShell />
 
       <main className="bg-white text-slate-900">
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-white">
-          <div className="mx-auto max-w-6xl px-4 pb-12 pt-16 sm:px-6 lg:px-8 lg:pt-20">
-            <div className="space-y-6 text-center">
-              <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+        <section className="hero choose-path-hero relative overflow-hidden">
+          <div className="mx-auto max-w-6xl px-4 pb-16 pt-20 sm:px-6 lg:px-8 lg:pb-20 lg:pt-28">
+            <div className="mx-auto max-w-4xl space-y-6 rounded-[32px] bg-black/40 px-6 py-10 text-center text-white shadow-2xl shadow-black/30 backdrop-blur-sm sm:px-10">
+              <div className="space-y-2">
+                <p className="text-xl font-medium sm:text-2xl">
+                  Ready to find the right agent for your buying journey?
+                </p>
+                <p className="text-xl font-medium sm:text-2xl">You have come to the right place.</p>
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight drop-shadow sm:text-5xl lg:text-6xl">
                 Buy With Clarity. Connect With Confidence.
               </h1>
-              <p className="mx-auto max-w-3xl text-base text-slate-600 sm:text-lg">
-                A buyer experience built around your priorities — start with a conversation that feels human.
+              <p className="mx-auto max-w-3xl text-base text-white/90 drop-shadow sm:text-lg">
+                A buyer experience built around your priorities — starting with a conversation that feels human and supportive.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
                   href="#connect-form"
-                  onClick={handleUsClick}
+                  onClick={handleHeroClick}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-green/30 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] sm:w-auto"
                 >
                   Talk With Finally Home Agents
@@ -431,25 +447,24 @@ export default function ChooseYourPathPage() {
               </h2>
             </div>
             <div className="mt-8">
-              <div className="rounded-[36px] border border-emerald-200 bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 p-8 text-white shadow-2xl shadow-emerald-900/40">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">
+              <div className="rounded-[36px] border border-emerald-100 bg-emerald-50 p-8 text-slate-900 shadow-xl shadow-emerald-100/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
                   Finally Home Agents • HomeLife Optimum Realty
                 </p>
-                <p className="mt-4 text-base text-emerald-100/90">
-                  Work with Matthew &amp; Landon Mulhall of Finally Home Agents at HomeLife Optimum Realty — serving the NorthSide GTA. Experience
-                  includes:
+                <p className="mt-4 text-base text-slate-700">
+                  Work with Matthew &amp; Landon Mulhall of Finally Home Agents at HomeLife Optimum Realty — serving the NorthSide GTA. Your experience includes:
                 </p>
-                <ul className="mt-6 grid gap-4 text-sm text-emerald-50 sm:grid-cols-2">
+                <ul className="mt-6 grid gap-4 text-sm text-slate-700 sm:grid-cols-2">
                   {[
-                    "Listening first: We begin by understanding what matters most to you — your goals, priorities, and comfort levels.",
-                    "Clear communication: You’ll always know what’s happening, what comes next, and why — no silence or guesswork.",
+                    "Listening first: We begin with what matters most to you — your goals, priorities, and comfort level.",
+                    "Clear communication: You’ll always know what’s happening, what comes next, and why.",
                     "Human-centered support: Your needs guide each step; the process feels supportive, not pressured.",
-                    "NorthSide GTA focused: We bring real community awareness — how neighbourhoods feel, not just how listings read.",
-                    "Flexible connection: Choose how to connect — phone, video, coffee, or in-person — and we’ll follow your lead.",
-                    "No obligation conversation: The first step is always a human conversation — not a contract.",
+                    "NorthSide GTA insight: We bring community understanding — how neighbourhoods feel, not just how listings read.",
+                    "Flexible connection: Choose phone, video, coffee, or in-person — we follow your lead.",
+                    "No obligation conversation: The first step is always a conversation — not a contract.",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
-                      <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-200">
+                      <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600/10 text-emerald-700">
                         ✓
                       </span>
                       <span>{item}</span>
@@ -459,7 +474,7 @@ export default function ChooseYourPathPage() {
                 <a
                   href="#connect-form"
                   onClick={handleUsClick}
-                  className="mt-8 inline-flex items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
+                  className="mt-8 inline-flex items-center justify-center rounded-2xl bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
                 >
                   Talk With Finally Home Agents
                 </a>
@@ -468,63 +483,61 @@ export default function ChooseYourPathPage() {
           </div>
         </section>
 
-        <section id="connect-form" className="bg-white py-12 sm:py-16">
+        <section className="bg-white py-12 sm:py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
-              <div className="space-y-6">
-                <div className="space-y-4 text-center sm:text-left">
-                  <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                    Meet Your Local Buyer Partners
-                  </h2>
-                  <p className="text-base text-slate-600 sm:max-w-3xl">
-                    We’re Matthew and Landon Mulhall — the Finally Home Agents team focused on helping buyers move with clarity, confidence, and local
-                    insight across the NorthSide GTA.
-                  </p>
-                </div>
-                <div className="grid gap-6 lg:grid-cols-1">
-                  {teamWithImages.map((member) => (
-                    <article
-                      key={member.name}
-                      className="grid grid-cols-1 items-center gap-6 rounded-[28px] border border-emerald-100 bg-white/90 p-5 shadow-2xl shadow-emerald-100/60 backdrop-blur-sm sm:p-6 lg:grid-cols-[auto,1fr]"
-                    >
-                      <div className="flex justify-center">
-                        <div className="relative w-full max-w-[200px] rounded-[26px] bg-gradient-to-tr from-emerald-300 via-emerald-400 to-emerald-500 p-[1.5px] shadow-lg shadow-emerald-200/60">
-                          <div className="rounded-[22px] border border-emerald-100 bg-white p-3">
-                            <img
-                              src={member.image}
-                              alt={member.name}
-                              className="h-auto w-full rounded-[18px] object-cover"
-                              loading="lazy"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="space-y-3 text-center lg:text-left">
-                        <div className="space-y-1">
-                          <h3 className="text-2xl font-semibold text-emerald-900">{member.name}</h3>
-                          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
-                            {member.title}
-                          </p>
-                        </div>
-                        <p className="text-sm leading-relaxed text-slate-700">{member.bio}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+            <div className="space-y-10">
+              <div className="space-y-4 text-center">
+                <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                  Meet the Finally Home Agents
+                </h2>
+                <p className="mx-auto max-w-3xl text-base text-slate-600">
+                  We’re Matthew and Landon Mulhall — the Finally Home Agents team focused on helping buyers move with clarity, confidence, and local insight across the NorthSide GTA.
+                </p>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-                    Let’s Connect — Your Way
-                  </h2>
-                  <p className="mt-3 text-base text-slate-600">
-                    Tell us a bit about what you’re looking for — we’ll reach out in the way you prefer. No pressure, just a conversation.
-                  </p>
-                </div>
-                <div className="rounded-[32px] border border-emerald-200 bg-slate-50 p-6 shadow-2xl shadow-emerald-200/70 sm:p-8">
-                  <ChooseYourPathForm selectedPath={selectedPath} />
-                </div>
+              <div className="grid gap-6 lg:grid-cols-2">
+                {teamWithImages.map((member) => (
+                  <article
+                    key={member.name}
+                    className="flex flex-col items-center gap-5 rounded-[28px] border border-emerald-100 bg-white p-6 text-center shadow-xl shadow-emerald-100/60 sm:flex-row sm:text-left"
+                  >
+                    <div className="flex-shrink-0">
+                      <div className="h-32 w-32 overflow-hidden rounded-full border border-emerald-200 shadow-lg shadow-emerald-100/60">
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="space-y-1">
+                        <h3 className="text-2xl font-semibold text-emerald-900">{member.name}</h3>
+                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                          {member.title}
+                        </p>
+                      </div>
+                      <p className="text-sm leading-relaxed text-slate-700">{member.bio}</p>
+                    </div>
+                  </article>
+                ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="connect-form" className="bg-white py-12 sm:py-16">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div className="space-y-6 text-center">
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                Let’s Connect — Your Way
+              </h2>
+              <p className="mx-auto max-w-3xl text-base text-slate-600">
+                Tell us a bit about what you’re looking for — we’ll reach out in the way you prefer. No pressure, just a conversation.
+              </p>
+            </div>
+            <div className="mt-8 rounded-[32px] border border-emerald-200 bg-slate-50 p-6 shadow-2xl shadow-emerald-200/70 sm:p-8">
+              <ChooseYourPathForm selectedPath={selectedPath} />
             </div>
           </div>
         </section>
@@ -543,7 +556,7 @@ export default function ChooseYourPathPage() {
             </p>
             <a
               href="#connect-form"
-              onClick={handleUsClick}
+              onClick={handleFooterClick}
               className="inline-flex items-center justify-center rounded-full bg-brand-green px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]"
             >
               Connect With Us
