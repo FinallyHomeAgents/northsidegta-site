@@ -60,6 +60,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/choose-your-path",
+    meta: {
+      route: "/choose-your-path",
+      documentTitle: "Find the Right Buyer Agent | Finally Home Agents – NorthSide GTA",
+      title: "Find the Right Buyer Agent | Finally Home Agents – NorthSide GTA",
+      description:
+        "Looking for an agent to help you buy a home in the NorthSide GTA? Connect with Finally Home Agents for a human, priority-first buying experience.",
+      canonicalUrl: "https://northsidegta.ca/choose-your-path",
+      ogType: "website",
+      ogImage: "/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/sellers",
     meta: {
       route: "/sellers",

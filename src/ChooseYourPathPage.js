@@ -3,15 +3,18 @@ import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
+import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import SellerReviewsSection from "./components/sellers/SellerReviewsSection";
 import teamMembers from "./data/teamMembers";
 import { trackEvent, trackEventOnce } from "./utils/analytics";
 
-const CHOOSE_PATH_ROUTE_META = {
-  route: "/choose-your-path",
-  ogType: "website",
-  siteName: "NorthSide GTA",
-};
+const CHOOSE_PATH_META =
+  getStaticRouteMeta("choose-your-path") ||
+  getStaticRouteMeta("/choose-your-path") || {
+    route: "/choose-your-path",
+    ogType: "website",
+    siteName: "NorthSide GTA",
+  };
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const CONNECT_OPTIONS = [
@@ -409,7 +412,7 @@ export default function ChooseYourPathPage() {
 
   return (
     <>
-      <DynamicMetaTags {...CHOOSE_PATH_ROUTE_META} />
+      <DynamicMetaTags {...CHOOSE_PATH_META} />
 
       <HeaderShell />
 
