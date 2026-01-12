@@ -14,6 +14,14 @@
     "seo_description": "Find your perfect home north of Toronto. Expert guidance, local insight, and personalized support from the NorthSide GTA real estate team | Finally Home Agents",
     "seo_image": "/uploads/buyers-page-seo.jpg"
   },
+  "/choose-your-path": {
+    "seo_title": "Choose Your Path | Buy With Clarity",
+    "seo_description": "Choose how you’d like to start the conversation about buying a home — phone, video, coffee, or in person. No pressure, just support.",
+    "og_title": "",
+    "og_description": "",
+    "og_image": "/uploads/buyers-page-seo.jpg",
+    "canonical_url": "https://northsidegta.ca/choose-your-path"
+  },
   "/cms/tastehub": {
     "seo_title": "TasteHub CMS | NorthSide GTA",
     "seo_description": "Access the TasteHub CMS to manage polls, ballots, and community-powered content for the NorthSide GTA.",

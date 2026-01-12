@@ -100,22 +100,6 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
-    route: "/choose-your-path",
-    meta: {
-      route: "/choose-your-path",
-      documentTitle: "Choose Your Path | Buy With Clarity",
-      title: "Choose Your Path | Buy With Clarity",
-      description:
-        "Choose how you’d like to start the conversation about buying a home — phone, video, coffee, or in person. No pressure, just support.",
-      canonicalUrl: "https://northsidegta.ca/choose-your-path",
-      ogType: "website",
-      ogImage: "/uploads/buyers-page-seo.jpg",
-      twitterCard: "summary_large_image",
-      twitterImage: "/uploads/buyers-page-seo.jpg",
-      siteName: "NorthSide GTA",
-    },
-  },
-  {
     route: "/community",
     meta: {
       route: "/community",
