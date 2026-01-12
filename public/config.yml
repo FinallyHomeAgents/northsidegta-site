@@ -509,6 +509,50 @@ collections:
             media_folder: '/public/uploads'
             public_folder: '/uploads'
 
+      - label: 'Choose Your Path SEO'
+        name: 'choose_your_path'
+        file: 'public/data/seo/choose-your-path.json'
+        fields:
+          - label: 'Route'
+            name: 'route'
+            widget: 'hidden'
+            default: '/choose-your-path'
+          - label: 'SEO Title'
+            name: 'seo_title'
+            widget: 'string'
+            required: false
+            hint: 'SEO title for the Choose Your Path page.'
+          - label: 'SEO Description'
+            name: 'seo_description'
+            widget: 'text'
+            required: false
+            hint: 'Short summary (140–160 characters) for the Choose Your Path page.'
+          - label: 'SEO Image'
+            name: 'seo_image'
+            widget: 'image'
+            required: false
+            hint: 'Image for link previews (ideally 1200x630). Leave blank to use the existing default.'
+            media_folder: '/public/uploads'
+            public_folder: '/uploads'
+          - label: 'OG Title'
+            name: 'og_title'
+            widget: 'string'
+            required: false
+          - label: 'OG Description'
+            name: 'og_description'
+            widget: 'text'
+            required: false
+          - label: 'OG Image'
+            name: 'og_image'
+            widget: 'image'
+            required: false
+            media_folder: '/public/uploads'
+            public_folder: '/uploads'
+          - label: 'Canonical URL'
+            name: 'canonical_url'
+            widget: 'string'
+            required: false
+
       - label: 'Sellers Page SEO'
         name: 'sellers'
         file: 'public/data/seo/sellers.json'
