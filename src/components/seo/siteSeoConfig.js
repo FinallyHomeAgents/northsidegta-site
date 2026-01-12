@@ -43,6 +43,10 @@ function loadFromFileSystem() {
         seo_title: cleanString(data.seo_title || data.seoTitle),
         seo_description: cleanString(data.seo_description || data.seoDescription),
         seo_image: cleanString(data.seo_image || data.seoImage),
+        og_title: cleanString(data.og_title || data.ogTitle),
+        og_description: cleanString(data.og_description || data.ogDescription),
+        og_image: cleanString(data.og_image || data.ogImage),
+        canonical_url: cleanString(data.canonical_url || data.canonicalUrl),
       };
     }
     return map;
@@ -66,6 +70,10 @@ function loadFromBundle() {
         seo_title: cleanString(value && (value.seo_title || value.seoTitle)),
         seo_description: cleanString(value && (value.seo_description || value.seoDescription)),
         seo_image: cleanString(value && (value.seo_image || value.seoImage)),
+        og_title: cleanString(value && (value.og_title || value.ogTitle)),
+        og_description: cleanString(value && (value.og_description || value.ogDescription)),
+        og_image: cleanString(value && (value.og_image || value.ogImage)),
+        canonical_url: cleanString(value && (value.canonical_url || value.canonicalUrl)),
       };
     }
     return map;
@@ -90,7 +98,15 @@ function getSiteSeoForRoute(route) {
   if (!normalizedRoute) return null;
   const entry = map[normalizedRoute];
   if (!entry) return null;
-  const hasValues = Boolean(entry.seo_title || entry.seo_description || entry.seo_image);
+  const hasValues = Boolean(
+    entry.seo_title ||
+      entry.seo_description ||
+      entry.seo_image ||
+      entry.og_title ||
+      entry.og_description ||
+      entry.og_image ||
+      entry.canonical_url,
+  );
   return hasValues ? entry : null;
 }
 

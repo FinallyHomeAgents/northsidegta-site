@@ -184,6 +184,10 @@ function getMetaTagsFromData(raw = {}) {
   const siteSeoTitle = safeString(siteSeo && siteSeo.seo_title);
   const siteSeoDescription = safeString(siteSeo && siteSeo.seo_description);
   const siteSeoImage = safeString(siteSeo && siteSeo.seo_image);
+  const siteSeoOgTitle = safeString(siteSeo && siteSeo.og_title);
+  const siteSeoOgDescription = safeString(siteSeo && siteSeo.og_description);
+  const siteSeoOgImage = safeString(siteSeo && siteSeo.og_image);
+  const siteSeoCanonicalUrl = safeString(siteSeo && siteSeo.canonical_url);
   const hasSiteSeoOverrides = Boolean(siteSeo);
 
   const fallbackTitleValue = safeString(raw.title);
@@ -191,7 +195,9 @@ function getMetaTagsFromData(raw = {}) {
   const documentTitleValue = safeString(
     siteSeoTitle || raw.documentTitle || fallbackTitleValue,
   );
-  const ogTitleValue = safeString(siteSeoTitle || raw.ogTitle || fallbackTitleValue);
+  const ogTitleValue = safeString(
+    siteSeoOgTitle || siteSeoTitle || raw.ogTitle || fallbackTitleValue,
+  );
   const twitterTitleValue = safeString(
     siteSeoTitle || raw.twitterTitle || ogTitleValue || documentTitleValue,
   );
@@ -199,7 +205,10 @@ function getMetaTagsFromData(raw = {}) {
   const fallbackDescriptionValue = safeString(raw.description);
   const descriptionValue = safeString(siteSeoDescription || raw.description);
   const ogDescriptionValue = safeString(
-    siteSeoDescription || raw.ogDescription || fallbackDescriptionValue,
+    siteSeoOgDescription ||
+      siteSeoDescription ||
+      raw.ogDescription ||
+      fallbackDescriptionValue,
   );
   const twitterDescriptionValue = safeString(
     siteSeoDescription ||
@@ -208,10 +217,14 @@ function getMetaTagsFromData(raw = {}) {
       descriptionValue,
   );
 
-  const canonicalValue = normalizeCanonicalUrl(raw.canonicalUrl, routeValue);
+  const canonicalValue = normalizeCanonicalUrl(
+    siteSeoCanonicalUrl || raw.canonicalUrl,
+    routeValue,
+  );
   const ogTypeValue = safeString(raw.ogType);
+  const metaImageSource = safeString(siteSeoOgImage || siteSeoImage);
   const { path: metaImagePath, absoluteUrl: resolvedMetaImageUrl } =
-    normalizeMetaImage(siteSeoImage, raw);
+    normalizeMetaImage(metaImageSource, raw);
   const ogImageValue = resolvedMetaImageUrl;
   const ogImageAltValue = safeString(raw.ogImageAlt);
   const twitterCardValue = safeString(raw.twitterCard) || DEFAULT_TWITTER_CARD;
