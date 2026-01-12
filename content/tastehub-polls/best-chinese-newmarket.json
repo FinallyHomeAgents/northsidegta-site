@@ -1,0 +1,58 @@
+{
+  "ballot_items": [
+    {
+      "name": "Cynthia's Chinese Restaurant",
+      "address": "16715 Yonge St Unit 18, Newmarket, ON",
+      "link": "https://share.google/nmxwuTbBbZJQEIRc5"
+    },
+    {
+      "name": "Hong Kong Kitchen",
+      "address": "16630 Bayview Ave, Newmarket, ON",
+      "link": "https://share.google/Wwq3tSfICpCu1HPWr"
+    },
+    {
+      "name": "4 Seasons Restaurant",
+      "address": "167 Main St S, Newmarket, ON ",
+      "link": "https://share.google/aDf2IJ4ceRwnJpniV"
+    },
+    {
+      "name": "CK's Restaurant",
+      "address": "1100 Gorham St Unit 15, Newmarket, ON",
+      "link": "https://share.google/aB7e2IvxZ4DYun95z"
+    },
+    {
+      "name": "Spicy Island",
+      "address": "1065 Davis Dr, Newmarket, ON",
+      "link": "https://share.google/nll7WcPOmX3c6AeyC"
+    },
+    {
+      "name": "Golden Bauhinia",
+      "address": "130 Davis Dr #9, Newmarket, ON",
+      "link": "https://share.google/N2hZAXvXJqXI8xjFY"
+    },
+    {
+      "name": "Pine House Cafe",
+      "address": "1100 Davis Dr Unit 1B, Newmarket, ON",
+      "link": "https://share.google/oaNAVnIxt3akayQl6"
+    },
+    {
+      "name": "O Street Cafe",
+      "address": "17074 Leslie St Unit 2, Newmarket, ON",
+      "link": "https://share.google/L4rXbCis42RRp8CLV"
+    },
+    {
+      "name": "The Point Eatery",
+      "address": "16775 Yonge St Suite 13, Newmarket, ON",
+      "link": "https://share.google/fK29uXIhIdjoGbfPF"
+    }
+  ],
+  "slug": "best-chinese-newmarket",
+  "featured": false,
+  "town": "Newmarket",
+  "status": "live",
+  "ranking_key": "tastehub_newmarket_chinese",
+  "title": "Best Chinese Food in Newmarket",
+  "image": "/uploads/newmarketchinese.jpg",
+  "description": "Help crown Newmarket's go-to Chinese food spot. Cast your vote and see who’s on top in real time.",
+  "category": "Chinese"
+}
