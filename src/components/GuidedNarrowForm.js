@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const TOWNS = [
   "Georgina",
@@ -33,18 +34,30 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
   const [represented, setRepresented] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const emailValid = useMemo(() => {
     if (!email) return false;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }, [email]);
 
+  const phoneValid = useMemo(() => {
+    if (!phone) return true;
+    const digits = phone.replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 15;
+  }, [phone]);
+
   const isRepresented = represented === "yes";
   const canSubmit =
-    represented === "no" && emailValid && name.trim().length > 1 && !submitting;
+    represented === "no" &&
+    emailValid &&
+    name.trim().length > 1 &&
+    phoneValid &&
+    !submitting;
 
   const toggleTown = (town) => {
     setTowns((prev) => {
@@ -60,6 +73,7 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
     if (value === "yes") {
       setName("");
       setEmail("");
+      setPhone("");
     }
   };
 
@@ -101,6 +115,7 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
       payload.append("device", device());
       payload.append("name", name);
       payload.append("email", email);
+      if (phone.trim()) payload.append("phone", phone.trim());
       payload.append("represented", represented || "no");
 
       const params = new URLSearchParams(window.location.search);
@@ -124,6 +139,14 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
     }
   };
 
+  useEffect(() => {
+    if (!done) return undefined;
+    const timeout = setTimeout(() => {
+      navigate("/");
+    }, 7000);
+    return () => clearTimeout(timeout);
+  }, [done, navigate]);
+
   if (done) {
     return (
       <div className="rounded-[28px] border border-emerald-200 bg-white/95 p-6 shadow-[0_24px_60px_rgba(12,35,18,0.12)]">
@@ -133,6 +156,15 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
         <p className="mt-2 text-sm text-emerald-900/80">
           You’ll hear from Matthew or Landon.
         </p>
+        <p className="mt-2 text-sm text-emerald-900/70">
+          You’ll be returned to the homepage shortly.
+        </p>
+        <Link
+          to="/"
+          className="mt-4 inline-flex items-center justify-center rounded-full border border-emerald-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700 transition hover:border-emerald-400 hover:bg-emerald-50"
+        >
+          Return now
+        </Link>
       </div>
     );
   }
@@ -298,6 +330,25 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
+            </label>
+            <label className="text-sm font-semibold text-emerald-950 md:col-span-2">
+              Phone (optional)
+              <input
+                type="tel"
+                className="mt-2 w-full rounded-xl border border-emerald-200/80 bg-white px-4 py-2 text-sm text-emerald-950 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                placeholder="416-555-1234"
+                aria-describedby="guided-phone-helper"
+              />
+              <span id="guided-phone-helper" className="mt-2 block text-xs font-normal text-emerald-700/70">
+                If you’d like us to follow up by call or text.
+              </span>
+              {!phoneValid ? (
+                <span className="mt-2 block text-xs font-normal text-rose-600">
+                  Please enter a valid phone number.
+                </span>
+              ) : null}
             </label>
           </div>
 
