@@ -27,6 +27,7 @@ import ChooseYourPathPage from "./ChooseYourPathPage";
 import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
+import GuidedPathPage from "./GuidedPathPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
@@ -109,6 +110,7 @@ function App() {
           <Route path="/northside-pass-preview/option-3" element={<OptionThreePage />} />
           <Route path="/northside-pass-preview/option-4" element={<OptionFourPage />} />
           <Route path="/northside-pass-preview/option-5" element={<OptionFivePage />} />
+          <Route path="/guided/:path" element={<GuidedPathPage />} />
 
           {/* Town pages — community slugs */}
           <Route path="/communities/:slug" element={<TownPage />} />
