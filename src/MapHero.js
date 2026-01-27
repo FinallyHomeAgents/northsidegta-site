@@ -1,6 +1,9 @@
 // src/MapHero.js
 import React, { useEffect, useRef, useState, useId, useLayoutEffect } from "react";
+import { Flag, Landmark, PiggyBank, Train, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import QuickContactCard from "./QuickContactCard";
+import { guidedPaths } from "./data/guidedPaths";
 
 /* ────────────────────────────────────────────────────────────
    Category labels + display order
@@ -1039,7 +1042,6 @@ export default function MapHero({
     : canHover
     ? hoverId
     : openId;
-  const activeTown = TOWNS.find((t) => t.id === activeId) || null;
 
   // Allow ESC to clear hover on desktop/pointer devices
   useEffect(() => {
@@ -1051,12 +1053,6 @@ export default function MapHero({
 
   const handleMobileAccordionToggle = () => {
     setMobileMatchOpen((prev) => !prev);
-  };
-
-  const handleMobileAccordionChange = (next) => {
-    if (isMobileViewport) {
-      setMobileMatchOpen(Boolean(next));
-    }
   };
 
   const sectionClasses = [
@@ -1107,7 +1103,6 @@ export default function MapHero({
       ? heroShellDynamicStyle
       : undefined;
 
-  const insightMode = canHover ? "desktop" : "mobile";
   const resolvedTicker =
     typeof tickerSlot === "undefined" ? null : tickerSlot || null;
   const decoratedTicker =
@@ -1154,12 +1149,15 @@ export default function MapHero({
                   {isMobileViewport ? (
                     <div className="mobile-accordion">
                       <div className="flex flex-col gap-3 text-left text-white">
-                        <span className="text-[11px] uppercase tracking-[0.28em] text-white/70">
-                          Match Concierge
+                        <span className="inline-flex w-fit items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-white/80">
+                          Full-Service Guidance
                         </span>
                         <h3 className="text-[20px] font-semibold leading-tight">
                           Your NorthSide GTA Match
                         </h3>
+                        <p className="text-sm text-white/80">
+                          A guided approach tailored to how you want to live.
+                        </p>
                         <button
                           type="button"
                           className="mobile-accordion-trigger inline-flex w-full items-center justify-center rounded-xl bg-brand-green px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_4px_12px_rgba(50,97,14,0.35)] transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:ring-offset-2 focus:ring-offset-emerald-950"
@@ -1167,7 +1165,7 @@ export default function MapHero({
                           aria-controls={accordionRegionId}
                           onClick={handleMobileAccordionToggle}
                         >
-                          {mobileMatchOpen ? "Hide form" : "Start"}
+                          {mobileMatchOpen ? "Hide options" : "Start"}
                         </button>
                       </div>
                       <div
@@ -1176,12 +1174,7 @@ export default function MapHero({
                         aria-hidden={!mobileMatchOpen}
                       >
                         <div className="mobile-accordion-content pt-3">
-                          <QuickContactCard
-                            variant="overlay"
-                            className="h-full"
-                            controlledOpen={mobileMatchOpen}
-                            onOpenChange={handleMobileAccordionChange}
-                          />
+                          <GuidedPathList variant="mobile" />
                         </div>
                       </div>
                     </div>
@@ -1247,17 +1240,7 @@ export default function MapHero({
               </div>
 
               <aside className="panel panel-right">
-                <TownInsightCard
-                  town={activeTown}
-                  mode={insightMode}
-                  onDismiss={() => setOpenId(null)}
-                  className="flex h-full flex-col"
-                  appearance="panel"
-                  isActive={
-                    isDesktopViewport &&
-                    Boolean(selectedId && activeTown && activeTown.id === selectedId)
-                  }
-                />
+                <FullServiceGuidancePanel className="flex h-full flex-col" />
               </aside>
             </div>
             </>
@@ -1314,6 +1297,94 @@ export default function MapHero({
         </div>
       </div>
     </section>
+  );
+}
+
+const GUIDED_PATH_ICONS = {
+  flag: Flag,
+  landmark: Landmark,
+  users: Users,
+  train: Train,
+  "piggy-bank": PiggyBank,
+};
+
+function GuidedPathList({ variant = "panel" }) {
+  const isMobile = variant === "mobile";
+  const listClasses = isMobile ? "space-y-3" : "space-y-3";
+  const itemBase = [
+    "group flex w-full items-start gap-3 rounded-2xl border px-4 py-3 text-left transition",
+    isMobile
+      ? "border-white/15 bg-white/10 text-white"
+      : "border-white/12 bg-white/5 text-emerald-50",
+    "hover:-translate-y-0.5 hover:border-emerald-200/50 hover:bg-white/10 hover:shadow-[0_12px_30px_rgba(10,32,18,0.35)]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/70 focus-visible:ring-offset-2",
+    isMobile ? "focus-visible:ring-offset-emerald-950" : "focus-visible:ring-offset-emerald-950",
+  ].join(" ");
+  const iconWrap = [
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border",
+    isMobile ? "border-white/25 bg-white/10" : "border-white/20 bg-white/10",
+  ].join(" ");
+  const titleClasses = "text-sm font-semibold";
+  const descriptionClasses = isMobile
+    ? "text-xs text-white/70"
+    : "text-xs text-emerald-100/70";
+
+  return (
+    <div className={listClasses}>
+      {guidedPaths.map((path) => {
+        const Icon = GUIDED_PATH_ICONS[path.iconKey] || Flag;
+        return (
+          <Link key={path.slug} to={`/guided/${path.slug}`} className={itemBase}>
+            <span className={iconWrap}>
+              <Icon className="h-4 w-4" />
+            </span>
+            <span className="flex-1">
+              <span className={titleClasses}>{path.title}</span>
+              <span className={`mt-1 block ${descriptionClasses}`}>
+                {path.description}
+              </span>
+            </span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+function FullServiceGuidancePanel({ className = "" }) {
+  const containerClasses = [
+    className,
+    "pointer-events-auto flex h-full flex-col overflow-hidden rounded-[30px] border border-emerald-900/45 shadow-[0_30px_96px_rgba(24,47,10,0.55)] backdrop-blur-xl",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const headerClasses =
+    "flex-none border-b border-emerald-200/20 bg-white/5 px-5 py-4 text-emerald-50";
+  const bodyClasses =
+    "flex-1 space-y-4 overflow-y-auto px-5 py-5 text-emerald-50/92";
+  const panelSurfaceStyles = {
+    backgroundImage:
+      "radial-gradient(140% 140% at 15% 20%, rgba(44,113,73,0.32) 0%, rgba(6,27,16,0.96) 52%, rgba(3,18,11,0.98) 100%)",
+    backgroundColor: "#04190e",
+  };
+
+  return (
+    <div className={containerClasses} style={panelSurfaceStyles}>
+      <div className={headerClasses}>
+        <span className="inline-flex w-fit items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-50/80">
+          Full-Service Guidance
+        </span>
+        <h3 className="mt-3 text-lg font-semibold leading-tight text-emerald-50 md:text-xl">
+          Find Your Place in the NorthSide GTA
+        </h3>
+        <p className="mt-2 text-sm text-emerald-100/80">
+          Choose a lifestyle and let us narrow it down for you.
+        </p>
+      </div>
+      <div className={bodyClasses}>
+        <GuidedPathList />
+      </div>
+    </div>
   );
 }
 
