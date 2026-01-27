@@ -1,6 +1,6 @@
 // src/MapHero.js
 import React, { useEffect, useRef, useState, useId, useLayoutEffect } from "react";
-import { Flag, Landmark, PiggyBank, Train, Users } from "lucide-react";
+import { ChevronRight, Flag, Landmark, PiggyBank, Train, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import QuickContactCard from "./QuickContactCard";
 import { guidedPaths } from "./data/guidedPaths";
@@ -1312,22 +1312,29 @@ function GuidedPathList({ variant = "panel" }) {
   const isMobile = variant === "mobile";
   const listClasses = isMobile ? "space-y-3" : "space-y-3";
   const itemBase = [
-    "group flex w-full items-start gap-3 rounded-2xl border px-4 py-3 text-left transition",
+    "group relative flex w-full items-start gap-3 rounded-2xl border px-4 py-3 text-left transition",
     isMobile
       ? "border-white/15 bg-white/10 text-white"
       : "border-white/12 bg-white/5 text-emerald-50",
-    "hover:-translate-y-0.5 hover:border-emerald-200/50 hover:bg-white/10 hover:shadow-[0_12px_30px_rgba(10,32,18,0.35)]",
+    "hover:-translate-y-0.5 hover:border-emerald-200/50 hover:bg-white/12 hover:shadow-[0_12px_30px_rgba(10,32,18,0.35)]",
+    "active:translate-y-0 active:bg-white/15 active:shadow-[0_8px_18px_rgba(10,32,18,0.28)]",
+    "after:absolute after:left-4 after:right-4 after:-bottom-1.5 after:h-px after:bg-white/10 after:opacity-70 last:after:hidden",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200/70 focus-visible:ring-offset-2",
     isMobile ? "focus-visible:ring-offset-emerald-950" : "focus-visible:ring-offset-emerald-950",
   ].join(" ");
   const iconWrap = [
-    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border",
-    isMobile ? "border-white/25 bg-white/10" : "border-white/20 bg-white/10",
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] transition-colors duration-200",
+    isMobile
+      ? "border-white/30 bg-white/12 group-hover:border-white/50 group-hover:bg-white/18"
+      : "border-white/25 bg-white/10 group-hover:border-emerald-100/60 group-hover:bg-white/15",
   ].join(" ");
   const titleClasses = "text-sm font-semibold";
   const descriptionClasses = isMobile
     ? "text-xs text-white/70"
     : "text-xs text-emerald-100/70";
+  const chevronClasses = isMobile
+    ? "ml-auto mt-1 text-white/70"
+    : "ml-auto mt-1 text-emerald-100/70 opacity-0 transition-opacity duration-200 group-hover:opacity-80 group-focus-visible:opacity-80";
 
   return (
     <div className={listClasses}>
@@ -1343,6 +1350,9 @@ function GuidedPathList({ variant = "panel" }) {
               <span className={`mt-1 block ${descriptionClasses}`}>
                 {path.description}
               </span>
+            </span>
+            <span className={chevronClasses} aria-hidden="true">
+              <ChevronRight className="h-4 w-4" />
             </span>
           </Link>
         );
@@ -1371,7 +1381,7 @@ function FullServiceGuidancePanel({ className = "" }) {
   return (
     <div className={containerClasses} style={panelSurfaceStyles}>
       <div className={headerClasses}>
-        <span className="inline-flex w-fit items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-50/80">
+        <span className="inline-flex w-fit items-center justify-center rounded-full border border-white/35 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-emerald-50/90 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]">
           Full-Service Guidance
         </span>
         <h3 className="mt-3 text-lg font-semibold leading-tight text-emerald-50 md:text-xl">
