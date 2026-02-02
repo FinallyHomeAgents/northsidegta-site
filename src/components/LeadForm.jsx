@@ -9,6 +9,9 @@ export default function LeadForm({
   title,
   realmLink,
   ctaText = "Send Me the Listings",
+  formHeader = "",
+  formSubheader = "",
+  trustLine = "",
   helperText = DEFAULT_HELPER,
   onSuccessRedirect,
 }) {
@@ -69,6 +72,12 @@ export default function LeadForm({
   return (
     <div style={styles.card}>
       <form onSubmit={onSubmit}>
+        {(formHeader || formSubheader) && (
+          <div style={styles.formHeader}>
+            {formHeader && <p style={styles.formHeaderText}>{formHeader}</p>}
+            {formSubheader && <p style={styles.formHeaderHelper}>{formSubheader}</p>}
+          </div>
+        )}
         <label style={styles.label}>
           Full Name
           <input
@@ -140,6 +149,8 @@ export default function LeadForm({
           {status.loading ? "Sending…" : ctaText}
         </button>
 
+        {trustLine && <p style={styles.trustLine}>{trustLine}</p>}
+
         {status.err && <p style={{ color: "#c0392b", marginTop: 10 }}>{status.err}</p>}
         {status.ok && !onSuccessRedirect && (
           <p style={{ color: "#2ecc71", marginTop: 10 }}>
@@ -183,6 +194,26 @@ const styles = {
     fontWeight: 700,
     border: "none",
     cursor: "pointer",
+  },
+  formHeader: { marginBottom: 16 },
+  formHeaderText: {
+    margin: 0,
+    fontSize: 16,
+    fontWeight: 700,
+    color: "#0f172a",
+  },
+  formHeaderHelper: {
+    marginTop: 6,
+    marginBottom: 0,
+    fontSize: 12.5,
+    lineHeight: 1.5,
+    color: "#64748b",
+  },
+  trustLine: {
+    marginTop: 10,
+    marginBottom: 0,
+    fontSize: 12,
+    color: "#64748b",
   },
   helper: { marginTop: 16, fontSize: 12.5, lineHeight: 1.6, color: "#475569" },
 };
