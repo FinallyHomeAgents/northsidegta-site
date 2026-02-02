@@ -94,6 +94,14 @@ export default function CuratedPage() {
     (typeof page.subheadline === "string" && page.subheadline.trim()) || DEFAULT_SUBHEADLINE;
   const ctaText =
     (typeof page.ctaText === "string" && page.ctaText.trim()) || "Send Me the Listings";
+  const eyebrow =
+    (typeof page.eyebrow === "string" && page.eyebrow.trim()) || "";
+  const formHeader =
+    (typeof page.formHeader === "string" && page.formHeader.trim()) || "";
+  const formSubheader =
+    (typeof page.formSubheader === "string" && page.formSubheader.trim()) || "";
+  const trustLine =
+    (typeof page.trustLine === "string" && page.trustLine.trim()) || "";
   const seoDescription =
     (typeof page.seoDescription === "string" && page.seoDescription.trim()) || subheadline;
 
@@ -146,6 +154,7 @@ export default function CuratedPage() {
             </div>
             <div style={layout.contentColumn}>
               <div style={layout.headingGroup}>
+                {eyebrow && <p style={layout.eyebrow}>{eyebrow}</p>}
                 <h1 style={layout.headline}>{headline}</h1>
                 {subheadline && <p style={layout.subheadline}>{subheadline}</p>}
               </div>
@@ -155,6 +164,9 @@ export default function CuratedPage() {
                   title={headline}
                   realmLink={page.realmLink}
                   ctaText={ctaText}
+                  formHeader={formHeader}
+                  formSubheader={formSubheader}
+                  trustLine={trustLine}
                   onSuccessRedirect={redirectUrl}
                 />
               </div>
@@ -229,6 +241,13 @@ const layout = {
     textAlign: "center",
     maxWidth: 720,
     marginBottom: 32,
+  },
+  eyebrow: {
+    margin: "0 0 12px",
+    fontSize: 13,
+    fontWeight: 600,
+    letterSpacing: "0.02em",
+    color: "#64748b",
   },
   headline: {
     margin: 0,
