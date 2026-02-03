@@ -27,6 +27,7 @@ import ChooseYourPathPage from "./ChooseYourPathPage";
 import TasteHubPage     from "./TasteHubPage";
 import TasteHubSmartListPage from "./TasteHubSmartListPage";
 import TasteHubCmsPage  from "./TasteHubCmsPage";
+import TasteHubRequestTabletopSignPage from "./TasteHubRequestTabletopSignPage";
 import GuidedPathPage from "./GuidedPathPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
@@ -83,6 +84,7 @@ function App() {
           <Route path="/sellers"      element={<SellersPage />} />
           <Route path="/community"    element={<CommunityPage />} />
           <Route path="/tastehub"     element={<TasteHubPage />} />
+          <Route path="/tastehub/request-tabletop-sign" element={<TasteHubRequestTabletopSignPage />} />
           <Route path="/tastehub/:slug" element={<TasteHubPage />} />
           <Route path="/tastehub/smart-list" element={<TasteHubSmartListPage />} />
           <Route path="/community/events/archive" element={<EventsArchivePage />} />
