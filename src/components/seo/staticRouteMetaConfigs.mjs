@@ -251,6 +251,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/tastehub/request-tabletop-sign",
+    meta: {
+      route: "/tastehub/request-tabletop-sign",
+      documentTitle: "Request a Tabletop Sign | NorthSide TasteHub",
+      title: "Request a Tabletop Sign | NorthSide TasteHub",
+      description:
+        "Featured restaurants on NorthSide TasteHub receive priority visibility — plus a tabletop sign that makes it easy for guests to vote. Limited to 50 this round.",
+      canonicalUrl: "https://northsidegta.ca/tastehub/request-tabletop-sign",
+      ogType: "website",
+      ogImage: "/seo/tastehub-default-poll-share.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/seo/tastehub-default-poll-share.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/cms/tastehub",
     meta: {
       route: "/cms/tastehub",
