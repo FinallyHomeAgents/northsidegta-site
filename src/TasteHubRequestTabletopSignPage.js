@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import HeaderShell from "./components/HeaderShell";
-import Footer from "./components/Footer";
+import Footer from "./Footer";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 
