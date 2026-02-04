@@ -73,5 +73,14 @@
     "seo_title": "NorthSide TasteHub™ | Community Food Rankings Across the NorthSide GTA",
     "seo_description": "Powered by the Finally Home Agents team, NorthSide TasteHub™ is where locals rank the best pizza, wings, date night spots and more across Uxbridge, Georgina, Stouffville, Aurora, Newmarket and the rest of the NorthSide GTA. Check live rankings or cast your vote today.",
     "seo_image": "/seo/tastehub-default-poll-share.jpg"
+  },
+  "/tastehub/request-tabletop-sign": {
+    "seo_title": "Request a Tabletop Sign | NorthSide TasteHub",
+    "seo_description": "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
+    "seo_image": "/Images/tastehub/request-tabletop-sign/hero.png",
+    "og_title": "Request a Tabletop Sign | NorthSide TasteHub",
+    "og_description": "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
+    "og_image": "/Images/tastehub/request-tabletop-sign/hero.png",
+    "canonical_url": "https://northsidegta.ca/tastehub/request-tabletop-sign"
   }
 }
