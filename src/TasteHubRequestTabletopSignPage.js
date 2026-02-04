@@ -216,8 +216,8 @@ export default function TasteHubRequestTabletopSignPage() {
             <div className="relative">
               <div className="absolute inset-0 rounded-[32px] bg-gradient-to-tr from-emerald-950/30 via-transparent to-emerald-900/40" />
               <img
-                src="/images/placeholder-insight-hero.svg"
-                alt="TasteHub tabletop sign preview"
+                src="/Images/tastehub/request-tabletop-sign/hero.png"
+                alt="TasteHub tabletop sign on a counter in a busy restaurant"
                 className="relative h-full w-full rounded-[32px] object-cover shadow-[0_30px_80px_rgba(6,55,24,0.35)]"
               />
             </div>
@@ -308,13 +308,13 @@ export default function TasteHubRequestTabletopSignPage() {
               </div>
               <div className="flex items-center gap-4">
                 <img
-                  src="/images/placeholder-insight-hero.svg"
-                  alt="Matthew placeholder headshot"
+                  src="/Images/matthew.jpg"
+                  alt="Matthew, NorthSide GTA co-founder"
                   className="h-16 w-16 rounded-full object-cover"
                 />
                 <img
-                  src="/images/placeholder-insight-hero.svg"
-                  alt="Landon placeholder headshot"
+                  src="/Images/landon.jpg"
+                  alt="Landon, NorthSide GTA co-founder"
                   className="h-16 w-16 rounded-full object-cover"
                 />
               </div>
