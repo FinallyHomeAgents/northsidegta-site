@@ -105,12 +105,12 @@ function buildAbsoluteUrl(value) {
 
 function normalizeMetaImage(siteSeoImage, raw = {}) {
   const candidates = [
+    siteSeoImage,
     raw.ogImage,
     raw.image,
     raw.twitterImage,
     raw.metaImage,
     raw.metaImagePath,
-    siteSeoImage,
     DEFAULT_META_IMAGE_PATH,
   ];
 
@@ -236,7 +236,10 @@ function getMetaTagsFromData(raw = {}) {
   const ogImageValue = resolvedMetaImageUrl;
   const ogImageAltValue = safeString(raw.ogImageAlt);
   const twitterCardValue = safeString(raw.twitterCard) || DEFAULT_TWITTER_CARD;
-  const twitterImageValue = resolveTwitterImage(raw.twitterImage, ogImageValue);
+  const twitterImageValue = resolveTwitterImage(
+    metaImageSource ? "" : raw.twitterImage,
+    ogImageValue,
+  );
   const twitterImageAltValue = safeString(raw.twitterImageAlt || ogImageAltValue);
   const siteNameValue = safeString(raw.siteName);
   const articleAuthorValue = safeString(raw.articleAuthor);
