@@ -58,35 +58,9 @@ export default function TasteHubRequestTabletopSignPage() {
 
   const meta = useMemo(() => {
     const base = getStaticRouteMeta("/tastehub/request-tabletop-sign") || {};
-
-    const heroAbsolute =
-      "https://northsidegta.ca/Images/tastehub/request-tabletop-sign/hero.png";
-
     return {
       ...base,
-
-      // SEO
-      title: "Request a Tabletop Sign | NorthSide TasteHub",
-      description:
-        "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
-
-      canonicalUrl: "https://northsidegta.ca/tastehub/request-tabletop-sign",
-
-      // Open Graph overrides (force)
-      ogTitle: "Request a Tabletop Sign | NorthSide TasteHub",
-      ogDescription:
-        "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
-      ogType: "website",
-      ogImage: heroAbsolute,
-      ogImageAlt: "TasteHub tabletop sign displayed on a restaurant counter",
-
-      // Twitter overrides (force)
-      twitterCard: "summary_large_image",
-      twitterTitle: "Request a Tabletop Sign | NorthSide TasteHub",
-      twitterDescription:
-        "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
-      twitterImage: heroAbsolute,
-      twitterImageAlt: "TasteHub tabletop sign displayed on a restaurant counter",
+      route: "/tastehub/request-tabletop-sign",
     };
   }, []);
 
