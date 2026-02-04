@@ -116,96 +116,238 @@ export default function TasteHubRequestTabletopSignPage() {
   };
 
   const isSubmitting = status === "submitting";
+  const valueCards = [
+    {
+      title: "Get Seen",
+      description: "Your restaurant appears on TasteHub when locals search where to eat.",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+          <path
+            d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <circle cx="12" cy="12" r="3.25" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        </svg>
+      ),
+    },
+    {
+      title: "Get Votes",
+      description: "Guests scan the sign and vote instantly from their phone.",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+          <path
+            d="M6 7.5h8.5M6 12h8.5M6 16.5h5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M15.75 7.5 18 9.75l3.75-4.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Get More Traffic",
+      description: "Top-voted spots become go-to recommendations in the community.",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+          <path
+            d="M5 15.5c2.5 0 4-2.5 6.5-2.5s4 2.5 7.5 2.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M5 9.5c2.5 0 4-2.5 6.5-2.5s4 2.5 7.5 2.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+  ];
+  const localGuideBullets = ["No ads", "No paid placements", "Just real votes from real locals"];
 
   return (
     <>
       <DynamicMetaTags {...meta} />
       <HeaderShell />
       <main className="flex-1 bg-[#f8fbf6] text-slate-900">
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#0b3a20] via-[#0f4c2a] to-[#f59e0b]">
-          <div className="absolute inset-0 opacity-30" aria-hidden>
-            <div className="absolute -left-12 top-12 h-64 w-64 rounded-full bg-emerald-300 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-200 blur-3xl" />
+        <section className="relative overflow-hidden bg-[#0b2f1a] text-white">
+          <div className="absolute inset-0 opacity-35" aria-hidden>
+            <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-emerald-400 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-amber-200 blur-3xl" />
           </div>
-          <div className="relative mx-auto flex max-w-5xl flex-col gap-6 px-6 pb-16 pt-20 text-white sm:px-8 md:pb-20 lg:px-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100/90">
-              NorthSide TasteHub
-            </p>
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-              50 Restaurants Will Be Featured on NorthSide TasteHub
-            </h1>
-            <p className="max-w-2xl text-lg text-emerald-50/90 sm:text-xl">
-              Selected spots receive priority visibility across the NorthSide GTA — plus a tabletop sign that makes it
-              easy for guests to vote and support you.
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href="#request-tabletop-sign"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-emerald-900 shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-900"
-              >
-                Claim My Spot
-              </a>
-              <p className="text-sm text-emerald-50/80">
-                Featured listing first. Tabletop sign included.
+          <div className="relative mx-auto grid max-w-6xl gap-10 px-6 pb-16 pt-20 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-12 lg:pb-20">
+            <div className="space-y-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100/90">
+                NorthSide TasteHub
+              </p>
+              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                More Votes. More Visibility. More Traffic.
+              </h1>
+              <p className="max-w-xl text-lg text-emerald-50/90 sm:text-xl">
+                NorthSide TasteHub helps locals discover where to eat — and helps great restaurants stand out.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <a
+                  href="#request-tabletop-sign"
+                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-emerald-900 shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-900"
+                >
+                  Request a Tabletop Sign
+                </a>
+                <p className="text-sm text-emerald-50/80">
+                  Free for selected restaurants • limited quantities available
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-0 rounded-[32px] bg-gradient-to-tr from-emerald-950/30 via-transparent to-emerald-900/40" />
+              <img
+                src="/images/placeholder-insight-hero.svg"
+                alt="TasteHub tabletop sign preview"
+                className="relative h-full w-full rounded-[32px] object-cover shadow-[0_30px_80px_rgba(6,55,24,0.35)]"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-8 lg:px-12">
+          <div className="flex flex-col gap-8">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-700">How it drives traffic</p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {valueCards.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-3xl border border-emerald-100/70 bg-white p-6 shadow-[0_18px_50px_rgba(6,55,24,0.08)]"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                    {card.icon}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-slate-900">{card.title}</h3>
+                  <p className="mt-2 text-sm text-slate-600">{card.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-6xl px-6 py-8 sm:px-8 lg:px-12">
+          <div className="rounded-3xl border border-emerald-100 bg-white p-8 shadow-[0_20px_60px_rgba(6,55,24,0.1)] lg:p-10">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  Think of TasteHub as the NorthSide GTA’s local food guide — decided by the community.
+                </h2>
+                <p className="text-sm text-slate-600">
+                  The restaurants people consistently choose naturally rise to the top. Category winners receive a
+                  NorthSide TasteHub Award for display in-store.
+                </p>
+              </div>
+              <ul className="space-y-3 text-sm text-slate-700">
+                {localGuideBullets.map((bullet) => (
+                  <li key={bullet} className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                      ✓
+                    </span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-8 lg:px-12">
+          <div className="grid gap-6 rounded-3xl border border-emerald-100/70 bg-white p-8 shadow-[0_20px_60px_rgba(6,55,24,0.08)] lg:grid-cols-[auto_1fr] lg:items-center lg:gap-10">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+              <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden="true">
+                <path
+                  d="M12 3.75 14.4 8.4 19.5 9.2l-3.6 3.5.9 5.1L12 15.9l-4.8 1.9.9-5.1L4.5 9.2l5.1-.8L12 3.75Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900">NorthSide TasteHub Awards</h2>
+              <p className="mt-3 text-sm text-slate-600">
+                Top-voted restaurants in each town and category receive a TasteHub Award (window decal / framed
+                recognition) to display in-store — helping customers instantly recognize local favourites.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16 sm:px-8 lg:flex-row lg:items-start lg:px-12">
-          <div className="flex-1 space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold text-slate-900">How it works</h2>
-              <ul className="space-y-3 text-sm text-slate-600">
-                {[
-                  "Locals vote for the places they actually return to",
-                  "Restaurants with more votes appear higher in TasteHub results",
-                  "Higher visibility leads to more local discovery",
-                  "We provide a tabletop sign so guests can vote in seconds",
-                ].map((item) => (
-                  <li key={item} className="flex gap-3">
-                    <span className="mt-1 h-2 w-2 flex-none rounded-full bg-emerald-500" aria-hidden />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-[0_20px_60px_rgba(6,55,24,0.12)]">
-              <h3 className="text-xl font-semibold text-slate-900">Limited to 50 tabletop signs this round</h3>
-              <p className="mt-3 text-sm text-slate-600">
-                To keep TasteHub curated and meaningful, we’re limiting tabletop signs to the first 50 restaurants that
-                request a feature spot. Once filled, requests close.
-              </p>
+        <section className="mx-auto w-full max-w-6xl px-6 py-10 sm:px-8 lg:px-12">
+          <div className="rounded-3xl border border-emerald-100 bg-white p-8 shadow-[0_20px_60px_rgba(6,55,24,0.08)]">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-3">
+                <h2 className="text-2xl font-semibold text-slate-900">Matthew &amp; Landon</h2>
+                <p className="text-sm font-semibold text-emerald-700">Finally Home Agents / NorthSide GTA</p>
+                <p className="max-w-2xl text-sm text-slate-600">
+                  “We built TasteHub to help locals discover the best places to eat — and to help great restaurants get
+                  the recognition they deserve. Small businesses are the heart of every town we work in.”
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <img
+                  src="/images/placeholder-insight-hero.svg"
+                  alt="Matthew placeholder headshot"
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+                <img
+                  src="/images/placeholder-insight-hero.svg"
+                  alt="Landon placeholder headshot"
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+              </div>
             </div>
           </div>
+        </section>
 
-          <div className="flex w-full max-w-xl flex-col gap-6">
-            <div
-              id="request-tabletop-sign"
-              className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-[0_24px_80px_rgba(6,55,24,0.16)] sm:p-8"
-            >
-              {status === "success" ? (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-semibold text-slate-900">Request received</h2>
-                  <p className="text-sm text-slate-600">
-                    We’ll confirm your feature spot and coordinate pickup or delivery.
-                  </p>
-                  <Link
-                    to="/tastehub"
-                    className="inline-flex items-center text-sm font-semibold text-emerald-700 hover:text-emerald-900"
-                  >
-                    Back to TasteHub →
-                  </Link>
+        <section className="mx-auto w-full max-w-6xl px-6 pb-20 pt-4 sm:px-8 lg:px-12">
+          <div
+            id="request-tabletop-sign"
+            className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-[0_24px_80px_rgba(6,55,24,0.16)] sm:p-8"
+          >
+            {status === "success" ? (
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold text-slate-900">Request received</h2>
+                <p className="text-sm text-slate-600">
+                  We’ll confirm your feature spot and coordinate pickup or delivery.
+                </p>
+                <Link
+                  to="/tastehub"
+                  className="inline-flex items-center text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+                >
+                  Back to TasteHub →
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-semibold text-slate-900">Request your tabletop sign</h2>
+                  <p className="text-sm text-slate-500">We’ll confirm availability and share the next steps.</p>
                 </div>
-              ) : (
-                <>
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-semibold text-slate-900">Request your tabletop sign</h2>
-                    <p className="text-sm text-slate-500">Takes ~30 seconds. No fees. No contracts.</p>
-                  </div>
 
-                  <form className="mt-6 space-y-5" onSubmit={handleSubmit} noValidate>
+                <form className="mt-6 space-y-5" onSubmit={handleSubmit} noValidate>
                     <div>
                       <label className="text-sm font-semibold text-slate-700" htmlFor="restaurantName">
                         Restaurant Name
@@ -390,13 +532,12 @@ export default function TasteHubRequestTabletopSignPage() {
                       disabled={isSubmitting}
                       className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-700 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-700/30 transition hover:-translate-y-0.5 hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      {isSubmitting ? "Submitting…" : "Claim My Spot"}
+                      {isSubmitting ? "Submitting…" : "Request a Tabletop Sign"}
                     </button>
                   </form>
                 </>
               )}
             </div>
-          </div>
         </section>
       </main>
       <Footer />
