@@ -1,0 +1,53 @@
+{
+  "ballot_items": [
+    {
+      "name": "Ground Burger Bar",
+      "address": "352 Doug Duncan Dr #2, Newmarket, ON",
+      "link": "https://share.google/vpI0NkFjj8qZTDgDA"
+    },
+    {
+      "name": "Fresh Burger",
+      "address": "17305 Leslie St Unit 2, Newmarket, ON",
+      "link": "https://share.google/AsOyFKXuaQI40JAiu"
+    },
+    {
+      "name": "The Burger's Priest",
+      "address": "17480 Yonge St Unit B9, Newmarket, ON",
+      "link": "https://share.google/j7U3ZpmQU0yaczTTQ"
+    },
+    {
+      "name": "Woody Wood Burger",
+      "address": "1100 Davis Dr #10, Newmarket, ON",
+      "link": "https://share.google/oG7KQ4uVlnsLnlP72"
+    },
+    {
+      "name": "Five Guys",
+      "address": "18265 Yonge St, East Gwillimbury, ON",
+      "link": "https://share.google/JDF6n7v4XltXqyLnD"
+    },
+    {
+      "name": "B Boyz The Burger Architect",
+      "address": "16700 Bayview Ave Unit #26, Newmarket, ON",
+      "link": "https://share.google/vcXASxOKgux6vdzjB"
+    },
+    {
+      "name": "Burgers n' Fries Forever",
+      "address": "17600 Yonge St Unit FM13B, Newmarket, ON",
+      "link": "https://share.google/B3BQiAGpM8qCXHMMg"
+    },
+    {
+      "name": "The WORKS Burgers & BBQ",
+      "address": "18075 Yonge St, Newmarket, ON",
+      "link": "https://share.google/2MdINcayGBVQDtps1"
+    }
+  ],
+  "slug": "best-burger-newmarket",
+  "featured": false,
+  "town": "Newmarket",
+  "status": "live",
+  "ranking_key": "tastehub_newmarket_burger",
+  "title": "Best Burger in Newmarket",
+  "image": "/uploads/newmarketburger.jpg",
+  "description": "Help crown Newmarket's go-to Burger spot. Cast your vote and see who’s on top in real time.",
+  "category": "Burgers"
+}
