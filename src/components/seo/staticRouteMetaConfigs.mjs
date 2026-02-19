@@ -203,6 +203,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/coffee",
+    meta: {
+      route: "/coffee",
+      documentTitle: "Book a Coffee | Finally Home Agents",
+      title: "Book a Coffee | Finally Home Agents",
+      description:
+        "Book a coffee with Finally Home Agents. Pick a day and start time from 9am to 9pm and we'll confirm the time and location.",
+      canonicalUrl: "https://northsidegta.ca/coffee",
+      ogType: "website",
+      ogImage: "/Images/northsidegta-map-bg.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/Images/northsidegta-map-bg.jpg",
+      siteName: "NorthSide GTA",
+    },
+  },
+  {
     route: "/contact",
     meta: {
       route: "/contact",
