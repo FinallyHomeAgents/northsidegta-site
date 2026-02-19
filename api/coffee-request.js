@@ -1,12 +1,14 @@
 import { Resend } from 'resend'
+import { DateTime } from 'luxon'
 
-import { readJsonBody } from '../lib/api-helpers'
-import { getKvClient, isKvConfigured } from '../lib/kv-admin'
+import { readJsonBody } from '../lib/api-helpers.js'
+import { getKvClient, isKvConfigured } from '../lib/kv-admin.js'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const RATE_LIMIT_MAX = 8
 const RATE_LIMIT_WINDOW_SECONDS = 60 * 60
 const TIME_REGEX = /^([01]\d|2[0-3]):(00|30)$/
+const BUSINESS_TZ = 'America/Toronto'
 
 const resendClient = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 const LEAD_TO_EMAIL = process.env.LEAD_TO_EMAIL || 'contact@finallyhomeagents.com'
@@ -49,21 +51,34 @@ function formatDateTime(date, time) {
   })
 }
 
-function isValidDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
-  const parsed = new Date(`${value}T00:00:00`)
-  if (Number.isNaN(parsed.getTime())) return false
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  return parsed >= today
-}
-
 function isValidTime(value) {
   if (!TIME_REGEX.test(value)) return false
   const [hour, minute] = value.split(':').map((part) => Number(part))
   if (hour < 9 || hour > 21) return false
   if (hour === 21 && minute !== 0) return false
   return true
+}
+
+export function validateRequestedDateTime(requestedDate, requestedTime) {
+  const requested = DateTime.fromISO(`${requestedDate}T${requestedTime}`, { zone: BUSINESS_TZ })
+  if (!requested.isValid) {
+    return { valid: false, reason: 'invalid' }
+  }
+
+  if (!isValidTime(requestedTime)) {
+    return { valid: false, reason: 'invalid' }
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)) {
+    return { valid: false, reason: 'invalid' }
+  }
+
+  const now = DateTime.now().setZone(BUSINESS_TZ)
+  if (requested < now) {
+    return { valid: false, reason: 'past' }
+  }
+
+  return { valid: true }
 }
 
 async function checkRateLimit(ip) {
@@ -151,13 +166,16 @@ export default async function handler(req, res) {
     return
   }
 
-  if (!isValidDate(payload.requestedDate)) {
-    res.status(400).json({ ok: false, error: 'Please select a future date.' })
-    return
-  }
-
-  if (!isValidTime(payload.requestedTime)) {
-    res.status(400).json({ ok: false, error: 'Please select a valid time between 9:00 AM and 9:00 PM.' })
+  const requestedDateTimeValidation = validateRequestedDateTime(
+    payload.requestedDate,
+    payload.requestedTime,
+  )
+  if (!requestedDateTimeValidation.valid) {
+    const errorMessage =
+      requestedDateTimeValidation.reason === 'past'
+        ? 'Requested time has already passed'
+        : 'Invalid requested date/time'
+    res.status(400).json({ ok: false, error: errorMessage })
     return
   }
 
