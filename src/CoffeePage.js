@@ -208,14 +208,22 @@ export default function CoffeePage() {
       <HeaderShell />
       <main className="bg-slate-50 pb-20">
         <section className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
-          <div className="grid gap-8 rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/5 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
+          <div className="grid gap-8 rounded-[32px] border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.85fr)] lg:p-10">
             <div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-slate-200 pb-3 text-xs text-slate-600 sm:text-sm">
+                <span className="font-medium text-slate-700">⭐ 5.0 on Google</span>
+                <span>Trusted by homeowners across the NorthSide GTA</span>
+                <a href="#reviews" className="font-medium underline underline-offset-2 transition hover:text-slate-900">
+                  Read our reviews
+                </a>
+              </div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">Finally Home Agents</p>
-              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-emerald-950 sm:text-5xl">Book the coffee.</h1>
-              <p className="mt-4 max-w-xl text-base text-slate-600 sm:text-lg">
-                Pick a day and start time (9am–9pm). We&apos;ll confirm the time and location.
+              <h1 className="mt-4 text-4xl font-medium tracking-tight text-emerald-950 sm:text-5xl">Book the coffee.</h1>
+              <p className="mt-4 max-w-[600px] text-base text-slate-700/90 sm:text-lg">
+                Pick a day and start time between 9am and 9pm.
+                <br className="hidden sm:block" />
+                We&apos;ll confirm the time and location by text or email.
               </p>
-              <p className="mt-2 text-sm text-slate-500">No pressure. This is just a quick intro.</p>
 
               <div className="mt-8 rounded-3xl border border-slate-200 p-4 sm:p-6">
                 <div className="mb-4 flex items-center justify-between">
@@ -296,7 +304,7 @@ export default function CoffeePage() {
 
               {success ? (
                 <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
-                  <h2 className="text-2xl font-semibold text-emerald-900">Thanks — we’ll be in contact to confirm the time and location.</h2>
+                  <h2 className="text-2xl font-semibold text-emerald-900">Thanks — we’ll be in contact shortly to confirm the time and the location.</h2>
                   <p className="mt-3 text-sm text-emerald-800">
                     Your request is pending. Requested time: <strong>{requestedTimeLabel}</strong>.
                   </p>
@@ -327,6 +335,15 @@ export default function CoffeePage() {
                   </div>
                   <FormField name="notes" label="Notes (optional)" value={form.notes} onChange={updateField} as="textarea" rows={3} />
 
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">WHAT TO EXPECT</p>
+                    <ul className="mt-2 space-y-1 text-sm text-slate-700">
+                      <li>Chat</li>
+                      <li>Answer your questions</li>
+                      <li>Enjoy a good coffee</li>
+                    </ul>
+                  </div>
+
                   <button
                     type="submit"
                     disabled={submitting}
@@ -334,17 +351,17 @@ export default function CoffeePage() {
                   >
                     {submitting ? "Sending…" : "Request this time"}
                   </button>
-                  <p className="text-xs text-slate-500">Requests aren’t auto-confirmed. We’ll confirm by text/email.</p>
+                  <p className="text-xs text-slate-500">Requests aren’t auto-confirmed. We’ll confirm shortly.</p>
                 </form>
               )}
             </div>
           </div>
         </section>
 
-        <section className="mx-auto mt-14 max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-[28px] bg-emerald-950 px-6 py-10 sm:px-10">
-            <h2 className="text-3xl font-semibold text-white sm:text-4xl">Real Google Reviews</h2>
-            <p className="mt-3 text-base text-emerald-100">From real clients we&apos;ve represented.</p>
+        <section id="reviews" className="mx-auto mt-12 max-w-6xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+          <div className="border-t border-slate-200 pt-10">
+            <h2 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Real Google Reviews</h2>
+            <p className="mt-3 text-base text-slate-600">From real clients we&apos;ve represented across the NorthSide GTA.</p>
             <div className="mt-8">
               <ReviewsCarousel reviews={REVIEWS} disclaimer="Real reviews from real clients." />
             </div>
