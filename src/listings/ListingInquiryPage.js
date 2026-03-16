@@ -47,6 +47,7 @@ function ListingInquiryForm({ config, agentStatus }) {
     notes: "",
     requestDetails: true,
     requestShowing: false,
+    confirmNoOtherBrokerage: false,
   });
   const [state, setState] = useState({ submitting: false, success: false, error: "" });
 
@@ -63,6 +64,7 @@ function ListingInquiryForm({ config, agentStatus }) {
     if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) return "Please enter a valid email address.";
     if (form.phone.replace(/\D/g, "").length < 10) return "Please enter a valid phone number.";
     if (!form.requestDetails && !form.requestShowing) return "Please choose at least one request option.";
+    if (!form.confirmNoOtherBrokerage) return "Please confirm your brokerage status before submitting.";
     return "";
   };
 
@@ -86,6 +88,7 @@ function ListingInquiryForm({ config, agentStatus }) {
       payload.append("message", form.notes.trim());
       payload.append("request_details", form.requestDetails ? "Yes" : "No");
       payload.append("request_showing", form.requestShowing ? "Yes" : "No");
+      payload.append("brokerage_confirmation", form.confirmNoOtherBrokerage ? "Confirmed" : "Not confirmed");
       payload.append("property_address", config.property.headlineAddress);
       payload.append("property_city", config.property.cityLine);
       payload.append("property_province", config.property.province);
@@ -111,6 +114,7 @@ function ListingInquiryForm({ config, agentStatus }) {
         notes: "",
         requestDetails: true,
         requestShowing: false,
+        confirmNoOtherBrokerage: false,
       });
     } catch {
       setState({
@@ -163,7 +167,23 @@ function ListingInquiryForm({ config, agentStatus }) {
           </div>
         </fieldset>
 
-        {state.error && <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{state.error}</p>}
+        <div className="rounded-xl border border-slate-200 px-3 py-3">
+          <label htmlFor="confirmNoOtherBrokerage" className="flex items-start gap-3 text-sm text-slate-700">
+            <input
+              id="confirmNoOtherBrokerage"
+              type="checkbox"
+              name="confirmNoOtherBrokerage"
+              checked={form.confirmNoOtherBrokerage}
+              onChange={onChange}
+              required
+              aria-required="true"
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-400"
+            />
+            <span>I confirm that I am not currently under contract with another real estate brokerage.</span>
+          </label>
+        </div>
+
+        {state.error && <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">{state.error}</p>}
         {state.success && <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Thanks — we received your request and will follow up shortly.</p>}
 
         <button type="submit" disabled={state.submitting} className="inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
@@ -287,7 +307,7 @@ export default function ListingInquiryPage({ config }) {
                     <img
                       src={member.imageSrc}
                       alt={member.imageAlt || `Headshot of ${member.name}`}
-                      className="h-32 w-full rounded-xl object-cover"
+                      className="h-auto w-full rounded-xl object-cover"
                       loading="lazy"
                     />
                   ) : (

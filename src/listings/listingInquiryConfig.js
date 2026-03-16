@@ -10,8 +10,8 @@ export const listingInquiry209Barrie = {
     cityLine: "Thornton, Essa",
     province: "Ontario",
     mls: "N12542736",
-    imageSrc: "/Images/hero-desktop.jpg",
-    imageAlt: "Front exterior view placeholder for 209 Barrie Street.",
+    imageSrc: "/Images/n12542736_1.jpg",
+    imageAlt: "Front exterior photo of 209 Barrie Street, Thornton",
   },
   intro: {
     title: "Thanks for your interest in 209 Barrie Street",
