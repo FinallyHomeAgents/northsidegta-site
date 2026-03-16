@@ -206,7 +206,16 @@ export default function ListingInquiryPage({ config }) {
                 <p className="mt-4 text-sm font-medium text-slate-600">{config.intro.prompt}</p>
               </div>
               <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/50">
-                <div className="h-32 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800" aria-hidden />
+                {config.property.imageSrc ? (
+                  <img
+                    src={config.property.imageSrc}
+                    alt={config.property.imageAlt || `${config.property.headlineAddress} listing photo`}
+                    className="h-40 w-full rounded-xl object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="h-32 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800" aria-hidden />
+                )}
                 <div className="mt-4 grid gap-3">
                   <DetailChip label="Address" value={config.property.headlineAddress} />
                   <DetailChip label="Location" value={`${config.property.cityLine}, ${config.property.province}`} />
@@ -274,7 +283,16 @@ export default function ListingInquiryPage({ config }) {
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {config.team.members.map((member) => (
                 <article key={member.name} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <div className="h-32 rounded-xl border border-dashed border-slate-300 bg-white" aria-label={`${member.name} headshot placeholder`} />
+                  {member.imageSrc ? (
+                    <img
+                      src={member.imageSrc}
+                      alt={member.imageAlt || `Headshot of ${member.name}`}
+                      className="h-32 w-full rounded-xl object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="h-32 rounded-xl border border-dashed border-slate-300 bg-white" aria-label={`${member.name} headshot placeholder`} />
+                  )}
                   <p className="mt-3 text-base font-semibold text-slate-900">{member.name}</p>
                   <p className="text-sm text-slate-600">{member.role}</p>
                 </article>

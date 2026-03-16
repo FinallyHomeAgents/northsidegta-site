@@ -10,6 +10,8 @@ export const listingInquiry209Barrie = {
     cityLine: "Thornton, Essa",
     province: "Ontario",
     mls: "N12542736",
+    imageSrc: "/Images/hero-desktop.jpg",
+    imageAlt: "Front exterior view placeholder for 209 Barrie Street.",
   },
   intro: {
     title: "Thanks for your interest in 209 Barrie Street",
@@ -22,8 +24,18 @@ export const listingInquiry209Barrie = {
     phone: "647-668-4646",
     email: "contact@finallyhomeagents.com",
     members: [
-      { name: "Matthew Mulhall", role: "Real Estate Agent" },
-      { name: "Landon Mulhall", role: "Real Estate Agent" },
+      {
+        name: "Matthew Mulhall",
+        role: "Real Estate Agent",
+        imageSrc: "/Images/matthew.jpg",
+        imageAlt: "Headshot of Matthew Mulhall.",
+      },
+      {
+        name: "Landon Mulhall",
+        role: "Real Estate Agent",
+        imageSrc: "/Images/landon.jpg",
+        imageAlt: "Headshot of Landon Mulhall.",
+      },
     ],
     summary:
       "Finally Home Agents help buyers and sellers across the NorthSide GTA with a professional, informed, and straightforward approach.",
