@@ -1,5 +1,93 @@
 [
   {
+    "slug": "go-north-starting-life-northside-gta",
+    "title": "Why more people are building their lives just north of Toronto",
+    "publishDate": "2026-03-24T13:00:00.000Z",
+    "excerpt": "More homes under $800K just north of Toronto. Why young families and their parents are starting their next chapter in the NorthSide GTA.",
+    "featureImage": "/uploads/insights/go-north-hero.jpg",
+    "featureImageAlt": "A scenic NorthSide GTA community just north of Toronto."
+  },
+  {
+    "slug": "parents-using-home-equity-help-kids-buy-houses-northside-gta",
+    "title": "Parents Are Using Their Home Equity to Help Their Kids Buy Houses — Just North of Toronto",
+    "publishDate": "2026-02-10T18:27:00.000Z",
+    "excerpt": "\"More GTA parents are unlocking the equity they’ve built over decades to help their kids buy real homes — not tiny condos. NorthSide GTA towns like Georgina, Stouffville, and Newmarket just to name a few, are closer than most people think — and for the first time in years, ownership actually makes sense again.\"",
+    "featureImage": "/uploads/insights/northside-gta-family-driveway-home-ownership.jpg",
+    "featureImageAlt": "Parents hugging their adult children in the driveway of a detached suburban home at sunset in the NorthSide GTA."
+  },
+  {
+    "slug": "where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers",
+    "title": "Where to Live in the NorthSide GTA (2026 Guide for Toronto Movers)",
+    "publishDate": "2025-11-28T17:22:00.000Z",
+    "excerpt": "Thinking about moving north of Toronto in 2026? Here’s how Uxbridge, Stouffville, East Gwillimbury, Newmarket, Aurora, Georgina, and Scugog compare for Toronto buyers — commute, lifestyle, housing, and who each town is best for.",
+    "featureImage": "/uploads/insights/where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers-hero.jpg",
+    "featureImageAlt": "“A high-resolution aerial view of a NorthSide GTA neighbourhood surrounded by fall forests, winding roads, and spacious properties — representing the landscape and lifestyle of the region.”"
+  },
+  {
+    "slug": "northside-tastehub-launch",
+    "title": "Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA",
+    "publishDate": "2025-11-24T18:00:00.000Z",
+    "excerpt": "NorthSide TasteHub is our new community-powered food hub for Uxbridge, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville and Scugog. Vote for your favourite spots, discover new places to eat, and finally settle all those “best pizza” debates north of Toronto.",
+    "featureImage": "/uploads/insights/uxbridgedinein.png",
+    "featureImageAlt": "NorthSide TasteHub voting screen showing local restaurant matchups in the NorthSide GTA"
+  },
+  {
+    "slug": "spotlight-on-aurora",
+    "title": "Meet the Towns: Spotlight on Aurora",
+    "publishDate": "2025-11-13T18:40:00.000Z",
+    "excerpt": "We love Aurora for its charm, trails, and sense of community. Discover why this NorthSide GTA town is one of the best places to live north of Toronto.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-9-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on Aurora"
+  },
+  {
+    "slug": "spotlight-on-newmarket",
+    "title": "Meet the Towns: Spotlight on Newmarket",
+    "publishDate": "2025-11-13T18:33:00.000Z",
+    "excerpt": "We love Newmarket for its mix of city convenience and small-town charm. Discover why this NorthSide GTA community is one of the best places to live.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-8-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on Newmarket"
+  },
+  {
+    "slug": "spotlight-on-stouffville",
+    "title": "Meet the Towns: Spotlight on Stouffville",
+    "publishDate": "2025-11-13T18:27:00.000Z",
+    "excerpt": "We love Stouffville for its balance of city convenience and small-town charm. Discover why this NorthSide GTA community is one of the most sought-after places to live.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-7-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on Stouffville"
+  },
+  {
+    "slug": "spotlight-on-scugog",
+    "title": "Meet the Towns: Spotlight on Scugog",
+    "publishDate": "2025-11-13T18:19:00.000Z",
+    "excerpt": "We love Scugog for its lakeside charm and small-town feel. Discover why Port Perry and the surrounding area are standout communities in the NorthSide GTA.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-6-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on Scugog"
+  },
+  {
+    "slug": "spotlight-on-east-gwillimbury",
+    "title": "Meet the Towns: Spotlight on East Gwillimbury",
+    "publishDate": "2025-11-13T18:09:00.000Z",
+    "excerpt": "We love East Gwillimbury for its balance of space, growth, and community. Discover why this NorthSide GTA town is one of the best places to call home.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-5-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on East Gwillimbury"
+  },
+  {
+    "slug": "spotlight-on-georgina",
+    "title": "Meet the Towns: Spotlight on Georgina",
+    "publishDate": "2025-11-13T17:44:00.000Z",
+    "excerpt": "Explore Georgina, the town at the top of Highway 404. Discover lakeside living, growing communities, and why so many families are calling it home.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-4-.jpg",
+    "featureImageAlt": "Meet the Towns: Spotlight on Georgina"
+  },
+  {
+    "slug": "spotlight-on-uxbridge",
+    "title": "Meet the Towns: Spotlight on Uxbridge",
+    "publishDate": "2025-11-13T17:02:00.000Z",
+    "excerpt": "We grew up in Uxbridge, the Trail Capital of Canada. Discover what this NorthSide GTA town has to offer.",
+    "featureImage": "/uploads/insights/meetthetownsspotlights-1920-x-1080-px-1-.jpg",
+    "featureImageAlt": "All of the NorthSide GTA Towns"
+  },
+  {
     "slug": "blue-jays-game7",
     "title": "Official Game 7 Viewing Parties Across the NorthSide GTA",
     "publishDate": "2025-11-01T14:23:00.000Z",
