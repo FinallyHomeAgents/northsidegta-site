@@ -12,7 +12,7 @@ tags:
   - Young Families
   - Parents
   - Home Ownership
-featureImage: /images/insights/go-north-hero.jpg
+featureImage: /uploads/insights/go-north-hero.jpg
 featureImageAlt: A scenic NorthSide GTA community just north of Toronto.
 inlineImages: []
 pullQuote:
@@ -21,13 +21,13 @@ videos: []
 seo:
   title: Why more people are building their lives just north of Toronto
   description: More homes under $800K just north of Toronto. Why young families and their parents are starting their next chapter in the NorthSide GTA.
-  ogImage: /images/insights/go-north-hero.jpg
+  ogImage: /uploads/insights/go-north-hero.jpg
 ---
 # Why more people are building their lives just north of Toronto
 
 *A shift that’s changing how young families and their parents think about what comes next*
 
-<img src="/images/insights/go-north-hero.jpg" alt="Go North hero image" />
+<img src="/uploads/insights/go-north-hero.jpg" alt="Go North hero image" />
 
 Go North
 
@@ -52,7 +52,7 @@ At some point, that trade-off becomes difficult to ignore.
 
 What’s interesting is that the alternative isn’t far.
 
-<img src="/images/insights/go-north-contrast.jpg" alt="City-to-NorthSide contrast image" />
+<img src="/uploads/insights/go-north-contrast.jpg" alt="City-to-NorthSide contrast image" />
 
 Just north of the city, the pace changes. Not in a way that feels disconnected, but in a way that feels more complete. Communities like Uxbridge, Georgina, Newmarket, Aurora, Stouffville, East Gwillimbury, and Scugog aren’t trying to replicate Toronto. They don’t need to.
 
@@ -72,7 +72,7 @@ For those still renting in the city, the contrast is even sharper. You don’t n
 
 Once you see that clearly, it’s difficult to unsee.
 
-<img src="/images/insights/go-north-homes.jpg" alt="NorthSide GTA homes" />
+<img src="/uploads/insights/go-north-homes.jpg" alt="NorthSide GTA homes" />
 
 ## A Different Way to Work, A Different Way to Live
 
@@ -90,7 +90,7 @@ For the days you do need to be in the city, the connection is still there. GO tr
 
 That balance is what more people are starting to look for.
 
-<img src="/images/insights/go-north-home-office.jpg" alt="Home office in NorthSide GTA home" />
+<img src="/uploads/insights/go-north-home-office.jpg" alt="Home office in NorthSide GTA home" />
 
 There’s another shift happening at the same time, and it’s quieter, but just as important.
 
@@ -117,7 +117,7 @@ Because for a lot of people, this move isn’t just about now.
 
 It’s about what comes after.
 
-<img src="/images/insights/go-north-family.jpg" alt="Multi-generational family lifestyle in NorthSide GTA" />
+<img src="/uploads/insights/go-north-family.jpg" alt="Multi-generational family lifestyle in NorthSide GTA" />
 
 ## The Timing Right Now
 
