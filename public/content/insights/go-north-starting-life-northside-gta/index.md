@@ -38,21 +38,21 @@ category: Insights
 
 Go North
 
-You don’t need to leave the GTA to get ahead.  
+You don’t need to leave the GTA to get ahead.\
 You just need to go a little further north — up the 404.
 
 Right now, there are homes just north of Toronto selling in the $700s and $800s that were well over $1M just a few years ago.
 
-You’re closer to owning a real home than you think.  
+You’re closer to owning a real home than you think.\
 Just not where you’ve been looking.
 
-And these aren’t the towns people remember from years ago.  
-They’ve grown. Built out. Modernized.  
+And these aren’t the towns people remember from years ago.\
+They’ve grown. Built out. Modernized.\
 Everything you need is already there.
 
 For a long time, Toronto has been the default answer. It still offers everything people come for in the first place—opportunity, energy, proximity to everything that feels important. But for many, it’s becoming harder to see how the next step happens there in a way that feels grounded.
 
-You can stay. A lot of people do.  
+You can stay. A lot of people do.\
 But staying often starts to look like paying more for less, waiting longer than expected, and adjusting your expectations instead of expanding them.
 
 At some point, that trade-off becomes difficult to ignore.
@@ -79,7 +79,7 @@ For those still renting in the city, the contrast is even sharper. You don’t n
 
 Once you see that clearly, it’s difficult to unsee.
 
-<img src="/uploads/insights/go-north-homes.jpg" alt="NorthSide GTA homes" />
+<img src="/uploads/insights/go-north-homes2.jpg" alt="NorthSide GTA homes" />
 
 ## A Different Way to Work, A Different Way to Live
 
@@ -105,19 +105,19 @@ Many parents are moving into a different stage of life. Work begins to slow. Pri
 
 What’s emerging in places across the NorthSide GTA is something that didn’t exist in quite the same way before—a kind of alignment.
 
-Adult children establishing themselves,  
+Adult children establishing themselves,\
 while parents begin to think about where they want to be next.
 
 Close enough to be part of each other’s day-to-day lives.
 
-Close enough for a quick visit.  
-For a dinner that isn’t planned weeks in advance.  
+Close enough for a quick visit.\
+For a dinner that isn’t planned weeks in advance.\
 For future kids and grandkids to grow up around each other, instead of seeing each other on occasion.
 
 And for many, it’s not just about being closer. It’s about setting something up properly.
 
-A home that isn’t temporary.  
-A community that supports the next phase of life.  
+A home that isn’t temporary.\
+A community that supports the next phase of life.\
 A foundation that the next generation can grow from, not start behind.
 
 Because for a lot of people, this move isn’t just about now.
@@ -152,12 +152,12 @@ At Finally Home Agents, most of the conversations we have don’t start with a p
 
 And more often than not, what people discover is that it’s not as far as they thought.
 
-Uxbridge.  
-Georgina.  
-Newmarket.  
-Aurora.  
-Stouffville.  
-East Gwillimbury.  
+Uxbridge.\
+Georgina.\
+Newmarket.\
+Aurora.\
+Stouffville.\
+East Gwillimbury.\
 Scugog.
 
 It’s north. Just not as far as you think.
@@ -168,8 +168,8 @@ Understanding the differences between each community. What fits your lifestyle. 
 
 Because no two moves are the same.
 
-For some, it’s about more space.  
-For others, it’s about getting into the market.  
+For some, it’s about more space.\
+For others, it’s about getting into the market.\
 For many, it’s about setting up the next phase of life properly.
 
 Our role is to help you see it clearly, and guide you to the version of that move that fits you best.
