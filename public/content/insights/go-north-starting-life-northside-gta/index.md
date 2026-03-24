@@ -38,9 +38,7 @@ category: Insights
 
 You don’t need to leave the GTA to get ahead.  
 You just need to go a little further north — up the 404.
-
 <img src="/uploads/insights/go-north-hero.jpg" alt="Go North hero image" />
-
 Right now, there are homes just north of Toronto selling in the $700s and $800s that were well over $1M just a few years ago.
 
 You’re closer to owning a real home than you think.  
@@ -58,9 +56,7 @@ But staying often starts to look like paying more for less, waiting longer than 
 At some point, that trade-off becomes difficult to ignore.
 
 What’s interesting is that the alternative isn’t far.
-
 <img src="/uploads/insights/go-north-contrast.jpg" alt="City-to-NorthSide contrast image" />
-
 Just north of the city, the pace changes. Not in a way that feels disconnected, but in a way that feels more complete. Communities like Uxbridge, Georgina, Newmarket, Aurora, Stouffville, East Gwillimbury, and Scugog aren’t trying to replicate Toronto. They don’t need to.
 
 What they offer is space—in the physical sense, but also in a way that’s harder to describe at first. Space to think longer term. Space to settle into something that feels like it can actually grow with you.
@@ -78,9 +74,7 @@ That difference isn’t abstract. It’s the difference between stretching and s
 For those still renting in the city, the contrast is even sharper. You don’t need to be told what it costs to stay in place. You feel it already. What’s new is that there’s now a version of ownership, not far outside the city, that feels attainable again.
 
 Once you see that clearly, it’s difficult to unsee.
-
 <img src="/uploads/insights/go-north-homes2.jpg" alt="NorthSide GTA homes" />
-
 ## A Different Way to Work, A Different Way to Live
 
 Another part of this shift is how people are working.
@@ -96,9 +90,7 @@ An extra bedroom isn’t just space. It becomes an office you can close the door
 For the days you do need to be in the city, the connection is still there. GO trains. GO buses. Direct routes south. You’re not cut off. You’re just not surrounded by it all the time.
 
 That balance is what more people are starting to look for.
-
 <img src="/uploads/insights/go-north-home-office.jpg" alt="Home office in NorthSide GTA home" />
-
 There’s another shift happening at the same time, and it’s quieter, but just as important.
 
 Many parents are moving into a different stage of life. Work begins to slow. Priorities change. Time becomes something they want to use more intentionally. And being closer to family starts to carry more weight than it used to.
@@ -123,9 +115,7 @@ A foundation that the next generation can grow from, not start behind.
 Because for a lot of people, this move isn’t just about now.
 
 It’s about what comes after.
-
 <img src="/uploads/insights/go-north-family.jpg" alt="Multi-generational family lifestyle in NorthSide GTA" />
-
 ## The Timing Right Now
 
 Prices are down from where they were.
@@ -151,7 +141,7 @@ That’s usually where we come in.
 At Finally Home Agents, most of the conversations we have don’t start with a plan to move north. They start with curiosity. A simple question about what’s out there. What things cost. Whether it would actually work.
 
 And more often than not, what people discover is that it’s not as far as they thought.
-
+<b>
 Uxbridge.  
 Georgina.  
 Newmarket.  
@@ -159,6 +149,7 @@ Aurora.
 Stouffville.  
 East Gwillimbury.  
 Scugog.
+</b>
 
 It’s north. Just not as far as you think.
 
