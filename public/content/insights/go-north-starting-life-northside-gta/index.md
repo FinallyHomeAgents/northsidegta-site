@@ -4,8 +4,8 @@ slug: go-north-starting-life-northside-gta
 publishDate: 2026-03-24T09:00:00-04:00
 draft: false
 author: Matthew Mulhall
-category: Insights
-excerpt: More homes under $800K just north of Toronto. Why young families and their parents are starting their next chapter in the NorthSide GTA.
+excerpt: More homes under $800K just north of Toronto. Why young families and
+  their parents are starting their next chapter in the NorthSide GTA.
 tags:
   - NorthSide GTA
   - Toronto Movers
@@ -16,12 +16,19 @@ featureImage: /uploads/insights/go-north-hero.jpg
 featureImageAlt: A scenic NorthSide GTA community just north of Toronto.
 inlineImages: []
 pullQuote:
-  text: A shift that’s changing how young families and their parents think about what comes next
+  text: A shift that’s changing how young families and their parents think about
+    what comes next
 videos: []
+mediaGuidelines: Inline images ≈1200 px wide (3:2 or 4:3). Gallery images 3:2 or
+  4:3. Pull-quote portraits ≈800×1000 px.
+videoGuidelines: Prefer external hosts (YouTube/Vimeo). Uploaded MP4/WebM ≤80 MB
+  with poster image + optional VTT captions.
 seo:
   title: Why more people are building their lives just north of Toronto
-  description: More homes under $800K just north of Toronto. Why young families and their parents are starting their next chapter in the NorthSide GTA.
+  description: More homes under $800K just north of Toronto. Why young families
+    and their parents are starting their next chapter in the NorthSide GTA.
   ogImage: /uploads/insights/go-north-hero.jpg
+category: Insights
 ---
 # Why more people are building their lives just north of Toronto
 
