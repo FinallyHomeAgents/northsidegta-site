@@ -41,6 +41,7 @@ import OptionFourPage from "./membership/OptionFourPage";
 import OptionFivePage from "./membership/OptionFivePage";
 import NorthsidePassPreviewV2Page from "./membership/NorthsidePassPreviewV2Page";
 import CoffeePage, { BookCoffeeAliasPage } from "./CoffeePage";
+import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -110,6 +111,7 @@ function App() {
           <Route path="/choose-your-path" element={<ChooseYourPathPage />} />
           <Route path="/coffee" element={<CoffeePage />} />
           <Route path="/book-coffee" element={<BookCoffeeAliasPage />} />
+          <Route path="/power-of-sale-support" element={<PowerOfSaleSupportPage />} />
           <Route path="/northside-pass-preview" element={<OptionFivePage />} />
           <Route path="/northside-pass-preview-v2" element={<NorthsidePassPreviewV2Page />} />
           <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />

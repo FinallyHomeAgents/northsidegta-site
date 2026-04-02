@@ -283,6 +283,23 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/power-of-sale-support",
+    meta: {
+      route: "/power-of-sale-support",
+      documentTitle: "Power of Sale Listing Support | NorthSide GTA",
+      title: "Power of Sale Listing Support | NorthSide GTA",
+      description:
+        "Structured real estate support for power of sale and lender-directed listings across the NorthSide GTA.",
+      canonicalUrl: "https://northsidegta.ca/power-of-sale-support",
+      ogType: "website",
+      ogImage: "/uploads/detachedhomesnorthsidelink.jpg",
+      twitterCard: "summary_large_image",
+      twitterImage: "/uploads/detachedhomesnorthsidelink.jpg",
+      siteName: "NorthSide GTA",
+      additionalMeta: [{ name: "robots", content: "noindex,nofollow" }],
+    },
+  },
+  {
     route: "/cms/tastehub",
     meta: {
       route: "/cms/tastehub",
