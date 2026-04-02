@@ -43,6 +43,26 @@ const reasons = [
   },
 ];
 
+const serviceScope = [
+  "Power of sale listings",
+  "Lender-directed sales",
+  "Private lender disposition support",
+  "As-is property sales",
+  "Occupied and vacant properties",
+  "Properties requiring cleanup or preparation coordination",
+  "Pricing strategy and market positioning",
+  "Offer management and communication",
+  "Coordination with lawyers and relevant professionals",
+];
+
+const propertyTypes = [
+  "Detached homes",
+  "Condos",
+  "Townhomes",
+  "Rural and semi-rural properties",
+  "Investment properties",
+];
+
 const processSteps = [
   {
     title: "Initial file review",
@@ -68,6 +88,16 @@ const processSteps = [
     body:
       "We provide updates on activity, feedback, and offers, and work alongside all parties involved through to closing.",
   },
+];
+
+const coverageAreas = [
+  "Newmarket",
+  "Aurora",
+  "East Gwillimbury",
+  "Stouffville",
+  "Uxbridge",
+  "Georgina",
+  "Scugog",
 ];
 
 const faqItems = [
@@ -108,63 +138,70 @@ export default function PowerOfSaleSupportPage() {
         description="Structured real estate support for power of sale and lender-directed listings across the NorthSide GTA."
         canonicalUrl="https://northsidegta.ca/power-of-sale-support"
         ogType="website"
-        ogImage="/uploads/northside-gta-finally-home-agents-hero.jpg"
+        ogImage="/uploads/detachedhomesnorthsidelink.jpg"
         twitterCard="summary_large_image"
-        twitterImage="/uploads/northside-gta-finally-home-agents-hero.jpg"
+        twitterImage="/uploads/detachedhomesnorthsidelink.jpg"
         additionalMeta={[{ name: "robots", content: "noindex,nofollow" }]}
       />
 
-      <main className="power-sale-page bg-[#f6f7f5] text-slate-900">
+      <main className="power-sale-page">
         <section className="power-sale-hero">
-          <img
-            src="/uploads/northside-gta-finally-home-agents-hero.jpg"
-            alt="Aerial view of the NorthSide GTA area at sunset"
-            className="power-sale-hero-image"
-            loading="eager"
-          />
-          <div className="power-sale-hero-overlay" aria-hidden="true" />
-          <div className="power-sale-wrap relative py-20 md:py-28 lg:py-32">
-            <p className="power-sale-kicker">Professional Partner Page</p>
-            <p className="power-sale-eyebrow">NorthSide GTA | Professional Listing Support</p>
-            <h1 className="power-sale-title">
-              Power of Sale Listing Support
-              <br />
-              For Banks, Lenders, and Mortgage Professionals
-            </h1>
-            <p className="power-sale-lead">
-              We provide structured real estate support for power of sale and lender-directed listings across the NorthSide GTA, combining clear communication, local market insight, and disciplined execution from launch through closing.
-            </p>
-            <p className="power-sale-lead power-sale-lead-secondary">
-              We are actively building relationships with lenders and mortgage professionals seeking a reliable, locally focused team.
-            </p>
-            <div className="power-sale-actions">
-              <a href="mailto:contact@finallyhomeagents.com?subject=Confidential%20Conversation%20Request" className="power-sale-btn power-sale-btn-primary">
-                Request a Confidential Conversation
-              </a>
-              <a href="mailto:contact@finallyhomeagents.com?subject=Power%20of%20Sale%20File%20Submission" className="power-sale-btn power-sale-btn-secondary">
-                Submit a File
-              </a>
+          <div className="power-sale-wrap power-sale-hero-grid">
+            <div className="power-sale-hero-content">
+              <p className="power-sale-kicker">Professional Partner Page</p>
+              <p className="power-sale-eyebrow">NorthSide GTA | Professional Listing Support</p>
+              <h1 className="power-sale-title">
+                Power of Sale Listing Support
+                <span>For Banks, Lenders, and Mortgage Professionals</span>
+              </h1>
+              <p className="power-sale-lead">
+                We provide structured real estate support for power of sale and lender-directed listings across the NorthSide GTA, combining clear communication, local market insight, and disciplined execution from launch through closing.
+              </p>
+              <p className="power-sale-lead">
+                We are actively building relationships with lenders and mortgage professionals seeking a reliable, locally focused team.
+              </p>
+              <div className="power-sale-actions">
+                <a
+                  href="mailto:contact@finallyhomeagents.com?subject=Confidential%20Conversation%20Request"
+                  className="power-sale-btn power-sale-btn-primary"
+                >
+                  Request a Confidential Conversation
+                </a>
+                <a
+                  href="mailto:contact@finallyhomeagents.com?subject=Power%20of%20Sale%20File%20Submission"
+                  className="power-sale-btn power-sale-btn-secondary"
+                >
+                  Submit a File
+                </a>
+              </div>
+              <p className="power-sale-serving-line">Serving the NorthSide GTA and surrounding communities.</p>
             </div>
-            <p className="power-sale-note">Serving the NorthSide GTA and surrounding communities.</p>
-            <p className="power-sale-brokerage">
-              Finally Home Agents | Matthew Mulhall &amp; Landon Mulhall, Sales Representatives, HomeLife Optimum Realty, Brokerage.
-            </p>
+            <div className="power-sale-hero-media">
+              <img
+                src="/uploads/detachedhomesnorthsidelink.jpg"
+                alt="Clean residential exterior in the NorthSide GTA"
+                loading="eager"
+              />
+            </div>
           </div>
         </section>
 
         <section className="power-sale-trust-strip" aria-label="Trust signals">
           <div className="power-sale-wrap power-sale-trust-grid">
             {trustSignals.map((signal) => (
-              <p key={signal} className="power-sale-trust-item">{signal}</p>
+              <p key={signal} className="power-sale-trust-item">
+                {signal}
+              </p>
             ))}
           </div>
         </section>
 
-        <section className="power-sale-wrap power-sale-section">
+        <section className="power-sale-wrap power-sale-section power-sale-why">
           <h2 className="power-sale-heading">Why lenders and mortgage professionals should consider working with us</h2>
-          <div className="power-sale-reason-grid">
-            {reasons.map((item) => (
-              <article key={item.title} className="power-sale-reason-item">
+          <div className="power-sale-numbered-grid">
+            {reasons.map((item, index) => (
+              <article key={item.title} className="power-sale-numbered-item">
+                <p className="power-sale-item-number">{String(index + 1).padStart(2, "0")}</p>
                 <h3>{item.title}</h3>
                 <p>{item.body}</p>
               </article>
@@ -174,49 +211,42 @@ export default function PowerOfSaleSupportPage() {
 
         <section className="power-sale-wrap power-sale-image-break">
           <img
-            src="/uploads/image-of-a-pool-in-a-backyard-of-a-nice-residential-home-in-ontario-canada..jpg"
-            alt="Bright, professionally presented residential property in the NorthSide GTA"
+            src="/uploads/finishedbasementsunder1m2.jpg"
+            alt="Bright, clean interior presentation suitable for listing marketing"
             loading="lazy"
             className="power-sale-supporting-image"
           />
         </section>
 
-        <section className="power-sale-wrap power-sale-section">
+        <section className="power-sale-wrap power-sale-section power-sale-handle-band">
           <h2 className="power-sale-heading">What we handle</h2>
           <div className="power-sale-handle-grid">
-            <div>
+            <article className="power-sale-list-block">
+              <p className="power-sale-list-label">Service scope</p>
               <ul>
-                <li>Power of sale listings</li>
-                <li>Lender-directed sales</li>
-                <li>Private lender disposition support</li>
-                <li>As-is property sales</li>
-                <li>Occupied and vacant properties</li>
-                <li>Properties requiring cleanup or preparation coordination</li>
-                <li>Pricing strategy and market positioning</li>
-                <li>Offer management and communication</li>
-                <li>Coordination with lawyers and relevant professionals</li>
+                {serviceScope.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
-            </div>
-            <div>
-              <p className="power-sale-subhead">Property types include</p>
+            </article>
+            <article className="power-sale-list-block">
+              <p className="power-sale-list-label">Property types include</p>
               <ul>
-                <li>Detached homes</li>
-                <li>Condos</li>
-                <li>Townhomes</li>
-                <li>Rural and semi-rural properties</li>
-                <li>Investment properties</li>
+                {propertyTypes.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
-            </div>
+            </article>
           </div>
         </section>
 
-        <section className="power-sale-wrap power-sale-section">
+        <section className="power-sale-wrap power-sale-section power-sale-process-band">
           <h2 className="power-sale-heading">Our Process</h2>
-          <ol className="power-sale-process-list">
+          <ol className="power-sale-process-stack">
             {processSteps.map((step, index) => (
               <li key={step.title} className="power-sale-process-item">
-                <span className="power-sale-step-num">{index + 1}</span>
-                <div>
+                <span className="power-sale-step-marker">{String(index + 1).padStart(2, "0")}</span>
+                <div className="power-sale-step-content">
                   <h3>{step.title}</h3>
                   <p>{step.body}</p>
                 </div>
@@ -225,35 +255,31 @@ export default function PowerOfSaleSupportPage() {
           </ol>
         </section>
 
-        <section className="power-sale-wrap power-sale-section power-sale-collab">
-          <div>
-            <h2 className="power-sale-heading">Built for professional collaboration</h2>
-            <p>
-              While our primary work is with buyers and sellers across the NorthSide GTA, our systems, communication standards, and listing process are designed to integrate smoothly with professional partners, including lenders, mortgage brokers, and legal teams.
-            </p>
+        <section className="power-sale-wrap power-sale-section power-sale-collab-band">
+          <div className="power-sale-collab-grid">
+            <div>
+              <h2 className="power-sale-heading">Built for professional collaboration</h2>
+              <p>
+                While our primary work is with buyers and sellers across the NorthSide GTA, our systems, communication standards, and listing process are designed to integrate smoothly with professional partners, including lenders, mortgage brokers, and legal teams.
+              </p>
+            </div>
+            <img src="/Images/hero-about.jpg" alt="Finally Home Agents team" loading="lazy" />
           </div>
-          <img
-            src="/Images/hero-about.jpg"
-            alt="Matthew and Landon of Finally Home Agents"
-            loading="lazy"
-          />
         </section>
 
-        <section className="power-sale-wrap power-sale-section">
+        <section className="power-sale-wrap power-sale-section power-sale-coverage-band">
           <h2 className="power-sale-heading">NorthSide GTA Coverage</h2>
           <div className="power-sale-coverage-grid">
             <ul>
-              <li>Newmarket</li>
-              <li>Aurora</li>
-              <li>East Gwillimbury</li>
-              <li>Stouffville</li>
-              <li>Uxbridge</li>
-              <li>Georgina</li>
-              <li>Scugog</li>
+              {coverageAreas.map((area) => (
+                <li key={area}>{area}</li>
+              ))}
             </ul>
-            <img src="/Images/northside-map.svg" alt="Map of NorthSide GTA coverage areas" loading="lazy" />
+            <div className="power-sale-map-frame">
+              <img src="/Images/northside-map.svg" alt="Map of NorthSide GTA coverage areas" loading="lazy" />
+            </div>
           </div>
-          <p className="power-sale-note">Serving the NorthSide GTA and surrounding communities.</p>
+          <p className="power-sale-serving-line">Serving the NorthSide GTA and surrounding communities.</p>
         </section>
 
         <section className="power-sale-wrap power-sale-section">
@@ -262,7 +288,9 @@ export default function PowerOfSaleSupportPage() {
             {faqItems.map((item) => (
               <details className="power-sale-faq-item" key={item.question}>
                 <summary>{item.question}</summary>
-                <p>{item.answer}</p>
+                <div className="power-sale-faq-answer">
+                  <p>{item.answer}</p>
+                </div>
               </details>
             ))}
           </div>
@@ -274,10 +302,16 @@ export default function PowerOfSaleSupportPage() {
             We are available to connect, review the situation, and outline a clear approach based on the property, timeline, and requirements.
           </p>
           <div className="power-sale-actions">
-            <a href="mailto:contact@finallyhomeagents.com?subject=Power%20of%20Sale%20File%20Submission" className="power-sale-btn power-sale-btn-primary">
+            <a
+              href="mailto:contact@finallyhomeagents.com?subject=Power%20of%20Sale%20File%20Submission"
+              className="power-sale-btn power-sale-btn-primary"
+            >
               Submit a File
             </a>
-            <a href="mailto:contact@finallyhomeagents.com?subject=Confidential%20Conversation%20Request" className="power-sale-btn power-sale-btn-secondary">
+            <a
+              href="mailto:contact@finallyhomeagents.com?subject=Confidential%20Conversation%20Request"
+              className="power-sale-btn power-sale-btn-secondary"
+            >
               Request a Confidential Conversation
             </a>
           </div>
@@ -288,12 +322,12 @@ export default function PowerOfSaleSupportPage() {
           </p>
         </section>
 
-        <section className="power-sale-wrap pb-16 md:pb-20">
+        <section className="power-sale-wrap power-sale-bottom-compliance">
           <p className="power-sale-compliance-line">
             We are a real estate team serving the NorthSide GTA, working in collaboration with lenders, mortgage professionals, and legal representatives where applicable.
           </p>
           <p className="power-sale-brokerage-bottom">
-            Brokerage: HomeLife Optimum Realty, Brokerage.
+            Finally Home Agents | Matthew Mulhall &amp; Landon Mulhall, Sales Representatives, HomeLife Optimum Realty, Brokerage.
           </p>
         </section>
       </main>
