@@ -3,11 +3,11 @@ import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./styles/power-of-sale-support.css";
 
 const trustSignals = [
-  "Local market knowledge across the NorthSide GTA",
-  "Professional listing preparation and presentation",
-  "Clear communication and consistent updates",
-  "Strategic pricing and market positioning",
-  "Coordinated execution with all stakeholders",
+  "NorthSide GTA market coverage",
+  "Structured listing execution",
+  "Professional stakeholder coordination",
+  "Consistent reporting cadence",
+  "Compliance-conscious positioning",
 ];
 
 const reasons = [
@@ -55,13 +55,7 @@ const serviceScope = [
   "Coordination with lawyers and relevant professionals",
 ];
 
-const propertyTypes = [
-  "Detached homes",
-  "Condos",
-  "Townhomes",
-  "Rural and semi-rural properties",
-  "Investment properties",
-];
+const propertyTypes = ["Detached homes", "Condos", "Townhomes", "Rural and semi-rural properties", "Investment properties"];
 
 const processSteps = [
   {
@@ -90,15 +84,7 @@ const processSteps = [
   },
 ];
 
-const coverageAreas = [
-  "Newmarket",
-  "Aurora",
-  "East Gwillimbury",
-  "Stouffville",
-  "Uxbridge",
-  "Georgina",
-  "Scugog",
-];
+const coverageAreas = ["Newmarket", "Aurora", "East Gwillimbury", "Stouffville", "Uxbridge", "Georgina", "Scugog"];
 
 const faqItems = [
   {
@@ -127,6 +113,17 @@ const faqItems = [
       "Yes. We work alongside all relevant parties to support a smooth and organized process.",
   },
 ];
+
+function ImagePlaceholder({ title, filename, guidance, compact = false }) {
+  return (
+    <div className={`power-sale-image-placeholder${compact ? " is-compact" : ""}`} role="img" aria-label={title}>
+      <p className="power-sale-placeholder-eyebrow">Image Placeholder</p>
+      <h3 className="power-sale-placeholder-title">{title}</h3>
+      <p className="power-sale-placeholder-file">{filename}</p>
+      <p className="power-sale-placeholder-guidance">{guidance}</p>
+    </div>
+  );
+}
 
 export default function PowerOfSaleSupportPage() {
   return (
@@ -177,10 +174,10 @@ export default function PowerOfSaleSupportPage() {
               <p className="power-sale-serving-line">Serving the NorthSide GTA and surrounding communities.</p>
             </div>
             <div className="power-sale-hero-media">
-              <img
-                src="/uploads/detachedhomesnorthsidelink.jpg"
-                alt="Clean residential exterior in the NorthSide GTA"
-                loading="eager"
+              <ImagePlaceholder
+                title="Hero Image Placeholder"
+                filename="public/Images/power-of-sale-hero.jpg"
+                guidance="Use a premium, clean exterior or architectural real estate image with negative space and a sophisticated tone. Avoid busy aerial composites, map overlays, or highly promotional visuals."
               />
             </div>
           </div>
@@ -210,11 +207,10 @@ export default function PowerOfSaleSupportPage() {
         </section>
 
         <section className="power-sale-wrap power-sale-image-break">
-          <img
-            src="/uploads/finishedbasementsunder1m2.jpg"
-            alt="Bright, clean interior presentation suitable for listing marketing"
-            loading="lazy"
-            className="power-sale-supporting-image"
+          <ImagePlaceholder
+            title="Supporting Listing Image Placeholder"
+            filename="public/Images/power-of-sale-supporting.jpg"
+            guidance="Use a clean, bright, professionally photographed interior or exterior image that reinforces presentation quality. Neutral tones. No lifestyle imagery."
           />
         </section>
 
@@ -263,7 +259,12 @@ export default function PowerOfSaleSupportPage() {
                 While our primary work is with buyers and sellers across the NorthSide GTA, our systems, communication standards, and listing process are designed to integrate smoothly with professional partners, including lenders, mortgage brokers, and legal teams.
               </p>
             </div>
-            <img src="/Images/hero-about.jpg" alt="Finally Home Agents team" loading="lazy" />
+            <ImagePlaceholder
+              title="Professional Team Image Placeholder"
+              filename="public/Images/power-of-sale-team.jpg"
+              guidance="Use a polished, editorial-quality team photo that feels appropriate for a private professional service page. Avoid casual or About-page-style imagery."
+              compact
+            />
           </div>
         </section>
 
@@ -276,7 +277,12 @@ export default function PowerOfSaleSupportPage() {
               ))}
             </ul>
             <div className="power-sale-map-frame">
-              <img src="/Images/northside-map.svg" alt="Map of NorthSide GTA coverage areas" loading="lazy" />
+              <ImagePlaceholder
+                title="NorthSide GTA Coverage Map Placeholder"
+                filename="public/Images/power-of-sale-coverage-map.png"
+                guidance="Use a clean, simplified NorthSide GTA coverage map. Minimal styling. Should support the section, not dominate it."
+                compact
+              />
             </div>
           </div>
           <p className="power-sale-serving-line">Serving the NorthSide GTA and surrounding communities.</p>

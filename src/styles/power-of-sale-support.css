@@ -1,89 +1,98 @@
 .power-sale-page {
-  --ps-bg: #f4f6f4;
+  --ps-bg: #f3f4f3;
   --ps-surface: #ffffff;
-  --ps-ink: #0f172a;
-  --ps-muted: #475569;
-  --ps-green: #0f5132;
-  --ps-border: rgba(15, 81, 50, 0.16);
+  --ps-surface-muted: #f8f8f7;
+  --ps-ink: #111827;
+  --ps-muted: #4b5563;
+  --ps-accent: #1f2937;
+  --ps-border: rgba(17, 24, 39, 0.16);
+  --ps-border-strong: rgba(17, 24, 39, 0.28);
   background: var(--ps-bg);
   color: var(--ps-ink);
-  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  padding-bottom: clamp(3.2rem, 7vw, 5rem);
 }
 
 .power-sale-wrap {
-  width: min(1120px, calc(100% - 2.4rem));
+  width: min(1160px, calc(100% - 3rem));
   margin-inline: auto;
 }
 
+.power-sale-section {
+  padding-top: clamp(3.8rem, 7vw, 6.3rem);
+}
+
+.power-sale-heading {
+  margin: 0 0 1.5rem;
+  max-width: 23ch;
+  font-size: clamp(1.36rem, 2.6vw, 2.15rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
 .power-sale-hero {
-  padding-top: clamp(2rem, 5vw, 4.2rem);
+  padding-top: clamp(2.4rem, 6vw, 5rem);
 }
 
 .power-sale-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(1.3rem, 3vw, 2.8rem);
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  gap: clamp(1.4rem, 3.2vw, 3.1rem);
   align-items: stretch;
 }
 
 .power-sale-hero-content {
   background: var(--ps-surface);
   border: 1px solid var(--ps-border);
-  border-radius: 1.2rem;
-  padding: clamp(1.5rem, 3vw, 2.6rem);
+  border-radius: 0.85rem;
+  padding: clamp(1.5rem, 3.5vw, 3rem);
 }
 
 .power-sale-kicker {
-  margin: 0 0 0.55rem;
-  display: inline-flex;
-  border: 1px solid rgba(15, 81, 50, 0.28);
-  border-radius: 999px;
-  padding: 0.3rem 0.65rem;
+  margin: 0 0 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.67rem;
-  font-weight: 600;
-  color: var(--ps-green);
+  letter-spacing: 0.14em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #374151;
 }
 
 .power-sale-eyebrow {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.13em;
   font-size: 0.69rem;
-  color: #334155;
+  color: #6b7280;
 }
 
 .power-sale-title {
-  margin: 0.8rem 0 0;
-  font-size: clamp(1.95rem, 3.8vw, 3.12rem);
-  line-height: 1.12;
-  letter-spacing: -0.025em;
-  max-width: 18ch;
+  margin: 0.9rem 0 0;
+  max-width: 17ch;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 .power-sale-title span {
   display: block;
-  margin-top: 0.45rem;
-  font-size: clamp(1.05rem, 1.9vw, 1.42rem);
-  line-height: 1.32;
+  margin-top: 0.55rem;
+  font-size: clamp(0.97rem, 1.8vw, 1.3rem);
+  line-height: 1.34;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  color: #1e293b;
+  color: #1f2937;
 }
 
 .power-sale-lead {
   margin: 1rem 0 0;
-  max-width: 62ch;
+  max-width: 60ch;
   line-height: 1.72;
-  color: #334155;
+  color: #374151;
 }
 
 .power-sale-actions {
-  margin-top: 1.4rem;
+  margin-top: 1.45rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.62rem;
+  gap: 0.6rem;
 }
 
 .power-sale-btn {
@@ -91,67 +100,101 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  border-radius: 999px;
-  font-size: 0.83rem;
+  border-radius: 0.4rem;
+  font-size: 0.77rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 0.58rem 1.08rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.62rem 0.88rem;
   border: 1px solid transparent;
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+  transition: background 170ms ease, color 170ms ease, border-color 170ms ease;
 }
 
 .power-sale-btn-primary {
-  background: var(--ps-green);
-  color: #f8fafc;
-  border-color: var(--ps-green);
+  background: #111827;
+  color: #f9fafb;
+  border-color: #111827;
 }
 
 .power-sale-btn-primary:hover,
 .power-sale-btn-primary:focus-visible {
-  background: #0b3d26;
-  border-color: #0b3d26;
+  background: #030712;
+  border-color: #030712;
 }
 
 .power-sale-btn-secondary {
   background: transparent;
-  color: #0f172a;
-  border-color: rgba(15, 23, 42, 0.24);
+  color: #111827;
+  border-color: rgba(17, 24, 39, 0.3);
 }
 
 .power-sale-btn-secondary:hover,
 .power-sale-btn-secondary:focus-visible {
-  background: #f8fafc;
+  background: #f9fafb;
+  border-color: rgba(17, 24, 39, 0.55);
 }
 
 .power-sale-serving-line {
   margin: 1rem 0 0;
-  color: #334155;
-  font-size: 0.9rem;
+  font-size: 0.83rem;
+  letter-spacing: 0.02em;
+  color: #4b5563;
 }
 
 .power-sale-hero-media {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.2rem;
-  border: 1px solid var(--ps-border);
-  min-height: clamp(340px, 42vw, 520px);
+  min-height: clamp(360px, 44vw, 560px);
 }
 
-.power-sale-hero-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(2, 6, 23, 0.08), rgba(2, 6, 23, 0.24));
-}
-
-.power-sale-hero-media img {
-  width: 100%;
+.power-sale-image-placeholder {
   height: 100%;
-  object-fit: cover;
+  min-height: clamp(250px, 35vw, 420px);
+  border-radius: 0.85rem;
+  border: 1px solid var(--ps-border);
+  background: linear-gradient(180deg, #fbfbfa 0%, #f3f4f6 100%);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  display: grid;
+  align-content: center;
+  gap: 0.6rem;
+}
+
+.power-sale-image-placeholder.is-compact {
+  min-height: 240px;
+}
+
+.power-sale-placeholder-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.power-sale-placeholder-title {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.6vw, 1.22rem);
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+.power-sale-placeholder-file {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.power-sale-placeholder-guidance {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #4b5563;
 }
 
 .power-sale-trust-strip {
-  margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
   background: var(--ps-surface);
   border-top: 1px solid var(--ps-border);
   border-bottom: 1px solid var(--ps-border);
@@ -164,60 +207,57 @@
 
 .power-sale-trust-item {
   margin: 0;
-  padding: 1.1rem 0.9rem;
-  font-size: 0.74rem;
-  line-height: 1.62;
-  color: #334155;
-  letter-spacing: 0.01em;
+  padding: 0.95rem 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  line-height: 1.65;
+  color: #4b5563;
 }
 
 .power-sale-trust-item + .power-sale-trust-item {
   border-left: 1px solid var(--ps-border);
 }
 
-.power-sale-section {
-  padding-top: clamp(3.3rem, 7vw, 6rem);
-}
-
-.power-sale-heading {
-  margin: 0 0 1.45rem;
-  font-size: clamp(1.42rem, 2.7vw, 2.2rem);
-  line-height: 1.24;
-  letter-spacing: -0.018em;
-}
-
 .power-sale-why .power-sale-heading {
-  max-width: 21ch;
+  margin-bottom: 1.2rem;
 }
 
 .power-sale-numbered-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border-top: 1px solid var(--ps-border);
-  border-left: 1px solid var(--ps-border);
 }
 
 .power-sale-numbered-item {
   margin: 0;
-  padding: 1.15rem 1.1rem 1.2rem;
-  border-right: 1px solid var(--ps-border);
+  padding: 1.25rem 0;
   border-bottom: 1px solid var(--ps-border);
-  background: rgba(255, 255, 255, 0.72);
+}
+
+.power-sale-numbered-item:nth-child(odd) {
+  padding-right: clamp(1rem, 2vw, 1.8rem);
+  border-right: 1px solid var(--ps-border);
+}
+
+.power-sale-numbered-item:nth-child(even) {
+  padding-left: clamp(1rem, 2vw, 1.8rem);
 }
 
 .power-sale-item-number {
-  margin: 0 0 0.55rem;
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
+  margin: 0 0 0.45rem;
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+  color: #6b7280;
   font-weight: 700;
-  color: var(--ps-green);
 }
 
 .power-sale-numbered-item h3,
 .power-sale-step-content h3 {
   margin: 0;
   font-size: 1.02rem;
-  line-height: 1.45;
+  line-height: 1.38;
+  letter-spacing: -0.01em;
 }
 
 .power-sale-numbered-item p,
@@ -228,31 +268,23 @@
 .power-sale-final-cta p,
 .power-sale-compliance-line,
 .power-sale-brokerage-bottom {
-  margin: 0.55rem 0 0;
+  margin: 0.52rem 0 0;
   color: var(--ps-muted);
-  line-height: 1.7;
+  line-height: 1.72;
 }
 
 .power-sale-image-break {
-  padding-top: clamp(2.8rem, 6vw, 5rem);
-}
-
-.power-sale-supporting-image {
-  width: 100%;
-  height: clamp(260px, 44vw, 470px);
-  object-fit: cover;
-  border-radius: 1rem;
-  border: 1px solid var(--ps-border);
+  padding-top: clamp(3rem, 6vw, 5.2rem);
 }
 
 .power-sale-handle-band,
 .power-sale-process-band,
 .power-sale-collab-band,
 .power-sale-coverage-band {
-  padding: clamp(1.25rem, 3.2vw, 2.3rem);
-  border: 1px solid var(--ps-border);
-  border-radius: 1rem;
   background: var(--ps-surface);
+  border: 1px solid var(--ps-border);
+  border-radius: 0.85rem;
+  padding: clamp(1.3rem, 3vw, 2.35rem);
 }
 
 .power-sale-handle-grid,
@@ -260,95 +292,80 @@
 .power-sale-collab-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1.2rem 1.8rem;
+  gap: clamp(1rem, 2.6vw, 2rem);
 }
 
 .power-sale-list-block + .power-sale-list-block {
   border-left: 1px solid var(--ps-border);
-  padding-left: 1.8rem;
+  padding-left: clamp(1rem, 2vw, 1.8rem);
 }
 
 .power-sale-list-label {
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.13em;
-  font-size: 0.67rem;
-  color: var(--ps-green);
-  font-weight: 600;
+  letter-spacing: 0.15em;
+  font-size: 0.64rem;
+  color: #6b7280;
+  font-weight: 700;
 }
 
 .power-sale-list-block ul,
 .power-sale-coverage-grid ul {
-  margin: 0.8rem 0 0;
-  padding-left: 1.05rem;
+  margin: 0.7rem 0 0;
+  padding-left: 1rem;
   display: grid;
-  gap: 0.38rem;
+  gap: 0.35rem;
+}
+
+.power-sale-process-band .power-sale-heading {
+  margin-bottom: 1.4rem;
 }
 
 .power-sale-process-stack {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.power-sale-process-item {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
-  padding: 1rem 0;
-}
-
-.power-sale-process-item + .power-sale-process-item {
   border-top: 1px solid var(--ps-border);
 }
 
-.power-sale-process-item:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 1.08rem;
-  top: 3rem;
-  width: 1px;
-  height: calc(100% - 1rem);
-  background: rgba(15, 81, 50, 0.26);
+.power-sale-process-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--ps-border);
 }
 
 .power-sale-step-marker {
-  width: 2.15rem;
-  height: 2.15rem;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 81, 50, 0.42);
-  color: var(--ps-green);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--ps-border-strong);
+  border-radius: 0.32rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  background: #f8fcf9;
+  letter-spacing: 0.11em;
+  color: #374151;
+  background: var(--ps-surface-muted);
 }
 
-.power-sale-collab-grid img {
-  width: 100%;
-  height: 100%;
-  min-height: 260px;
-  object-fit: cover;
-  border-radius: 0.9rem;
-  border: 1px solid var(--ps-border);
+.power-sale-collab-grid p {
+  max-width: 58ch;
 }
 
 .power-sale-map-frame {
   border: 1px solid var(--ps-border);
-  border-radius: 0.9rem;
-  background: #f8fafc;
-  padding: clamp(0.8rem, 2vw, 1.3rem);
+  border-radius: 0.8rem;
+  background: var(--ps-surface-muted);
+  padding: 0.8rem;
 }
 
-.power-sale-map-frame img {
-  width: 100%;
-  max-height: 300px;
-  object-fit: contain;
+.power-sale-map-frame .power-sale-image-placeholder {
+  min-height: 220px;
+  border-radius: 0.6rem;
 }
 
 .power-sale-faq-list {
@@ -363,9 +380,9 @@
   list-style: none;
   cursor: pointer;
   padding: 0.95rem 0;
-  font-size: 0.97rem;
-  font-weight: 500;
-  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111827;
 }
 
 .power-sale-faq-item summary::-webkit-details-marker {
@@ -375,13 +392,13 @@
 .power-sale-faq-answer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 220ms ease;
+  transition: grid-template-rows 200ms ease;
 }
 
 .power-sale-faq-answer p {
   overflow: hidden;
   margin: 0;
-  padding-bottom: 0.95rem;
+  padding-bottom: 1rem;
 }
 
 .power-sale-faq-item[open] .power-sale-faq-answer {
@@ -389,31 +406,32 @@
 }
 
 .power-sale-final-cta {
-  margin-top: clamp(2.8rem, 7vw, 5rem);
-  background: #f0f6f2;
-  border: 1px solid rgba(15, 81, 50, 0.25);
-  border-radius: 1rem;
-  padding: clamp(1.4rem, 4vw, 2.4rem);
+  margin-top: clamp(3rem, 7vw, 5.3rem);
+  background: #eef0ef;
+  border: 1px solid var(--ps-border-strong);
+  border-radius: 0.8rem;
+  padding: clamp(1.5rem, 3.5vw, 2.55rem);
 }
 
 .power-sale-final-cta h2 {
   margin: 0;
-  font-size: clamp(1.38rem, 2.8vw, 2rem);
-  line-height: 1.3;
-  letter-spacing: -0.02em;
   max-width: 32ch;
+  font-size: clamp(1.3rem, 2.5vw, 1.95rem);
+  line-height: 1.26;
+  letter-spacing: -0.02em;
 }
 
 .power-sale-contact-row {
   margin: 1rem 0 0;
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.48rem;
+  font-size: 0.9rem;
 }
 
 .power-sale-contact-row a {
-  color: var(--ps-green);
+  color: #111827;
   text-decoration: none;
 }
 
@@ -422,29 +440,40 @@
 }
 
 .power-sale-bottom-compliance {
-  padding-top: 2rem;
+  padding-top: 2.2rem;
 }
 
 .power-sale-compliance-line,
 .power-sale-brokerage-bottom {
   text-align: center;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
 }
 
 .power-sale-brokerage-bottom {
-  margin-top: 0.45rem;
+  margin-top: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #334155;
+  color: #374151;
 }
 
 @media (max-width: 1023px) {
+  .power-sale-wrap {
+    width: min(1160px, calc(100% - 1.6rem));
+  }
+
   .power-sale-hero-grid,
   .power-sale-numbered-grid,
   .power-sale-handle-grid,
   .power-sale-coverage-grid,
   .power-sale-collab-grid {
     grid-template-columns: 1fr;
+  }
+
+  .power-sale-numbered-item:nth-child(odd),
+  .power-sale-numbered-item:nth-child(even) {
+    padding-left: 0;
+    padding-right: 0;
+    border-right: 0;
   }
 
   .power-sale-list-block + .power-sale-list-block {
@@ -463,11 +492,7 @@
     border-top: 1px solid var(--ps-border);
   }
 
-  .power-sale-wrap {
-    width: min(1120px, calc(100% - 1.5rem));
-  }
-
-  .power-sale-process-item:not(:last-child)::after {
-    left: 1.06rem;
+  .power-sale-btn {
+    width: 100%;
   }
 }
