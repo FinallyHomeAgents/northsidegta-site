@@ -8,7 +8,7 @@ const ROUTE = "/listings/5670-thomas-drive-baldwin";
 const CANONICAL = `https://www.northsidegta.ca${ROUTE}`;
 const VIDEO_URL = "https://listings.wylieford.com/videos/019e1822-d5e0-70a4-bcad-11c5e77acb82";
 const BRAND_URL = "https://listings.wylieford.com/sites/5670-thomas-drive-baldwin-on-l0e-1a0-24719268/branded";
-const OG_IMAGE = "https://www.northsidegta.ca/Images/n12542736_1.jpg";
+const OG_IMAGE = "https://www.northsidegta.ca/Images/5670-thomas-drive-og.jpg";
 
 const statPills = [
   ["Bedrooms", "2"],
