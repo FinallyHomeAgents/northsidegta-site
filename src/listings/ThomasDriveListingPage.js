@@ -5,10 +5,10 @@ import DynamicMetaTags from "../components/seo/DynamicMetaTags";
 import { getFormEndpoint } from "../components/contact/contactConfig";
 
 const ROUTE = "/listings/5670-thomas-drive-baldwin";
-const CANONICAL = `https://www.northsidegta.ca${ROUTE}`;
+const CANONICAL = `https://northsidegta.ca${ROUTE}`;
 const VIDEO_URL = "https://listings.wylieford.com/videos/019e1822-d5e0-70a4-bcad-11c5e77acb82";
 const BRAND_URL = "https://listings.wylieford.com/sites/5670-thomas-drive-baldwin-on-l0e-1a0-24719268/branded";
-const OG_IMAGE = "https://www.northsidegta.ca/Images/5670-thomas-drive-og.jpg";
+const OG_IMAGE = "https://northsidegta.ca/Images/5670-thomas-drive-og.jpg";
 
 const statPills = [
   ["Bedrooms", "2"],
@@ -122,7 +122,7 @@ export default function ThomasDriveListingPage() {
         provider: {
           "@type": "RealEstateAgent",
           name: "Finally Home Agents",
-          url: "https://www.northsidegta.ca/",
+          url: "https://northsidegta.ca/",
         },
       },
       {
@@ -146,8 +146,8 @@ export default function ThomasDriveListingPage() {
         "@type": "BreadcrumbList",
         "@id": `${CANONICAL}#breadcrumbs`,
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.northsidegta.ca/" },
-          { "@type": "ListItem", position: 2, name: "Listings", item: "https://www.northsidegta.ca/listings" },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://northsidegta.ca/" },
+          { "@type": "ListItem", position: 2, name: "Listings", item: "https://northsidegta.ca/listings" },
           { "@type": "ListItem", position: 3, name: "5670 Thomas Drive, Baldwin", item: CANONICAL },
         ],
       },
