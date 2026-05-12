@@ -1,5 +1,21 @@
 {
   "redirects": [
+    {
+      "source": "/",
+      "has": [
+        { "type": "host", "value": "5670thomasdr.ca" }
+      ],
+      "destination": "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
+      "statusCode": 308
+    },
+    {
+      "source": "/",
+      "has": [
+        { "type": "host", "value": "www.5670thomasdr.ca" }
+      ],
+      "destination": "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
+      "statusCode": 308
+    },
     { "source": "/admin", "destination": "/cms", "statusCode": 308 },
     { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
   ],
