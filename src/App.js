@@ -34,6 +34,7 @@ import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 import Inquiry209BarrieStreetPage from "./listings/Inquiry209BarrieStreetPage";
 import KenBishopWayVideoPage from "./listings/KenBishopWayVideoPage";
+import ThomasDriveListingPage from "./listings/ThomasDriveListingPage";
 import EventsReviewPage from "./community/EventsReviewPage";
 import OptionOnePage from "./membership/OptionOnePage";
 import OptionTwoPage from "./membership/OptionTwoPage";
@@ -85,6 +86,7 @@ function App() {
           <Route path="/thank-you-209-barrie-st" element={<ThankYou209BarriePage />} />
           <Route path="/listings/209-barrie-street-thornton-inquiry" element={<Inquiry209BarrieStreetPage />} />
           <Route path="/listings/45-ken-bishop-way-video" element={<KenBishopWayVideoPage />} />
+          <Route path="/listings/5670-thomas-drive-baldwin" element={<ThomasDriveListingPage />} />
           <Route path="/about"        element={<AboutPage />} />
           <Route path="/buyers"       element={<BuyersPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
