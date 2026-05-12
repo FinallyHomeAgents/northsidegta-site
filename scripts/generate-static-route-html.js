@@ -119,7 +119,6 @@ function mergeMetaTags(baseTags, routeMetaConfig) {
 
 function resolveTagKey(tag) {
   if (!tag || typeof tag !== "object") return "";
-  if (tag.key) return tag.key;
   if (tag.type === "meta") {
     const attrs = tag.attributes || {};
     if (attrs.name) return `meta:name:${attrs.name}`;

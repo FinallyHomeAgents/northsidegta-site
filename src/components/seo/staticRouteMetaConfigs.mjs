@@ -163,6 +163,34 @@ const STATIC_ROUTE_META_CONFIGS = [
       siteName: "NorthSide GTA",
     },
   },
+
+  {
+    route: "/listings/5670-thomas-drive-baldwin",
+    meta: {
+      route: "/listings/5670-thomas-drive-baldwin",
+      documentTitle: "5670 Thomas Drive, Baldwin ON | Detached Bungalow for Sale",
+      title: "5670 Thomas Drive, Baldwin ON | Detached Bungalow for Sale",
+      description:
+        "Explore 5670 Thomas Drive in Baldwin, Georgina. View the walkthrough video, photos, floor plans, listing details, and request a showing with Finally Home Agents.",
+      canonicalUrl: "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
+      ogType: "website",
+      ogImage: "https://northsidegta.ca/Images/5670-thomas-drive-og.jpg",
+      ogImageAlt: "5670 Thomas Drive in Baldwin, Georgina",
+      twitterCard: "summary_large_image",
+      twitterTitle: "5670 Thomas Drive, Baldwin ON | Detached Bungalow for Sale",
+      twitterDescription:
+        "Explore 5670 Thomas Drive in Baldwin, Georgina. View the walkthrough video, photos, floor plans, listing details, and request a showing with Finally Home Agents.",
+      twitterImage: "https://northsidegta.ca/Images/5670-thomas-drive-og.jpg",
+      twitterImageAlt: "5670 Thomas Drive in Baldwin, Georgina",
+      siteName: "NorthSide GTA",
+      additionalMeta: [
+        { property: "og:image:secure_url", content: "https://northsidegta.ca/Images/5670-thomas-drive-og.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:url", content: "https://northsidegta.ca/listings/5670-thomas-drive-baldwin" }
+      ],
+    },
+  },
   {
     route: "/media",
     meta: {
