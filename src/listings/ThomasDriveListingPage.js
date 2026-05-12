@@ -8,6 +8,7 @@ const ROUTE = "/listings/5670-thomas-drive-baldwin";
 const CANONICAL = `https://www.northsidegta.ca${ROUTE}`;
 const VIDEO_URL = "https://listings.wylieford.com/videos/019e1822-d5e0-70a4-bcad-11c5e77acb82";
 const BRAND_URL = "https://listings.wylieford.com/sites/5670-thomas-drive-baldwin-on-l0e-1a0-24719268/branded";
+const OG_IMAGE = "https://www.northsidegta.ca/Images/n12542736_1.jpg";
 
 const statPills = [
   ["Bedrooms", "2"],
@@ -96,18 +97,91 @@ function ShowingForm() {
 }
 
 export default function ThomasDriveListingPage() {
+  const seoTitle = "5670 Thomas Drive, Baldwin ON Detached Bungalow for Sale | Finally Home Agents";
+  const seoDescription =
+    "Discover 5670 Thomas Drive in Baldwin (Georgina): a detached bungalow on a generous lot with updated kitchen and windows, detached garage/workshop, and practical main-floor living. Watch the video tour, browse photos, and request your private showing with Finally Home Agents.";
+  const schemaGraph = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "RealEstateListing",
+        "@id": `${CANONICAL}#listing`,
+        url: CANONICAL,
+        name: "5670 Thomas Drive, Baldwin ON - Detached Bungalow for Sale",
+        description: seoDescription,
+        datePosted: "2026-05-12",
+        image: [OG_IMAGE],
+        mainEntity: { "@id": `${CANONICAL}#residence` },
+        offers: {
+          "@type": "Offer",
+          price: 724999,
+          priceCurrency: "CAD",
+          availability: "https://schema.org/InStock",
+          url: CANONICAL,
+        },
+        provider: {
+          "@type": "RealEstateAgent",
+          name: "Finally Home Agents",
+          url: "https://www.northsidegta.ca/",
+        },
+      },
+      {
+        "@type": "SingleFamilyResidence",
+        "@id": `${CANONICAL}#residence`,
+        name: "5670 Thomas Drive, Baldwin ON",
+        description: "Detached bungalow in Baldwin, Georgina with detached garage/workshop.",
+        image: [OG_IMAGE],
+        numberOfBedrooms: 2,
+        numberOfBathroomsTotal: 1,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "5670 Thomas Drive",
+          addressLocality: "Baldwin",
+          addressRegion: "ON",
+          postalCode: "L0E 1A0",
+          addressCountry: "CA",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${CANONICAL}#breadcrumbs`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.northsidegta.ca/" },
+          { "@type": "ListItem", position: 2, name: "Listings", item: "https://www.northsidegta.ca/listings" },
+          { "@type": "ListItem", position: 3, name: "5670 Thomas Drive, Baldwin", item: CANONICAL },
+        ],
+      },
+    ],
+  };
+
   return <>
-    <DynamicMetaTags route={ROUTE} documentTitle="5670 Thomas Drive, Baldwin | Presented by Finally Home Agents" title="5670 Thomas Drive, Baldwin | Presented by Finally Home Agents" description="Explore 5670 Thomas Drive in Baldwin, Georgina. View the walkthrough video, photos, floor plans, listing details, and request a showing with Finally Home Agents." canonicalUrl={CANONICAL} ogType="website" ogImage="/Images/og-home.jpg" twitterCard="summary_large_image" twitterImage="/Images/og-home.jpg" />
+    <DynamicMetaTags
+      route={ROUTE}
+      documentTitle={seoTitle}
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={CANONICAL}
+      ogType="website"
+      ogImage={OG_IMAGE}
+      ogImageAlt="Front exterior of 5670 Thomas Drive, Baldwin ON detached bungalow for sale."
+      twitterCard="summary_large_image"
+      twitterImage={OG_IMAGE}
+      twitterTitle={seoTitle}
+      twitterDescription={seoDescription}
+      additionalMeta={[{ property: "og:url", content: CANONICAL }]}
+    >
+      <script type="application/ld+json">{JSON.stringify(schemaGraph)}</script>
+    </DynamicMetaTags>
     <HeaderShell />
     <main className="bg-slate-950 text-white pb-16">
       <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-emerald-300">Presented by Finally Home Agents • NorthSide GTA</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">5670 Thomas Drive, Baldwin</h1>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">5670 Thomas Drive, Baldwin ON Detached Bungalow for Sale</h1>
             <p className="mt-4 text-3xl font-bold text-emerald-300">$724,999</p>
             <p className="mt-1 text-sm uppercase tracking-[0.2em] text-slate-300">MLS N13113298</p>
-            <p className="mt-4 max-w-xl text-slate-200">Detached bungalow in Baldwin with a large lot, updated core systems, detached garage/workshop, and practical indoor-outdoor space for day-to-day living.</p>
+            <p className="mt-4 max-w-xl text-slate-200">A detached bungalow in Baldwin, Georgina featuring an updated eat-in kitchen, modernized windows, detached garage/workshop, and a large lot with private outdoor space designed for practical everyday living.</p>
             <div className="mt-6 flex flex-wrap gap-3"><a href="#request-showing" className="rounded-full bg-emerald-400 px-5 py-2.5 font-semibold text-slate-950">Request a Showing</a><a href="#video" className="rounded-full border border-white/25 px-5 py-2.5 font-semibold">Watch Video</a><a href={BRAND_URL} target="_blank" rel="noreferrer" className="rounded-full border border-white/25 px-5 py-2.5 font-semibold">View Photos</a></div>
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3">{statPills.map(([k,v]) => <div key={k} className="rounded-xl border border-white/15 bg-white/5 p-3"><p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{k}</p><p className="mt-1 text-sm font-semibold">{v}</p></div>)}</div>
           </div>
