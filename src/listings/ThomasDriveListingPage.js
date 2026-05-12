@@ -10,7 +10,7 @@ const VIDEO_URL = "https://listings.wylieford.com/videos/019e1822-d5e0-70a4-bcad
 const BRAND_URL = "https://listings.wylieford.com/sites/5670-thomas-drive-baldwin-on-l0e-1a0-24719268/branded";
 
 const statPills = [
-  ["Bedrooms", "2 + 1"],
+  ["Bedrooms", "2"],
   ["Bathrooms", "1"],
   ["Property Type", "Detached Bungalow"],
   ["Parking", "5 spaces + detached garage"],
@@ -26,7 +26,7 @@ const detailsSections = [
   },
   {
     title: "Interior",
-    rows: [["Bedrooms", "2 + 1"], ["Bathrooms", "1"], ["Basement", "Unfinished"], ["Laundry", "Main floor"]],
+    rows: [["Bedrooms", "2"], ["Bathrooms", "1"], ["Basement", "Unfinished"], ["Laundry", "Main floor"]],
   },
   {
     title: "Exterior / Lot",
@@ -111,7 +111,7 @@ export default function ThomasDriveListingPage() {
             <div className="mt-6 flex flex-wrap gap-3"><a href="#request-showing" className="rounded-full bg-emerald-400 px-5 py-2.5 font-semibold text-slate-950">Request a Showing</a><a href="#video" className="rounded-full border border-white/25 px-5 py-2.5 font-semibold">Watch Video</a><a href={BRAND_URL} target="_blank" rel="noreferrer" className="rounded-full border border-white/25 px-5 py-2.5 font-semibold">View Photos</a></div>
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3">{statPills.map(([k,v]) => <div key={k} className="rounded-xl border border-white/15 bg-white/5 p-3"><p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{k}</p><p className="mt-1 text-sm font-semibold">{v}</p></div>)}</div>
           </div>
-          <div id="video" className="rounded-2xl border border-white/20 bg-black/60 p-3 shadow-2xl shadow-black/50"><div className="overflow-hidden rounded-xl border border-white/10"><iframe title="5670 Thomas Drive walkthrough" src={VIDEO_URL} className="aspect-video w-full" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" /></div></div>
+          <div id="video" className="rounded-2xl border border-white/20 bg-black/60 p-3 shadow-2xl shadow-black/50"><div className="overflow-hidden rounded-xl border border-white/10"><iframe title="5670 Thomas Drive walkthrough" src={VIDEO_URL} className="aspect-video w-full lg:aspect-[4/3]" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" /></div></div>
         </div>
       </section>
 
