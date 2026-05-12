@@ -130,7 +130,26 @@ export default function ThomasDriveListingPage() {
         <div id="request-showing" className="rounded-3xl bg-white p-6 text-slate-900 shadow-xl">
           <p className="text-xs uppercase tracking-[0.18em] text-emerald-700">Showing Request</p>
           <h2 className="mt-2 text-2xl font-semibold">Request your private showing</h2>
-          <p className="mt-2 text-sm text-slate-600">Matthew Mulhall & Landon Mulhall • Finally Home Agents • HomeLife Optimum Realty</p>
+          <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Presented by Finally Home Agents</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <article className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                <img src="/Images/matthew.jpg" alt="Headshot of Matthew Mulhall." className="h-12 w-12 rounded-full object-cover" loading="lazy" />
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Matthew Mulhall</p>
+                  <p className="text-xs text-slate-600">Real Estate Agent</p>
+                </div>
+              </article>
+              <article className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                <img src="/Images/landon.jpg" alt="Headshot of Landon Mulhall." className="h-12 w-12 rounded-full object-cover" loading="lazy" />
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Landon Mulhall</p>
+                  <p className="text-xs text-slate-600">Real Estate Agent</p>
+                </div>
+              </article>
+            </div>
+            <p className="mt-3 text-xs text-slate-600">HomeLife Optimum Realty</p>
+          </div>
           <div className="mt-5"><ShowingForm /></div>
         </div>
       </section>
