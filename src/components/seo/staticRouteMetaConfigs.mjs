@@ -191,6 +191,34 @@ const STATIC_ROUTE_META_CONFIGS = [
       ],
     },
   },
+
+  {
+    route: "/listings/33-st-augustine-drive-brooklin",
+    meta: {
+      route: "/listings/33-st-augustine-drive-brooklin",
+      documentTitle: "33 St Augustine Drive, Brooklin ON | 2020-Built Family Home for Sale",
+      title: "33 St Augustine Drive, Brooklin ON | 2020-Built Family Home for Sale",
+      description:
+        "Explore 33 St Augustine Drive in Brooklin, Whitby. View the walkthrough video, photos, floor plans, listing details, and request a showing with Finally Home Agents.",
+      canonicalUrl: "https://northsidegta.ca/listings/33-st-augustine-drive-brooklin",
+      ogType: "website",
+      ogImage: "https://northsidegta.ca/Images/33-st-augustine-drive-og.jpg",
+      ogImageAlt: "33 St Augustine Drive in Brooklin, Whitby",
+      twitterCard: "summary_large_image",
+      twitterTitle: "33 St Augustine Drive, Brooklin ON | 2020-Built Family Home for Sale",
+      twitterDescription:
+        "Explore 33 St Augustine Drive in Brooklin, Whitby. View the walkthrough video, photos, floor plans, listing details, and request a showing with Finally Home Agents.",
+      twitterImage: "https://northsidegta.ca/Images/33-st-augustine-drive-og.jpg",
+      twitterImageAlt: "33 St Augustine Drive in Brooklin, Whitby",
+      siteName: "NorthSide GTA",
+      additionalMeta: [
+        { property: "og:image:secure_url", content: "https://northsidegta.ca/Images/33-st-augustine-drive-og.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:url", content: "https://northsidegta.ca/listings/33-st-augustine-drive-brooklin" }
+      ],
+    },
+  },
   {
     route: "/media",
     meta: {
