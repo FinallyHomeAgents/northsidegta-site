@@ -33,6 +33,7 @@ import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 import Inquiry209BarrieStreetPage from "./listings/Inquiry209BarrieStreetPage";
+import Inquiry33StAugustineDriveBrooklinPage from "./listings/Inquiry33StAugustineDriveBrooklinPage";
 import KenBishopWayVideoPage from "./listings/KenBishopWayVideoPage";
 import ThomasDriveListingPage from "./listings/ThomasDriveListingPage";
 import StAugustineDriveListingPage from "./listings/StAugustineDriveListingPage";
@@ -86,6 +87,7 @@ function App() {
           <Route path="/thank-you"     element={<ThankYouPage />} />
           <Route path="/thank-you-209-barrie-st" element={<ThankYou209BarriePage />} />
           <Route path="/listings/209-barrie-street-thornton-inquiry" element={<Inquiry209BarrieStreetPage />} />
+          <Route path="/listings/33-st-augustine-drive-brooklin-inquiry" element={<Inquiry33StAugustineDriveBrooklinPage />} />
           <Route path="/listings/45-ken-bishop-way-video" element={<KenBishopWayVideoPage />} />
           <Route path="/listings/5670-thomas-drive-baldwin" element={<ThomasDriveListingPage />} />
           <Route path="/listings/33-st-augustine-drive-brooklin" element={<StAugustineDriveListingPage />} />
