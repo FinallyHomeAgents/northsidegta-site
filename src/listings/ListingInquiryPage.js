@@ -206,9 +206,9 @@ export default function ListingInquiryPage({ config }) {
       <DynamicMetaTags
         route={config.route}
         documentTitle={config.pageTitle}
-        title={config.pageTitle}
-        description={config.seoDescription}
-        canonicalUrl={`https://northsidegta.ca${config.route}`}
+        title={config.ogTitle || config.pageTitle}
+        description={config.ogDescription || config.seoDescription}
+        canonicalUrl={config.canonicalUrl || `https://northsidegta.ca${config.route}`}
         ogType="website"
         ogImage={config.ogImage}
         twitterCard="summary_large_image"
