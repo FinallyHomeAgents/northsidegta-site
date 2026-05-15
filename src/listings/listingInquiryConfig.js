@@ -52,14 +52,14 @@ export const listingInquiry33StAugustineDriveBrooklin = {
   ogTitle: "33 St Augustine Drive, Brooklin",
   ogDescription:
     "A newer Brooklin family home with a finished basement, flexible bedroom layout, and a standout backyard with pool.",
-  ogImage: "/Images/listings/33-st-augustine-drive-og.jpg",
+  ogImage: "/Images/33-st-augustine-drive-og.jpg",
   canonicalUrl: "https://northsidegta.ca/listings/33-st-augustine-drive-brooklin-inquiry",
   property: {
     headlineAddress: "33 St Augustine Drive",
     cityLine: "Brooklin, Whitby",
     province: "Ontario",
     mls: "E13124552",
-    imageSrc: "/Images/listings/33-st-augustine-drive-og.jpg",
+    imageSrc: "/Images/33-st-augustine-drive-og.jpg",
     imageAlt: "33 St Augustine Drive, Brooklin, ON (placeholder image path; replace with final listing image asset).",
     price: "$1,289,999",
     propertyType: "Detached family home",
