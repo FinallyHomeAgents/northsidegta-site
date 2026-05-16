@@ -43,7 +43,7 @@ const STATIC_ROUTE_META_CONFIGS = [
       documentTitle: "Keswick Homes for Sale at Lower Price Points | NorthSide GTA",
       title: "Lower-Priced Keswick Homes | NorthSide GTA",
       description:
-        "Browse current lower-priced homes in Keswick, Georgina. See price bands, local market notes, and get alerts for new opportunities near Lake Simcoe and north of Toronto.",
+        "Browse current lower-priced homes in Keswick and Georgina. See price bands, local market notes, and get alerts for new opportunities north of Toronto.",
       canonicalUrl: "https://www.northsidegta.ca/keswick-lower-priced-homes",
       ogType: "website",
       ogImage: "https://www.northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
