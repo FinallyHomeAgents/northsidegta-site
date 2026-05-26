@@ -35,13 +35,13 @@ export default function Navigation() {
     { to: "/tastehub", label: "NorthSide TasteHub™", badge: "NEW" },
     { to: "/community", label: "NorthSide Events Guide" },
     { divider: true },
-    { to: "/uxbridge", label: "Uxbridge" },
-    { to: "/georgina", label: "Georgina" },
-    { to: "/stouffville", label: "Stouffville" },
-    { to: "/east-gwillimbury", label: "East Gwillimbury" },
-    { to: "/newmarket", label: "Newmarket" },
-    { to: "/aurora", label: "Aurora" },
-    { to: "/scugog", label: "Scugog" },
+    { to: "/communities/uxbridge", label: "Uxbridge" },
+    { to: "/communities/georgina", label: "Georgina" },
+    { to: "/communities/stouffville", label: "Stouffville" },
+    { to: "/communities/east-gwillimbury", label: "East Gwillimbury" },
+    { to: "/communities/newmarket", label: "Newmarket" },
+    { to: "/communities/aurora", label: "Aurora" },
+    { to: "/communities/scugog", label: "Scugog" },
   ];
 
   const [communitiesOpen, setCommunitiesOpen] = useState(false);

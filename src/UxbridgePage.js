@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
+import HeaderShell from "./components/HeaderShell";
 
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -181,14 +182,6 @@ const PAGE_SCHEMA = `{
 }`;
 const PAGE_BODY_HTML = `
 
-<nav class="topnav" role="navigation" aria-label="Site navigation">
-  <a href="https://northsidegta.ca" class="topnav-logo">NorthSide <span>GTA</span></a>
-  <div class="topnav-right">
-    <a href="https://northsidegta.ca/neighbourhood-guide" class="topnav-link">Neighbourhood guide</a>
-    <a href="/tastehub" class="topnav-link">TasteHub</a>
-    <a href="#contact" class="topnav-cta">Get local guidance</a>
-  </div>
-</nav>
 
 <!-- HERO -->
 <header class="hero" role="banner">
@@ -508,5 +501,5 @@ export default function UxbridgePage() {
       <meta property="og:image" content="https://northsidegta.ca/Images/uxbridge-banner.jpg" />
       <link rel="canonical" href="https://northsidegta.ca/communities/uxbridge" />
       <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
-    </Helmet><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
+    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }

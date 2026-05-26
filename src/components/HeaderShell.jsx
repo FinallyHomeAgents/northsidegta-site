@@ -22,6 +22,7 @@ export default function HeaderShell() {
 
       {/* Brand green coverage band */}
       <CoverageStrip />
+
     </header>
   );
 }

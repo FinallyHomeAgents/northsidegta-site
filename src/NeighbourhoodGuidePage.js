@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
+import HeaderShell from "./components/HeaderShell";
 
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -377,14 +378,6 @@ const PAGE_BODY_HTML = `
 </div>
 
 <!-- NAV -->
-<nav class="topnav" role="navigation" aria-label="Site navigation">
-  <a href="https://northsidegta.ca" class="topnav-logo">NorthSide <span>GTA</span></a>
-  <div class="topnav-right">
-    <a href="/tastehub" class="topnav-link">TasteHub</a>
-    <a href="https://northsidegta.ca/listings" class="topnav-link">Listings</a>
-    <a href="#lead-form" class="topnav-cta" onclick="scrollToLead();return false;">Get local guidance</a>
-  </div>
-</nav>
 
 <!-- HERO -->
 <header class="hero" role="banner">
@@ -608,7 +601,7 @@ const PAGE_BODY_HTML = `
         <div class="omc-town">Newmarket</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
-      <p class="omc-desc">A 4-bed detached in Stonehaven-Wyndham or Armitage — 2000s build, double garage, finished basement, strong school catchment. Strong value compared with nearby options.</p>
+      <p class="omc-desc">A 3–4 bed detached in areas like Armitage, Bristol-London, or select pockets near Stonehaven — often with a double garage and a practical family layout, with finish level varying home to home.</p>
       <a href="/communities/newmarket" class="omc-link">View Newmarket guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#1a4a1a;">
@@ -617,7 +610,7 @@ const PAGE_BODY_HTML = `
         <div class="omc-town">Stouffville</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
-      <p class="omc-desc">A brand-new 4-bed, 3-bath detached in a new subdivision — 2,200–2,600 sq ft, double garage, modern finishes. Everything new. You choose the colours.</p>
+      <p class="omc-desc">A 3–4 bed detached, typically in established subdivisions, often around roughly 1,700–2,200 sq ft with a double garage and family-friendly layout. Condition and lot depth vary by street.</p>
       <a href="/communities/stouffville" class="omc-link">View Stouffville guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#4a2a1a;">
@@ -626,7 +619,7 @@ const PAGE_BODY_HTML = `
         <div class="omc-town">East Gwillimbury</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
-      <p class="omc-desc">A 4–5 bed estate home on a 55-ft lot in Queensville or Sharon — 2,600–3,000 sq ft, 3-car garage. More home per dollar than most of York Region.</p>
+      <p class="omc-desc">A 3-bed detached on a good-sized lot in communities like Holland Landing, Sharon, or Queensville — with functional living space and room to personalize over time.</p>
       <a href="/communities/east-gwillimbury" class="omc-link">View East Gwillimbury guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#0a3a4a;">
@@ -635,7 +628,7 @@ const PAGE_BODY_HTML = `
         <div class="omc-town">Georgina</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
-      <p class="omc-desc">A waterfront or near-waterfront property on Lake Simcoe — large lot, private dock. Or a newer 5-bed detached in Keswick North with a triple garage. One of the strongest value plays in York Region at this price point.</p>
+      <p class="omc-desc">A newer or updated 4-bed detached in communities like Keswick (including Simcoe Landing), often with a nice lot and modern family layout. Waterfront and triple-garage homes are typically above this budget.</p>
       <a href="/communities/georgina" class="omc-link">View Georgina guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#2a3a1a;">
@@ -644,7 +637,7 @@ const PAGE_BODY_HTML = `
         <div class="omc-town">Uxbridge</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
-      <p class="omc-desc">A 4-bed on a half-acre lot with character, or a small equestrian property with a barn on 2–5 acres. Properties simply unavailable at this price closer to the city.</p>
+      <p class="omc-desc">A 3–4 bed detached in a subdivision setting with a solid family layout, often with a double garage and yard space. Rural and equestrian-style properties are usually a higher budget tier.</p>
       <a href="/communities/uxbridge" class="omc-link">View Uxbridge guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#3a1a0a;">
@@ -852,5 +845,5 @@ export default function NeighbourhoodGuidePage() {
       <meta property="og:image" content="https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg" />
       <link rel="canonical" href="https://northsidegta.ca/neighbourhood-guide" />
       <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
-    </Helmet><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
+    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }
