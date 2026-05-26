@@ -1,49 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Living in Scugog, Ontario | Real Estate &amp; Neighbourhood Guide | Finally Home Agents</title>
-<meta name="description" content="Explore Scugog, Ontario with Finally Home Agents. Compare neighbourhoods, home prices, commute, schools, parks, local favourites, and whether Scugog is the right fit for your move north of Toronto.">
-<meta property="og:title" content="Living in Scugog, Ontario | NorthSide GTA Guide">
-<meta property="og:description" content="Compare lifestyle, commute, home prices, schools, neighbourhoods, and local favourites in Scugog. A practical buyer guide from Finally Home Agents.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://northsidegta.ca/communities/scugog">
-<meta property="og:image" content="https://northsidegta.ca/Images/scugog-banner.jpg">
-<link rel="canonical" href="https://northsidegta.ca/communities/scugog">
-<script type="application/ld+json">{
-  "@context":"https://schema.org",
-  "@graph":[
-    {
-      "@type":"Article",
-      "headline":"Living in Scugog, Ontario | Real Estate & Neighbourhood Guide",
-      "description":"Port Perry heritage streets, Lake Scugog waterfront, century homes, and a genuinely distinct small-town character.",
-      "url":"https://northsidegta.ca/communities/scugog",
-      "dateModified":"2026-05-24",
-      "author":[
-        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
-        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
-      ],
-      "publisher":{"@type":"Organization","name":"Finally Home Agents Team","url":"https://northsidegta.ca"},
-      "about":{"@type":"City","name":"Scugog","containedInPlace":{"@type":"AdministrativeArea","name":"Durham Region, Ontario"}}
-    },
-    {
-      "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is Port Perry Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Port Perry, the main centre of Scugog Township, is known for its Victorian Main Street, Lake Scugog waterfront, Heritage Festival, antique shops on Water Street, and a well-preserved small-town character. It is one of the more visually distinctive communities in Ontario."}},{"@type":"Question","name":"Is Scugog a good place to buy a home?","acceptedAnswer":{"@type":"Answer","text":"For buyers who want heritage properties, waterfront access, or a genuine small-town character — and who have flexible work arrangements — Scugog offers distinctive properties at Durham Region pricing. The commute to Toronto is the principal consideration: approximately 75 minutes off-peak, more during peak periods."}},{"@type":"Question","name":"What communities are in Scugog Township?","acceptedAnswer":{"@type":"Answer","text":"Scugog includes Port Perry (the main commercial and residential centre), Blackstock, Caesarea, Prince Albert, Nestleton, and extensive rural areas."}}]
-    },
-    {
-      "@type":"RealEstateAgent",
-      "name":"Finally Home Agents Team",
-      "url":"https://northsidegta.ca",
-      "employee":[
-        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative"},
-        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative"}
-      ]
-    }
-  ]
-}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
+import React, { useEffect, useMemo, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+
+const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --green:#1e4d0f;--green2:#2d6b18;--green3:#4a8f2a;
@@ -56,7 +14,7 @@
   --shm:0 4px 20px rgba(0,0,0,0.10);--shl:0 12px 40px rgba(0,0,0,0.13);
   --r:8px;--rl:14px;--rxl:20px;
   --fd:'Playfair Display',Georgia,serif;--fb:'Inter',system-ui,sans-serif;--t:0.18s;
-  --town-color:#2a1208;
+  --town-color:#0a3040;
 }
 html{scroll-behavior:smooth;}
 body{font-family:var(--fb);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -116,7 +74,7 @@ img{max-width:100%;display:block;}
 .hl-check{width:18px;height:18px;background:var(--gpale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hl-check svg{width:10px;height:10px;stroke:var(--green);stroke-width:2.5;fill:none;}
 /* DAY IN LIFE */
-.dil-block{background:linear-gradient(135deg,#2a120812,#2a120806);border-left:3px solid #2a1208;padding:18px 20px;border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--ink2);line-height:1.8;}
+.dil-block{background:linear-gradient(135deg,#0a304012,#0a304006);border-left:3px solid #0a3040;padding:18px 20px;border-radius:0 var(--r) var(--r) 0;font-size:13.5px;color:var(--ink2);line-height:1.8;}
 /* FAQ */
 .faq-item{border-bottom:1px solid var(--border);}
 .faq-item:last-child{border-bottom:none;}
@@ -153,7 +111,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .pk{color:rgba(255,255,255,0.6);}
 .pv{font-weight:600;color:#fff;}
 .mkt-pill{display:inline-block;font-size:10px;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);font-weight:500;}
-.onemil-box{background:linear-gradient(135deg,#2a120818,#2a120808);border:1px solid #2a120835;border-radius:var(--rl);padding:18px;margin-bottom:16px;}
+.onemil-box{background:linear-gradient(135deg,#0a304018,#0a304008);border:1px solid #0a304035;border-radius:var(--rl);padding:18px;margin-bottom:16px;}
 .onemil-price{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--green);margin-bottom:8px;}
 .onemil-desc{font-size:12.5px;color:var(--ink2);line-height:1.65;}
 /* CTA CARD */
@@ -189,9 +147,39 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .fit-item p{color:var(--ink2);line-height:1.6;}
 @media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}}
 @media(max-width:640px){.container{padding:0 16px;}.topnav{padding:0 16px;}.topnav-right .topnav-link{display:none;}.hero{height:360px;}}
-</style>
-</head>
-<body>
+`;
+const PAGE_SCHEMA = `{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Article",
+      "headline":"Living in Georgina, Ontario | Real Estate & Neighbourhood Guide",
+      "description":"Lake Simcoe access, larger lots, and one of the most accessible price points in York Region.",
+      "url":"https://northsidegta.ca/communities/georgina",
+      "dateModified":"2026-05-24",
+      "author":[
+        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
+        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
+      ],
+      "publisher":{"@type":"Organization","name":"Finally Home Agents Team","url":"https://northsidegta.ca"},
+      "about":{"@type":"City","name":"Georgina","containedInPlace":{"@type":"AdministrativeArea","name":"York Region, Ontario"}}
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[{"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is the most affordable municipality in York Region by average sale price."}},{"@type":"Question","name":"Is Georgina a good place to live?","acceptedAnswer":{"@type":"Answer","text":"Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — particularly those with remote work arrangements. The primary trade-offs are a longer commute to Toronto and car-dependence for daily needs."}},{"@type":"Question","name":"What communities are in Georgina?","acceptedAnswer":{"@type":"Answer","text":"Georgina includes Keswick (the largest urban centre), Keswick South, Keswick North, Sutton, Jackson's Point, Pefferlaw, Baldwin, Belhaven, Virginia, and historic lakeshore communities along Lake Simcoe."}}]
+    },
+    {
+      "@type":"RealEstateAgent",
+      "name":"Finally Home Agents Team",
+      "url":"https://northsidegta.ca",
+      "employee":[
+        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative"},
+        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative"}
+      ]
+    }
+  ]
+}`;
+const PAGE_BODY_HTML = `
 
 <nav class="topnav" role="navigation" aria-label="Site navigation">
   <a href="https://northsidegta.ca" class="topnav-logo">NorthSide <span>GTA</span></a>
@@ -204,20 +192,20 @@ details[open] .faq-icon{transform:rotate(45deg);}
 
 <!-- HERO -->
 <header class="hero" role="banner">
-  <img src="/Images/scugog-banner.jpg" alt="Port Perry waterfront in Scugog" class="hero-img" loading="eager">
+  <img src="/Images/georgina-banner.jpg" alt="Lake Simcoe shoreline in Georgina" class="hero-img" loading="eager">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">
-      <img src="/Images/towns/scugog.jpg" alt="Scugog NorthSide GTA town badge" class="town-badge">
-      <span>Durham Region &middot; NorthSide GTA</span>
+      <img src="/Images/towns/georgina.jpg" alt="Georgina NorthSide GTA town badge" class="town-badge">
+      <span>York Region &middot; NorthSide GTA</span>
     </div>
-    <h1>Living in Scugog</h1>
-    <p class="hero-sub">Port Perry heritage, Lake Scugog waterfront, small-town character, and a slower pace within reach of the GTA.</p>
+    <h1>Living in Georgina</h1>
+    <p class="hero-sub">Lake Simcoe, more space, shoreline communities, beaches, marinas, and one of York Region's most accessible price points.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$960K</div><div class="hstat-lbl">Avg. sold</div></div>
-      <div class="hstat"><div class="hstat-val">75 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">36d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">5.5 mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">$875K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">65 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
+      <div class="hstat"><div class="hstat-val">38d</div><div class="hstat-lbl">Avg. on mkt</div></div>
+      <div class="hstat"><div class="hstat-val">7.5 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
 </header>
@@ -227,7 +215,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href="https://northsidegta.ca">Home</a><span>&rsaquo;</span>
     <a href="https://northsidegta.ca/neighbourhood-guide">Neighbourhood guide</a><span>&rsaquo;</span>
-    <span>Scugog</span>
+    <span>Georgina</span>
   </nav>
   <div class="page-grid">
 
@@ -236,8 +224,8 @@ details[open] .faq-icon{transform:rotate(45deg);}
 
       <!-- INTRO -->
       <div class="sec">
-        <div class="sec-eyebrow">About Scugog</div>
-        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Scugog is a deliberate choice. Buyers who move here are typically not compromising — they are choosing Port Perry's character, Lake Scugog's waterfront, and a pace that the closer suburbs cannot offer. The commute trade-off is real and should be factored into any decision. The heritage property stock, particularly on and near Main Street, is irreplaceable.</p>
+        <div class="sec-eyebrow">About Georgina</div>
+        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — and who are comfortable with the commute trade-off. With 7.5 months of inventory, it is currently a buyer's market with meaningful negotiating room, particularly on non-waterfront properties.</p>
         <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
           <a href="#contact" class="btn-primary" style="font-size:13px;padding:10px 20px;">Get local guidance</a>
           <a href="https://northsidegta.ca/neighbourhood-guide" class="btn-secondary" style="font-size:13px;padding:9px 18px;">Compare all towns</a>
@@ -246,9 +234,9 @@ details[open] .faq-icon{transform:rotate(45deg);}
 
       <!-- SUB-COMMUNITIES -->
       <div class="sec" id="neighbourhoods">
-        <h2>Neighbourhoods &amp; areas in Scugog</h2>
-        <div style="margin-bottom:12px;"><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Port Perry</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Blackstock</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Caesarea</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Prince Albert</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Rural Scugog</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Nestleton</span></div>
-        <p style="font-size:13px;color:var(--ink3);line-height:1.7;">Each area within Scugog has its own character, price range, and feel. Talk to Matthew or Landon about which sub-community fits your lifestyle and budget best.</p>
+        <h2>Neighbourhoods &amp; areas in Georgina</h2>
+        <div style="margin-bottom:12px;"><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Keswick</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Keswick South</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Keswick North</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Sutton</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Jackson's Point</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Pefferlaw</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Baldwin</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Belhaven</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Virginia</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Historic Lakeshore Communities</span></div>
+        <p style="font-size:13px;color:var(--ink3);line-height:1.7;">Each area within Georgina has its own character, price range, and feel. Talk to Matthew or Landon about which sub-community fits your lifestyle and budget best.</p>
       </div>
 
       <!-- SCHOOLS & COMMUTE -->
@@ -257,26 +245,30 @@ details[open] .faq-icon{transform:rotate(45deg);}
         <table class="school-table" aria-label="Schools">
       <thead><tr><th>School</th><th>Rating</th><th>Notes</th></tr></thead>
       <tbody><tr>
-      <td><div class="school-name">Port Perry High School</div><div class="school-type">Public Secondary</div></td>
-      <td class="school-rating">6.5/10</td>
-      <td class="school-note">Durham District School Board</td>
-    </tr><tr>
-      <td><div class="school-name">Scugog Central Public School</div><div class="school-type">Public Elementary</div></td>
+      <td><div class="school-name">Keswick High School</div><div class="school-type">Public Secondary</div></td>
       <td class="school-rating">6.8/10</td>
-      <td class="school-note">Fraser Institute 2024</td>
+      <td class="school-note">York Region District School Board</td>
     </tr><tr>
-      <td><div class="school-name">St. Theresa Catholic Elementary</div><div class="school-type">Catholic Elementary</div></td>
+      <td><div class="school-name">Sutton District High School</div><div class="school-type">Public Secondary</div></td>
+      <td class="school-rating">6.5/10</td>
+      <td class="school-note">York Region District School Board</td>
+    </tr><tr>
+      <td><div class="school-name">Our Lady of the Lake Catholic Elem.</div><div class="school-type">Catholic Elementary</div></td>
+      <td class="school-rating">6.9/10</td>
+      <td class="school-note">York Catholic District School Board</td>
+    </tr><tr>
+      <td><div class="school-name">Keswick Public School</div><div class="school-type">Public Elementary</div></td>
       <td class="school-rating">6.7/10</td>
-      <td class="school-note">Durham Catholic District School Board</td>
+      <td class="school-note">York Region District School Board</td>
     </tr></tbody>
     </table>
     <p style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.65;">Ratings from Fraser Institute Ontario School Report Cards 2024/2025. School boundaries can change — verify directly with the relevant school board before making a property decision.</p>
         <div style="margin-top:18px;">
-          <h2 style="font-size:18px;margin-bottom:10px;">Commute from Scugog</h2>
+          <h2 style="font-size:18px;margin-bottom:10px;">Commute from Georgina</h2>
           <div style="background:var(--cream);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--ink2);line-height:1.75;">
-            <div><strong>Distance to DVP/401:</strong> 88 km</div>
-            <div><strong>Off-peak drive time:</strong> approximately 75 minutes</div>
-            <div><strong>Transit:</strong> Car-dependent — Durham Transit only</div>
+            <div><strong>Distance to DVP/401:</strong> 80 km</div>
+            <div><strong>Off-peak drive time:</strong> approximately 65 minutes</div>
+            <div><strong>Transit:</strong> Car-dependent — no GO Train service</div>
             <div style="margin-top:8px;font-size:12px;color:var(--ink4);">Drive times are off-peak estimates. Peak-hour commute times are typically 30–60% longer depending on conditions.</div>
           </div>
         </div>
@@ -286,113 +278,83 @@ details[open] .faq-icon{transform:rotate(45deg);}
       <div class="sec" id="restaurants">
         <h2>Local restaurants &amp; cafés</h2>
         <div class="rest-item">
-      <div><div class="rest-name">Simcoe Street Grill</div><div class="rest-desc">Waterfront dining — well-regarded locally</div></div>
+      <div><div class="rest-name">Jack's Waterfront Restaurant</div><div class="rest-desc">Lakeside dining — popular summer patio in Keswick</div></div>
     </div><div class="rest-item">
-      <div><div class="rest-name">St. Andrew's Pub</div><div class="rest-desc">Heritage pub in a 150-year-old building</div></div>
+      <div><div class="rest-name">Cook's Bay Brewhouse</div><div class="rest-desc">Local craft brewery in Keswick</div></div>
     </div><div class="rest-item">
-      <div><div class="rest-name">Princess Street Cafe</div><div class="rest-desc">Weekend brunch — busy by 9 AM</div></div>
+      <div><div class="rest-name">Jackson's Point Bistro</div><div class="rest-desc">Seasonal lakeside dining</div></div>
     </div><div class="rest-item">
-      <div><div class="rest-name">Fiesta Gardens</div><div class="rest-desc">Coffee and gelato on the main strip</div></div>
-    </div><div class="rest-item">
-      <div><div class="rest-name">Inn at Port Perry (dining)</div><div class="rest-desc">Sit-down dining in a historic inn</div></div>
+      <div><div class="rest-name">Sutton cafés and diners</div><div class="rest-desc">Small-town café culture across Sutton</div></div>
     </div><p style="font-size:11px;color:var(--ink4);margin-top:10px;">Included for community context. Not ranked or endorsed by Finally Home Agents.</p>
       </div>
 
       <!-- TASTEHUB -->
-      <section class="th-section" aria-labelledby="th-h-scugog">
+      <section class="th-section" aria-labelledby="th-h-georgina">
   <div class="th-header">
     <div>
       <div class="sec-eyebrow">Community-powered local food picks</div>
-      <h2 class="sec-h2" id="th-h-scugog" style="font-size:20px;">NorthSide TasteHub Local Favourites in Scugog</h2>
-      <p class="sec-sub" style="font-size:13px;margin-top:6px;">Port Perry's restaurants, cafés, bakeries, patios, and lake-town favourites are a major part of Scugog's lifestyle. TasteHub shows what locals are voting for.</p>
+      <h2 class="sec-h2" id="th-h-georgina" style="font-size:20px;">NorthSide TasteHub Local Favourites in Georgina</h2>
+      <p class="sec-sub" style="font-size:13px;margin-top:6px;">Lake days, casual patios, pizza nights, and local cafés are part of Georgina's appeal. TasteHub helps buyers discover where locals are actually going.</p>
       <p style="font-size:11px;color:var(--ink4);margin-top:6px;">TasteHub results are community-powered and are not paid rankings or endorsements.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
-      <a href="/tastehub?town=scugog" class="btn-primary" style="font-size:12px;padding:9px 18px;">See Scugog favourites</a>
+      <a href="/tastehub?town=georgina" class="btn-primary" style="font-size:12px;padding:9px 18px;">See Georgina favourites</a>
       <a href="/tastehub" class="btn-secondary" style="font-size:12px;padding:8px 16px;">Vote on TasteHub</a>
     </div>
   </div>
-  <div id="th-polls-scugog" class="th-cards">
+  <div id="th-polls-georgina" class="th-cards">
     <!-- TasteHub polls load here -->
     <div class="th-fallback">
-      <p style="margin-bottom:8px;font-weight:500;">TasteHub polls for Scugog are coming soon.</p>
+      <p style="margin-bottom:8px;font-weight:500;">TasteHub polls for Georgina are coming soon.</p>
       <p style="margin-bottom:14px;">Explore live TasteHub voting across the NorthSide GTA.</p>
       <a href="/tastehub" class="btn-secondary" style="font-size:12px;">See all TasteHub polls</a>
     </div>
   </div>
 </section>
-<script>
-(function(){
-  var townName = "Scugog";
-  var containerId = "th-polls-scugog";
-  var tasteHubUrl = "/tastehub?town=" + encodeURIComponent(townName.toLowerCase().replace(/ /g,'-'));
-  fetch('/api/tastehub/polls', {credentials:'same-origin'})
-    .then(function(r){if(!r.ok)throw new Error('no polls');return r.json();})
-    .then(function(data){
-      var polls = Array.isArray(data) ? data : (data.polls || []);
-      var live = polls.filter(function(p){
-        return p.status === 'live' && p.town && p.town.toLowerCase() === townName.toLowerCase();
-      }).slice(0,3);
-      if(live.length === 0) return;
-      var container = document.getElementById(containerId);
-      container.innerHTML = live.map(function(p){
-        var href = p.slug ? '/tastehub/' + p.slug : '/tastehub';
-        var img = p.image || '/seo/tastehub-default-poll-share.jpg';
-        return '<a href="' + href + '" class="th-card" style="text-decoration:none;color:inherit;">'
-          + '<img src="' + img + '" alt="' + (p.title||'TasteHub poll') + '" class="th-card-img" loading="lazy">'
-          + '<div class="th-card-body">'
-          + '<div class="th-card-town">' + townName + '</div>'
-          + '<div class="th-card-title">' + (p.title||'Local favourite') + '</div>'
-          + '<div class="th-card-cta">Vote now &rarr;</div>'
-          + '</div></a>';
-      }).join('');
-    })
-    .catch(function(){ /* fallback already shown */ });
-})();
-</script>
+
 
       <!-- WHY PEOPLE CHOOSE -->
       <div class="sec" id="lifestyle">
-        <h2>Why people choose Scugog</h2>
-        <div class="highlight-grid"><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Port Perry Victorian Main Street</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Lake Scugog waterfront</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Heritage Festival (annual summer event)</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Boutique shops and galleries on Water St</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Antiques on Water Street</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Fireworks on the lake, July 1st</span></div></div>
+        <h2>Why people choose Georgina</h2>
+        <div class="highlight-grid"><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Lake Simcoe shoreline access</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Sibbald Point Provincial Park</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Jackson's Point beach and marina</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Cook's Bay</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Pefferlaw Brook trails</span></div><div class="hl-item"><div class="hl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><span>Boating, fishing, and seasonal ice fishing</span></div></div>
       </div>
 
       <!-- BUYER FIT -->
       <div class="sec" id="buyer-fit">
-        <h2>Is Scugog the right fit?</h2>
+        <h2>Is Georgina the right fit?</h2>
         <div class="fit-grid">
           <div class="fit-item fit-good">
             <div class="fit-label">Well suited for</div>
-            <p>Heritage home buyers, waterfront property seekers, buyers with remote work flexibility, buyers approaching or in retirement.</p>
+            <p>Buyers with remote work flexibility, waterfront property seekers, buyers who want more space and a different pace at an accessible price point.</p>
           </div>
           <div class="fit-item fit-watch">
             <div class="fit-label">Things to weigh up</div>
-            <p>Scugog has the longest commute of the seven NorthSide GTA communities — approximately 75 minutes off-peak to central Toronto, and considerably longer during peak hours. Remote or hybrid work is a practical prerequisite for most buyers.</p>
+            <p>Georgina requires car travel for essentially all daily needs. There is no GO Train service. Commute to central Toronto is approximately 65 minutes off-peak and longer during peak periods.</p>
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
-          <strong>Market note:</strong> Waterfront and heritage properties have historically held value relative to the broader local market. Non-waterfront inventory is soft, with 5.5 months available and buyers holding meaningful negotiating room.
+          <strong>Market note:</strong> Waterfront properties in Georgina have historically held value relative to the broader market. The overall market has 7.5 months of inventory, which gives buyers meaningful negotiating room.
         </div>
       </div>
 
       <!-- DAY IN LIFE -->
       <div class="sec" id="day-in-life">
-        <h2>A day in Scugog</h2>
-        <div class="dil-block">Morning walk along Water Street — Port Perry's Main Street is genuinely one of the most well-preserved Victorian streetscapes in Ontario. Work from home, or commit to the long drive. Evenings on the dock in summer. Weekend: Port Perry Farmers Market, kayaking on the lake, antique browsing on Water Street. The Heritage Festival in late summer brings the whole region in.</div>
+        <h2>A day in Georgina</h2>
+        <div class="dil-block">No fixed alarm on remote work days. Coffee with a view of the lake, then the laptop open by 8:30. Afternoon: paddleboard from the dock or a walk to Keswick Beach with the kids. Evenings at Jack's waterfront patio when the weather cooperates. The trade-off with the commute is something Georgina buyers are conscious of — most have made a deliberate choice about where they want to spend their time.</div>
       </div>
 
       <!-- FAQ -->
       <div class="sec" id="faq">
         <h2>Frequently asked questions</h2>
         <details class="faq-item">
-      <summary class="faq-summary">What is Port Perry Ontario known for? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">Port Perry, the main centre of Scugog Township, is known for its Victorian Main Street, Lake Scugog waterfront, Heritage Festival, antique shops on Water Street, and a well-preserved small-town character. It is one of the more visually distinctive communities in Ontario.</div>
+      <summary class="faq-summary">What is Georgina Ontario known for? <span class="faq-icon">+</span></summary>
+      <div class="faq-answer">Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is the most affordable municipality in York Region by average sale price.</div>
     </details><details class="faq-item">
-      <summary class="faq-summary">Is Scugog a good place to buy a home? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">For buyers who want heritage properties, waterfront access, or a genuine small-town character — and who have flexible work arrangements — Scugog offers distinctive properties at Durham Region pricing. The commute to Toronto is the principal consideration: approximately 75 minutes off-peak, more during peak periods.</div>
+      <summary class="faq-summary">Is Georgina a good place to live? <span class="faq-icon">+</span></summary>
+      <div class="faq-answer">Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — particularly those with remote work arrangements. The primary trade-offs are a longer commute to Toronto and car-dependence for daily needs.</div>
     </details><details class="faq-item">
-      <summary class="faq-summary">What communities are in Scugog Township? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">Scugog includes Port Perry (the main commercial and residential centre), Blackstock, Caesarea, Prince Albert, Nestleton, and extensive rural areas.</div>
+      <summary class="faq-summary">What communities are in Georgina? <span class="faq-icon">+</span></summary>
+      <div class="faq-answer">Georgina includes Keswick (the largest urban centre), Keswick South, Keswick North, Sutton, Jackson's Point, Pefferlaw, Baldwin, Belhaven, Virginia, and historic lakeshore communities along Lake Simcoe.</div>
     </details>
       </div>
 
@@ -411,13 +373,13 @@ details[open] .faq-icon{transform:rotate(45deg);}
     </a><a href="/communities/east-gwillimbury" class="town-nav-chip">
       <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury NorthSide GTA town badge" width="20" height="20" loading="lazy">
       East Gwillimbury
-    </a><a href="/communities/georgina" class="town-nav-chip">
+    </a><a href="/communities/georgina" class="town-nav-chip current">
       <img src="/Images/towns/georgina.jpg" alt="Georgina NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Georgina
     </a><a href="/communities/uxbridge" class="town-nav-chip">
       <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Uxbridge
-    </a><a href="/communities/scugog" class="town-nav-chip current">
+    </a><a href="/communities/scugog" class="town-nav-chip">
       <img src="/Images/towns/scugog.jpg" alt="Scugog NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Scugog
     </a></div>
@@ -432,37 +394,37 @@ details[open] .faq-icon{transform:rotate(45deg);}
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$960K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1099K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$762K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$800K</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">36d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">98%</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">5.5</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$875K</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$910K</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$815K</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$590K</span></div>
+        <div class="prow"><span class="pk">Days on market</span><span class="pv">38d</span></div>
+        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">97%</span></div>
+        <div class="prow"><span class="pk">Months inventory</span><span class="pv">7.5</span></div>
         <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">Buyer's market</span></span></div>
         <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">TRREB MLS® 2025–2026. Not an appraisal. Confirm with a registered agent before decisions.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->
       <div class="onemil-box">
-        <div class="onemil-price">What does $1M buy in Scugog?</div>
-        <p class="onemil-desc">A well-preserved Victorian century home on a double lot steps from Port Perry's Main Street and the waterfront, or a contemporary 4-bed on Lake Scugog with dock access. Heritage properties of this character are rare and not replicable at this price elsewhere in the GTA orbit.</p>
+        <div class="onemil-price">What does $1M buy in Georgina?</div>
+        <p class="onemil-desc">A 4-bed waterfront or near-waterfront property on Lake Simcoe with a private dock and mature trees. Or a newer 5-bed detached in Keswick North with a triple garage on a large lot. Strong value compared with nearby options anywhere else in York Region at this price.</p>
         <p style="font-size:10px;color:var(--ink4);margin-top:8px;">Based on active listings Q1–Q2 2026. Properties vary.</p>
       </div>
 
       <!-- CTA -->
       <div class="cta-card">
         <h3>Talk to a local real estate agent</h3>
-        <p>We can help you compare neighbourhoods, understand current pricing, and decide whether Scugog fits your lifestyle, budget, and timing.</p>
+        <p>We can help you compare neighbourhoods, understand current pricing, and decide whether Georgina fits your lifestyle, budget, and timing.</p>
         <div class="agent-sm">
           <div class="asm"><div class="asm-name">Matthew Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
           <div class="asm"><div class="asm-name">Landon Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
         </div>
         <div class="cta-form">
-          <input type="text" id="sf_name_scugog" placeholder="Your name" autocomplete="name">
-          <input type="email" id="sf_email_scugog" placeholder="Email address" autocomplete="email">
-          <input type="tel" id="sf_phone_scugog" placeholder="Phone (optional)" autocomplete="tel">
-          <select id="sf_tl_scugog">
+          <input type="text" id="sf_name_georgina" placeholder="Your name" autocomplete="name">
+          <input type="email" id="sf_email_georgina" placeholder="Email address" autocomplete="email">
+          <input type="tel" id="sf_phone_georgina" placeholder="Phone (optional)" autocomplete="tel">
+          <select id="sf_tl_georgina">
             <option value="">Timeline</option>
             <option>Ready now</option>
             <option>1–3 months</option>
@@ -470,14 +432,14 @@ details[open] .faq-icon{transform:rotate(45deg);}
             <option>6–12 months</option>
             <option>Just researching</option>
           </select>
-          <button class="cta-submit" onclick="submitTownLead('scugog','Scugog')">Get local guidance &rarr;</button>
+          <button class="cta-submit" onclick="submitTownLead('georgina','Georgina')">Get local guidance &rarr;</button>
         </div>
         <div class="sms-box">
-          <p>Want listings for Scugog? Get quiet text alerts.</p>
+          <p>Want listings for Georgina? Get quiet text alerts.</p>
           <p style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px;">No spam. Just relevant listings and local updates.</p>
           <div class="sms-row">
-            <input type="tel" id="sms_scugog" placeholder="Your phone number">
-            <button class="sms-btn" onclick="submitSMSTown('scugog','Scugog')">Set alerts</button>
+            <input type="tel" id="sms_georgina" placeholder="Your phone number">
+            <button class="sms-btn" onclick="submitSMSTown('georgina','Georgina')">Set alerts</button>
           </div>
         </div>
         <p class="reco-note">By submitting you consent to being contacted by Matthew Mulhall and Landon Mulhall, Sales Representatives, Finally Home Agents Team, HomeLife Optimum Realty, Brokerage, under TRESA, governed by RECO. For SMS: standard msg &amp; data rates may apply. Reply STOP to unsubscribe.</p>
@@ -493,41 +455,60 @@ details[open] .faq-icon{transform:rotate(45deg);}
   </div>
 </footer>
 
-<script>
-function submitTownLead(id, town) {
-  var n = document.getElementById('sf_name_' + id).value.trim();
-  var em = document.getElementById('sf_email_' + id).value.trim();
-  if (!n || !em) { alert('Please enter your name and email.'); return; }
-  var payload = {
-    name: n, email: em,
-    phone: document.getElementById('sf_phone_' + id).value,
-    timeline: document.getElementById('sf_tl_' + id).value,
-    town: town,
-    source: 'NorthSide GTA Neighbourhood Guide v4 — ' + town + ' town page',
-    timestamp: new Date().toISOString()
-  };
-  fetch('/api/leads', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload),
-    credentials: 'same-origin'
-  }).catch(function() {});
-  var btn = document.querySelector('.cta-submit');
-  if (btn) { btn.textContent = '✓ Request sent'; btn.disabled = true; }
+
+`;
+
+export default function GeorginaPage() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const townName = "Georgina";
+    const container = containerRef.current?.querySelector("#th-polls-georgina");
+    if (!container) return;
+    fetch("/api/tastehub/polls", { credentials: "same-origin" })
+      .then((r) => { if (!r.ok) throw new Error("no polls"); return r.json(); })
+      .then((data) => {
+        const polls = Array.isArray(data) ? data : data.polls || [];
+        const live = polls.filter((p) => p.status === "live" && p.town && p.town.toLowerCase() === townName.toLowerCase()).slice(0, 3);
+        if (!live.length) return;
+        container.innerHTML = live.map((p) => {
+          const href = p.slug ? `/tastehub/${p.slug}` : "/tastehub";
+          const img = p.image || "/seo/tastehub-default-poll-share.jpg";
+          return `<a href="${href}" class="th-card" style="text-decoration:none;color:inherit;"><img src="${img}" alt="${p.title || "TasteHub poll"}" class="th-card-img" loading="lazy"><div class="th-card-body"><div class="th-card-town">${townName}</div><div class="th-card-title">${p.title || "Local favourite"}</div><div class="th-card-cta">Vote now &rarr;</div></div></a>`;
+        }).join("");
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    window.submitTownLead = (id, town) => {
+      const n = document.getElementById(`sf_name_${id}`)?.value.trim();
+      const em = document.getElementById(`sf_email_${id}`)?.value.trim();
+      if (!n || !em) { alert("Please enter your name and email."); return; }
+      const payload = { name: n, email: em, phone: document.getElementById(`sf_phone_${id}`)?.value, timeline: document.getElementById(`sf_tl_${id}`)?.value, town, source: `NorthSide GTA Neighbourhood Guide v4 — ${town} town page`, timestamp: new Date().toISOString() };
+      fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const btn = document.querySelector(".cta-submit"); if (btn) { btn.textContent = "✓ Request sent"; btn.disabled = true; }
+    };
+    window.submitSMSTown = (id, town) => {
+      const phone = document.getElementById(`sms_${id}`)?.value.trim();
+      if (!phone) { alert("Please enter your phone number."); return; }
+      const payload = { phone, town, source: `NorthSide SMS opt-in — ${town}`, timestamp: new Date().toISOString() };
+      fetch("/api/sms-optin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const smsBox = document.getElementById(`sms_${id}`)?.closest(".sms-box");
+      if (smsBox) smsBox.innerHTML = `<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ${town} listings. Reply STOP to unsubscribe.</p>`;
+    };
+    return () => { delete window.submitTownLead; delete window.submitSMSTown; };
+  }, []);
+  const schemaObject = useMemo(() => JSON.parse(PAGE_SCHEMA), []);
+  return (<><Helmet>
+      <title>Living in Georgina, Ontario | Real Estate &amp; Neighbourhood Guide | Finally Home Agents</title>
+      <meta name="description" content="Explore Georgina, Ontario with Finally Home Agents. Compare neighbourhoods, home prices, commute, schools, parks, local favourites, and whether Georgina is the right fit for your move north of Toronto." />
+      <meta property="og:title" content="Living in Georgina, Ontario | NorthSide GTA Guide" />
+      <meta property="og:description" content="Compare lifestyle, commute, home prices, schools, neighbourhoods, and local favourites in Georgina. A practical buyer guide from Finally Home Agents." />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content="https://northsidegta.ca/communities/georgina" />
+      <meta property="og:image" content="https://northsidegta.ca/Images/georgina-banner.jpg" />
+      <link rel="canonical" href="https://northsidegta.ca/communities/georgina" />
+      <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
+    </Helmet><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }
-function submitSMSTown(id, town) {
-  var phone = document.getElementById('sms_' + id).value.trim();
-  if (!phone) { alert('Please enter your phone number.'); return; }
-  var payload = { phone: phone, town: town, source: 'NorthSide SMS opt-in — ' + town, timestamp: new Date().toISOString() };
-  fetch('/api/sms-optin', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload),
-    credentials: 'same-origin'
-  }).catch(function() {});
-  var smsBox = document.getElementById('sms_' + id).closest('.sms-box');
-  if (smsBox) smsBox.innerHTML = '<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ' + town + ' listings. Reply STOP to unsubscribe.</p>';
-}
-</script>
-</body>
-</html>

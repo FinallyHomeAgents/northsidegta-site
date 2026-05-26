@@ -48,6 +48,15 @@ import CoffeePage, { BookCoffeeAliasPage } from "./CoffeePage";
 import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 import KeswickLowerPricedHomesPage from "./KeswickLowerPricedHomesPage";
 
+import AuroraPage from "./AuroraPage";
+import NewmarketPage from "./NewmarketPage";
+import StouffvillePage from "./StouffvillePage";
+import EastGwillimburyPage from "./EastGwillimburyPage";
+import GeorginaPage from "./GeorginaPage";
+import UxbridgePage from "./UxbridgePage";
+import ScugogPage from "./ScugogPage";
+import NeighbourhoodGuidePage from "./NeighbourhoodGuidePage";
+
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
 
@@ -131,7 +140,16 @@ function App() {
           <Route path="/northside-pass-preview/option-5" element={<OptionFivePage />} />
           <Route path="/guided/:path" element={<GuidedPathPage />} />
 
+          <Route path="/neighbourhood-guide" element={<NeighbourhoodGuidePage />} />
+
           {/* Town pages — community slugs */}
+          <Route path="/communities/aurora" element={<AuroraPage />} />
+          <Route path="/communities/newmarket" element={<NewmarketPage />} />
+          <Route path="/communities/stouffville" element={<StouffvillePage />} />
+          <Route path="/communities/east-gwillimbury" element={<EastGwillimburyPage />} />
+          <Route path="/communities/georgina" element={<GeorginaPage />} />
+          <Route path="/communities/uxbridge" element={<UxbridgePage />} />
+          <Route path="/communities/scugog" element={<ScugogPage />} />
           <Route path="/communities/:slug" element={<TownPage />} />
 
           {/* Town pages — short URLs like /aurora */}

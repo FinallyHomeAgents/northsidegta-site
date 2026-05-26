@@ -1,51 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NorthSide GTA Neighbourhood Guide | Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge & Scugog | Finally Home Agents</title>
-<meta name="description" content="A practical neighbourhood guide for buyers looking north of Toronto. Compare home prices, commute times, schools, lifestyle, and local favourites for Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.">
-<meta property="og:title" content="NorthSide GTA Neighbourhood Guide | Finally Home Agents">
-<meta property="og:description" content="Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog. Prices, commutes, schools, and the trade-offs that matter.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://northsidegta.ca/neighbourhood-guide">
-<meta property="og:image" content="https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg">
-<link rel="canonical" href="https://northsidegta.ca/neighbourhood-guide">
-<script type="application/ld+json">{
-  "@context":"https://schema.org",
-  "@graph":[
-    {
-      "@type":"WebPage",
-      "name":"NorthSide GTA Neighbourhood Guide",
-      "description":"A practical neighbourhood guide for buyers looking north of Toronto. Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.",
-      "url":"https://northsidegta.ca/neighbourhood-guide",
-      "dateModified":"2026-05-24",
-      "publisher":{
-        "@type":"RealEstateAgent",
-        "name":"Finally Home Agents Team",
-        "url":"https://northsidegta.ca",
-        "employee":[
-          {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
-          {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
-        ]
-      }
-    },
-    {
-      "@type":"FAQPage",
-      "mainEntity":[
-        {"@type":"Question","name":"What is the average home price in Aurora Ontario 2026?","acceptedAnswer":{"@type":"Answer","text":"The average sold price in Aurora is approximately $1,122,000 across all home types (TRREB MLS Q1 2026). Detached homes average around $1,561,000. It is currently a buyer's market with approximately 4.2 months of inventory."}},
-        {"@type":"Question","name":"Which towns north of Toronto have GO Train access?","acceptedAnswer":{"@type":"Answer","text":"Aurora and Newmarket are served by the GO Barrie line with service to Union Station. Stouffville is served by the GO Stouffville line. East Gwillimbury, Georgina, Uxbridge, and Scugog are car-dependent for Toronto commuting."}},
-        {"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront living across communities including Keswick, Sutton, and Jackson's Point. It is one of York Region's most affordable municipalities and is popular with remote workers and buyers seeking waterfront access."}},
-        {"@type":"Question","name":"What is the most affordable town north of Toronto?","acceptedAnswer":{"@type":"Answer","text":"Georgina has the lowest average sold price among the NorthSide GTA communities at approximately $875,000 (TRREB 2025–2026). Scugog ($960,000) and Uxbridge ($990,000) are also below the $1M average mark."}},
-        {"@type":"Question","name":"What is Uxbridge Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge is officially Canada's Trail Capital, with over 300 kilometres of trails on the Oak Ridges Moraine. It is also known for its equestrian community, heritage downtown, Dagmar Ski Resort, and active arts and theatre scene."}}
-      ]
-    }
-  ]
-}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
+import React, { useEffect, useMemo, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+
+const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --green:#1e4d0f;--green2:#2d6b18;--green3:#4a8f2a;
@@ -368,9 +324,39 @@ details[open] .faq-icon{transform:rotate(45deg);}
   .lead-section{padding:40px 16px;}
   .form-card{padding:20px;}
 }
-</style>
-</head>
-<body>
+`;
+const PAGE_SCHEMA = `{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebPage",
+      "name":"NorthSide GTA Neighbourhood Guide",
+      "description":"A practical neighbourhood guide for buyers looking north of Toronto. Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.",
+      "url":"https://northsidegta.ca/neighbourhood-guide",
+      "dateModified":"2026-05-24",
+      "publisher":{
+        "@type":"RealEstateAgent",
+        "name":"Finally Home Agents Team",
+        "url":"https://northsidegta.ca",
+        "employee":[
+          {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
+          {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
+        ]
+      }
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What is the average home price in Aurora Ontario 2026?","acceptedAnswer":{"@type":"Answer","text":"The average sold price in Aurora is approximately $1,122,000 across all home types (TRREB MLS Q1 2026). Detached homes average around $1,561,000. It is currently a buyer's market with approximately 4.2 months of inventory."}},
+        {"@type":"Question","name":"Which towns north of Toronto have GO Train access?","acceptedAnswer":{"@type":"Answer","text":"Aurora and Newmarket are served by the GO Barrie line with service to Union Station. Stouffville is served by the GO Stouffville line. East Gwillimbury, Georgina, Uxbridge, and Scugog are car-dependent for Toronto commuting."}},
+        {"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront living across communities including Keswick, Sutton, and Jackson's Point. It is one of York Region's most affordable municipalities and is popular with remote workers and buyers seeking waterfront access."}},
+        {"@type":"Question","name":"What is the most affordable town north of Toronto?","acceptedAnswer":{"@type":"Answer","text":"Georgina has the lowest average sold price among the NorthSide GTA communities at approximately $875,000 (TRREB 2025–2026). Scugog ($960,000) and Uxbridge ($990,000) are also below the $1M average mark."}},
+        {"@type":"Question","name":"What is Uxbridge Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge is officially Canada's Trail Capital, with over 300 kilometres of trails on the Oak Ridges Moraine. It is also known for its equestrian community, heritage downtown, Dagmar Ski Resort, and active arts and theatre scene."}}
+      ]
+    }
+  ]
+}`;
+const PAGE_BODY_HTML = `
 
 <div id="maptip" role="tooltip" aria-live="polite"></div>
 
@@ -830,445 +816,41 @@ details[open] .faq-icon{transform:rotate(45deg);}
   </div>
 </footer>
 
-<script>
-// ── DATA ────────────────────────────────────────────────────────────────────
-var HOODS=[
-  {id:'aurora',name:'Aurora',region:'York Region',type:'urban',slug:'aurora',
-   banner:'/Images/aurora-banner.jpg',badge:'/Images/towns/aurora.jpg',
-   positioning:'Established neighbourhoods, strong schools, heritage streets, and direct GO Train access.',
-   avgPrice:1122,det:1561,town:918,condo:720,dvpKm:46,driveMin:35,
-   transit:'GO Train (Barrie line) — approx. 45 min to Union',walk:52,school:8.5,
-   dom:24,spl:97,inv:4.2,pop:'~62,000',lot:'Varied — small to large',newdev:'Moderate',
-   mkt:"Buyer's",bestFor:'Families, upsizers, commuters',
-   watch:'Premium pricing; older homes may need updates',
-   invest:'Market tends to hold value consistently across cycles',
-   pills:[['p-go','GO Train'],['p-school','Strong schools'],['p-her','Heritage downtown']],
-   subs:['Aurora Village','Aurora Heights','Aurora Highlands','Aurora Estates','Bayview Wellington','Hills of St. Andrew','Rural Aurora'],
-   schools:[['Dr. G.W. Williams Secondary','Public Secondary','8.8/10','Top 30 Ontario — Fraser 2024'],['Aurora High School','Public Secondary','7.6/10','YRDSB'],["St. Andrew's College",'Private Boys Gr.5–12','—','National profile; boarding available'],["St. Anne's School",'Private Girls Gr.5–12','—','Founded 2022'],['Holy Spirit Catholic Elem.','Catholic Elem.','7.5/10','Fraser 2024'],['Hartman Public School','Public Elem.','7.4/10','Fraser 2024']],
-   rests:[['Joia Ristorante & Wine Bar','Italian — Aurora institution since 1997'],['Fishbone Kitchen + Bar','Seafood and cocktails on Yonge'],['FIKA Cafe','Café with a strong patio'],['Beertown Public House','Craft beer and pub fare'],['Locale Aurora','Modern Canadian comfort food']],
-   dil:'Morning coffee near Yonge St, then a short walk to Aurora GO. Union Station approximately 45 minutes. After school, kids walk home from Dr. G.W. Williams. Weekend: Aurora Farmers Market on Saturday, Nokiidaa Trail in the afternoon.',
-   mapX:455,mapY:322},
-  {id:'newmarket',name:'Newmarket',region:'York Region',type:'urban',slug:'newmarket',
-   banner:'/Images/newmarket-banner.jpg',badge:'/Images/towns/newmarket.jpg',
-   positioning:'GO Train access, walkable Main Street, established neighbourhoods, and practical day-to-day convenience.',
-   avgPrice:1048,det:1142,town:820,condo:544,dvpKm:55,driveMin:45,
-   transit:'GO Train (Barrie line) + YRT/Viva BRT',walk:58,school:7.9,
-   dom:17,spl:98,inv:1.6,pop:'~88,000',lot:'Small to medium',newdev:'Moderate',
-   mkt:'Balanced',bestFor:'First-time buyers, commuters, downsizers',
-   watch:'Average 17 days on market — well-priced homes move quickly',
-   invest:'Highest sales volume in York Region; strong rental demand',
-   pills:[['p-go','GO Train'],['p-val','Strong value vs Aurora'],['p-school','Strong schools']],
-   subs:['Stonehaven-Wyndham','Armitage','Bristol-London','Glenway Estates','Central Newmarket','Gorham-College Manor','Huron Heights-Leslie Valley'],
-   schools:[['Newmarket High School','Public Secondary','8.5/10','Fraser 2024'],['Dr. John M. Denison SS','Public Secondary','7.2/10','YRDSB'],['Huron Heights Secondary','Public Secondary','7.0/10','French Immersion + Arts'],['Cardinal Carter Catholic SS','Catholic Secondary','7.5/10','York Catholic DSB'],['Stonehaven Public School','Public Elem.','8.1/10','Fraser 2024']],
-   rests:[['Ground Burger Bar','Wagyu burgers on Main St — local favourite'],['Hungry Brew Hops','Craft beer and pub food'],['Luna Ristorante','Authentic Italian'],['Flaming Stove','Indian and Asian fusion'],['Poached Dreams Diner','Brunch — busy on weekends']],
-   dil:'Walk to Newmarket GO in 9 minutes. Union Station roughly 55 minutes later. Kids walk home from school. Dinner on Main Street. Weekend: Fairy Lake, farmers market, hockey at Ray Twinney Arena.',
-   mapX:443,mapY:298},
-  {id:'stouffville',name:'Stouffville',region:'York Region',type:'suburb',slug:'stouffville',
-   banner:'/Images/stouffville-banner.jpg',badge:'/Images/towns/stouffville.jpg',
-   positioning:'GO access, newer homes on reasonable lots, strong schools, and a Main Street that still feels local.',
-   avgPrice:1114,det:1280,town:890,condo:680,dvpKm:48,driveMin:40,
-   transit:'GO Train (Stouffville line) — approx. 65 min to Union',walk:42,school:8.1,
-   dom:28,spl:99,inv:6.0,pop:'~50,000',lot:'Medium — newer subdivisions',newdev:'High — projects completing 2026',
-   mkt:"Buyer's",bestFor:'Young families, new-build buyers, GTA movers',
-   watch:'6 months of inventory — buyers are currently in a strong negotiating position',
-   invest:'Long-term upside as GO service improves and amenities mature',
-   pills:[['p-go','GO Train'],['p-new','New construction'],['p-school','Strong schools']],
-   subs:['Stouffville town','Ballantrae','Claremont','Gormley','Vandorf','Rural Whitchurch'],
-   schools:[['Stouffville District Secondary','Public Secondary','7.9/10','Fraser 2024'],['All Saints Catholic SS','Catholic Secondary','7.7/10','York Catholic DSB'],['Barbara Reid Public School','Public Elem.','7.7/10','Fraser 2024'],['Glad Park Public School','Public Elem.','7.3/10','Fraser 2024'],['St. Mark Catholic Elem.','Catholic Elem.','7.5/10','York Catholic DSB']],
-   rests:[['Maki Japanese Restaurant','AYCE sushi — popular with locals'],['Cork & Barrel','Wine bar on Main St'],['Ballantrae Golf & CC','Clubhouse dining'],['Stone Road Grille','Casual neighbourhood spot'],['Main St. cafés','Several independent options']],
-   dil:'School drop-off, then GO Stouffville line — 65 minutes to Union. New build with a proper garage. Weekend: Ballantrae Golf, Bruce\'s Mill Conservation Area, Sunday farmers market.',
-   mapX:520,mapY:332},
-  {id:'eastgwillimbury',name:'East Gwillimbury',region:'York Region',type:'suburb',slug:'east-gwillimbury',
-   banner:'/Images/eastgwillimbury-banner.jpg',badge:'/Images/towns/east-gwillimbury.jpg',
-   positioning:'Newer communities, larger lots, and faster growth across Sharon, Queensville, Holland Landing, and Mount Albert.',
-   avgPrice:1150,det:1550,town:890,condo:680,dvpKm:60,driveMin:50,
-   transit:'Hwy 404 + Bradford bypass — no GO station',walk:22,school:7.8,
-   dom:30,spl:98,inv:4.5,pop:'~32,000',lot:'Large — some of the best lot sizes in York Region',newdev:'Very high — ongoing through 2026',
-   mkt:"Buyer's",bestFor:'Upsizers, families needing space, new-home buyers',
-   watch:'Car-dependent — residents drive for all errands',
-   invest:'Infrastructure investment ongoing; market expected to mature',
-   pills:[['p-new','New builds'],['p-val','Largest lots in York']],
-   subs:['Holland Landing','Sharon','Queensville','Mount Albert','Rural East Gwillimbury'],
-   schools:[['Sharon Public School','Public Elem.','7.8/10','Fraser 2024'],['Queensville Public School','Public Elem.','7.5/10','YRDSB'],['Dr. John M. Denison SS','Secondary — Newmarket','7.2/10','Closest secondary'],['Sacred Heart Catholic Elem.','Catholic Elem.','7.6/10','York Catholic DSB']],
-   rests:[['Sharon village cafés','Independent spots in the heritage village'],['Holland Landing diners','Classic small-town dining'],['HALP Aquatics Café','New café inside the rec centre (2025)'],['15 min to Newmarket','Full dining scene accessible by car']],
-   dil:'School drop-off around the corner. Hwy 404 south — 45–60 minutes depending on traffic. Home to a 3-car garage and a yard big enough to use. HALP recreation centre with the kids after school.',
-   mapX:468,mapY:274},
-  {id:'georgina',name:'Georgina',region:'York Region',type:'rural',slug:'georgina',
-   banner:'/Images/georgina-banner.jpg',badge:'/Images/towns/georgina.jpg',
-   positioning:'Lake Simcoe, more space, shoreline communities, and one of York Region\'s most accessible price points.',
-   avgPrice:875,det:910,town:815,condo:590,dvpKm:80,driveMin:65,
-   transit:'Car-dependent — no GO Train',walk:18,school:6.8,
-   dom:38,spl:97,inv:7.5,pop:'~46,000',lot:'Large — many waterfront and oversized',newdev:'Low to moderate',
-   mkt:"Buyer's",bestFor:'Remote workers, waterfront buyers, buyers seeking more space',
-   watch:'Longer commute to Toronto; car required for all daily errands',
-   invest:'Waterfront properties tend to hold value over the long term',
-   pills:[['p-lake','Lake Simcoe'],['p-val','Accessible price point'],['p-trail','Outdoors']],
-   subs:["Keswick","Keswick South","Keswick North","Sutton","Jackson's Point","Pefferlaw","Baldwin","Belhaven","Virginia","Historic Lakeshore Communities"],
-   schools:[['Keswick High School','Public Secondary','6.8/10','YRDSB'],['Sutton District High School','Public Secondary','6.5/10','YRDSB'],['Our Lady of the Lake Catholic','Catholic Elem.','6.9/10','York Catholic DSB'],['Keswick Public School','Public Elem.','6.7/10','YRDSB']],
-   rests:[["Jack's Waterfront Restaurant",'Keswick waterfront patio — seasonal'],["Cook's Bay Brewhouse",'Local craft brewery'],["Jackson's Point Bistro",'Seasonal lakeside dining'],['Sutton cafés','Small-town cafés and diners']],
-   dil:'Remote work from home with Lake Simcoe in the background. Noon paddleboard from the dock. Kids to the beach after school. Dinner on a waterfront patio. A different pace.',
-   mapX:490,mapY:154},
-  {id:'uxbridge',name:'Uxbridge',region:'Durham Region',type:'rural',slug:'uxbridge',
-   banner:'/Images/uxbridge-banner.jpg',badge:'/Images/towns/uxbridge.jpg',
-   positioning:'Trail networks, rolling countryside, heritage streets, and a quieter lifestyle with room to breathe.',
-   avgPrice:990,det:1200,town:750,condo:527,dvpKm:75,driveMin:60,
-   transit:'Car-dependent — Durham Transit only',walk:28,school:7.2,
-   dom:34,spl:97,inv:4.0,pop:'~22,000',lot:'Large to estate — rural character',newdev:'Low',
-   mkt:'Balanced',bestFor:'Nature lovers, equestrians, artists, remote workers',
-   watch:'No GO Train access; commute is longer — car is essential',
-   invest:'Stable balanced market; 85% homeownership rate; buyers can negotiate',
-   pills:[['p-trail',"Canada's Trail Capital"],['p-arts','Arts & culture'],['p-her','Heritage character']],
-   subs:['Uxbridge town','Goodwood','Leaskdale','Sandford','Udora','Zephyr','Siloam','Vivian'],
-   schools:[['Uxbridge Secondary School','Public Secondary','7.2/10','DDSB — arts program'],['Uxbridge Public School','Public Elem.','7.4/10','Fraser 2024'],['St. Joseph Catholic Elem.','Catholic Elem.','7.0/10','Durham Catholic DSB']],
-   rests:[['Tin Can Coffee','Independent café — consistently busy'],['Uxbridge Brewing Co.','Small-batch craft beer, town square patio'],["Frankie D's Ristorante",'Italian — book ahead on weekends'],['Headwater Farms store','Local beef and provisions'],['Tin Cup Pub','Neighbourhood pub']],
-   dil:'Early morning trail run through Durham Forest before the day starts. Car to Toronto — 60–75 minutes via Hwy 48/404. Half-acre lot, quiet street. Theatre Uxbridge or Uxbridge Brewing Co. in the evening.',
-   mapX:598,mapY:335},
-  {id:'scugog',name:'Scugog',region:'Durham Region',type:'rural',slug:'scugog',
-   banner:'/Images/scugog-banner.jpg',badge:'/Images/towns/scugog.jpg',
-   positioning:'Port Perry heritage, Lake Scugog waterfront, small-town character, and a pace that is genuinely different from the city.',
-   avgPrice:960,det:1099,town:762,condo:800,dvpKm:88,driveMin:75,
-   transit:'Car-dependent — Durham Transit only',walk:20,school:6.5,
-   dom:36,spl:98,inv:5.5,pop:'~22,000',lot:'Large — many on acreage',newdev:'Very low',
-   mkt:"Buyer's",bestFor:'Heritage buyers, waterfront seekers, retirees, remote workers',
-   watch:'Longest drive to Toronto of these seven communities',
-   invest:'Waterfront and heritage properties tend to hold value; broader market is soft',
-   pills:[['p-lake','Lake Scugog'],['p-her','Century homes'],['p-arts','Boutique downtown']],
-   subs:['Port Perry','Blackstock','Caesarea','Prince Albert','Rural Scugog','Nestleton'],
-   schools:[['Port Perry High School','Public Secondary','6.5/10','DDSB'],['Scugog Central Public School','Public Elem.','6.8/10','DDSB'],['St. Theresa Catholic Elem.','Catholic Elem.','6.7/10','Durham Catholic DSB']],
-   rests:[['Simcoe Street Grill','Waterfront dining'],["St. Andrew's Pub",'Heritage pub building'],['Princess Street Cafe','Brunch — busy weekends'],['Fiesta Gardens','Coffee and gelato on Main St'],['Inn at Port Perry (dining)','Weekend destination dining']],
-   dil:'Sunrise walk along Water Street. Remote work with Lake Scugog nearby. Weekend: Port Perry Farmers Market, kayaking on the lake, antiques on Water St, fireworks on the water July 1st.',
-   mapX:718,mapY:345},
-];
 
-var FILTERS=[
-  {id:'all',label:'All 7 towns'},
-  {id:'york',label:'York Region',fn:function(h){return h.region==='York Region';}},
-  {id:'durham',label:'Durham Region',fn:function(h){return h.region==='Durham Region';}},
-  {id:'under1m',label:'Under $1M avg',fn:function(h){return h.avgPrice<1000;}},
-  {id:'go',label:'GO Train',fn:function(h){return h.pills.some(function(p){return p[0]==='p-go';});}},
-  {id:'water',label:'Waterfront',fn:function(h){return h.pills.some(function(p){return p[0]==='p-lake';});}},
-  {id:'new',label:'New builds',fn:function(h){return h.pills.some(function(p){return p[0]==='p-new';});}},
-];
+`;
 
-var activeFilter='all',selected=[],viewMode='cards',expanded={};
+export default function NeighbourhoodGuidePage() {
+  const containerRef = useRef(null);
 
-function getList(){
-  var f=FILTERS.find(function(x){return x.id===activeFilter;});
-  var list=f&&f.fn?HOODS.filter(f.fn):HOODS.slice();
-  var v=document.getElementById('sortSel').value;
-  if(v==='price-asc')list.sort(function(a,b){return a.avgPrice-b.avgPrice;});
-  else if(v==='price-desc')list.sort(function(a,b){return b.avgPrice-a.avgPrice;});
-  else if(v==='commute')list.sort(function(a,b){return a.driveMin-b.driveMin;});
-  else list.sort(function(a,b){return a.name.localeCompare(b.name);});
-  return list;
+  useEffect(() => {
+    window.submitTownLead = (id, town) => {
+      const n = document.getElementById(`sf_name_${id}`)?.value.trim();
+      const em = document.getElementById(`sf_email_${id}`)?.value.trim();
+      if (!n || !em) { alert("Please enter your name and email."); return; }
+      const payload = { name: n, email: em, phone: document.getElementById(`sf_phone_${id}`)?.value, timeline: document.getElementById(`sf_tl_${id}`)?.value, town, source: `NorthSide GTA Neighbourhood Guide v4 — ${town} town page`, timestamp: new Date().toISOString() };
+      fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const btn = document.querySelector(".cta-submit"); if (btn) { btn.textContent = "✓ Request sent"; btn.disabled = true; }
+    };
+    window.submitSMSTown = (id, town) => {
+      const phone = document.getElementById(`sms_${id}`)?.value.trim();
+      if (!phone) { alert("Please enter your phone number."); return; }
+      const payload = { phone, town, source: `NorthSide SMS opt-in — ${town}`, timestamp: new Date().toISOString() };
+      fetch("/api/sms-optin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const smsBox = document.getElementById(`sms_${id}`)?.closest(".sms-box");
+      if (smsBox) smsBox.innerHTML = `<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ${town} listings. Reply STOP to unsubscribe.</p>`;
+    };
+    return () => { delete window.submitTownLead; delete window.submitSMSTown; };
+  }, []);
+  const schemaObject = useMemo(() => JSON.parse(PAGE_SCHEMA), []);
+  return (<><Helmet>
+      <title>NorthSide GTA Neighbourhood Guide | Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge & Scugog | Finally Home Agents</title>
+      <meta name="description" content="A practical neighbourhood guide for buyers looking north of Toronto. Compare home prices, commute times, schools, lifestyle, and local favourites for Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog." />
+      <meta property="og:title" content="NorthSide GTA Neighbourhood Guide | Finally Home Agents" />
+      <meta property="og:description" content="Compare Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog. Prices, commutes, schools, and the trade-offs that matter." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://northsidegta.ca/neighbourhood-guide" />
+      <meta property="og:image" content="https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg" />
+      <link rel="canonical" href="https://northsidegta.ca/neighbourhood-guide" />
+      <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
+    </Helmet><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }
-function bestIn(vals,lower){
-  var b=lower?Math.min.apply(null,vals):Math.max.apply(null,vals);
-  return vals.map(function(v){return v===b;});
-}
-
-function renderCards(){
-  var list=getList();
-  if(!list.length)return '<div class="empty">No communities match this filter.</div>';
-  var html='<div class="card-grid" id="town-cards">';
-  list.forEach(function(h){
-    var isSel=selected.indexOf(h.id)>-1;
-    var isExp=!!expanded[h.id];
-    var mktClass=h.mkt.indexOf('Buyer')>-1?'p-buyer':'p-bal';
-    var mktLabel=h.mkt+' market';
-    var regionClass=h.region.indexOf('York')>-1?'region-york':'region-durham';
-    // Schools mini
-    var schoolsMini='<div class="school-mini">';
-    h.schools.slice(0,4).forEach(function(s){
-      schoolsMini+='<div class="school-mini-row"><div><div class="school-mini-name">'+s[0]+'</div><div class="school-mini-type">'+s[1]+'</div></div><div class="school-mini-r">'+s[2]+'</div></div>';
-    });
-    schoolsMini+='<p style="font-size:10px;color:var(--ink4);margin-top:6px;">Fraser Institute 2024/2025. Verify boundaries with school board.</p></div>';
-    // Rests mini
-    var restsMini='<div class="rest-mini">';
-    h.rests.forEach(function(r){
-      restsMini+='<div class="rest-mini-row"><div><div class="rest-mini-name">'+r[0]+'</div><div class="rest-mini-desc">'+r[1]+'</div></div></div>';
-    });
-    restsMini+='<p style="font-size:10px;color:var(--ink4);margin-top:6px;">Included for community context only — not a ranking or endorsement.</p></div>';
-    // Subs
-    var subsBadges='<div class="subs">'+h.subs.map(function(s){return'<span class="sub">'+s+'</span>';}).join('')+'</div>';
-    // Expanded data
-    var xpanel='';
-    if(isExp){
-      xpanel='<div class="tc-expanded">'
-        +'<div class="xdata-grid">'
-        +'<div><div class="xrow"><span class="xk">Detached avg.</span><span class="xv">$'+h.det+'K</span></div>'
-        +'<div class="xrow"><span class="xk">Townhouse avg.</span><span class="xv">$'+h.town+'K</span></div>'
-        +'<div class="xrow"><span class="xk">Condo/apt avg.</span><span class="xv">$'+h.condo+'K</span></div>'
-        +'<div class="xrow"><span class="xk">Sale/list ratio</span><span class="xv">'+h.spl+'%</span></div></div>'
-        +'<div><div class="xrow"><span class="xk">Months inventory</span><span class="xv">'+h.inv+'</span></div>'
-        +'<div class="xrow"><span class="xk">Walk score</span><span class="xv">'+h.walk+'/100</span></div>'
-        +'<div class="xrow"><span class="xk">Population</span><span class="xv">'+h.pop+'</span></div>'
-        +'<div class="xrow"><span class="xk">Lot size</span><span class="xv" style="text-align:right;max-width:120px;font-size:11px;">'+h.lot+'</span></div></div></div>'
-        +'<div class="xalert xalert-warn" style="margin-top:10px;"><strong>Consider:</strong> '+h.watch+'</div>'
-        +'<div class="xalert xalert-inv" style="margin-top:6px;"><strong>Market note:</strong> '+h.invest+'</div>'
-        +'</div>';
-    }
-    html+='<article class="tc'+(isSel?' sel':'')+'" id="card-'+h.id+'" aria-label="'+h.name+' — '+h.region+'">'
-      // Image
-      +'<div class="tc-img-wrap" onclick="toggleSel(\''+h.id+'\')" style="cursor:pointer;">'
-      +'<img src="'+h.banner+'" alt="'+h.name+' neighbourhood" class="tc-img" loading="lazy">'
-      +'<div class="tc-img-overlay" aria-hidden="true"></div>'
-      +'<div class="tc-badge-wrap">'
-      +'<img src="'+h.badge+'" alt="'+h.name+' NorthSide GTA town badge" class="tc-badge" loading="lazy">'
-      +'<span class="tc-badge-name">'+h.name+'</span>'
-      +'</div>'
-      +'<span class="tc-region '+regionClass+'">'+h.region+'</span>'
-      +(isSel?'<span class="selbadge">Selected</span>':'')
-      +'</div>'
-      // Body
-      +'<div class="tc-body" onclick="toggleSel(\''+h.id+'\')" style="cursor:pointer;">'
-      +'<div class="tc-top">'
-      +'<div style="flex:1;"><p style="font-size:12px;color:var(--ink3);margin-bottom:3px;">'+h.type+' community</p>'
-      +'<p style="font-size:13px;color:var(--ink2);line-height:1.5;">'+h.positioning+'</p></div>'
-      +'<div style="text-align:right;flex-shrink:0;margin-left:12px;"><div style="font-family:var(--fd);font-size:20px;font-weight:700;color:var(--green);">$'+h.avgPrice+'K</div><div style="font-size:10px;color:var(--ink4);">avg. sold</div></div>'
-      +'</div>'
-      +'<div class="tc-meta">'
-      +'<div class="tc-stat"><div class="tc-stat-val">'+h.dvpKm+' km</div><div class="tc-stat-lbl">to DVP/401</div></div>'
-      +'<div class="tc-stat"><div class="tc-stat-val">'+h.driveMin+' min</div><div class="tc-stat-lbl">off-peak drive</div></div>'
-      +'<div class="tc-stat"><div class="tc-stat-val">'+h.dom+'d</div><div class="tc-stat-lbl">avg. on market</div></div>'
-      +'</div>'
-      +'<div class="tc-pills">'+h.pills.map(function(p){return'<span class="pill '+p[0]+'">'+p[1]+'</span>';}).join('')
-      +'<span class="pill '+mktClass+'">'+mktLabel+'</span></div>'
-      +'</div>'
-      // Sub-communities
-      +subsBadges
-      // Tabs
-      +'<div class="tc-tabs" role="tablist">'
-      +'<button class="tc-tab on" onclick="stab(this,\''+h.id+'\',\'ov\')" role="tab">Overview</button>'
-      +'<button class="tc-tab" onclick="stab(this,\''+h.id+'\',\'sc\')" role="tab">Schools</button>'
-      +'<button class="tc-tab" onclick="stab(this,\''+h.id+'\',\'re\')" role="tab">Dining</button>'
-      +'<button class="tc-tab" onclick="stab(this,\''+h.id+'\',\'dl\')" role="tab">Day in life</button>'
-      +'</div>'
-      +'<div id="tp-ov-'+h.id+'" class="tc-panel on"><div class="dil-mini">'+h.positioning+' <a href="/communities/'+h.slug+'" style="font-size:12px;font-weight:500;">Read the full '+h.name+' guide &rarr;</a></div></div>'
-      +'<div id="tp-sc-'+h.id+'" class="tc-panel">'+schoolsMini+'</div>'
-      +'<div id="tp-re-'+h.id+'" class="tc-panel">'+restsMini+'</div>'
-      +'<div id="tp-dl-'+h.id+'" class="tc-panel"><div class="dil-mini">'+h.dil+'</div></div>'
-      // Expand button
-      +(xpanel||'')
-      +'<button class="tc-expand-btn" onclick="toggleExp(\''+h.id+'\')">'+(isExp?'Show less ▲':'Full data: prices, inventory, transit &amp; more ▼')+'</button>'
-      // View guide link
-      +'<a href="/communities/'+h.slug+'" class="town-page-link" style="display:block;text-align:center;font-size:12px;font-weight:500;color:var(--green);padding:9px 0;border-top:1px solid var(--border);background:var(--gpale);transition:background 0.18s;">View '+h.name+' neighbourhood guide &rarr;</a>'
-      +'</article>';
-  });
-  html+='</div>';
-  // Action bar
-  if(selected.length>0){
-    html+='<div class="sel-action"><button class="cab" onclick="setView(\'compare\')">Compare '+selected.length+' selected &rarr;</button></div>';
-  } else {
-    html+='<p class="sel-hint">Select any community card to compare side by side</p>';
-  }
-  return html;
-}
-
-function stab(el,hid,tab){
-  var ctabs=el.closest('.tc-tabs');
-  ctabs.querySelectorAll('.tc-tab').forEach(function(t){t.classList.remove('on');});
-  el.classList.add('on');
-  var card=document.getElementById('card-'+hid);
-  card.querySelectorAll('.tc-panel').forEach(function(p){p.classList.remove('on');});
-  document.getElementById('tp-'+tab+'-'+hid).classList.add('on');
-}
-
-function toggleExp(hid){
-  expanded[hid]=!expanded[hid];
-  render();
-  setTimeout(function(){
-    var el=document.getElementById('card-'+hid);
-    if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },60);
-}
-
-function renderCompare(){
-  var sh=selected.length>0?HOODS.filter(function(h){return selected.indexOf(h.id)>-1;}):HOODS.slice(0,3);
-  var n=sh.length;
-  var ct='150px repeat('+n+',minmax(0,1fr))';
-  function hdr(){
-    return '<div class="crow" style="display:grid;grid-template-columns:'+ct+';">'
-      +'<div class="clbl" style="border-bottom:2px solid var(--green);background:var(--cream);"></div>'
-      +sh.map(function(h){return'<div class="cch">'+h.name+'</div>';}).join('')+'</div>';
-  }
-  function sec(l){return'<div class="csec">'+l+'</div>';}
-  function row(l,ic,vals,fmt,low){
-    var b=bestIn(vals,low);
-    return'<div class="crow" style="display:grid;grid-template-columns:'+ct+';">'
-      +'<div class="clbl"><i class="fas '+ic+'" aria-hidden="true"></i>'+l+'</div>'
-      +vals.map(function(v,i){return'<div class="ccell'+(b[i]?' best':'')+'">'+fmt(v)+'</div>';}).join('')+'</div>';
-  }
-  function brow(l,ic,vals,maxV,fmt,low){
-    var b=bestIn(vals,low);
-    return'<div class="crow" style="display:grid;grid-template-columns:'+ct+';">'
-      +'<div class="clbl"><i class="fas '+ic+'" aria-hidden="true"></i>'+l+'</div>'
-      +vals.map(function(v,i){
-        var p=Math.round((v/maxV)*100);
-        return'<div class="ccell'+(b[i]?' best':'')+'"><div>'+fmt(v)+'</div>'
-          +'<div class="btr"><div class="bfl'+(b[i]?' bb':'')+'" style="width:'+p+'%"></div></div></div>';
-      }).join('')+'</div>';
-  }
-  function trow(l,ic,vals){
-    return'<div class="crow" style="display:grid;grid-template-columns:'+ct+';">'
-      +'<div class="clbl"><i class="fas '+ic+'" aria-hidden="true"></i>'+l+'</div>'
-      +vals.map(function(v){return'<div class="cins">'+v+'</div>';}).join('')+'</div>';
-  }
-  var prices=sh.map(function(h){return h.avgPrice;});
-  var dets=sh.map(function(h){return h.det;});
-  var towns=sh.map(function(h){return h.town;});
-  var condos=sh.map(function(h){return h.condo;});
-  var kms=sh.map(function(h){return h.dvpKm;});
-  var mins=sh.map(function(h){return h.driveMin;});
-  var doms=sh.map(function(h){return h.dom;});
-  var spls=sh.map(function(h){return h.spl;});
-  var invs=sh.map(function(h){return h.inv;});
-  var walks=sh.map(function(h){return h.walk;});
-  var schs=sh.map(function(h){return h.school;});
-  return'<section class="cmp-section">'
-    +'<div class="cmp-hdr"><h2 class="cmp-title">Side-by-side comparison</h2><button class="back-btn" onclick="setView(\'cards\')">← Back to cards</button></div>'
-    +'<div class="ctable">'
-    +hdr()
-    +sec('Sub-communities')
-    +trow('Areas within','fa-map-pin',sh.map(function(h){return h.subs.slice(0,3).join(', ')+(h.subs.length>3?' +more':'');}))
-    +sec('Pricing — avg. sold (TRREB MLS® 2025–2026)')
-    +brow('All home types','fa-home',prices,Math.max.apply(null,prices),function(v){return'$'+v+'K';},true)
-    +row('Detached','fa-house',dets,function(v){return'$'+v+'K';},true)
-    +row('Townhouse','fa-building',towns,function(v){return'$'+v+'K';},true)
-    +row('Condo / apt','fa-city',condos,function(v){return'$'+v+'K';},true)
-    +sec('Market conditions')
-    +trow('Market type','fa-chart-line',sh.map(function(h){return h.mkt+' market';}))
-    +brow('Avg days on market','fa-clock',doms,Math.max.apply(null,doms),function(v){return v+'d';},true)
-    +row('Sale/list ratio','fa-percent',spls,function(v){return v+'%';},false)
-    +brow('Months of inventory','fa-layer-group',invs,Math.max.apply(null,invs),function(v){return v+' mo';},false)
-    +sec('Commute & lifestyle')
-    +brow('Distance to DVP/401','fa-road',kms,Math.max.apply(null,kms),function(v){return v+' km';},true)
-    +brow('Off-peak drive time','fa-car',mins,Math.max.apply(null,mins),function(v){return v+' min';},true)
-    +trow('Transit','fa-train',sh.map(function(h){return h.transit;}))
-    +brow('Walk score','fa-person-walking',walks,100,function(v){return v+'/100';},false)
-    +sec('Community')
-    +row('School rating avg.','fa-graduation-cap',schs,function(v){return v+'/10';},false)
-    +trow('Lot sizes','fa-ruler',sh.map(function(h){return h.lot;}))
-    +trow('Best for','fa-users',sh.map(function(h){return h.bestFor;}))
-    +sec('Buyer trade-offs')
-    +trow('Things to weigh','fa-triangle-exclamation',sh.map(function(h){return h.watch;}))
-    +trow('Market note','fa-arrow-trend-up',sh.map(function(h){return h.invest;}))
-    +'<div class="cleg">Green highlight = strongest in that category among selected towns &nbsp;|&nbsp; TRREB MLS® 2025–2026 &nbsp;|&nbsp; Fraser Institute 2024/2025</div>'
-    +'</div></section>';
-}
-
-function render(){
-  document.getElementById('mainContent').innerHTML=viewMode==='cards'?renderCards():renderCompare();
-}
-function setView(v){
-  viewMode=v;
-  document.getElementById('btnCards').classList.toggle('on',v==='cards');
-  document.getElementById('btnCompare').classList.toggle('on',v==='compare');
-  render();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function toggleSel(id){
-  var idx=selected.indexOf(id);
-  if(idx>-1){selected.splice(idx,1);}
-  else{if(selected.length>=4)selected.shift();selected.push(id);}
-  render();
-}
-function setFilter(id){
-  activeFilter=id;
-  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
-  render();
-}
-function jumpTo(id){
-  setView('cards');
-  if(activeFilter!=='all'){
-    var f=FILTERS.find(function(x){return x.id===activeFilter;});
-    var h=HOODS.find(function(x){return x.id===id;});
-    if(f&&f.fn&&h&&!f.fn(h))setFilter('all');
-  }
-  setTimeout(function(){
-    var el=document.getElementById('card-'+id);
-    if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-  },180);
-}
-
-// Filters
-document.getElementById('filterBar').innerHTML=FILTERS.map(function(f){
-  return'<button class="fbtn'+(f.id==='all'?' on':'')+'" data-id="'+f.id+'" onclick="setFilter(\''+f.id+'\')" aria-label="Show: '+f.label+'">'+f.label+'</button>';
-}).join('');
-
-// Map
-function buildMap(){
-  var g=document.getElementById('townMarkers');
-  HOODS.forEach(function(h){
-    var x=h.mapX,y=h.mapY;
-    var el=document.createElementNS('http://www.w3.org/2000/svg','g');
-    el.setAttribute('cursor','pointer');
-    el.setAttribute('role','button');
-    el.setAttribute('tabindex','0');
-    el.setAttribute('aria-label',h.name+' — click to jump to this community');
-    el.innerHTML='<circle cx="'+x+'" cy="'+y+'" r="14" fill="rgba(30,77,15,0.15)"/>'
-      +'<circle cx="'+x+'" cy="'+y+'" r="9" fill="#1e4d0f" stroke="#fff" stroke-width="2"/>'
-      +'<circle cx="'+x+'" cy="'+y+'" r="3.5" fill="#c8831a"/>'
-      +'<text x="'+x+'" y="'+(y-13)+'" font-family="\'Inter\',sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="600" style="text-shadow:0 1px 3px rgba(0,0,0,0.8);pointer-events:none;">'+h.name+'</text>'
-      +'<text x="'+x+'" y="'+(y+22)+'" font-family="\'Inter\',sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle" style="pointer-events:none;">$'+h.avgPrice+'K &middot; '+h.driveMin+' min</text>';
-    el.addEventListener('click',function(){jumpTo(h.id);});
-    el.addEventListener('mouseenter',function(ev){showTip(ev,h);});
-    el.addEventListener('mouseleave',hideTip);
-    el.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' ')jumpTo(h.id);});
-    g.appendChild(el);
-  });
-}
-var tip=document.getElementById('maptip');
-function showTip(ev,h){
-  tip.innerHTML='<strong>'+h.name+'</strong><br>Avg: $'+h.avgPrice+'K &middot; '+h.driveMin+' min off-peak<br>'+h.mkt+' market &middot; '+h.dom+'d avg. on market';
-  tip.style.opacity='1';
-  moveTip(ev);
-}
-function moveTip(ev){
-  var left=ev.clientX+14,top=ev.clientY+14;
-  if(left+210>window.innerWidth)left=ev.clientX-222;
-  tip.style.left=left+'px';tip.style.top=top+'px';
-}
-function hideTip(){tip.style.opacity='0';}
-document.getElementById('mapsvg').addEventListener('mousemove',function(e){if(tip.style.opacity==='1')moveTip(e);});
-
-// Forms
-function scrollToLead(){document.getElementById('lead-form').scrollIntoView({behavior:'smooth'});}
-
-function submitSMSMain(){
-  var phone=document.getElementById('sms_phone').value.trim();
-  var town=document.getElementById('sms_town').value;
-  if(!phone){alert('Please enter your phone number.');return;}
-  if(!town){alert('Please choose a community.');return;}
-  var payload={phone:phone,town:town,source:'NorthSide GTA Guide v4 — SMS opt-in',timestamp:new Date().toISOString()};
-  fetch('/api/sms-optin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),credentials:'same-origin'}).catch(function(){});
-  var section=document.getElementById('sms-section');
-  section.innerHTML='<div style="max-width:1120px;margin:0 auto;padding:20px 24px;text-align:center;"><p style="color:#fff;font-size:14px;">You are in. We will text you new '+town+' listings. Reply STOP at any time to unsubscribe.</p></div>';
-}
-
-function submitLead(){
-  var n=document.getElementById('f_fn').value.trim();
-  var em=document.getElementById('f_em').value.trim();
-  if(!n||!em){alert('Please enter your name and email.');return;}
-  var towns=Array.from(document.querySelectorAll('.pchk:checked')).map(function(c){return c.value;}).join(', ')||'Not specified';
-  var payload={
-    name:n+' '+document.getElementById('f_ln').value.trim(),
-    email:em,
-    phone:document.getElementById('f_ph').value.trim(),
-    timeline:document.getElementById('f_tl').value,
-    budget:document.getElementById('f_bg').value,
-    towns:towns,
-    note:document.getElementById('f_nt').value.trim(),
-    source:'NorthSide GTA Neighbourhood Guide v4',
-    timestamp:new Date().toISOString()
-  };
-  fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),credentials:'same-origin'}).catch(function(){});
-  document.getElementById('leadFormBody').style.display='none';
-  document.getElementById('formSuccess').style.display='block';
-}
-
-buildMap();
-render();
-</script>
-</body>
-</html>

@@ -1,49 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Living in Uxbridge, Ontario | Real Estate &amp; Neighbourhood Guide | Finally Home Agents</title>
-<meta name="description" content="Explore Uxbridge, Ontario with Finally Home Agents. Compare neighbourhoods, home prices, commute, schools, parks, local favourites, and whether Uxbridge is the right fit for your move north of Toronto.">
-<meta property="og:title" content="Living in Uxbridge, Ontario | NorthSide GTA Guide">
-<meta property="og:description" content="Compare lifestyle, commute, home prices, schools, neighbourhoods, and local favourites in Uxbridge. A practical buyer guide from Finally Home Agents.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://northsidegta.ca/communities/uxbridge">
-<meta property="og:image" content="https://northsidegta.ca/Images/uxbridge-banner.jpg">
-<link rel="canonical" href="https://northsidegta.ca/communities/uxbridge">
-<script type="application/ld+json">{
-  "@context":"https://schema.org",
-  "@graph":[
-    {
-      "@type":"Article",
-      "headline":"Living in Uxbridge, Ontario | Real Estate & Neighbourhood Guide",
-      "description":"Canada's Trail Capital — 300+ km of trails, heritage streets, a local arts scene, and Durham Region pricing.",
-      "url":"https://northsidegta.ca/communities/uxbridge",
-      "dateModified":"2026-05-24",
-      "author":[
-        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
-        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
-      ],
-      "publisher":{"@type":"Organization","name":"Finally Home Agents Team","url":"https://northsidegta.ca"},
-      "about":{"@type":"City","name":"Uxbridge","containedInPlace":{"@type":"AdministrativeArea","name":"Durham Region, Ontario"}}
-    },
-    {
-      "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is Uxbridge Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge holds the official designation of Canada's Trail Capital, with more than 300 km of trails on the Oak Ridges Moraine including the Trans Canada Trail and Durham Forest. The town is also known for its equestrian community, active arts scene, and Theatre Uxbridge."}},{"@type":"Question","name":"Is Uxbridge a good place to live?","acceptedAnswer":{"@type":"Answer","text":"For buyers with remote work flexibility, equestrian interests, or a preference for a quieter lifestyle within reach of the GTA, Uxbridge is a strong option. The main trade-offs are car-dependence and a longer commute. The market is balanced with approximately 4 months of inventory."}},{"@type":"Question","name":"What trails are in Uxbridge?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge has more than 300 km of multi-use trails supporting hiking, mountain biking, equestrian use, cross-country skiing, and snowshoeing. Key routes include Durham Forest, Glen Major Forest, the Trans Canada Trail, and the Oak Ridges Moraine Trail."}}]
-    },
-    {
-      "@type":"RealEstateAgent",
-      "name":"Finally Home Agents Team",
-      "url":"https://northsidegta.ca",
-      "employee":[
-        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative"},
-        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative"}
-      ]
-    }
-  ]
-}</script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
+import React, { useEffect, useMemo, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+
+const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --green:#1e4d0f;--green2:#2d6b18;--green3:#4a8f2a;
@@ -189,9 +147,39 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .fit-item p{color:var(--ink2);line-height:1.6;}
 @media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}}
 @media(max-width:640px){.container{padding:0 16px;}.topnav{padding:0 16px;}.topnav-right .topnav-link{display:none;}.hero{height:360px;}}
-</style>
-</head>
-<body>
+`;
+const PAGE_SCHEMA = `{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Article",
+      "headline":"Living in Uxbridge, Ontario | Real Estate & Neighbourhood Guide",
+      "description":"Canada's Trail Capital — 300+ km of trails, heritage streets, a local arts scene, and Durham Region pricing.",
+      "url":"https://northsidegta.ca/communities/uxbridge",
+      "dateModified":"2026-05-24",
+      "author":[
+        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
+        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
+      ],
+      "publisher":{"@type":"Organization","name":"Finally Home Agents Team","url":"https://northsidegta.ca"},
+      "about":{"@type":"City","name":"Uxbridge","containedInPlace":{"@type":"AdministrativeArea","name":"Durham Region, Ontario"}}
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[{"@type":"Question","name":"What is Uxbridge Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge holds the official designation of Canada's Trail Capital, with more than 300 km of trails on the Oak Ridges Moraine including the Trans Canada Trail and Durham Forest. The town is also known for its equestrian community, active arts scene, and Theatre Uxbridge."}},{"@type":"Question","name":"Is Uxbridge a good place to live?","acceptedAnswer":{"@type":"Answer","text":"For buyers with remote work flexibility, equestrian interests, or a preference for a quieter lifestyle within reach of the GTA, Uxbridge is a strong option. The main trade-offs are car-dependence and a longer commute. The market is balanced with approximately 4 months of inventory."}},{"@type":"Question","name":"What trails are in Uxbridge?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge has more than 300 km of multi-use trails supporting hiking, mountain biking, equestrian use, cross-country skiing, and snowshoeing. Key routes include Durham Forest, Glen Major Forest, the Trans Canada Trail, and the Oak Ridges Moraine Trail."}}]
+    },
+    {
+      "@type":"RealEstateAgent",
+      "name":"Finally Home Agents Team",
+      "url":"https://northsidegta.ca",
+      "employee":[
+        {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative"},
+        {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative"}
+      ]
+    }
+  ]
+}`;
+const PAGE_BODY_HTML = `
 
 <nav class="topnav" role="navigation" aria-label="Site navigation">
   <a href="https://northsidegta.ca" class="topnav-logo">NorthSide <span>GTA</span></a>
@@ -321,35 +309,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
     </div>
   </div>
 </section>
-<script>
-(function(){
-  var townName = "Uxbridge";
-  var containerId = "th-polls-uxbridge";
-  var tasteHubUrl = "/tastehub?town=" + encodeURIComponent(townName.toLowerCase().replace(/ /g,'-'));
-  fetch('/api/tastehub/polls', {credentials:'same-origin'})
-    .then(function(r){if(!r.ok)throw new Error('no polls');return r.json();})
-    .then(function(data){
-      var polls = Array.isArray(data) ? data : (data.polls || []);
-      var live = polls.filter(function(p){
-        return p.status === 'live' && p.town && p.town.toLowerCase() === townName.toLowerCase();
-      }).slice(0,3);
-      if(live.length === 0) return;
-      var container = document.getElementById(containerId);
-      container.innerHTML = live.map(function(p){
-        var href = p.slug ? '/tastehub/' + p.slug : '/tastehub';
-        var img = p.image || '/seo/tastehub-default-poll-share.jpg';
-        return '<a href="' + href + '" class="th-card" style="text-decoration:none;color:inherit;">'
-          + '<img src="' + img + '" alt="' + (p.title||'TasteHub poll') + '" class="th-card-img" loading="lazy">'
-          + '<div class="th-card-body">'
-          + '<div class="th-card-town">' + townName + '</div>'
-          + '<div class="th-card-title">' + (p.title||'Local favourite') + '</div>'
-          + '<div class="th-card-cta">Vote now &rarr;</div>'
-          + '</div></a>';
-      }).join('');
-    })
-    .catch(function(){ /* fallback already shown */ });
-})();
-</script>
+
 
       <!-- WHY PEOPLE CHOOSE -->
       <div class="sec" id="lifestyle">
@@ -493,41 +453,60 @@ details[open] .faq-icon{transform:rotate(45deg);}
   </div>
 </footer>
 
-<script>
-function submitTownLead(id, town) {
-  var n = document.getElementById('sf_name_' + id).value.trim();
-  var em = document.getElementById('sf_email_' + id).value.trim();
-  if (!n || !em) { alert('Please enter your name and email.'); return; }
-  var payload = {
-    name: n, email: em,
-    phone: document.getElementById('sf_phone_' + id).value,
-    timeline: document.getElementById('sf_tl_' + id).value,
-    town: town,
-    source: 'NorthSide GTA Neighbourhood Guide v4 — ' + town + ' town page',
-    timestamp: new Date().toISOString()
-  };
-  fetch('/api/leads', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload),
-    credentials: 'same-origin'
-  }).catch(function() {});
-  var btn = document.querySelector('.cta-submit');
-  if (btn) { btn.textContent = '✓ Request sent'; btn.disabled = true; }
+
+`;
+
+export default function UxbridgePage() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const townName = "Uxbridge";
+    const container = containerRef.current?.querySelector("#th-polls-uxbridge");
+    if (!container) return;
+    fetch("/api/tastehub/polls", { credentials: "same-origin" })
+      .then((r) => { if (!r.ok) throw new Error("no polls"); return r.json(); })
+      .then((data) => {
+        const polls = Array.isArray(data) ? data : data.polls || [];
+        const live = polls.filter((p) => p.status === "live" && p.town && p.town.toLowerCase() === townName.toLowerCase()).slice(0, 3);
+        if (!live.length) return;
+        container.innerHTML = live.map((p) => {
+          const href = p.slug ? `/tastehub/${p.slug}` : "/tastehub";
+          const img = p.image || "/seo/tastehub-default-poll-share.jpg";
+          return `<a href="${href}" class="th-card" style="text-decoration:none;color:inherit;"><img src="${img}" alt="${p.title || "TasteHub poll"}" class="th-card-img" loading="lazy"><div class="th-card-body"><div class="th-card-town">${townName}</div><div class="th-card-title">${p.title || "Local favourite"}</div><div class="th-card-cta">Vote now &rarr;</div></div></a>`;
+        }).join("");
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    window.submitTownLead = (id, town) => {
+      const n = document.getElementById(`sf_name_${id}`)?.value.trim();
+      const em = document.getElementById(`sf_email_${id}`)?.value.trim();
+      if (!n || !em) { alert("Please enter your name and email."); return; }
+      const payload = { name: n, email: em, phone: document.getElementById(`sf_phone_${id}`)?.value, timeline: document.getElementById(`sf_tl_${id}`)?.value, town, source: `NorthSide GTA Neighbourhood Guide v4 — ${town} town page`, timestamp: new Date().toISOString() };
+      fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const btn = document.querySelector(".cta-submit"); if (btn) { btn.textContent = "✓ Request sent"; btn.disabled = true; }
+    };
+    window.submitSMSTown = (id, town) => {
+      const phone = document.getElementById(`sms_${id}`)?.value.trim();
+      if (!phone) { alert("Please enter your phone number."); return; }
+      const payload = { phone, town, source: `NorthSide SMS opt-in — ${town}`, timestamp: new Date().toISOString() };
+      fetch("/api/sms-optin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      const smsBox = document.getElementById(`sms_${id}`)?.closest(".sms-box");
+      if (smsBox) smsBox.innerHTML = `<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ${town} listings. Reply STOP to unsubscribe.</p>`;
+    };
+    return () => { delete window.submitTownLead; delete window.submitSMSTown; };
+  }, []);
+  const schemaObject = useMemo(() => JSON.parse(PAGE_SCHEMA), []);
+  return (<><Helmet>
+      <title>Living in Uxbridge, Ontario | Real Estate &amp; Neighbourhood Guide | Finally Home Agents</title>
+      <meta name="description" content="Explore Uxbridge, Ontario with Finally Home Agents. Compare neighbourhoods, home prices, commute, schools, parks, local favourites, and whether Uxbridge is the right fit for your move north of Toronto." />
+      <meta property="og:title" content="Living in Uxbridge, Ontario | NorthSide GTA Guide" />
+      <meta property="og:description" content="Compare lifestyle, commute, home prices, schools, neighbourhoods, and local favourites in Uxbridge. A practical buyer guide from Finally Home Agents." />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content="https://northsidegta.ca/communities/uxbridge" />
+      <meta property="og:image" content="https://northsidegta.ca/Images/uxbridge-banner.jpg" />
+      <link rel="canonical" href="https://northsidegta.ca/communities/uxbridge" />
+      <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
+    </Helmet><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }
-function submitSMSTown(id, town) {
-  var phone = document.getElementById('sms_' + id).value.trim();
-  if (!phone) { alert('Please enter your phone number.'); return; }
-  var payload = { phone: phone, town: town, source: 'NorthSide SMS opt-in — ' + town, timestamp: new Date().toISOString() };
-  fetch('/api/sms-optin', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload),
-    credentials: 'same-origin'
-  }).catch(function() {});
-  var smsBox = document.getElementById('sms_' + id).closest('.sms-box');
-  if (smsBox) smsBox.innerHTML = '<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ' + town + ' listings. Reply STOP to unsubscribe.</p>';
-}
-</script>
-</body>
-</html>
