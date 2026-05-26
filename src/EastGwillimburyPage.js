@@ -486,7 +486,7 @@ export default function EastGwillimburyPage() {
       const em = document.getElementById(`sf_email_${id}`)?.value.trim();
       if (!n || !em) { alert("Please enter your name and email."); return; }
       const payload = { name: n, email: em, phone: document.getElementById(`sf_phone_${id}`)?.value, timeline: document.getElementById(`sf_tl_${id}`)?.value, town, source: `NorthSide GTA Neighbourhood Guide v4 — ${town} town page`, timestamp: new Date().toISOString() };
-      fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
+      fetch("/api/send-lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, casl: true, notRepresented: true, title: `NorthSide GTA local guidance — ${town}`, realmLink: window.location.href }), credentials: "same-origin" }).catch(() => {});
       const btn = document.querySelector(".cta-submit"); if (btn) { btn.textContent = "✓ Request sent"; btn.disabled = true; }
     };
     window.submitSMSTown = (id, town) => {
