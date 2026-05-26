@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
-import TownStrip from "./TownStrip";
+import HeaderShell from "./components/HeaderShell";
 
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -517,5 +517,5 @@ export default function NewmarketPage() {
       <meta property="og:image" content="https://northsidegta.ca/Images/newmarket-banner.jpg" />
       <link rel="canonical" href="https://northsidegta.ca/communities/newmarket" />
       <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
-    </Helmet><TownStrip /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
+    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }

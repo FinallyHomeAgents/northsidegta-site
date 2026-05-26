@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
-import TownStrip from "./TownStrip";
+import HeaderShell from "./components/HeaderShell";
 
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -517,5 +517,5 @@ export default function StouffvillePage() {
       <meta property="og:image" content="https://northsidegta.ca/Images/stouffville-banner.jpg" />
       <link rel="canonical" href="https://northsidegta.ca/communities/stouffville" />
       <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
-    </Helmet><TownStrip /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
+    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
 }
