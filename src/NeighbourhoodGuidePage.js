@@ -378,14 +378,6 @@ const PAGE_BODY_HTML = `
 </div>
 
 <!-- NAV -->
-<nav class="topnav" role="navigation" aria-label="Site navigation">
-  <a href="https://northsidegta.ca" class="topnav-logo">NorthSide <span>GTA</span></a>
-  <div class="topnav-right">
-    <a href="/tastehub" class="topnav-link">TasteHub</a>
-    <a href="https://northsidegta.ca/listings" class="topnav-link">Listings</a>
-    <a href="#lead-form" class="topnav-cta" onclick="scrollToLead();return false;">Get local guidance</a>
-  </div>
-</nav>
 
 <!-- HERO -->
 <header class="hero" role="banner">

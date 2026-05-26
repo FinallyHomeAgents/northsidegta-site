@@ -1,12 +1,10 @@
 // src/components/HeaderShell.jsx
 import React from "react";
 import Navigation from "../Navigation";
-import CoverageStrip from "./CoverageStrip";
 
 /**
  * HeaderShell
- * Wraps Navigation + CoverageStrip into ONE sticky header,
- * ensuring consistent color and attachment site-wide.
+ * Shared top header wrapper for site navigation.
  */
 export default function HeaderShell() {
   return (
@@ -20,8 +18,6 @@ export default function HeaderShell() {
       {/* Your existing toolbar */}
       <Navigation />
 
-      {/* Brand green coverage band */}
-      <CoverageStrip />
     </header>
   );
 }
