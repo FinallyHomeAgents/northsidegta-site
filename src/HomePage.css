@@ -1006,13 +1006,6 @@ main { padding-top: 100px; }
 .mobile-drawer__footer { margin-top: auto; }
 .mobile-drawer-open { overflow: hidden; }
 
-.hero__map-frame object.northside-map {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 360px;
-  border: 0;
-}
 .agent-intro__photo-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1059,5 +1052,73 @@ main { padding-top: 100px; }
   }
   .agent-intro__portrait .agent-intro__img {
     min-height: 320px;
+  }
+}
+
+.hero__map-frame svg.northside-map--inline {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+}
+.northside-map--inline .map-town {
+  cursor: pointer;
+  outline: none;
+}
+.northside-map--inline .map-town .svc,
+.northside-map--inline .map-town .svc-name,
+.northside-map--inline .map-town .svc-sub,
+.northside-map--inline .map-town .mring,
+.northside-map--inline .map-town .mglyph {
+  transition: filter 260ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms cubic-bezier(0.2, 0.8, 0.2, 1), fill 260ms cubic-bezier(0.2, 0.8, 0.2, 1), stroke 260ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.northside-map--inline .map-town:hover .svc,
+.northside-map--inline .map-town:focus .svc,
+.northside-map--inline .map-town:focus-visible .svc {
+  fill: #2f7315;
+  filter: brightness(1.08) drop-shadow(0 12px 20px rgba(23,63,8,0.25));
+}
+.northside-map--inline .map-town:hover .svc-name,
+.northside-map--inline .map-town:focus .svc-name,
+.northside-map--inline .map-town:focus-visible .svc-name {
+  fill: #fff7df;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.northside-map--inline .map-town:hover .mring,
+.northside-map--inline .map-town:focus .mring,
+.northside-map--inline .map-town:focus-visible .mring {
+  stroke: #c9a465;
+  stroke-width: 2.4;
+  fill: rgba(201,164,101,0.24);
+}
+.northside-map--inline .map-town:focus-visible .svc {
+  stroke: #c9a465;
+  stroke-width: 4;
+}
+.northside-map--inline .map-marker-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nsMapPulse 2.4s ease-in-out infinite;
+}
+@keyframes nsMapPulse {
+  0%, 100% {
+    opacity: 0.48;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .northside-map--inline .map-marker-pulse {
+    animation: none;
+  }
+  .northside-map--inline .map-town .svc,
+  .northside-map--inline .map-town .svc-name,
+  .northside-map--inline .map-town .svc-sub,
+  .northside-map--inline .map-town .mring,
+  .northside-map--inline .map-town .mglyph {
+    transition: none;
   }
 }
