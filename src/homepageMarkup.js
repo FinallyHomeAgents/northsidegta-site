@@ -119,13 +119,19 @@ export const HOMEPAGE_MARKUP = String.raw`
 
         
         <div class="hero__map-frame" id="northside-map-container">
-          <img             src="/assets/homepage/northside-map.svg"
-            alt="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
-            width="900" height="700"
+          <object
+            data="/assets/homepage/northside-map.svg"
+            type="image/svg+xml"
             class="northside-map"
             id="northside-map"
+            aria-label="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
           >
-          
+            <img
+              src="/assets/homepage/northside-map.svg"
+              alt="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
+              width="900" height="700"
+            >
+          </object>
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
@@ -596,13 +602,29 @@ export const HOMEPAGE_MARKUP = String.raw`
   <section class="agent-intro" aria-labelledby="agent-heading">
     <div class="section-inner section-inner--narrow">
       <div class="agent-intro__grid">
-        <div class="agent-intro__photo">
-          <img             src="/assets/team/matthew-landon.svg"
-            alt="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate"
-            width="800" height="600"
-            loading="lazy"
-            class="agent-intro__img"
-          >
+        <div class="agent-intro__photo" role="img" aria-label="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate">
+          <div class="agent-intro__photo-grid">
+            <figure class="agent-intro__portrait">
+              <img
+                src="/Images/matthew.jpg"
+                alt=""
+                width="400" height="600"
+                loading="lazy"
+                class="agent-intro__img"
+              >
+              <figcaption>Matthew Mulhall</figcaption>
+            </figure>
+            <figure class="agent-intro__portrait">
+              <img
+                src="/Images/landon.jpg"
+                alt=""
+                width="400" height="600"
+                loading="lazy"
+                class="agent-intro__img"
+              >
+              <figcaption>Landon Mulhall</figcaption>
+            </figure>
+          </div>
         </div>
         <div class="agent-intro__copy">
           <p class="section-eyebrow">The team behind NorthSide GTA</p>
