@@ -1,20 +1,12 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   NorthSide GTA Homepage — Design System CSS (v4)
-   Extracted from approved homepage. Use as implementation reference.
-   Fonts: Newsreader (serif) + Blinker (UI sans). Both available on Google Fonts.
-   Layout: Tailwind-compatible class naming. Can be adapted to Tailwind tokens.
-═══════════════════════════════════════════════════════════════════════════ */
-
-/* ─── Brand CSS Variables ──────────────────────────────────────────────── */
 :root {
-  /* Brand greens */
+
   --ns-green-dark:    #173f08;
   --ns-green:         #235c0d;
   --ns-green-light:   #3f7a22;
   --ns-green-hover:   #3a7822;
   --ns-green-active:  #4a8f28;
 
-  /* Neutrals */
+
   --ns-cream:         #f4efe5;
   --ns-paper:         #e8e3d7;
   --ns-paper-light:   #f5f2eb;
@@ -23,49 +15,48 @@
   --ns-border:        #e6e2d6;
   --ns-border-soft:   #e0dcd2;
 
-  /* Navy */
+
   --ns-navy:          #1c2c4c;
   --ns-navy-dark:     #172a44;
 
-  /* Accent */
+
   --ns-gold:          #c9a465;
   --ns-gold-dark:     #c8a75a;
 
-  /* Text */
+
   --ns-muted:         #7d7d70;
   --ns-slate:         #475569;
   --ns-text:          #0f172a;
   --ns-emerald-900:   #1a2f06;
 
-  /* Water (map) */
+
   --ns-water:         #cfe4f3;
   --ns-water-deep:    #a8cbe1;
 
-  /* Semantic */
+
   --brand-green:      var(--ns-green);
   --brand-forest:     var(--ns-green-dark);
 
-  /* Typography */
+
   --font-serif:       'Newsreader', Georgia, 'Times New Roman', serif;
   --font-ui:          'Blinker', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  /* Spacing scale */
+
   --section-py:       4rem;
   --section-py-lg:    5rem;
-  --max-w:            80rem;   /* 1280px */
-  --max-w-narrow:     72rem;   /* 1152px */
-  --max-w-faq:        48rem;   /* 768px */
+  --max-w:            80rem;
+  --max-w-narrow:     72rem;
+  --max-w-faq:        48rem;
 
-  /* Radius */
-  --radius-card:      1.5rem;  /* 24px */
-  --radius-card-lg:   2rem;    /* 32px */
-  --radius-btn:       0.75rem; /* 12px */
 
-  /* Transition */
+  --radius-card:      1.5rem;
+  --radius-card-lg:   2rem;
+  --radius-btn:       0.75rem;
+
+
   --transition:       260ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ─── Reset / Base ──────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; }
 html { font-family: var(--font-ui); color: var(--ns-text); background: #fff; }
 body { margin: 0; }
@@ -73,12 +64,10 @@ img { display: block; max-width: 100%; }
 a { color: inherit; }
 ul[role="list"] { list-style: none; padding: 0; }
 
-/* ─── Utility ───────────────────────────────────────────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
-/* ─── Pulse dot animation ───────────────────────────────────────────────── */
 .pulse-dot {
   display: inline-flex;
   position: relative;
@@ -101,7 +90,6 @@ ul[role="list"] { list-style: none; padding: 0; }
   50% { transform: scale(2); opacity: 0; }
 }
 
-/* ─── Section layout helpers ────────────────────────────────────────────── */
 .section-inner {
   max-width: var(--max-w);
   margin-inline: auto;
@@ -138,7 +126,6 @@ ul[role="list"] { list-style: none; padding: 0; }
   color: var(--ns-slate);
 }
 
-/* ─── Brand lockup ──────────────────────────────────────────────────────── */
 .brand-primary {
   display: block;
   font-family: var(--font-serif);
@@ -158,7 +145,6 @@ ul[role="list"] { list-style: none; padding: 0; }
   margin-top: 3px;
 }
 
-/* ─── Buttons ───────────────────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -206,7 +192,6 @@ ul[role="list"] { list-style: none; padding: 0; }
 .btn--whatsapp { background: #25D366; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 .btn--whatsapp:hover { filter: brightness(1.05); }
 
-/* ─── Pills ─────────────────────────────────────────────────────────────── */
 .pill-list {
   display: flex;
   flex-wrap: wrap;
@@ -224,7 +209,6 @@ ul[role="list"] { list-style: none; padding: 0; }
   box-shadow: inset 0 0 0 1px #bbf7d0;
 }
 
-/* ─── HEADER ────────────────────────────────────────────────────────────── */
 .site-header {
   position: fixed;
   inset-inline: 0;
@@ -254,7 +238,6 @@ ul[role="list"] { list-style: none; padding: 0; }
 .site-header__brand { text-decoration: none; display: flex; flex-direction: column; line-height: 1; transition: opacity 0.2s; }
 .site-header__brand:hover { opacity: 0.85; }
 
-/* Desktop nav */
 .site-nav {
   display: none;
   align-items: center;
@@ -271,7 +254,6 @@ ul[role="list"] { list-style: none; padding: 0; }
 }
 .site-nav__link:hover { color: var(--ns-green-dark); }
 
-/* Mobile toggle */
 .site-header__menu-toggle {
   display: flex;
   background: none;
@@ -282,7 +264,6 @@ ul[role="list"] { list-style: none; padding: 0; }
 }
 @media (min-width: 1024px) { .site-header__menu-toggle { display: none; } }
 
-/* ─── Intent bar ────────────────────────────────────────────────────────── */
 .intent-bar {
   background: #162c12;
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -320,8 +301,6 @@ ul[role="list"] { list-style: none; padding: 0; }
 }
 @media (min-width: 640px) { .intent-bar__status { display: flex; } }
 
-/* ─── HERO ──────────────────────────────────────────────────────────────── */
-/* Main page padding to clear fixed nav + intent bar */
 main { padding-top: 100px; }
 @media (min-width: 640px) { main { padding-top: 108px; } }
 @media (min-width: 1024px) { main { padding-top: 100px; } }
@@ -334,7 +313,6 @@ main { padding-top: 100px; }
   .hero__grid { grid-template-columns: 44% 56%; }
 }
 
-/* Hero copy — dark green panel */
 .hero__copy {
   position: relative;
   overflow: hidden;
@@ -394,7 +372,6 @@ main { padding-top: 100px; }
 }
 @media (min-width: 640px) { .hero__ctas { flex-direction: row; } }
 
-/* Google Reviews strip */
 .google-reviews-strip {
   margin-top: 32px;
   display: inline-flex;
@@ -415,7 +392,6 @@ main { padding-top: 100px; }
 .google-reviews-strip__text strong { font-size: 14px; }
 .google-reviews-strip__text span { font-size: 12px; color: rgba(209,250,229,0.7); }
 
-/* Hero map panel */
 .hero__map-panel {
   display: flex;
   flex-direction: column;
@@ -456,7 +432,6 @@ main { padding-top: 100px; }
   border-top: 1px solid #d8d4c8;
 }
 
-/* ─── SOCIAL PROOF BAR ──────────────────────────────────────────────────── */
 .proof-bar {
   background: #f7f4ed;
   border-top: 1px solid var(--ns-border-soft);
@@ -487,7 +462,6 @@ main { padding-top: 100px; }
 .proof-bar__value { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--ns-emerald-900); }
 .proof-bar__label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; }
 
-/* ─── PATHWAYS ──────────────────────────────────────────────────────────── */
 .pathways { background: #fff; padding: 16px 16px 4px; }
 .pathways__inner { max-width: var(--max-w); margin-inline: auto; }
 .pathways__grid {
@@ -511,7 +485,6 @@ main { padding-top: 100px; }
 .pathway--sellers .pathway__body { color: rgba(240,249,255,0.85); }
 .pathway .btn { margin-top: 28px; }
 
-/* ─── COMMUNITY CARDS ───────────────────────────────────────────────────── */
 .communities {
   background: #fff;
   padding-block: var(--section-py);
@@ -558,7 +531,6 @@ main { padding-top: 100px; }
 .community-card__price { display: block; font-size: 16px; font-weight: 700; color: var(--ns-emerald-900); }
 .community-card__cta { font-size: 13px; font-weight: 600; color: var(--ns-green-dark); }
 
-/* ─── MARKET SNAPSHOT ───────────────────────────────────────────────────── */
 .market-snapshot { background: #eaf3de; }
 .market-snapshot .section-inner { padding-block: 32px; }
 .market-snapshot__header {
@@ -601,7 +573,6 @@ main { padding-top: 100px; }
 .market-snapshot__disclaimer { margin-top: 16px; font-size: 12px; font-weight: 500; color: #475569; }
 .market-snapshot__legal { margin-top: 4px; font-size: 11px; color: #94a3b8; }
 
-/* ─── WHY FHA ───────────────────────────────────────────────────────────── */
 .why-fha { background: var(--ns-paper-warm); padding-block: var(--section-py); }
 @media (min-width: 640px) { .why-fha { padding-block: var(--section-py-lg); } }
 .why-fha__grid { margin-top: 3rem; display: grid; gap: 24px; }
@@ -635,11 +606,9 @@ main { padding-top: 100px; }
 }
 .why-card__body { margin-top: 12px; flex: 1; font-size: 14px; line-height: 1.7; color: #475569; }
 
-/* ─── PROOF SECTION ─────────────────────────────────────────────────────── */
 .proof-section { background: var(--ns-sand); padding-block: var(--section-py); }
 @media (min-width: 640px) { .proof-section { padding-block: var(--section-py-lg); } }
 
-/* Gold rule group */
 .gold-rule-group {
   display: flex;
   align-items: center;
@@ -654,7 +623,6 @@ main { padding-top: 100px; }
 }
 .gold-rule { display: block; height: 1px; width: 40px; background: var(--ns-gold); }
 
-/* Moves grid */
 .moves-grid { margin-top: 0; display: grid; gap: 16px; }
 @media (min-width: 640px) { .moves-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .moves-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -725,7 +693,6 @@ main { padding-top: 100px; }
 .move-card--sold .move-card__details dd:last-child { font-size: 12px; line-height: 1.6; color: #a8c4e8; }
 .move-card__details dd { margin: 0; font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.7); }
 
-/* Moves CTA strip */
 .moves-cta-strip {
   margin-top: 32px;
   display: flex;
@@ -742,7 +709,6 @@ main { padding-top: 100px; }
 .moves-cta-strip__text strong { font-weight: 600; color: var(--ns-emerald-900); }
 .moves-cta-strip__text span { font-size: 14px; color: #64748b; }
 
-/* Reviews */
 .reviews { margin-top: 56px; }
 .reviews__header {
   display: flex;
@@ -777,7 +743,6 @@ main { padding-top: 100px; }
 .review-card__name { font-size: 14px; font-weight: 600; color: var(--ns-emerald-900); font-style: normal; }
 .review-card__type { font-size: 12px; font-weight: 500; color: #94a3b8; }
 
-/* ─── AGENT INTRO ───────────────────────────────────────────────────────── */
 .agent-intro { background: #fff; padding-block: var(--section-py); }
 @media (min-width: 640px) { .agent-intro { padding-block: var(--section-py-lg); } }
 .agent-intro__grid { display: grid; gap: 40px; align-items: center; }
@@ -789,7 +754,6 @@ main { padding-top: 100px; }
 @media (min-width: 640px) { .agent-intro__body { font-size: 18px; } }
 .agent-intro__contacts { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
-/* ─── FAQ ───────────────────────────────────────────────────────────────── */
 .faq {
   background: #fff;
   padding-block: var(--section-py);
@@ -811,7 +775,6 @@ main { padding-top: 100px; }
 }
 .faq__answer { margin: 12px 0 0 0; font-size: 14px; line-height: 1.7; color: #475569; }
 
-/* ─── FINAL CTA ─────────────────────────────────────────────────────────── */
 .final-cta {
   background: linear-gradient(135deg, #0c1c0d, #13280f, #23470a);
   padding-block: 80px;
@@ -843,7 +806,6 @@ main { padding-top: 100px; }
 }
 @media (min-width: 640px) { .final-cta__buttons { flex-direction: row; justify-content: center; } }
 
-/* ─── INSIGHTS PREVIEW ──────────────────────────────────────────────────── */
 .insights-preview { background: #f8fafc; padding-block: var(--section-py); }
 @media (min-width: 640px) { .insights-preview { padding-block: var(--section-py-lg); } }
 .insights-preview__header {
@@ -896,7 +858,6 @@ main { padding-top: 100px; }
 .insight-card__footer span:first-child { font-size: 14px; font-weight: 600; color: var(--ns-green-dark); }
 .insight-card__footer span:last-child { font-size: 12px; color: #94a3b8; }
 
-/* ─── SITE FOOTER ───────────────────────────────────────────────────────── */
 .site-footer {
   background: #fff;
   border-top: 1px solid var(--ns-border-soft);
@@ -920,9 +881,6 @@ main { padding-top: 100px; }
   text-align: center;
 }
 .site-footer__legal p { font-size: 12px; color: #94a3b8; line-height: 1.6; }
-
-/* ─── MAP CSS (NorthSide GTA SVG interactive map) ───────────────────────── */
-/* Full map CSS extracted from approved homepage — see also homepage-map.svg */
 
 .nsmap {
   --map-paper:     #f4f1e8;
@@ -990,3 +948,177 @@ main { padding-top: 100px; }
 .nsmap .shield-text { font-family: var(--ui); font-weight: 700; font-size: 13px; fill: var(--hwy-shield-ink); letter-spacing: 0.01em; }
 .nsmap a.region-link { outline: none; }
 .nsmap a.region-link:focus-visible .region-fill { stroke: #fff; stroke-width: 4; }
+
+.hamburger-icon,
+.hamburger-icon::before,
+.hamburger-icon::after {
+  display: block;
+  width: 24px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+}
+.hamburger-icon { position: relative; }
+.hamburger-icon::before { position: absolute; transform: translateY(-7px); }
+.hamburger-icon::after { position: absolute; transform: translateY(7px); }
+.mobile-drawer[hidden] { display: none; }
+.mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--ns-cream);
+  padding: 20px;
+  color: var(--ns-text);
+}
+.mobile-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.mobile-drawer__close {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--ns-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ns-green-dark);
+  font-size: 20px;
+  cursor: pointer;
+}
+.mobile-drawer__nav {
+  display: grid;
+  gap: 10px;
+}
+.mobile-drawer__nav a {
+  border-radius: 18px;
+  background: #fff;
+  padding: 16px 18px;
+  color: var(--ns-green-dark);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+}
+.mobile-drawer__footer { margin-top: auto; }
+.mobile-drawer-open { overflow: hidden; }
+
+.agent-intro__photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  height: 100%;
+  min-height: 420px;
+}
+.agent-intro__portrait {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(23,63,8,0.9), rgba(35,92,13,0.72));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+}
+.agent-intro__portrait .agent-intro__img {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(1.02) contrast(1.03);
+}
+.agent-intro__portrait figcaption {
+  position: absolute;
+  inset-inline: 12px;
+  bottom: 12px;
+  border: 1px solid rgba(244,239,229,0.22);
+  border-radius: 999px;
+  background: rgba(23,63,8,0.78);
+  color: var(--ns-cream);
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+@media (max-width: 520px) {
+  .agent-intro__photo-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .agent-intro__portrait .agent-intro__img {
+    min-height: 320px;
+  }
+}
+
+.hero__map-frame svg.northside-map--inline {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+}
+.northside-map--inline .map-town {
+  cursor: pointer;
+  outline: none;
+}
+.northside-map--inline .map-town .svc,
+.northside-map--inline .map-town .svc-name,
+.northside-map--inline .map-town .svc-sub,
+.northside-map--inline .map-town .mring,
+.northside-map--inline .map-town .mglyph {
+  transition: filter 260ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms cubic-bezier(0.2, 0.8, 0.2, 1), fill 260ms cubic-bezier(0.2, 0.8, 0.2, 1), stroke 260ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.northside-map--inline .map-town:hover .svc,
+.northside-map--inline .map-town:focus .svc,
+.northside-map--inline .map-town:focus-visible .svc {
+  fill: #2f7315;
+  filter: brightness(1.08) drop-shadow(0 12px 20px rgba(23,63,8,0.25));
+}
+.northside-map--inline .map-town:hover .svc-name,
+.northside-map--inline .map-town:focus .svc-name,
+.northside-map--inline .map-town:focus-visible .svc-name {
+  fill: #fff7df;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.northside-map--inline .map-town:hover .mring,
+.northside-map--inline .map-town:focus .mring,
+.northside-map--inline .map-town:focus-visible .mring {
+  stroke: #c9a465;
+  stroke-width: 2.4;
+  fill: rgba(201,164,101,0.24);
+}
+.northside-map--inline .map-town:focus-visible .svc {
+  stroke: #c9a465;
+  stroke-width: 4;
+}
+.northside-map--inline .map-marker-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nsMapPulse 2.4s ease-in-out infinite;
+}
+@keyframes nsMapPulse {
+  0%, 100% {
+    opacity: 0.48;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .northside-map--inline .map-marker-pulse {
+    animation: none;
+  }
+  .northside-map--inline .map-town .svc,
+  .northside-map--inline .map-town .svc-name,
+  .northside-map--inline .map-town .svc-sub,
+  .northside-map--inline .map-town .mring,
+  .northside-map--inline .map-town .mglyph {
+    transition: none;
+  }
+}

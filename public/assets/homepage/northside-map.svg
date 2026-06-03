@@ -10,18 +10,18 @@
     This is a STATIC reference. The production map is interactive (React/JSX).
     For the interactive version, see the map.jsx component in homepage-map-notes below.
 
-    CSS variables used (define on .nsmap or :root):
-      --svc: #235c0d          (service region fill)
-      --svc-hover: #3a7822    (hover fill)
-      --svc-rule: rgba(200,167,90,0.25)  (region border)
-      --svc-ink: #f0e8d4      (region name colour)
-      --svc-sub: #c9a465      (subtitle colour)
-      --ctx: #e3e1d8          (context region fill)
-      --water: #cfe1ee        (lake fill)
-      --water-ink: #6f9fbc    (lake label)
-      --ctx-ink: #8d8d80      (context label)
-      --hwy: #d98b2b          (highway line)
-      --skyline: #c8bda4      (Toronto skyline bars)
+    CSS colour notes (define on .nsmap or :root if adapting):
+      svc: #235c0d            (service region fill)
+      svc-hover: #3a7822      (hover fill)
+      svc-rule: rgba(200,167,90,0.25)  (region border)
+      svc-ink: #f0e8d4        (region name colour)
+      svc-sub: #c9a465        (subtitle colour)
+      ctx: #e3e1d8            (context region fill)
+      water: #cfe1ee          (lake fill)
+      water-ink: #6f9fbc      (lake label)
+      ctx-ink: #8d8d80        (context label)
+      hwy: #d98b2b            (highway line)
+      skyline: #c8bda4        (Toronto skyline bars)
   -->
 
   <defs>

@@ -1,54 +1,16 @@
-<!DOCTYPE html>
-<html lang="en-CA">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents</title>
-  <meta name="description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <link rel="canonical" href="https://www.northsidegta.ca/">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#23470a">
-  <meta name="facebook-domain-verification" content="1tfwypal0s72obxs9238figl03nk5i">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:site_name" content="NorthSide GTA">
-  <meta property="og:title" content="NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents">
-  <meta property="og:description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <meta property="og:url" content="https://www.northsidegta.ca/">
-  <meta property="og:image" content="https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@northsidegta">
-  <meta name="twitter:title" content="NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents">
-  <meta name="twitter:description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <meta name="twitter:image" content="https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg">
-  <meta name="geo.region" content="CA-ON">
-  <meta name="geo.placename" content="Newmarket, Ontario, Canada">
-  <link rel="alternate" hreflang="en-CA" href="https://www.northsidegta.ca/">
-  <!-- JSON-LD: see homepage-seo.md for full schema -->
-  <link rel="stylesheet" href="/assets/homepage/homepage-styles.css">
-</head>
-<body>
-
-<!-- ═══════════════════════════════════════════════════════════
-     HEADER / NAV
-     Sticky. Scrolled state adds shadow + backdrop-blur.
-     Mobile: hamburger → full-screen drawer.
-═══════════════════════════════════════════════════════════ -->
+export const HOMEPAGE_MARKUP = String.raw`
 <header class="site-header" id="site-header">
   <div class="site-header__inner">
 
-    <!-- Brand lockup: serif "NorthSide GTA" + spaced-caps subline -->
+    
     <a href="/" class="site-header__brand" aria-label="NorthSide GTA home">
       <span class="brand-primary">NorthSide GTA</span>
       <span class="brand-secondary">served by Finally Home Agents</span>
     </a>
 
-    <!-- Desktop nav -->
+    
     <nav class="site-nav" aria-label="Site navigation">
-      <a href="/communities" class="site-nav__link">Communities</a>
+      <a href="#communities" class="site-nav__link">Communities</a>
       <a href="/" class="site-nav__link">Home</a>
       <a href="/about" class="site-nav__link">About</a>
       <a href="/buyers" class="site-nav__link">Buyers</a>
@@ -59,13 +21,13 @@
       <a href="/contact" class="btn btn--green btn--sm">Let's Talk</a>
     </nav>
 
-    <!-- Mobile hamburger -->
+    
     <button class="site-header__menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
       <span class="hamburger-icon" aria-hidden="true"></span>
     </button>
   </div>
 
-  <!-- Intent bar (slim, below nav) -->
+  
   <div class="intent-bar" role="navigation" aria-label="Quick intent navigation">
     <div class="intent-bar__inner">
       <div class="intent-bar__pills">
@@ -81,7 +43,6 @@
   </div>
 </header>
 
-<!-- Mobile nav drawer -->
 <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
   <div class="mobile-drawer__header">
     <a href="/" class="site-header__brand">
@@ -91,7 +52,7 @@
     <button class="mobile-drawer__close" aria-label="Close navigation menu">✕</button>
   </div>
   <nav class="mobile-drawer__nav">
-    <a href="/communities">Communities</a>
+    <a href="#communities">Communities</a>
     <a href="/">Home</a>
     <a href="/about">About</a>
     <a href="/buyers">Buyers</a>
@@ -107,16 +68,11 @@
 
 <main>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       HERO
-       Two-column grid: 44% copy / 56% map.
-       Left: dark green gradient, H1, subheading, CTAs, reviews.
-       Right: framed map panel edge-to-edge.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="hero" aria-labelledby="hero-heading">
     <div class="hero__grid">
 
-      <!-- Hero copy -->
+      
       <div class="hero__copy">
         <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
 
@@ -137,9 +93,9 @@
           <a href="#communities" class="btn btn--ghost btn--lg">Explore Communities</a>
         </div>
 
-        <!-- Google Reviews strip -->
+        
         <a href="https://share.google/GJz2QTQ8GqZIifaNH" class="google-reviews-strip" target="_blank" rel="noopener" aria-label="5.0 Google Rating — see all client reviews">
-          <img src="/assets/logos/google-logo.png" alt="Google" width="60" height="20">
+          <img src="/Images/google-logo.png" alt="Google" width="60" height="20">
           <span class="stars" aria-hidden>★★★★★</span>
           <span class="google-reviews-strip__text">
             <strong>5.0 Google Rating</strong>
@@ -148,7 +104,7 @@
         </a>
       </div>
 
-      <!-- Hero map panel -->
+      
       <div class="hero__map-panel">
         <div class="hero__map-header">
           <div>
@@ -161,16 +117,274 @@
           </div>
         </div>
 
-        <!-- Map: see homepage-map.svg and homepage-assets.md -->
+        
         <div class="hero__map-frame" id="northside-map-container">
-          <img
-            src="/assets/homepage/northside-map.svg"
-            alt="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
-            width="900" height="700"
-            class="northside-map"
-            id="northside-map"
-          >
-          <!-- JS progressively enhances this into the interactive SVG map -->
+                    <svg class="northside-map northside-map--inline" id="northside-map" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg"
+               role="img"
+               aria-label="NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog north of Toronto"
+               style="width:100%;height:auto;display:block;background:#f4f1e8;">
+
+            <!--
+              NorthSide GTA — static reference map SVG (v4)
+              ViewBox: 1600 × 900
+              Coordinates extracted from approved homepage map-data bundle.
+              This is a STATIC reference. The production map is interactive (React/JSX).
+              For the interactive version, see the map.jsx component in homepage-map-notes below.
+
+              CSS colour notes (define on .nsmap or :root if adapting):
+                svc: #235c0d            (service region fill)
+                svc-hover: #3a7822      (hover fill)
+                svc-rule: rgba(200,167,90,0.25)  (region border)
+                svc-ink: #f0e8d4        (region name colour)
+                svc-sub: #c9a465        (subtitle colour)
+                ctx: #e3e1d8            (context region fill)
+                water: #cfe1ee          (lake fill)
+                water-ink: #6f9fbc      (lake label)
+                ctx-ink: #8d8d80        (context label)
+                hwy: #d98b2b            (highway line)
+                skyline: #c8bda4        (Toronto skyline bars)
+            -->
+
+            <defs>
+              <style>
+                .map-bg    { fill: #f4f1e8; }
+                .water     { fill: #cfe1ee; }
+                .water-lbl { font-family: 'Blinker', system-ui, sans-serif; font-size: 17px; font-weight: 600;
+                             fill: #6f9fbc; letter-spacing: 0.42em; text-transform: uppercase; }
+                .water-lbl.sm { font-size: 11px; letter-spacing: 0.16em; }
+                .ctx       { fill: #e3e1d8; stroke: #f4f1e8; stroke-width: 2; stroke-linejoin: round; }
+                .ctx.toronto { fill: #d8d4c4; }
+                .ctx-lbl   { font-family: 'Blinker', system-ui, sans-serif; font-size: 19px; font-weight: 500;
+                             fill: #8d8d80; }
+                .ctx-lbl.toronto { font-family: 'Newsreader', Georgia, serif; font-style: italic;
+                                   font-size: 26px; fill: #7c7868; }
+                .svc       { fill: #235c0d; stroke: rgba(200,167,90,0.25); stroke-width: 2.5; stroke-linejoin: round; }
+                .svc-name  { font-family: 'Newsreader', Georgia, serif; font-weight: 400; fill: #f0e8d4;
+                             letter-spacing: 0.01em;
+                             filter: drop-shadow(0 1px 4px rgba(0,0,0,0.45)); }
+                .tier-lg   { font-size: 38px; }
+                .tier-md   { font-size: 28px; }
+                .tier-sm   { font-size: 21px; }
+                .svc-sub   { font-family: 'Blinker', system-ui, sans-serif; font-weight: 600; font-size: 12px;
+                             fill: #c9a465; letter-spacing: 0.22em; text-transform: uppercase; }
+                .hwy-cas   { fill: none; stroke: #f4f1e8; stroke-width: 8; stroke-linecap: round; }
+                .hwy-line  { fill: none; stroke: #d98b2b; stroke-width: 3.5; stroke-linecap: round; }
+                .shield    { fill: #fff; stroke: #2c560c; stroke-width: 1.4; }
+                .shield-txt{ font-family: 'Blinker', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+                             fill: #2c560c; }
+                .skyline   { fill: #c8bda4; }
+                .sublake   { fill: #cfe1ee; stroke: #a8cadf; stroke-width: 1; }
+                .mring     { fill: rgba(255,255,255,0.16); stroke: rgba(255,255,255,0.55); stroke-width: 1.2; }
+                .mglyph    { stroke: #fff; stroke-width: 1.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+              </style>
+            </defs>
+
+            <!-- ── BACKGROUND ─────────────────────────────────────────── -->
+            <rect width="1600" height="900" class="map-bg"/>
+
+            <!-- ── LAKE SIMCOE (top) ──────────────────────────────────── -->
+            <path class="water"
+              d="M 0,0 L 1600,0 L 1600,150 L 1320,150 L 1150,182 L 1092,156 L 1010,134 L 928,122
+                 L 846,132 L 770,118 L 700,134 L 648,150 L 600,156 L 575,170 L 575,250 L 545,256
+                 L 512,250 L 490,165 L 462,150 L 430,162 L 392,150 L 348,166 L 305,150 L 262,140
+                 L 180,150 L 90,148 L 0,150 Z"/>
+            <text class="water-lbl" x="800" y="76" text-anchor="middle">Lake Simcoe</text>
+
+            <!-- ── LAKE ONTARIO (bottom) ─────────────────────────────── -->
+            <path class="water"
+              d="M 0,900 L 1600,900 L 1600,838 L 1410,832 L 1260,838 L 1095,842 L 980,840
+                 L 830,825 L 700,832 L 420,838 L 180,832 L 0,852 Z"/>
+            <text class="water-lbl" x="800" y="872" text-anchor="middle">Lake Ontario</text>
+
+            <!-- ── CONTEXT REGIONS ───────────────────────────────────── -->
+            <!-- NW unlabeled land -->
+            <path class="ctx" d="M 180,400 L 490,400 L 490,165 L 462,150 L 430,162 L 392,150 L 348,166 L 305,150 L 262,140 L 180,150 Z"/>
+            <!-- King -->
+            <path class="ctx" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
+            <text class="ctx-lbl" x="335" y="520" text-anchor="middle">King</text>
+            <!-- Vaughan -->
+            <path class="ctx" d="M 180,630 L 410,630 L 410,782 L 180,786 Z"/>
+            <text class="ctx-lbl" x="296" y="712" text-anchor="middle">Vaughan</text>
+            <!-- Richmond Hill -->
+            <path class="ctx" d="M 410,630 L 575,630 L 575,782 L 410,782 Z"/>
+            <text class="ctx-lbl" x="493" y="702" text-anchor="middle">Richmond</text>
+            <text class="ctx-lbl" x="493" y="722" text-anchor="middle">Hill</text>
+            <!-- Markham -->
+            <path class="ctx" d="M 575,630 L 830,630 L 830,782 L 575,782 Z"/>
+            <text class="ctx-lbl" x="702" y="712" text-anchor="middle">Markham</text>
+            <!-- Pickering -->
+            <path class="ctx" d="M 830,630 L 980,630 L 980,784 L 830,782 Z"/>
+            <text class="ctx-lbl" x="905" y="712" text-anchor="middle">Pickering</text>
+            <!-- Ajax -->
+            <path class="ctx" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z"/>
+            <text class="ctx-lbl" x="1037" y="716" text-anchor="middle">Ajax</text>
+            <!-- Whitby -->
+            <path class="ctx" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z"/>
+            <text class="ctx-lbl" x="1177" y="716" text-anchor="middle">Whitby</text>
+            <!-- Oshawa -->
+            <path class="ctx" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z"/>
+            <text class="ctx-lbl" x="1335" y="716" text-anchor="middle">Oshawa</text>
+            <!-- Toronto -->
+            <path class="ctx toronto" d="M 180,786 L 410,782 L 575,782 L 830,782 L 830,825 L 700,832 L 420,838 L 180,832 Z"/>
+            <text class="ctx-lbl toronto" x="475" y="815" text-anchor="middle">Toronto</text>
+
+            <!-- ── TORONTO SKYLINE (subtle bars) ─────────────────────── -->
+            <g transform="translate(0, 782)" opacity="0.9">
+              <rect class="skyline" x="360" y="-16" width="8" height="16"/>
+              <rect class="skyline" x="374" y="-24" width="8" height="24"/>
+              <rect class="skyline" x="388" y="-20" width="8" height="20"/>
+              <rect class="skyline" x="402" y="-30" width="8" height="30"/>
+              <rect class="skyline" x="418" y="-26" width="8" height="26"/>
+              <rect class="skyline" x="434" y="-40" width="8" height="40"/>
+              <rect class="skyline" x="452" y="-34" width="8" height="34"/>
+              <rect class="skyline" x="470" y="-46" width="8" height="46"/>
+              <rect class="skyline" x="490" y="-40" width="8" height="40"/>
+              <rect class="skyline" x="510" y="-56" width="8" height="56"/>
+              <rect class="skyline" x="530" y="-48" width="8" height="48"/>
+              <rect class="skyline" x="552" y="-66" width="8" height="66"/>
+              <rect class="skyline" x="570" y="-60" width="8" height="60"/>
+              <rect class="skyline" x="586" y="-96" width="6" height="96"/><!-- CN tower-ish spike -->
+              <rect class="skyline" x="602" y="-70" width="8" height="70"/>
+              <rect class="skyline" x="618" y="-52" width="8" height="52"/>
+              <rect class="skyline" x="636" y="-44" width="8" height="44"/>
+              <rect class="skyline" x="654" y="-36" width="8" height="36"/>
+              <rect class="skyline" x="670" y="-28" width="8" height="28"/>
+              <rect class="skyline" x="686" y="-20" width="8" height="20"/>
+            </g>
+
+            <!-- ── SERVICE REGIONS (NorthSide GTA towns) ─────────────── -->
+
+            <!-- Georgina -->
+            <a class="map-town" tabindex="0" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
+              <path class="svc" d="M 575,255 L 575,170 L 600,156 L 648,150 L 700,134 L 770,118 L 846,132 L 928,122 L 1010,134 L 1092,156 L 1150,182 L 1150,255 Z"/>
+              <text class="svc-name tier-lg" x="862" y="226" text-anchor="middle">Georgina</text>
+              <text class="svc-sub" x="862" y="247" text-anchor="middle">Keswick · Sutton</text>
+              <!-- marker ring -->
+              <circle class="mring map-marker-pulse" cx="862" cy="182" r="14"/>
+              <!-- wave glyph -->
+              <path class="mglyph" d="M 855,180 Q 859,177 862,180 T 869,180"/>
+              <path class="mglyph" d="M 855,184 Q 859,181 862,184 T 869,184"/>
+            </a>
+
+            <!-- East Gwillimbury -->
+            <a class="map-town" tabindex="0" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
+              <path class="svc" d="M 490,255 L 905,255 L 905,400 L 490,400 Z"/>
+              <text class="svc-name tier-lg" x="697" y="340" text-anchor="middle">East Gwillimbury</text>
+              <text class="svc-sub" x="697" y="362" text-anchor="middle">Holland Landing</text>
+              <circle class="mring map-marker-pulse" cx="705" cy="302" r="14"/>
+              <!-- field lines glyph -->
+              <line class="mglyph" x1="699" y1="298" x2="711" y2="298"/>
+              <line class="mglyph" x1="699" y1="302" x2="711" y2="302" stroke-dasharray="2,2"/>
+              <line class="mglyph" x1="699" y1="306" x2="711" y2="306" stroke-dasharray="2,2"/>
+            </a>
+
+            <!-- Newmarket -->
+            <a class="map-town" tabindex="0" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
+              <path class="svc" d="M 490,400 L 640,400 L 640,510 L 490,510 Z"/>
+              <text class="svc-name tier-sm" x="565" y="468" text-anchor="middle">Newmarket</text>
+              <text class="svc-sub" x="565" y="488" text-anchor="middle">Old Main</text>
+              <circle class="mring map-marker-pulse" cx="565" cy="436" r="12"/>
+              <!-- cross glyph -->
+              <line class="mglyph" x1="565" y1="431" x2="565" y2="441"/>
+              <line class="mglyph" x1="560" y1="436" x2="570" y2="436"/>
+            </a>
+
+            <!-- Aurora -->
+            <a class="map-town" tabindex="0" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
+              <path class="svc" d="M 490,510 L 640,510 L 640,630 L 490,630 Z"/>
+              <text class="svc-name tier-sm" x="565" y="582" text-anchor="middle">Aurora</text>
+              <text class="svc-sub" x="565" y="602" text-anchor="middle">Town Park</text>
+              <circle class="mring map-marker-pulse" cx="565" cy="548" r="12"/>
+              <!-- sunrise glyph -->
+              <path class="mglyph" d="M 559,552 A 6,6 0 0,1 571,552"/>
+              <line class="mglyph" x1="565" y1="542" x2="565" y2="544"/>
+              <line class="mglyph" x1="558" y1="544" x2="560" y2="546"/>
+              <line class="mglyph" x1="570" y1="546" x2="572" y2="544"/>
+            </a>
+
+            <!-- Whitchurch-Stouffville -->
+            <a class="map-town" tabindex="0" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
+              <path class="svc" d="M 640,400 L 905,400 L 905,630 L 640,630 Z"/>
+              <text class="svc-name tier-md" x="772" y="500" text-anchor="middle">Whitchurch–</text>
+              <text class="svc-name tier-md" x="772" y="530" text-anchor="middle">Stouffville</text>
+              <text class="svc-sub" x="772" y="554" text-anchor="middle">Stouffville</text>
+              <circle class="mring map-marker-pulse" cx="772" cy="458" r="14"/>
+              <!-- grid glyph -->
+              <rect class="mglyph" x="766" y="452" width="5" height="5" rx="0.5"/>
+              <rect class="mglyph" x="773" y="452" width="5" height="5" rx="0.5"/>
+              <rect class="mglyph" x="766" y="459" width="5" height="5" rx="0.5"/>
+              <rect class="mglyph" x="773" y="459" width="5" height="5" rx="0.5"/>
+            </a>
+
+            <!-- Uxbridge -->
+            <a class="map-town" tabindex="0" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
+              <path class="svc" d="M 905,255 L 1150,255 L 1150,400 L 1158,500 L 1150,630 L 905,630 Z"/>
+              <text class="svc-name tier-lg" x="1027" y="462" text-anchor="middle">Uxbridge</text>
+              <text class="svc-sub" x="1027" y="484" text-anchor="middle">Trail Capital</text>
+              <circle class="mring map-marker-pulse" cx="1027" cy="420" r="14"/>
+              <!-- pine tree glyph -->
+              <path class="mglyph" d="M 1027,413 L 1031,419 L 1029,419 L 1033,425 L 1021,425 L 1025,419 L 1023,419 Z"/>
+              <line class="mglyph" x1="1025" y1="425" x2="1025" y2="428"/>
+              <line class="mglyph" x1="1029" y1="425" x2="1029" y2="428"/>
+            </a>
+
+            <!-- Scugog -->
+            <a class="map-town" tabindex="0" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
+              <path class="svc" d="M 1150,255 L 1380,255 L 1392,360 L 1400,470 L 1384,560 L 1360,630 L 1150,630 L 1150,400 Z"/>
+              <!-- Lake Scugog cutout -->
+              <ellipse class="sublake" cx="1316" cy="360" rx="17" ry="44" transform="rotate(14,1316,360)"/>
+              <text class="water-lbl sm" x="1316" y="345" text-anchor="middle">Lake</text>
+              <text class="water-lbl sm" x="1316" y="357" text-anchor="middle">Scugog</text>
+              <text class="svc-name tier-lg" x="1248" y="512" text-anchor="middle">Scugog</text>
+              <text class="svc-sub" x="1248" y="534" text-anchor="middle">Port Perry · Lake Scugog</text>
+              <circle class="mring map-marker-pulse" cx="1232" cy="470" r="14"/>
+              <!-- droplet glyph -->
+              <path class="mglyph" d="M 1232,463 Q 1237,468 1237,472 A 5,5 0 0,1 1227,472 Q 1227,468 1232,463 Z"/>
+              <circle class="mglyph" fill="#fff" stroke="none" cx="1232" cy="472" r="1.5"/>
+            </a>
+
+            <!-- ── HIGHWAY 404 ──────────────────────────────────────── -->
+            <g pointer-events="none">
+              <path class="hwy-cas" d="M 650,180 C 650,260 646,330 645,400 C 645,500 646,560 646,620 C 646,700 648,760 648,800"/>
+              <path class="hwy-line" d="M 650,180 C 650,260 646,330 645,400 C 645,500 646,560 646,620 C 646,700 648,760 648,800"/>
+              <!-- Arrow at bottom -->
+              <polygon fill="#d98b2b" points="648,810 643,796 653,796"/>
+              <!-- Shield at top -->
+              <rect class="shield" x="638" y="196" width="24" height="20" rx="3"/>
+              <text class="shield-txt" x="650" y="210" text-anchor="middle">404</text>
+            </g>
+
+            <!-- ── COMPASS ─────────────────────────────────────────── -->
+            <g transform="translate(1520, 780)" opacity="0.7">
+              <line stroke="#8a8a7e" stroke-width="1.4" x1="0" y1="-24" x2="0" y2="24"/>
+              <line stroke="#8a8a7e" stroke-width="1.4" x1="-24" y1="0" x2="24" y2="0"/>
+              <polygon fill="#235c0d" points="0,-24 -5,-8 5,-8"/>
+              <text font-family="'Blinker',system-ui,sans-serif" font-weight="700" font-size="16"
+                    fill="#3a3a32" x="0" y="-28" text-anchor="middle">N</text>
+            </g>
+
+            <!-- ── SCALE ──────────────────────────────────────────── -->
+            <g transform="translate(1380, 820)" opacity="0.7">
+              <line stroke="#3a3a32" stroke-width="1.6" x1="0" y1="0" x2="100" y2="0"/>
+              <line stroke="#3a3a32" stroke-width="1.6" x1="0" y1="-4" x2="0" y2="4"/>
+              <line stroke="#3a3a32" stroke-width="1.6" x1="66" y1="-3" x2="66" y2="3"/>
+              <line stroke="#3a3a32" stroke-width="1.6" x1="100" y1="-4" x2="100" y2="4"/>
+              <text font-family="'Blinker',system-ui,sans-serif" font-size="12" fill="#8a8a7e"
+                    x="0" y="-8">0</text>
+              <text font-family="'Blinker',system-ui,sans-serif" font-size="12" fill="#8a8a7e"
+                    x="60" y="-8">10</text>
+              <text font-family="'Blinker',system-ui,sans-serif" font-size="12" fill="#8a8a7e"
+                    x="94" y="-8">15 km</text>
+            </g>
+
+          </svg>
+          <noscript>
+            <img
+              src="/assets/homepage/northside-map.svg"
+              alt="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
+              width="900" height="700"
+            >
+          </noscript>
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
@@ -181,10 +395,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       SOCIAL PROOF BAR
-       5 metrics with icons. Horizontally scrollable on mobile.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="proof-bar" aria-label="Trust indicators">
     <div class="proof-bar__inner">
       <div class="proof-bar__item">
@@ -215,11 +426,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       BUYER / SELLER PATHWAYS
-       Side-by-side panels: green (buyers) + navy (sellers).
-       Rounded 28px container with shadow.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="pathways" aria-label="Buyer and seller pathways">
     <div class="pathways__inner">
       <div class="pathways__grid">
@@ -242,11 +449,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       COMMUNITY CARDS
-       7-up grid. Each card: image, town name, subtitle, pills,
-       avg price, explore CTA.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="communities" id="communities" aria-labelledby="communities-heading">
     <div class="section-inner">
       <div class="section-header section-header--center">
@@ -260,7 +463,7 @@
         <li class="community-card">
           <a href="/communities/georgina" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/georgina.webp" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/georgina.jpg" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Georgina</h3>
@@ -282,7 +485,7 @@
         <li class="community-card">
           <a href="/communities/east-gwillimbury" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/east-gwillimbury.webp" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">East Gwillimbury</h3>
@@ -304,7 +507,7 @@
         <li class="community-card">
           <a href="/communities/newmarket" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/newmarket.webp" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/newmarket.jpg" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Newmarket</h3>
@@ -326,7 +529,7 @@
         <li class="community-card">
           <a href="/communities/aurora" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/aurora.webp" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/aurora.jpg" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Aurora</h3>
@@ -348,7 +551,7 @@
         <li class="community-card">
           <a href="/communities/stouffville" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/stouffville.webp" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/stouffville.jpg" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Whitchurch-Stouffville</h3>
@@ -370,7 +573,7 @@
         <li class="community-card">
           <a href="/communities/uxbridge" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/uxbridge.webp" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Uxbridge</h3>
@@ -392,7 +595,7 @@
         <li class="community-card">
           <a href="/communities/scugog" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/scugog.webp" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/scugog.jpg" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Scugog</h3>
@@ -415,11 +618,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MARKET SNAPSHOT
-       Horizontally scrollable row of 7 town data cards.
-       Source/date visible. Disclaimer below.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="market-snapshot" id="market" aria-labelledby="market-heading">
     <div class="section-inner">
       <div class="market-snapshot__header">
@@ -431,7 +630,7 @@
       </div>
 
       <div class="market-cards" role="list" aria-label="Market data by community">
-        <!-- Repeat for each town -->
+        
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--down">↓ -7.8%</span></div>
           <span class="market-card__price">$767,732</span>
@@ -478,10 +677,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       WHY FINALLY HOME AGENTS
-       3-card grid. bg-[#f9f7f2].
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="why-fha" aria-labelledby="why-fha-heading">
     <div class="section-inner">
       <div class="section-header section-header--center">
@@ -490,17 +686,17 @@
       </div>
       <div class="why-fha__grid">
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- location pin icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Town-by-town guidance before the search begins</h3>
           <p class="why-card__body">Before you start touring homes, we walk you through the real differences between each community — commute, schools, price range, and feel. Aurora and Newmarket are not the same. Georgina and Scugog are not the same. That context shapes your search.</p>
         </div>
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- grid/listing icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Pricing and marketing built for how buyers actually search</h3>
           <p class="why-card__body">Photography, video, drone, and staging strategy — not as add-ons, but as standard practice. Your listing is priced using current TRREB data, positioned for the buyers most likely to act, and marketed beyond the MLS.</p>
         </div>
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- checkmark icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Offer and negotiation support from first showing to closing</h3>
           <p class="why-card__body">We are in your corner from the first showing through to the last signature. That means offer strategy, condition advice, negotiation, lawyer and lender coordination, and a clear picture of what you are getting into before you commit.</p>
         </div>
@@ -508,14 +704,11 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       PROOF SECTION (Recent Moves + Reviews combined)
-       bg-[#f0ede6]
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="proof-section" aria-label="Client results and reviews">
     <div class="section-inner">
 
-      <!-- Recent Client Moves -->
+      
       <div class="recent-moves">
         <div class="section-header section-header--center recent-moves__header">
           <div class="gold-rule-group" aria-hidden="true"><span class="gold-rule"></span><span>Real Results</span><span class="gold-rule"></span></div>
@@ -523,9 +716,9 @@
           <p class="section-sub">Active representation across the NorthSide GTA and beyond.</p>
         </div>
         <div class="moves-grid">
-          <!-- 6 move cards — green for Purchased, navy for Sold -->
-          <!-- Each card: type badge, town name, gold line, Goal + Result rows -->
-          <!-- Ghost letter: first letter of location, font-size:140px, opacity:0.06 -->
+          
+          
+          
           <article class="move-card move-card--purchased">
             <span class="move-card__ghost" aria-hidden="true">M</span>
             <div class="move-card__top">
@@ -600,7 +793,7 @@
           </article>
         </div>
 
-        <!-- Move cards bottom CTA strip -->
+        
         <div class="moves-cta-strip">
           <div class="moves-cta-strip__text">
             <strong>Planning your next move? Let's map it out.</strong>
@@ -610,7 +803,7 @@
         </div>
       </div>
 
-      <!-- Client Reviews -->
+      
       <div class="reviews">
         <div class="reviews__header">
           <div>
@@ -658,22 +851,33 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       AGENT INTRO
-       Two-column: photo left, copy right (lg screens).
-       bg-white.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="agent-intro" aria-labelledby="agent-heading">
     <div class="section-inner section-inner--narrow">
       <div class="agent-intro__grid">
-        <div class="agent-intro__photo">
-          <img
-            src="/assets/team/matthew-landon.webp"
-            alt="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate"
-            width="800" height="600"
-            loading="lazy"
-            class="agent-intro__img"
-          >
+        <div class="agent-intro__photo" role="img" aria-label="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate">
+          <div class="agent-intro__photo-grid">
+            <figure class="agent-intro__portrait">
+              <img
+                src="/Images/matthew.jpg"
+                alt=""
+                width="400" height="600"
+                loading="lazy"
+                class="agent-intro__img"
+              >
+              <figcaption>Matthew Mulhall</figcaption>
+            </figure>
+            <figure class="agent-intro__portrait">
+              <img
+                src="/Images/landon.jpg"
+                alt=""
+                width="400" height="600"
+                loading="lazy"
+                class="agent-intro__img"
+              >
+              <figcaption>Landon Mulhall</figcaption>
+            </figure>
+          </div>
         </div>
         <div class="agent-intro__copy">
           <p class="section-eyebrow">The team behind NorthSide GTA</p>
@@ -689,11 +893,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FAQ
-       Accordion-optional. Uses dl/dt/dd. bg-white.
-       Must match FAQPage schema exactly.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="faq" aria-labelledby="faq-heading">
     <div class="section-inner section-inner--faq">
       <div class="section-header section-header--center">
@@ -718,17 +918,14 @@
           <dd class="faq__answer">Yes. Finally Home Agents provides full seller representation across all seven NorthSide GTA communities — market-informed pricing strategy, professional photography, video, and marketing, and coordinated support through to closing.</dd>
         </div>
         <div class="faq__item">
-          <dt class="faq__question">Can I compare NorthSide GTA communities before deciding where to buy?</dt>
+          <dt class="faq__question">Can I compare NorthSide GTA communities before buying?</dt>
           <dd class="faq__answer">Yes. The NorthSide GTA platform helps buyers compare communities by lifestyle, price point, commute, and local character. Finally Home Agents provides town-by-town guidance before the search begins, so buyers understand the real differences between Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.</dd>
         </div>
       </dl>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FINAL CTA
-       Dark green gradient. Centered. Two buttons.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="final-cta" aria-labelledby="final-cta-heading">
     <div class="section-inner section-inner--narrow section-inner--center">
       <h2 class="final-cta__heading" id="final-cta-heading">Planning a Move North of Toronto?</h2>
@@ -740,10 +937,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       INSIGHTS PREVIEW
-       3-card grid. bg-slate-50.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="insights-preview" aria-labelledby="insights-heading">
     <div class="section-inner">
       <div class="insights-preview__header">
@@ -775,9 +969,6 @@
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════════════════════ -->
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__grid">
@@ -824,6 +1015,4 @@
     </div>
   </div>
 </footer>
-
-</body>
-</html>
+`;

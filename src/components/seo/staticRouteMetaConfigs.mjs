@@ -1,25 +1,28 @@
 const DEFAULT_GLOBAL_META_CONFIG = {
   route: "/",
-  documentTitle: "NorthSide GTA | Real Estate Agents for Buyers & Sellers",
-  title: "NorthSide GTA | Real Estate Agents for Buyers & Sellers",
+  documentTitle: "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
+  title: "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
   description:
-    "Find your perfect home or sell for more in the NorthSide GTA. Local experts serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
-  canonicalUrl: "https://northsidegta.ca/",
+    "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
+  canonicalUrl: "https://www.northsidegta.ca/",
   ogType: "website",
-  ogImage: "/Images/og-home.jpg",
+  ogImage: "https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
   ogImageAlt:
-    "NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog",
+    "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
   twitterCard: "summary_large_image",
-  twitterImage: "/Images/og-home.jpg",
+  twitterImage: "https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
   twitterImageAlt:
-    "NorthSide GTA Map showing towns: Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog",
+    "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
   siteName: "NorthSide GTA",
   additionalMeta: [
-    {
-      name: "keywords",
-      content:
-        "NorthSide GTA, real estate, homes for sale North GTA, sell my home, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog",
-    },
+    { name: "robots", content: "index, follow" },
+    { property: "og:locale", content: "en_CA" },
+    { name: "twitter:site", content: "@northsidegta" },
+    { name: "facebook-domain-verification", content: "1tfwypal0s72obxs9238figl03nk5i" },
+    { name: "geo.region", content: "CA-ON" },
+    { name: "geo.placename", content: "Newmarket, Ontario, Canada" },
+    { name: "language", content: "en-CA" },
+    { name: "referrer", content: "strict-origin-when-cross-origin" },
   ],
 };
 
