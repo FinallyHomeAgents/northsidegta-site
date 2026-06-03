@@ -1,54 +1,16 @@
-<!DOCTYPE html>
-<html lang="en-CA">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents</title>
-  <meta name="description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <link rel="canonical" href="https://www.northsidegta.ca/">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#23470a">
-  <meta name="facebook-domain-verification" content="1tfwypal0s72obxs9238figl03nk5i">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:site_name" content="NorthSide GTA">
-  <meta property="og:title" content="NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents">
-  <meta property="og:description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <meta property="og:url" content="https://www.northsidegta.ca/">
-  <meta property="og:image" content="https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@northsidegta">
-  <meta name="twitter:title" content="NorthSide GTA Real Estate | Buy &amp; Sell North of Toronto | Finally Home Agents">
-  <meta name="twitter:description" content="Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.">
-  <meta name="twitter:image" content="https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg">
-  <meta name="geo.region" content="CA-ON">
-  <meta name="geo.placename" content="Newmarket, Ontario, Canada">
-  <link rel="alternate" hreflang="en-CA" href="https://www.northsidegta.ca/">
-  <!-- JSON-LD: see homepage-seo.md for full schema -->
-  <link rel="stylesheet" href="/assets/homepage/homepage-styles.css">
-</head>
-<body>
-
-<!-- ═══════════════════════════════════════════════════════════
-     HEADER / NAV
-     Sticky. Scrolled state adds shadow + backdrop-blur.
-     Mobile: hamburger → full-screen drawer.
-═══════════════════════════════════════════════════════════ -->
+export const HOMEPAGE_MARKUP = String.raw`
 <header class="site-header" id="site-header">
   <div class="site-header__inner">
 
-    <!-- Brand lockup: serif "NorthSide GTA" + spaced-caps subline -->
+    
     <a href="/" class="site-header__brand" aria-label="NorthSide GTA home">
       <span class="brand-primary">NorthSide GTA</span>
       <span class="brand-secondary">served by Finally Home Agents</span>
     </a>
 
-    <!-- Desktop nav -->
+    
     <nav class="site-nav" aria-label="Site navigation">
-      <a href="/communities" class="site-nav__link">Communities</a>
+      <a href="#communities" class="site-nav__link">Communities</a>
       <a href="/" class="site-nav__link">Home</a>
       <a href="/about" class="site-nav__link">About</a>
       <a href="/buyers" class="site-nav__link">Buyers</a>
@@ -59,13 +21,13 @@
       <a href="/contact" class="btn btn--green btn--sm">Let's Talk</a>
     </nav>
 
-    <!-- Mobile hamburger -->
+    
     <button class="site-header__menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
       <span class="hamburger-icon" aria-hidden="true"></span>
     </button>
   </div>
 
-  <!-- Intent bar (slim, below nav) -->
+  
   <div class="intent-bar" role="navigation" aria-label="Quick intent navigation">
     <div class="intent-bar__inner">
       <div class="intent-bar__pills">
@@ -81,7 +43,6 @@
   </div>
 </header>
 
-<!-- Mobile nav drawer -->
 <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
   <div class="mobile-drawer__header">
     <a href="/" class="site-header__brand">
@@ -91,7 +52,7 @@
     <button class="mobile-drawer__close" aria-label="Close navigation menu">✕</button>
   </div>
   <nav class="mobile-drawer__nav">
-    <a href="/communities">Communities</a>
+    <a href="#communities">Communities</a>
     <a href="/">Home</a>
     <a href="/about">About</a>
     <a href="/buyers">Buyers</a>
@@ -107,16 +68,11 @@
 
 <main>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       HERO
-       Two-column grid: 44% copy / 56% map.
-       Left: dark green gradient, H1, subheading, CTAs, reviews.
-       Right: framed map panel edge-to-edge.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="hero" aria-labelledby="hero-heading">
     <div class="hero__grid">
 
-      <!-- Hero copy -->
+      
       <div class="hero__copy">
         <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
 
@@ -137,9 +93,9 @@
           <a href="#communities" class="btn btn--ghost btn--lg">Explore Communities</a>
         </div>
 
-        <!-- Google Reviews strip -->
+        
         <a href="https://share.google/GJz2QTQ8GqZIifaNH" class="google-reviews-strip" target="_blank" rel="noopener" aria-label="5.0 Google Rating — see all client reviews">
-          <img src="/assets/logos/google-logo.png" alt="Google" width="60" height="20">
+          <img src="/Images/google-logo.png" alt="Google" width="60" height="20">
           <span class="stars" aria-hidden>★★★★★</span>
           <span class="google-reviews-strip__text">
             <strong>5.0 Google Rating</strong>
@@ -148,7 +104,7 @@
         </a>
       </div>
 
-      <!-- Hero map panel -->
+      
       <div class="hero__map-panel">
         <div class="hero__map-header">
           <div>
@@ -161,16 +117,15 @@
           </div>
         </div>
 
-        <!-- Map: see homepage-map.svg and homepage-assets.md -->
+        
         <div class="hero__map-frame" id="northside-map-container">
-          <img
-            src="/assets/homepage/northside-map.svg"
+          <img             src="/assets/homepage/northside-map.svg"
             alt="Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog"
             width="900" height="700"
             class="northside-map"
             id="northside-map"
           >
-          <!-- JS progressively enhances this into the interactive SVG map -->
+          
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
@@ -181,10 +136,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       SOCIAL PROOF BAR
-       5 metrics with icons. Horizontally scrollable on mobile.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="proof-bar" aria-label="Trust indicators">
     <div class="proof-bar__inner">
       <div class="proof-bar__item">
@@ -215,11 +167,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       BUYER / SELLER PATHWAYS
-       Side-by-side panels: green (buyers) + navy (sellers).
-       Rounded 28px container with shadow.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="pathways" aria-label="Buyer and seller pathways">
     <div class="pathways__inner">
       <div class="pathways__grid">
@@ -242,11 +190,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       COMMUNITY CARDS
-       7-up grid. Each card: image, town name, subtitle, pills,
-       avg price, explore CTA.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="communities" id="communities" aria-labelledby="communities-heading">
     <div class="section-inner">
       <div class="section-header section-header--center">
@@ -260,7 +204,7 @@
         <li class="community-card">
           <a href="/communities/georgina" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/georgina.webp" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/georgina.jpg" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Georgina</h3>
@@ -282,7 +226,7 @@
         <li class="community-card">
           <a href="/communities/east-gwillimbury" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/east-gwillimbury.webp" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">East Gwillimbury</h3>
@@ -304,7 +248,7 @@
         <li class="community-card">
           <a href="/communities/newmarket" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/newmarket.webp" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/newmarket.jpg" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Newmarket</h3>
@@ -326,7 +270,7 @@
         <li class="community-card">
           <a href="/communities/aurora" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/aurora.webp" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/aurora.jpg" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Aurora</h3>
@@ -348,7 +292,7 @@
         <li class="community-card">
           <a href="/communities/stouffville" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/stouffville.webp" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/stouffville.jpg" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Whitchurch-Stouffville</h3>
@@ -370,7 +314,7 @@
         <li class="community-card">
           <a href="/communities/uxbridge" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/uxbridge.webp" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Uxbridge</h3>
@@ -392,7 +336,7 @@
         <li class="community-card">
           <a href="/communities/scugog" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/assets/communities/scugog.webp" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/Images/towns/scugog.jpg" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Scugog</h3>
@@ -415,11 +359,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MARKET SNAPSHOT
-       Horizontally scrollable row of 7 town data cards.
-       Source/date visible. Disclaimer below.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="market-snapshot" id="market" aria-labelledby="market-heading">
     <div class="section-inner">
       <div class="market-snapshot__header">
@@ -431,7 +371,7 @@
       </div>
 
       <div class="market-cards" role="list" aria-label="Market data by community">
-        <!-- Repeat for each town -->
+        
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--down">↓ -7.8%</span></div>
           <span class="market-card__price">$767,732</span>
@@ -478,10 +418,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       WHY FINALLY HOME AGENTS
-       3-card grid. bg-[#f9f7f2].
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="why-fha" aria-labelledby="why-fha-heading">
     <div class="section-inner">
       <div class="section-header section-header--center">
@@ -490,17 +427,17 @@
       </div>
       <div class="why-fha__grid">
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- location pin icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Town-by-town guidance before the search begins</h3>
           <p class="why-card__body">Before you start touring homes, we walk you through the real differences between each community — commute, schools, price range, and feel. Aurora and Newmarket are not the same. Georgina and Scugog are not the same. That context shapes your search.</p>
         </div>
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- grid/listing icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Pricing and marketing built for how buyers actually search</h3>
           <p class="why-card__body">Photography, video, drone, and staging strategy — not as add-ons, but as standard practice. Your listing is priced using current TRREB data, positioned for the buyers most likely to act, and marketed beyond the MLS.</p>
         </div>
         <div class="why-card">
-          <div class="why-card__icon" aria-hidden="true"><!-- checkmark icon --></div>
+          <div class="why-card__icon" aria-hidden="true"></div>
           <h3 class="why-card__title">Offer and negotiation support from first showing to closing</h3>
           <p class="why-card__body">We are in your corner from the first showing through to the last signature. That means offer strategy, condition advice, negotiation, lawyer and lender coordination, and a clear picture of what you are getting into before you commit.</p>
         </div>
@@ -508,14 +445,11 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       PROOF SECTION (Recent Moves + Reviews combined)
-       bg-[#f0ede6]
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="proof-section" aria-label="Client results and reviews">
     <div class="section-inner">
 
-      <!-- Recent Client Moves -->
+      
       <div class="recent-moves">
         <div class="section-header section-header--center recent-moves__header">
           <div class="gold-rule-group" aria-hidden="true"><span class="gold-rule"></span><span>Real Results</span><span class="gold-rule"></span></div>
@@ -523,9 +457,9 @@
           <p class="section-sub">Active representation across the NorthSide GTA and beyond.</p>
         </div>
         <div class="moves-grid">
-          <!-- 6 move cards — green for Purchased, navy for Sold -->
-          <!-- Each card: type badge, town name, gold line, Goal + Result rows -->
-          <!-- Ghost letter: first letter of location, font-size:140px, opacity:0.06 -->
+          
+          
+          
           <article class="move-card move-card--purchased">
             <span class="move-card__ghost" aria-hidden="true">M</span>
             <div class="move-card__top">
@@ -600,7 +534,7 @@
           </article>
         </div>
 
-        <!-- Move cards bottom CTA strip -->
+        
         <div class="moves-cta-strip">
           <div class="moves-cta-strip__text">
             <strong>Planning your next move? Let's map it out.</strong>
@@ -610,7 +544,7 @@
         </div>
       </div>
 
-      <!-- Client Reviews -->
+      
       <div class="reviews">
         <div class="reviews__header">
           <div>
@@ -658,17 +592,12 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       AGENT INTRO
-       Two-column: photo left, copy right (lg screens).
-       bg-white.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="agent-intro" aria-labelledby="agent-heading">
     <div class="section-inner section-inner--narrow">
       <div class="agent-intro__grid">
         <div class="agent-intro__photo">
-          <img
-            src="/assets/team/matthew-landon.webp"
+          <img             src="/assets/team/matthew-landon.svg"
             alt="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate"
             width="800" height="600"
             loading="lazy"
@@ -689,11 +618,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FAQ
-       Accordion-optional. Uses dl/dt/dd. bg-white.
-       Must match FAQPage schema exactly.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="faq" aria-labelledby="faq-heading">
     <div class="section-inner section-inner--faq">
       <div class="section-header section-header--center">
@@ -718,17 +643,14 @@
           <dd class="faq__answer">Yes. Finally Home Agents provides full seller representation across all seven NorthSide GTA communities — market-informed pricing strategy, professional photography, video, and marketing, and coordinated support through to closing.</dd>
         </div>
         <div class="faq__item">
-          <dt class="faq__question">Can I compare NorthSide GTA communities before deciding where to buy?</dt>
+          <dt class="faq__question">Can I compare NorthSide GTA communities before buying?</dt>
           <dd class="faq__answer">Yes. The NorthSide GTA platform helps buyers compare communities by lifestyle, price point, commute, and local character. Finally Home Agents provides town-by-town guidance before the search begins, so buyers understand the real differences between Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.</dd>
         </div>
       </dl>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FINAL CTA
-       Dark green gradient. Centered. Two buttons.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="final-cta" aria-labelledby="final-cta-heading">
     <div class="section-inner section-inner--narrow section-inner--center">
       <h2 class="final-cta__heading" id="final-cta-heading">Planning a Move North of Toronto?</h2>
@@ -740,10 +662,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       INSIGHTS PREVIEW
-       3-card grid. bg-slate-50.
-  ═══════════════════════════════════════════════════════════ -->
+  
   <section class="insights-preview" aria-labelledby="insights-heading">
     <div class="section-inner">
       <div class="insights-preview__header">
@@ -775,9 +694,6 @@
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════════════════════ -->
 <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__grid">
@@ -824,6 +740,4 @@
     </div>
   </div>
 </footer>
-
-</body>
-</html>
+`;

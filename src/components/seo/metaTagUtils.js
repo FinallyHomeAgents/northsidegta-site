@@ -1,6 +1,6 @@
 const { getSiteSeoForRoute } = require("./siteSeoConfig");
 
-const SITE_BASE_URL = "https://northsidegta.ca";
+const SITE_BASE_URL = "https://www.northsidegta.ca";
 const DEFAULT_META_IMAGE_PATH = "/Images/og-home.jpg";
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 const SOCIAL_IMAGE_WIDTH = "1200";
