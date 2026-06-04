@@ -82,7 +82,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         </h1>
 
         <p class="hero__intro">
-          Buy or sell north of Toronto with Finally Home Agents across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.
+          Buy or sell north of Toronto with Finally Home Agents across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with trusted support in Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.
         </p>
         <p class="hero__sub">
           Explore the communities, compare the lifestyle, and get clear guidance before your next move.
@@ -109,7 +109,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <div class="hero__map-header">
           <div>
             <p class="map-label">Explore the NorthSide GTA</p>
-            <p class="map-sublabel">Tap any community to learn more</p>
+            <p class="map-sublabel">Tap any focus community to learn more</p>
           </div>
           <div class="map-interactive-badge">
             <span class="pulse-dot pulse-dot--green"></span>
@@ -138,9 +138,11 @@ export const HOMEPAGE_MARKUP = String.raw`
                 svc-ink: #f0e8d4        (region name colour)
                 svc-sub: #c9a465        (subtitle colour)
                 ctx: #e3e1d8            (context region fill)
+                also-served-fill: #d8c9a6 (nearby GTA communities also served)
                 water: #cfe1ee          (lake fill)
                 water-ink: #6f9fbc      (lake label)
                 ctx-ink: #8d8d80        (context label)
+                also-served-label: #7b715f
                 hwy: #d98b2b            (highway line)
                 skyline: #c8bda4        (Toronto skyline bars)
             -->
@@ -153,9 +155,11 @@ export const HOMEPAGE_MARKUP = String.raw`
                              fill: #6f9fbc; letter-spacing: 0.42em; text-transform: uppercase; }
                 .water-lbl.sm { font-size: 11px; letter-spacing: 0.16em; }
                 .ctx       { fill: #e3e1d8; stroke: #f4f1e8; stroke-width: 2; stroke-linejoin: round; }
+                .ctx.also-served { fill: #d8c9a6; stroke: #efe6d1; }
                 .ctx.toronto { fill: #d8d4c4; }
                 .ctx-lbl   { font-family: 'Blinker', system-ui, sans-serif; font-size: 19px; font-weight: 500;
                              fill: #8d8d80; }
+                .ctx-lbl.also-served { fill: #7b715f; }
                 .ctx-lbl.toronto { font-family: 'Newsreader', Georgia, serif; font-style: italic;
                                    font-size: 26px; fill: #7c7868; }
                 .svc       { fill: #235c0d; stroke: rgba(200,167,90,0.25); stroke-width: 2.5; stroke-linejoin: round; }
@@ -203,27 +207,27 @@ export const HOMEPAGE_MARKUP = String.raw`
             <path class="ctx" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
             <text class="ctx-lbl" x="335" y="520" text-anchor="middle">King</text>
             <!-- Vaughan -->
-            <path class="ctx" d="M 180,630 L 410,630 L 410,782 L 180,786 Z"/>
-            <text class="ctx-lbl" x="296" y="712" text-anchor="middle">Vaughan</text>
+            <path class="ctx also-served" d="M 180,630 L 410,630 L 410,782 L 180,786 Z" aria-label="Vaughan — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="296" y="712" text-anchor="middle">Vaughan</text>
             <!-- Richmond Hill -->
-            <path class="ctx" d="M 410,630 L 575,630 L 575,782 L 410,782 Z"/>
-            <text class="ctx-lbl" x="493" y="702" text-anchor="middle">Richmond</text>
-            <text class="ctx-lbl" x="493" y="722" text-anchor="middle">Hill</text>
+            <path class="ctx also-served" d="M 410,630 L 575,630 L 575,782 L 410,782 Z" aria-label="Richmond Hill — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="493" y="702" text-anchor="middle">Richmond</text>
+            <text class="ctx-lbl also-served" x="493" y="722" text-anchor="middle">Hill</text>
             <!-- Markham -->
-            <path class="ctx" d="M 575,630 L 830,630 L 830,782 L 575,782 Z"/>
-            <text class="ctx-lbl" x="702" y="712" text-anchor="middle">Markham</text>
+            <path class="ctx also-served" d="M 575,630 L 830,630 L 830,782 L 575,782 Z" aria-label="Markham — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="702" y="712" text-anchor="middle">Markham</text>
             <!-- Pickering -->
-            <path class="ctx" d="M 830,630 L 980,630 L 980,784 L 830,782 Z"/>
-            <text class="ctx-lbl" x="905" y="712" text-anchor="middle">Pickering</text>
+            <path class="ctx also-served" d="M 830,630 L 980,630 L 980,784 L 830,782 Z" aria-label="Pickering — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="905" y="712" text-anchor="middle">Pickering</text>
             <!-- Ajax -->
-            <path class="ctx" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z"/>
-            <text class="ctx-lbl" x="1037" y="716" text-anchor="middle">Ajax</text>
+            <path class="ctx also-served" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z" aria-label="Ajax — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="1037" y="716" text-anchor="middle">Ajax</text>
             <!-- Whitby -->
-            <path class="ctx" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z"/>
-            <text class="ctx-lbl" x="1177" y="716" text-anchor="middle">Whitby</text>
+            <path class="ctx also-served" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z" aria-label="Whitby — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="1177" y="716" text-anchor="middle">Whitby</text>
             <!-- Oshawa -->
-            <path class="ctx" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z"/>
-            <text class="ctx-lbl" x="1335" y="716" text-anchor="middle">Oshawa</text>
+            <path class="ctx also-served" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z" aria-label="Oshawa — Nearby community also served"/>
+            <text class="ctx-lbl also-served" x="1335" y="716" text-anchor="middle">Oshawa</text>
             <!-- Toronto -->
             <path class="ctx toronto" d="M 180,786 L 410,782 L 575,782 L 830,782 L 830,825 L 700,832 L 420,838 L 180,832 Z"/>
             <text class="ctx-lbl toronto" x="475" y="815" text-anchor="middle">Toronto</text>
@@ -385,10 +389,14 @@ export const HOMEPAGE_MARKUP = String.raw`
               width="900" height="700"
             >
           </noscript>
+          <div class="map-legend" aria-label="Map legend">
+            <span class="map-legend__item"><span class="map-legend__dot map-legend__dot--focus" aria-hidden="true"></span>NorthSide GTA focus area</span>
+            <span class="map-legend__item"><span class="map-legend__dot map-legend__dot--served" aria-hidden="true"></span>Nearby communities also served</span>
+          </div>
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
-          Seven communities north of Toronto · hover to preview, click to explore
+          NorthSide GTA focus communities · also serving Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
         </div>
       </div>
 
