@@ -747,8 +747,8 @@ main { padding-top: 100px; }
 @media (min-width: 640px) { .agent-intro { padding-block: var(--section-py-lg); } }
 .agent-intro__grid { display: grid; gap: 40px; align-items: center; }
 @media (min-width: 1024px) { .agent-intro__grid { grid-template-columns: 1fr 1fr; } }
-.agent-intro__photo { overflow: hidden; border-radius: var(--radius-card-lg); border: 1px solid var(--ns-border); box-shadow: 0 16px 40px rgba(35,71,10,0.1); }
-.agent-intro__img { width: 100%; height: 100%; object-fit: cover; }
+.agent-intro__photo { overflow: hidden; border-radius: var(--radius-card-lg); border: 1px solid var(--ns-border); background: linear-gradient(135deg, rgba(23,63,8,0.96), rgba(35,92,13,0.82)); box-shadow: 0 16px 40px rgba(35,71,10,0.1); }
+.agent-intro__img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .agent-intro__copy .section-heading { margin-top: 12px; }
 .agent-intro__body { margin-top: 20px; font-size: 16px; line-height: 1.7; color: #475569; }
 @media (min-width: 640px) { .agent-intro__body { font-size: 18px; } }
@@ -1006,54 +1006,24 @@ main { padding-top: 100px; }
 .mobile-drawer__footer { margin-top: auto; }
 .mobile-drawer-open { overflow: hidden; }
 
-.agent-intro__photo-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  height: 100%;
-  min-height: 420px;
-}
-.agent-intro__portrait {
-  position: relative;
+.agent-intro__team-card {
   overflow: hidden;
   margin: 0;
-  border-radius: 24px;
+  aspect-ratio: 1484 / 1060;
+  border-radius: calc(var(--radius-card-lg) - 1px);
   background: linear-gradient(135deg, rgba(23,63,8,0.9), rgba(35,92,13,0.72));
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
 }
-.agent-intro__portrait .agent-intro__img {
-  width: 100%;
-  height: 100%;
-  min-height: 420px;
-  object-fit: cover;
-  object-position: center top;
+.agent-intro__team-card .agent-intro__img {
+  object-position: center center;
   filter: saturate(1.02) contrast(1.03);
 }
-.agent-intro__portrait figcaption {
-  position: absolute;
-  inset-inline: 12px;
-  bottom: 12px;
-  border: 1px solid rgba(244,239,229,0.22);
-  border-radius: 999px;
-  background: rgba(23,63,8,0.78);
-  color: var(--ns-cream);
-  padding: 8px 12px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  backdrop-filter: blur(8px);
-}
 @media (max-width: 520px) {
-  .agent-intro__photo-grid {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-  .agent-intro__portrait .agent-intro__img {
+  .agent-intro__team-card {
     min-height: 320px;
   }
 }
+
 
 .hero__map-frame svg.northside-map--inline {
   display: block;
