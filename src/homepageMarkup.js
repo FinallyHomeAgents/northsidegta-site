@@ -82,7 +82,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         </h1>
 
         <p class="hero__intro">
-          Buy or sell north of Toronto with Finally Home Agents across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with trusted support in Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.
+          Buy or sell north of Toronto with Finally Home Agents across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with trusted support in King, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.
         </p>
         <p class="hero__sub">
           Explore the communities, compare the lifestyle, and get clear guidance before your next move.
@@ -162,6 +162,28 @@ export const HOMEPAGE_MARKUP = String.raw`
                 .ctx-lbl.also-served { fill: #7b715f; }
                 .ctx-lbl.toronto { font-family: 'Newsreader', Georgia, serif; font-style: italic;
                                    font-size: 26px; fill: #7c7868; }
+                .map-nearby-served { cursor: help; outline: none; }
+                .map-nearby-served .ctx.also-served { transition: fill 240ms ease, stroke 240ms ease, filter 240ms ease; }
+                .map-nearby-served .ctx-lbl.also-served { transition: fill 240ms ease; pointer-events: none; }
+                .map-nearby-served:hover .ctx.also-served,
+                .map-nearby-served:focus .ctx.also-served,
+                .map-nearby-served:focus-visible .ctx.also-served { fill: #ddcfad; stroke: #fff4df; filter: drop-shadow(0 5px 10px rgba(54, 45, 25, 0.12)); }
+                .map-nearby-served:hover .ctx-lbl.also-served,
+                .map-nearby-served:focus .ctx-lbl.also-served,
+                .map-nearby-served:focus-visible .ctx-lbl.also-served { fill: #5f563f; }
+                .map-nearby-served:focus-visible .ctx.also-served { stroke-width: 3; }
+                .nearby-tooltip { opacity: 0; transition: opacity 220ms ease; pointer-events: none; }
+                .map-nearby-served:hover .nearby-tooltip,
+                .map-nearby-served:focus .nearby-tooltip,
+                .map-nearby-served:focus-visible .nearby-tooltip { opacity: 1; }
+                .nearby-tooltip-card { fill: rgba(255, 252, 244, 0.96); stroke: rgba(123, 113, 95, 0.22); stroke-width: 1; filter: drop-shadow(0 8px 14px rgba(35, 71, 10, 0.14)); }
+                .nearby-tooltip-name { font-family: 'Newsreader', Georgia, serif; font-size: 26px; fill: #173f08; font-weight: 600; }
+                .nearby-tooltip-copy { font-family: 'Blinker', system-ui, sans-serif; font-size: 18px; fill: #6f6655; font-weight: 600; letter-spacing: 0.02em; }
+                @media (prefers-reduced-motion: reduce) {
+                  .map-nearby-served .ctx.also-served,
+                  .map-nearby-served .ctx-lbl.also-served,
+                  .nearby-tooltip { transition: none; }
+                }
                 .svc       { fill: #235c0d; stroke: rgba(200,167,90,0.25); stroke-width: 2.5; stroke-linejoin: round; }
                 .svc-name  { font-family: 'Newsreader', Georgia, serif; font-weight: 400; fill: #f0e8d4;
                              letter-spacing: 0.01em;
@@ -204,30 +226,86 @@ export const HOMEPAGE_MARKUP = String.raw`
             <!-- NW unlabeled land -->
             <path class="ctx" d="M 180,400 L 490,400 L 490,165 L 462,150 L 430,162 L 392,150 L 348,166 L 305,150 L 262,140 L 180,150 Z"/>
             <!-- King -->
-            <path class="ctx" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
-            <text class="ctx-lbl" x="335" y="520" text-anchor="middle">King</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="King — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
+              <text class="ctx-lbl also-served" x="335" y="520" text-anchor="middle">King</text>
+              <g class="nearby-tooltip" transform="translate(36,455)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">King</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Vaughan -->
-            <path class="ctx also-served" d="M 180,630 L 410,630 L 410,782 L 180,786 Z" aria-label="Vaughan — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="296" y="712" text-anchor="middle">Vaughan</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Vaughan — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 180,630 L 410,630 L 410,782 L 180,786 Z"/>
+              <text class="ctx-lbl also-served" x="296" y="712" text-anchor="middle">Vaughan</text>
+              <g class="nearby-tooltip" transform="translate(126,655)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Vaughan</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Richmond Hill -->
-            <path class="ctx also-served" d="M 410,630 L 575,630 L 575,782 L 410,782 Z" aria-label="Richmond Hill — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="493" y="702" text-anchor="middle">Richmond</text>
-            <text class="ctx-lbl also-served" x="493" y="722" text-anchor="middle">Hill</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Richmond Hill — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 410,630 L 575,630 L 575,782 L 410,782 Z"/>
+              <text class="ctx-lbl also-served" x="493" y="702" text-anchor="middle">Richmond</text>
+              <text class="ctx-lbl also-served" x="493" y="722" text-anchor="middle">Hill</text>
+              <g class="nearby-tooltip" transform="translate(323,650)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Richmond Hill</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Markham -->
-            <path class="ctx also-served" d="M 575,630 L 830,630 L 830,782 L 575,782 Z" aria-label="Markham — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="702" y="712" text-anchor="middle">Markham</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Markham — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 575,630 L 830,630 L 830,782 L 575,782 Z"/>
+              <text class="ctx-lbl also-served" x="702" y="712" text-anchor="middle">Markham</text>
+              <g class="nearby-tooltip" transform="translate(532,655)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Markham</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Pickering -->
-            <path class="ctx also-served" d="M 830,630 L 980,630 L 980,784 L 830,782 Z" aria-label="Pickering — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="905" y="712" text-anchor="middle">Pickering</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Pickering — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 830,630 L 980,630 L 980,784 L 830,782 Z"/>
+              <text class="ctx-lbl also-served" x="905" y="712" text-anchor="middle">Pickering</text>
+              <g class="nearby-tooltip" transform="translate(735,655)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Pickering</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Ajax -->
-            <path class="ctx also-served" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z" aria-label="Ajax — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="1037" y="716" text-anchor="middle">Ajax</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Ajax — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z"/>
+              <text class="ctx-lbl also-served" x="1037" y="716" text-anchor="middle">Ajax</text>
+              <g class="nearby-tooltip" transform="translate(867,659)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Ajax</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Whitby -->
-            <path class="ctx also-served" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z" aria-label="Whitby — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="1177" y="716" text-anchor="middle">Whitby</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Whitby — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z"/>
+              <text class="ctx-lbl also-served" x="1177" y="716" text-anchor="middle">Whitby</text>
+              <g class="nearby-tooltip" transform="translate(1007,659)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Whitby</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Oshawa -->
-            <path class="ctx also-served" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z" aria-label="Oshawa — Nearby community also served"/>
-            <text class="ctx-lbl also-served" x="1335" y="716" text-anchor="middle">Oshawa</text>
+            <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Oshawa — also served by Finally Home Agents">
+              <path class="ctx also-served" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z"/>
+              <text class="ctx-lbl also-served" x="1335" y="716" text-anchor="middle">Oshawa</text>
+              <g class="nearby-tooltip" transform="translate(1165,659)" aria-hidden="true">
+                <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
+                <text class="nearby-tooltip-name" x="20" y="32">Oshawa</text>
+                <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+              </g>
+            </g>
             <!-- Toronto -->
             <path class="ctx toronto" d="M 180,786 L 410,782 L 575,782 L 830,782 L 830,825 L 700,832 L 420,838 L 180,832 Z"/>
             <text class="ctx-lbl toronto" x="475" y="815" text-anchor="middle">Toronto</text>
@@ -396,7 +474,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
-          NorthSide GTA focus communities · also serving Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
+          NorthSide GTA focus communities · also serving King, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
         </div>
       </div>
 
