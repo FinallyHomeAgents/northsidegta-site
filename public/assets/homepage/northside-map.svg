@@ -51,13 +51,43 @@
       .map-nearby-served:focus .ctx-lbl.also-served,
       .map-nearby-served:focus-visible .ctx-lbl.also-served { fill: #5f563f; }
       .map-nearby-served:focus-visible .ctx.also-served { stroke-width: 3; }
-      .nearby-tooltip { opacity: 0; transition: opacity 220ms ease; pointer-events: none; }
+      .nearby-service-marker { pointer-events: none; filter: drop-shadow(0 3px 6px rgba(54, 45, 25, 0.13)); }
+      .nearby-service-marker__disc { fill: #f8f1df; stroke: #b79a5c; stroke-width: 1.4; }
+      .nearby-service-marker__check { fill: none; stroke: #32610e; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .nearby-tooltip { opacity: 0; overflow: visible; transition: opacity 220ms ease; pointer-events: none; }
       .map-nearby-served:hover .nearby-tooltip,
       .map-nearby-served:focus .nearby-tooltip,
       .map-nearby-served:focus-visible .nearby-tooltip { opacity: 1; }
-      .nearby-tooltip-card { fill: rgba(255, 252, 244, 0.96); stroke: rgba(123, 113, 95, 0.22); stroke-width: 1; filter: drop-shadow(0 8px 14px rgba(35, 71, 10, 0.14)); }
+      .map-nearby-served--bradford:hover ~ .nearby-tooltip--bradford,
+      .map-nearby-served--bradford:focus ~ .nearby-tooltip--bradford,
+      .map-nearby-served--bradford:focus-visible ~ .nearby-tooltip--bradford { opacity: 1; }
+      .map-nearby-served--king:hover ~ .nearby-tooltip--king,
+      .map-nearby-served--king:focus ~ .nearby-tooltip--king,
+      .map-nearby-served--king:focus-visible ~ .nearby-tooltip--king { opacity: 1; }
+      .map-nearby-served--vaughan:hover ~ .nearby-tooltip--vaughan,
+      .map-nearby-served--vaughan:focus ~ .nearby-tooltip--vaughan,
+      .map-nearby-served--vaughan:focus-visible ~ .nearby-tooltip--vaughan { opacity: 1; }
+      .map-nearby-served--richmond-hill:hover ~ .nearby-tooltip--richmond-hill,
+      .map-nearby-served--richmond-hill:focus ~ .nearby-tooltip--richmond-hill,
+      .map-nearby-served--richmond-hill:focus-visible ~ .nearby-tooltip--richmond-hill { opacity: 1; }
+      .map-nearby-served--markham:hover ~ .nearby-tooltip--markham,
+      .map-nearby-served--markham:focus ~ .nearby-tooltip--markham,
+      .map-nearby-served--markham:focus-visible ~ .nearby-tooltip--markham { opacity: 1; }
+      .map-nearby-served--pickering:hover ~ .nearby-tooltip--pickering,
+      .map-nearby-served--pickering:focus ~ .nearby-tooltip--pickering,
+      .map-nearby-served--pickering:focus-visible ~ .nearby-tooltip--pickering { opacity: 1; }
+      .map-nearby-served--ajax:hover ~ .nearby-tooltip--ajax,
+      .map-nearby-served--ajax:focus ~ .nearby-tooltip--ajax,
+      .map-nearby-served--ajax:focus-visible ~ .nearby-tooltip--ajax { opacity: 1; }
+      .map-nearby-served--whitby:hover ~ .nearby-tooltip--whitby,
+      .map-nearby-served--whitby:focus ~ .nearby-tooltip--whitby,
+      .map-nearby-served--whitby:focus-visible ~ .nearby-tooltip--whitby { opacity: 1; }
+      .map-nearby-served--oshawa:hover ~ .nearby-tooltip--oshawa,
+      .map-nearby-served--oshawa:focus ~ .nearby-tooltip--oshawa,
+      .map-nearby-served--oshawa:focus-visible ~ .nearby-tooltip--oshawa { opacity: 1; }
+      .nearby-tooltip-card { fill: rgba(255, 252, 244, 0.98); stroke: rgba(123, 113, 95, 0.24); stroke-width: 1; filter: drop-shadow(0 12px 22px rgba(35, 71, 10, 0.16)); }
       .nearby-tooltip-name { font-family: 'Newsreader', Georgia, serif; font-size: 26px; fill: #173f08; font-weight: 600; }
-      .nearby-tooltip-copy { font-family: 'Blinker', system-ui, sans-serif; font-size: 18px; fill: #6f6655; font-weight: 600; letter-spacing: 0.02em; }
+      .nearby-tooltip-copy { font-family: 'Blinker', system-ui, sans-serif; font-size: 18px; fill: #6f6655; font-weight: 600; letter-spacing: 0.01em; white-space: normal; }
       @media (prefers-reduced-motion: reduce) {
         .map-nearby-served .ctx.also-served,
         .map-nearby-served .ctx-lbl.also-served,
@@ -102,88 +132,87 @@
   <text class="water-lbl" x="800" y="872" text-anchor="middle">Lake Ontario</text>
 
   <!-- ── CONTEXT REGIONS ───────────────────────────────────── -->
-  <!-- NW unlabeled land -->
-  <path class="ctx" d="M 180,400 L 490,400 L 490,165 L 462,150 L 430,162 L 392,150 L 348,166 L 305,150 L 262,140 L 180,150 Z"/>
-  <!-- King -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="King — also served by Finally Home Agents">
-    <path class="ctx also-served" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
-    <text class="ctx-lbl also-served" x="335" y="520" text-anchor="middle">King</text>
-    <g class="nearby-tooltip" transform="translate(36,455)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">King</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+  <!-- Bradford -->
+  <g class="map-nearby-served map-nearby-served--bradford" tabindex="0" focusable="true" role="img" aria-label="Bradford — also guided by Finally Home Agents">
+    <path class="ctx also-served" d="M 180,400 L 490,400 L 490,165 L 462,150 L 430,162 L 392,150 L 348,166 L 305,150 L 262,140 L 180,150 Z"/>
+    <g class="nearby-service-marker" transform="translate(307,282)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="335" y="312" text-anchor="middle">Bradford</text>
+  </g>
+  <!-- King -->
+  <g class="map-nearby-served map-nearby-served--king" tabindex="0" focusable="true" role="img" aria-label="King — also guided by Finally Home Agents">
+    <path class="ctx also-served" d="M 180,400 L 490,400 L 490,630 L 180,630 Z"/>
+    <g class="nearby-service-marker" transform="translate(307,492)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
+    </g>
+    <text class="ctx-lbl also-served" x="335" y="520" text-anchor="middle">King</text>
   </g>
   <!-- Vaughan -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Vaughan — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--vaughan" tabindex="0" focusable="true" role="img" aria-label="Vaughan — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 180,630 L 410,630 L 410,782 L 180,786 Z"/>
-    <text class="ctx-lbl also-served" x="296" y="712" text-anchor="middle">Vaughan</text>
-    <g class="nearby-tooltip" transform="translate(126,655)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Vaughan</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(268,684)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="296" y="712" text-anchor="middle">Vaughan</text>
   </g>
   <!-- Richmond Hill -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Richmond Hill — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--richmond-hill" tabindex="0" focusable="true" role="img" aria-label="Richmond Hill — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 410,630 L 575,630 L 575,782 L 410,782 Z"/>
+    <g class="nearby-service-marker" transform="translate(462,674)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
+    </g>
     <text class="ctx-lbl also-served" x="493" y="702" text-anchor="middle">Richmond</text>
     <text class="ctx-lbl also-served" x="493" y="722" text-anchor="middle">Hill</text>
-    <g class="nearby-tooltip" transform="translate(323,650)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Richmond Hill</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
-    </g>
   </g>
   <!-- Markham -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Markham — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--markham" tabindex="0" focusable="true" role="img" aria-label="Markham — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 575,630 L 830,630 L 830,782 L 575,782 Z"/>
-    <text class="ctx-lbl also-served" x="702" y="712" text-anchor="middle">Markham</text>
-    <g class="nearby-tooltip" transform="translate(532,655)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Markham</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(667,684)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="702" y="712" text-anchor="middle">Markham</text>
   </g>
   <!-- Pickering -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Pickering — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--pickering" tabindex="0" focusable="true" role="img" aria-label="Pickering — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 830,630 L 980,630 L 980,784 L 830,782 Z"/>
-    <text class="ctx-lbl also-served" x="905" y="712" text-anchor="middle">Pickering</text>
-    <g class="nearby-tooltip" transform="translate(735,655)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Pickering</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(862,684)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="905" y="712" text-anchor="middle">Pickering</text>
   </g>
   <!-- Ajax -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Ajax — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--ajax" tabindex="0" focusable="true" role="img" aria-label="Ajax — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 980,630 L 1095,630 L 1095,788 L 980,784 Z"/>
-    <text class="ctx-lbl also-served" x="1037" y="716" text-anchor="middle">Ajax</text>
-    <g class="nearby-tooltip" transform="translate(867,659)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Ajax</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(1012,688)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="1037" y="716" text-anchor="middle">Ajax</text>
   </g>
   <!-- Whitby -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Whitby — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--whitby" tabindex="0" focusable="true" role="img" aria-label="Whitby — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 1095,630 L 1260,630 L 1260,792 L 1095,788 Z"/>
-    <text class="ctx-lbl also-served" x="1177" y="716" text-anchor="middle">Whitby</text>
-    <g class="nearby-tooltip" transform="translate(1007,659)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Whitby</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(1147,688)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="1177" y="716" text-anchor="middle">Whitby</text>
   </g>
   <!-- Oshawa -->
-  <g class="map-nearby-served" tabindex="0" focusable="true" role="img" aria-label="Oshawa — also served by Finally Home Agents">
+  <g class="map-nearby-served map-nearby-served--oshawa" tabindex="0" focusable="true" role="img" aria-label="Oshawa — also guided by Finally Home Agents">
     <path class="ctx also-served" d="M 1260,630 L 1400,630 L 1410,640 L 1404,792 L 1260,792 Z"/>
-    <text class="ctx-lbl also-served" x="1335" y="716" text-anchor="middle">Oshawa</text>
-    <g class="nearby-tooltip" transform="translate(1165,659)" aria-hidden="true">
-      <rect class="nearby-tooltip-card" width="340" height="82" rx="16"/>
-      <text class="nearby-tooltip-name" x="20" y="32">Oshawa</text>
-      <text class="nearby-tooltip-copy" x="20" y="58">Also served by Finally Home Agents</text>
+    <g class="nearby-service-marker" transform="translate(1305,688)" aria-hidden="true">
+      <circle class="nearby-service-marker__disc" r="10"/>
+      <path class="nearby-service-marker__check" d="M -4,0 L -1,3.5 L 5,-4"/>
     </g>
+    <text class="ctx-lbl also-served" x="1335" y="716" text-anchor="middle">Oshawa</text>
   </g>
   <!-- Toronto -->
   <path class="ctx toronto" d="M 180,786 L 410,782 L 575,782 L 830,782 L 830,825 L 700,832 L 420,838 L 180,832 Z"/>
@@ -336,6 +365,53 @@
           x="60" y="-8">10</text>
     <text font-family="'Blinker',system-ui,sans-serif" font-size="12" fill="#8a8a7e"
           x="94" y="-8">15 km</text>
+  </g>
+
+  <!-- Nearby-served tooltips render above the map so copy is never clipped. -->
+  <g class="nearby-tooltip nearby-tooltip--bradford" transform="translate(210,235)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Bradford</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--king" transform="translate(36,455)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">King</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--vaughan" transform="translate(126,655)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Vaughan</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--richmond-hill" transform="translate(323,650)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Richmond Hill</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--markham" transform="translate(532,655)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Markham</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--pickering" transform="translate(735,655)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Pickering</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--ajax" transform="translate(867,659)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Ajax</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--whitby" transform="translate(1007,659)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Whitby</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
+  </g>
+  <g class="nearby-tooltip nearby-tooltip--oshawa" transform="translate(1165,659)" aria-hidden="true">
+    <rect class="nearby-tooltip-card" width="430" height="92" rx="18"/>
+    <text class="nearby-tooltip-name" x="20" y="32">Oshawa</text>
+    <text class="nearby-tooltip-copy" x="20" y="62">Also guided by Finally Home Agents</text>
   </g>
 
 </svg>

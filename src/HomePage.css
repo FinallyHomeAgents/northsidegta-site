@@ -421,8 +421,8 @@ main { padding-top: 100px; }
   font-weight: 500;
   color: #16a34a;
 }
-.hero__map-frame { position: relative; flex: 1; overflow: hidden; }
-.northside-map { width: 100%; height: 100%; object-fit: cover; }
+.hero__map-frame { position: relative; flex: 1; overflow: visible; }
+.northside-map { width: 100%; height: 100%; object-fit: cover; overflow: visible; }
 .map-legend {
   position: absolute;
   left: 14px;
