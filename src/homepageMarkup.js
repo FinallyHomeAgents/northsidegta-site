@@ -1031,7 +1031,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <div class="agent-intro__copy">
           <p class="section-eyebrow">The team behind NorthSide GTA</p>
           <h2 class="section-heading" id="agent-heading">We live here. We work here.</h2>
-          <p class="agent-intro__body">Matthew and Landon are the Finally Home Agents behind NorthSide GTA. They know which streets flood in spring, where the best trails are, and what it actually feels like to live in each of these communities. When you're making one of the biggest decisions of your life, that kind of local knowledge matters.</p>
+          <p class="agent-intro__body">For brothers Matthew and Landon, NorthSide GTA is personal.<br><br>It’s where they <span class="text-brand-green font-bold">live</span>, <span class="text-brand-green font-bold">work</span>, <span class="text-brand-green font-bold">raise their families</span>, <span class="text-brand-green font-bold">golf</span>, and spend their time. That perspective shapes how they guide clients — helping people look beyond homes and prices to understand the <span class="text-brand-green font-bold">communities</span>, lifestyle, and <span class="text-brand-green font-bold">long-term fit</span> behind each move.</p>
           <div class="agent-intro__contacts">
             <a href="https://wa.me/16476684646" class="btn btn--whatsapp">WhatsApp us</a>
             <a href="tel:+16476684646" class="btn btn--outline-green">Matthew · 647-668-4646</a>
