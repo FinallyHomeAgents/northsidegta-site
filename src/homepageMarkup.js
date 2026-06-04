@@ -855,29 +855,16 @@ export const HOMEPAGE_MARKUP = String.raw`
   <section class="agent-intro" aria-labelledby="agent-heading">
     <div class="section-inner section-inner--narrow">
       <div class="agent-intro__grid">
-        <div class="agent-intro__photo" role="img" aria-label="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate">
-          <div class="agent-intro__photo-grid">
-            <figure class="agent-intro__portrait">
-              <img
-                src="/Images/matthew.jpg"
-                alt=""
-                width="400" height="600"
-                loading="lazy"
-                class="agent-intro__img"
-              >
-              <figcaption>Matthew Mulhall</figcaption>
-            </figure>
-            <figure class="agent-intro__portrait">
-              <img
-                src="/Images/landon.jpg"
-                alt=""
-                width="400" height="600"
-                loading="lazy"
-                class="agent-intro__img"
-              >
-              <figcaption>Landon Mulhall</figcaption>
-            </figure>
-          </div>
+        <div class="agent-intro__photo">
+          <figure class="agent-intro__team-card">
+            <img
+              src="/assets/homepage/matthew-landon-northside-gta.jpg"
+              alt="Matthew Mulhall and Landon Mulhall of Finally Home Agents — NorthSide GTA real estate"
+              width="1484" height="1060"
+              loading="lazy"
+              class="agent-intro__img"
+            >
+          </figure>
         </div>
         <div class="agent-intro__copy">
           <p class="section-eyebrow">The team behind NorthSide GTA</p>
