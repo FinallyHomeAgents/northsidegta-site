@@ -528,24 +528,13 @@ main { padding-top: 100px; }
 .focus-community-rail__tile img,
 .focus-community-rail__logo {
   display: block;
-  width: 96%;
-  max-width: 116px;
-  height: 82px;
+  width: auto;
+  height: auto;
+  max-width: 90%;
+  max-height: 78%;
   margin: auto;
   object-fit: contain;
   object-position: center;
-}
-.focus-community-rail__logo--georgina,
-.focus-community-rail__logo--east-gwillimbury,
-.focus-community-rail__logo--scugog {
-  width: 98%;
-  max-width: 118px;
-}
-.focus-community-rail__logo--aurora,
-.focus-community-rail__logo--newmarket,
-.focus-community-rail__logo--stouffville,
-.focus-community-rail__logo--uxbridge {
-  width: 94%;
 }
 .focus-community-rail__tile span {
   max-width: 100%;
@@ -574,15 +563,10 @@ main { padding-top: 100px; }
   }
   .focus-community-rail__tile img,
   .focus-community-rail__logo {
-    width: 92%;
-    max-width: 98px;
-    height: 76px;
-  }
-  .focus-community-rail__logo--georgina,
-  .focus-community-rail__logo--east-gwillimbury,
-  .focus-community-rail__logo--scugog {
-    width: 94%;
-    max-width: 100px;
+    width: auto;
+    height: auto;
+    max-width: 90%;
+    max-height: 78%;
   }
 }
 @media (min-width: 1280px) {
@@ -691,23 +675,16 @@ main { padding-top: 100px; }
 }
 .community-card__img {
   display: block;
-  width: 100%;
-  height: 100%;
-  max-width: 78%;
-  max-height: 70%;
+  width: auto;
+  height: auto;
+  max-width: 82%;
+  max-height: 76%;
   margin: auto;
   object-fit: contain;
   object-position: center;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 .community-card:hover .community-card__img { transform: scale(1.02); filter: saturate(1.03); }
-.community-card__logo--georgina,
-.community-card__logo--east-gwillimbury,
-.community-card__logo--scugog { max-width: 82%; }
-.community-card__logo--aurora,
-.community-card__logo--newmarket,
-.community-card__logo--stouffville,
-.community-card__logo--uxbridge { max-width: 76%; }
 
 .community-card__body { display: flex; flex-direction: column; flex: 1; padding: 20px; }
 .community-card__name { font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--ns-emerald-900); }
