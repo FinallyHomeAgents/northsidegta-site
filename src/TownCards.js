@@ -1,15 +1,15 @@
 // src/TownCards.js
 import React from "react";
 
-/*  Make sure each JPG exists in public/Images/towns/  */
+/*  Uses existing NorthSide GTA town logo assets in public/assets/town-logos/.  */
 const towns = [
-  { name: "Georgina",         image: "georgina.jpg" },
-  { name: "Uxbridge",         image: "uxbridge.jpg" },
-  { name: "East Gwillimbury", image: "east-gwillimbury.jpg" },
-  { name: "Newmarket",        image: "newmarket.jpg" },
-  { name: "Stouffville",      image: "stouffville.jpg" },
-  { name: "Aurora",           image: "aurora.jpg" },
-  { name: "Scugog",           image: "scugog.jpg" },
+  { name: "Georgina",         image: "georgina.webp" },
+  { name: "Uxbridge",         image: "uxbridge.webp" },
+  { name: "East Gwillimbury", image: "east-gwillimbury.webp" },
+  { name: "Newmarket",        image: "newmarket.webp" },
+  { name: "Stouffville",      image: "stouffville.webp" },
+  { name: "Aurora",           image: "aurora.webp" },
+  { name: "Scugog",           image: "scugog.webp" },
 ];
 
 export default function TownCards() {
@@ -28,9 +28,9 @@ export default function TownCards() {
             {/* Perfect square image wrapper */}
             <div className="aspect-square">
               <img
-                src={`/Images/towns/${image}`}
+                src={`/assets/town-logos/${image}`}
                 alt={name}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-center p-6"
               />
             </div>
 
