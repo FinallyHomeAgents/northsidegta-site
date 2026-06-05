@@ -659,7 +659,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/georgina" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/georgina.jpg" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/georgina.webp" alt="Georgina official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--georgina">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Georgina</h3>
@@ -681,7 +681,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/east-gwillimbury" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--east-gwillimbury">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">East Gwillimbury</h3>
@@ -703,7 +703,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/newmarket" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/newmarket.jpg" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/newmarket.webp" alt="Newmarket official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--newmarket">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Newmarket</h3>
@@ -725,7 +725,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/aurora" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/aurora.jpg" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/aurora.webp" alt="Aurora official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--aurora">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Aurora</h3>
@@ -747,7 +747,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/stouffville" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/stouffville.jpg" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/stouffville.webp" alt="Whitchurch-Stouffville official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--stouffville">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Whitchurch-Stouffville</h3>
@@ -769,7 +769,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/uxbridge" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--uxbridge">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Uxbridge</h3>
@@ -791,7 +791,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/scugog" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/scugog.jpg" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/scugog.webp" alt="Scugog official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--scugog">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Scugog</h3>

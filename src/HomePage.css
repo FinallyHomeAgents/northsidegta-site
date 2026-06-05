@@ -680,9 +680,34 @@ main { padding-top: 100px; }
 .community-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(35,71,10,0.1); }
 .community-card__link { display: flex; flex-direction: column; flex: 1; text-decoration: none; color: inherit; }
 
-.community-card__img-wrap { aspect-ratio: 16/10; overflow: hidden; background: #dcfce7; }
-.community-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.community-card:hover .community-card__img { transform: scale(1.04); }
+.community-card__img-wrap {
+  aspect-ratio: 16/10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f6f1e8 0%, #ebe4d5 100%);
+  padding: clamp(28px, 7%, 40px);
+}
+.community-card__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 78%;
+  max-height: 70%;
+  margin: auto;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.community-card:hover .community-card__img { transform: scale(1.02); filter: saturate(1.03); }
+.community-card__logo--georgina,
+.community-card__logo--east-gwillimbury,
+.community-card__logo--scugog { max-width: 82%; }
+.community-card__logo--aurora,
+.community-card__logo--newmarket,
+.community-card__logo--stouffville,
+.community-card__logo--uxbridge { max-width: 76%; }
 
 .community-card__body { display: flex; flex-direction: column; flex: 1; padding: 20px; }
 .community-card__name { font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--ns-emerald-900); }
