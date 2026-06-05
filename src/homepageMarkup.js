@@ -549,6 +549,40 @@ export const HOMEPAGE_MARKUP = String.raw`
           </div>
         </div>
 
+        <nav class="focus-community-rail" aria-label="NorthSide GTA focus communities">
+          <p class="focus-community-rail__label">NorthSide GTA focus communities</p>
+          <div class="focus-community-rail__track">
+            <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--georgina" src="/assets/town-logos/georgina.webp" alt="Georgina" width="720" height="300" loading="eager" decoding="async">
+              <span>Georgina</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--east-gwillimbury" src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury" width="720" height="300" loading="eager" decoding="async">
+              <span>East Gwillimbury</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--newmarket" src="/assets/town-logos/newmarket.webp" alt="Newmarket" width="720" height="300" loading="eager" decoding="async">
+              <span>Newmarket</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--aurora" src="/assets/town-logos/aurora.webp" alt="Aurora" width="720" height="300" loading="eager" decoding="async">
+              <span>Aurora</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--stouffville" src="/assets/town-logos/stouffville.webp" alt="Whitchurch-Stouffville" width="720" height="300" loading="eager" decoding="async">
+              <span>Stouffville</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--uxbridge" src="/assets/town-logos/uxbridge.webp" alt="Uxbridge" width="720" height="300" loading="eager" decoding="async">
+              <span>Uxbridge</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
+              <img class="focus-community-rail__logo focus-community-rail__logo--scugog" src="/assets/town-logos/scugog.webp" alt="Scugog" width="720" height="300" loading="eager" decoding="async">
+              <span>Scugog</span>
+            </a>
+          </div>
+        </nav>
+
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
           NorthSide GTA focus communities · guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
         </div>
@@ -625,7 +659,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/georgina" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/georgina.jpg" alt="Lake Simcoe lifestyle in Georgina — NorthSide GTA real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/georgina.webp" alt="Georgina official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--georgina">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Georgina</h3>
@@ -647,7 +681,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/east-gwillimbury" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury homes and growing communities in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--east-gwillimbury">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">East Gwillimbury</h3>
@@ -669,7 +703,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/newmarket" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/newmarket.jpg" alt="Newmarket neighbourhoods and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/newmarket.webp" alt="Newmarket official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--newmarket">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Newmarket</h3>
@@ -691,7 +725,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/aurora" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/aurora.jpg" alt="Aurora neighbourhoods and parks in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/aurora.webp" alt="Aurora official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--aurora">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Aurora</h3>
@@ -713,7 +747,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/stouffville" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/stouffville.jpg" alt="Stouffville community and real estate north of Toronto" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/stouffville.webp" alt="Whitchurch-Stouffville official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--stouffville">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Whitchurch-Stouffville</h3>
@@ -735,7 +769,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/uxbridge" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge trails and green space in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--uxbridge">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Uxbridge</h3>
@@ -757,7 +791,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <li class="community-card">
           <a href="/communities/scugog" class="community-card__link">
             <div class="community-card__img-wrap">
-              <img src="/Images/towns/scugog.jpg" alt="Scugog and Port Perry lakeside lifestyle in the NorthSide GTA" width="480" height="300" loading="lazy" class="community-card__img">
+              <img src="/assets/town-logos/scugog.webp" alt="Scugog official municipal logo" width="720" height="300" loading="lazy" class="community-card__img community-card__logo community-card__logo--scugog">
             </div>
             <div class="community-card__body">
               <h3 class="community-card__name">Scugog</h3>

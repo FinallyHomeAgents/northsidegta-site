@@ -314,6 +314,7 @@ main { padding-top: 100px; }
 }
 
 .hero__copy {
+  min-width: 0;
   position: relative;
   overflow: hidden;
   background: linear-gradient(145deg, #0a1a0b, #11240d, #1e3d08);
@@ -393,6 +394,7 @@ main { padding-top: 100px; }
 .google-reviews-strip__text span { font-size: 12px; color: rgba(209,250,229,0.7); }
 
 .hero__map-panel {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   background: #edeae0;
@@ -467,6 +469,126 @@ main { padding-top: 100px; }
     padding: 6px 8px;
   }
   .map-legend__item { font-size: 9px; }
+}
+
+.focus-community-rail {
+  border-top: 1px solid rgba(123, 113, 95, 0.14);
+  background: linear-gradient(180deg, #f2eee4 0%, #ebe6d9 100%);
+  padding: 12px 14px 14px;
+}
+.focus-community-rail__label {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #51613b;
+}
+.focus-community-rail__track {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  padding: 1px 2px 4px;
+}
+.focus-community-rail__tile {
+  flex: 0 0 clamp(104px, 13.5%, 120px);
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 1px solid rgba(123, 113, 95, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 252, 244, 0.82);
+  padding: 2px 2px 4px;
+  text-decoration: none;
+  color: #405232;
+  box-shadow: 0 8px 18px rgba(35, 71, 10, 0.045);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.focus-community-rail__tile:hover,
+.focus-community-rail__tile:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(35, 92, 13, 0.25);
+  background: rgba(255, 255, 250, 0.96);
+  box-shadow: 0 12px 22px rgba(35, 71, 10, 0.08);
+}
+.focus-community-rail__tile:focus-visible {
+  outline: 2px solid rgba(35, 92, 13, 0.42);
+  outline-offset: 2px;
+}
+.focus-community-rail__tile img,
+.focus-community-rail__logo {
+  display: block;
+  width: 96%;
+  max-width: 116px;
+  height: 82px;
+  margin: auto;
+  object-fit: contain;
+  object-position: center;
+}
+.focus-community-rail__logo--georgina,
+.focus-community-rail__logo--east-gwillimbury,
+.focus-community-rail__logo--scugog {
+  width: 98%;
+  max-width: 118px;
+}
+.focus-community-rail__logo--aurora,
+.focus-community-rail__logo--newmarket,
+.focus-community-rail__logo--stouffville,
+.focus-community-rail__logo--uxbridge {
+  width: 94%;
+}
+.focus-community-rail__tile span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+@media (max-width: 767px) {
+  .focus-community-rail {
+    padding: 11px 12px 13px;
+  }
+  .focus-community-rail__label {
+    text-align: left;
+  }
+  .focus-community-rail__track {
+    justify-content: flex-start;
+    gap: 7px;
+  }
+  .focus-community-rail__tile {
+    flex-basis: 104px;
+    min-height: 90px;
+    padding: 2px 2px 4px;
+  }
+  .focus-community-rail__tile img,
+  .focus-community-rail__logo {
+    width: 92%;
+    max-width: 98px;
+    height: 76px;
+  }
+  .focus-community-rail__logo--georgina,
+  .focus-community-rail__logo--east-gwillimbury,
+  .focus-community-rail__logo--scugog {
+    width: 94%;
+    max-width: 100px;
+  }
+}
+@media (min-width: 1280px) {
+  .focus-community-rail__track {
+    overflow-x: visible;
+  }
 }
 
 .hero__map-footer {
@@ -558,9 +680,34 @@ main { padding-top: 100px; }
 .community-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(35,71,10,0.1); }
 .community-card__link { display: flex; flex-direction: column; flex: 1; text-decoration: none; color: inherit; }
 
-.community-card__img-wrap { aspect-ratio: 16/10; overflow: hidden; background: #dcfce7; }
-.community-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.community-card:hover .community-card__img { transform: scale(1.04); }
+.community-card__img-wrap {
+  aspect-ratio: 16/10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f6f1e8 0%, #ebe4d5 100%);
+  padding: clamp(28px, 7%, 40px);
+}
+.community-card__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 78%;
+  max-height: 70%;
+  margin: auto;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.community-card:hover .community-card__img { transform: scale(1.02); filter: saturate(1.03); }
+.community-card__logo--georgina,
+.community-card__logo--east-gwillimbury,
+.community-card__logo--scugog { max-width: 82%; }
+.community-card__logo--aurora,
+.community-card__logo--newmarket,
+.community-card__logo--stouffville,
+.community-card__logo--uxbridge { max-width: 76%; }
 
 .community-card__body { display: flex; flex-direction: column; flex: 1; padding: 20px; }
 .community-card__name { font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--ns-emerald-900); }
