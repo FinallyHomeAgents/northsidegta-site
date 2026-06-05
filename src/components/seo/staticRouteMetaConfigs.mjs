@@ -143,6 +143,30 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
   {
+    route: "/communities",
+    meta: {
+      route: "/communities",
+      documentTitle: "NorthSide GTA Communities | Compare Towns North of Toronto",
+      title: "NorthSide GTA Communities | Compare Towns North of Toronto",
+      description:
+        "Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog with Matthew and Landon Mulhall of Finally Home Agents.",
+      canonicalUrl: "https://northsidegta.ca/communities",
+      ogType: "website",
+      ogImage: "https://northsidegta.ca/assets/homepage/northside-map.svg",
+      ogImageAlt: "NorthSide GTA community comparison map",
+      twitterCard: "summary_large_image",
+      twitterImage: "https://northsidegta.ca/assets/homepage/northside-map.svg",
+      twitterImageAlt: "NorthSide GTA community comparison map",
+      siteName: "NorthSide GTA",
+      additionalMeta: [
+        { name: "robots", content: "index, follow" },
+        { property: "og:locale", content: "en_CA" },
+        { name: "geo.region", content: "CA-ON" },
+        { name: "geo.placename", content: "NorthSide GTA, Ontario, Canada" },
+      ],
+    },
+  },
+  {
     route: "/community",
     meta: {
       route: "/community",

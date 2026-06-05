@@ -32,6 +32,7 @@ export default function Navigation() {
   ];
 
   const communitiesItems = [
+    { to: "/communities", label: "Compare Communities" },
     { to: "/tastehub", label: "NorthSide TasteHub™", badge: "NEW" },
     { to: "/community", label: "NorthSide Events Guide" },
     { divider: true },
