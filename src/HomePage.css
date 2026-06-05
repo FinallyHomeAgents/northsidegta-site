@@ -474,10 +474,10 @@ main { padding-top: 100px; }
 .focus-community-rail {
   border-top: 1px solid rgba(123, 113, 95, 0.14);
   background: linear-gradient(180deg, #f2eee4 0%, #ebe6d9 100%);
-  padding: 10px 16px 12px;
+  padding: 12px 16px 14px;
 }
 .focus-community-rail__label {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   text-align: center;
   font-size: 9px;
   font-weight: 800;
@@ -490,21 +490,25 @@ main { padding-top: 100px; }
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: 7px;
+  gap: 8px;
   max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  padding: 1px 2px 4px;
 }
 .focus-community-rail__tile {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 0 0 clamp(96px, 13%, 112px);
+  min-height: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  border: 1px solid rgba(123, 113, 95, 0.16);
-  border-radius: 12px;
-  background: rgba(255, 252, 244, 0.78);
-  padding: 7px 6px 6px;
+  gap: 5px;
+  border: 1px solid rgba(123, 113, 95, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 252, 244, 0.8);
+  padding: 8px 7px 7px;
   text-decoration: none;
   color: #405232;
   box-shadow: 0 8px 18px rgba(35, 71, 10, 0.045);
@@ -524,9 +528,10 @@ main { padding-top: 100px; }
 .focus-community-rail__tile img {
   display: block;
   width: 100%;
-  max-width: 74px;
-  height: 28px;
+  max-width: 96px;
+  height: 62px;
   object-fit: contain;
+  object-position: center;
 }
 .focus-community-rail__tile span {
   max-width: 100%;
@@ -539,29 +544,28 @@ main { padding-top: 100px; }
 }
 @media (max-width: 767px) {
   .focus-community-rail {
-    padding-inline: 12px;
+    padding: 11px 12px 13px;
   }
   .focus-community-rail__label {
     text-align: left;
   }
   .focus-community-rail__track {
     justify-content: flex-start;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    padding: 1px 2px 4px;
+    gap: 7px;
   }
   .focus-community-rail__tile {
-    flex: 0 0 104px;
+    flex-basis: 98px;
+    min-height: 84px;
+    padding: 7px 6px 6px;
+  }
+  .focus-community-rail__tile img {
+    max-width: 88px;
+    height: 58px;
   }
 }
-@media (min-width: 1024px) and (max-width: 1180px) {
-  .focus-community-rail__tile img {
-    max-width: 64px;
-    height: 25px;
-  }
-  .focus-community-rail__tile span {
-    font-size: 8px;
+@media (min-width: 1280px) {
+  .focus-community-rail__track {
+    overflow-x: visible;
   }
 }
 
