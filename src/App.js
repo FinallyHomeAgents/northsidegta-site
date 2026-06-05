@@ -8,6 +8,7 @@ import AboutPage        from "./AboutPage";
 import BuyersPage       from "./BuyersPage";
 import SellersPage      from "./SellersPage";
 import CommunityPage    from "./CommunityPage";
+import CommunitiesPage  from "./CommunitiesPage";
 import ContactPage      from "./ContactPage";
 import VipPage          from "./vip";
 import SignWithUsPage   from "./SignWithUsPage";
@@ -105,6 +106,7 @@ function App() {
           <Route path="/buyers"       element={<BuyersPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
           <Route path="/community"    element={<CommunityPage />} />
+          <Route path="/communities"  element={<CommunitiesPage />} />
           <Route path="/tastehub"     element={<TasteHubPage />} />
           <Route path="/tastehub/request-tabletop-sign" element={<TasteHubRequestTabletopSignPage />} />
           <Route path="/tastehub/:slug" element={<TasteHubPage />} />
