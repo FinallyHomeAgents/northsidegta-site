@@ -549,6 +549,40 @@ export const HOMEPAGE_MARKUP = String.raw`
           </div>
         </div>
 
+        <nav class="focus-community-rail" aria-label="NorthSide GTA focus communities">
+          <p class="focus-community-rail__label">NorthSide GTA focus communities</p>
+          <div class="focus-community-rail__track">
+            <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
+              <img src="/assets/town-logos/georgina.webp" alt="Georgina" width="720" height="300" loading="eager" decoding="async">
+              <span>Georgina</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
+              <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury" width="720" height="300" loading="eager" decoding="async">
+              <span>East Gwillimbury</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
+              <img src="/assets/town-logos/newmarket.webp" alt="Newmarket" width="720" height="300" loading="eager" decoding="async">
+              <span>Newmarket</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
+              <img src="/assets/town-logos/aurora.webp" alt="Aurora" width="720" height="300" loading="eager" decoding="async">
+              <span>Aurora</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
+              <img src="/assets/town-logos/stouffville.webp" alt="Whitchurch-Stouffville" width="720" height="300" loading="eager" decoding="async">
+              <span>Stouffville</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
+              <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge" width="720" height="300" loading="eager" decoding="async">
+              <span>Uxbridge</span>
+            </a>
+            <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
+              <img src="/assets/town-logos/scugog.webp" alt="Scugog" width="720" height="300" loading="eager" decoding="async">
+              <span>Scugog</span>
+            </a>
+          </div>
+        </nav>
+
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
           NorthSide GTA focus communities · guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
         </div>
