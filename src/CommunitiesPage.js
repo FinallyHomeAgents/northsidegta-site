@@ -1,6 +1,6 @@
 import React from "react";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
-import Navigation from "./Navigation";
+import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
 import LeadForm from "./components/LeadForm";
 import "./HomePage.css";
@@ -227,7 +227,7 @@ function CommunitiesPage() {
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </DynamicMetaTags>
 
-      <Navigation />
+      <HeaderShell />
       <main className="communities-page">
         <section className="communities-hero" aria-labelledby="communities-hero-heading">
           <div className="section-inner communities-hero__grid">
