@@ -148,11 +148,20 @@
   background: #f4f1e8;
   box-shadow: 0 26px 70px rgba(35,71,10,0.12);
 }
-.communities-map-card__object {
+.communities-map-card__inline,
+.communities-map-card__fallback {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border: 0;
+}
+.communities-map-card__inline svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.communities-map-card__fallback {
+  height: auto;
+  object-fit: contain;
 }
 .communities-map-card .map-legend { padding: 0 1rem 1rem; justify-content: center; }
 

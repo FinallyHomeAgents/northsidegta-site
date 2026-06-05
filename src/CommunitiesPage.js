@@ -145,6 +145,50 @@ const structuredData = {
   ],
 };
 
+
+function InlineNorthsideMap() {
+  const [svgMarkup, setSvgMarkup] = React.useState("");
+
+  React.useEffect(() => {
+    let isMounted = true;
+
+    fetch("/assets/homepage/northside-map.svg")
+      .then((response) => (response.ok ? response.text() : ""))
+      .then((markup) => {
+        if (!isMounted || !markup) return;
+        setSvgMarkup(markup.replaceAll('<a href="/communities/', '<a target="_top" href="/communities/'));
+      })
+      .catch(() => {
+        if (isMounted) setSvgMarkup("");
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!svgMarkup) {
+    return (
+      <img
+        className="communities-map-card__fallback"
+        src="/assets/homepage/northside-map.svg"
+        alt="NorthSide GTA map showing Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog"
+        width="1600"
+        height="900"
+        loading="lazy"
+      />
+    );
+  }
+
+  return (
+    <div
+      className="communities-map-card__inline"
+      aria-label="Interactive NorthSide GTA map with focus communities and nearby guided areas"
+      dangerouslySetInnerHTML={{ __html: svgMarkup }}
+    />
+  );
+}
+
 function TownLogoRail() {
   return (
     <nav className="communities-logo-rail" aria-label="Official town logos for NorthSide GTA communities">
@@ -250,14 +294,7 @@ function CommunitiesPage() {
               <p className="section-sub">Focus communities link to their town pages. Nearby guided areas are shown as contextual service areas only.</p>
             </div>
             <div className="communities-map-card">
-              <object
-                className="communities-map-card__object"
-                data="/assets/homepage/northside-map.svg"
-                type="image/svg+xml"
-                aria-label="Interactive NorthSide GTA map with focus communities and nearby guided areas"
-              >
-                <img src="/assets/homepage/northside-map.svg" alt="NorthSide GTA map showing Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog" width="1600" height="900" loading="lazy" />
-              </object>
+              <InlineNorthsideMap />
               <div className="map-legend" aria-label="Map legend">
                 <span className="map-legend__item"><span className="map-legend__dot map-legend__dot--focus" aria-hidden="true"></span>NorthSide GTA focus area</span>
                 <span className="map-legend__item"><span className="map-legend__dot map-legend__dot--served" aria-hidden="true"></span>Guidance also available nearby</span>
