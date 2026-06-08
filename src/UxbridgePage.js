@@ -184,7 +184,7 @@ const PAGE_BODY_HTML = `
 
 
 <!-- HERO -->
-<header class="hero" role="banner">
+<section class="hero" aria-label="Community hero">
   <img src="/Images/uxbridge-banner.jpg" alt="Uxbridge streetscape with historic buildings" class="hero-img" loading="eager">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-content">

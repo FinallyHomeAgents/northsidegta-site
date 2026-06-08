@@ -117,9 +117,9 @@ export default function Navigation() {
                 }, 50);
               }}
             >
-              <NavLink
-                to="/communities"
-                className={() => `
+              <button
+                type="button"
+                className={`
                   relative inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[13px] font-semibold tracking-[0.01em]
                   transition duration-150 hover:bg-emerald-50 hover:text-brand-green focus-visible:outline focus-visible:outline-2
                   focus-visible:outline-offset-4 focus-visible:outline-brand-green/70
@@ -129,16 +129,17 @@ export default function Navigation() {
                 aria-haspopup="true"
                 aria-expanded={communitiesOpen}
                 onFocus={openCommunitiesMenu}
+                onClick={() => setCommunitiesOpen((open) => !open)}
               >
                 <span>Communities</span>
                 <svg className={`h-3.5 w-3.5 transition-transform duration-150 ${communitiesOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
                 </svg>
-              </NavLink>
+              </button>
 
               <div
-                className={`absolute left-0 top-full mt-3 w-[300px] rounded-3xl border border-emerald-100 bg-white p-2.5 shadow-[0_22px_60px_rgba(15,23,42,0.14)] ring-1 ring-black/[0.03] transition-all duration-150 ease-out ${
-                  communitiesOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
+                className={`absolute left-0 top-full z-[80] mt-3 w-[300px] rounded-3xl border border-emerald-100 bg-white p-2.5 shadow-[0_22px_60px_rgba(15,23,42,0.14)] ring-1 ring-black/[0.03] transition-all duration-150 ease-out ${
+                  communitiesOpen ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none -translate-y-1 opacity-0"
                 }`}
               >
                 <div className="px-3 pb-2 pt-1">
@@ -202,7 +203,7 @@ export default function Navigation() {
       <div
         id="mobile-navigation"
         className={`fixed inset-x-0 top-[76px] z-50 max-h-[calc(100vh-76px)] overflow-y-auto border-b border-emerald-100 bg-white px-4 pb-6 pt-3 shadow-[0_24px_60px_rgba(15,23,42,0.16)] transition duration-200 ease-out xl:hidden ${
-          menuOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-3 opacity-0"
+          menuOpen ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none -translate-y-3 opacity-0"
         }`}
       >
         <nav className="mx-auto grid max-w-2xl gap-2" aria-label="Mobile navigation">

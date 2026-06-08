@@ -184,7 +184,7 @@ const PAGE_BODY_HTML = `
 
 
 <!-- HERO -->
-<header class="hero" role="banner">
+<section class="hero" aria-label="Community hero">
   <img src="/Images/eastgwillimbury-banner.jpg" alt="Neighbourhood streetscape in East Gwillimbury" class="hero-img" loading="eager">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-content">

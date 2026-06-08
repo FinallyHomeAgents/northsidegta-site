@@ -380,7 +380,7 @@ const PAGE_BODY_HTML = `
 <!-- NAV -->
 
 <!-- HERO -->
-<header class="hero" role="banner">
+<section class="hero" aria-label="Community hero">
   <img src="/uploads/northside-gta-finally-home-agents-hero.jpg"
        onerror="this.src='https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg'"
        alt="Aerial view of communities along the NorthSide GTA corridor" class="hero-img" loading="eager">
