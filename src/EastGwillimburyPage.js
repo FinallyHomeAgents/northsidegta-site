@@ -195,13 +195,13 @@ const PAGE_BODY_HTML = `
     <h1>Living in East Gwillimbury</h1>
     <p class="hero-sub">Newer communities, larger lots, family-focused growth, and quick access to Highway 404 across Sharon, Queensville, Holland Landing, and Mount Albert.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1150K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$1,150,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">50 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">30d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">4.5 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -387,10 +387,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1150K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1550K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,150,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,550,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">30d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">98%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">4.5</span></div>

@@ -195,13 +195,13 @@ const PAGE_BODY_HTML = `
     <h1>Living in Scugog</h1>
     <p class="hero-sub">Port Perry heritage, Lake Scugog waterfront, small-town character, and a slower pace within reach of the GTA.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$960K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$960,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">75 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">36d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">5.5 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -385,10 +385,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$960K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1099K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$762K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$800K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$960,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,099,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$762,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$800,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">36d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">98%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">5.5</span></div>

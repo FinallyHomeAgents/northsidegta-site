@@ -195,13 +195,13 @@ const PAGE_BODY_HTML = `
     <h1>Living in Georgina</h1>
     <p class="hero-sub">Lake Simcoe, more space, shoreline communities, beaches, marinas, and one of York Region's most accessible price points.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$875K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$875,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">65 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">38d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">7.5 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -387,10 +387,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$875K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$910K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$815K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$590K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$875,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$910,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$815,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$590,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">38d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">97%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">7.5</span></div>

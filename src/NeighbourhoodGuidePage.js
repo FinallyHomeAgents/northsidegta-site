@@ -397,7 +397,7 @@ const PAGE_BODY_HTML = `
       <a href="#lead-form" class="btn-secondary" onclick="scrollToLead();return false;">Get local guidance</a>
     </div>
   </div>
-</header>
+</section>
 
 <!-- INTRO / WHY THIS GUIDE -->
 <section class="intro-section container" aria-labelledby="intro-h">
@@ -735,8 +735,8 @@ const PAGE_BODY_HTML = `
           <label for="f_bg">Budget range</label>
           <select id="f_bg">
             <option value="">Select budget</option>
-            <option>Under $800K</option>
-            <option>$800K – $1M</option>
+            <option>Under $800,000</option>
+            <option>$800,000 – $1M</option>
             <option>$1M – $1.3M</option>
             <option>$1.3M – $1.7M</option>
             <option>$1.7M – $2.5M</option>

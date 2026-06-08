@@ -195,13 +195,13 @@ const PAGE_BODY_HTML = `
     <h1>Living in Stouffville</h1>
     <p class="hero-sub">A fast-growing family town with GO access, newer homes, parks, schools, and a Main Street that still feels local.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1114K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$1,114,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">40 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">28d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">6.0 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -393,10 +393,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1114K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1280K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,114,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,280,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">28d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">99%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">6.0</span></div>

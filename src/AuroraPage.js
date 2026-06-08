@@ -195,13 +195,13 @@ const PAGE_BODY_HTML = `
     <h1>Living in Aurora</h1>
     <p class="hero-sub">Established neighbourhoods, strong schools, heritage streets, GO access, and one of the most complete lifestyles in the NorthSide GTA.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1122K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$1,122,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">35 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">24d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">4.2 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -397,10 +397,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1122K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1561K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$918K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$720K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,122,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,561,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$918,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$720,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">24d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">97%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">4.2</span></div>
