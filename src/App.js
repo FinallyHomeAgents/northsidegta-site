@@ -57,6 +57,7 @@ import GeorginaPage from "./GeorginaPage";
 import UxbridgePage from "./UxbridgePage";
 import ScugogPage from "./ScugogPage";
 import NeighbourhoodGuidePage from "./NeighbourhoodGuidePage";
+import HeaderShell, { HeaderShellProvider } from "./components/HeaderShell";
 
 // Load the town slugs right here (no helper to avoid any cyclic import)
 import towns from "./towns.json";
@@ -89,8 +90,10 @@ function App() {
   return (
     <div data-test="app-shell">
       <Router>
+        <HeaderShellProvider>
         <GlobalStructuredData />
         <GlobalDefaultMeta />
+        <HeaderShell global />
         <Routes>
           {/* Core pages */}
           <Route path="/"             element={<HomePage />} />
@@ -162,6 +165,7 @@ function App() {
           {/* Catch-all for any slug not yet in towns.json (optional) */}
           <Route path="/:slug" element={<TownPage />} />
         </Routes>
+        </HeaderShellProvider>
       </Router>
       <Analytics />
     </div>

@@ -31,13 +31,13 @@ const CATEGORY_ORDER = [
 ];
 
 const TOWN_LOGO_PATHS = {
-  georgina: "/Images/towns/georgina.jpg",
-  "east-gwillimbury": "/Images/towns/east-gwillimbury.jpg",
-  newmarket: "/Images/towns/newmarket.jpg",
-  aurora: "/Images/towns/aurora.jpg",
-  stouffville: "/Images/towns/stouffville.jpg",
-  scugog: "/Images/towns/scugog.jpg",
-  uxbridge: "/Images/towns/uxbridge.jpg",
+  georgina: "/assets/town-logos/georgina.webp",
+  "east-gwillimbury": "/assets/town-logos/east-gwillimbury.webp",
+  newmarket: "/assets/town-logos/newmarket.webp",
+  aurora: "/assets/town-logos/aurora.webp",
+  stouffville: "/assets/town-logos/stouffville.webp",
+  scugog: "/assets/town-logos/scugog.webp",
+  uxbridge: "/assets/town-logos/uxbridge.webp",
 };
 
 /* ────────────────────────────────────────────────────────────

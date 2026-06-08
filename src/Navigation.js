@@ -1,322 +1,280 @@
 // src/Navigation.js
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+
+const NAV_LINKS = [
+  { to: "/", label: "Home", end: true },
+  { to: "/about", label: "About" },
+  { to: "/buyers", label: "Buyers" },
+  { to: "/sellers", label: "Sellers" },
+  { to: "/insights", label: "Insights" },
+  { to: "/media", label: "Videos" },
+  { to: "/contact", label: "Contact" },
+];
+
+const COMMUNITIES_ITEMS = [
+  { to: "/tastehub", label: "NorthSide TasteHub™" },
+  { to: "/community", label: "NorthSide Events Guide" },
+  { to: "/communities/uxbridge", label: "Uxbridge", icon: "/assets/town-logos/uxbridge.webp" },
+  { to: "/communities/georgina", label: "Georgina", icon: "/assets/town-logos/georgina.webp" },
+  { to: "/communities/stouffville", label: "Stouffville", icon: "/assets/town-logos/stouffville.webp" },
+  { to: "/communities/east-gwillimbury", label: "East Gwillimbury", icon: "/assets/town-logos/east-gwillimbury.webp" },
+  { to: "/communities/newmarket", label: "Newmarket", icon: "/assets/town-logos/newmarket.webp" },
+  { to: "/communities/aurora", label: "Aurora", icon: "/assets/town-logos/aurora.webp" },
+  { to: "/communities/scugog", label: "Scugog", icon: "/assets/town-logos/scugog.webp" },
+];
+
+const isCommunityPath = (pathname) => (
+  pathname === "/communities" ||
+  pathname.startsWith("/communities/") ||
+  pathname === "/community" ||
+  pathname.startsWith("/community/") ||
+  pathname === "/tastehub" ||
+  pathname.startsWith("/tastehub/")
+);
+
+const navLinkClass = ({ isActive }) => `
+  relative inline-flex items-center rounded-full px-2 py-2 text-[13px] font-semibold tracking-[0.01em]
+  transition duration-150 hover:bg-emerald-50 hover:text-brand-green focus-visible:outline focus-visible:outline-2
+  focus-visible:outline-offset-4 focus-visible:outline-brand-green/70
+  after:absolute after:inset-x-2 after:-bottom-0.5 after:h-[2px] after:origin-left after:rounded-full after:bg-brand-green
+  after:transition-transform after:duration-150 ${isActive ? "text-brand-green after:scale-x-100" : "text-slate-700 after:scale-x-0 hover:after:scale-x-100"}
+`;
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [communitiesOpen, setCommunitiesOpen] = useState(false);
+  const [mobileCommunitiesOpen, setMobileCommunitiesOpen] = useState(false);
   const communitiesWrapperRef = useRef(null);
+  const location = useLocation();
+  const communityActive = isCommunityPath(location.pathname);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-    };
+    setMenuOpen(false);
+    setCommunitiesOpen(false);
+    setMobileCommunitiesOpen(false);
+  }, [location.pathname]);
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", menuOpen);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      document.body.classList.remove("overflow-hidden");
     };
-  }, []);
-
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/about", label: "About" },
-    { to: "/buyers", label: "Buyers" },
-    { to: "/sellers", label: "Sellers" },
-    { to: "/insights", label: "Insights" },
-    { to: "/media", label: "Videos + Reels" },
-    { to: "/contact", label: "Contact" },
-  ];
-
-  const communitiesItems = [
-    { to: "/communities", label: "Compare Communities" },
-    { to: "/tastehub", label: "NorthSide TasteHub™", badge: "NEW" },
-    { to: "/community", label: "NorthSide Events Guide" },
-    { divider: true },
-    { to: "/communities/uxbridge", label: "Uxbridge" },
-    { to: "/communities/georgina", label: "Georgina" },
-    { to: "/communities/stouffville", label: "Stouffville" },
-    { to: "/communities/east-gwillimbury", label: "East Gwillimbury" },
-    { to: "/communities/newmarket", label: "Newmarket" },
-    { to: "/communities/aurora", label: "Aurora" },
-    { to: "/communities/scugog", label: "Scugog" },
-  ];
-
-  const [communitiesOpen, setCommunitiesOpen] = useState(false);
-
-  const toggleMenu = () => {
-    if (menuOpen) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setMenuOpen(false);
-        setIsAnimating(false);
-      }, 300);
-    } else {
-      setMenuOpen(true);
-    }
-  };
+  }, [menuOpen]);
 
   const closeCommunitiesMenu = () => setCommunitiesOpen(false);
   const openCommunitiesMenu = () => setCommunitiesOpen(true);
 
   return (
-    <>
+    <div className="bg-white">
       <style>{`
-        @keyframes btnLift {
-          0% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-          100% { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
-        }
-
-        @keyframes taglineFadeUp {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-taglineFadeUp {
-          animation: taglineFadeUp 0.6s ease-out 0.6s both;
-        }
-
-        .header-purpose-line {
-          background-image: linear-gradient(90deg, #32610E 0%, #22440A 100%);
-          background-size: 0% 2px;
-          background-repeat: no-repeat;
-          background-position: left bottom;
-          transition: background-size 0.3s ease-in-out;
-        }
-
-        .header-purpose-line:hover {
-          background-size: 100% 2px;
-        }
-
         @media (prefers-reduced-motion: reduce) {
-          .animate-taglineFadeUp {
-            animation: none;
-          }
-
-          .header-purpose-line {
-            transition: none;
+          .northside-global-header * {
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
+            animation-duration: 0.01ms !important;
           }
         }
       `}</style>
 
-      <header
-        className="
-          sticky top-0 z-50
-          bg-gradient-to-b from-white to-[#f8faf8]/60
-          backdrop-blur supports-[backdrop-filter]:bg-white/85
-          border-b border-emerald-100
-          shadow-sm
-        "
-      >
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
-            {/* Brand (badge only) */}
-            <Link
-              to="/"
-              className="flex items-center hover:opacity-90 transition flex-shrink-0"
-              aria-label="NorthSide GTA - Home"
-            >
-              <img
-                src="/Images/newtoolbar.png"
-                alt="NorthSide GTA navigation badge"
-                className="h-10 sm:h-12 w-auto flex-shrink-0"
-                loading="eager"
-                decoding="async"
-              />
-            </Link>
+      <div className="northside-global-header border-b border-emerald-100/80 bg-white shadow-[0_1px_18px_rgba(15,23,42,0.06)]">
+        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[80px] lg:px-8">
+          <Link
+            to="/"
+            className="group flex min-w-0 items-center gap-3 rounded-2xl pr-3 transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70 sm:gap-3"
+            aria-label="NorthSide GTA home"
+          >
+            <img
+              src="/Images/fha-badge.png"
+              alt="Finally Home Agents logo"
+              className="hidden h-10 w-10 flex-shrink-0 rounded-full object-contain md:block"
+              loading="eager"
+              decoding="async"
+            />
+            <span className="flex min-w-0 flex-col leading-none">
+              <span className="whitespace-nowrap text-[22px] font-semibold tracking-[-0.035em] text-slate-950 sm:text-[24px]">
+                NorthSide GTA
+              </span>
+              <span className="mt-1 max-w-[210px] truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-green/80 sm:max-w-none sm:text-[11px]">
+                Served by Finally Home Agents
+              </span>
+            </span>
+          </Link>
 
-            <p
-              className={`hidden md:block header-purpose-line font-semibold tracking-wide text-[#32610E] leading-snug max-w-[15rem] whitespace-normal transition-all duration-300 ease-out animate-taglineFadeUp cursor-default select-none ${
-                scrolled ? "text-[13px] opacity-75" : "text-sm opacity-100"
-              }`}
+          <nav className="hidden flex-1 items-center justify-end gap-1 text-slate-700 xl:flex" aria-label="Primary navigation">
+            <div
+              ref={communitiesWrapperRef}
+              className="relative"
+              onMouseEnter={openCommunitiesMenu}
+              onMouseLeave={closeCommunitiesMenu}
+              onBlur={() => {
+                setTimeout(() => {
+                  const wrapper = communitiesWrapperRef.current;
+                  if (wrapper && !wrapper.contains(document.activeElement)) {
+                    closeCommunitiesMenu();
+                  }
+                }, 50);
+              }}
             >
-              Helping GTA buyers find their next home north of Toronto — with us.
-            </p>
-          </div>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex flex-1 items-center justify-end text-gray-700 font-medium md:ml-8">
-            <div className="flex items-center space-x-6 lg:space-x-8 mr-4">
-              <div
-                ref={communitiesWrapperRef}
-                className="relative"
-                onMouseEnter={openCommunitiesMenu}
-                onMouseLeave={closeCommunitiesMenu}
-                onBlur={() => {
-                  setTimeout(() => {
-                    const wrapper = communitiesWrapperRef.current;
-                    if (wrapper && !wrapper.contains(document.activeElement)) {
-                      closeCommunitiesMenu();
-                    }
-                  }, 50);
-                }}
+              <button
+                type="button"
+                className={`
+                  relative inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[13px] font-semibold tracking-[0.01em]
+                  transition duration-150 hover:bg-emerald-50 hover:text-brand-green focus-visible:outline focus-visible:outline-2
+                  focus-visible:outline-offset-4 focus-visible:outline-brand-green/70
+                  after:absolute after:inset-x-2 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-brand-green after:transition-transform after:duration-150
+                  ${communityActive || communitiesOpen ? "bg-emerald-50 text-brand-green after:scale-x-100" : "text-slate-700 after:scale-x-0 hover:after:scale-x-100"}
+                `}
+                aria-haspopup="true"
+                aria-expanded={communitiesOpen}
+                onFocus={openCommunitiesMenu}
+                onClick={() => setCommunitiesOpen((open) => !open)}
               >
-                <button
-                  type="button"
-                  className="
-                    relative text-[15px] tracking-wide
-                    transition duration-200
-                    hover:text-brand-green
-                    after:content-[''] after:absolute after:-bottom-1 after:left-0
-                    after:w-0 after:h-[2px] after:bg-brand-green after:transition-all after:duration-200
-                    hover:after:w-full
-                  "
-                  aria-haspopup="true"
-                  aria-expanded={communitiesOpen}
-                  onFocus={openCommunitiesMenu}
-                  onClick={() => setCommunitiesOpen((prev) => !prev)}
-                >
-                  Communities
-                </button>
+                <span>Communities</span>
+                <svg className={`h-3.5 w-3.5 transition-transform duration-150 ${communitiesOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                </svg>
+              </button>
 
-                <div
-                  className={`
-                    absolute right-0 mt-3 w-[320px] rounded-2xl border border-slate-200 bg-white p-3 shadow-xl
-                    transition-all duration-200 ease-out
-                    ${communitiesOpen ? "visible opacity-100 translate-y-0" : "invisible opacity-0 -translate-y-1"}
-                  `}
-                >
-                  <div className="space-y-1">
-                    {communitiesItems.map((item, idx) => {
-                      if (item.divider) {
-                        return <div key={`divider-${idx}`} className="my-2 border-t border-slate-100" aria-hidden />;
-                      }
-
-                      return (
-                        <Link
-                          key={item.to}
-                          to={item.to}
-                          className="
-                            flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-[15px]
-                            text-slate-700 transition hover:bg-emerald-50 hover:text-brand-green
-                          "
-                          onClick={closeCommunitiesMenu}
-                        >
-                          <span className="leading-tight">{item.label}</span>
-                          {item.badge && (
-                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
-                              {item.badge}
-                            </span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
+              <div
+                className={`absolute left-0 top-full z-[80] mt-3 w-[300px] rounded-3xl border border-emerald-100 bg-white p-2.5 shadow-[0_22px_60px_rgba(15,23,42,0.14)] ring-1 ring-black/[0.03] transition-all duration-150 ease-out ${
+                  communitiesOpen ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none -translate-y-1 opacity-0"
+                }`}
+              >
+                <div className="px-3 pb-2 pt-1">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Explore NorthSide</p>
+                </div>
+                <div className="grid gap-1">
+                  {COMMUNITIES_ITEMS.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      className={({ isActive }) => `flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition duration-150 hover:bg-emerald-50 hover:text-brand-green ${
+                        isActive ? "bg-emerald-50 text-brand-green" : "text-slate-700"
+                      }`}
+                      onClick={closeCommunitiesMenu}
+                    >
+                      {item.icon ? (
+                        <img src={item.icon} alt="" className="h-7 w-7 flex-shrink-0 rounded-full object-contain p-0.5 ring-1 ring-emerald-100" loading="lazy" />
+                      ) : (
+                        <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-50 text-xs text-brand-green ring-1 ring-emerald-100">NS</span>
+                      )}
+                      <span>{item.label}</span>
+                    </NavLink>
+                  ))}
                 </div>
               </div>
-
-              {navLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className="
-                    relative text-[15px] tracking-wide
-                    transition duration-200
-                    hover:text-brand-green
-                    after:content-[''] after:absolute after:-bottom-1 after:left-0
-                    after:w-0 after:h-[2px] after:bg-brand-green after:transition-all after:duration-200
-                    hover:after:w-full
-                  "
-                >
-                  {l.label}
-                </Link>
-              ))}
             </div>
 
-            {/* Let’s Talk button */}
+            {NAV_LINKS.map((link) => (
+              <NavLink key={link.to} to={link.to} end={link.end} className={navLinkClass}>
+                {link.label}
+              </NavLink>
+            ))}
+
             <Link
               to="/contact"
-              className="
-                ml-2 inline-flex items-center
-                rounded-lg bg-brand-green px-4 py-2
-                text-white font-semibold shadow-sm
-                transition
-                hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)]
-                hover:-translate-y-[1px]
-                hover:shadow-md
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2
-              "
-              onMouseEnter={(e) => {
-                e.currentTarget.style.animation = "btnLift 200ms ease-out forwards";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.animation = "none";
-              }}
+              className="ml-2 inline-flex items-center justify-center rounded-full bg-brand-green px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(50,97,14,0.22)] transition duration-150 hover:-translate-y-0.5 hover:bg-brand-green-dark hover:shadow-[0_14px_28px_rgba(50,97,14,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70"
             >
-              Let’s&nbsp;Talk
+              Let’s Talk
             </Link>
           </nav>
 
-          {/* Mobile toggle */}
           <button
-            className="md:hidden text-gray-700 focus:outline-none"
-            onClick={toggleMenu}
-            aria-label="Toggle Menu"
+            type="button"
+            className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-emerald-100 bg-white text-slate-700 shadow-sm transition hover:bg-emerald-50 hover:text-brand-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green/70 xl:hidden"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               {menuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
               )}
             </svg>
           </button>
         </div>
+      </div>
 
-        {/* Mobile dropdown */}
-        {(menuOpen || isAnimating) && (
-          <div
-            className={`md:hidden px-4 pb-4 ${
-              isAnimating ? "animate-slideUp" : "animate-slideDown"
+      <div
+        id="mobile-navigation"
+        className={`fixed inset-x-0 top-[76px] z-50 max-h-[calc(100vh-76px)] overflow-y-auto border-b border-emerald-100 bg-white px-4 pb-6 pt-3 shadow-[0_24px_60px_rgba(15,23,42,0.16)] transition duration-200 ease-out xl:hidden ${
+          menuOpen ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none -translate-y-3 opacity-0"
+        }`}
+      >
+        <nav className="mx-auto grid max-w-2xl gap-2" aria-label="Mobile navigation">
+          <button
+            type="button"
+            className={`flex min-h-12 w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-base font-semibold transition duration-150 ${
+              communityActive || mobileCommunitiesOpen ? "bg-emerald-50 text-brand-green" : "text-slate-800 hover:bg-emerald-50 hover:text-brand-green"
             }`}
+            onClick={() => setMobileCommunitiesOpen((open) => !open)}
+            aria-expanded={mobileCommunitiesOpen}
           >
-            <ul className="space-y-4 text-gray-700 font-medium">
-              {navLinks.map((l) => (
-                <li key={l.to}>
-                  <Link to={l.to} onClick={toggleMenu} className="block text-[15px] leading-tight">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/contact"
-                  onClick={toggleMenu}
-                  className="block rounded-md bg-brand-green px-4 py-2 text-center text-white transition hover:bg-[linear-gradient(90deg,#32610E_0%,#22440A_100%)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green/50 focus-visible:ring-offset-2"
+            <span>Communities</span>
+            <svg className={`h-4 w-4 transition-transform duration-150 ${mobileCommunitiesOpen ? "rotate-180" : ""}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+            </svg>
+          </button>
+
+          {mobileCommunitiesOpen && (
+            <div className="grid gap-1 rounded-3xl border border-emerald-100 bg-emerald-50/40 p-2">
+              {COMMUNITIES_ITEMS.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) => `flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition duration-150 ${
+                    isActive ? "bg-white text-brand-green shadow-sm" : "text-slate-700 hover:bg-white hover:text-brand-green"
+                  }`}
                 >
-                  Let’s&nbsp;Talk
-                </Link>
-              </li>
-            </ul>
-
-            <div className="mt-6 space-y-3 rounded-2xl border border-slate-100 bg-white/70 p-4 text-sm text-slate-700 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">Communities</p>
-              <ul className="space-y-2">
-                {communitiesItems.map((item, idx) => {
-                  if (item.divider) {
-                    return <li key={`divider-${idx}`} className="border-t border-slate-100 pt-2" aria-hidden />;
-                  }
-
-                  return (
-                    <li key={item.to}>
-                      <Link
-                        to={item.to}
-                        onClick={toggleMenu}
-                        className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 text-[15px] leading-tight hover:bg-emerald-50 hover:text-brand-green"
-                      >
-                        <span>{item.label}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+                  {item.icon ? (
+                    <img src={item.icon} alt="" className="h-7 w-7 flex-shrink-0 rounded-full object-contain p-0.5 ring-1 ring-emerald-100" loading="lazy" />
+                  ) : (
+                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white text-xs text-brand-green ring-1 ring-emerald-100">NS</span>
+                  )}
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
             </div>
+          )}
+
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) => `flex min-h-12 items-center rounded-2xl px-4 py-3 text-base font-semibold transition duration-150 ${
+                isActive ? "bg-emerald-50 text-brand-green" : "text-slate-800 hover:bg-emerald-50 hover:text-brand-green"
+              }`}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+
+          <div className="mt-3 grid gap-2 rounded-3xl border border-emerald-100 bg-slate-50 p-2 sm:grid-cols-3">
+            <Link to="/buyers" className="rounded-2xl bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:text-brand-green">
+              Buying north of Toronto
+            </Link>
+            <Link to="/sellers" className="rounded-2xl bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:text-brand-green">
+              Selling my home
+            </Link>
+            <Link to="/communities" className="rounded-2xl bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:text-brand-green">
+              Explore communities
+            </Link>
           </div>
-        )}
-      </header>
-    </>
+
+          <Link
+            to="/contact"
+            className="mt-2 inline-flex min-h-12 items-center justify-center rounded-2xl bg-brand-green px-5 py-3 text-base font-semibold text-white shadow-[0_12px_26px_rgba(50,97,14,0.24)] transition duration-150 hover:bg-brand-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green/70"
+          >
+            Let’s Talk
+          </Link>
+        </nav>
+      </div>
+    </div>
   );
 }

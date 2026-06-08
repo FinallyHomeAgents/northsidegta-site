@@ -184,24 +184,24 @@ const PAGE_BODY_HTML = `
 
 
 <!-- HERO -->
-<header class="hero" role="banner">
+<section class="hero" aria-label="Community hero">
   <img src="/Images/eastgwillimbury-banner.jpg" alt="Neighbourhood streetscape in East Gwillimbury" class="hero-img" loading="eager">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">
-      <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury NorthSide GTA town badge" class="town-badge">
+      <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury NorthSide GTA town badge" class="town-badge">
       <span>York Region &middot; NorthSide GTA</span>
     </div>
     <h1>Living in East Gwillimbury</h1>
     <p class="hero-sub">Newer communities, larger lots, family-focused growth, and quick access to Highway 404 across Sharon, Queensville, Holland Landing, and Mount Albert.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1150K</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">$1,150,000</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">50 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
       <div class="hstat"><div class="hstat-val">30d</div><div class="hstat-lbl">Avg. on mkt</div></div>
       <div class="hstat"><div class="hstat-val">4.5 mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- BODY -->
 <div class="container">
@@ -355,25 +355,25 @@ const PAGE_BODY_HTML = `
       <div class="sec">
         <h2>Other NorthSide GTA communities</h2>
         <div class="towns-nav"><a href="/communities/aurora" class="town-nav-chip">
-      <img src="/Images/towns/aurora.jpg" alt="Aurora NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/aurora.webp" alt="Aurora NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Aurora
     </a><a href="/communities/newmarket" class="town-nav-chip">
-      <img src="/Images/towns/newmarket.jpg" alt="Newmarket NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/newmarket.webp" alt="Newmarket NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Newmarket
     </a><a href="/communities/stouffville" class="town-nav-chip">
-      <img src="/Images/towns/stouffville.jpg" alt="Stouffville NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/stouffville.webp" alt="Stouffville NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Stouffville
     </a><a href="/communities/east-gwillimbury" class="town-nav-chip current">
-      <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury NorthSide GTA town badge" width="20" height="20" loading="lazy">
       East Gwillimbury
     </a><a href="/communities/georgina" class="town-nav-chip">
-      <img src="/Images/towns/georgina.jpg" alt="Georgina NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/georgina.webp" alt="Georgina NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Georgina
     </a><a href="/communities/uxbridge" class="town-nav-chip">
-      <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Uxbridge
     </a><a href="/communities/scugog" class="town-nav-chip">
-      <img src="/Images/towns/scugog.jpg" alt="Scugog NorthSide GTA town badge" width="20" height="20" loading="lazy">
+      <img src="/assets/town-logos/scugog.webp" alt="Scugog NorthSide GTA town badge" width="20" height="20" loading="lazy">
       Scugog
     </a></div>
         <p style="margin-top:14px;font-size:13px;"><a href="https://northsidegta.ca/neighbourhood-guide" style="font-weight:500;">Compare all seven communities side by side &rarr;</a></p>
@@ -387,10 +387,10 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1150K</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1550K</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890K</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680K</span></div>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,150,000</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,550,000</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890,000</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680,000</span></div>
         <div class="prow"><span class="pk">Days on market</span><span class="pv">30d</span></div>
         <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">98%</span></div>
         <div class="prow"><span class="pk">Months inventory</span><span class="pv">4.5</span></div>

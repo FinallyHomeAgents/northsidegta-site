@@ -380,7 +380,7 @@ const PAGE_BODY_HTML = `
 <!-- NAV -->
 
 <!-- HERO -->
-<header class="hero" role="banner">
+<section class="hero" aria-label="Community hero">
   <img src="/uploads/northside-gta-finally-home-agents-hero.jpg"
        onerror="this.src='https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg'"
        alt="Aerial view of communities along the NorthSide GTA corridor" class="hero-img" loading="eager">
@@ -397,7 +397,7 @@ const PAGE_BODY_HTML = `
       <a href="#lead-form" class="btn-secondary" onclick="scrollToLead();return false;">Get local guidance</a>
     </div>
   </div>
-</header>
+</section>
 
 <!-- INTRO / WHY THIS GUIDE -->
 <section class="intro-section container" aria-labelledby="intro-h">
@@ -452,43 +452,43 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="th-towns">
       <a href="/tastehub?town=aurora" class="th-town-chip">
-        <img src="/Images/towns/aurora.jpg" alt="Aurora NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/aurora.webp" alt="Aurora NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Aurora</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=newmarket" class="th-town-chip">
-        <img src="/Images/towns/newmarket.jpg" alt="Newmarket NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/newmarket.webp" alt="Newmarket NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Newmarket</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=stouffville" class="th-town-chip">
-        <img src="/Images/towns/stouffville.jpg" alt="Stouffville NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/stouffville.webp" alt="Stouffville NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Stouffville</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=east-gwillimbury" class="th-town-chip">
-        <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">East Gwillimbury</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=georgina" class="th-town-chip">
-        <img src="/Images/towns/georgina.jpg" alt="Georgina NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/georgina.webp" alt="Georgina NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Georgina</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=uxbridge" class="th-town-chip">
-        <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Uxbridge</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
       </a>
       <a href="/tastehub?town=scugog" class="th-town-chip">
-        <img src="/Images/towns/scugog.jpg" alt="Scugog NorthSide GTA town badge" width="36" height="36" loading="lazy">
+        <img src="/assets/town-logos/scugog.webp" alt="Scugog NorthSide GTA town badge" width="36" height="36" loading="lazy">
         <div class="th-town-chip-name">Scugog</div>
         <div class="th-town-chip-label">Local food voting</div>
         <div class="th-town-chip-cta">See favourites &rarr;</div>
@@ -588,7 +588,7 @@ const PAGE_BODY_HTML = `
   <div class="onemil-grid">
     <div class="omc" style="--omc-c:#1a4a6b;">
       <div class="omc-header">
-        <img src="/Images/towns/aurora.jpg" alt="Aurora NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/aurora.webp" alt="Aurora NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Aurora</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -597,7 +597,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#3a2060;">
       <div class="omc-header">
-        <img src="/Images/towns/newmarket.jpg" alt="Newmarket NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/newmarket.webp" alt="Newmarket NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Newmarket</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -606,7 +606,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#1a4a1a;">
       <div class="omc-header">
-        <img src="/Images/towns/stouffville.jpg" alt="Stouffville NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/stouffville.webp" alt="Stouffville NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Stouffville</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -615,7 +615,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#4a2a1a;">
       <div class="omc-header">
-        <img src="/Images/towns/east-gwillimbury.jpg" alt="East Gwillimbury NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">East Gwillimbury</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -624,7 +624,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#0a3a4a;">
       <div class="omc-header">
-        <img src="/Images/towns/georgina.jpg" alt="Georgina NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/georgina.webp" alt="Georgina NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Georgina</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -633,7 +633,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#2a3a1a;">
       <div class="omc-header">
-        <img src="/Images/towns/uxbridge.jpg" alt="Uxbridge NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/uxbridge.webp" alt="Uxbridge NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Uxbridge</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -642,7 +642,7 @@ const PAGE_BODY_HTML = `
     </div>
     <div class="omc" style="--omc-c:#3a1a0a;">
       <div class="omc-header">
-        <img src="/Images/towns/scugog.jpg" alt="Scugog NorthSide GTA town badge" class="omc-badge" loading="lazy">
+        <img src="/assets/town-logos/scugog.webp" alt="Scugog NorthSide GTA town badge" class="omc-badge" loading="lazy">
         <div class="omc-town">Scugog</div>
       </div>
       <div class="omc-price">At $1,000,000</div>
@@ -735,8 +735,8 @@ const PAGE_BODY_HTML = `
           <label for="f_bg">Budget range</label>
           <select id="f_bg">
             <option value="">Select budget</option>
-            <option>Under $800K</option>
-            <option>$800K – $1M</option>
+            <option>Under $800,000</option>
+            <option>$800,000 – $1M</option>
             <option>$1M – $1.3M</option>
             <option>$1.3M – $1.7M</option>
             <option>$1.7M – $2.5M</option>

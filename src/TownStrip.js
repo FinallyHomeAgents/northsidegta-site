@@ -17,20 +17,20 @@ const CLOSEST_TO_FURTHEST = [
 ];
 
 const TOWNS = [
-  { id: "georgina",         name: "Georgina",         href: "/georgina",         img: "/Images/towns/georgina.jpg",        blurb: "Lake life & beaches." },
-  { id: "uxbridge",         name: "Uxbridge",         href: "/uxbridge",         img: "/Images/towns/uxbridge.jpg",        blurb: "Trails & small-town charm." },
-  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/Images/towns/east-gwillimbury.jpg", blurb: "New builds & 404 access." },
-  { id: "newmarket",        name: "Newmarket",        href: "/newmarket",        img: "/Images/towns/newmarket.jpg",       blurb: "Shops, dining, GO train." },
-  { id: "stouffville",      name: "Stouffville",      href: "/stouffville",      img: "/Images/towns/stouffville.jpg",     blurb: "Family streets & parks." },
-  { id: "aurora",           name: "Aurora",           href: "/aurora",           img: "/Images/towns/aurora.jpg",          blurb: "Schools & quiet streets." },
-  { id: "scugog",           name: "Scugog",           href: "/scugog",           img: "/Images/towns/scugog.jpg",          blurb: "Heritage & lakefront." },
+  { id: "georgina",         name: "Georgina",         href: "/georgina",         img: "/assets/town-logos/georgina.webp",        blurb: "Lake life & beaches." },
+  { id: "uxbridge",         name: "Uxbridge",         href: "/uxbridge",         img: "/assets/town-logos/uxbridge.webp",        blurb: "Trails & small-town charm." },
+  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/assets/town-logos/east-gwillimbury.webp", blurb: "New builds & 404 access." },
+  { id: "newmarket",        name: "Newmarket",        href: "/newmarket",        img: "/assets/town-logos/newmarket.webp",       blurb: "Shops, dining, GO train." },
+  { id: "stouffville",      name: "Stouffville",      href: "/stouffville",      img: "/assets/town-logos/stouffville.webp",     blurb: "Family streets & parks." },
+  { id: "aurora",           name: "Aurora",           href: "/aurora",           img: "/assets/town-logos/aurora.webp",          blurb: "Schools & quiet streets." },
+  { id: "scugog",           name: "Scugog",           href: "/scugog",           img: "/assets/town-logos/scugog.webp",          blurb: "Heritage & lakefront." },
 ];
 
 function onImgError(e, townId) {
   const el = e.currentTarget;
   const tried = parseInt(el.getAttribute("data-tried") || "0", 10);
-  const base = `/Images/towns/${townId}`;
-  const variants = [`${base}.jpg`, `${base}.png`, `${base}.jpeg`];
+  const base = `/assets/town-logos/${townId}`;
+  const variants = [`${base}.webp`, `${base}.png`];
   if (tried < variants.length) { el.setAttribute("data-tried", String(tried + 1)); el.src = variants[tried]; }
   else { el.style.display = "none"; }
 }

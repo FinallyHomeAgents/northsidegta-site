@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
+import HeaderShell from "./components/HeaderShell";
 
 import { HOMEPAGE_MARKUP } from "./homepageMarkup";
 
@@ -133,34 +134,6 @@ const structuredData = {
 };
 
 export default function HomePage() {
-  useEffect(() => {
-    const drawer = document.getElementById("mobile-drawer");
-    const openButton = document.querySelector(".site-header__menu-toggle");
-    const closeButton = document.querySelector(".mobile-drawer__close");
-    const setDrawerOpen = (isOpen) => {
-      if (!drawer || !openButton) return;
-      drawer.hidden = !isOpen;
-      openButton.setAttribute("aria-expanded", String(isOpen));
-      document.body.classList.toggle("mobile-drawer-open", isOpen);
-    };
-    const openDrawer = () => setDrawerOpen(true);
-    const closeDrawer = () => setDrawerOpen(false);
-    const closeOnLink = (event) => {
-      if (event.target.closest("a")) closeDrawer();
-    };
-
-    openButton?.addEventListener("click", openDrawer);
-    closeButton?.addEventListener("click", closeDrawer);
-    drawer?.addEventListener("click", closeOnLink);
-
-    return () => {
-      openButton?.removeEventListener("click", openDrawer);
-      closeButton?.removeEventListener("click", closeDrawer);
-      drawer?.removeEventListener("click", closeOnLink);
-      document.body.classList.remove("mobile-drawer-open");
-    };
-  }, []);
-
   return (
     <>
       <DynamicMetaTags
@@ -191,6 +164,7 @@ export default function HomePage() {
         <link rel="alternate" hrefLang="en-CA" href={HOME_URL} />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </DynamicMetaTags>
+      <HeaderShell />
       <div className="homepage-v4" dangerouslySetInnerHTML={{ __html: HOMEPAGE_MARKUP }} />
     </>
   );

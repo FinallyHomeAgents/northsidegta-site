@@ -301,9 +301,7 @@ ul[role="list"] { list-style: none; padding: 0; }
 }
 @media (min-width: 640px) { .intent-bar__status { display: flex; } }
 
-main { padding-top: 100px; }
-@media (min-width: 640px) { main { padding-top: 108px; } }
-@media (min-width: 1024px) { main { padding-top: 100px; } }
+main { padding-top: 0; }
 
 .hero__grid {
   display: grid;

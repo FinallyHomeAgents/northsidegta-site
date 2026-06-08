@@ -3,13 +3,13 @@ import React from "react";
 
 // 🏙️ 7 towns array (now includes Scugog)
 const towns = [
-  { name: "Stouffville",      img: "/Images/towns/stouffville.jpg" },
-  { name: "Newmarket",        img: "/Images/towns/newmarket.jpg" },
-  { name: "Aurora",           img: "/Images/towns/aurora.jpg" },
-  { name: "East Gwillimbury", img: "/Images/towns/east-gwillimbury.jpg" },
-  { name: "Uxbridge",         img: "/Images/towns/uxbridge.jpg" },
-  { name: "Georgina",         img: "/Images/towns/georgina.jpg" },
-  { name: "Scugog",           img: "/Images/towns/scugog.jpg" },   // ← NEW card
+  { name: "Stouffville",      img: "/assets/town-logos/stouffville.webp" },
+  { name: "Newmarket",        img: "/assets/town-logos/newmarket.webp" },
+  { name: "Aurora",           img: "/assets/town-logos/aurora.webp" },
+  { name: "East Gwillimbury", img: "/assets/town-logos/east-gwillimbury.webp" },
+  { name: "Uxbridge",         img: "/assets/town-logos/uxbridge.webp" },
+  { name: "Georgina",         img: "/assets/town-logos/georgina.webp" },
+  { name: "Scugog",           img: "/assets/town-logos/scugog.webp" },   // ← NEW card
 ];
 
 export default function CommunityGrid() {
@@ -31,7 +31,7 @@ export default function CommunityGrid() {
             <img
               src={img}
               alt={name}
-              className="h-48 w-full object-cover object-center"
+              className="h-48 w-full object-contain object-center bg-white p-6"
             />
 
             {/* Text under photo */}
