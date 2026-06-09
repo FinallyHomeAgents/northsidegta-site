@@ -1033,12 +1033,10 @@ export const HOMEPAGE_MARKUP = String.raw`
         class="inline-lead__form"
         name="homepage-lead"
         method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        action="/thank-you"
-        novalidate
+        action="/api/homepage-lead"
       >
         <input type="hidden" name="form-name" value="homepage-lead">
+        <input type="hidden" name="sourceUrl" value="/">
         <p class="inline-lead__honeypot" aria-hidden="true">
           <label>Don't fill this out: <input name="bot-field" tabindex="-1"></label>
         </p>
@@ -1093,6 +1091,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         <p class="inline-lead__disclaimer">
           No spam. No pressure. Regulated by RECO · HomeLife Optimum Realty, Brokerage.
         </p>
+        <p class="inline-lead__status" data-inline-lead-status aria-live="polite"></p>
       </form>
     </div>
   </section>

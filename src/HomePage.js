@@ -154,20 +154,75 @@ export default function HomePage() {
     }
 
     const counters = document.querySelectorAll("[data-counter]");
-    if (!counters.length || !("IntersectionObserver" in window)) return undefined;
+    let observer = null;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          animateCounter(entry.target);
-          observer.unobserve(entry.target);
+    if (counters.length && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach((el) => observer.observe(el));
+    }
+
+    const form = document.querySelector('form[name="homepage-lead"]');
+    const status = form?.querySelector("[data-inline-lead-status]");
+    const sourceUrl = form?.querySelector('input[name="sourceUrl"]');
+    const submitButton = form?.querySelector('button[type="submit"]');
+
+    if (sourceUrl) {
+      sourceUrl.value = window.location.href;
+    }
+
+    async function handleLeadSubmit(event) {
+      event.preventDefault();
+
+      if (!form.reportValidity()) return;
+
+      const formData = new FormData(form);
+      if (formData.get("bot-field")) return;
+
+      if (status) {
+        status.textContent = "Sending...";
+      }
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(formData.entries())),
+          credentials: "same-origin",
+        });
+
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "Unable to send right now.");
         }
-      });
-    }, { threshold: 0.5 });
 
-    counters.forEach((el) => observer.observe(el));
+        window.location.href = "/thank-you?source=homepage-lead";
+      } catch (error) {
+        if (status) {
+          status.textContent = error.message || "Sorry, something went wrong. Please try again.";
+        }
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+      }
+    }
 
-    return () => observer.disconnect();
+    form?.addEventListener("submit", handleLeadSubmit);
+
+    return () => {
+      observer?.disconnect();
+      form?.removeEventListener("submit", handleLeadSubmit);
+    };
   }, []);
 
   return (

@@ -1482,3 +1482,16 @@ main { padding-top: 0; }
     padding: 5px 10px;
   }
 }
+
+.inline-lead__status {
+  min-height: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 10px 0 0;
+  text-align: center;
+}
+
+.inline-lead__submit:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
