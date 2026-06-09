@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
 import HeaderShell from "./components/HeaderShell";
@@ -134,6 +134,97 @@ const structuredData = {
 };
 
 export default function HomePage() {
+  useEffect(() => {
+    function animateCounter(el) {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || "0", 10);
+      const duration = 900;
+      let start = null;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        el.textContent = current.toFixed(decimals);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    const counters = document.querySelectorAll("[data-counter]");
+    let observer = null;
+
+    if (counters.length && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach((el) => observer.observe(el));
+    }
+
+    const form = document.querySelector('form[name="homepage-lead"]');
+    const status = form?.querySelector("[data-inline-lead-status]");
+    const sourceUrl = form?.querySelector('input[name="sourceUrl"]');
+    const submitButton = form?.querySelector('button[type="submit"]');
+
+    if (sourceUrl) {
+      sourceUrl.value = window.location.href;
+    }
+
+    async function handleLeadSubmit(event) {
+      event.preventDefault();
+
+      if (!form.reportValidity()) return;
+
+      const formData = new FormData(form);
+      if (formData.get("bot-field")) return;
+
+      if (status) {
+        status.textContent = "Sending...";
+      }
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(formData.entries())),
+          credentials: "same-origin",
+        });
+
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "Unable to send right now.");
+        }
+
+        window.location.href = "/thank-you?source=homepage-lead";
+      } catch (error) {
+        if (status) {
+          status.textContent = error.message || "Sorry, something went wrong. Please try again.";
+        }
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+      }
+    }
+
+    form?.addEventListener("submit", handleLeadSubmit);
+
+    return () => {
+      observer?.disconnect();
+      form?.removeEventListener("submit", handleLeadSubmit);
+    };
+  }, []);
+
   return (
     <>
       <DynamicMetaTags
