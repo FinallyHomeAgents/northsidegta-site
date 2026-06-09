@@ -6,7 +6,7 @@ export const HOMEPAGE_MARKUP = String.raw`
     <div class="hero__grid">
 
       
-      <div class="hero__copy">
+      <div class="hero__copy hero-animate">
         <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
 
         <h1 class="hero__heading" id="hero-heading">
@@ -27,14 +27,22 @@ export const HOMEPAGE_MARKUP = String.raw`
         </div>
 
         
-        <a href="https://share.google/GJz2QTQ8GqZIifaNH" class="google-reviews-strip" target="_blank" rel="noopener" aria-label="5.0 Google Rating — see all client reviews">
-          <img src="/Images/google-logo.png" alt="Google" width="60" height="20">
-          <span class="stars" aria-hidden>★★★★★</span>
-          <span class="google-reviews-strip__text">
-            <strong>5.0 Google Rating</strong>
-            <span>Based on client reviews</span>
+        <div class="hero-badges">
+          <a href="https://share.google/GJz2QTQ8GqZIifaNH" target="_blank" rel="noopener" class="hero-badge hero-badge--google" aria-label="5.0 Google Rating — view reviews">
+            <img src="/Images/google-logo.png" alt="Google" width="16" height="16">
+            <span>★ 5.0 Google Rating</span>
+            <span class="sr-only">Based on client reviews</span>
+          </a>
+          <span class="hero-badge">
+            <span aria-hidden="true">✓</span> RECO Licensed
           </span>
-        </a>
+          <span class="hero-badge">
+            <span aria-hidden="true">📍</span> 7 Communities
+          </span>
+          <span class="hero-badge">
+            <span aria-hidden="true">🔄</span> Updated Monthly
+          </span>
+        </div>
       </div>
 
       
@@ -529,12 +537,12 @@ export const HOMEPAGE_MARKUP = String.raw`
     <div class="proof-bar__inner">
       <div class="proof-bar__item">
         <span class="proof-bar__icon proof-bar__icon--gold" aria-hidden>★</span>
-        <strong class="proof-bar__value">5.0 Stars</strong>
+        <strong class="proof-bar__value"><span data-counter data-target="5.0" data-decimals="1">5.0</span> Stars</strong>
         <span class="proof-bar__label">Google Rating</span>
       </div>
       <div class="proof-bar__item">
         <span class="proof-bar__icon" aria-hidden>📍</span>
-        <strong class="proof-bar__value">7</strong>
+        <strong class="proof-bar__value"><span data-counter data-target="7">7</span></strong>
         <span class="proof-bar__label">Communities Served</span>
       </div>
       <div class="proof-bar__item">
@@ -757,6 +765,10 @@ export const HOMEPAGE_MARKUP = String.raw`
         </div>
         <span class="market-snapshot__source">Source: TRREB Market Watch, April 2026</span>
       </div>
+
+      <p class="market-context">
+        Prices across the NorthSide GTA are down year-over-year — giving buyers more room to negotiate and more time to decide than at any point in the last three years.
+      </p>
 
       <div class="market-cards" role="list" aria-label="Market data by community">
         
@@ -1010,7 +1022,82 @@ export const HOMEPAGE_MARKUP = String.raw`
   </section>
 
   
-  <section class="faq" aria-labelledby="faq-heading">
+  <section class="inline-lead" id="get-started" aria-labelledby="inline-lead-heading">
+    <div class="inline-lead__inner">
+      <div class="inline-lead__copy">
+        <p class="inline-lead__eyebrow">Ready when you are</p>
+        <h2 id="inline-lead-heading" class="inline-lead__heading">Tell us where you're headed.</h2>
+        <p class="inline-lead__sub">We'll follow up with community comparisons, current pricing, and a clear next step — no pressure, no spam.</p>
+      </div>
+      <form
+        class="inline-lead__form"
+        name="homepage-lead"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/thank-you"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="homepage-lead">
+        <p class="inline-lead__honeypot" aria-hidden="true">
+          <label>Don't fill this out: <input name="bot-field" tabindex="-1"></label>
+        </p>
+
+        <div class="inline-lead__fields">
+          <div class="inline-lead__field">
+            <label for="lead-name" class="inline-lead__label">Your name</label>
+            <input
+              type="text"
+              id="lead-name"
+              name="name"
+              class="inline-lead__input"
+              placeholder="First name is fine"
+              autocomplete="given-name"
+              required
+            >
+          </div>
+
+          <div class="inline-lead__field">
+            <label for="lead-phone" class="inline-lead__label">Phone or email</label>
+            <input
+              type="text"
+              id="lead-phone"
+              name="contact"
+              class="inline-lead__input"
+              placeholder="However you prefer to be reached"
+              autocomplete="tel"
+              required
+            >
+          </div>
+
+          <div class="inline-lead__field inline-lead__field--full">
+            <label for="lead-community" class="inline-lead__label">Which communities interest you?</label>
+            <select id="lead-community" name="community" class="inline-lead__select" required>
+              <option value="" disabled selected>Pick one to start</option>
+              <option value="Aurora">Aurora</option>
+              <option value="Newmarket">Newmarket</option>
+              <option value="East Gwillimbury">East Gwillimbury</option>
+              <option value="Georgina">Georgina</option>
+              <option value="Stouffville">Whitchurch-Stouffville</option>
+              <option value="Uxbridge">Uxbridge</option>
+              <option value="Scugog">Scugog</option>
+              <option value="Not sure yet">Not sure yet — help me compare</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="inline-lead__submit">
+          Start the Conversation →
+        </button>
+
+        <p class="inline-lead__disclaimer">
+          No spam. No pressure. Regulated by RECO · HomeLife Optimum Realty, Brokerage.
+        </p>
+      </form>
+    </div>
+  </section>
+
+    <section class="faq" aria-labelledby="faq-heading">
     <div class="section-inner section-inner--faq">
       <div class="section-header section-header--center">
         <p class="section-eyebrow">Common questions</p>

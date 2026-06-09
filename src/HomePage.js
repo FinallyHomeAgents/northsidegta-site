@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
 import HeaderShell from "./components/HeaderShell";
@@ -134,6 +134,42 @@ const structuredData = {
 };
 
 export default function HomePage() {
+  useEffect(() => {
+    function animateCounter(el) {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || "0", 10);
+      const duration = 900;
+      let start = null;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        el.textContent = current.toFixed(decimals);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    const counters = document.querySelectorAll("[data-counter]");
+    if (!counters.length || !("IntersectionObserver" in window)) return undefined;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <DynamicMetaTags
