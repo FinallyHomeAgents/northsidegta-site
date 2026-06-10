@@ -66,22 +66,22 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/buyers",
     meta: {
       route: "/buyers",
-      documentTitle: "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
-      title: "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
+      documentTitle: "Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA",
+      title: "Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA",
       description:
-        "Ready to buy in the NorthSide GTA? Get a personalized town match, VIP listing alerts, and expert guidance from Finally Home Agents in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
+        "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call.",
       canonicalUrl: "https://northsidegta.ca/buyers",
       ogType: "website",
-      ogImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
+      ogImage: "https://www.northsidegta.ca/uploads/buyers-page-seo.jpg",
       twitterCard: "summary_large_image",
-      twitterImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
+      twitterImage: "https://www.northsidegta.ca/uploads/buyers-page-seo.jpg",
       siteName: "NorthSide GTA",
       additionalMeta: [
         { name: "robots", content: "index,follow" },
         {
           name: "keywords",
           content:
-            "NorthSide GTA homes for sale, buy a home Georgina, buy a home East Gwillimbury, buy a home Newmarket, buy a home Aurora, buy a home Stouffville, buy a home Uxbridge, buy a home Scugog, town match, VIP listing alerts, Finally Home Agents",
+            "buy a home north of Toronto, NorthSide GTA buyers agent, Aurora homes for sale, Newmarket homes for sale, Stouffville real estate, Uxbridge homes, Georgina real estate, East Gwillimbury homes, Scugog real estate, town match quiz, Finally Home Agents buyers",
         },
       ],
     },
