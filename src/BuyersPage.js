@@ -1,1208 +1,893 @@
 // src/BuyersPage.js
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
-import GoogleGradientReviews, { GOOGLE_REVIEWS } from "./components/reviews/GoogleGradientReviews";
-import DynamicMetaTags from "./components/seo/DynamicMetaTags";
-import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import { getFormEndpoint } from "./components/contact/contactConfig";
-import { buildBuyersPageSchema } from "./lib/structuredData/buyersPage";
 
-/* ───────── helpers ───────── */
-const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
-const phoneOk = (v) => v.replace(/\D/g, "").length >= 10;
-
-const TOWNS = [
-  "Georgina",
-  "East Gwillimbury",
-  "Newmarket",
+const COMMUNITIES = [
   "Aurora",
+  "Newmarket",
   "Stouffville",
   "Uxbridge",
+  "Georgina",
+  "East Gwillimbury",
   "Scugog",
-  "None",
 ];
 
-const TOWN_QUICK_PICKS = [
-  { name: "Uxbridge", href: "/uxbridge", hint: "Trails & forests" },
-  { name: "Stouffville", href: "/stouffville", hint: "Main street energy" },
-  { name: "Georgina", href: "/georgina", hint: "Lake Simcoe life" },
-  { name: "East Gwillimbury", href: "/east-gwillimbury", hint: "New builds & 404" },
-  { name: "Newmarket", href: "/newmarket", hint: "Shops & GO train" },
-  { name: "Scugog", href: "/scugog", hint: "Heritage & harbour" },
+const TOWN_DATA = {
+  Aurora: {
+    slug: "aurora",
+    reasons: [
+      "Top school catchments in York Region",
+      "GO Train + Hwy 404 for daily commuters",
+      "Established family neighbourhoods and mature streetscapes",
+    ],
+  },
+  Newmarket: {
+    slug: "newmarket",
+    reasons: [
+      "Historic Main Street — walkable shops, restaurants, errands",
+      "GO Train to Union Station under 60 min",
+      "Strong schools and full municipal services",
+    ],
+  },
+  Stouffville: {
+    slug: "stouffville",
+    reasons: [
+      "Village main street with GO Train access",
+      "Active trail system through town",
+      "Strong family community and newer builds",
+    ],
+  },
+  Uxbridge: {
+    slug: "uxbridge",
+    reasons: [
+      "Trail Capital of Canada — 10,000+ acres of protected trails",
+      "Most space per dollar in the NorthSide GTA",
+      "Heritage downtown with real small-town character",
+    ],
+  },
+  Georgina: {
+    slug: "georgina",
+    reasons: [
+      "Lake Simcoe waterfront — Keswick and Sutton",
+      "Most affordable avg. price in the NorthSide GTA",
+      "Growing fast with new amenities",
+    ],
+  },
+  "East Gwillimbury": {
+    slug: "east-gwillimbury",
+    reasons: [
+      "Strong Hwy 404 corridor access",
+      "Larger lots and newer builds",
+      "Growing community — Holland Landing and beyond",
+    ],
+  },
+  Scugog: {
+    slug: "scugog",
+    reasons: [
+      "Port Perry waterfront and heritage main street",
+      "Lake Scugog — boating, fishing, four seasons",
+      "True small-town pace, away from the suburban sprawl",
+    ],
+  },
+};
+
+const QUESTIONS = [
+  {
+    question: "What matters most to your family right now?",
+    options: [
+      { value: "schools", label: "Top-rated schools" },
+      { value: "trails", label: "Trails & outdoor space" },
+      { value: "walkable", label: "Walkable main street" },
+      { value: "quiet", label: "Quiet & privacy" },
+      { value: "commute", label: "Fast commute access" },
+    ],
+  },
+  {
+    question: "How would you describe your ideal pace of life?",
+    options: [
+      { value: "suburban", label: "Suburban — amenities close by" },
+      { value: "smalltown", label: "Small town — know your neighbours" },
+      { value: "rural", label: "Rural — space and quiet" },
+      { value: "active", label: "Active — trails and lake access" },
+      { value: "urbanedge", label: "Urban edge — city feel, more space" },
+    ],
+  },
+  {
+    question: "What's your relationship with Toronto going forward?",
+    options: [
+      { value: "daily", label: "Daily commute still likely" },
+      { value: "fewweek", label: "A few times a week" },
+      { value: "occasional", label: "Occasional — weekends only" },
+      { value: "cutting", label: "Cutting ties completely" },
+      { value: "wfh", label: "Working from home full-time" },
+    ],
+  },
+];
+
+const SCORE_MATRIX = {
+  schools: { Aurora: 3, Newmarket: 2, Stouffville: 2 },
+  trails: { Uxbridge: 3, Georgina: 2, Scugog: 2, "East Gwillimbury": 1 },
+  walkable: { Newmarket: 3, Aurora: 2, Stouffville: 2, Scugog: 1 },
+  quiet: { Scugog: 3, Uxbridge: 2, Georgina: 2 },
+  commute: { Aurora: 3, Newmarket: 3, Stouffville: 2, "East Gwillimbury": 2 },
+  suburban: { Aurora: 3, Newmarket: 2, "East Gwillimbury": 2 },
+  smalltown: { Scugog: 3, Uxbridge: 2, Stouffville: 2 },
+  rural: { Uxbridge: 3, Scugog: 2, Georgina: 2 },
+  active: { Uxbridge: 3, Georgina: 3, Scugog: 2 },
+  urbanedge: { Newmarket: 3, Aurora: 2, Stouffville: 2 },
+  daily: { Aurora: 3, Newmarket: 3, Stouffville: 2 },
+  fewweek: { Newmarket: 2, Aurora: 2, Stouffville: 2, "East Gwillimbury": 2 },
+  occasional: { Scugog: 3, Uxbridge: 2, Georgina: 2 },
+  cutting: { Scugog: 3, Uxbridge: 3, Georgina: 2 },
+  wfh: { "East Gwillimbury": 3, Uxbridge: 2, Scugog: 2, Georgina: 2 },
+};
+
+const PHOTO_GRID = [
+  {
+    image: "/Images/newmarket-banner.jpg",
+    position: "center 52%",
+    label: "Main Street, Newmarket",
+    sublabel: "Historic · Walkable · GO Train",
+  },
+  {
+    image: "/Images/aurora-banner.jpg",
+    position: "center 45%",
+    label: "Aurora community trails",
+    sublabel: "Parks · Schools · Neighbourhoods",
+  },
+  {
+    image: "/Images/stouffville-banner.jpg",
+    position: "center 48%",
+    label: "Stouffville heritage district",
+    sublabel: "Village feel · GO Train · Trails",
+  },
+  {
+    image: "/Images/uxbridge-banner.jpg",
+    position: "center 46%",
+    label: "Uxbridge trail system",
+    sublabel: "Trail Capital of Canada",
+  },
+  {
+    image: "/Images/georgina-banner.jpg",
+    position: "center 44%",
+    label: "Lake Simcoe waterfront",
+    sublabel: "Georgina · Keswick · Sutton",
+  },
+  {
+    image: "/Images/eastgwillimbury-banner.jpg",
+    position: "center 50%",
+    label: "East Gwillimbury new builds",
+    sublabel: "404 Corridor · Growing fast",
+  },
+];
+
+const MARKET_SNAPSHOT = [
+  ["Aurora", "$1,153,153", "26 days avg", "↓ 12.3%"],
+  ["Newmarket", "$998,202", "24 days avg", "↓ 9.2%"],
+  ["Stouffville", "$1,186,821", "27 days avg", "↓ 10.2%"],
+  ["Uxbridge", "$1,023,606", "37 days avg", "↓ 7.3%"],
+  ["Georgina", "$767,732", "24 days avg", "↓ 7.8%"],
+  ["East Gwillimbury", "$1,038,275", "31 days avg", "↓ 4.4%"],
+  ["Scugog", "$865,895", "37 days avg", "↓ 6.4%"],
 ];
 
 const PROCESS_STEPS = [
-  { title: "Clarify", description: "Goals, budget, neighborhoods" },
-  { title: "Tour", description: "Curated homes, fast scheduling" },
-  { title: "Offer", description: "Comps, strategy, negotiations" },
-  { title: "Close", description: "Lawyers, keys, move-in plan" },
+  ["01", "Town strategy", "We map lifestyle, commute, school needs, and budget to the right shortlist before you chase listings."],
+  ["02", "Focused showing plan", "We build efficient showing days around homes that actually fit your criteria and shortlisted towns."],
+  ["03", "Offer strategy", "We read each micro-market, structure the offer, and negotiate so you can move with confidence."],
+  ["04", "Closing support", "Trades, schools, lawyers, neighbours — we stay close through closing and the first weeks after."],
 ];
 
+const REVIEWS = [
+  ["Devin Tappenden", "Buyer · Uxbridge", "Matthew and the team really took the time and care to help us find the right place. He made the sometimes overwhelming burden of moving seem so smooth."],
+  ["Larissa Halko", "Buyer & Seller", "What really stood out was that Matt understood our priorities as a family and ensured these were held in high regard throughout the whole process."],
+  ["Susan Booth", "Seller · Holland Landing", "Their professionalism and personal attention set them apart. Throughout the entire process these Finally Home Agents exceeded our expectations."],
+];
 
-/* ───────── Little inline icons (used in UI labels/headers) ───────── */
-const CheckIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M20 6L9 17l-5-5" />
-  </svg>
-);
-const XIcon = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M6 6l12 12M18 6L6 18" />
-  </svg>
-);
-/* ───────── Comparison: Buying on Your Own vs With Finally Home Agents (kept) ───────── */
-function ComparisonGrid() {
-  const solo = [
-    "Guesswork on where to live",
-    "You hunt listings… and miss off-market",
-    "No early alerts or pricing context",
-    "DIY negotiation risks overpaying",
-    "Tiring weekend tours with little focus",
-    "Paperwork + deadlines = stress",
-    "No trusted pros when issues appear",
-    "Decisions made without a second set of eyes",
-    "Generic info — not tailored to you",
-  ];
-  const withUs = [
-    "Town Match: Top-3 areas based on your lifestyle & budget",
-    "VIP alerts + off-market conversations",
-    "Real-time price comps & micro-neighbourhood intel",
-    "Offer strategy that wins without overpaying",
-    "Planned, efficient tours — no time wasted",
-    "We quarterback the process, you stay calm",
-    "Inspector, lawyer, mortgage — vetted partners",
-    "Walk-away confidence with data-driven advice",
-    "AI-assisted insights tailored to your criteria",
-  ];
+const SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://northsidegta.ca/buyers",
+      url: "https://northsidegta.ca/buyers",
+      name: "Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA",
+      description:
+        "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
+      inLanguage: "en-CA",
+      isPartOf: { "@id": "https://northsidegta.ca/#website" },
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "NorthSide GTA", item: "https://northsidegta.ca" },
+          { "@type": "ListItem", position: 2, name: "Buyers", item: "https://northsidegta.ca/buyers" },
+        ],
+      },
+    },
+    {
+      "@type": "RealEstateAgent",
+      name: "Finally Home Agents",
+      url: "https://northsidegta.ca",
+      telephone: "+16476684646",
+      areaServed: [
+        "Aurora, Ontario",
+        "Newmarket, Ontario",
+        "Whitchurch-Stouffville, Ontario",
+        "Uxbridge, Ontario",
+        "Georgina, Ontario",
+        "East Gwillimbury, Ontario",
+        "Scugog, Ontario",
+      ],
+      description:
+        "Finally Home Agents — Matthew and Landon Mulhall — provide buyer representation across the NorthSide GTA, operating under HomeLife Optimum Realty, Brokerage.",
+      aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "12", bestRating: "5" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Which communities do Finally Home Agents serve for buyers?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Finally Home Agents serves buyers across Aurora, Newmarket, Whitchurch-Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What does the buyer process look like with Finally Home Agents?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Finally Home Agents starts with a town strategy call to match buyers to the right community, then builds curated showing days, provides offer strategy and negotiation support, and stays involved through to closing and beyond.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is there a tool to help me decide which NorthSide GTA town to buy in?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. The Town Match quiz on this page asks three questions about your lifestyle, pace of life, and commute needs, then recommends a primary community plus two alternatives.",
+          },
+        },
+      ],
+    },
+  ],
+};
+
+function scrollToSection(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function SectionHeader({ eyebrow, title, lead, dark = false, compact = false, children }) {
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_45px_130px_rgba(34,68,10,0.5)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/15 via-emerald-500/10 to-emerald-700/5" aria-hidden />
-      <div className="relative z-10 grid overflow-hidden md:grid-cols-2">
-        {/* Left: On your own */}
-        <div className="border-b border-white/10 bg-slate-900/60 backdrop-blur-sm md:border-b-0 md:border-r">
-          <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4 text-rose-200/90">
-            <XIcon className="h-5 w-5" />
-            <h3 className="text-[12px] font-semibold uppercase tracking-[0.28em]">Buying On Your Own</h3>
-          </div>
-          <ul className="space-y-3 px-5 py-6">
-            {solo.map((t, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-emerald-100/80">
-                <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-rose-400/80" />
-                <span className="leading-6">{t}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Right: With Finally Home Agents */}
-        <div className="bg-gradient-to-br from-emerald-500/40 via-emerald-500/20 to-emerald-600/30">
-          <div className="flex items-center gap-2 border-b border-white/20 px-5 py-4 text-white">
-            <CheckIcon className="h-5 w-5" />
-            <h3 className="text-[12px] font-semibold uppercase tracking-[0.28em]">Buying With Finally Home Agents</h3>
-          </div>
-          <ul className="space-y-3 px-5 py-6">
-            {withUs.map((t, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-white">
-                <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-white/70" />
-                <span className="leading-6">{t}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <div className={`buyers-section-header${compact ? " compact" : ""}`}>
+      <p className={`buyers-eyebrow${dark ? " buyers-eyebrow-dark" : ""}`}>{eyebrow}</p>
+      <h2>{title}</h2>
+      {lead && <p className={`buyers-lead${dark ? " buyers-lead-dark" : ""}`}>{lead}</p>}
+      {children}
     </div>
   );
 }
 
-/* ───────── Detailed Buyer Sign-Up form (map background, more fields) ───────── */
-function BuyerSignupForm() {
-  const [form, setForm] = useState({
-    // Contact
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    // Buyer basics
-    budgetMin: "",
-    budgetMax: "",
-    bedrooms: "",
-    bathrooms: "",
-    propertyType: "",
-    timeline: "",
-    towns: [],
-    mustHaves: "",
-    niceToHaves: "",
-    // Confirmations
-    notUnderContract: false,
-    consent: false,
-    // honeypot
-    nickname: "",
-  });
+function TownMatchQuiz() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState(null);
 
-  const [sending, setSending] = useState(false);
-  const [done, setDone] = useState(false);
-  const [error, setError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({ email: "", phone: "" });
-  const errorRef = useRef(null);
+  const selected = answers[step] || "";
+  const progress = `${((step + 1) / QUESTIONS.length) * 100}%`;
 
-  const utm = useMemo(() => new URLSearchParams(window.location.search), []);
-  const device = useMemo(() => (/Mobi/i.test(navigator.userAgent) ? "mobile" : "desktop"), []);
-
-  const formspreeId = useMemo(() => {
-    const fromEnv = (process.env.REACT_APP_FORMSPREE_BUYERS_ID || "").trim();
-    return fromEnv || "xanbzajw";
-  }, []);
-
-  const requiredChecks = {
-    firstName: !!form.firstName.trim(),
-    lastName: !!form.lastName.trim(),
-    email: !!form.email.trim() && emailOk(form.email),
-    phone: !!form.phone.trim() && phoneOk(form.phone),
-    timeline: !!form.timeline,
-    notUnderContract: !!form.notUnderContract,
-    consent: !!form.consent,
-  };
-  const requiredOk = Object.values(requiredChecks).every(Boolean);
-
-  const progressPct = Math.max(
-    6,
-    Math.round(
-      (Object.values(requiredChecks).filter(Boolean).length /
-        Object.keys(requiredChecks).length) * 100
-    )
-  );
-
-  function update(e) {
-    const { name, value, type, checked } = e.target;
-    setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
-
-    if (name === "email") {
-      setFieldErrors((fe) => ({ ...fe, email: value && !emailOk(value) ? "Enter a valid email" : "" }));
-    }
-    if (name === "phone") {
-      setFieldErrors((fe) => ({ ...fe, phone: value && !phoneOk(value) ? "Enter a 10-digit phone number" : "" }));
-    }
-  }
-
-  function toggleTown(town) {
-    setForm((f) => {
-      const exists = f.towns.includes(town);
-      let next = exists ? f.towns.filter((t) => t !== town) : [...f.towns, town];
-      if (next.length > 7) next = next.slice(0, 7);
-      if (town === "None" && !exists) next = ["None"];
-      if (town !== "None" && next.includes("None")) next = next.filter((t) => t !== "None");
-      return { ...f, towns: next };
+  function chooseAnswer(value) {
+    setAnswers((current) => {
+      const next = [...current];
+      next[step] = value;
+      return next;
     });
   }
 
-  async function onSubmit(e) {
-    e.preventDefault();
-    setError("");
-
-    const emailErr = form.email ? (emailOk(form.email) ? "" : "Enter a valid email") : "Email is required";
-    const phoneErr = form.phone ? (phoneOk(form.phone) ? "" : "Enter a 10-digit phone number") : "Phone is required";
-    setFieldErrors({ email: emailErr, phone: phoneErr });
-
-    if (!formspreeId) {
-      setError("Formspree Form ID is missing. Add REACT_APP_FORMSPREE_BUYERS_ID to your .env file.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-      return;
-    }
-    if (!requiredOk) {
-      setError("Please complete all required fields and fix the highlighted errors.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-      return;
-    }
-    if (form.nickname) return;
-
-    try {
-      setSending(true);
-      const endpoint = `https://formspree.io/f/${formspreeId}`;
-
-      const payload = {
-        first_name: form.firstName.trim(),
-        last_name: form.lastName.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        budget_min: form.budgetMin,
-        budget_max: form.budgetMax,
-        desired_bedrooms: form.bedrooms,
-        desired_bathrooms: form.bathrooms,
-        property_type: form.propertyType,
-        timeline: form.timeline,
-        towns: form.towns.join(", "),
-        must_haves: form.mustHaves,
-        nice_to_haves: form.niceToHaves,
-        not_under_contract: form.notUnderContract ? "Yes" : "No",
-        consent: form.consent ? "Yes" : "No",
-        utm_source: utm.get("utm_source") || "",
-        utm_campaign: utm.get("utm_campaign") || "",
-        device,
-        source_url: window.location.href,
-        submitted_at: new Date().toLocaleString(),
-        _subject: `New Buyer Sign-Up — ${form.firstName} ${form.lastName}`,
-        _replyto: form.email || undefined,
-      };
-
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+  function calculateResult(finalAnswers) {
+    const scores = COMMUNITIES.reduce((acc, town) => ({ ...acc, [town]: 0 }), {});
+    finalAnswers.forEach((answer) => {
+      Object.entries(SCORE_MATRIX[answer] || {}).forEach(([town, points]) => {
+        scores[town] += points;
       });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        const msg = body?.errors?.[0]?.message || body?.message || `Request failed (${res.status})`;
-        throw new Error(msg);
-      }
-
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "buyer_signup_submit" });
-        if (window.fbq) window.fbq("trackCustom", "BuyerSignupSubmit");
-      } catch {}
-
-      setDone(true);
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong sending your request. Please try again.");
-      setTimeout(() => errorRef.current?.focus(), 0);
-    } finally {
-      setSending(false);
-    }
+    });
+    const ranked = COMMUNITIES
+      .map((town, index) => ({ town, score: scores[town], index }))
+      .sort((a, b) => b.score - a.score || a.index - b.index);
+    setResult(ranked.slice(0, 3).map((item) => item.town));
   }
 
-  if (done) {
+  function nextStep() {
+    if (!selected) return;
+    if (step === QUESTIONS.length - 1) {
+      calculateResult(answers);
+      return;
+    }
+    setStep((current) => current + 1);
+  }
+
+  function retakeQuiz() {
+    setStep(0);
+    setAnswers([]);
+    setResult(null);
+  }
+
+  if (result) {
+    const [primary, ...secondary] = result;
+    const primaryData = TOWN_DATA[primary];
     return (
-      <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_45px_130px_rgba(34,68,10,0.55)]">
-        <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 px-6 py-10 text-white backdrop-blur-xl sm:px-10">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.35),_transparent_70%)]" aria-hidden />
-          <div className="relative z-10 flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-              <CheckIcon className="h-4 w-4" />
-              Match Concierge
-            </span>
-            <h3 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              You’re in — we’ll reach out within 24 hours
-            </h3>
-            <p className="max-w-2xl text-sm text-emerald-100/85 sm:text-base">
-              Thanks! A NorthSide GTA specialist will contact you via email or phone within 24 hours to kick off your personalized town match and search plan.
-            </p>
-            <p className="text-xs uppercase tracking-[0.3em] text-emerald-100/70">Private &amp; secure. We never spam.</p>
+      <div className="quiz-card result-card">
+        <div className="result-primary">
+          <h3>{primary}</h3>
+          <p>Based on your answers, {primary} is your strongest fit.</p>
+          <ul>
+            {primaryData.reasons.map((reason) => (
+              <li key={reason}><span>✓</span>{reason}</li>
+            ))}
+          </ul>
+          <div className="result-conversion">
+            <strong>Want us to pressure-test this against your budget, commute, and timing?</strong>
+            <p>Send us your basics and we’ll build a practical NorthSide GTA shortlist around your actual move.</p>
+            <button type="button" onClick={() => scrollToSection("cta-section")}>Send me my town shortlist</button>
+          </div>
+          <div className="result-actions secondary-actions">
+            <a href={`/communities/${primaryData.slug}`}>Explore {primary} →</a>
           </div>
         </div>
+        <div className="also-like">
+          <p className="buyers-eyebrow">You might also like</p>
+          <div className="also-grid">
+            {secondary.map((town) => (
+              <article key={town} className="also-card">
+                <h4>{town}</h4>
+                <p>{TOWN_DATA[town].reasons[0]}</p>
+                <a href={`/communities/${TOWN_DATA[town].slug}`}>Secondary town guide →</a>
+              </article>
+            ))}
+          </div>
+        </div>
+        <button className="retake-button" type="button" onClick={retakeQuiz}>← Retake the quiz</button>
       </div>
     );
   }
 
+  const question = QUESTIONS[step];
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/20 bg-white/5 p-[1.5px] shadow-[0_55px_140px_rgba(34,68,10,0.55)]">
-      <div className="relative overflow-hidden rounded-[30px] bg-[#07150d]/90 p-6 backdrop-blur-xl sm:p-8 md:p-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(50,97,14,0.4),_transparent_70%)]" aria-hidden />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
-          style={{ backgroundImage: "url('/Images/northside-map-grid.png')", backgroundSize: "cover" }}
-          aria-hidden
-        />
-
-        <div className="relative z-10 space-y-6">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-500/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100 shadow-sm backdrop-blur">
-              VIP
-            </div>
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <h3 className="text-3xl font-semibold tracking-tight text-white md:text-[2.35rem]">Match Concierge</h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {[
-                  { icon: "⏱️", text: "Takes ~1 minute" },
-                  { icon: "✅", text: "No spam, no obligation" },
-                  { icon: "🔒", text: "Secure & private" },
-                  { icon: "📍", text: "Local market experts" },
-                ].map((p) => (
-                  <span
-                    key={p.text}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[12px] font-semibold text-white shadow-sm backdrop-blur"
-                  >
-                    <span>{p.icon}</span> {p.text}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <p className="max-w-xl text-sm text-emerald-100/85 md:text-base">
-              Tell us how you live — we’ll match you to the right town, street, and home.
-            </p>
-          </div>
-
-          <div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 transition-all"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-            <div className="mt-1 text-right text-[11px] font-medium text-emerald-100/70">
-              {progressPct}% complete
-            </div>
-          </div>
-
-          {error && (
-            <div
-              ref={errorRef}
-              tabIndex={-1}
-              role="alert"
-              aria-live="assertive"
-              className="mt-2 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100"
-            >
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={onSubmit} className="grid grid-cols-1 gap-5">
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  First Name <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  autoComplete="given-name"
-                  required
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Last Name <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  autoComplete="family-name"
-                  required
-                />
-              </label>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Email <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.email
-                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/60"
-                      : "border-white/10 focus:border-emerald-400 focus:ring-emerald-400/40"
-                  }`}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                />
-                {fieldErrors.email && <p className="mt-1 text-xs text-red-200">{fieldErrors.email}</p>}
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Phone <span className="text-red-300">*</span>
-                </span>
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={update}
-                  className={`mt-1 w-full rounded-lg border px-3 py-2 bg-white text-slate-900 shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 ${
-                    fieldErrors.phone
-                      ? "border-red-400 focus:border-red-400 focus:ring-red-400/60"
-                      : "border-white/10 focus:border-emerald-400 focus:ring-emerald-400/40"
-                  }`}
-                  placeholder="(###) ###-####"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  required
-                />
-                {fieldErrors.phone && <p className="mt-1 text-xs text-red-200">{fieldErrors.phone}</p>}
-              </label>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">Budget (min)</span>
-                <input
-                  name="budgetMin"
-                  value={form.budgetMin}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="$800,000"
-                  inputMode="decimal"
-                  autoComplete="off"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Budget (max)</span>
-                <input
-                  name="budgetMax"
-                  value={form.budgetMax}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="$1,200,000"
-                  inputMode="decimal"
-                  autoComplete="off"
-                />
-              </label>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-3">
-              <label className="block">
-                <span className="text-sm font-medium text-white">Bedrooms (desired)</span>
-                <select
-                  name="bedrooms"
-                  value={form.bedrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Bathrooms (desired)</span>
-                <select
-                  name="bathrooms"
-                  value={form.bathrooms}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Select…</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5+</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">Property type</span>
-                <select
-                  name="propertyType"
-                  value={form.propertyType}
-                  onChange={update}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/95 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                >
-                  <option value="">Any</option>
-                  <option>Detached</option>
-                  <option>Semi-Detached</option>
-                  <option>Townhouse</option>
-                  <option>Condo</option>
-                  <option>Rural</option>
-                </select>
-              </label>
-            </div>
-
-            <div>
-              <span className="block text-sm font-medium text-white">
-                When are you hoping to buy? <span className="text-red-300">*</span>
-              </span>
-              <div className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 md:grid-cols-5">
-                {["Now", "1–3 Months", "4–6 Months", "7–12 Months", "Longer"].map((label, idx) => (
-                  <label
-                    key={label}
-                    className={`group flex cursor-pointer items-center gap-2 rounded-2xl border px-3 py-2 transition ${
-                      form.timeline === label
-                        ? "border-white/30 bg-white/15 text-white shadow-lg shadow-emerald-900/30"
-                        : "border-white/10 bg-white/5 text-emerald-100/80 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="timeline"
-                      value={label}
-                      checked={form.timeline === label}
-                      onChange={update}
-                      required={idx === 0}
-                      className="h-4 w-4 border-white/40 text-emerald-400 focus:ring-emerald-400/60"
-                    />
-                    <span className="leading-snug">{label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <span className="text-sm font-medium text-white">Which NorthSide GTA towns interest you most?</span>
-              <p className="mt-1 text-xs text-emerald-100/70">Select up to 7.</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {TOWNS.map((town) => {
-                  const active = form.towns.includes(town);
-                  return (
-                    <button
-                      type="button"
-                      key={town}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] transition backdrop-blur ${
-                        active
-                          ? "border-white/25 bg-white/15 text-white shadow-lg shadow-emerald-900/20"
-                          : "border-white/15 bg-white/5 text-emerald-100/80 hover:border-white/25 hover:bg-white/10 hover:text-white"
-                      }`}
-                      onClick={() => toggleTown(town)}
-                    >
-                      {town}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Must-haves <span className="text-emerald-100/70">(optional)</span>
-                </span>
-                <textarea
-                  name="mustHaves"
-                  value={form.mustHaves}
-                  onChange={update}
-                  rows={3}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="E.g., garage, yard, quiet street, near GO Station…"
-                />
-              </label>
-              <label className="block">
-                <span className="text-sm font-medium text-white">
-                  Nice-to-haves <span className="text-emerald-100/70">(optional)</span>
-                </span>
-                <textarea
-                  name="niceToHaves"
-                  value={form.niceToHaves}
-                  onChange={update}
-                  rows={3}
-                  className="mt-1 w-full rounded-lg border border-white/10 bg-white/90 px-3 py-2 text-slate-900 shadow-lg shadow-emerald-900/10 placeholder-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/40"
-                  placeholder="E.g., finished basement, newer roof, south-facing yard…"
-                />
-              </label>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg shadow-emerald-900/30 backdrop-blur">
-              <h4 className="text-sm font-semibold text-white">Before You Submit</h4>
-              <p className="text-xs text-emerald-100/80">Please confirm the following to help us respond faster.</p>
-              <div className="mt-3 space-y-2 text-sm">
-                <label className="flex items-start gap-2 text-emerald-100/80">
-                  <input
-                    type="checkbox"
-                    name="notUnderContract"
-                    checked={form.notUnderContract}
-                    onChange={update}
-                    className="mt-1 h-4 w-4 rounded border border-white/40 text-emerald-500 focus:ring-emerald-400/80"
-                    required
-                  />
-                  <span>
-                    I confirm that I am <span className="underline">not</span> currently under contract with another Real Estate Brokerage.
-                  </span>
-                </label>
-                <label className="flex items-start gap-2 text-emerald-100/80">
-                  <input
-                    type="checkbox"
-                    name="consent"
-                    checked={form.consent}
-                    onChange={update}
-                    className="mt-1 h-4 w-4 rounded border border-white/40 text-emerald-500 focus:ring-emerald-400/80"
-                    required
-                  />
-                  <span>
-                    I agree to be contacted by Finally Home Agents about my buyer match and search plan.
-                    <span className="block text-emerald-100/60 text-xs">You can unsubscribe anytime. We respect your privacy.</span>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <button
-                type="submit"
-                disabled={!requiredOk || sending}
-                className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {sending ? "Sending…" : "Start Your Match"}
-              </button>
-
-              <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
-            </div>
-
-            <input
-              type="text"
-              name="nickname"
-              value={form.nickname}
-              onChange={update}
-              className="hidden"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </form>
-
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-emerald-100/70">
-            <span>★★★★★ Google reviews</span>
-            <span>•</span>
-            <span>AI-assisted town matching &amp; VIP listing alerts</span>
-            <span>•</span>
-            <span>Local team. Personal guidance.</span>
-          </div>
-        </div>
+    <div className="quiz-card">
+      <div className="quiz-progress" aria-hidden="true"><span style={{ width: progress }} /></div>
+      <p className="quiz-step">Question {step + 1} of 3</p>
+      <h3>{question.question}</h3>
+      <div className="quiz-options" role="radiogroup" aria-label={question.question}>
+        {question.options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            className={selected === option.value ? "selected" : ""}
+            onClick={() => chooseAnswer(option.value)}
+            role="radio"
+            aria-checked={selected === option.value}
+          >
+            {option.label}
+          </button>
+        ))}
       </div>
+      <button className="quiz-next" type="button" disabled={!selected} onClick={nextStep}>
+        {step === QUESTIONS.length - 1 ? "See my match →" : "Next"}
+      </button>
     </div>
   );
 }
 
-function BuyersHero({ onStartSearch, onTalkToAgent }) {
-  return (
-    <section className="relative isolate">
-      <figure className="relative h-[60vh] w-full overflow-hidden lg:h-[75vh] lg:max-h-[820px]">
-       <img
-  src={`${process.env.PUBLIC_URL || ''}/uploads/buyers-hero-northside-family.jpg`}
-  alt="Young family exploring a NorthSide GTA neighborhood with stone and brick homes at sunset — representing the lifestyle of buying north of Toronto."
-  loading="eager"
-  decoding="async"
-  className="w-full h-[75vh] object-cover"
-/>
-      </figure>
-
-      <div className="absolute inset-0">
-        <div className="mx-auto flex h-full w-full max-w-6xl items-end px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-16">
-          <div className="relative max-w-xl">
-            <div
-              className="absolute -inset-6 rounded-[32px] bg-gradient-to-br from-[#32610E]/70 via-[#244c0b]/60 to-transparent"
-              aria-hidden
-            />
-            <div className="relative rounded-[32px] border border-white/15 bg-white/10 p-6 shadow-[0_30px_120px_rgba(4,17,12,0.55)] backdrop-blur lg:p-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-100">
-                BUYERS • NORTHSIDE GTA
-              </div>
-              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.9rem]">
-                Find your NorthSide home.
-              </h1>
-              <p className="mt-3 max-w-lg text-base text-emerald-50/90 sm:text-lg">
-                Space, community, and lifestyle north of Toronto — with Finally Home Agents.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button
-                  type="button"
-                  onClick={() => onStartSearch?.()}
-                  className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_40px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-300"
-                >
-                  Start Your Home Search
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onTalkToAgent?.()}
-                  className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
-                >
-                  Talk to an Agent
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WhyBuyWithUsBand() {
-  const items = [
-    { icon: "✅", text: "Local intel you can’t Google — schools, micro-neighborhoods, commutes." },
-    { icon: "🧭", text: "Concierge search — we shortlist and book tours for you." },
-    { icon: "🛡️", text: "Offer strategy that wins — clean terms, timing, and comps that matter." },
-    { icon: "🤝", text: "From offer to keys — financing, lawyers, inspections, movers." },
-  ];
-
-  return (
-    <section aria-label="Why buy with Finally Home Agents">
-      <div className="rounded-[28px] border border-white/10 bg-white/10 p-5 shadow-[0_24px_70px_rgba(4,17,12,0.45)] backdrop-blur">
-        <div className="grid gap-4 text-sm text-emerald-50 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ icon, text }) => (
-            <div key={text} className="flex items-start gap-3">
-              <span className="text-lg leading-none">{icon}</span>
-              <p className="leading-6 text-emerald-50/90">{text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TownQuickPicksStrip() {
-  return (
-    <section aria-labelledby="town-quick-picks-heading" className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_24px_70px_rgba(4,17,12,0.4)] backdrop-blur">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 id="town-quick-picks-heading" className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            Town quick-picks
-          </h2>
-          <p className="mt-1 text-sm text-emerald-100/80">Tap a town to jump straight into listings and local intel.</p>
-        </div>
-      </div>
-      <div className="mt-5 flex flex-wrap gap-3">
-        {TOWN_QUICK_PICKS.map((town) => (
-          <a
-            key={town.name}
-            href={town.href}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-white/60 hover:bg-white/20"
-          >
-            <span>{town.name}</span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-100/70 group-hover:text-white/90">
-              {town.hint}
-            </span>
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function BuyersReviewCarousel() {
-  const grouped = useMemo(() => {
-    const chunkSize = 3;
-    const acc = [];
-    for (let i = 0; i < GOOGLE_REVIEWS.length; i += chunkSize) {
-      acc.push(GOOGLE_REVIEWS.slice(i, i + chunkSize));
-    }
-    return acc;
-  }, []);
-
-  const totalSlides = grouped.length || 1;
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || totalSlides <= 1) return;
-    const id = setInterval(() => {
-      setActive((prev) => (prev + 1) % totalSlides);
-    }, 6000);
-    return () => clearInterval(id);
-  }, [paused, totalSlides]);
-
-  useEffect(() => {
-    if (active >= totalSlides) {
-      setActive(0);
-    }
-  }, [active, totalSlides]);
-
-  if (grouped.length === 0) {
-    return null;
-  }
-
-  return (
-    <section className="space-y-6" aria-labelledby="buyers-reviews-heading">
-      <div className="text-center">
-        <h2 id="buyers-reviews-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Real buyers. Real reviews.
-        </h2>
-        <p className="mt-2 text-base text-emerald-100/80">Verified Google reviews from NorthSide GTA clients.</p>
-      </div>
-
-      <div
-        className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-4 shadow-[0_24px_80px_rgba(4,17,12,0.45)] backdrop-blur"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-      >
-        <div
-          className="flex transition-transform duration-700 ease-out"
-          style={{ transform: `translateX(-${active * 100}%)` }}
-        >
-          {grouped.map((group, index) => (
-            <div key={index} className="w-full shrink-0 px-1 sm:px-2">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.map((review) => (
-                  <article
-                    key={review.name}
-                    className="flex h-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/12 p-5 text-left text-emerald-50 shadow-[0_14px_40px_rgba(4,17,12,0.35)] backdrop-blur"
-                  >
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-emerald-100/80">
-                      <img src="/Images/google-logo.png" alt="Google" className="h-5 w-5" loading="lazy" />
-                      Finally Home Agents
-                    </div>
-                    <p className="text-sm leading-6 text-emerald-50/90 sm:text-base">{review.quote}</p>
-                    <div className="mt-auto text-sm font-semibold text-white/90">— {review.name}</div>
-                    <span className="text-[11px] uppercase tracking-[0.3em] text-emerald-100/60">Verified Client Review</span>
-                  </article>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {totalSlides > 1 && (
-          <div className="mt-6 flex items-center justify-center gap-2">
-            {Array.from({ length: totalSlides }).map((_, index) => (
-              <span
-                key={index}
-                className={`h-1.5 w-6 rounded-full transition ${index === active ? "bg-emerald-300" : "bg-white/25"}`}
-                aria-hidden="true"
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function ProcessSection() {
-  return (
-    <section aria-labelledby="buyers-process-heading" className="space-y-6">
-      <div className="text-center">
-        <h2 id="buyers-process-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Buying with Finally Home Agents is simple
-        </h2>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {PROCESS_STEPS.map((step) => (
-          <div key={step.title} className="rounded-3xl border border-white/10 bg-white/8 p-5 text-left shadow-[0_18px_50px_rgba(4,17,12,0.4)] backdrop-blur">
-            <h3 className="text-lg font-semibold text-white">{step.title}</h3>
-            <p className="mt-1 text-sm text-emerald-100/80">{step.description}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CallbackDrawer({ expanded, onExpandedChange }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [notes, setNotes] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
-  const [showErrors, setShowErrors] = useState(false);
-
+function ConsultationForm() {
+  const [expanded, setExpanded] = useState(false);
+  const [selectedTowns, setSelectedTowns] = useState([]);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
   const formEndpoint = useMemo(() => getFormEndpoint(), []);
 
-  const validations = useMemo(() => {
-    const issues = {};
-    if (!name.trim()) issues.name = "Name is required.";
-    if (!phone.trim()) issues.phone = "Phone number is required.";
-    return issues;
-  }, [name, phone]);
+  function toggleTown(town) {
+    setSelectedTowns((current) =>
+      current.includes(town) ? current.filter((item) => item !== town) : [...current, town]
+    );
+  }
 
-  const visibleErrors = showErrors ? validations : {};
-
-  const submit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
-    if (submitting) return;
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    setStatus("sending");
+    setError("");
 
-    if (Object.keys(validations).length > 0) {
-      setShowErrors(true);
-      return;
-    }
-
-    setSubmitting(true);
-    setShowErrors(false);
-    setError(null);
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.towns = selectedTowns.join(", ");
 
     try {
-      const payload = new FormData();
-      payload.append("name", name.trim());
-      payload.append("phone", phone.trim());
-      if (notes.trim()) {
-        payload.append("message", notes.trim());
-      }
-      payload.append("source", "callback");
-
-      const response = await fetch(formEndpoint, {
+      const response = await fetch(form.action, {
         method: "POST",
-        body: payload,
-        headers: { Accept: "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error("Request failed");
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || "Sorry, something went wrong. Please try again.");
       }
 
-      setSuccess(true);
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
+      setStatus("success");
+      form.reset();
+      setSelectedTowns([]);
+    } catch (submissionError) {
+      setStatus("idle");
+      setError(submissionError.message || "Sorry, something went wrong. Please try again.");
     }
-  };
-
-  const panelId = "buyers-callback-panel";
-  const titleId = "buyers-callback-title";
-
-  if (success) {
-    return (
-      <div className="rounded-[28px] border border-white/15 bg-white/10 p-6 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
-        <h3 className="text-xl font-semibold">We’ll be in touch shortly</h3>
-        <p className="mt-2 text-sm text-emerald-100/85">Thanks for your request! A NorthSide GTA advisor will call you between 9am–9pm.</p>
-      </div>
-    );
   }
 
   return (
-    <div className="rounded-[28px] border border-white/15 bg-white/8 text-white shadow-[0_24px_80px_rgba(4,17,12,0.4)] backdrop-blur">
-      <button
-        type="button"
-        onClick={() => onExpandedChange(!expanded)}
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left text-sm font-semibold uppercase tracking-[0.32em] text-emerald-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
-        aria-expanded={expanded}
-        aria-controls={panelId}
-        aria-labelledby={titleId}
-      >
-        <span id={titleId}>Premium callback (9am–9pm)</span>
-        <span aria-hidden className="text-lg">{expanded ? "–" : "+"}</span>
-      </button>
-      <div id={panelId} hidden={!expanded} className="border-t border-white/10 px-6 py-6 sm:px-8">
-        <form className="space-y-4" onSubmit={submit}>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Name *</span>
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-              required
-            />
-            {visibleErrors.name && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.name}</span>}
-          </label>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Phone *</span>
-            <input
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/95 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-              required
-            />
-            {visibleErrors.phone && <span className="mt-1 block text-xs text-emerald-100/80">{visibleErrors.phone}</span>}
-          </label>
-          <label className="block text-sm">
-            <span className="text-emerald-100/80">Notes <span className="text-emerald-100/60">(optional)</span></span>
-            <textarea
-              value={notes}
-              onChange={(event) => setNotes(event.target.value)}
-              rows={3}
-              className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 px-3 py-2 text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-            />
-          </label>
+    <div className="consultation-wrap">
+      <div className="team-photo-block">
+        <img src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="Matthew and Landon Mulhall" />
+        <p>Matthew & Landon Mulhall · Finally Home Agents · HomeLife Optimum Realty, Brokerage</p>
+      </div>
+      <div className="consultation-card">
+        {status === "success" ? (
+          <p className="form-thanks">Thanks — we'll be in touch shortly. Matt & Landon</p>
+        ) : (
+          <form action={formEndpoint} method="POST" onSubmit={handleSubmit}>
+            <input type="hidden" name="_subject" value="New buyer inquiry — NorthSide GTA" />
+            <input type="hidden" name="_next" value="" />
+            <input type="hidden" name="towns" value={selectedTowns.join(", ")} />
 
-          {error && <p className="text-sm text-red-200">{error}</p>}
+            <div className="form-two-col">
+              <label>
+                <span>First name</span>
+                <input name="first_name" placeholder="Your first name" required />
+              </label>
+              <label>
+                <span>Phone or email</span>
+                <input name="contact" placeholder="Phone or email" required />
+              </label>
+            </div>
 
-          <div className="flex flex-col gap-2">
+            <label>
+              <span>Where are you moving from?</span>
+              <select name="moving_from" required defaultValue="">
+                <option value="" disabled>Select one</option>
+                <option>Toronto — downtown / midtown</option>
+                <option>Toronto — east end</option>
+                <option>Toronto — west end</option>
+                <option>North York / Scarborough</option>
+                <option>Elsewhere in GTA</option>
+                <option>Outside the GTA</option>
+              </select>
+            </label>
+
             <button
-              type="submit"
-              disabled={submitting}
-              className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_35px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+              className={`expand-toggle${expanded ? " open" : ""}`}
+              type="button"
+              aria-expanded={expanded}
+              onClick={() => setExpanded((open) => !open)}
             >
-              {submitting ? "Sending…" : "Request callback"}
+              <span>▸</span>
+              Add more detail — budget, timeline, towns you're thinking about
             </button>
-            <p className="text-xs text-emerald-100/70">Private &amp; secure. We never spam.</p>
-          </div>
-        </form>
+
+            {expanded && (
+              <div className="expanded-fields">
+                <label>
+                  <span>Budget range</span>
+                  <select name="budget" defaultValue="">
+                    <option value="">Select a budget</option>
+                    <option>Under $800K</option>
+                    <option>$800K – $1M</option>
+                    <option>$1M – $1.3M</option>
+                    <option>$1.3M+</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Timeline</span>
+                  <select name="timeline" defaultValue="">
+                    <option value="">Select a timeline</option>
+                    <option>Just exploring</option>
+                    <option>3–6 months</option>
+                    <option>6–12 months</option>
+                    <option>Ready now</option>
+                  </select>
+                </label>
+
+                <fieldset>
+                  <legend>Towns curious about</legend>
+                  <div className="town-chip-grid">
+                    {COMMUNITIES.map((town) => (
+                      <button
+                        key={town}
+                        type="button"
+                        className={selectedTowns.includes(town) ? "selected" : ""}
+                        onClick={() => toggleTown(town)}
+                        aria-pressed={selectedTowns.includes(town)}
+                      >
+                        {town}
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
+              </div>
+            )}
+
+            {error && <p className="form-error" role="alert">{error}</p>}
+            <button className="submit-button" type="submit" disabled={status === "sending"}>
+              {status === "sending" ? "Sending..." : "Book a Strategy Call →"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
 }
 
-function StickyCtaBar({ onStartSearch, onCallBack }) {
-  const [visible, setVisible] = useState(false);
+export default function BuyersPage() {
+  const [stickyTarget, setStickyTarget] = useState("town-match");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const doc = document.documentElement;
-      const scrollTop = doc.scrollTop || document.body.scrollTop;
-      const maxScroll = doc.scrollHeight - doc.clientHeight;
-      if (maxScroll <= 0) {
-        setVisible(false);
-        return;
-      }
-      setVisible(scrollTop >= maxScroll * 0.25);
-    };
+    const quizSection = document.getElementById("town-match");
+    if (!quizSection || typeof IntersectionObserver === "undefined") return undefined;
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => setStickyTarget(entry.boundingClientRect.top < 0 && !entry.isIntersecting ? "cta-section" : "town-match"),
+      { threshold: 0, rootMargin: "-90px 0px 0px 0px" }
+    );
+
+    observer.observe(quizSection);
+    return () => observer.disconnect();
   }, []);
 
-  if (!visible) {
-    return null;
-  }
-
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-6">
-      <div className="pointer-events-auto mx-auto flex max-w-3xl flex-col gap-3 rounded-2xl border border-white/10 bg-[#05180f]/95 p-4 text-white shadow-[0_20px_60px_rgba(4,17,12,0.55)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-emerald-50/90 sm:text-base">Looking north of Toronto? We’ll guide you.</p>
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <button
-            type="button"
-            onClick={onStartSearch}
-            className="inline-flex items-center justify-center rounded-lg bg-[#32610E] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(50,97,14,0.35)] transition hover:bg-[#2b530c] focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          >
-            Start Your Search
-          </button>
-          <button
-            type="button"
-            onClick={onCallBack}
-            className="inline-flex items-center justify-center rounded-lg border border-white/60 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
-          >
-            Call Back
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+    <main className="buyers-page">
+      <Helmet>
+        <title>Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA</title>
+        <meta
+          name="description"
+          content="Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call."
+        />
+        <meta
+          name="keywords"
+          content="buy a home north of Toronto, NorthSide GTA buyers agent, Aurora homes for sale, Newmarket homes for sale, Stouffville real estate, Uxbridge homes, Georgina real estate, East Gwillimbury homes, Scugog real estate, town match quiz, Finally Home Agents buyers"
+        />
+        <link rel="canonical" href="https://northsidegta.ca/buyers" />
+        <meta property="og:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
+        <meta property="og:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
+        <meta property="og:url" content="https://northsidegta.ca/buyers" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_CA" />
+        <meta property="og:site_name" content="NorthSide GTA" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
+        <meta name="twitter:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
+        <meta name="twitter:image" content="https://www.northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta name="twitter:site" content="@northsidegta" />
+        <script type="application/ld+json">{JSON.stringify(SCHEMA)}</script>
+      </Helmet>
 
-const BUYERS_ROUTE_META = getStaticRouteMeta("/buyers") || {};
+      <style>{BUYERS_STYLES}</style>
 
-/* ───────── Page ───────── */
-export default function BuyersPage() {
-  const [callbackOpen, setCallbackOpen] = useState(false);
-  const buyersSchema = useMemo(() => buildBuyersPageSchema(), []);
-
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
-  const handleStartSearch = () => scrollToId("match-concierge");
-  const handleTalkToAgent = () => {
-    setCallbackOpen(true);
-    scrollToId("buyers-contact");
-  };
-
-  return (
-    <div className="min-h-screen overflow-hidden bg-[#04110c] text-white">
-      <HeaderShell />
-      <DynamicMetaTags {...BUYERS_ROUTE_META}>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name:
-              BUYERS_ROUTE_META.title ||
-              "Buy a Home in the NorthSide GTA | Town Match, VIP Alerts & Expert Agents",
-            url: BUYERS_ROUTE_META.canonicalUrl || "https://northsidegta.ca/buyers",
-            description:
-              "Personalized town match, VIP listing alerts, and expert guidance for buyers in the NorthSide GTA.",
-            about: {
-              "@type": "RealEstateAgent",
-              name: "Finally Home Agents",
-              areaServed: [
-                "Georgina",
-                "East Gwillimbury",
-                "Newmarket",
-                "Aurora",
-                "Stouffville",
-                "Uxbridge",
-                "Scugog",
-              ],
-              url: "https://northsidegta.ca",
-              brand: "Finally Home Agents",
-            },
-          })}
-        </script>
-      </DynamicMetaTags>
-
-      {buyersSchema && (
-        <Helmet>
-          <script type="application/ld+json">{JSON.stringify(buyersSchema, null, 2)}</script>
-        </Helmet>
-      )}
-
-      <main className="relative pb-24">
-        <BuyersHero onStartSearch={handleStartSearch} onTalkToAgent={handleTalkToAgent} />
-
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(50,97,14,0.25),_transparent_65%)]" aria-hidden />
-        <div className="pointer-events-none absolute -top-32 left-[-10%] h-[26rem] w-[26rem] rounded-full bg-emerald-400/20 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute bottom-[-40%] right-[-20%] h-[32rem] w-[32rem] rounded-full bg-emerald-300/20 blur-3xl" aria-hidden />
-
-        <div className="relative z-10">
-          <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-12 sm:px-6 lg:px-8 lg:pb-24">
-            <div className="space-y-16 sm:space-y-20">
-              <WhyBuyWithUsBand />
-
-              <section id="match-concierge" className="scroll-mt-28 space-y-8">
-                <div className="max-w-3xl">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Match Concierge / Home Search
-                  </h2>
-                  <p className="mt-3 text-base text-emerald-100/80 sm:text-lg">
-                    Register to get your NorthSide GTA match, insider strategies, and VIP alerts — the unfair advantage other buyers don’t have.
-                  </p>
-                </div>
-                <BuyerSignupForm />
-              </section>
-
-              <BuyersReviewCarousel />
-
-              <TownQuickPicksStrip />
-
-              <section className="space-y-6">
-                <div className="mx-auto max-w-3xl text-center">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Buying on your own vs with Finally Home Agents
-                  </h2>
-                  <p className="mt-3 text-base text-emerald-100/80">
-                    See how concierge-level strategy, intel, and execution change your outcome in the NorthSide GTA.
-                  </p>
-                </div>
-                <ComparisonGrid />
-                <p className="text-center text-sm text-emerald-100/80">
-                  Join NorthSide GTA buyers who found the right town — and won the right home — with Finally Home Agents.
-                </p>
-              </section>
-
-              <ProcessSection />
-
-              <section className="space-y-6">
-                <div className="mx-auto max-w-3xl text-center">
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Featured Google love</h2>
-                  <p className="mt-2 text-base text-emerald-100/80">
-                    A quick spotlight from the buyers we’ve guided north of Toronto.
-                  </p>
-                </div>
-                <GoogleGradientReviews />
-              </section>
-
-              <section className="space-y-6">
-                <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-gradient-to-br from-emerald-500 via-emerald-500/70 to-emerald-600 px-6 py-12 text-center shadow-[0_45px_130px_rgba(34,68,10,0.6)]">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.15),_transparent_70%)]" aria-hidden />
-                  <div className="relative z-10 space-y-4">
-                    <h3 className="text-3xl font-semibold md:text-4xl">Don’t Leave Power on the Table</h3>
-                    <p className="text-lg text-emerald-100/90 md:text-xl">
-                      Register now to unlock your Match and move forward with confidence.
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              <section id="buyers-contact" className="scroll-mt-28">
-                <CallbackDrawer expanded={callbackOpen} onExpandedChange={setCallbackOpen} />
-              </section>
-            </div>
+      <section className="buyers-hero">
+        <img className="buyers-hero-bg" src="/uploads/northside-gta-finally-home-agents-hero.jpg" alt="" aria-hidden="true" />
+        <div className="buyers-container hero-inner">
+          <p className="buyers-eyebrow buyers-eyebrow-dark">Buying North of Toronto</p>
+          <h1>You don't have to leave the city. You get to.</h1>
+          <p className="hero-subhead">A guided buyer path for Toronto families moving north: match the right town, understand the market, then pressure-test the shortlist with Matt & Landon.</p>
+          <div className="hero-actions">
+            <button type="button" className="hero-primary" onClick={() => scrollToSection("town-match")}>Find My Town →</button>
+            <button type="button" className="hero-ghost" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
+          </div>
+          <div className="trust-strip">
+            {[ ["5.0 ★", "Google Rating"], ["7", "Communities Served"], ["RECO", "Registered · Ontario"], ["HomeLife", "Optimum Realty"] ].map(([stat, label]) => (
+              <div key={stat}><strong>{stat}</strong><span>{label}</span></div>
+            ))}
           </div>
         </div>
+      </section>
 
-        <StickyCtaBar onStartSearch={handleStartSearch} onCallBack={handleTalkToAgent} />
-      </main>
+      <section className="community-strip" aria-label="Communities served">
+        <div className="buyers-container community-strip-inner">
+          <span className="serving-label">Serving:</span>
+          <span className="serving-dot" />
+          <div className="community-tags">
+            {COMMUNITIES.map((town) => <span key={town}>{town}</span>)}
+          </div>
+          <p>Guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa</p>
+        </div>
+      </section>
+
+      <section className="buyers-section white-section" id="town-match">
+        <div className="buyers-container split-section">
+          <SectionHeader
+            eyebrow="01 / Town Match"
+            title="Where do you actually belong?"
+            lead="Start here. Answer 3 quick questions and we’ll point you toward the NorthSide GTA towns that best fit your lifestyle, commute, and pace."
+          />
+          <TownMatchQuiz />
+        </div>
+      </section>
+
+      <section className="buyers-section tinted-section">
+        <div className="buyers-container">
+          <SectionHeader
+            eyebrow="02 / Life Up Here"
+            title="This is what you're actually moving to"
+            lead="Not just a bigger house — a different kind of morning. School drop-off without gridlock. A backyard that gets used. Communities built around real life."
+          />
+          <div className="photo-grid">
+            {PHOTO_GRID.map(({ image, position, label, sublabel }) => (
+              <figure
+                className="photo-card"
+                key={label}
+                style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.72)), url(${image})`, backgroundPosition: position }}
+              >
+                <figcaption><strong>{label}</strong><span>{sublabel}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="buyers-section white-section">
+        <div className="buyers-container">
+          <SectionHeader
+            eyebrow="03 / Market Context"
+            title="A quick read on where budgets are landing"
+            lead="April 2026 · TRREB Market Watch. Use this as context, then let us apply it to your budget and timing."
+          />
+          <div className="market-grid">
+            {MARKET_SNAPSHOT.map(([town, price, days, yoy]) => (
+              <article className="market-card" key={town}>
+                <h3>{town}</h3>
+                <strong>{price}</strong>
+                <span>{days}</span>
+                <em>{yoy}</em>
+              </article>
+            ))}
+          </div>
+          <div className="market-followup">
+            <p className="attribution">Source: TRREB Market Watch · April 2026. Figures rounded; not a guarantee of value.</p>
+            <button type="button" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
+          </div>
+        </div>
+      </section>
+
+      <section className="buyers-section tinted-section">
+        <div className="buyers-container">
+          <SectionHeader
+            eyebrow="04 / How We Work"
+            title="A calm system for buying north"
+            lead="A focused buyer process that keeps your shortlist tight, your showings useful, and your offer strategy grounded in local context."
+          />
+          <div className="process-grid">
+            {PROCESS_STEPS.map(([step, title, body]) => (
+              <article className="process-card" key={step}>
+                <span>{step}</span>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="buyers-section white-section">
+        <div className="buyers-container">
+          <SectionHeader eyebrow="05 / Client Proof" title="Real moves. Real families." compact>
+            <p className="buyers-lead">All reviews from Google. <a href="https://share.google/GJz2QTQ8GqZIifaNH" target="_blank" rel="noreferrer">See all Google reviews →</a></p>
+          </SectionHeader>
+          <div className="reviews-grid">
+            {REVIEWS.map(([name, context, quote]) => (
+              <article className="review-card" key={name}>
+                <div className="stars" aria-label="5 stars">★★★★★</div>
+                <blockquote>“{quote}”</blockquote>
+                <h3>{name}</h3>
+                <p>{context}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="buyers-section dark-section" id="cta-section">
+        <div className="buyers-container cta-grid">
+          <SectionHeader
+            eyebrow="06 / Start the Conversation"
+            title="Want a town shortlist built around your actual move?"
+            lead="Tell us where you’re coming from, what matters most, and when you’re thinking of moving. We’ll help you narrow the right NorthSide GTA towns before you waste time on the wrong homes."
+            dark
+          />
+          <ConsultationForm />
+        </div>
+      </section>
+
+      <div className="mobile-cta-bar">
+        <div><strong>{stickyTarget === "town-match" ? "Ready to find your town?" : "Have your shortlist?"}</strong><span>Matt & Landon · Finally Home Agents</span></div>
+        <button type="button" onClick={() => scrollToSection(stickyTarget)}>{stickyTarget === "town-match" ? "Find My Town" : "Book a Strategy Call"}</button>
+      </div>
 
       <Footer />
-    </div>
+    </main>
   );
 }
+
+const BUYERS_STYLES = `
+  .buyers-page {
+    --primary: #23470a;
+    --accent: #5a8a2a;
+    --soft: #a8c97a;
+    --tinted: #f9f8f5;
+    --text: #1a1a1a;
+    --muted: #5a6474;
+    --border: #e2ddd5;
+    --trust: #f5f3ee;
+    color: var(--text);
+    background: #fff;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  .buyers-container { max-width: 1120px; margin: 0 auto; }
+  .buyers-eyebrow { margin: 0 0 12px; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .buyers-eyebrow-dark { color: var(--soft); }
+  .buyers-section { padding: 42px 32px; scroll-margin-top: 120px; }
+  .white-section { background: #fff; }
+  .tinted-section { background: var(--tinted); }
+  .dark-section { background: var(--primary); padding-top: 44px; padding-bottom: 44px; }
+  .buyers-section-header { max-width: 620px; margin-bottom: 24px; }
+  .buyers-section-header.compact { margin-bottom: 18px; }
+  .buyers-section-header h2 { margin: 0; color: var(--text); font-family: "Playfair Display", Georgia, serif; font-size: 32px; line-height: 1.08; font-weight: 600; letter-spacing: -0.02em; }
+  .dark-section .buyers-section-header h2 { color: #fff; }
+  .buyers-lead { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.75; }
+  .buyers-lead a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .buyers-lead-dark { color: rgba(255,255,255,0.65); }
+
+  .buyers-hero { position: relative; overflow: hidden; background: var(--primary); padding: 72px 32px 44px; }
+  .buyers-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; }
+  .buyers-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(35,71,10,0.95), rgba(35,71,10,0.74), rgba(35,71,10,0.45)); }
+  .hero-inner { position: relative; z-index: 1; max-width: 760px; margin-left: max(calc((100vw - 1120px) / 2), 0px); }
+  .buyers-hero h1 { margin: 0; max-width: 640px; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 38px; line-height: 1.08; font-weight: 600; letter-spacing: -0.02em; }
+  .hero-subhead { max-width: 610px; margin: 16px 0 0; color: rgba(255,255,255,0.76); font-size: 14px; line-height: 1.75; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .hero-actions button, .result-actions button, .result-actions a, .quiz-next, .submit-button, .mobile-cta-bar button { border-radius: 3px; border: 0; font-weight: 600; cursor: pointer; transition: transform 160ms ease, opacity 160ms ease; }
+  .hero-actions button:hover, .result-actions button:hover, .result-actions a:hover, .quiz-next:hover, .submit-button:hover, .mobile-cta-bar button:hover { transform: translateY(-1px); }
+  .hero-primary { background: #fff; color: var(--primary); padding: 12px 20px; }
+  .hero-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.72) !important; padding: 11px 20px; }
+  .trust-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; max-width: 620px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 18px; margin-top: 24px; }
+  .trust-strip strong { display: block; color: #fff; font-size: 15px; font-weight: 600; }
+  .trust-strip span { display: block; margin-top: 3px; color: rgba(255,255,255,0.6); font-size: 11.5px; }
+
+  .community-strip { background: var(--trust); border-bottom: 1px solid #e8e4db; padding: 9px 32px; }
+  .community-strip-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+  .serving-label { color: var(--muted); font-size: 11.5px; }
+  .serving-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--primary); }
+  .community-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .community-tags span { border: 1px solid #e2ddd5; border-radius: 999px; background: #fff; padding: 4px 9px; color: var(--primary); font-size: 11.5px; font-weight: 600; }
+  .community-strip p { flex-basis: 100%; margin: 2px 0 0; color: var(--muted); font-size: 11.5px; }
+
+  .split-section { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(340px, 600px); gap: 34px; align-items: start; }
+  .quiz-card { width: 100%; max-width: 600px; background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 26px; box-shadow: 0 22px 70px rgba(26,26,26,0.07); }
+  .quiz-progress { height: 2px; background: #e8e4db; margin-bottom: 16px; }
+  .quiz-progress span { display: block; height: 100%; background: var(--primary); transition: width 180ms ease; }
+  .quiz-step { margin: 0 0 10px; color: var(--muted); font-size: 11px; }
+  .quiz-card h3 { margin: 0 0 18px; color: var(--text); font-family: "Playfair Display", Georgia, serif; font-size: 24px; line-height: 1.2; }
+  .quiz-options { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 22px; }
+  .quiz-options button { background: var(--tinted); border: 1px solid #ddd6c8; border-radius: 20px; padding: 8px 16px; color: var(--text); font-size: 12.5px; cursor: pointer; }
+  .quiz-options button.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .quiz-next { background: var(--primary); color: #fff; padding: 11px 22px; }
+  .quiz-next:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+  .result-primary h3 { margin-bottom: 8px; color: var(--primary); font-size: 26px; }
+  .result-primary p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+  .result-primary ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+  .result-primary li { display: flex; gap: 9px; color: var(--text); font-size: 13px; line-height: 1.55; }
+  .result-primary li span { color: var(--accent); font-weight: 700; }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .result-conversion { margin-top: 20px; border: 1px solid #dfe8d5; border-radius: 5px; background: #f7fbf1; padding: 16px; }
+  .result-conversion strong { display: block; color: var(--primary); font-size: 14px; line-height: 1.35; }
+  .result-conversion p { margin: 6px 0 12px; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+  .result-conversion button { border: 0; border-radius: 3px; background: var(--primary); color: #fff; padding: 11px 16px; font-weight: 700; cursor: pointer; }
+  .secondary-actions { margin-top: 10px; }
+  .result-actions button { background: var(--primary); color: #fff; padding: 11px 18px; }
+  .result-actions a { display: inline-flex; align-items: center; background: var(--tinted); border: 1px solid var(--border); color: var(--primary); padding: 10px 18px; text-decoration: none; }
+  .also-like { border-top: 1px solid #e8e4db; margin-top: 24px; padding-top: 18px; }
+  .also-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .also-card { border: 1px solid var(--border); border-radius: 5px; padding: 14px 16px; }
+  .also-card h4 { margin: 0 0 6px; color: var(--primary); font-size: 13px; font-weight: 600; }
+  .also-card p { margin: 0 0 10px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .also-card a { color: var(--primary); font-size: 12px; font-weight: 600; text-decoration: none; }
+  .retake-button { margin-top: 18px; padding: 0; border: 0; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+
+  .photo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .photo-card { position: relative; overflow: hidden; min-height: 142px; margin: 0; border-radius: 5px; background-color: #1a3a0a; background-size: cover; background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+  .photo-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(26,58,10,0.3), rgba(26,58,10,0)); }
+  .photo-card figcaption { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 12px; color: #fff; }
+  .photo-card strong { display: block; font-size: 13px; font-weight: 600; }
+  .photo-card span { display: block; margin-top: 3px; color: rgba(255,255,255,0.72); font-size: 11.5px; }
+
+  .market-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .market-card, .process-card, .review-card { border: 1px solid var(--border); border-radius: 5px; background: #fff; }
+  .market-card { padding: 13px 15px; }
+  .market-card h3 { margin: 0 0 10px; color: var(--primary); font-size: 13px; font-weight: 700; }
+  .market-card strong { display: block; font-size: 18px; color: var(--text); }
+  .market-card span, .market-card em { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; font-style: normal; }
+  .market-card em { color: var(--accent); font-weight: 700; }
+  .attribution { margin: 0; color: var(--muted); font-size: 10.5px; }
+  .market-followup { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; }
+  .market-followup button { flex-shrink: 0; border: 1px solid var(--border); border-radius: 3px; background: #fff; color: var(--primary); padding: 9px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  .process-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .process-card { padding: 18px 16px; }
+  .process-card span { display: block; margin-bottom: 10px; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; }
+  .process-card h3 { margin: 0 0 9px; color: var(--primary); font-family: "Playfair Display", Georgia, serif; font-size: 20px; line-height: 1.15; }
+  .process-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .review-card { padding: 17px; }
+  .stars { color: var(--primary); font-size: 12px; letter-spacing: 1px; }
+  .review-card blockquote { margin: 10px 0 14px; color: var(--text); font-size: 13px; line-height: 1.62; }
+  .review-card h3 { margin: 0; color: var(--primary); font-size: 13px; font-weight: 700; }
+  .review-card p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+
+  .cta-grid { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(340px, 540px); gap: 36px; align-items: start; }
+  .consultation-wrap { max-width: 540px; }
+  .team-photo-block { margin-bottom: 16px; }
+  .team-photo-block img { width: 100%; max-width: 540px; height: 176px; border-radius: 5px; object-fit: cover; object-position: center 32%; display: block; }
+  .team-photo-block p { margin: 8px 0 0; color: rgba(255,255,255,0.45); font-size: 11px; }
+  .consultation-card { max-width: 540px; border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; background: rgba(255,255,255,0.07); padding: 24px; box-shadow: 0 24px 70px rgba(0,0,0,0.14); }
+  .consultation-card form { display: grid; gap: 12px; }
+  .form-two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .consultation-card label, .consultation-card fieldset { display: grid; gap: 6px; margin: 0; border: 0; padding: 0; }
+  .consultation-card label span, .consultation-card legend { color: rgba(255,255,255,0.72); font-size: 11px; }
+  .consultation-card input, .consultation-card select { width: 100%; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; background: rgba(255,255,255,0.08); padding: 10px 12px; color: #fff; font-size: 13px; }
+  .consultation-card input::placeholder { color: rgba(255,255,255,0.35); }
+  .consultation-card option { color: #1a1a1a; }
+  .expand-toggle { display: flex; align-items: center; gap: 8px; border: 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); background: transparent; padding: 10px 0; color: rgba(255,255,255,0.78); font-size: 12px; text-align: left; cursor: pointer; }
+  .expand-toggle span { display: inline-block; transition: transform 160ms ease; }
+  .expand-toggle.open span { transform: rotate(90deg); }
+  .expanded-fields { display: grid; gap: 14px; }
+  .town-chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .town-chip-grid button { border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6); padding: 8px 12px; font-size: 12px; cursor: pointer; }
+  .town-chip-grid button.selected { background: #3a7a1a; border-color: #3a7a1a; color: #fff; }
+  .submit-button { width: 100%; background: #fff; color: var(--primary); padding: 12px 13px; font-weight: 700; scroll-margin-bottom: 110px; }
+  .submit-button:disabled { opacity: 0.65; cursor: wait; transform: none; }
+  .form-error { margin: 0; color: #ffd4c9; font-size: 12px; }
+  .form-thanks { margin: 18px 0; color: #fff; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 26px; line-height: 1.25; }
+
+  .mobile-cta-bar { display: none; }
+
+  @media (max-width: 900px) {
+    .split-section, .cta-grid { grid-template-columns: 1fr; }
+    .market-grid, .process-grid, .reviews-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 768px) {
+    .buyers-page { padding-bottom: 82px; }
+    .mobile-cta-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: var(--primary); border-top: 2px solid var(--accent); padding: 11px 18px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -12px 30px rgba(0,0,0,0.18); }
+    .mobile-cta-bar strong { display: block; color: #fff; font-size: 13px; font-weight: 600; }
+    .mobile-cta-bar span { display: block; color: rgba(255,255,255,0.65); font-size: 12px; }
+    .mobile-cta-bar button { flex-shrink: 0; background: #fff; color: var(--primary); padding: 9px 18px; font-size: 12px; }
+  }
+
+  @media (max-width: 640px) {
+    .buyers-hero, .buyers-section, .community-strip { padding-left: 20px; padding-right: 20px; }
+    .buyers-section { padding-top: 34px; padding-bottom: 34px; }
+    .dark-section { padding-bottom: 104px; }
+    .buyers-hero { padding-top: 58px; }
+    .buyers-hero h1 { font-size: 32px; }
+    .buyers-section-header h2 { font-size: 29px; }
+    .trust-strip, .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
+    .quiz-card, .consultation-card { padding: 22px; }
+    .photo-card { min-height: 154px; }
+    .market-followup { align-items: flex-start; flex-direction: column; }
+    .team-photo-block img { height: 150px; object-position: center 30%; }
+  }
+`;
