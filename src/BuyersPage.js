@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
+import { BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
 
 const COMMUNITIES = [
   "Aurora",
@@ -185,76 +186,6 @@ const REVIEWS = [
   ["Larissa Halko", "Buyer & Seller", "What really stood out was that Matt understood our priorities as a family and ensured these were held in high regard throughout the whole process."],
   ["Susan Booth", "Seller · Holland Landing", "Their professionalism and personal attention set them apart. Throughout the entire process these Finally Home Agents exceeded our expectations."],
 ];
-
-const SCHEMA = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": "https://northsidegta.ca/buyers",
-      url: "https://northsidegta.ca/buyers",
-      name: "Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA",
-      description:
-        "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
-      inLanguage: "en-CA",
-      isPartOf: { "@id": "https://northsidegta.ca/#website" },
-      breadcrumb: {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "NorthSide GTA", item: "https://northsidegta.ca" },
-          { "@type": "ListItem", position: 2, name: "Buyers", item: "https://northsidegta.ca/buyers" },
-        ],
-      },
-    },
-    {
-      "@type": "RealEstateAgent",
-      name: "Finally Home Agents",
-      url: "https://northsidegta.ca",
-      telephone: "+16476684646",
-      areaServed: [
-        "Aurora, Ontario",
-        "Newmarket, Ontario",
-        "Whitchurch-Stouffville, Ontario",
-        "Uxbridge, Ontario",
-        "Georgina, Ontario",
-        "East Gwillimbury, Ontario",
-        "Scugog, Ontario",
-      ],
-      description:
-        "Finally Home Agents — Matthew and Landon Mulhall — provide buyer representation across the NorthSide GTA, operating under HomeLife Optimum Realty, Brokerage.",
-      aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "12", bestRating: "5" },
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Which communities do Finally Home Agents serve for buyers?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Finally Home Agents serves buyers across Aurora, Newmarket, Whitchurch-Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What does the buyer process look like with Finally Home Agents?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Finally Home Agents starts with a town strategy call to match buyers to the right community, then builds curated showing days, provides offer strategy and negotiation support, and stays involved through to closing and beyond.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Is there a tool to help me decide which NorthSide GTA town to buy in?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. The Town Match quiz on this page asks three questions about your lifestyle, pace of life, and commute needs, then recommends a primary community plus two alternatives.",
-          },
-        },
-      ],
-    },
-  ],
-};
 
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -552,16 +483,14 @@ export default function BuyersPage() {
           name="description"
           content="Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call."
         />
-        <meta
-          name="keywords"
-          content="buy a home north of Toronto, NorthSide GTA buyers agent, Aurora homes for sale, Newmarket homes for sale, Stouffville real estate, Uxbridge homes, Georgina real estate, East Gwillimbury homes, Scugog real estate, town match quiz, Finally Home Agents buyers"
-        />
+        <meta name="author" content="Finally Home Agents" />
+        <meta name="publisher" content="Finally Home Agents" />
         <link rel="canonical" href="https://northsidegta.ca/buyers" />
         <meta property="og:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
         <meta property="og:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
         <meta property="og:url" content="https://northsidegta.ca/buyers" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta property="og:image" content="https://northsidegta.ca/uploads/buyers-page-seo.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="en_CA" />
@@ -569,9 +498,9 @@ export default function BuyersPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
         <meta name="twitter:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
-        <meta name="twitter:image" content="https://www.northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta name="twitter:image" content="https://northsidegta.ca/uploads/buyers-page-seo.jpg" />
         <meta name="twitter:site" content="@northsidegta" />
-        <script type="application/ld+json">{JSON.stringify(SCHEMA)}</script>
+        <script type="application/ld+json">{JSON.stringify(BUYERS_SCHEMA)}</script>
       </Helmet>
 
       <style>{BUYERS_STYLES}</style>

@@ -88,6 +88,11 @@ function buildHeadFragments(baseHtml, doctype, baseTags, routeMeta) {
   const fragments = combinedTags.map(stringifyTag).filter(Boolean);
   fragments.forEach((fragment) => appendHeadTag(head, fragment));
 
+  const schemaFragment = stringifyJsonLdScript(routeMeta.schema);
+  if (schemaFragment) {
+    appendHeadTag(head, schemaFragment);
+  }
+
   return finalizeHtml(doc, doctype);
 }
 
@@ -156,6 +161,13 @@ function stringifyTag(tag) {
     return attrText ? `<link ${attrText} />` : "";
   }
   return "";
+}
+
+function stringifyJsonLdScript(schema) {
+  if (!schema) return "";
+  const json = typeof schema === "string" ? schema : JSON.stringify(schema);
+  if (!json) return "";
+  return `<script type="application/ld+json">${json.replace(/</g, "\\u003c")}</script>`;
 }
 
 function escapeHtml(value) {
