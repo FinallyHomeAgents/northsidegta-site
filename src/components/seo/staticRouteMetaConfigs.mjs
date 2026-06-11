@@ -1,3 +1,5 @@
+import { BUYERS_SCHEMA } from "./buyersSchema.mjs";
+
 const DEFAULT_GLOBAL_META_CONFIG = {
   route: "/",
   documentTitle: "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
@@ -72,18 +74,16 @@ const STATIC_ROUTE_META_CONFIGS = [
         "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call.",
       canonicalUrl: "https://northsidegta.ca/buyers",
       ogType: "website",
-      ogImage: "https://www.northsidegta.ca/uploads/buyers-page-seo.jpg",
+      ogImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
       twitterCard: "summary_large_image",
-      twitterImage: "https://www.northsidegta.ca/uploads/buyers-page-seo.jpg",
+      twitterImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
       siteName: "NorthSide GTA",
       additionalMeta: [
         { name: "robots", content: "index,follow" },
-        {
-          name: "keywords",
-          content:
-            "buy a home north of Toronto, NorthSide GTA buyers agent, Aurora homes for sale, Newmarket homes for sale, Stouffville real estate, Uxbridge homes, Georgina real estate, East Gwillimbury homes, Scugog real estate, town match quiz, Finally Home Agents buyers",
-        },
+        { name: "author", content: "Finally Home Agents" },
+        { name: "publisher", content: "Finally Home Agents" },
       ],
+      schema: BUYERS_SCHEMA,
     },
   },
   {

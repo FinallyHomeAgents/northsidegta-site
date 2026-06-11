@@ -154,10 +154,7 @@ function normalizeImageCandidate(candidate) {
 
   if (isAbsoluteUrl(value)) {
     try {
-      const url = new URL(value);
-      const combined = `${url.pathname}${url.search}${url.hash}`.replace(/[#?]$/, "");
-      const path = combined || url.pathname || "";
-      return ensureLeadingSlash(path);
+      return new URL(value).toString();
     } catch (error) {
       return "";
     }
