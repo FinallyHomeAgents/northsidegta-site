@@ -13,7 +13,7 @@ const rootDir = path.resolve(__dirname, '..')
 const configPath = path.join(rootDir, 'config', 'event-feeds.json')
 const eventsDir = path.join(rootDir, 'public', 'data', 'events')
 
-const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
+const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://northsidegta.ca/community)'
 const MIN_REQUEST_DELAY_MS = 6000
 const DEFAULT_PRIORITY = 50
 

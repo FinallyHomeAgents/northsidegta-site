@@ -182,7 +182,7 @@ const MembershipCardPreviewPage = () => {
           name="description"
           content="Join the NorthSide GTA membership and get your digital card instantly."
         />
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview" />
       </Helmet>
 
       <HeaderShell />

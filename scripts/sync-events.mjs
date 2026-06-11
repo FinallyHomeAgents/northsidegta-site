@@ -28,7 +28,7 @@ const reportsDir = path.join(rootDir, 'public', 'data', 'sync-reports')
 const urlUpdateLogPath = path.join(rootDir, 'logs', 'events-url-updates.log')
 const { allowNetworkInCi, networkBlockedReason } = require('../lib/events/env.js')
 
-const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://www.northsidegta.ca/community)'
+const DEFAULT_USER_AGENT = 'NorthSideGTA-EventBot/1.0 (+https://northsidegta.ca/community)'
 const DEFAULT_PRIORITY = 50
 const DEFAULT_TIMEOUT_MS = 15000
 const DEFAULT_RETRY_ATTEMPTS = 3

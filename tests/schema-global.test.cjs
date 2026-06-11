@@ -17,7 +17,7 @@ function loadGraph(getGlobalGraphJson) {
   return parsed['@graph'] || []
 }
 
-test('global graph includes core identities and reviews', async () => {
+test('global graph includes core identities without review or aggregateRating schema', async () => {
   const { getGlobalGraphJson, PLACE_IDS } = await loadGraphModule()
   const graph = loadGraph(getGlobalGraphJson)
   const ids = new Set(graph.map((node) => node['@id']))
@@ -33,8 +33,9 @@ test('global graph includes core identities and reviews', async () => {
   )
 
   const business = graph.find((node) => node['@id'] === 'https://northsidegta.ca/#finally-home-agents')
-  assert.ok(Array.isArray(business?.review) && business.review.length >= 10)
-  assert.equal(business?.aggregateRating?.ratingValue, '5')
+  assert.ok(business, 'Finally Home Agents business node should exist')
+  assert.equal(business?.review, undefined)
+  assert.equal(business?.aggregateRating, undefined)
 })
 
 test('global graph exposes region, places, and relationships', async () => {

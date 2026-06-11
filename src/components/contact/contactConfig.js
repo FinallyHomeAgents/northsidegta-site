@@ -283,7 +283,7 @@ export function getJsonLd(config) {
   const organization = {
     "@type": "Organization",
     name: "Finally Home Agents",
-    url: "https://www.northsidegta.ca/contact",
+    url: "https://northsidegta.ca/contact",
     telephone: phone || undefined,
     sameAs: [...sameAs, ...(config.jsonLd?.sameAs || [])].filter(Boolean),
   };
@@ -304,7 +304,7 @@ export function getJsonLd(config) {
     "@type": "ContactPage",
     name: config.heroHeadline,
     description: config.heroSubhead,
-    url: "https://www.northsidegta.ca/contact",
+    url: "https://northsidegta.ca/contact",
     mainEntity: organization,
     areaServed: config.jsonLd?.areaServed || DEFAULT_CONFIG.jsonLd.areaServed,
   };

@@ -160,7 +160,7 @@ export default function EventsArchivePage() {
       <Helmet>
         <title>Past Events Archive • NorthSide GTA</title>
         <meta name="description" content={pageDescription} />
-        <link rel="canonical" href="https://www.northsidegta.ca/events/archive" />
+        <link rel="canonical" href="https://northsidegta.ca/events/archive" />
         <meta property="og:title" content="Past Events Archive" />
         <meta property="og:description" content={pageDescription} />
       </Helmet>

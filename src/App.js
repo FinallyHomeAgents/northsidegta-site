@@ -32,6 +32,7 @@ import TasteHubRequestTabletopSignPage from "./TasteHubRequestTabletopSignPage";
 import GuidedPathPage from "./GuidedPathPage";
 import GlobalDefaultMeta from "./components/seo/GlobalDefaultMeta";
 import GlobalStructuredData from "./components/seo/GlobalStructuredData";
+import RouteSpecificMeta from "./components/seo/RouteSpecificMeta";
 import ThankYou209BarriePage from "./ThankYou209BarriePage";
 import Inquiry209BarrieStreetPage from "./listings/Inquiry209BarrieStreetPage";
 import Inquiry33StAugustineDriveBrooklinPage from "./listings/Inquiry33StAugustineDriveBrooklinPage";
@@ -165,6 +166,7 @@ function App() {
           {/* Catch-all for any slug not yet in towns.json (optional) */}
           <Route path="/:slug" element={<TownPage />} />
         </Routes>
+        <RouteSpecificMeta />
         </HeaderShellProvider>
       </Router>
       <Analytics />

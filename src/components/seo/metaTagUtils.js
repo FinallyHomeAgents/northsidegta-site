@@ -1,6 +1,6 @@
 const { getSiteSeoForRoute } = require("./siteSeoConfig");
 
-const SITE_BASE_URL = "https://www.northsidegta.ca";
+const SITE_BASE_URL = "https://northsidegta.ca";
 const DEFAULT_META_IMAGE_PATH = "/Images/og-home.jpg";
 const DEFAULT_TWITTER_CARD = "summary_large_image";
 const SOCIAL_IMAGE_WIDTH = "1200";
@@ -80,6 +80,10 @@ function isAbsoluteUrl(value) {
   return /^https?:\/\//i.test(value);
 }
 
+function normalizeNorthsideUrl(value) {
+  return safeString(value).replace(/^https:\/\/www\.northsidegta\.ca/i, SITE_BASE_URL);
+}
+
 function normalizeCanonicalUrl(value, routeValue) {
   const provided = safeString(value);
   if (provided) {
@@ -94,7 +98,7 @@ function buildAbsoluteUrl(value) {
   const trimmed = safeString(value);
   if (!trimmed) return "";
   if (isAbsoluteUrl(trimmed)) {
-    return trimmed;
+    return normalizeNorthsideUrl(trimmed);
   }
   if (trimmed.startsWith("//")) {
     return `https:${trimmed}`;
@@ -154,7 +158,7 @@ function normalizeImageCandidate(candidate) {
 
   if (isAbsoluteUrl(value)) {
     try {
-      return new URL(value).toString();
+      return normalizeNorthsideUrl(new URL(value).toString());
     } catch (error) {
       return "";
     }
@@ -186,7 +190,7 @@ function normalizeAdditionalMeta(additionalMeta) {
 
 function getMetaTagsFromData(raw = {}) {
   const routeValue = safeString(raw.route);
-  const siteSeo = routeValue ? getSiteSeoForRoute(routeValue) : null;
+  const siteSeo = raw.ignoreSiteSeo ? null : (routeValue ? getSiteSeoForRoute(routeValue) : null);
   const siteSeoTitle = safeString(siteSeo && siteSeo.seo_title);
   const siteSeoDescription = safeString(siteSeo && siteSeo.seo_description);
   const siteSeoImage = safeString(siteSeo && siteSeo.seo_image);

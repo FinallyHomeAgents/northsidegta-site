@@ -313,56 +313,23 @@ export default function HomeAnalysisPage() {
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <HeaderShell />
         <Helmet>
-  <title>Free Home Value Estimate — NorthSide GTA | Finally Home Agents</title>
-  <meta
-    name="description"
-    content="Get a fast, expert home value estimate for the NorthSide GTA. AI-assisted analysis plus local agent insight for Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-  />
-  <link rel="canonical" href="https://www.northsidegta.ca/homeanalysis" />
-  <meta name="robots" content="index,follow" />
-
-  <meta
-    name="keywords"
-    content="home value NorthSide GTA, free home estimate, what is my home worth Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, CMA, home valuation"
-  />
-
-  {/* Open Graph */}
-  <meta property="og:title" content="Free Home Value Estimate — NorthSide GTA | Finally Home Agents" />
-  <meta
-    property="og:description"
-    content="AI-assisted valuation + local expertise. Get your estimate for Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog."
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.northsidegta.ca/homeanalysis" />
-  <meta property="og:image" content="https://www.northsidegta.ca/Images/northsidegta-map-bg.jpg" />
-
-  {/* JSON-LD */}
-  <script type="application/ld+json">
-    {JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "Free Home Value Estimate — NorthSide GTA | Finally Home Agents",
-      "url": "https://www.northsidegta.ca/homeanalysis",
-      "description":
-        "Request a fast, expert home valuation for the NorthSide GTA.",
-      "about": {
-        "@type": "RealEstateAgent",
-        "name": "Finally Home Agents",
-        "areaServed": [
-          "Georgina",
-          "East Gwillimbury",
-          "Newmarket",
-          "Aurora",
-          "Stouffville",
-          "Uxbridge",
-          "Scugog"
-        ],
-        "url": "https://www.northsidegta.ca",
-        "brand": "Finally Home Agents"
-      }
-    })}
-  </script>
-</Helmet>
+          <title>Get a Home Value Opinion | NorthSide GTA | Finally Home Agents</title>
+          <meta
+            name="description"
+            content="Find out what your home in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog could sell for today."
+          />
+          <meta name="robots" content="index, follow" />
+          <meta name="author" content="Finally Home Agents" />
+          <meta name="publisher" content="Finally Home Agents" />
+          <link rel="canonical" href="https://northsidegta.ca/homeanalysis" />
+          <meta property="og:title" content="Get a Home Value Opinion | NorthSide GTA | Finally Home Agents" />
+          <meta property="og:description" content="Find out what your home north of Toronto could sell for today." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://northsidegta.ca/homeanalysis" />
+          <meta property="og:image" content="https://northsidegta.ca/uploads/sellers-page-seo.jpg" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image" content="https://northsidegta.ca/uploads/sellers-page-seo.jpg" />
+        </Helmet>
         <main className="mx-auto max-w-3xl px-4 py-16 text-center">
           <div
             className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-700 px-4 py-1 text-sm font-medium"

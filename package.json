@@ -25,7 +25,8 @@
     "generate:insights": "node scripts/generate-insights-data.js",
     "insights:migrate-images": "node scripts/migrate-insight-image-paths.js",
     "insights:check-images": "node scripts/check-insight-images.js",
-    "seed:spotlights": "ts-node --transpile-only scripts/seedTownSpotlightsFromGoogle.ts"
+    "seed:spotlights": "ts-node --transpile-only scripts/seedTownSpotlightsFromGoogle.ts",
+    "seo:check": "node scripts/seo-check.cjs"
   },
   "dependencies": {
     "@fastify/busboy": "^3.2.0",

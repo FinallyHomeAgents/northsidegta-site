@@ -22,23 +22,23 @@ export default function SignWithUsPage() {
       <HeaderShell />
 
       <Helmet>
-  <title>Sell With Finally Home Agents | NorthSide GTA Listing Experts</title>
-  <meta
-    name="description"
-    content="List with confidence in the NorthSide GTA. Strategy, staging, premium media and negotiation that delivers top results in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
-  />
-  <meta
-    name="keywords"
-    content="list my home NorthSide GTA, sell house Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog, real estate listing agent"
-  />
-  <link rel="canonical" href="https://www.northsidegta.ca/signwithus" />
-
-  <meta property="og:title" content="Sell With Finally Home Agents | NorthSide GTA" />
-  <meta property="og:description" content="Strategy-first listing team with premium media and strong negotiation." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.northsidegta.ca/signwithus" />
-  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
-</Helmet>
+        <title>Work With Finally Home Agents | NorthSide GTA</title>
+        <meta
+          name="description"
+          content="Share your buying or selling goals with Finally Home Agents for NorthSide GTA real estate guidance."
+        />
+        <meta name="robots" content="noindex, follow" />
+        <meta name="author" content="Finally Home Agents" />
+        <meta name="publisher" content="Finally Home Agents" />
+        <link rel="canonical" href="https://northsidegta.ca/sign" />
+        <meta property="og:title" content="Work With Finally Home Agents | NorthSide GTA" />
+        <meta property="og:description" content="Share your buying or selling goals with Finally Home Agents." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://northsidegta.ca/sign" />
+        <meta property="og:image" content="https://northsidegta.ca/uploads/sellers-page-seo.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://northsidegta.ca/uploads/sellers-page-seo.jpg" />
+      </Helmet>
 
       <div className="px-4 md:px-20 py-16 space-y-12">
 
