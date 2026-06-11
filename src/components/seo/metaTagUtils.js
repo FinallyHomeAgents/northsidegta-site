@@ -171,6 +171,7 @@ function normalizeAdditionalMeta(additionalMeta) {
       const name = safeString(meta.name);
       const property = safeString(meta.property);
       const content = safeString(meta.content);
+      if (name.toLowerCase() === "keywords") return null;
       if (!content || (!name && !property)) return null;
       const key = safeString(meta.key);
       return {
