@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
-import { BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
+import { BUYER_FAQS, BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
 
 const COMMUNITIES = [
   "Aurora",
@@ -187,6 +187,37 @@ const REVIEWS = [
   ["Susan Booth", "Seller · Holland Landing", "Their professionalism and personal attention set them apart. Throughout the entire process these Finally Home Agents exceeded our expectations."],
 ];
 
+const FAQ_TOWN_LINKS = {
+  Aurora: "/communities/aurora",
+  Newmarket: "/communities/newmarket",
+  Stouffville: "/communities/stouffville",
+  Uxbridge: "/communities/uxbridge",
+  Georgina: "/communities/georgina",
+  "East Gwillimbury": "/communities/east-gwillimbury",
+  Scugog: "/communities/scugog",
+};
+
+const LINKED_TOWNS_PATTERN = new RegExp(
+  `\\b(${Object.keys(FAQ_TOWN_LINKS).sort((a, b) => b.length - a.length).join("|")})\\b`,
+  "g"
+);
+
+function renderFaqAnswer(answer, linkedTowns) {
+  return answer.split(LINKED_TOWNS_PATTERN).map((part, index) => {
+    const href = FAQ_TOWN_LINKS[part];
+    if (!href || linkedTowns.has(part)) {
+      return part;
+    }
+
+    linkedTowns.add(part);
+    return (
+      <a href={href} key={`${part}-${index}`}>
+        {part}
+      </a>
+    );
+  });
+}
+
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -199,6 +230,30 @@ function SectionHeader({ eyebrow, title, lead, dark = false, compact = false, ch
       {lead && <p className={`buyers-lead${dark ? " buyers-lead-dark" : ""}`}>{lead}</p>}
       {children}
     </div>
+  );
+}
+
+function BuyersFaqSection() {
+  const linkedTowns = new Set();
+
+  return (
+    <section className="buyers-section tinted-section buyers-faq-section">
+      <div className="buyers-container">
+        <SectionHeader
+          eyebrow="06 / Buyer FAQ"
+          title="Buyer Questions We Hear Most Often"
+          lead="Buying north of Toronto is not just about finding a house. It is about choosing the right town, commute, lifestyle, and long-term fit before you make a move."
+        />
+        <div className="buyers-faq-list">
+          {BUYER_FAQS.map(({ question, answer }, index) => (
+            <details className="buyers-faq-item" key={question} open={index === 0}>
+              <summary>{question}</summary>
+              <p>{renderFaqAnswer(answer, linkedTowns)}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -627,10 +682,12 @@ export default function BuyersPage() {
         </div>
       </section>
 
+      <BuyersFaqSection />
+
       <section className="buyers-section dark-section" id="cta-section">
         <div className="buyers-container cta-grid">
           <SectionHeader
-            eyebrow="06 / Start the Conversation"
+            eyebrow="07 / Start the Conversation"
             title="Want a town shortlist built around your actual move?"
             lead="Tell us where you’re coming from, what matters most, and when you’re thinking of moving. We’ll help you narrow the right NorthSide GTA towns before you waste time on the wrong homes."
             dark
@@ -766,6 +823,18 @@ const BUYERS_STYLES = `
   .review-card h3 { margin: 0; color: var(--primary); font-size: 13px; font-weight: 700; }
   .review-card p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 
+  .buyers-faq-section { border-top: 1px solid var(--border); }
+  .buyers-faq-list { display: grid; gap: 10px; max-width: 920px; }
+  .buyers-faq-item { border: 1px solid var(--border); border-radius: 6px; background: #fff; box-shadow: 0 16px 45px rgba(26,26,26,0.045); overflow: hidden; }
+  .buyers-faq-item summary { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; color: var(--primary); font-family: "Playfair Display", Georgia, serif; font-size: 19px; line-height: 1.22; font-weight: 600; cursor: pointer; list-style: none; }
+  .buyers-faq-item summary::-webkit-details-marker { display: none; }
+  .buyers-faq-item summary::after { content: "+"; flex: 0 0 auto; width: 28px; height: 28px; border: 1px solid #d8d2c6; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--accent); font-family: Inter, system-ui, sans-serif; font-size: 18px; line-height: 1; transition: transform 160ms ease, background 160ms ease, color 160ms ease; }
+  .buyers-faq-item[open] summary { border-bottom: 1px solid #eee8df; }
+  .buyers-faq-item[open] summary::after { content: "−"; background: var(--primary); border-color: var(--primary); color: #fff; }
+  .buyers-faq-item p { margin: 0; padding: 16px 20px 20px; color: var(--muted); font-size: 14px; line-height: 1.78; }
+  .buyers-faq-item a { color: var(--primary); font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(35,71,10,0.25); }
+  .buyers-faq-item a:hover { border-bottom-color: var(--primary); }
+
   .cta-grid { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(340px, 540px); gap: 36px; align-items: start; }
   .consultation-wrap { max-width: 540px; }
   .team-photo-block { margin-bottom: 16px; }
@@ -815,6 +884,8 @@ const BUYERS_STYLES = `
     .buyers-section-header h2 { font-size: 29px; }
     .trust-strip, .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
     .quiz-card, .consultation-card { padding: 22px; }
+    .buyers-faq-item summary { align-items: flex-start; padding: 16px; font-size: 17px; }
+    .buyers-faq-item p { padding: 14px 16px 17px; font-size: 13.5px; }
     .photo-card { min-height: 154px; }
     .market-followup { align-items: flex-start; flex-direction: column; }
     .team-photo-block img { height: 150px; object-position: center 30%; }
