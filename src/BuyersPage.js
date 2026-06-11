@@ -202,6 +202,15 @@ const LINKED_TOWNS_PATTERN = new RegExp(
   "g"
 );
 
+function applyInitialFaqOpen(node, index) {
+  if (!node || index !== 0 || node.dataset.initialOpenApplied === "true") {
+    return;
+  }
+
+  node.open = true;
+  node.dataset.initialOpenApplied = "true";
+}
+
 function renderFaqAnswer(answer, linkedTowns) {
   return answer.split(LINKED_TOWNS_PATTERN).map((part, index) => {
     const href = FAQ_TOWN_LINKS[part];
@@ -246,7 +255,12 @@ function BuyersFaqSection() {
         />
         <div className="buyers-faq-list">
           {BUYER_FAQS.map(({ question, answer }, index) => (
-            <details className="buyers-faq-item" key={question} open={index === 0}>
+            <details
+              className="buyers-faq-item"
+              key={question}
+              defaultOpen={index === 0}
+              ref={(node) => applyInitialFaqOpen(node, index)}
+            >
               <summary>{question}</summary>
               <p>{renderFaqAnswer(answer, linkedTowns)}</p>
             </details>
