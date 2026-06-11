@@ -449,8 +449,8 @@ export default function ReferralPartnersPage() {
           content="A dedicated referral partner page for agents with clients moving to the NorthSide GTA, including Uxbridge, Stouffville, Newmarket, Aurora, Georgina, East Gwillimbury, and Scugog."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.northsidegta.ca/referral-partners" />
-        <link rel="canonical" href="https://www.northsidegta.ca/referral-partners" />
+        <meta property="og:url" content="https://northsidegta.ca/referral-partners" />
+        <link rel="canonical" href="https://northsidegta.ca/referral-partners" />
       </Helmet>
 
       <HeaderShell />

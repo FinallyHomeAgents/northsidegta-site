@@ -74,7 +74,7 @@ const OptionTwoPage = () => {
     <div className="min-h-screen bg-slate-50">
       <Helmet>
         <title>NorthSide Pass — Option 2</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview/option-2" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview/option-2" />
       </Helmet>
       <HeaderShell />
 

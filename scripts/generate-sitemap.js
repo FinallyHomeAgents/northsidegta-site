@@ -96,7 +96,7 @@ function main() {
     { path: '/buyers', changefreq: 'weekly', priority: '0.9' },
     { path: '/sellers', changefreq: 'weekly', priority: '0.9' },
     { path: '/homeanalysis', changefreq: 'monthly', priority: '0.7' },
-    { path: '/vip', changefreq: 'monthly', priority: '0.6' },
+    { path: '/communities', changefreq: 'monthly', priority: '0.8' },
     { path: '/about', changefreq: 'yearly', priority: '0.5' },
     { path: '/contact', changefreq: 'yearly', priority: '0.5' },
     { path: '/community', changefreq: 'daily', priority: '0.8' },
@@ -112,7 +112,7 @@ function main() {
     .map((town) => (typeof town === 'object' ? town.slug : null))
     .filter((slug) => typeof slug === 'string' && slug.trim())
     .forEach((slug) => {
-      staticRoutes.push({ path: `/${slug.trim()}`, changefreq: 'monthly', priority: '0.7' })
+      staticRoutes.push({ path: `/communities/${slug.trim()}`, changefreq: 'monthly', priority: '0.8' })
     })
 
   const collections = loadCollections(collectionsDir)

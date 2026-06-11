@@ -14,7 +14,7 @@ const OptionThreePage = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Helmet>
         <title>NorthSide Pass — Option 3</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview/option-3" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview/option-3" />
       </Helmet>
       <HeaderShell />
 

@@ -2,23 +2,25 @@ import { BUYERS_SCHEMA } from "./buyersSchema.mjs";
 
 const DEFAULT_GLOBAL_META_CONFIG = {
   route: "/",
-  documentTitle: "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
-  title: "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
+  documentTitle: "NorthSide GTA Real Estate | Finally Home Agents",
+  title: "NorthSide GTA Real Estate | Finally Home Agents",
   description:
-    "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
-  canonicalUrl: "https://www.northsidegta.ca/",
+    "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
+  canonicalUrl: "https://northsidegta.ca/",
   ogType: "website",
-  ogImage: "https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
+  ogImage: "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
   ogImageAlt:
     "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
   twitterCard: "summary_large_image",
-  twitterImage: "https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
+  twitterImage: "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
   twitterImageAlt:
     "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
   siteName: "NorthSide GTA",
   additionalMeta: [
     { name: "robots", content: "index, follow" },
     { property: "og:locale", content: "en_CA" },
+    { name: "author", content: "Finally Home Agents" },
+    { name: "publisher", content: "Finally Home Agents" },
     { name: "twitter:site", content: "@northsidegta" },
     { name: "facebook-domain-verification", content: "1tfwypal0s72obxs9238figl03nk5i" },
     { name: "geo.region", content: "CA-ON" },
@@ -49,11 +51,11 @@ const STATIC_ROUTE_META_CONFIGS = [
       title: "Lower-Priced Keswick Homes | NorthSide GTA",
       description:
         "Browse current lower-priced homes in Keswick and Georgina. See price bands, local market notes, and get alerts for new opportunities north of Toronto.",
-      canonicalUrl: "https://www.northsidegta.ca/keswick-lower-priced-homes",
+      canonicalUrl: "https://northsidegta.ca/keswick-lower-priced-homes",
       ogType: "website",
-      ogImage: "https://www.northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
+      ogImage: "https://northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
       twitterCard: "summary_large_image",
-      twitterImage: "https://www.northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
+      twitterImage: "https://northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
       siteName: "NorthSide GTA",
     },
   },
@@ -406,6 +408,160 @@ const STATIC_ROUTE_META_CONFIGS = [
   },
 ];
 
+const SITE_URL = "https://northsidegta.ca";
+const AUTHOR_PUBLISHER_META = [
+  { name: "author", content: "Finally Home Agents" },
+  { name: "publisher", content: "Finally Home Agents" },
+];
+const INDEX_META = [{ name: "robots", content: "index, follow" }, ...AUTHOR_PUBLISHER_META];
+const NOINDEX_META = [{ name: "robots", content: "noindex, follow" }, ...AUTHOR_PUBLISHER_META];
+const CORE_TOWNS = ["Georgina", "East Gwillimbury", "Newmarket", "Aurora", "Stouffville", "Uxbridge", "Scugog"];
+const COMMUNITY_IMAGE = `${SITE_URL}/uploads/community-page-seo.jpg`;
+const HOME_IMAGE = `${SITE_URL}/uploads/northside-gta-finally-home-agents-hero.jpg`;
+const SELLERS_IMAGE = `${SITE_URL}/uploads/sellers-page-seo.jpg`;
+
+function areaServedPlaces(townNames = CORE_TOWNS) {
+  return townNames.map((name) => ({ "@type": "Place", name: `${name}, Ontario` }));
+}
+
+function breadcrumbSchema(path, label) {
+  const url = `${SITE_URL}${path === "/" ? "/" : path}`;
+  const items = [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }];
+  if (path !== "/") {
+    if (path.startsWith("/communities/")) {
+      items.push({ "@type": "ListItem", position: 2, name: "Communities", item: `${SITE_URL}/communities` });
+      items.push({ "@type": "ListItem", position: 3, name: label, item: url });
+    } else {
+      items.push({ "@type": "ListItem", position: 2, name: label, item: url });
+    }
+  }
+  return { "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: items };
+}
+
+function baseAgentNode() {
+  return {
+    "@type": ["RealEstateAgent", "LocalBusiness"],
+    "@id": `${SITE_URL}/#finally-home-agents`,
+    name: "Finally Home Agents",
+    alternateName: "NorthSide GTA",
+    url: SITE_URL,
+    brand: { "@type": "Brand", name: "NorthSide GTA", url: SITE_URL },
+    parentOrganization: { "@type": "Organization", name: "HomeLife Optimum Realty, Brokerage" },
+    employee: [{ "@type": "Person", name: "Matthew Mulhall" }, { "@type": "Person", name: "Landon Mulhall" }],
+    areaServed: areaServedPlaces(),
+  };
+}
+
+function makePageSchema({ path, title, description, pageType = "WebPage", image, serviceType, collectionItems, town }) {
+  const url = `${SITE_URL}${path === "/" ? "/" : path}`;
+  const label = town || (path === "/" ? "Home" : title.split("|")[0].trim());
+  const graph = [baseAgentNode(), {
+    "@type": path === "/" ? "WebSite" : pageType,
+    "@id": path === "/" ? `${SITE_URL}/#website` : `${url}#webpage`,
+    url,
+    name: title,
+    description,
+    inLanguage: "en-CA",
+    publisher: { "@id": `${SITE_URL}/#finally-home-agents` },
+    image,
+  }];
+  if (path !== "/") graph.push(breadcrumbSchema(path, label));
+  if (serviceType) {
+    graph.push({
+      "@type": "Service",
+      "@id": `${url}#service`,
+      name: serviceType,
+      serviceType,
+      url,
+      provider: { "@id": `${SITE_URL}/#finally-home-agents` },
+      areaServed: areaServedPlaces(town ? [town] : CORE_TOWNS),
+      description,
+    });
+  }
+  if (collectionItems) {
+    graph.push({
+      "@type": "ItemList",
+      "@id": `${url}#itemlist`,
+      name: "NorthSide GTA Communities",
+      itemListElement: collectionItems.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        url: `${SITE_URL}${item.path}`,
+      })),
+    });
+  }
+  return { "@context": "https://schema.org", "@graph": graph };
+}
+
+function routeMeta({ route, title, description, image, robots = "index, follow", pageType = "WebPage", schema, serviceType, collectionItems, town }) {
+  const canonicalUrl = `${SITE_URL}${route === "/" ? "/" : route}`;
+  return {
+    route,
+    ignoreSiteSeo: true,
+    documentTitle: title,
+    title,
+    description,
+    canonicalUrl,
+    ogType: pageType === "Article" ? "article" : "website",
+    ogImage: image,
+    twitterCard: "summary_large_image",
+    twitterImage: image,
+    siteName: "NorthSide GTA",
+    additionalMeta: [
+      { name: "robots", content: robots },
+      { property: "og:locale", content: "en_CA" },
+      ...AUTHOR_PUBLISHER_META,
+    ],
+    schema: schema || makePageSchema({ path: route, title, description, pageType, image, serviceType, collectionItems, town }),
+  };
+}
+
+const COMMUNITY_ITEMS = [
+  { name: "Georgina", path: "/communities/georgina" },
+  { name: "East Gwillimbury", path: "/communities/east-gwillimbury" },
+  { name: "Newmarket", path: "/communities/newmarket" },
+  { name: "Aurora", path: "/communities/aurora" },
+  { name: "Stouffville", path: "/communities/stouffville" },
+  { name: "Uxbridge", path: "/communities/uxbridge" },
+  { name: "Scugog", path: "/communities/scugog" },
+];
+
+const TOWN_REMEDIATION = [
+  ["/communities/georgina", "Georgina", "Georgina Real Estate | Buying & Selling in Georgina | Finally Home Agents", "Buy or sell in Georgina with Finally Home Agents. Compare Keswick, Sutton, Jackson's Point, lake access, local market trends, and NorthSide GTA lifestyle fit."],
+  ["/communities/east-gwillimbury", "East Gwillimbury", "East Gwillimbury Real Estate | Finally Home Agents", "Buy or sell in East Gwillimbury with Finally Home Agents. Compare Holland Landing, Sharon, Queensville, Mount Albert, commute options, and local market fit."],
+  ["/communities/newmarket", "Newmarket", "Newmarket Real Estate | Buying & Selling in Newmarket | Finally Home Agents", "Buy or sell in Newmarket with Finally Home Agents. Compare Main Street, GO Transit access, schools, established neighbourhoods, and local market trends."],
+  ["/communities/aurora", "Aurora", "Aurora Real Estate | Buying & Selling in Aurora | Finally Home Agents", "Buy or sell in Aurora with Finally Home Agents. Compare established neighbourhoods, schools, GO Transit access, luxury homes, and NorthSide GTA market trends."],
+  ["/communities/stouffville", "Stouffville", "Stouffville Real Estate | Buying & Selling in Stouffville | Finally Home Agents", "Buy or sell in Stouffville with Finally Home Agents. Compare family neighbourhoods, Main Street, GO Transit, newer homes, and Whitchurch-Stouffville market trends."],
+  ["/communities/uxbridge", "Uxbridge", "Uxbridge Real Estate | Buying & Selling in Uxbridge | Finally Home Agents", "Buy or sell in Uxbridge with Finally Home Agents. Compare trails, golf, rural properties, family neighbourhoods, and NorthSide GTA market trends."],
+  ["/communities/scugog", "Scugog", "Scugog Real Estate | Port Perry Homes | Finally Home Agents", "Buy or sell in Scugog with Finally Home Agents. Compare Port Perry, Lake Scugog, waterfront homes, small-town lifestyle, and local market trends."],
+];
+
+const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
+  { route: "/", meta: routeMeta({ route: "/", title: "NorthSide GTA Real Estate | Finally Home Agents", description: "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "WebSite" }) },
+  { route: "/buyers", meta: routeMeta({ route: "/buyers", title: "Buying a Home North of Toronto | Finally Home Agents", description: "Buying north of Toronto? Compare Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog with local buyer guidance.", image: `${SITE_URL}/uploads/buyers-page-seo.jpg`, schema: BUYERS_SCHEMA }) },
+  { route: "/sellers", meta: routeMeta({ route: "/sellers", title: "Selling Your Home in the NorthSide GTA | Finally Home Agents", description: "Thinking about selling in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog? Get local pricing, media, and strategy.", image: SELLERS_IMAGE, serviceType: "Seller representation" }) },
+  { route: "/communities", meta: routeMeta({ route: "/communities", title: "NorthSide GTA Communities | Compare Towns North of Toronto", description: "Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog with Finally Home Agents.", image: COMMUNITY_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },
+  { route: "/contact", meta: routeMeta({ route: "/contact", title: "Contact Finally Home Agents | NorthSide GTA Real Estate", description: "Contact Matthew and Landon Mulhall for buying, selling, and local real estate guidance across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-contact-northsidegta.jpg`, pageType: "ContactPage" }) },
+  { route: "/about", meta: routeMeta({ route: "/about", title: "About Finally Home Agents | NorthSide GTA Real Estate", description: "Meet Matthew and Landon Mulhall of Finally Home Agents, helping buyers and sellers across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-about-northsidegta.jpg` }) },
+  { route: "/homeanalysis", meta: routeMeta({ route: "/homeanalysis", title: "Get a Home Value Opinion | NorthSide GTA | Finally Home Agents", description: "Find out what your home in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog could sell for today.", image: SELLERS_IMAGE, serviceType: "Home value opinion" }) },
+  { route: "/sign", meta: routeMeta({ route: "/sign", title: "Work With Finally Home Agents | NorthSide GTA", description: "Share your buying or selling goals with Finally Home Agents for NorthSide GTA real estate guidance.", image: SELLERS_IMAGE, robots: "noindex, follow", serviceType: "Real estate consultation" }) },
+  { route: "/vip", meta: routeMeta({ route: "/vip", title: "VIP Listing Access | NorthSide GTA", description: "Private NorthSide GTA listing access for registered clients and invited buyers.", image: `${SITE_URL}/vip-hero.png`, robots: "noindex, follow", serviceType: "Private listing alerts" }) },
+  ...TOWN_REMEDIATION.map(([route, town, title, description]) => ({
+    route,
+    meta: routeMeta({ route, title, description, image: COMMUNITY_IMAGE, serviceType: `${town} real estate guidance`, town }),
+  })),
+];
+
+function mergeRouteMetaConfigs(baseConfigs, overrideConfigs) {
+  const routeToEntry = new Map();
+  [...baseConfigs, ...overrideConfigs].forEach((entry) => {
+    if (!entry || !entry.route || !entry.meta) return;
+    routeToEntry.set(entry.route, { route: entry.route, meta: entry.meta });
+  });
+  return Array.from(routeToEntry.values());
+}
+
 function cloneMeta(meta = {}) {
   return JSON.parse(JSON.stringify(meta));
 }
@@ -413,13 +569,15 @@ function cloneMeta(meta = {}) {
 export function getStaticRouteMeta(route) {
   if (!route) return null;
   const normalized = route === "/" ? "/" : `/${route.replace(/^\//, "")}`;
-  const entry = STATIC_ROUTE_META_CONFIGS.find((item) => item.route === normalized);
+  const entry = EFFECTIVE_STATIC_ROUTE_META_CONFIGS.find((item) => item.route === normalized);
   if (!entry) return null;
   return cloneMeta(entry.meta);
 }
 
 const CLONED_DEFAULT_GLOBAL_META_CONFIG = cloneMeta(DEFAULT_GLOBAL_META_CONFIG);
-const CLONED_STATIC_ROUTE_META_CONFIGS = STATIC_ROUTE_META_CONFIGS.map((item) => ({
+const EFFECTIVE_STATIC_ROUTE_META_CONFIGS = mergeRouteMetaConfigs(STATIC_ROUTE_META_CONFIGS, SEO_REMEDIATION_ROUTE_META_CONFIGS);
+
+const CLONED_STATIC_ROUTE_META_CONFIGS = EFFECTIVE_STATIC_ROUTE_META_CONFIGS.map((item) => ({
   route: item.route,
   meta: cloneMeta(item.meta),
 }));

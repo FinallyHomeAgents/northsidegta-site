@@ -91,7 +91,7 @@ const NorthsidePassPreviewV2Page = () => {
     <div className="min-h-screen bg-[#05070d] text-white">
       <Helmet>
         <title>NorthSide Pass — Preview V2</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview-v2" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview-v2" />
       </Helmet>
 
       <HeaderShell />

@@ -14,7 +14,7 @@ const OptionOnePage = () => {
     <div className="min-h-screen bg-slate-950 text-white">
       <Helmet>
         <title>NorthSide Pass — Option 1</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview/option-1" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview/option-1" />
       </Helmet>
       <HeaderShell />
 

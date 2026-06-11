@@ -130,111 +130,6 @@ const PLACE_NODES = [
   containedInPlace: place.containedInPlace,
 }));
 
-const REVIEW_TEMPLATE = {
-  "@type": "Review",
-  reviewRating: {
-    "@type": "Rating",
-    ratingValue: "5",
-    bestRating: "5",
-  },
-  itemReviewed: { "@id": `${BASE_URL}/#finally-home-agents` },
-};
-
-const GOOGLE_REVIEWS = [
-  {
-    author: "Kevin Hickey",
-    body:
-      "Landon was fantastic—he toured dozens of homes with me, kept everything on budget, and was always available.",
-    datePublished: "2025-07-01",
-  },
-  {
-    author: "Glenn Tappenden",
-    body:
-      "Matthew and Landon handled multiple transactions for us with professionalism, quick replies, and great advice.",
-    datePublished: "2025-07-01",
-  },
-  {
-    author: "Ryan Porter",
-    body: "Matt was always available and guided us smoothly into our new place. Thanks for the help!",
-    datePublished: "2025-07-01",
-  },
-  {
-    author: "Susan Booth",
-    body:
-      "The Finally Home Agents team made selling straightforward and stress-free with clear communication throughout.",
-  },
-  {
-    author: "Logan Abernethy",
-    body:
-      "Responsive, knowledgeable, and friendly—Matthew made buying in the NorthSide GTA feel effortless.",
-  },
-  {
-    author: "Jessica Le",
-    body:
-      "Landon made renting stress-free, easy to communicate with, and incredibly thoughtful about my needs.",
-    datePublished: "2023-09-01",
-  },
-  {
-    author: "Tessa Conway",
-    body:
-      "Moving to a brand-new city felt easy with Landon guiding the rental process from start to finish.",
-    datePublished: "2024-01-01",
-  },
-  {
-    author: "Olivia Oprea",
-    body:
-      "Matthew found my dream home in a challenging market and negotiated a winning offer.",
-    datePublished: "2022-10-01",
-  },
-  {
-    author: "Arron Breen",
-    body:
-      "Matt sold our house above market and negotiated our forever home for less—highly recommend.",
-    datePublished: "2022-05-01",
-  },
-  {
-    author: "Dawn Rouse",
-    body:
-      "Honest guidance, organized showings, and great marketing. We felt supported every step of the way.",
-  },
-  {
-    author: "Glenn Tappenden",
-    body: "Thoughtful follow-up and detailed advice kept every deal on track.",
-  },
-].map((review) => ({
-  ...REVIEW_TEMPLATE,
-  author: { "@type": "Person", name: review.author },
-  reviewBody: review.body,
-  datePublished: review.datePublished,
-}));
-
-const FACEBOOK_RECOMMENDATIONS = [
-  "Sjeli Pearse",
-  "Michelle Revell",
-  "Sagen Pearse",
-  "Raul Tec",
-  "Tommy Hogan",
-  "Mike Kloepfer",
-  "Nickolas Goldring",
-  "Shane Oliver",
-  "Jordan Fontaine",
-  "Sara Saloojee",
-  "Nikki Moran",
-  "Samantha Smith",
-  "Reid Moran",
-  "Pankil Shah",
-  "Gary Semeniuk",
-  "Shiraz Griffin",
-  "Kyle Orlando",
-].map((name) => ({
-  ...REVIEW_TEMPLATE,
-  author: { "@type": "Person", name },
-  reviewBody:
-    "Recommended the Finally Home Agents team for their responsiveness, marketing, and care for clients across the NorthSide GTA.",
-}));
-
-const REVIEWS = [...GOOGLE_REVIEWS, ...FACEBOOK_RECOMMENDATIONS];
-
 export function buildGlobalGraph() {
   const logoUrl = `${BASE_URL}/Images/newtoolbar.png`;
   const northsideLogo = logoUrl;
@@ -275,19 +170,12 @@ export function buildGlobalGraph() {
       "https://www.tiktok.com/@northsidegta",
       "https://www.facebook.com/MGLMREALESTATE",
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5",
-      reviewCount: 11,
-      bestRating: "5",
-    },
-    review: REVIEWS,
   };
 
   const homelifeOptimum = {
     "@type": "Organization",
     "@id": `${BASE_URL}/#homelife-optimum`,
-    name: "HomeLife Optimum Realty",
+    name: "HomeLife Optimum Realty, Brokerage",
     address: finallyHomeAgents.address,
     sameAs: [],
   };

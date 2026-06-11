@@ -45,7 +45,7 @@ const OptionFivePage = () => {
     <div className="min-h-screen bg-slate-950 text-white">
       <Helmet>
         <title>NorthSide Pass — Membership</title>
-        <link rel="canonical" href="https://www.northsidegta.ca/northside-pass-preview" />
+        <link rel="canonical" href="https://northsidegta.ca/northside-pass-preview" />
       </Helmet>
 
       <HeaderShell />

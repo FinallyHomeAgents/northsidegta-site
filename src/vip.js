@@ -5,22 +5,22 @@ import HeaderShell from "./components/HeaderShell";
 
 const HELMET_CONTENT = (
   <Helmet>
-    <title>VIP Listing Alerts | NorthSide GTA Buyer Advantage</title>
+    <title>VIP Listing Access | NorthSide GTA</title>
     <meta
       name="description"
-      content="Get VIP alerts for NorthSide GTA listings and off-market opportunities across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+      content="Private NorthSide GTA listing access for registered clients and invited buyers."
     />
-    <meta
-      name="keywords"
-      content="VIP listing alerts NorthSide GTA, off-market homes, buyer alerts, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
-    />
-    <link rel="canonical" href="https://www.northsidegta.ca/vip" />
-
-    <meta property="og:title" content="VIP Listing Alerts | NorthSide GTA" />
-    <meta property="og:description" content="Be first to know about new and off-market opportunities." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="author" content="Finally Home Agents" />
+    <meta name="publisher" content="Finally Home Agents" />
+    <link rel="canonical" href="https://northsidegta.ca/vip" />
+    <meta property="og:title" content="VIP Listing Access | NorthSide GTA" />
+    <meta property="og:description" content="Private listing access for registered clients and invited buyers." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.northsidegta.ca/vip" />
-    <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+    <meta property="og:url" content="https://northsidegta.ca/vip" />
+    <meta property="og:image" content="https://northsidegta.ca/vip-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://northsidegta.ca/vip-hero.png" />
   </Helmet>
 );
 

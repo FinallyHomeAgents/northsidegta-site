@@ -89,16 +89,12 @@ export default function LegacyContactPage() {
     name="description"
     content="Questions about buying or selling in the NorthSide GTA? Contact Finally Home Agents—local experts for Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
   />
-  <meta
-    name="keywords"
-    content="contact realtor NorthSide GTA, real estate agent contact, Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, Scugog"
-  />
-  <link rel="canonical" href="https://www.northsidegta.ca/contact" />
+  <link rel="canonical" href="https://northsidegta.ca/contact" />
 
   <meta property="og:title" content="Contact Finally Home Agents | NorthSide GTA" />
   <meta property="og:description" content="Talk to a local NorthSide GTA agent today." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.northsidegta.ca/contact" />
+  <meta property="og:url" content="https://northsidegta.ca/contact" />
   <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
 </Helmet>
 

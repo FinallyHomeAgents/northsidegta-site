@@ -7,8 +7,8 @@ import { HOMEPAGE_MARKUP } from "./homepageMarkup";
 
 const HOME_TITLE = "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents";
 const HOME_DESCRIPTION = "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.";
-const HOME_URL = "https://www.northsidegta.ca/";
-const HOME_IMAGE = "https://www.northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg";
+const HOME_URL = "https://northsidegta.ca/";
+const HOME_IMAGE = "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg";
 const HOME_IMAGE_ALT = "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog";
 
 const FAQS = [
@@ -101,7 +101,7 @@ const structuredData = {
       publisher: { "@id": `${HOME_URL}#organization` },
       potentialAction: {
         "@type": "SearchAction",
-        target: "https://www.northsidegta.ca/search?q={search_term_string}",
+        target: "https://northsidegta.ca/search?q={search_term_string}",
         "query-input": "required name=search_term_string",
       },
     },

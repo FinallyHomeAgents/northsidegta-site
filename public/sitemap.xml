@@ -22,9 +22,9 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/vip</loc>
+    <loc>https://northsidegta.ca/communities</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://northsidegta.ca/about</loc>
@@ -52,39 +52,59 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/georgina</loc>
+    <loc>https://northsidegta.ca/communities/georgina</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/east-gwillimbury</loc>
+    <loc>https://northsidegta.ca/communities/east-gwillimbury</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/newmarket</loc>
+    <loc>https://northsidegta.ca/communities/newmarket</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/aurora</loc>
+    <loc>https://northsidegta.ca/communities/aurora</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/stouffville</loc>
+    <loc>https://northsidegta.ca/communities/stouffville</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/uxbridge</loc>
+    <loc>https://northsidegta.ca/communities/uxbridge</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/scugog</loc>
+    <loc>https://northsidegta.ca/communities/scugog</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/1m-north-of-toronto</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/detached-homes-georgina</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/detached-homes-northsidegta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/collections/estates-of-wyndance-homes-for-sale</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://northsidegta.ca/collections/golfunder2m</loc>
@@ -164,6 +184,132 @@
     <lastmod>2025-10-06T16:03:30.000Z</lastmod>
   </url>
   <url>
+    <loc>https://northsidegta.ca/events/20251213-allison-lupton-s-celtic-christmas-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251217-acc-public-board-meeting-december-2025-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251217-open-studio-ages-18-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251220-lol-playlab-grand-opening-whitchurch-stouffville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251222-winter-break-daily-art-camp-dec-22-ages-4-7-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251222-winter-break-daily-art-camp-dec-22-ages-7-12-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251222-y-a-r-portfolio-review-spark-sessions-charm-making-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251223-winter-break-daily-art-camp-dec-23-ages-4-7-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251223-winter-break-daily-art-camp-dec-23-ages-7-12-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251229-winter-break-daily-art-camp-dec-29-ages-4-7-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251229-winter-break-daily-art-camp-dec-29-ages-7-12-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251230-winter-break-daily-art-camp-dec-30-ages-4-7-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20251230-winter-break-daily-art-camp-dec-30-ages-7-12-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260102-shifting-realities-new-years-art-jamboree-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260112-comic-drawing-for-children-7-12yrs-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260112-comic-drawing-for-children-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-02T08:39:36.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260112-intro-to-wood-carving-16-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-11T08:39:24.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260112-intro-to-wood-carving-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-02T08:39:36.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260124-john-sheard-s-british-invasion-charmie-2-00pm-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-11-29T08:34:31.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260206-blain-milatz-duo-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-11-29T08:34:31.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/20260301-little-magic-sam-awbf-aurora</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2025-12-01T08:40:20.000Z</lastmod>
+  </url>
+  <url>
     <loc>https://northsidegta.ca/events/aurora-cultural-centre-10002603-1759518000-1759527000-auroraculturalcentre-ca-20251003</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
@@ -198,6 +344,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
     <lastmod>2025-05-01T14:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://northsidegta.ca/events/discover-stouffville-https-discoverstouffvilleca-event-the-stouffville-christmas-market-20251213</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://northsidegta.ca/events/experience-york-region-10014157-1759582800-1759593600-www-experienceyorkregion-com-20251003</loc>
