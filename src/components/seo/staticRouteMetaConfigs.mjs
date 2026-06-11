@@ -55,13 +55,6 @@ const STATIC_ROUTE_META_CONFIGS = [
       twitterCard: "summary_large_image",
       twitterImage: "https://www.northsidegta.ca/Images/seo/keswick-lower-priced-homes-og.jpg",
       siteName: "NorthSide GTA",
-      additionalMeta: [
-        {
-          name: "keywords",
-          content:
-            "Keswick homes for sale, Keswick houses for sale, lower priced homes in Keswick, homes for sale in Keswick Ontario, Georgina homes for sale, affordable homes in Georgina, homes north of Toronto",
-        },
-      ],
     },
   },
   {
@@ -116,14 +109,7 @@ const STATIC_ROUTE_META_CONFIGS = [
       twitterCard: "summary_large_image",
       twitterImage: "https://northsidegta.ca/Images/northsidegta-map-bg.jpg",
       siteName: "NorthSide GTA",
-      additionalMeta: [
-        { name: "robots", content: "index,follow" },
-        {
-          name: "keywords",
-          content:
-            "sell my home NorthSide GTA, list my home Georgina, list my home East Gwillimbury, sell house Newmarket, sell house Aurora, sell house Stouffville, sell house Uxbridge, sell house Scugog, home marketing, real estate agent",
-        },
-      ],
+      additionalMeta: [{ name: "robots", content: "index,follow" }],
     },
   },
   {
@@ -300,13 +286,6 @@ const STATIC_ROUTE_META_CONFIGS = [
       twitterCard: "summary_large_image",
       twitterImage: "/Images/northsidegta-map-bg.jpg",
       siteName: "NorthSide GTA",
-      additionalMeta: [
-        {
-          name: "keywords",
-          content:
-            "about Finally Home Agents, NorthSide GTA realtors, local real estate team, Newmarket, Aurora, Uxbridge",
-        },
-      ],
     },
   },
   {

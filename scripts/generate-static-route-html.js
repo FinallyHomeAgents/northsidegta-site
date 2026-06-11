@@ -142,7 +142,7 @@ function resolveTagKey(tag) {
 function stringifyTag(tag) {
   if (!tag) return "";
   if (tag.type === "title") {
-    return `<title>${escapeHtml(tag.content || "")}</title>`;
+    return `<title data-rh="true">${escapeHtml(tag.content || "")}</title>`;
   }
   if (tag.type === "meta") {
     const attrs = tag.attributes || {};
@@ -150,7 +150,7 @@ function stringifyTag(tag) {
       .filter(([, value]) => value != null && value !== "")
       .map(([key, value]) => `${key}="${escapeAttribute(value)}"`)
       .join(" ");
-    return attrText ? `<meta ${attrText} />` : "";
+    return attrText ? `<meta ${attrText} data-rh="true" />` : "";
   }
   if (tag.type === "link") {
     const attrs = tag.attributes || {};
@@ -158,7 +158,7 @@ function stringifyTag(tag) {
       .filter(([, value]) => value != null && value !== "")
       .map(([key, value]) => `${key}="${escapeAttribute(value)}"`)
       .join(" ");
-    return attrText ? `<link ${attrText} />` : "";
+    return attrText ? `<link ${attrText} data-rh="true" />` : "";
   }
   return "";
 }
@@ -167,7 +167,7 @@ function stringifyJsonLdScript(schema) {
   if (!schema) return "";
   const json = typeof schema === "string" ? schema : JSON.stringify(schema);
   if (!json) return "";
-  return `<script type="application/ld+json">${json.replace(/</g, "\\u003c")}</script>`;
+  return `<script type="application/ld+json" data-rh="true">${json.replace(/</g, "\\u003c")}</script>`;
 }
 
 function escapeHtml(value) {
@@ -189,7 +189,18 @@ function getOutputPath(root, route) {
   return path.join(root, normalized, "index.html");
 }
 
-main().catch((error) => {
-  console.error("[generate-static-route-html] Failed:", error);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error("[generate-static-route-html] Failed:", error);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  buildHeadFragments,
+  mergeMetaTags,
+  resolveTagKey,
+  stringifyTag,
+  stringifyJsonLdScript,
+  getOutputPath,
+};
