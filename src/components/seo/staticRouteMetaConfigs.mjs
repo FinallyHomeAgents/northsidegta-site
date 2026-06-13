@@ -30,6 +30,48 @@ const DEFAULT_GLOBAL_META_CONFIG = {
   ],
 };
 
+
+const GEORGINA_LIVING_GUIDE_FAQS = [
+  ["Is Georgina a good place to live?", "Georgina can be a strong fit for young families, Lake Simcoe lifestyle buyers, retirees, empty nesters, and buyers who want more space while staying connected to York Region. It may be less ideal for people who need a transit-first or short daily commute."],
+  ["Which Georgina community is best for commuting?", "Keswick is typically the strongest starting point for commuters because it offers the most direct relationship to Highway 404 access within Georgina."],
+  ["Are Keswick, Sutton, and Jackson’s Point basically the same?", "No. Keswick often feels more like a family commuter community, while Sutton and Jackson’s Point tend to feel more lake-lifestyle oriented and slower paced."],
+  ["What should buyers know about waterfront homes in Georgina?", "Waterfront homes vary significantly. Buyers should review shoreline condition, conservation considerations, septic or well systems where applicable, insurance, access, and winter maintenance before firming up a purchase."],
+];
+
+const GEORGINA_LIVING_GUIDE_SCHEMA = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://northsidegta.ca/communities/georgina/living-in-georgina#webpage",
+    "url": "https://northsidegta.ca/communities/georgina/living-in-georgina",
+    "name": "Living in Georgina, Ontario | NorthSide GTA Town Guide",
+    "description": "A practical guide to living in Georgina, Ontario, including Keswick, Sutton, Jackson’s Point, Pefferlaw, Lake Simcoe lifestyle, commuting, schools, budgets, waterfront due diligence, and buyer fit.",
+    "isPartOf": { "@id": "https://northsidegta.ca/#website" },
+    "about": { "@type": "Place", "name": "Georgina, Ontario" },
+    "publisher": { "@type": "Organization", "name": "Finally Home Agents", "url": "https://northsidegta.ca" },
+    "inLanguage": "en-CA"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://northsidegta.ca/" },
+      { "@type": "ListItem", "position": 2, "name": "Communities", "item": "https://northsidegta.ca/communities" },
+      { "@type": "ListItem", "position": 3, "name": "Georgina", "item": "https://northsidegta.ca/communities/georgina" },
+      { "@type": "ListItem", "position": 4, "name": "Living in Georgina", "item": "https://northsidegta.ca/communities/georgina/living-in-georgina" }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": GEORGINA_LIVING_GUIDE_FAQS.map(([name, text]) => ({
+      "@type": "Question",
+      name,
+      "acceptedAnswer": { "@type": "Answer", text }
+    }))
+  }
+];
+
 const STATIC_ROUTE_META_CONFIGS = [
   {
     route: "/",
@@ -43,6 +85,32 @@ const STATIC_ROUTE_META_CONFIGS = [
     },
   },
 
+
+  {
+    route: "/communities/georgina/living-in-georgina",
+    meta: {
+      route: "/communities/georgina/living-in-georgina",
+      documentTitle: "Living in Georgina, Ontario | NorthSide GTA Town Guide",
+      title: "Living in Georgina, Ontario | NorthSide GTA Town Guide",
+      description:
+        "Thinking about moving to Georgina? Compare Keswick, Sutton, Jackson’s Point, Pefferlaw, Lake Simcoe lifestyle, commuting, schools, budgets, and buyer fit.",
+      canonicalUrl: "https://northsidegta.ca/communities/georgina/living-in-georgina",
+      ogType: "website",
+      ogImage: "https://northsidegta.ca/uploads/community-page-seo.jpg",
+      ogImageAlt: "NorthSide GTA Georgina living guide with Lake Simcoe lifestyle and community decision guidance",
+      twitterCard: "summary_large_image",
+      twitterImage: "https://northsidegta.ca/uploads/community-page-seo.jpg",
+      twitterImageAlt: "NorthSide GTA Georgina living guide with Lake Simcoe lifestyle and community decision guidance",
+      siteName: "NorthSide GTA",
+      additionalMeta: [
+        { name: "robots", content: "index,follow" },
+        { property: "og:locale", content: "en_CA" },
+        { name: "author", content: "Finally Home Agents" },
+        { name: "publisher", content: "Finally Home Agents" },
+      ],
+      schema: GEORGINA_LIVING_GUIDE_SCHEMA,
+    },
+  },
   {
     route: "/keswick-lower-priced-homes",
     meta: {

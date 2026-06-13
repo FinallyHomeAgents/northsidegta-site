@@ -49,6 +49,7 @@ import NorthsidePassPreviewV2Page from "./membership/NorthsidePassPreviewV2Page"
 import CoffeePage, { BookCoffeeAliasPage } from "./CoffeePage";
 import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 import KeswickLowerPricedHomesPage from "./KeswickLowerPricedHomesPage";
+import GeorginaLivingGuidePage from "./GeorginaLivingGuidePage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -154,6 +155,7 @@ function App() {
           <Route path="/communities/stouffville" element={<StouffvillePage />} />
           <Route path="/communities/east-gwillimbury" element={<EastGwillimburyPage />} />
           <Route path="/communities/georgina" element={<GeorginaPage />} />
+          <Route path="/communities/georgina/living-in-georgina" element={<GeorginaLivingGuidePage />} />
           <Route path="/communities/uxbridge" element={<UxbridgePage />} />
           <Route path="/communities/scugog" element={<ScugogPage />} />
           <Route path="/communities/:slug" element={<TownPage />} />

@@ -8,7 +8,7 @@ const BUILD_DIR = path.join(ROOT, 'build');
 const SITE = 'https://northsidegta.ca';
 const ROUTES = [
   '/', '/buyers', '/sellers', '/communities', '/homeanalysis',
-  '/communities/georgina', '/communities/newmarket', '/communities/aurora',
+  '/communities/georgina', '/communities/georgina/living-in-georgina', '/communities/newmarket', '/communities/aurora',
   '/communities/stouffville', '/communities/uxbridge', '/communities/scugog',
   '/communities/east-gwillimbury', '/contact', '/about', '/sign', '/vip',
 ];
