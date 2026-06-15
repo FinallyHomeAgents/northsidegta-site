@@ -7,46 +7,63 @@ export const HOMEPAGE_MARKUP = String.raw`
 
       
       <div class="hero__copy hero-animate">
-        <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
+        <img class="hero__photo" src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true" fetchpriority="high">
+        <div class="hero__photo-overlay" aria-hidden="true"></div>
+        <div class="hero__photo-vignette" aria-hidden="true"></div>
+        <div class="hero__copy-inner">
+          <section class="hero__brand-section" aria-label="NorthSide GTA introduction">
+            <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
 
-        <h1 class="hero__heading" id="hero-heading">
-          NorthSide GTA Real Estate,
-          <span class="hero__heading-em">Guided by Finally Home Agents.</span>
-        </h1>
+            <h1 class="hero__heading" id="hero-heading">
+              NorthSide GTA Real Estate,
+              <span class="hero__heading-em">Guided by Finally Home Agents.</span>
+            </h1>
 
-        <p class="hero__intro">
-          Buy or sell north of Toronto with Finally Home Agents across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — with trusted support in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa.
-        </p>
-        <p class="hero__sub">
-          Explore the communities, compare the lifestyle, and get clear guidance before your next move.
-        </p>
+            <p class="hero__intro">
+              Buy or sell north of Toronto with trusted local guidance — community by community, decision by decision.
+            </p>
+          </section>
 
-        <div class="hero__ctas">
-          <a href="/buyers" class="btn btn--green btn--lg">Start Your NorthSide Move <span aria-hidden>→</span></a>
-          <a href="#communities" class="btn btn--ghost btn--lg">Explore Communities</a>
-        </div>
+          <div class="hero__divider" aria-hidden="true"></div>
 
-        
-        <div class="hero-badges">
-          <a href="https://share.google/GJz2QTQ8GqZIifaNH" target="_blank" rel="noopener" class="hero-badge hero-badge--google" aria-label="5.0 Google Rating — view reviews">
-            <img src="/Images/google-logo.png" alt="Google" width="16" height="16">
-            <span>★ 5.0 Google Rating</span>
-            <span class="sr-only">Based on client reviews</span>
-          </a>
-          <span class="hero-badge">
-            <span aria-hidden="true">✓</span> RECO Licensed
-          </span>
-          <span class="hero-badge">
-            <span aria-hidden="true">📍</span> 7 Communities
-          </span>
-          <span class="hero-badge">
-            <span aria-hidden="true">🔄</span> Updated Monthly
-          </span>
+          <section class="hero__agents" aria-label="Meet Finally Home Agents">
+            <p class="hero__agents-label">Finally Home Agents</p>
+            <h2 class="hero__agents-title">Meet Matthew &amp; Landon Mulhall</h2>
+            <p class="hero__agents-copy">Two agents, seven communities, one focus — helping you find the right home north of Toronto before you start chasing listings.</p>
+            <p class="hero__agents-attribution">HomeLife Optimum Realty, Brokerage · Licensed by RECO</p>
+          </section>
+
+          <div class="hero-badges" aria-label="NorthSide GTA trust signals">
+            <a href="https://share.google/GJz2QTQ8GqZIifaNH" target="_blank" rel="noopener" class="hero-badge hero-badge--google" aria-label="5.0 Rating — Google Reviews">
+              <span class="hero-badge__icon" aria-hidden="true">⭐</span>
+              <span class="hero-badge__text"><strong>5.0 Rating</strong><span>Google Reviews</span></span>
+            </a>
+            <span class="hero-badge">
+              <span class="hero-badge__icon" aria-hidden="true">📍</span>
+              <span class="hero-badge__text"><strong>7 Communities</strong><span>North of Toronto</span></span>
+            </span>
+            <span class="hero-badge">
+              <span class="hero-badge__icon" aria-hidden="true">🔄</span>
+              <span class="hero-badge__text"><strong>Updated Monthly</strong><span>Market Data</span></span>
+            </span>
+          </div>
         </div>
       </div>
 
       
       <div class="hero__map-panel">
+        <div class="options-bar" aria-label="Choose how to explore NorthSide GTA towns">
+          <button class="opt opt--guided" type="button" data-hero-option="guided">
+            <span class="opt-tag">Guided path</span>
+            <span class="opt-title">Help me find the right town</span>
+            <span class="opt-action">Take the Town Match Quiz →</span>
+          </button>
+          <button class="opt opt--self" type="button" data-hero-option="self-guided">
+            <span class="opt-tag">Self-guided</span>
+            <span class="opt-title">I'll explore the towns myself</span>
+            <span class="opt-action">Browse the Map Below →</span>
+          </button>
+        </div>
         <div class="hero__map-header">
           <div>
             <p class="map-label">Explore the NorthSide GTA</p>
