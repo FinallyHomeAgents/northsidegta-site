@@ -1594,22 +1594,28 @@ main { padding-top: 0; }
 }
 
 .hero__copy {
-  background: #0a1604;
+  background-color: #0a1604;
+  position: relative;
+  overflow: hidden;
 }
 
-.agent-video,
+.agent-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  opacity: 0.55;
+  z-index: 0;
+}
+
 .hero__video-overlay {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-}
-.agent-video {
-  object-fit: cover;
-  object-position: right center;
-  mix-blend-mode: multiply;
-  opacity: 0.9;
 }
 .agent-video img {
   width: 100%;
@@ -1666,11 +1672,12 @@ main { padding-top: 0; }
 
 .hero__copy {
   isolation: isolate;
-  background: #0a1604;
+  background-color: #0a1604;
+  position: relative;
+  overflow: hidden;
 }
 
 .agent-video {
-  z-index: 0;
   display: block;
 }
 
