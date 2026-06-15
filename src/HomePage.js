@@ -257,8 +257,8 @@ export default function HomePage() {
         trackHeroEvent("hero_option_click", { option: "self_guided", label: "Browse the Map Below" });
         const mapFrame = document.getElementById("northside-map-container");
         mapFrame?.scrollIntoView({ behavior: "smooth", block: "center" });
-        mapFrame?.classList.add("hero__map-frame--pulse");
-        window.setTimeout(() => mapFrame?.classList.remove("hero__map-frame--pulse"), 1500);
+        mapFrame?.classList.add("map-pulse");
+        window.setTimeout(() => mapFrame?.classList.remove("map-pulse"), 1500);
       }
     }
 
@@ -305,7 +305,15 @@ export default function HomePage() {
       <div className="homepage-v4" dangerouslySetInnerHTML={{ __html: HOMEPAGE_MARKUP }} />
       {isTownMatchOpen && (
         <Suspense fallback={null}>
-          <TownMatchModal isOpen={isTownMatchOpen} onClose={closeTownMatch} onComplete={() => setQuizCompleted(true)} />
+          <TownMatchModal
+            isOpen={isTownMatchOpen}
+            onClose={closeTownMatch}
+            onComplete={(resultTowns) => {
+              const [townName] = resultTowns || [];
+              setQuizCompleted(true);
+              trackHeroEvent("quiz_complete", { source: "homepage_hero", quiz_result: townName });
+            }}
+          />
         </Suspense>
       )}
     </>

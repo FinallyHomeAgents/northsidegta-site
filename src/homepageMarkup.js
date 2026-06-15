@@ -7,9 +7,12 @@ export const HOMEPAGE_MARKUP = String.raw`
 
       
       <div class="hero__copy hero-animate">
-        <img class="hero__photo" src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true" fetchpriority="high">
-        <div class="hero__photo-overlay" aria-hidden="true"></div>
-        <div class="hero__photo-vignette" aria-hidden="true"></div>
+        <video autoplay loop muted playsinline aria-hidden="true" class="agent-video" poster="/assets/homepage/matthew-landon-northside-gta.jpg">
+          <source src="/assets/homepage/matthew-landon-hero.mp4" type="video/mp4">
+          <img src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true">
+        </video>
+        <div class="hero__video-overlay hero__video-overlay--side" aria-hidden="true"></div>
+        <div class="hero__video-overlay hero__video-overlay--bottom" aria-hidden="true"></div>
         <div class="hero__copy-inner">
           <section class="hero__brand-section" aria-label="NorthSide GTA introduction">
             <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
@@ -54,14 +57,14 @@ export const HOMEPAGE_MARKUP = String.raw`
       <div class="hero__map-panel">
         <div class="options-bar" aria-label="Choose how to explore NorthSide GTA towns">
           <button class="opt opt--guided" type="button" data-hero-option="guided">
-            <span class="opt-tag">Guided path</span>
+            <span class="opt-tag">Guided Path</span>
             <span class="opt-title">Help me find the right town</span>
             <span class="opt-action">Take the Town Match Quiz →</span>
           </button>
           <button class="opt opt--self" type="button" data-hero-option="self-guided">
-            <span class="opt-tag">Self-guided</span>
+            <span class="opt-tag">Self-Guided</span>
             <span class="opt-title">I'll explore the towns myself</span>
-            <span class="opt-action">Browse the Map Below →</span>
+            <span class="opt-action">Browse the Map Below <span class="opt-action__arrow" aria-hidden="true">↓</span></span>
           </button>
         </div>
         <div class="hero__map-header">
