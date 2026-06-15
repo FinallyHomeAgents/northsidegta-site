@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
 import HeaderShell from "./components/HeaderShell";
 
 import { HOMEPAGE_MARKUP } from "./homepageMarkup";
+
+const TownMatchModal = lazy(() => import("./components/modals/TownMatchModal"));
 
 const HOME_TITLE = "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents";
 const HOME_DESCRIPTION = "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.";
@@ -133,7 +135,30 @@ const structuredData = {
   ],
 };
 
+function trackHeroEvent(name, params) {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", name, params);
+  }
+}
+
 export default function HomePage() {
+  const [isTownMatchOpen, setIsTownMatchOpen] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+
+  const openTownMatch = useCallback(() => {
+    trackHeroEvent("hero_option_click", { option: "guided", label: "Help me find the right town" });
+    trackHeroEvent("quiz_modal_open", { source: "homepage_hero" });
+    setQuizCompleted(false);
+    setIsTownMatchOpen(true);
+  }, []);
+
+  const closeTownMatch = useCallback(() => {
+    if (!quizCompleted) {
+      trackHeroEvent("quiz_modal_dismiss", { source: "homepage_hero" });
+    }
+    setIsTownMatchOpen(false);
+  }, [quizCompleted]);
+
   useEffect(() => {
     function animateCounter(el) {
       const target = parseFloat(el.dataset.target);
@@ -219,11 +244,32 @@ export default function HomePage() {
 
     form?.addEventListener("submit", handleLeadSubmit);
 
+    function handleHeroOptionClick(event) {
+      const guided = event.target.closest?.("[data-hero-option='guided']");
+      const selfGuided = event.target.closest?.("[data-hero-option='self-guided']");
+
+      if (guided) {
+        openTownMatch();
+        return;
+      }
+
+      if (selfGuided) {
+        trackHeroEvent("hero_option_click", { option: "self_guided", label: "Browse the Map Below" });
+        const mapFrame = document.getElementById("northside-map-container");
+        mapFrame?.scrollIntoView({ behavior: "smooth", block: "center" });
+        mapFrame?.classList.add("map-pulse");
+        window.setTimeout(() => mapFrame?.classList.remove("map-pulse"), 1500);
+      }
+    }
+
+    document.addEventListener("click", handleHeroOptionClick);
+
     return () => {
       observer?.disconnect();
       form?.removeEventListener("submit", handleLeadSubmit);
+      document.removeEventListener("click", handleHeroOptionClick);
     };
-  }, []);
+  }, [openTownMatch]);
 
   return (
     <>
@@ -257,6 +303,19 @@ export default function HomePage() {
       </DynamicMetaTags>
       <HeaderShell />
       <div className="homepage-v4" dangerouslySetInnerHTML={{ __html: HOMEPAGE_MARKUP }} />
+      {isTownMatchOpen && (
+        <Suspense fallback={null}>
+          <TownMatchModal
+            isOpen={isTownMatchOpen}
+            onClose={closeTownMatch}
+            onComplete={(resultTowns) => {
+              const [townName] = resultTowns || [];
+              setQuizCompleted(true);
+              trackHeroEvent("quiz_complete", { source: "homepage_hero", quiz_result: townName });
+            }}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

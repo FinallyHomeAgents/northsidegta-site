@@ -271,7 +271,7 @@ function BuyersFaqSection() {
   );
 }
 
-function TownMatchQuiz() {
+export function TownMatchQuiz({ variant = "buyers", onComplete } = {}) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [result, setResult] = useState(null);
@@ -297,7 +297,9 @@ function TownMatchQuiz() {
     const ranked = COMMUNITIES
       .map((town, index) => ({ town, score: scores[town], index }))
       .sort((a, b) => b.score - a.score || a.index - b.index);
-    setResult(ranked.slice(0, 3).map((item) => item.town));
+    const resultTowns = ranked.slice(0, 3).map((item) => item.town);
+    setResult(resultTowns);
+    onComplete?.(resultTowns);
   }
 
   function nextStep() {
@@ -322,19 +324,22 @@ function TownMatchQuiz() {
       <div className="quiz-card result-card">
         <div className="result-primary">
           <h3>{primary}</h3>
-          <p>Based on your answers, {primary} is your strongest fit.</p>
+          <p>{variant === "modal" ? `Looks like ${primary} could be a great fit.` : `Based on your answers, ${primary} is your strongest fit.`}</p>
           <ul>
             {primaryData.reasons.map((reason) => (
               <li key={reason}><span>✓</span>{reason}</li>
             ))}
           </ul>
-          <div className="result-conversion">
-            <strong>Want us to pressure-test this against your budget, commute, and timing?</strong>
-            <p>Send us your basics and we’ll build a practical NorthSide GTA shortlist around your actual move.</p>
-            <button type="button" onClick={() => scrollToSection("cta-section")}>Send me my town shortlist</button>
-          </div>
+          {variant !== "modal" && (
+            <div className="result-conversion">
+              <strong>Want us to pressure-test this against your budget, commute, and timing?</strong>
+              <p>Send us your basics and we’ll build a practical NorthSide GTA shortlist around your actual move.</p>
+              <button type="button" onClick={() => scrollToSection("cta-section")}>Send me my town shortlist</button>
+            </div>
+          )}
           <div className="result-actions secondary-actions">
             <a href={`/communities/${primaryData.slug}`}>Explore {primary} →</a>
+            {variant === "modal" && <a href="/contact">Talk to Matt &amp; Landon →</a>}
           </div>
         </div>
         <div className="also-like">
