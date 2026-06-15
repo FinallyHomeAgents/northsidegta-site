@@ -1658,3 +1658,59 @@ main { padding-top: 0; }
   .hero__copy-inner { min-height: 520px; }
   .agent-video { object-position: right center; }
 }
+
+/* Production hero bug fixes: isolate media layers and keep logo rail clean/visible. */
+.hero__grid {
+  overflow: hidden;
+}
+
+.hero__copy {
+  isolation: isolate;
+  background: #0a1604;
+}
+
+.agent-video {
+  z-index: 0;
+  display: block;
+}
+
+.hero__video-overlay {
+  z-index: 1;
+}
+
+.hero__copy-inner {
+  z-index: 2;
+}
+
+.hero__intro {
+  max-width: 260px;
+}
+
+@media (min-width: 1024px) {
+  .hero__grid {
+    height: calc(100vh - 81px - 48px);
+    min-height: 480px;
+    max-height: 680px;
+  }
+
+  .hero__copy,
+  .hero__map-panel {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .hero__map-frame {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .focus-community-rail__track {
+    overflow-x: auto;
+  }
+
+  .focus-community-rail__tile {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 88px;
+  }
+}
