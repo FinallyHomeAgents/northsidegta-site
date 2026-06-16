@@ -1612,8 +1612,8 @@ main { padding-top: 0; }
 
 @media (min-width: 768px) {
   .agent-video {
-    top: 15%;
-    height: 85%;
+    top: 25%;
+    height: 75%;
     object-position: right top;
   }
 }
@@ -1698,7 +1698,7 @@ main { padding-top: 0; }
 }
 
 .hero__intro {
-  max-width: 260px;
+  max-width: 240px;
 }
 
 @media (min-width: 1024px) {
