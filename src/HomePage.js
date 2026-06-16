@@ -197,16 +197,25 @@ export default function HomePage() {
     const form = document.querySelector('form[name="homepage-lead"]');
     const status = form?.querySelector("[data-inline-lead-status]");
     const sourceUrl = form?.querySelector('input[name="sourceUrl"]');
+    const pageUrl = form?.querySelector('input[name="pageUrl"]');
+    const submittedAt = form?.querySelector('input[name="submittedAt"]');
     const submitButton = form?.querySelector('button[type="submit"]');
 
     if (sourceUrl) {
       sourceUrl.value = window.location.href;
+    }
+    if (pageUrl) {
+      pageUrl.value = window.location.href;
     }
 
     async function handleLeadSubmit(event) {
       event.preventDefault();
 
       if (!form.reportValidity()) return;
+
+      if (submittedAt) {
+        submittedAt.value = new Date().toISOString();
+      }
 
       const formData = new FormData(form);
       if (formData.get("bot-field")) return;
@@ -231,7 +240,13 @@ export default function HomePage() {
           throw new Error(result.error || "Unable to send right now.");
         }
 
-        window.location.href = "/thank-you?source=homepage-lead";
+        form.innerHTML = `
+          <div class="inline-lead__success" role="status" aria-live="polite" tabindex="-1">
+            <p>Thanks — we received your request.</p>
+            <p>We’ll reach out within 24 hours to learn more about what you’re looking for and help you compare your options in the NorthSide GTA.</p>
+          </div>
+        `;
+        form.querySelector(".inline-lead__success")?.focus();
       } catch (error) {
         if (status) {
           status.textContent = error.message || "Sorry, something went wrong. Please try again.";

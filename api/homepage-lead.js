@@ -1,31 +1,20 @@
-import { Resend } from 'resend'
-
-const resendClient = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const LEAD_TO_EMAIL = process.env.LEAD_TO_EMAIL || process.env.AGENT_EMAIL || 'contact@finallyhomeagents.com'
-const LEAD_FROM_EMAIL =
-  process.env.LEAD_FROM_EMAIL || 'NorthSide GTA <no-reply@northsidegta.ca>'
-const THANK_YOU_PATH = '/thank-you?source=homepage-lead'
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
+const DEFAULT_PAGE_URL = 'https://northsidegta.ca/'
+const SUCCESS_MESSAGE_HEADING = 'Thanks — we received your request.'
+const SUCCESS_MESSAGE_BODY = 'We’ll reach out within 24 hours to learn more about what you’re looking for and help you compare your options in the NorthSide GTA.'
 
 function normalizeText(value, max = 250) {
   if (typeof value !== 'string') return ''
   return value.replace(/\s+/g, ' ').trim().slice(0, max)
 }
 
-function escapeHtml(value = '') {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;')
-}
-
-function getClientIp(req) {
-  const header = req.headers['x-forwarded-for']
-  if (Array.isArray(header)) return header[0] || 'unknown'
-  if (typeof header === 'string') return header.split(',')[0].trim() || 'unknown'
-  return req.socket?.remoteAddress || 'unknown'
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
 }
 
 async function readBody(req) {
@@ -68,13 +57,33 @@ function wantsJson(req) {
   return accept.includes('application/json') || contentType.includes('application/json')
 }
 
-function sendError(req, res, status, error) {
+function sendResponse(req, res, status, body) {
   if (wantsJson(req)) {
-    res.status(status).json({ ok: false, error })
+    res.status(status).json(body)
     return
   }
 
-  res.status(status).send(error)
+  if (body.ok) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    res.status(status).send(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Homepage form received | NorthSide GTA</title>
+  </head>
+  <body>
+    <main role="main" aria-labelledby="homepage-lead-success" style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;color:#0f172a;">
+      <h1 id="homepage-lead-success" style="font-size:1.5rem;line-height:1.3;margin:0 0 1rem;">${SUCCESS_MESSAGE_HEADING}</h1>
+      <p style="margin:0 0 1.5rem;">${SUCCESS_MESSAGE_BODY}</p>
+      <p><a href="/" style="color:#32610e;font-weight:600;">Return to the homepage</a></p>
+    </main>
+  </body>
+</html>`)
+    return
+  }
+
+  res.status(status).send(body.error || 'Unable to submit lead right now.')
 }
 
 export default async function handler(req, res) {
@@ -88,87 +97,71 @@ export default async function handler(req, res) {
   try {
     body = await readBody(req)
   } catch (error) {
-    sendError(req, res, 400, 'Invalid request body.')
+    sendResponse(req, res, 400, { ok: false, error: 'Invalid request body.' })
     return
   }
 
   if (normalizeText(body['bot-field'] || body.botField, 120)) {
-    if (wantsJson(req)) {
-      res.status(200).json({ ok: true })
-      return
-    }
-    res.writeHead(303, { Location: THANK_YOU_PATH })
-    res.end()
+    sendResponse(req, res, 200, { ok: true })
     return
   }
 
+  const submittedAt = normalizeText(body.submittedAt, 80) || new Date().toISOString()
+  const pageUrl = normalizeText(body.pageUrl || body.sourceUrl, 500) || DEFAULT_PAGE_URL
   const payload = {
     name: normalizeText(body.name, 120),
     contact: normalizeText(body.contact, 180),
     community: normalizeText(body.community, 120),
-    sourceUrl: normalizeText(body.sourceUrl, 500),
-    formName: normalizeText(body['form-name'] || body.formName || 'homepage-lead', 120),
+    source: 'Homepage form',
+    pageUrl,
+    submittedAt,
   }
 
   if (!payload.name || !payload.contact || !payload.community) {
-    sendError(req, res, 400, 'Please complete name, contact, and community.')
+    sendResponse(req, res, 400, { ok: false, error: 'Please complete name, contact, and community.' })
     return
   }
 
-  const replyTo = EMAIL_REGEX.test(payload.contact) ? payload.contact : undefined
-  const ip = getClientIp(req)
-  const submittedAt = new Date().toISOString()
-
-  if (!resendClient) {
-    sendError(req, res, 500, 'Email service not configured.')
+  if (!FORMSPREE_ENDPOINT || !isHttpUrl(FORMSPREE_ENDPOINT)) {
+    console.error('[homepage-lead] Formspree endpoint is not configured')
+    sendResponse(req, res, 500, { ok: false, error: 'Lead form is not configured right now.' })
     return
   }
-
-  const html = `
-    <div style="font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;">
-      <h2 style="margin-bottom:12px;">New Homepage Lead</h2>
-      <table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <tr><td style="padding:6px 0;font-weight:600;">Name</td><td style="padding:6px 0;">${escapeHtml(payload.name)}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">Phone or email</td><td style="padding:6px 0;">${escapeHtml(payload.contact)}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">Community interest</td><td style="padding:6px 0;">${escapeHtml(payload.community)}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">Source page</td><td style="padding:6px 0;">${escapeHtml(payload.sourceUrl || 'https://northsidegta.ca/')}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">Form</td><td style="padding:6px 0;">${escapeHtml(payload.formName)}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">Submitted</td><td style="padding:6px 0;">${escapeHtml(submittedAt)}</td></tr>
-        <tr><td style="padding:6px 0;font-weight:600;">IP</td><td style="padding:6px 0;">${escapeHtml(ip)}</td></tr>
-      </table>
-    </div>
-  `
-
-  const text = [
-    'New Homepage Lead',
-    `Name: ${payload.name}`,
-    `Phone or email: ${payload.contact}`,
-    `Community interest: ${payload.community}`,
-    `Source page: ${payload.sourceUrl || 'https://northsidegta.ca/'}`,
-    `Form: ${payload.formName}`,
-    `Submitted: ${submittedAt}`,
-    `IP: ${ip}`,
-  ].join('\n')
 
   try {
-    await resendClient.emails.send({
-      from: LEAD_FROM_EMAIL,
-      to: [LEAD_TO_EMAIL],
-      subject: `Homepage Lead — ${payload.community} — ${payload.name}`,
-      ...(replyTo ? { replyTo } : {}),
-      html,
-      text,
+    const formspreeResponse = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        Name: payload.name,
+        'Phone or email': payload.contact,
+        'Selected town/community': payload.community,
+        Source: payload.source,
+        'Page URL': payload.pageUrl,
+        'Submitted date/time': payload.submittedAt,
+        _subject: `Homepage Lead — ${payload.community} — ${payload.name}`,
+        _gotcha: '',
+      }),
     })
 
-    if (wantsJson(req)) {
-      res.status(200).json({ ok: true })
+    if (!formspreeResponse.ok) {
+      let responseText = ''
+      try {
+        responseText = await formspreeResponse.text()
+      } catch (error) {
+        console.error('[homepage-lead] failed to read Formspree error response', error)
+      }
+      console.error('[homepage-lead] Formspree error', formspreeResponse.status, responseText)
+      sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
       return
     }
 
-    res.writeHead(303, { Location: THANK_YOU_PATH })
-    res.end()
+    sendResponse(req, res, 200, { ok: true })
   } catch (error) {
-    console.error('[homepage-lead] failed', error)
-    sendError(req, res, 502, 'Unable to send lead right now.')
+    console.error('[homepage-lead] Formspree request failed', error)
+    sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
   }
 }
