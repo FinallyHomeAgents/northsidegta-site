@@ -1,5 +1,7 @@
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 const DEFAULT_PAGE_URL = 'https://northsidegta.ca/'
+const SUCCESS_MESSAGE_HEADING = 'Thanks — we received your request.'
+const SUCCESS_MESSAGE_BODY = 'We’ll reach out within 24 hours to learn more about what you’re looking for and help you compare your options in the NorthSide GTA.'
 
 function normalizeText(value, max = 250) {
   if (typeof value !== 'string') return ''
@@ -55,9 +57,29 @@ function wantsJson(req) {
   return accept.includes('application/json') || contentType.includes('application/json')
 }
 
-function sendJson(req, res, status, body) {
+function sendResponse(req, res, status, body) {
   if (wantsJson(req)) {
     res.status(status).json(body)
+    return
+  }
+
+  if (body.ok) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    res.status(status).send(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Homepage form received | NorthSide GTA</title>
+  </head>
+  <body>
+    <main role="main" aria-labelledby="homepage-lead-success" style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;color:#0f172a;">
+      <h1 id="homepage-lead-success" style="font-size:1.5rem;line-height:1.3;margin:0 0 1rem;">${SUCCESS_MESSAGE_HEADING}</h1>
+      <p style="margin:0 0 1.5rem;">${SUCCESS_MESSAGE_BODY}</p>
+      <p><a href="/" style="color:#32610e;font-weight:600;">Return to the homepage</a></p>
+    </main>
+  </body>
+</html>`)
     return
   }
 
@@ -75,12 +97,12 @@ export default async function handler(req, res) {
   try {
     body = await readBody(req)
   } catch (error) {
-    sendJson(req, res, 400, { ok: false, error: 'Invalid request body.' })
+    sendResponse(req, res, 400, { ok: false, error: 'Invalid request body.' })
     return
   }
 
   if (normalizeText(body['bot-field'] || body.botField, 120)) {
-    sendJson(req, res, 200, { ok: true })
+    sendResponse(req, res, 200, { ok: true })
     return
   }
 
@@ -96,13 +118,13 @@ export default async function handler(req, res) {
   }
 
   if (!payload.name || !payload.contact || !payload.community) {
-    sendJson(req, res, 400, { ok: false, error: 'Please complete name, contact, and community.' })
+    sendResponse(req, res, 400, { ok: false, error: 'Please complete name, contact, and community.' })
     return
   }
 
   if (!FORMSPREE_ENDPOINT || !isHttpUrl(FORMSPREE_ENDPOINT)) {
     console.error('[homepage-lead] Formspree endpoint is not configured')
-    sendJson(req, res, 500, { ok: false, error: 'Lead form is not configured right now.' })
+    sendResponse(req, res, 500, { ok: false, error: 'Lead form is not configured right now.' })
     return
   }
 
@@ -133,13 +155,13 @@ export default async function handler(req, res) {
         console.error('[homepage-lead] failed to read Formspree error response', error)
       }
       console.error('[homepage-lead] Formspree error', formspreeResponse.status, responseText)
-      sendJson(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
+      sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
       return
     }
 
-    sendJson(req, res, 200, { ok: true })
+    sendResponse(req, res, 200, { ok: true })
   } catch (error) {
     console.error('[homepage-lead] Formspree request failed', error)
-    sendJson(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
+    sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
   }
 }
