@@ -1612,7 +1612,9 @@ main { padding-top: 0; }
 
 @media (min-width: 768px) {
   .agent-video {
-    object-position: right 45%;
+    top: 15%;
+    height: 85%;
+    object-position: right top;
   }
 }
 
