@@ -6,6 +6,9 @@ const WEBSITE_ID = "https://northsidegta.ca/#website";
 const PUBLISHER_ID = "https://northsidegta.ca/#finally-home-agents";
 const NORTHSIDE_ID = "https://northsidegta.ca/#northside-gta";
 const NORTHSIDE_REGION_ID = "https://northsidegta.ca/#northside-gta-region";
+const SELLERS_PAGE_TITLE = "Sell Your Home North of Toronto | NorthSide GTA | Finally Home Agents";
+const SELLERS_PAGE_DESCRIPTION =
+  "Considering selling in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog? Finally Home Agents provides strategic pricing, professional marketing, and personal guidance from first conversation to closing.";
 
 const CORE_TOWN_IDS = [
   "uxbridge",
@@ -27,14 +30,32 @@ function buildSellersPageSchema() {
         "@type": "WebPage",
         "@id": `${pageUrl}/#webpage`,
         url: pageUrl,
-        name: "NorthSide GTA Seller Strategy | Finally Home Agents",
-        description:
-          "Listing prep, marketing, and negotiations for NorthSide GTA sellers with a plan that keeps you in control of timelines and pricing.",
+        name: SELLERS_PAGE_TITLE,
+        description: SELLERS_PAGE_DESCRIPTION,
         inLanguage: "en-CA",
         isPartOf: { "@id": WEBSITE_ID },
         about: [{ "@id": NORTHSIDE_REGION_ID }, { "@id": NORTHSIDE_ID }],
         publisher: { "@id": PUBLISHER_ID },
         mentions: [{ "@id": NORTHSIDE_REGION_ID }, ...CORE_TOWN_IDS],
+      },
+
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Sellers", item: pageUrl },
+        ],
+      },
+      {
+        "@type": "Service",
+        "@id": `${pageUrl}#service`,
+        name: "Seller representation",
+        serviceType: "Seller representation",
+        url: pageUrl,
+        provider: { "@id": PUBLISHER_ID },
+        areaServed: CORE_TOWN_IDS,
+        description: SELLERS_PAGE_DESCRIPTION,
       },
       {
         "@type": "FAQPage",
@@ -53,4 +74,4 @@ function buildSellersPageSchema() {
   };
 }
 
-module.exports = { buildSellersPageSchema };
+module.exports = { buildSellersPageSchema, SELLERS_PAGE_TITLE, SELLERS_PAGE_DESCRIPTION };
