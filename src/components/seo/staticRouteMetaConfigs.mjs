@@ -1,4 +1,7 @@
 import { BUYERS_SCHEMA } from "./buyersSchema.mjs";
+import sellersSchemaModule from "../../lib/structuredData/sellersPage.js";
+
+const { buildSellersPageSchema, SELLERS_PAGE_TITLE, SELLERS_PAGE_DESCRIPTION } = sellersSchemaModule;
 
 const DEFAULT_GLOBAL_META_CONFIG = {
   route: "/",
@@ -101,17 +104,19 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/sellers",
     meta: {
       route: "/sellers",
-      documentTitle: "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
-      title: "Sell Your Home for More in the NorthSide GTA | Strategy, Staging & Marketing",
-      description:
-        "Thinking of selling in the NorthSide GTA? Get AI-backed pricing, pro staging, premium media, and negotiation that wins—serving Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
+      documentTitle: SELLERS_PAGE_TITLE,
+      title: SELLERS_PAGE_TITLE,
+      description: SELLERS_PAGE_DESCRIPTION,
       canonicalUrl: "https://northsidegta.ca/sellers",
       ogType: "website",
-      ogImage: "https://northsidegta.ca/Images/northsidegta-map-bg.jpg",
+      ogImage: "https://northsidegta.ca/uploads/sellers-page-seo.jpg",
+      ogImageAlt: "Bright living room with NorthSide GTA and Finally Home Agents branding",
       twitterCard: "summary_large_image",
-      twitterImage: "https://northsidegta.ca/Images/northsidegta-map-bg.jpg",
+      twitterImage: "https://northsidegta.ca/uploads/sellers-page-seo.jpg",
+      twitterImageAlt: "Bright living room with NorthSide GTA and Finally Home Agents branding",
       siteName: "NorthSide GTA",
-      additionalMeta: [{ name: "robots", content: "index,follow" }],
+      additionalMeta: [{ name: "robots", content: "index, follow" }],
+      schema: buildSellersPageSchema(),
     },
   },
   {
@@ -419,6 +424,7 @@ const CORE_TOWNS = ["Georgina", "East Gwillimbury", "Newmarket", "Aurora", "Stou
 const COMMUNITY_IMAGE = `${SITE_URL}/uploads/community-page-seo.jpg`;
 const HOME_IMAGE = `${SITE_URL}/uploads/northside-gta-finally-home-agents-hero.jpg`;
 const SELLERS_IMAGE = `${SITE_URL}/uploads/sellers-page-seo.jpg`;
+const SELLERS_IMAGE_ALT = "Bright living room with NorthSide GTA and Finally Home Agents branding";
 
 function areaServedPlaces(townNames = CORE_TOWNS) {
   return townNames.map((name) => ({ "@type": "Place", name: `${name}, Ontario` }));
@@ -494,7 +500,7 @@ function makePageSchema({ path, title, description, pageType = "WebPage", image,
   return { "@context": "https://schema.org", "@graph": graph };
 }
 
-function routeMeta({ route, title, description, image, robots = "index, follow", pageType = "WebPage", schema, serviceType, collectionItems, town }) {
+function routeMeta({ route, title, description, image, imageAlt, robots = "index, follow", pageType = "WebPage", schema, serviceType, collectionItems, town }) {
   const canonicalUrl = `${SITE_URL}${route === "/" ? "/" : route}`;
   return {
     route,
@@ -505,8 +511,10 @@ function routeMeta({ route, title, description, image, robots = "index, follow",
     canonicalUrl,
     ogType: pageType === "Article" ? "article" : "website",
     ogImage: image,
+    ogImageAlt: imageAlt,
     twitterCard: "summary_large_image",
     twitterImage: image,
+    twitterImageAlt: imageAlt,
     siteName: "NorthSide GTA",
     additionalMeta: [
       { name: "robots", content: robots },
@@ -540,7 +548,7 @@ const TOWN_REMEDIATION = [
 const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
   { route: "/", meta: routeMeta({ route: "/", title: "NorthSide GTA Real Estate | Finally Home Agents", description: "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "WebSite" }) },
   { route: "/buyers", meta: routeMeta({ route: "/buyers", title: "Buying a Home North of Toronto | Finally Home Agents", description: "Buying north of Toronto? Compare Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog with local buyer guidance.", image: `${SITE_URL}/uploads/buyers-page-seo.jpg`, schema: BUYERS_SCHEMA }) },
-  { route: "/sellers", meta: routeMeta({ route: "/sellers", title: "Selling Your Home in the NorthSide GTA | Finally Home Agents", description: "Thinking about selling in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog? Get local pricing, media, and strategy.", image: SELLERS_IMAGE, serviceType: "Seller representation" }) },
+  { route: "/sellers", meta: routeMeta({ route: "/sellers", title: SELLERS_PAGE_TITLE, description: SELLERS_PAGE_DESCRIPTION, image: SELLERS_IMAGE, imageAlt: SELLERS_IMAGE_ALT, schema: buildSellersPageSchema(), serviceType: "Seller representation" }) },
   { route: "/communities", meta: routeMeta({ route: "/communities", title: "NorthSide GTA Communities | Compare Towns North of Toronto", description: "Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog with Finally Home Agents.", image: COMMUNITY_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },
   { route: "/contact", meta: routeMeta({ route: "/contact", title: "Contact Finally Home Agents | NorthSide GTA Real Estate", description: "Contact Matthew and Landon Mulhall for buying, selling, and local real estate guidance across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-contact-northsidegta.jpg`, pageType: "ContactPage" }) },
   { route: "/about", meta: routeMeta({ route: "/about", title: "About Finally Home Agents | NorthSide GTA Real Estate", description: "Meet Matthew and Landon Mulhall of Finally Home Agents, helping buyers and sellers across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-about-northsidegta.jpg` }) },

@@ -28,29 +28,49 @@ const buyersFaq = [
 
 const sellersFaq = [
   {
-    question: "How do you price homes for NorthSide GTA sellers?",
+    question: "How early should we talk before listing?",
     answer:
-      "We blend local comps, current buyer demand, and timing to set a price strategy that protects your equity and drives showings.",
+      "Ideally, a few months before you plan to sell. That gives us time to review the property, discuss timing, and identify which improvements are worth doing before the home reaches the market. Some sellers contact us much earlier, and that is completely fine. A good plan is more useful than rushing into a listing.",
   },
   {
-    question: "What marketing do you include?",
+    question: "Do we need to renovate before selling?",
     answer:
-      "Professional photos, targeted digital ads, email, and neighbourhood outreach so buyers see your home online and in person.",
+      "Usually not. Most homes benefit more from targeted preparation than a major renovation. We look at the condition of the property, the likely buyer, and the current market, then recommend the repairs, cleaning, landscaping, or updates most likely to improve presentation and buyer confidence. We will also tell you when spending more is unlikely to produce a worthwhile return.",
   },
   {
-    question: "Can you help if I need to buy and sell at the same time?",
+    question: "Can we sell and buy at the same time?",
     answer:
-      "Yes. We design a step-by-step plan that covers staging, offer timing, and bridge options so you never feel rushed.",
+      "Yes. Many of our clients need to coordinate both moves. We help compare the risks of buying first versus selling first, then build the offer, financing, closing-date, and condition strategy around your situation. The right order depends on your finances, the type of home you are selling, and how competitive the market is for the property you want to buy.",
   },
   {
-    question: "Do you manage showings and feedback?",
+    question: "Do you work across all NorthSide GTA communities?",
     answer:
-      "We coordinate every showing, gather real feedback, and adjust quickly so your listing stays competitive.",
+      "Yes. Our primary service area includes Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog. We also work throughout nearby York Region and Durham communities.\n\nIf your property is elsewhere in Ontario, we can still help. Where the market falls outside our direct area of expertise, we will connect you with a strong local agent we trust and remain available to help guide the process.\n\nEvery selling strategy is adjusted to the property, the local buyer pool, and the conditions in that specific market.",
   },
   {
-    question: "How do you negotiate offers?",
+    question: "Will we get pressured to list right away?",
     answer:
-      "We verify buyer strength, counter with clear terms, and protect your must-haves so you close on the right deal, not just the first one.",
+      "No. The first conversation is simply a chance to understand the property, your timing, and what you are trying to accomplish.\n\nIt also gives both sides an opportunity to determine whether the working relationship feels right before any commitment is made. We will explain your options, recommend the most sensible next steps, and leave the timing and decision with you.",
+  },
+  {
+    question: "What happens after we submit the planning form?",
+    answer:
+      "Matthew or Landon will review the information personally and reach out within 24 hours. The first step is a straightforward conversation about the property, your timing, and what would be most helpful. From there, we may recommend a property visit, a pricing and market review, or a preparation plan. There is no automated valuation and no obligation to list.",
+  },
+  {
+    question: "How do you determine the right list price?",
+    answer:
+      "We look at more than recent comparable sales. The property’s condition, location, unique features, current competition, buyer activity, and local market momentum all help determine the right strategy.\n\nOur goal is not simply to list your home. It is to position it to sell. The list price influences which buyers notice the property, how they interpret it, and how much activity the launch creates. We explain the available pricing options, the risks and advantages of each, and recommend the approach most likely to produce the strongest overall result.",
+  },
+  {
+    question: "What is included in your marketing?",
+    answer:
+      "Every listing includes a strategy built around the property and the buyers most likely to respond to it. Depending on the home, that may include professional photography, video, drone footage, floor plans, listing copy, MLS exposure, social media, digital promotion, open houses, agent outreach, and property-specific web presentation.\n\nThe marketing is not treated as a checklist. The presentation, timing, and distribution should all work together to position the home properly.\n\nDo not add staging as a promised included service.",
+  },
+  {
+    question: "What should we do before putting the home on the market?",
+    answer:
+      "We begin with a property review and identify what is worth addressing before the listing goes live. That may include repairs, decluttering, cleaning, paint, landscaping, exterior presentation, or minor updates.\n\nNot every home needs major work. We focus on the improvements most likely to strengthen buyer confidence and presentation, and we will also tell you where spending more is unlikely to make sense.",
   },
 ];
 
