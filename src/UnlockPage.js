@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import "./UnlockPage.css";
 
@@ -28,14 +28,6 @@ export default function UnlockPage() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
-  const codeRef = useRef(null);
-
-  useEffect(() => {
-    if (form.name && form.phone && form.instagramHandle && !form.code) {
-      codeRef.current?.focus();
-    }
-  }, [form.name, form.phone, form.instagramHandle, form.code]);
-
   const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
 
   async function onSubmit(event) {
@@ -57,6 +49,10 @@ export default function UnlockPage() {
         body: JSON.stringify({ ...form, pageUrl: window.location.href }),
       });
       const data = await response.json();
+      if (response.status === 429) {
+        setError(data.error || "Too many attempts. Please try again later.");
+        return;
+      }
       setResult(data.unlocked ? "unlocked" : "locked");
     } catch {
       setError("We couldn't reach the lockbox. Please try again.");
@@ -75,10 +71,10 @@ export default function UnlockPage() {
           <h1>{won ? "Unlocked." : "Still locked."}</h1>
           <p className="result-copy">
             {won
-              ? "You won 3 Dozen Callaway Chrome Soft Golf Balls."
+              ? "You won an entry into the 2026 Finally Home Fall Scramble."
               : "Thanks for playing. Winners announced at dinner."}
           </p>
-          {won && <p className="handoff">Show this screen to Matthew or Landon.</p>}
+          {won && <p className="handoff">We’ll be in contact with you.</p>}
           <button className="ghost-button" type="button" onClick={() => setResult(null)}>Try another code</button>
         </section>
       </main>
@@ -114,7 +110,7 @@ export default function UnlockPage() {
 
         <div className="prize-card">
           <span>Prize</span>
-          <strong>3 Dozen Callaway Chrome Soft Golf Balls</strong>
+          <strong>Entry into the 2026 Finally Home Fall Scramble</strong>
         </div>
 
         <ol className="steps-card">
@@ -128,7 +124,7 @@ export default function UnlockPage() {
           <label>Name<input value={form.name} onChange={(e) => update("name", e.target.value)} autoComplete="name" required /></label>
           <label>Phone<input value={form.phone} onChange={(e) => update("phone", e.target.value)} autoComplete="tel" inputMode="tel" required /></label>
           <label>Instagram Handle<input value={form.instagramHandle} onChange={(e) => update("instagramHandle", e.target.value)} placeholder="@yourhandle" autoComplete="off" required /></label>
-          <label className="code-label">5-Digit Code<input ref={codeRef} value={form.code} onChange={(e) => update("code", e.target.value.replace(/\D/g, "").slice(0, 5))} inputMode="numeric" pattern="[0-9]*" maxLength="5" placeholder="•••••" required /></label>
+          <label className="code-label">5-Digit Code<input value={form.code} onChange={(e) => update("code", e.target.value.replace(/\D/g, "").slice(0, 5))} inputMode="numeric" pattern="[0-9]*" maxLength="5" placeholder="•••••" required /></label>
 
           <div className="checks">
             <label><input type="checkbox" checked={form.followedFinallyHomeAgents} onChange={(e) => update("followedFinallyHomeAgents", e.target.checked)} /> I followed @FinallyHomeAgents</label>
@@ -142,7 +138,7 @@ export default function UnlockPage() {
         <section className="birdie-card">
           <p className="eyebrow">Bonus contest</p>
           <h2>Longest Birdie of the Day</h2>
-          <p>The longest made birdie on this hole wins a FREE entry into the 2027 Finally Home Cup.</p>
+          <p>The longest made birdie on this hole wins an entry into the 2026 Finally Home Fall Scramble.</p>
           <p>Matthew and Landon will be on the green to witness and measure every birdie.</p>
         </section>
 
