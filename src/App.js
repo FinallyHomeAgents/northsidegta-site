@@ -49,6 +49,7 @@ import NorthsidePassPreviewV2Page from "./membership/NorthsidePassPreviewV2Page"
 import CoffeePage, { BookCoffeeAliasPage } from "./CoffeePage";
 import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 import KeswickLowerPricedHomesPage from "./KeswickLowerPricedHomesPage";
+import UnlockPage from "./UnlockPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -137,6 +138,7 @@ function App() {
           <Route path="/book-coffee" element={<BookCoffeeAliasPage />} />
           <Route path="/power-of-sale-support" element={<PowerOfSaleSupportPage />} />
           <Route path="/keswick-lower-priced-homes" element={<KeswickLowerPricedHomesPage />} />
+          <Route path="/unlock" element={<UnlockPage />} />
           <Route path="/northside-pass-preview" element={<OptionFivePage />} />
           <Route path="/northside-pass-preview-v2" element={<NorthsidePassPreviewV2Page />} />
           <Route path="/northside-pass-preview/option-1" element={<OptionOnePage />} />
