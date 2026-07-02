@@ -1,8 +1,7 @@
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 const WINDOW_MS = 10 * 60 * 1000
-const MAX_IP_ATTEMPTS = 5
+const MAX_IP_ATTEMPTS = 20
 const ipAttempts = new Map()
-const codeAttempts = new Map()
 
 // This temporary contest uses in-memory throttling. Durable storage would be
 // needed for production-critical abuse prevention across serverless instances.
@@ -106,6 +105,8 @@ export default async function handler(req, res) {
     code: submittedCode,
     followedFinallyHomeAgents: Boolean(body.followedFinallyHomeAgents),
     followedNorthSideGTA: Boolean(body.followedNorthSideGTA),
+    marketing_consent: Boolean(body.marketing_consent),
+    marketing_consent_timestamp: Boolean(body.marketing_consent) ? timestamp : '',
     timestamp,
     pageUrl: normalizeText(body.pageUrl, 500),
   }
@@ -118,9 +119,7 @@ export default async function handler(req, res) {
 
   const now = Date.now()
   const clientIp = getClientIp(req)
-  const throttled =
-    isThrottled(ipAttempts, clientIp, MAX_IP_ATTEMPTS, now) ||
-    isThrottled(codeAttempts, submittedCode, 1, now)
+  const throttled = isThrottled(ipAttempts, clientIp, MAX_IP_ATTEMPTS, now)
 
   if (throttled) {
     await submitToFormspree({ ...basePayload, result: 'locked' })

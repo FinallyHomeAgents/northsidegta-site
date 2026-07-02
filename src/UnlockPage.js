@@ -9,6 +9,7 @@ const initialForm = {
   code: '',
   followedFinallyHomeAgents: false,
   followedNorthSideGTA: false,
+  marketing_consent: false,
 }
 
 const codeDigits = Array.from({ length: 5 })
@@ -88,7 +89,10 @@ export default function UnlockPage() {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({ ...form, pageUrl: window.location.href }),
+        body: JSON.stringify({
+          ...form,
+          pageUrl: window.location.href,
+        }),
       })
       const data = await response.json()
       if (response.status === 429) {
@@ -120,12 +124,6 @@ export default function UnlockPage() {
         />
       </Helmet>
       <section className="unlock-shell">
-        <div className="brand-row" aria-label="Event sponsors">
-          <img src="/Images/fha-badge.png" alt="Finally Home Agents" />
-          <span />
-          <img src="/Images/northsidegta-logo.svg" alt="NorthSide GTA" />
-        </div>
-
         <div className="unlock-hero">
           <div className="lockbox-stage" aria-hidden="true">
             <img className="lockbox-photo" src={lockboxHeroPath} alt="" />
@@ -259,6 +257,25 @@ export default function UnlockPage() {
                   </label>
                 </div>
 
+                <div className="optional-consent">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="marketing_consent"
+                      checked={form.marketing_consent}
+                      onChange={(e) =>
+                        update('marketing_consent', e.target.checked)
+                      }
+                    />{' '}
+                    <span>
+                      <strong>Optional:</strong> I agree to receive occasional
+                      real estate, community and promotional emails from Finally
+                      Home Agents and NorthSide GTA. I understand that I can
+                      unsubscribe at any time.
+                    </span>
+                  </label>
+                </div>
+
                 {error && (
                   <p className="form-error" role="alert">
                     {error}
@@ -275,6 +292,14 @@ export default function UnlockPage() {
             )}
           </div>
         </div>
+
+        <footer className="unlock-legal-footer">
+          <p>
+            This promotion is not intended to solicit buyers or sellers currently
+            under contract with another real estate brokerage.
+          </p>
+          <p>HomeLife Optimum Realty, Brokerage</p>
+        </footer>
       </section>
     </main>
   )
