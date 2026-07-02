@@ -377,3 +377,114 @@
     padding: 1rem 1.15rem 1rem 1.25rem;
   }
 }
+
+.optional-consent {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.75rem;
+}
+.optional-consent label {
+  grid-template-columns: 1.1rem 1fr;
+  align-items: start;
+  color: rgba(255, 250, 240, 0.78);
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.optional-consent input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.1rem;
+  accent-color: #5f9f36;
+  padding: 0;
+}
+.optional-consent strong {
+  color: #d8b968;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.host-card {
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  justify-self: center;
+  max-width: 20rem;
+  margin: 0.1rem auto 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  color: rgba(255, 250, 240, 0.76);
+}
+.host-card img {
+  display: block;
+  width: 4.8rem;
+  height: 4.8rem;
+  border-radius: 999px;
+  object-fit: cover;
+  object-position: center 18%;
+  opacity: 0.9;
+}
+.host-card p {
+  margin: 0;
+  color: #fffaf0;
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.15;
+}
+.host-card span {
+  display: block;
+  margin-top: 0.2rem;
+  color: #d8b968;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.unlock-legal-footer {
+  max-width: 42rem;
+  margin: 1.15rem auto 0;
+  color: rgba(255, 250, 240, 0.62);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: center;
+}
+.unlock-legal-footer p {
+  margin: 0.15rem 0;
+}
+.unlock-legal-footer p:last-child {
+  color: rgba(255, 250, 240, 0.78);
+  font-weight: 800;
+}
+
+@media (min-width: 720px) {
+  .optional-consent {
+    grid-column: 1 / -1;
+  }
+  .host-card {
+    justify-self: start;
+  }
+  .host-card img {
+    width: 5.2rem;
+    height: 5.2rem;
+  }
+  .unlock-legal-footer {
+    margin-top: 1.35rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .host-card {
+    border-radius: 1.4rem;
+  }
+  .host-card img {
+    width: 4rem;
+    height: 4rem;
+  }
+  .host-card p {
+    font-size: 0.8rem;
+  }
+  .host-card span {
+    font-size: 0.68rem;
+  }
+}
