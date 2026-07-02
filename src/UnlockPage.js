@@ -14,7 +14,6 @@ const initialForm = {
 
 const codeDigits = Array.from({ length: 5 })
 const lockboxHeroPath = '/assets/unlock/lockbox-hero.png'
-const teamImagePath = '/assets/homepage/matthew-landon-northside-gta.jpg'
 
 function validate(form) {
   if (!form.name.trim()) return 'Name is required.'
@@ -92,9 +91,6 @@ export default function UnlockPage() {
         },
         body: JSON.stringify({
           ...form,
-          marketing_consent_timestamp: form.marketing_consent
-            ? new Date().toISOString()
-            : '',
           pageUrl: window.location.href,
         }),
       })
@@ -294,14 +290,6 @@ export default function UnlockPage() {
                 </button>
               </form>
             )}
-
-            <aside className="host-card" aria-label="Contest hosts">
-              <img src={teamImagePath} alt="Matthew and Landon Mulhall" />
-              <div>
-                <p>Hosted by Matthew &amp; Landon</p>
-                <span>Finally Home Agents</span>
-              </div>
-            </aside>
           </div>
         </div>
 

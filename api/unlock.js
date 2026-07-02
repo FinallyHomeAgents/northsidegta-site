@@ -106,9 +106,7 @@ export default async function handler(req, res) {
     followedFinallyHomeAgents: Boolean(body.followedFinallyHomeAgents),
     followedNorthSideGTA: Boolean(body.followedNorthSideGTA),
     marketing_consent: Boolean(body.marketing_consent),
-    marketing_consent_timestamp: Boolean(body.marketing_consent)
-      ? normalizeText(body.marketing_consent_timestamp, 80) || timestamp
-      : '',
+    marketing_consent_timestamp: Boolean(body.marketing_consent) ? timestamp : '',
     timestamp,
     pageUrl: normalizeText(body.pageUrl, 500),
   }
