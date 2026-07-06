@@ -1,0 +1,58 @@
+{
+  "ballot_items": [
+    {
+      "address": "559 Steven Ct, Newmarket, ON",
+      "name": "The Wings Hut",
+      "link": "https://share.google/jwboOMrm9m7cYyxXw"
+    },
+    {
+      "address": "540 Davis Dr, Newmarket, ON",
+      "name": "The Wing Spot",
+      "link": "https://share.google/HHjMipcKbJsOomLBl"
+    },
+    {
+      "name": "Wing House (Newmarket)",
+      "address": "16635 Yonge St #17, Newmarket, ON",
+      "link": "https://share.google/ZEXMa0UVWmgkIrOA1"
+    },
+    {
+      "name": "Coop's Smokin' Wing House",
+      "address": "18077 Leslie St, Newmarket, ON",
+      "link": "https://share.google/53hTh45mNqjURwYdA"
+    },
+    {
+      "name": "Wild Wing (Newmarket)",
+      "address": "17205 Leslie St #4, Newmarket, ON",
+      "link": "https://share.google/c1nLCyTxRj4YKnY3z"
+    },
+    {
+      "name": "Jack Astors (Newmarket)",
+      "link": "https://jackastors.com/?locationId=935",
+      "address": "7830 Yonge St, Newmarket, ON"
+    },
+    {
+      "name": "Crow's Nest",
+      "address": "115 Prospect St, Newmarket, ON",
+      "link": "https://share.google/lGPBmILMkS0qB18kO"
+    },
+    {
+      "name": "St. Louis Bar & Grill (Newmarket)",
+      "address": "17074 Leslie St Unit 4, Newmarket, ON",
+      "link": "https://share.google/O8FwVKC5a29xlcicA"
+    },
+    {
+      "name": "TJ's Bar & Grill (Newmarket)",
+      "address": "17335 Yonge St #1, Newmarket, ON",
+      "link": "https://share.google/XjVU2jVrjK5xPX6hd"
+    }
+  ],
+  "slug": "best-wings-newmarket",
+  "featured": false,
+  "town": "Newmarket",
+  "status": "live",
+  "ranking_key": "tastehub_newmarket_wings_2025",
+  "title": "Best Wings in Newmarket",
+  "image": "/uploads/newmarketwings.jpg",
+  "description": "Help crown Newmarket’s go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}

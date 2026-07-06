@@ -1,0 +1,32 @@
+{
+  "slug": "20251115-divine-brown-sings-billie-sarah-and-ella-2-00pm-aurora",
+  "title": "Divine Brown Sings Billie, Sarah and Ella - 2:00PM",
+  "summary": "Divine Brown Sings Billie, Sarah and Ella - 2:00PM",
+  "description": "Pricing Regular: $55.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Cultural Centre Presents Divine Brown Sings Billie, Sarah and Ella Aurora Town Square Performance Hall 50 Victoria Street, Aurora 1:15 pm Doors Open 2:00 pm Show Start With a five-octave vocal range and a voice that commands the stage, Divine Brown brings the music of jazz legends Ella Fitzgerald, Billie Holiday, and Sarah Vaughan to thrilling life. This acclaimed concert experience—part tribute, part theatrical storytelling—celebrates three revolutionary women who shaped the sound of a generation. Known for her Juno Award-winning album The Love Chronicles and hit single Old School Love, Divine’s powerhouse vocals and stage presence have captivated audiences across the country. After sold-out runs at Soulpepper Theatre, this unforgettable show comes to life in a soulful evening of jazz, storytelling, and pure vocal magic. This presentation is made possible with the support of Season Sponsor Lead Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
+  "startDate": "2025-11-15T19:00:00Z",
+  "endDate": "2025-11-15T20:30:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-11-15",
+      "all_day": false,
+      "start_time": "14:00",
+      "end_time": "15:30"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/divine-brown-sings-ella-billy-sarah-2526/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "pending",
+  "source": "feed",
+  "sourceRef": "10002606-1763215200-1763220600@auroraculturalcentre.ca",
+  "updatedAt": "2025-11-15T08:30:50Z"
+}

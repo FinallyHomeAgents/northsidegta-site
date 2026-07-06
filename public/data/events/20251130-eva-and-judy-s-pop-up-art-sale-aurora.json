@@ -1,0 +1,32 @@
+{
+  "slug": "20251130-eva-and-judy-s-pop-up-art-sale-aurora",
+  "title": "Eva and Judy's Pop-Up Art Sale",
+  "summary": "Eva and Judy's Pop-Up Art Sale",
+  "description": "Eva & Judy’s Pop-Up Art Sale Sunday, November 30, 2025 10:00 AM – 5:00 PM Homeroom Galleries | 50 Victoria Street, Aurora Stop by the Homeroom Galleries to purchase limited edition prints from Eva and Judy! Learn more about Shifting Realities",
+  "startDate": "2025-11-30T15:00:00Z",
+  "endDate": "2025-11-30T22:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-11-30",
+      "all_day": false,
+      "start_time": "10:00",
+      "end_time": "17:00"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Homeroom Galleries, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/pop-up-print-sale-2025/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "pending",
+  "source": "feed",
+  "sourceRef": "10002735-1764496800-1764522000@auroraculturalcentre.ca",
+  "updatedAt": "2025-11-29T08:34:31Z"
+}

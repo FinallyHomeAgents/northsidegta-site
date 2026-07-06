@@ -1,0 +1,104 @@
+{
+  "slug": "sample-rich-media",
+  "title": "Designing NorthSide GTA's Immersive Insight",
+  "publishDate": "2025-02-10T08:30:00-05:00",
+  "author": "NorthSide GTA Studio",
+  "excerpt": "See how multimedia storytelling can weave inline imagery, pull quotes, galleries, and smart video placements into a single NorthSide GTA Insight.",
+  "tags": [
+    "northside gta",
+    "insights"
+  ],
+  "featureImage": "/uploads/insights/aurora-banner.jpg",
+  "featureImageAlt": "Sunrise over Aurora's revitalized greenway",
+  "seo": {
+    "title": "Designing an Immersive Insight | NorthSide GTA",
+    "description": "Explore a multimedia example of a NorthSide GTA Insight featuring inline images, pull quotes, galleries, and both external and uploaded video embeds.",
+    "ogImage": "/uploads/insights/aurora-banner.jpg"
+  },
+  "gallery": [
+    {
+      "image": "/uploads/insights/scugog-banner.jpg",
+      "alt": "Lake Scugog boardwalk at golden hour",
+      "caption": "Waterfront living stays front and centre in North Durham."
+    },
+    {
+      "image": "/uploads/insights/uxbridge-banner.jpg",
+      "alt": "Cyclist passing through a forested path in Uxbridge",
+      "caption": "Trails connect neighbourhood amenities the moment snow melts."
+    },
+    {
+      "image": "/uploads/insights/georgina-banner.jpg",
+      "alt": "Streetscape with independent shops in Georgina",
+      "caption": "Local retail anchors give new buyers immediate community."
+    },
+    {
+      "image": "/uploads/insights/mlcom_prod_5441ec_01_hero.jpg",
+      "alt": "Modern kitchen staged for a listing",
+      "caption": "Design-forward interiors continue to outperform."
+    }
+  ],
+  "inlineImages": [
+    {
+      "image": "/uploads/insights/whynorthsidegtablog.jpg",
+      "alt": "NorthSide GTA team collaborating over neighbourhood maps",
+      "caption": "Our planners map the story flow before a single word is written.",
+      "placement": "after-h1"
+    },
+    {
+      "image": "/uploads/insights/whynorthsidegtablog-lando.jpg",
+      "alt": "Landon speaking with clients in a bright studio",
+      "caption": "Client interviews power every data point we visualize.",
+      "placement": "after-p2"
+    },
+    {
+      "image": "/uploads/insights/eastgwillimbury-banner.jpg",
+      "alt": "Aerial view of East Gwillimbury neighbourhoods",
+      "caption": "Regional comparisons help highlight what feels different up north.",
+      "placement": "after-p4"
+    },
+    {
+      "image": "/uploads/insights/georgeina-press-release-2025-10-21-og.jpg",
+      "alt": "Press event announcing new Georgina waterfront initiative",
+      "caption": "Supplement the story with timely municipal announcements.",
+      "placement": "end"
+    }
+  ],
+  "pullQuote": {
+    "text": "Multimedia lets our buyers feel the story before they even step into a showing.",
+    "attribution": "Finally Home Agents",
+    "portrait": "/uploads/insights/whynorthsidegtablog-lando.jpg"
+  },
+  "videos": [
+    {
+      "placement": "after-h1",
+      "aspectRatio": "16:9",
+      "externalUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "file": "",
+      "poster": "/uploads/insights/aurora-banner.jpg",
+      "captions": "",
+      "title": "Greenway drone flyover",
+      "playerOptions": {
+        "autoplay": false,
+        "loop": false,
+        "showControls": true,
+        "startAt": 15
+      }
+    },
+    {
+      "placement": "after-p4",
+      "aspectRatio": "4:3",
+      "externalUrl": "",
+      "file": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
+      "poster": "/uploads/insights/mlcom_prod_5441ec_01_hero.jpg",
+      "captions": "/uploads/insights/sample-market-overview.vtt",
+      "title": "Market overview walkthrough",
+      "playerOptions": {
+        "autoplay": false,
+        "loop": true,
+        "showControls": true,
+        "startAt": 0
+      }
+    }
+  ],
+  "body": "# Building an insight that feels like a walkthrough\n\nA standout NorthSide GTA Insight starts with a narrative arc that welcomes readers into the neighbourhood experience before they even hit play on a video. We lead with an editor's note, then a hero statement that sets the tone for the data to follow.\n\nFrom there, we map two to three short paragraphs that move from emotion to evidence. It's where inline photography can soften a market stat or make a staging tip feel tangible.\n\nAs we get into specifics, the third act becomes about proof points: price trajectories, commute comparisons, and lifestyle differentiators. That's where a quick inline chart or neighbourhood still can anchor the reader.\n\nBy the time we close, readers should feel confident that their next step is clear—book the showing, request the staging consult, or call us in for a relocation plan.\n\n## How to adapt this template\n\nUse this page as a sandbox. Swap in your own assets, tweak placements, and explore how the pull quote, videos, and gallery interact on mobile versus desktop."
+}

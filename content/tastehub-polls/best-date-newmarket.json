@@ -1,0 +1,48 @@
+{
+  "ballot_items": [
+    {
+      "name": "Made In Mexico",
+      "address": "179 Main St S, Newmarket, ON",
+      "link": "https://share.google/liNxovpGucDuNZwVK"
+    },
+    {
+      "name": "Joia on Main",
+      "address": "497 Timothy St, Newmarket, ON",
+      "link": "https://share.google/9oeFqmusgkZ8v2xec"
+    },
+    {
+      "name": "Luna Ristorante",
+      "address": "16655 Yonge St #9-10, Newmarket, ON",
+      "link": "https://share.google/kVQhZsZoNf5WmQIdP"
+    },
+    {
+      "name": "BAR LOCALE (Newmarket)",
+      "address": "500 Water St, Newmarket, ON",
+      "link": "https://share.google/tMb1Ec6d3vykMOJ6V"
+    },
+    {
+      "name": "Orsini's",
+      "address": "16700 Bayview Ave #1, Newmarket, ON",
+      "link": "https://share.google/xSx5TkG6LPTxacC8p"
+    },
+    {
+      "name": "Overlea",
+      "address": "180 Main St S, Newmarket, ON",
+      "link": "https://share.google/EZ8C7yF1p6dIkvyTY"
+    },
+    {
+      "name": "Jack Astors",
+      "address": "17830 Yonge St, Newmarket, ON",
+      "link": "https://share.google/uHb08TcGIV7MDu0JZ"
+    }
+  ],
+  "slug": "best-date-newmarket",
+  "featured": false,
+  "town": "Newmarket",
+  "status": "live",
+  "ranking_key": "tastehub_newmarket_date_2025",
+  "title": "Best Date Night in Newmarket",
+  "image": "/uploads/newmarketdinein.jpg",
+  "description": "Help crown Newmarket’s go-to Date Night restaurant. Cast your vote and see who’s on top in real time.",
+  "category": "Date Night Spot"
+}

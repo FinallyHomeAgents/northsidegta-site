@@ -1,0 +1,54 @@
+{
+  "ballot_items": [
+    {
+      "name": "The Boondocks Eatery",
+      "address": "4- West, 7751 Black River Rd, Sutton, ON",
+      "link": "https://theboondockseatery.com/"
+    },
+    {
+      "name": "Shoreland Bar & Restaurant",
+      "address": "534 Lake Dr S, Georgina, ON",
+      "link": "https://share.google/cLlsX5gn8UnmN1ghQ"
+    },
+    {
+      "name": "The Corner House Bistro",
+      "address": "240 Church St, Keswick, ON",
+      "link": "https://cornerhousebistro.ca/menu/"
+    },
+    {
+      "name": "Jackson’s Bistro",
+      "address": "21090 Dalton Rd, Jacksons Point, ON",
+      "link": "https://share.google/k2fxhWdWkM33F4ohT"
+    },
+    {
+      "name": "The Beach Lakefront Bar & Grill",
+      "address": "221 Lake Dr N, Keswick, ON",
+      "link": "https://www.thebeachlakefrontbar.com/"
+    },
+    {
+      "name": "Alfredo's Ristorante",
+      "address": "1 Church St, Keswick, ON",
+      "link": "https://share.google/Oq0DkrK6l6RRosyCW"
+    },
+    {
+      "name": "Drinkwaters Lounge Restaurant & Bar",
+      "address": "55 Hedge Rd, Georgina, ON",
+      "link": "https://www.briars.ca/dining"
+    },
+    {
+      "name": "Big Bone BBQ",
+      "address": "1 Church St, Georgina, ON",
+      "link": "https://share.google/moF0DEdU86HLs4Hty"
+    }
+  ],
+  "slug": "best-date-georgina",
+  "featured": false,
+  "town": "Georgina",
+  "status": "live",
+  "ranking_key": "tastehub_georgina_date_2025",
+  "title": "Best Date Night in Georgina",
+  "town_area": "",
+  "image": "/uploads/georginadinein.jpg",
+  "description": "Help crown Georgina's go-to Date Night restaurant. Cast your vote and see who’s on top in real time.",
+  "category": "Date Night Spot"
+}

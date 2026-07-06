@@ -1,0 +1,59 @@
+{
+  "ballot_items": [
+    {
+      "id": "papas-pizzaland",
+      "name": "Papa’s Pizzaland",
+      "link": "https://share.google/uHZ8aVVtJJoPESTBz",
+      "address": "28 Toronto St S #7, Uxbridge, ON"
+    },
+    {
+      "id": "pizzaville-uxbridge",
+      "name": "Pizzaville (Uxbridge)",
+      "address": "304 Toronto St S Unit 104, Uxbridge, ON",
+      "link": "https://share.google/0jgVsjfE1L6Pxjc0T"
+    },
+    {
+      "id": "dominos-pizza-uxbridge",
+      "name": "Domino’s Pizza (Uxbridge)",
+      "address": "54 Brock St W, Uxbridge, ON",
+      "link": "https://share.google/NOnM9TN7KLrSkcIVe"
+    },
+    {
+      "id": "pizza-pizza-uxbridge",
+      "name": "Pizza Pizza (Uxbridge)",
+      "address": "6 Brock St W, Uxbridge, ON",
+      "link": "https://share.google/gThnqyCuznZvCgxZt"
+    },
+    {
+      "id": "sandford-pizza-house",
+      "name": "Sandford Pizza House",
+      "address": "403 Sandford Rd, Sandford, ON",
+      "link": "https://share.google/XVZaH80IyGErNzHHt"
+    },
+    {
+      "id": "pizza-hut-uxbridge",
+      "name": "Pizza Hut (Uxbridge)",
+      "address": "2 Douglas Rd, Uxbridge, ON",
+      "link": "https://share.google/o8Mqf4t1bLbk7Hj8H"
+    },
+    {
+      "name": "Slabtown Cider Co.",
+      "address": "4559 Concession 6, Uxbridge, ON",
+      "link": "https://www.slabtowncider.com/eatery"
+    },
+    {
+      "name": "Foundry Pi",
+      "address": "14 Victoria St, Uxbridge, ON",
+      "link": "https://share.google/CnAAsAves2MKNI0hL"
+    }
+  ],
+  "slug": "best-pizza-uxbridge",
+  "featured": true,
+  "town": "Uxbridge",
+  "status": "live",
+  "ranking_key": "tastehub_uxbridge_pizza_2025",
+  "title": "Best Pizza in Uxbridge",
+  "image": "/uploads/uxbridgepizza.jpg",
+  "description": "Help crown Uxbridge’s go-to pizza spot. Cast your vote and see who’s on top in real time.",
+  "category": "Pizza"
+}

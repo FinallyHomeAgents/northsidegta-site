@@ -1,0 +1,59 @@
+{
+  "ballot_items": [
+    {
+      "name": "Urban Pantry",
+      "address": "4 Toronto St N, Uxbridge, ON",
+      "link": "https://urbanpantry.ca/"
+    },
+    {
+      "name": "Sundays",
+      "address": "58 Brock St W, Uxbridge",
+      "link": "https://www.sundaysrestaurant.ca/"
+    },
+    {
+      "name": "9 by Tin",
+      "address": "9 Brock St W, Uxbridge ON",
+      "link": "https://9bytin.ca/"
+    },
+    {
+      "name": "Nest",
+      "address": "722 Chalk Lake Rd suite 3, Uxbridge, ON",
+      "link": "https://www.trailhub.ca/restaurant/nest/"
+    },
+    {
+      "name": "Wixan’s Bridge",
+      "address": "65 Brock St W, Uxbridge, ON",
+      "link": "https://www.wixansbridge.com/"
+    },
+    {
+      "name": "Corner House Pub & Grill",
+      "address": "104 Brock St W, Uxbridge, ON",
+      "link": "https://cornerhousepubandgrill.com/"
+    },
+    {
+      "name": "Fig Kitchen & Market",
+      "address": "29 Toronto St S, Uxbridge, ON",
+      "link": "https://figkitchenandmarket.com/"
+    },
+    {
+      "name": "Slabtown Cider Co.",
+      "address": "4559 Concession 6, Uxbridge, ON",
+      "link": "slabtowncider.com"
+    },
+    {
+      "name": "Second Wedge Brewing Co.",
+      "address": "14 Victoria St, Uxbridge, ON",
+      "link": "https://thesecondwedge.ca/"
+    }
+  ],
+  "slug": "best-date-night-uxbridge",
+  "custom_category": "",
+  "featured": false,
+  "town": "Uxbridge",
+  "status": "live",
+  "ranking_key": "tastehub_uxbridge_Datenight_2025",
+  "title": "Best Date Night in Uxbridge",
+  "image": "/uploads/uxbridgedinein.jpg",
+  "description": "Help crown Uxbridge’s go-to Date Night restaurant. Cast your vote and see who’s on top in real time.",
+  "category": "Date Night Spot"
+}

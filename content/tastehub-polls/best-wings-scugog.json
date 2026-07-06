@@ -1,0 +1,38 @@
+{
+  "ballot_items": [
+    {
+      "name": "Wing House Port Perry",
+      "address": "15300 ON-12, Port Perry, ON",
+      "link": "https://winghouse.ca/"
+    },
+    {
+      "name": "Amazing Wings Guys",
+      "address": "14011 Old Scugog Rd, Blackstock, ON",
+      "link": "http://amazingwings.ca/"
+    },
+    {
+      "name": "Castle John's Port Perry",
+      "address": "1894 Scugog St #11, Port Perry, ON",
+      "link": "https://share.google/p66oulPaih5DP3eSq"
+    },
+    {
+      "name": "The Lakeview Pub",
+      "address": "136 Water St, Port Perry, ON",
+      "link": "https://thelakeviewpub.com/wp-content/uploads/2024/01/Main-Menu-17x14_web.pdf"
+    },
+    {
+      "name": "The Oakridge Pub",
+      "address": "15930 Old Simcoe Rd, Port Perry, ON",
+      "link": "https://www.theoakridgepub.com/"
+    }
+  ],
+  "slug": "best-wings-scugog",
+  "featured": false,
+  "town": "Scugog",
+  "status": "live",
+  "ranking_key": "tastehub_scugog_wings_2025",
+  "title": "Best Wings in Scugog",
+  "image": "/uploads/scugogwings.jpg",
+  "description": "Help crown Scugog's go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}

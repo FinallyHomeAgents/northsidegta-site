@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2025-12-03T11:47:36.531-05:00",
+  "totals": {
+    "created": 0,
+    "updated": 0,
+    "unchanged": 0,
+    "errors": 1
+  },
+  "feeds": [
+    {
+      "id": "discover-stouffville",
+      "name": "Discover Stouffville",
+      "type": "adapter:wordpressTribe",
+      "parser": "wordpressTribe",
+      "town": "Stouffville",
+      "category": "Festivals",
+      "url": "",
+      "status": "error",
+      "created": 0,
+      "updated": 0,
+      "unchanged": 0,
+      "itemsFetched": 0,
+      "errors": [
+        "fetch failed",
+        "fetch failed",
+        "fetch failed"
+      ],
+      "fallbackUsed": false,
+      "fallbackUrl": "",
+      "fallbackPath": "",
+      "discoveredUrl": "",
+      "discoveryStatus": 0,
+      "discoveryHint": "",
+      "redirectChain": [],
+      "redirected": false,
+      "lastResolvedUrl": "",
+      "lastRequestedUrl": "",
+      "lastStatus": 0,
+      "lastHeaders": {},
+      "lastError": "fetch failed",
+      "durationMs": 3115,
+      "startedAt": "2025-12-03T16:47:36.531Z",
+      "finishedAt": "2025-12-03T16:47:39.646Z"
+    }
+  ],
+  "urlUpdates": [],
+  "fallbacks": []
+}

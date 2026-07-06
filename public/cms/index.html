@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>NorthSide GTA CMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif;
+        color:#0f172a;
+      }
+      body.cms-loaded { display:block; background:#f8fafc; }
+
+      /* Top controls (only visible once CMS UI is mounted) */
+      #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
+      body.cms-loaded #cms-controls{display:block}
+      #events-admin-link,
+      #smart-list-link{
+        margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
+        color:#1d4ed8;font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px
+      }
+      #logout-button{padding:8px 14px;border-radius:999px;border:none;background:#0f172a;color:#f8fafc;font-size:13px;font-weight:600;cursor:pointer}
+
+      /* Local login overlay */
+      #login-container{
+        width:min(90%,380px);background:rgba(255,255,255,.92);border-radius:18px;padding:32px 28px;
+        box-shadow:0 25px 70px rgba(15,23,42,.35);backdrop-filter:blur(12px)
+      }
+      body.cms-loaded #login-container{display:none}
+      h1{margin:0 0 16px;font-size:24px;font-weight:600;text-align:center;color:#0f172a}
+      p.description{margin:0 0 24px;font-size:15px;color:#475569;text-align:center}
+      label{display:block;margin-bottom:16px}
+      label span{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#1e293b}
+      input[type='text'],input[type='password']{
+        width:100%;padding:12px 14px;border-radius:10px;border:1px solid #cbd5f5;background:#f8fafc;font-size:14px
+      }
+      button[type='submit']{
+        width:100%;padding:12px 16px;border:none;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:15px;cursor:pointer
+      }
+      #login-status{min-height:20px;margin-top:16px;font-size:13px;text-align:center;color:#dc2626}
+    </style>
+  </head>
+  <body>
+    <!-- Controls visible once CMS is running -->
+    <div id="cms-controls">
+      <a id="events-admin-link" href="/community/events-admin" target="_blank" rel="noopener noreferrer">Community Events Admin</a>
+      <a id="smart-list-link" href="/tastehub/smart-list" target="_blank" rel="noopener noreferrer">TasteHub Smart List Tool</a>
+      <button id="logout-button" type="button">Log out</button>
+    </div>
+
+    <!-- Local username/password login -->
+    <div id="login-container">
+      <form id="cms-login-form" autocomplete="on">
+        <h1>Welcome back</h1>
+        <p class="description">Sign in to manage your NorthSide GTA content.</p>
+        <label>
+          <span>Username</span>
+          <input type="text" name="username" id="username" autocomplete="username" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" id="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit">Sign in</button>
+        <div id="login-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <!-- Decap: manual init -->
+    <script>window.CMS_MANUAL_INIT = true;</script>
+    <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
+
+    <script>
+      (function () {
+        const STORAGE_KEYS = ['decap-cms-user', 'netlify-cms-user'];
+        const form = document.getElementById('cms-login-form');
+        const statusEl = document.getElementById('login-status');
+        const logoutButton = document.getElementById('logout-button');
+        const submitButton = form.querySelector("button[type='submit']");
+        const defaultButtonText = submitButton.textContent;
+        let cmsHasInitialized = false;
+
+        function setStatus(message, isError){ statusEl.textContent = message || ''; statusEl.style.color = isError ? '#dc2626' : '#0f172a'; }
+        function setLoading(isLoading){ submitButton.disabled = isLoading; submitButton.textContent = isLoading ? 'Signing in…' : defaultButtonText; }
+
+        function clearStoredTokens(){
+          try{ STORAGE_KEYS.forEach((k)=>localStorage.removeItem(k)); }catch{}
+        }
+        function storeToken(token, username){
+          try{
+            const name = (typeof username==='string' && username.trim()) ? username.trim() : 'CMS User';
+            const payload = JSON.stringify({ token, backendName:'github', login:name, name });
+            STORAGE_KEYS.forEach((k)=>localStorage.setItem(k,payload));
+          }catch{}
+        }
+        function getStoredUser(){
+          try{
+            for (const k of STORAGE_KEYS){
+              const raw = localStorage.getItem(k); if(!raw) continue;
+              try{ const v = JSON.parse(raw); if(v && typeof v.token === 'string' && v.token.length) return v; }
+              catch{ localStorage.removeItem(k); }
+            }
+          }catch{}
+          return null;
+        }
+
+        function formatPreviewDate(value){
+          if (!value) return '';
+          try {
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' });
+          } catch (err) {
+            return '';
+          }
+        }
+
+        function registerInsightsPreview(){
+          if (window.__insightsPreviewRegistered) return;
+          if (!window.CMS || typeof window.createClass !== 'function' || typeof window.h !== 'function') {
+            return setTimeout(registerInsightsPreview, 50);
+          }
+
+          const { createClass, h } = window;
+
+          const InsightPreview = createClass({
+            render: function () {
+              const entry = this.props.entry;
+              const data = entry && entry.get ? entry.get('data') : null;
+              const body = this.props.widgetFor ? this.props.widgetFor('body') : null;
+              const title = data && data.get ? data.get('title') : '';
+              const author = data && data.get ? data.get('author') : '';
+              const publishDate = data && data.get ? data.get('publishDate') : '';
+              const excerpt = data && data.get ? data.get('excerpt') : '';
+              const featureImage = data && data.get ? data.get('featureImage') : '';
+              const featureImageAlt = data && data.get ? data.get('featureImageAlt') : '';
+              const metaPieces = [author, formatPreviewDate(publishDate)].filter(Boolean);
+
+              return h('div', { className: 'insight-preview-root' }, [
+                h('section', {
+                  className: 'insight-preview-hero',
+                  style: featureImage ? { backgroundImage: `url(${featureImage})` } : {},
+                }, [
+                  h('div', { className: 'insight-preview-hero-overlay' }),
+                  h('div', { className: 'insight-preview-hero-watermark' }),
+                  h('div', { className: 'insight-preview-hero-content' }, [
+                    h('span', { className: 'insight-preview-kicker' }, 'NorthSide GTA Insights'),
+                    h('h1', { className: 'insight-preview-title' }, title || 'Insight title'),
+                    metaPieces.length
+                      ? h('p', { className: 'insight-preview-meta' }, metaPieces.join(' • '))
+                      : null,
+                    featureImageAlt ? h('span', { className: 'sr-only' }, featureImageAlt) : null,
+                  ]),
+                ]),
+                h('main', { className: 'insight-preview-main' }, [
+                  excerpt ? h('p', { className: 'insight-preview-excerpt' }, excerpt) : null,
+                  h('div', { className: 'insight-preview-body' }, body),
+                ]),
+              ]);
+            },
+          });
+
+          CMS.registerPreviewStyle(`
+            .insight-preview-root { font-family: 'Blinker', sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; }
+            .insight-preview-hero { position: relative; min-height: 280px; padding: 48px 32px; display: flex; align-items: flex-end; background-size: cover; background-position: center; overflow: hidden; color: #fff; }
+            .insight-preview-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,17,12,0.85) 0%, rgba(4,17,12,0.75) 50%, rgba(4,17,12,0.92) 100%); }
+            .insight-preview-hero-watermark { position: absolute; bottom: 24px; right: 24px; width: 160px; height: 160px; background: url('/Images/northsidegta-logo.svg') center/contain no-repeat; opacity: 0.12; }
+            .insight-preview-hero-content { position: relative; z-index: 1; max-width: 720px; display: grid; gap: 18px; }
+            .insight-preview-kicker { font-size: 11px; letter-spacing: 0.45em; text-transform: uppercase; color: #bbf7d0; font-weight: 600; }
+            .insight-preview-title { margin: 0; font-size: 2.6rem; font-weight: 600; line-height: 1.1; }
+            .insight-preview-meta { margin: 0; font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+            .insight-preview-main { max-width: 780px; margin: 48px auto; padding: 0 32px 80px; }
+            .insight-preview-excerpt { font-size: 1.1rem; color: #475569; margin-bottom: 24px; }
+            .insight-preview-body { font-size: 1rem; line-height: 1.7; color: #334155; }
+            .insight-preview-body img { max-width: 100%; border-radius: 24px; box-shadow: 0 30px 70px rgba(15,118,110,0.15); margin: 32px 0; }
+            .insight-preview-body blockquote { margin: 32px 0; padding: 24px; border-left: 4px solid #34d399; background: rgba(209, 250, 229, 0.4); border-radius: 18px; font-style: italic; color: #065f46; }
+            .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+            @media (max-width: 640px) { .insight-preview-title { font-size: 2rem; } .insight-preview-main { padding: 0 20px 60px; } }
+          `, { raw: true });
+
+          CMS.registerPreviewTemplate('insights', InsightPreview);
+          window.__insightsPreviewRegistered = true;
+        }
+
+        function bootCMSOnce() {
+          if (cmsHasInitialized) return;
+          if (!window.CMS || typeof CMS.init !== 'function') {
+            return setTimeout(bootCMSOnce, 50);
+          }
+          CMS.init();
+          registerInsightsPreview();
+          cmsHasInitialized = true;
+          document.body.classList.add('cms-loaded');
+          // ensure a sensible default route
+          try {
+            if (!location.hash || location.hash === '#') location.replace('#/collections');
+          } catch {}
+          console.info('[cms] Decap initialized');
+        }
+
+        async function handleLogin(e){
+          e.preventDefault();
+          const fd = new FormData(form);
+          const username = (fd.get('username') || '').trim();
+          const password = fd.get('password') || '';
+          if (!username || !password){ setStatus('Enter both your username and password.', true); return; }
+          setLoading(true); setStatus('Signing in…', false);
+          try{
+            const res = await fetch('/api/cms-login', {
+              method:'POST', headers:{'Content-Type':'application/json'},
+              body: JSON.stringify({ username, password }), credentials:'same-origin'
+            });
+            const payload = await res.json().catch(()=>({}));
+            if(!res.ok || !payload.token){
+              clearStoredTokens();
+              setStatus(payload.error || 'Login failed. Please check your credentials.', true);
+              setLoading(false);
+              return;
+            }
+            storeToken(payload.token, username);
+            setStatus('Signed in! Loading the CMS…', false);
+            document.body.classList.add('cms-loaded');
+            setLoading(false);
+            bootCMSOnce();
+          }catch(err){
+            console.error('[cms-login] request failed', err);
+            setStatus('We could not reach the server. Please try again.', true);
+            setLoading(false);
+          }
+        }
+
+        function handleLogout(){ clearStoredTokens(); window.location.replace('/cms/'); }
+
+        form.addEventListener('submit', handleLogin);
+        logoutButton.addEventListener('click', handleLogout);
+
+        // Auto-boot if already logged in
+        if (getStoredUser()){
+          document.body.classList.add('cms-loaded');
+          bootCMSOnce();
+        } else {
+          requestAnimationFrame(()=>{ try{ document.getElementById('username')?.focus(); }catch{} });
+        }
+      })();
+    </script>
+    <script src="https://cdn.pulse.is/livechat/loader.js" data-live-chat-id="68fa76a75fc77f1bca09a31a" async></script>
+  </body>
+</html>

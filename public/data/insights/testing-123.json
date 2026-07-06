@@ -1,0 +1,29 @@
+{
+  "slug": "testing-123",
+  "title": "Testing 123",
+  "publishDate": "2025-10-30T14:29:00.000Z",
+  "author": "Landon Mulhall & Matthew Mulhall",
+  "excerpt": "Test",
+  "tags": [
+    "northside gta"
+  ],
+  "featureImage": "/uploads/insights/hero-about.jpg",
+  "featureImageAlt": "Aerial view of the NorthSide GTA with morning sunlight",
+  "seo": {
+    "title": "Testing 123 | NorthSide GTA",
+    "description": "Test",
+    "ogImage": "/uploads/insights/scugog-banner.jpg"
+  },
+  "gallery": [
+    {
+      "image": "/uploads/insights/eastgwillimbury-banner.jpg",
+      "alt": "",
+      "caption": ""
+    }
+  ],
+  "inlineImages": [],
+  "pullQuote": null,
+  "videos": [],
+  "body": "Testing 123 Testing 123 Testing 123 Testing 123 Testing 123 Testing 123 Testing 123 Testing 123\n",
+  "sourcePath": "public/content/insights/testing-123/index.md"
+}

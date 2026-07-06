@@ -1,0 +1,26 @@
+// src/data/tickerItems.js
+export const TICKER_ITEMS = [
+  "🛣️ 404 access puts most NorthSide towns within 45 minutes of Toronto",
+  "🌲 Uxbridge — the Trail Capital of Canada with over 300 km of paths",
+  "🏖️ Lake Simcoe views meet small-town living in Georgina",
+  "🏌️ Thursday nights are for golf across the NorthSide GTA",
+  "🚗 NorthSide GTA: where weekend drives feel like weekend getaways",
+  "🌅 Catch sunrise over the lake in Keswick or sunset in Stouffville",
+  "🏞️ NorthSide means bigger skies, quieter nights, and space to breathe",
+  "🌾 Local farms. Local food. Local community — that’s NorthSide living",
+  "🧭 From Scugog to Newmarket, every town tells its own story",
+  "🚦 Toronto: 45 min commute | NorthSide: 45 min home from Toronto",
+  "💨 City pace | Country calm",
+  "🌳 More trees. Less traffic.",
+  "🏡 Backyard BBQs > Rooftop patios",
+  "🏌️ 18 holes > 18 floors",
+  "🐕 Trails over transit",
+  "🌇 Downtown skyline | NorthSide starlight",
+  "🕊️ Space to grow — just north of the city",
+  "💚 NorthSide GTA — More Community. Less Traffic.",
+  "🌐 Explore towns, events, and lifestyle at NorthSideGTA.ca",
+  "🏡 Finally Home Agents — proudly serving the NorthSide GTA",
+  "📲 Follow @NorthSideGTA for local events and hidden gems",
+  "🏠 Find your new home — north of the noise",
+  "🔗 Discover life just beyond the 404"
+];

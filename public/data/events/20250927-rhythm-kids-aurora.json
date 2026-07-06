@@ -1,0 +1,368 @@
+{
+  "slug": "20250927-rhythm-kids-aurora",
+  "title": "Rhythm Kids",
+  "summary": "Rhythm Kids",
+  "description": "Register Here Starting August 11! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. September 27 – November 22, 2025 [SKIP October 11] Saturdays | 11:00 – 11:45 am| Ages 3-6 Aurora Town Square – Program Room A 50 Victoria Street, Aurora The Rhythm Kids program is geared towards children 3-6 years of age and parents are asked to wait outside of the classroom. The focus of this class is on developing foundational music knowledge while allowing children the opportunity to build self esteem and independence. Children will be guided through expressive music making and movement as they explore musical concepts such as rhythm, pitch and dynamics. Instrument exploration, expressive movement as well as learning to play simple patterns in a group while keeping a steady beat will all be part of our musical journey together.",
+  "startDate": "2025-09-27T04:00:00Z",
+  "endDate": "2025-11-23T04:59:59Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-09-27",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-09-28",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-09-29",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-09-30",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-01",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-02",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-03",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-04",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-05",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-06",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-07",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-08",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-09",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-10",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-11",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-12",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-13",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-14",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-15",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-16",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-17",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-18",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-19",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-20",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-21",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-22",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-23",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-24",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-25",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-26",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-27",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-28",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-29",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-30",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-10-31",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-01",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-02",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-03",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-04",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-05",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-06",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-07",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-08",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-09",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-10",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-11",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-12",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-13",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-14",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-15",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-16",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-17",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-18",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-19",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-20",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-21",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "date": "2025-11-22",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Program Room A, 50 Victoria Street, Aurora, Ontario, Canada",
+  "address": "Aurora Town Square – Program Room A, 50 Victoria Street, Aurora, Ontario, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/rhythm-kids-fall25/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "pending",
+  "source": "feed",
+  "sourceRef": "10002653-1758931200-1763855999@auroraculturalcentre.ca",
+  "updatedAt": "2025-11-21T08:37:11Z"
+}

@@ -1,0 +1,28 @@
+{
+  "slug": "20251127-trivia-night-19-stouffville",
+  "title": "Trivia Night 19+",
+  "summary": "A full-service, fun Trivia Challenge event at 19 on the Park with your friends to take home bragging rights! Prizes for trivia champions and raffle draws throughout for more excitement! This is a 19+ event with snacks and alcohol service available for purchase on-site. Team play is preferred.",
+  "description": "Trivia Night A full-service, fun Trivia Challenge event at 19 on the Park with your friends to take home bragging rights! Prizes for trivia champions and raffle draws throughout for more excitement! This is a 19+ event with snacks and alcohol service available for purchase on-site. Team play is preferred.",
+  "startDate": "2025-11-28T00:00:00Z",
+  "endDate": "2025-11-28T02:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": false,
+  "category": "Other",
+  "town": "Stouffville",
+  "locationName": "Lebovic Centre for Arts & Entertainment – Nineteen on the Park",
+  "address": "19 Civic Avenue, Stouffville, L4A 1G5",
+  "priceType": "Mixed",
+  "priceNote": "$10",
+  "badges": [
+    "Family-friendly"
+  ],
+  "image": "https://discoverstouffville.ca/wp-content/uploads/2025/10/Trivia-Night-1.jpg",
+  "eventUrl": "https://discoverstouffville.ca/event/trivia-night-19/",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "approved",
+  "source": "feed",
+  "sourceRef": "https://discoverstouffville.ca/event/trivia-night-19/",
+  "updatedAt": "2025-11-27T08:37:09Z"
+}

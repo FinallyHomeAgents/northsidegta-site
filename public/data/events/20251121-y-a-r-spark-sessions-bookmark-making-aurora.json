@@ -1,0 +1,32 @@
+{
+  "slug": "20251121-y-a-r-spark-sessions-bookmark-making-aurora",
+  "title": "Y.A.R. Spark Sessions: Bookmark Making",
+  "summary": "Y.A.R. Spark Sessions: Bookmark Making",
+  "description": "Y.A.R. Spark Sessions: Bookmark Making Youth (Ages 13 – 17) | Free, Drop-In Program November 21 (PA DAY) | 2:00 – 3:00 pm Underground Gallery (Level B1) | 50 Victoria Street, Aurora Fuel your creative self at Spark Session! Spark Sessions are free, recurring, student-led arts and craft workshops for youth from ages 13 to 17. Each Spark Session is themed, with materials and snacks provided at no cost (while quantities last). This session’s theme: Bookmark Making About Youth Artists on the Rise! (YAR): Spark Sessions run as part of Youth Artists on the Rise! (YAR), a community for arts-impassioned youth ages 13-17 to develop their skills in the arts, make connections, and build a community for collaboration and growth. Participants have access to art studio space, exhibiting opportunities, and workshops. Register for YAR now!",
+  "startDate": "2025-11-21T19:00:00Z",
+  "endDate": "2025-11-21T20:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-11-21",
+      "all_day": false,
+      "start_time": "14:00",
+      "end_time": "15:00"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/spark-sessions-november-21/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "pending",
+  "source": "feed",
+  "sourceRef": "10002696-1763733600-1763737200@auroraculturalcentre.ca",
+  "updatedAt": "2025-11-21T08:37:11Z"
+}

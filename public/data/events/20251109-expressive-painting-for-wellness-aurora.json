@@ -1,0 +1,32 @@
+{
+  "slug": "20251109-expressive-painting-for-wellness-aurora",
+  "title": "Expressive Painting for Wellness",
+  "summary": "Expressive Painting for Wellness",
+  "description": "Register Here! Registration for all Aurora Cultural Centre programs is on the Town of Aurora’s e-PLAY website. All programs continue to be part of the Aurora Cultural Centre. Sunday, November 9, 2025 11:00 – 4:00 pm | Ages 16+ Aurora Town Square – Shining Hill Visual Arts Studio A 50 Victoria Street, Aurora This program will help cultivate your creativity and felt sense of well-being through a gently guided and playful approach to art-making. You will learn to trust what is intuitively needed, without judgement and let that shape the direction of your large-scale acrylic painting on paper; perhaps standing back at times to let the emerging image “speak”. Both skilled artists and the creatively curious will have the opportunity to share their wisdom in several “sharing circles” in this full-day studio group session. No previous art experience is required! Materials provided. Bring your lunch and an apron or old t-shirt as painting can get messy!",
+  "startDate": "2025-11-09T05:00:00Z",
+  "endDate": "2025-11-10T04:59:59Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2025-11-09",
+      "all_day": true,
+      "start_time": "",
+      "end_time": ""
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Shining Hill Visual Arts Studio A, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/expressive-painting-for-wellness-fall25/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "pending",
+  "source": "feed",
+  "sourceRef": "10002687-1762646400-1762732799@auroraculturalcentre.ca",
+  "updatedAt": "2025-11-08T08:31:22Z"
+}

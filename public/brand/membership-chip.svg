@@ -1,0 +1,13 @@
+<svg width="42" height="30" viewBox="0 0 42 30" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chipMetal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5f5f5" />
+      <stop offset="25%" stop-color="#dcdcdc" />
+      <stop offset="50%" stop-color="#ffffff" />
+      <stop offset="75%" stop-color="#b8b8b8" />
+      <stop offset="100%" stop-color="#e7e7e7" />
+    </linearGradient>
+  </defs>
+  <rect width="42" height="30" rx="5" fill="url(#chipMetal)" stroke="#ffffff55" stroke-width="1.2" />
+  <rect x="10" y="6" width="22" height="18" rx="3" fill="#ffffff22" />
+</svg>

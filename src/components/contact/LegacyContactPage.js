@@ -1,0 +1,287 @@
+// Legacy contact page kept for feature-flag fallback
+import React, { useEffect, useState } from 'react';
+import { Helmet } from "react-helmet-async";
+import HeaderShell from '../HeaderShell';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import {
+  FaTrophy,
+  FaHandshake,
+  FaInstagram,
+  FaFacebookF
+} from 'react-icons/fa';
+
+/* background dots */
+const PageBackground = () => (
+  <style>{`
+    body{
+      background-image:radial-gradient(circle,rgba(0,0,0,0.05)1px,rgba(0,0,0,0)1px);
+      background-size:12px 12px;
+    }
+  `}</style>
+);
+
+/* Google-style review slider */
+function ReviewSlider() {
+  const reviews = [
+    { name:'Susan Booth',   quote:'“Finally Home Agents exceeded our expectations when selling our home in Holland Landing. Their professionalism and personal attention set them apart.”' },
+    { name:'Logan Abernethy', quote:'“As a first-time buyer I had plenty of questions. Landon was patient and made my experience fantastic.”' },
+    { name:'Jessica Le',    quote:'“Landon made renting stress-free. Really nice to work with and very easy to communicate with.”' },
+    { name:'Tessa Conway',  quote:'“Landon took all the stress out of renting in a brand-new city — I am forever thankful!”' },
+    { name:'Olivia Oprea',  quote:'“Matthew found me my dream home during a crazy market. Wouldn’t have got it without him.”' },
+    { name:'Arron Breen',   quote:'“Matt sold our house above market and negotiated our forever home for less. Highly recommend.”' },
+  ];
+  const [i,setI]=useState(0);
+  useEffect(()=>{
+    const id=setInterval(()=>setI(x=>(x+1)%reviews.length),6000);
+    return()=>clearInterval(id);
+  },[]);
+  return(
+    <div className="rounded-xl border border-gray-200 shadow-sm bg-gray-50 overflow-hidden">
+      <div className="bg-[#4285F4] h-1" />
+      <div className="relative px-4 sm:px-8 py-6 min-h-[180px] sm:min-h-[150px]">
+        {reviews.map((r,idx)=>(
+          <div key={idx}
+               className={`absolute inset-0 flex flex-col items-center justify-center text-center
+                           transition-opacity duration-700 ${idx===i?'opacity-100':'opacity-0'}`}>
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
+              <img src="/Images/google-logo.png" alt="Google" className="h-5 w-5 sm:h-6 sm:w-6 object-contain"/>
+              <span className="font-semibold text-xs sm:text-sm text-gray-700 whitespace-nowrap">
+                Finally&nbsp;Home&nbsp;Agents
+              </span>
+              <div className="flex text-[#FBBC05] text-xs sm:text-sm leading-none">
+                {'★★★★★'.split('').map((_,s)=><span key={s}>★</span>)}
+              </div>
+            </div>
+            <p className="italic max-w-xs sm:max-w-md text-xs sm:text-sm">{r.quote}</p>
+            <p className="mt-1 sm:mt-2 font-semibold text-xs sm:text-sm">— {r.name}</p>
+            <p className="text-[10px] sm:text-xs text-gray-500">Verified Client Review</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function LegacyContactPage() {
+  /* message-form state */
+  const [formData,setFormData] = useState({ name:'', email:'', phone:'', message:'' });
+  const [formSent,setFormSent] = useState(false);
+
+  async function handleContactSubmit(e){
+    e.preventDefault();
+    const res = await fetch('https://formspree.io/f/mwpborow',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(formData)
+    });
+    if(res.ok) setFormSent(true);
+    else alert('Something went wrong — please try again.');
+  }
+
+  return (
+    <>
+      <PageBackground />
+        <HeaderShell />
+      <Helmet>
+  <title>Contact Finally Home Agents | NorthSide GTA Realtors®</title>
+  <meta
+    name="description"
+    content="Questions about buying or selling in the NorthSide GTA? Contact Finally Home Agents—local experts for Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge & Scugog."
+  />
+  <link rel="canonical" href="https://northsidegta.ca/contact" />
+
+  <meta property="og:title" content="Contact Finally Home Agents | NorthSide GTA" />
+  <meta property="og:description" content="Talk to a local NorthSide GTA agent today." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://northsidegta.ca/contact" />
+  <meta property="og:image" content="/Images/northsidegta-map-bg.jpg" />
+</Helmet>
+
+      <div className="space-y-14 sm:space-y-16 px-4 md:px-20 py-8 sm:py-12">
+
+        {/* HERO / ANALOGY */}
+        <section className="max-w-4xl mx-auto">
+          <Card className="text-center space-y-4 sm:space-y-5 p-6 sm:p-10">
+            <div className="flex justify-center gap-4">
+              <FaTrophy   className="w-8 h-8 sm:w-10 sm:h-10 text-yellow-500"/>
+              <FaHandshake className="w-8 h-8 sm:w-10 sm:h-10 text-brand-green"/>
+            </div>
+
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-bold leading-tight">
+              Every&nbsp;Pro&nbsp;Has&nbsp;an&nbsp;Agent&nbsp;—<br className="sm:hidden"/>
+              You&nbsp;Should&nbsp;Too.
+            </h1>
+
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
+              Let’s talk about your next move. Questions about buying, selling, or life in the NorthSide&nbsp;GTA?
+              Drop us a note&nbsp;— no pressure, just real advice.
+            </p>
+
+            <p className="text-sm sm:text-base text-muted-foreground">
+              At <strong>Finally&nbsp;Home&nbsp;Agents</strong> we don’t just sell homes&nbsp;— we build partnerships.
+              Like a top sports agent, we negotiate, strategize, and stay in your corner for every move.
+            </p>
+          </Card>
+        </section>
+
+        {/* GOOGLE REVIEWS */}
+        <section className="max-w-3xl mx-auto">
+          <ReviewSlider />
+        </section>
+
+        {/* CTA PROMPT */}
+        <section className="text-center space-y-2">
+          <h2 className="text-xl sm:text-2xl font-semibold">Reach Out Your Way.</h2>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto">
+            Call, chat, or drop us a quick note — whichever’s easiest. We reply fast.
+          </p>
+          <p className="flex justify-center">
+            <span className="inline-block rounded-full bg-brand-green/10 px-3 py-1 text-xs font-medium text-brand-green sm:text-sm">
+              💬 We reply within 1&nbsp;hour&nbsp;(9&nbsp;am&nbsp;–&nbsp;9&nbsp;pm)
+            </span>
+          </p>
+        </section>
+
+        {/* FORM + CONTACT CARD */}
+        <section className="grid md:grid-cols-2 gap-8 sm:gap-12 items-start">
+
+          {/* message form */}
+          {!formSent ? (
+            <form onSubmit={handleContactSubmit} className="space-y-4 w-full">
+              <input
+                type="text" name="name" placeholder="Full Name" required
+                value={formData.name}
+                onChange={e=>setFormData({...formData,name:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <input
+                type="email" name="email" placeholder="Email" required
+                value={formData.email}
+                onChange={e=>setFormData({...formData,email:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <input
+                type="tel" name="phone" placeholder="Phone (optional)"
+                value={formData.phone}
+                onChange={e=>setFormData({...formData,phone:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <textarea
+                name="message" rows="4" placeholder="Your Message" required
+                value={formData.message}
+                onChange={e=>setFormData({...formData,message:e.target.value})}
+                className="w-full border rounded-md px-4 py-3"
+              />
+              <Button size="lg" type="submit" className="w-full sm:w-auto">
+                Send Message
+              </Button>
+            </form>
+          ) : (
+            <Card className="p-6 text-center bg-emerald-50">
+              <h3 className="mb-2 text-xl font-semibold text-brand-green">Thank you!</h3>
+              <p className="text-sm text-muted-foreground">
+                Your message is on its way. We’ll respond within the hour.
+              </p>
+            </Card>
+          )}
+
+          {/* contact info card */}
+          <Card className="space-y-4 sm:space-y-6">
+            <div className="space-y-1 sm:space-y-2">
+              <h2 className="text-xl sm:text-2xl font-semibold">Contact Info</h2>
+              <p className="text-base">📞 <a href="tel:16476684646" className="hover:underline">(647) 668-4646</a></p>
+              <p className="text-base">📧 <a href="mailto:contact@finallyhomeagents.com" className="hover:underline">contact@finallyhomeagents.com</a></p>
+              <p className="text-base">📍 <span className="font-medium">NorthSide GTA</span> — <span className="italic">More Community, Less Traffic</span></p>
+            </div>
+
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20👋"
+              target="_blank" rel="noreferrer"
+              className="relative flex items-center justify-center gap-3
+                         bg-gradient-to-r from-[#25D366] via-[#20bf5e] to-[#128C7E]
+                         text-white px-6 py-4 rounded-2xl shadow-xl
+                         hover:shadow-2xl hover:scale-[1.03] transition"
+            >
+              <span className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3
+                               bg-yellow-400 text-white text-xs font-bold px-1.5 py-[1px]
+                               rounded-full shadow animate-bounce">
+                Chat
+              </span>
+              <svg viewBox="0 0 448 512" className="w-5 h-5 fill-current"><path d="M380.9 97.1c-39.7-39.7-92.5-61.6-148.9-61.1C100.3 36.4 0 138 0 261.8c0 45.1 11.9 88.9 34.5 127.7L0 512l125.2-33.1c37.8 20.8 79.8 31.7 122.6 31.6h.6c123.5 0 224-100.7 224-224.6.1-59.3-22.9-115.1-64.5-156.8z"/></svg>
+              WhatsApp
+            </a>
+
+            {/* socials */}
+            <p className="text-center text-xs sm:text-sm font-medium text-muted-foreground">
+              Follow Finally Home Agents
+            </p>
+            <div className="flex justify-center gap-3">
+              <a href="https://instagram.com/finallyhomeagents" target="_blank" rel="noreferrer"
+                 className="flex items-center justify-center w-9 h-9 rounded-full
+                            bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500
+                            text-white shadow hover:shadow-lg hover:scale-110 transition">
+                <FaInstagram className="w-4 h-4"/><span className="sr-only">Instagram</span>
+              </a>
+              <a href="https://facebook.com/finallyhomeagents" target="_blank" rel="noreferrer"
+                 className="flex items-center justify-center w-9 h-9 rounded-full
+                            bg-[#1877F2] text-white shadow hover:bg-[#0f6ae0]
+                            hover:shadow-lg hover:scale-110 transition">
+                <FaFacebookF className="w-4 h-4"/><span className="sr-only">Facebook</span>
+              </a>
+            </div>
+
+            <Button as="a" href="https://calendly.com/yourlink" variant="outline" size="lg" className="w-full sm:w-auto">
+              Book a Call
+            </Button>
+          </Card>
+        </section>
+
+        {/* MAP */}
+        <section className="text-center space-y-3 sm:space-y-4">
+          <h2 className="text-2xl sm:text-3xl font-semibold">Where We Work</h2>
+          <p className="max-w-2xl mx-auto text-muted-foreground text-sm sm:text-base">
+            Proudly serving Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket, Scugog and beyond.
+          </p>
+          <div className="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+            <span className="text-gray-500 text-sm">[ Map Placeholder ]</span>
+          </div>
+        </section>
+
+        {/* TRUST LOGOS */}
+        <section className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6">
+          <img src="/Images/brokerage.png" alt="HomeLife Optimum Realty" className="h-8 sm:h-10 opacity-80"/>
+          <img src="/Images/reco.png"      alt="Registered with RECO"    className="h-8 sm:h-10 opacity-80"/>
+          <img src="/Images/treb.png"      alt="Member: TRREB"           className="h-8 sm:h-10 opacity-80"/>
+        </section>
+
+        {/* QUICK CTA CARDS */}
+        <section className="grid sm:grid-cols-3 gap-4 sm:gap-6">
+          {[
+            { title:'Buyers',  text:'See how we help buyers' },
+            { title:'Sellers', text:'Stand-out listing strategy' },
+            { title:'VIP',     text:'Early access & perks' },
+          ].map(c=>(
+            <Card key={c.title} className="text-center space-y-2 sm:space-y-3">
+              <h3 className="text-lg sm:text-xl font-semibold">{c.title}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{c.text}</p>
+              <Button variant="outline" size="sm" className="sm:size-base">Learn More</Button>
+            </Card>
+          ))}
+        </section>
+      </div>
+
+      {/* floating WhatsApp */}
+      <a href="https://wa.me/16476684646?text=Hi%20Finally%20Home%20Agents%20👋" target="_blank" rel="noreferrer"
+         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16
+                    rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E]
+                    flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 transition"
+         aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 448 512" className="w-6 h-6 sm:w-8 sm:h-8 fill-white">
+          <path d="M380.9 97.1c-39.7-39.7-92.5-61.6-148.9-61.1C100.3 36.4 0 138 0 261.8c0 45.1 11.9 88.9 34.5 127.7L0 512l125.2-33.1c37.8 20.8 79.8 31.7 122.6 31.6h.6c123.5 0 224-100.7 224-224.6.1-59.3-22.9-115.1-64.5-156.8z"/>
+        </svg>
+      </a>
+    </>
+  );
+}

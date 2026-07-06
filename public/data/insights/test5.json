@@ -1,0 +1,29 @@
+{
+  "slug": "test5",
+  "title": "test5",
+  "publishDate": "2025-10-30T15:36:00.000Z",
+  "author": "matt",
+  "excerpt": "test",
+  "tags": [
+    "test"
+  ],
+  "featureImage": "/uploads/insights/eastgwillimbury-banner.jpg",
+  "featureImageAlt": "test image",
+  "seo": {
+    "title": "test5 | NorthSide GTA",
+    "description": "test",
+    "ogImage": "/uploads/insights/uxbridge-banner.jpg"
+  },
+  "gallery": [
+    {
+      "image": "/uploads/insights/aurora-banner.jpg",
+      "alt": "",
+      "caption": ""
+    }
+  ],
+  "inlineImages": [],
+  "pullQuote": null,
+  "videos": [],
+  "body": "test\n",
+  "sourcePath": "public/content/insights/test5/index.md"
+}

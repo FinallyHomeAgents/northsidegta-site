@@ -1,0 +1,54 @@
+{
+  "ballot_items": [
+    {
+      "name": "The Naked Wing",
+      "address": "24018 Woodbine Ave, Keswick, ON",
+      "link": "https://thenakedwing.ca/"
+    },
+    {
+      "name": "6IXTY WINGS",
+      "address": "566 The Queensway S, Keswick, ON",
+      "link": "https://6ixtywings.com/"
+    },
+    {
+      "name": "Wild Bill's Bistro",
+      "address": "443 The Queensway S, Keswick, ON",
+      "link": "https://www.wildbillsbistro.com/"
+    },
+    {
+      "name": "Big Bone BBQ & Wicked Wings",
+      "address": "1 Church St Keswick ON",
+      "link": "https://bigbonebbq.ca/order-now/?location=Keswick#/menu"
+    },
+    {
+      "name": "Wing Court",
+      "address": "207 Church St, Keswick ON",
+      "link": "https://share.google/F6lel8EYRZKBFyxaa"
+    },
+    {
+      "name": "Sammy's Chicken Coop",
+      "address": "213 The Queensway S, Keswick, ON",
+      "link": "https://share.google/wG8LD68n9Plu5Tr3C"
+    },
+    {
+      "name": "Kings Tavern",
+      "address": "213 The Queensway S #14/15, Keswick, ON",
+      "link": "https://kingstavern.ca/home/"
+    },
+    {
+      "address": "297 The Queensway S, Keswick, ON",
+      "name": " Chef Todd's kitchen",
+      "link": "https://cheftoddskitchen.com/"
+    }
+  ],
+  "slug": "best-wings-keswick",
+  "featured": false,
+  "town": "Georgina",
+  "status": "live",
+  "ranking_key": "astehub_keswick_pizza_2025",
+  "title": "Best Wings in Keswick",
+  "town_area": "Keswick",
+  "image": "/uploads/georginawings.jpg",
+  "description": "Help crown Keswick's go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}

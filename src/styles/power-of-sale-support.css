@@ -1,0 +1,498 @@
+.power-sale-page {
+  --ps-bg: #f3f4f3;
+  --ps-surface: #ffffff;
+  --ps-surface-muted: #f8f8f7;
+  --ps-ink: #111827;
+  --ps-muted: #4b5563;
+  --ps-accent: #1f2937;
+  --ps-border: rgba(17, 24, 39, 0.16);
+  --ps-border-strong: rgba(17, 24, 39, 0.28);
+  background: var(--ps-bg);
+  color: var(--ps-ink);
+  padding-bottom: clamp(3.2rem, 7vw, 5rem);
+}
+
+.power-sale-wrap {
+  width: min(1160px, calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.power-sale-section {
+  padding-top: clamp(3.8rem, 7vw, 6.3rem);
+}
+
+.power-sale-heading {
+  margin: 0 0 1.5rem;
+  max-width: 23ch;
+  font-size: clamp(1.36rem, 2.6vw, 2.15rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.power-sale-hero {
+  padding-top: clamp(2.4rem, 6vw, 5rem);
+}
+
+.power-sale-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  gap: clamp(1.4rem, 3.2vw, 3.1rem);
+  align-items: stretch;
+}
+
+.power-sale-hero-content {
+  background: var(--ps-surface);
+  border: 1px solid var(--ps-border);
+  border-radius: 0.85rem;
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+}
+
+.power-sale-kicker {
+  margin: 0 0 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.power-sale-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.69rem;
+  color: #6b7280;
+}
+
+.power-sale-title {
+  margin: 0.9rem 0 0;
+  max-width: 17ch;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.power-sale-title span {
+  display: block;
+  margin-top: 0.55rem;
+  font-size: clamp(0.97rem, 1.8vw, 1.3rem);
+  line-height: 1.34;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.power-sale-lead {
+  margin: 1rem 0 0;
+  max-width: 60ch;
+  line-height: 1.72;
+  color: #374151;
+}
+
+.power-sale-actions {
+  margin-top: 1.45rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.power-sale-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 0.4rem;
+  font-size: 0.77rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.62rem 0.88rem;
+  border: 1px solid transparent;
+  transition: background 170ms ease, color 170ms ease, border-color 170ms ease;
+}
+
+.power-sale-btn-primary {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #111827;
+}
+
+.power-sale-btn-primary:hover,
+.power-sale-btn-primary:focus-visible {
+  background: #030712;
+  border-color: #030712;
+}
+
+.power-sale-btn-secondary {
+  background: transparent;
+  color: #111827;
+  border-color: rgba(17, 24, 39, 0.3);
+}
+
+.power-sale-btn-secondary:hover,
+.power-sale-btn-secondary:focus-visible {
+  background: #f9fafb;
+  border-color: rgba(17, 24, 39, 0.55);
+}
+
+.power-sale-serving-line {
+  margin: 1rem 0 0;
+  font-size: 0.83rem;
+  letter-spacing: 0.02em;
+  color: #4b5563;
+}
+
+.power-sale-hero-media {
+  min-height: clamp(360px, 44vw, 560px);
+}
+
+.power-sale-image-placeholder {
+  height: 100%;
+  min-height: clamp(250px, 35vw, 420px);
+  border-radius: 0.85rem;
+  border: 1px solid var(--ps-border);
+  background: linear-gradient(180deg, #fbfbfa 0%, #f3f4f6 100%);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  display: grid;
+  align-content: center;
+  gap: 0.6rem;
+}
+
+.power-sale-image-placeholder.is-compact {
+  min-height: 240px;
+}
+
+.power-sale-placeholder-eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.power-sale-placeholder-title {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.6vw, 1.22rem);
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+.power-sale-placeholder-file {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.power-sale-placeholder-guidance {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+.power-sale-trust-strip {
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  background: var(--ps-surface);
+  border-top: 1px solid var(--ps-border);
+  border-bottom: 1px solid var(--ps-border);
+}
+
+.power-sale-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.power-sale-trust-item {
+  margin: 0;
+  padding: 0.95rem 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+.power-sale-trust-item + .power-sale-trust-item {
+  border-left: 1px solid var(--ps-border);
+}
+
+.power-sale-why .power-sale-heading {
+  margin-bottom: 1.2rem;
+}
+
+.power-sale-numbered-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--ps-border);
+}
+
+.power-sale-numbered-item {
+  margin: 0;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--ps-border);
+}
+
+.power-sale-numbered-item:nth-child(odd) {
+  padding-right: clamp(1rem, 2vw, 1.8rem);
+  border-right: 1px solid var(--ps-border);
+}
+
+.power-sale-numbered-item:nth-child(even) {
+  padding-left: clamp(1rem, 2vw, 1.8rem);
+}
+
+.power-sale-item-number {
+  margin: 0 0 0.45rem;
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.power-sale-numbered-item h3,
+.power-sale-step-content h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.38;
+  letter-spacing: -0.01em;
+}
+
+.power-sale-numbered-item p,
+.power-sale-step-content p,
+.power-sale-list-block li,
+.power-sale-faq-item p,
+.power-sale-collab-grid p,
+.power-sale-final-cta p,
+.power-sale-compliance-line,
+.power-sale-brokerage-bottom {
+  margin: 0.52rem 0 0;
+  color: var(--ps-muted);
+  line-height: 1.72;
+}
+
+.power-sale-image-break {
+  padding-top: clamp(3rem, 6vw, 5.2rem);
+}
+
+.power-sale-handle-band,
+.power-sale-process-band,
+.power-sale-collab-band,
+.power-sale-coverage-band {
+  background: var(--ps-surface);
+  border: 1px solid var(--ps-border);
+  border-radius: 0.85rem;
+  padding: clamp(1.3rem, 3vw, 2.35rem);
+}
+
+.power-sale-handle-grid,
+.power-sale-coverage-grid,
+.power-sale-collab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2.6vw, 2rem);
+}
+
+.power-sale-list-block + .power-sale-list-block {
+  border-left: 1px solid var(--ps-border);
+  padding-left: clamp(1rem, 2vw, 1.8rem);
+}
+
+.power-sale-list-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.64rem;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.power-sale-list-block ul,
+.power-sale-coverage-grid ul {
+  margin: 0.7rem 0 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.power-sale-process-band .power-sale-heading {
+  margin-bottom: 1.4rem;
+}
+
+.power-sale-process-stack {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ps-border);
+}
+
+.power-sale-process-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--ps-border);
+}
+
+.power-sale-step-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--ps-border-strong);
+  border-radius: 0.32rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  color: #374151;
+  background: var(--ps-surface-muted);
+}
+
+.power-sale-collab-grid p {
+  max-width: 58ch;
+}
+
+.power-sale-map-frame {
+  border: 1px solid var(--ps-border);
+  border-radius: 0.8rem;
+  background: var(--ps-surface-muted);
+  padding: 0.8rem;
+}
+
+.power-sale-map-frame .power-sale-image-placeholder {
+  min-height: 220px;
+  border-radius: 0.6rem;
+}
+
+.power-sale-faq-list {
+  border-top: 1px solid var(--ps-border);
+}
+
+.power-sale-faq-item {
+  border-bottom: 1px solid var(--ps-border);
+}
+
+.power-sale-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.95rem 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.power-sale-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.power-sale-faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease;
+}
+
+.power-sale-faq-answer p {
+  overflow: hidden;
+  margin: 0;
+  padding-bottom: 1rem;
+}
+
+.power-sale-faq-item[open] .power-sale-faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.power-sale-final-cta {
+  margin-top: clamp(3rem, 7vw, 5.3rem);
+  background: #eef0ef;
+  border: 1px solid var(--ps-border-strong);
+  border-radius: 0.8rem;
+  padding: clamp(1.5rem, 3.5vw, 2.55rem);
+}
+
+.power-sale-final-cta h2 {
+  margin: 0;
+  max-width: 32ch;
+  font-size: clamp(1.3rem, 2.5vw, 1.95rem);
+  line-height: 1.26;
+  letter-spacing: -0.02em;
+}
+
+.power-sale-contact-row {
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.48rem;
+  font-size: 0.9rem;
+}
+
+.power-sale-contact-row a {
+  color: #111827;
+  text-decoration: none;
+}
+
+.power-sale-contact-row a:hover {
+  text-decoration: underline;
+}
+
+.power-sale-bottom-compliance {
+  padding-top: 2.2rem;
+}
+
+.power-sale-compliance-line,
+.power-sale-brokerage-bottom {
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.power-sale-brokerage-bottom {
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #374151;
+}
+
+@media (max-width: 1023px) {
+  .power-sale-wrap {
+    width: min(1160px, calc(100% - 1.6rem));
+  }
+
+  .power-sale-hero-grid,
+  .power-sale-numbered-grid,
+  .power-sale-handle-grid,
+  .power-sale-coverage-grid,
+  .power-sale-collab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .power-sale-numbered-item:nth-child(odd),
+  .power-sale-numbered-item:nth-child(even) {
+    padding-left: 0;
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .power-sale-list-block + .power-sale-list-block {
+    border-left: 0;
+    border-top: 1px solid var(--ps-border);
+    padding-left: 0;
+    padding-top: 1.1rem;
+  }
+
+  .power-sale-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .power-sale-trust-item + .power-sale-trust-item {
+    border-left: 0;
+    border-top: 1px solid var(--ps-border);
+  }
+
+  .power-sale-btn {
+    width: 100%;
+  }
+}

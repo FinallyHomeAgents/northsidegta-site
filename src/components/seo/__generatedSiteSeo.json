@@ -1,0 +1,82 @@
+{
+  "/": {
+    "seo_title": "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents",
+    "seo_description": "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
+    "seo_image": "/uploads/northside-gta-finally-home-agents-hero.jpg"
+  },
+  "/about": {
+    "seo_title": "About Finally Home Agents | NorthSide GTA Real Estate Team",
+    "seo_description": "Matthew and Landon Mulhall built Finally Home Agents with the same dedication and trust found in professional athlete–agent partnerships — guiding families across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog to achieve their real estate goals through teamwork, strategy, and care.",
+    "seo_image": "/uploads/og-about-northsidegta.jpg"
+  },
+  "/buyers": {
+    "seo_title": "Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA",
+    "seo_description": "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call.",
+    "seo_image": "https://northsidegta.ca/uploads/buyers-page-seo.jpg"
+  },
+  "/choose-your-path": {
+    "seo_title": "Find the Right Buyer Agent | Finally Home Agents – NorthSide GTA",
+    "seo_description": "Searching for the right agent to help you buy a home in the NorthSide GTA? Meet Finally Home Agents — focused on priority-driven guidance, clear communication, and a supportive buying process.",
+    "seo_image": "/uploads/insights/uxbridge-aerial-neighbourhood-2026.jpg"
+  },
+  "/cms/tastehub": {
+    "seo_title": "TasteHub CMS | NorthSide GTA",
+    "seo_description": "Access the TasteHub CMS to manage polls, ballots, and community-powered content for the NorthSide GTA.",
+    "seo_image": "/Images/og-home.jpg"
+  },
+  "/community": {
+    "seo_title": "NorthSide GTA Events & Local Happenings | Finally Home Agents",
+    "seo_description": "Find upcoming community events, farmers markets, and local gatherings across the NorthSide GTA — from Uxbridge to Georgina and Stouffville. Explore what’s happening north of Toronto with Finally Home Agents.",
+    "seo_image": "/uploads/community-page-seo.jpg"
+  },
+  "/community/events": {
+    "seo_title": "NorthSide GTA Events | What's On Across Aurora, Uxbridge & Beyond",
+    "seo_description": "Always-updated guide to NorthSide GTA events across Aurora, Uxbridge, Georgina, Stouffville, East Gwillimbury, Newmarket and Scugog.",
+    "seo_image": "/Images/hero-desktop.jpg"
+  },
+  "/community/submit-event": {
+    "seo_title": "Submit a Local Event | NorthSide GTA Community Calendar",
+    "seo_description": "Promote your local event across the NorthSide GTA. Submit your event details and we’ll feature it on our community calendar so residents in Stouffville, Uxbridge, Newmarket, Georgina, East Gwillimbury, Scugog, and Aurora can discover it.",
+    "seo_image": "/uploads/community-page-seo.jpg"
+  },
+  "/contact": {
+    "seo_title": "Contact Finally Home Agents | NorthSide GTA Team",
+    "seo_description": "Have questions about buying or selling in the NorthSide GTA? Connect with Matthew and Landon Mulhall at Finally Home Agents for guidance across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog.",
+    "seo_image": "/uploads/og-contact-northsidegta.jpg"
+  },
+  "/insights": {
+    "seo_title": "NorthSide GTA Insights | Local News, Town Highlights & Real Estate Trends",
+    "seo_description": "Explore NorthSide GTA Insights — your source for local stories, community news, and real estate updates across Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog. Discover life north of Toronto with Finally Home Agents.",
+    "seo_image": "/uploads/insights-seo.jpg"
+  },
+  "/insights/where-to-live-in-the-northside-gta-2026-guide-for-toronto-movers": {
+    "seo_title": "Where to Live in the NorthSide GTA in 2026 | Finally Home Agents",
+    "seo_description": "A detailed 2026 guide for Toronto buyers comparing Uxbridge, Stouffville, East Gwillimbury, Newmarket, Aurora, Georgina, and Scugog — commute, lifestyle, housing, and who each town is best for.",
+    "seo_image": "/uploads/insights/where-to-live-northside-gta-2026-guide.jpg"
+  },
+  "/media": {
+    "seo_title": "NorthSide GTA Videos & Reels | Finally Home Agents",
+    "seo_description": "Watch NorthSide GTA videos and reels featuring community highlights, real estate insights, and local stories from Uxbridge, Stouffville, Georgina, East Gwillimbury, Newmarket, Aurora, and Scugog — served by Finally Home Agents.",
+    "seo_image": "/uploads/videos-reels.jpg"
+  },
+  "/recommended": {
+    "seo_title": "Sell Your Home in the NorthSide GTA | Start with a Local Plan",
+    "seo_description": "Start your home sale with Matthew & Landon Mulhall, Sales Representatives at HomeLife Optimum Realty. Complimentary listing prep consult, clear plan, and local NorthSide GTA expertise.",
+    "seo_image": "/uploads/og-launch-home-sale-northside-gta.webp"
+  },
+  "/sellers": {
+    "seo_title": "Sell Your Home North of Toronto | NorthSide GTA | Finally Home Agents",
+    "seo_description": "Considering selling in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog? Finally Home Agents provides strategic pricing, professional marketing, and personal guidance from first conversation to closing.",
+    "seo_image": "/uploads/sellers-page-seo.jpg"
+  },
+  "/tastehub": {
+    "seo_title": "NorthSide TasteHub™ | Community Food Rankings Across the NorthSide GTA",
+    "seo_description": "Powered by the Finally Home Agents team, NorthSide TasteHub™ is where locals rank the best pizza, wings, date night spots and more across Uxbridge, Georgina, Stouffville, Aurora, Newmarket and the rest of the NorthSide GTA. Check live rankings or cast your vote today.",
+    "seo_image": "/seo/tastehub-default-poll-share.jpg"
+  },
+  "/tastehub/request-tabletop-sign": {
+    "seo_title": "Request a Tabletop Sign | NorthSide TasteHub",
+    "seo_description": "More votes means more visibility and more traffic. Request a NorthSide TasteHub tabletop sign for your restaurant.",
+    "seo_image": "/Images/tastehub/request-tabletop-sign/hero.png"
+  }
+}

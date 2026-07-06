@@ -1,0 +1,38 @@
+{
+  "ballot_items": [
+    {
+      "name": "Wing Riders",
+      "address": "307 Toronto St S Unit 4, Uxbridge, ON",
+      "link": "https://wingriders.ca/"
+    },
+    {
+      "name": "Corner House Pub and Grill",
+      "address": "104 Brock St W, Uxbridge, ON",
+      "link": "https://cornerhousepubandgrill.com/"
+    },
+    {
+      "name": "Wixan's Bridge Restaurant",
+      "address": "65 Brock St W, Uxbridge, ON",
+      "link": "https://www.wixansbridge.com/"
+    },
+    {
+      "name": "Col. Mcgrady's Pub & Grill",
+      "address": "44 Brock St W, Uxbridge, ON",
+      "link": "https://www.colmcgrady.com/"
+    },
+    {
+      "name": "One Eyed Jack (Uxbridge)",
+      "address": "2 Douglas Rd Unit A10, Uxbridge, ON",
+      "link": "https://share.google/Cv64ECZSypvGORz8w"
+    }
+  ],
+  "slug": "best-wings-uxbridge",
+  "featured": false,
+  "town": "Uxbridge",
+  "status": "live",
+  "ranking_key": "tastehub_uxbridge_wings_2025",
+  "title": "Best Wings in Uxbridge",
+  "image": "/uploads/uxbridgewings.jpg",
+  "description": "Help crown Uxbridge’s go-to Wing spot. Cast your vote and see who’s on top in real time.",
+  "category": "Wings"
+}

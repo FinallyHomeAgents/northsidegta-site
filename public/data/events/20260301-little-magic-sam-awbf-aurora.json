@@ -1,0 +1,32 @@
+{
+  "slug": "20260301-little-magic-sam-awbf-aurora",
+  "title": "Little Magic Sam [AWBF]",
+  "summary": "Little Magic Sam [AWBF]",
+  "description": "Pricing Regular: $20.00 (HST included) Student: $15.00 (HST included – ID Required at entry) Tickets On Sale Mix & Match Subscription Package: Choose 3 or more ACC shows (excluding family shows) and save 15%! Must be done within the same transaction, discount provided at checkout. Aurora Winter Blues Festival Pass: Choose all 4 evening and 2 matinee performances (6 Shows) for $199 – discount at checkout Aurora Cultural Centre Presents Little Magic Sam Aurora Winter Blues Festival Aurora Town Square Performance Hall 50 Victoria Street, Aurora 6:45 pm Doors Open 7:30 pm Show Start Blues is in his blood—and when Little Magic Sam plugs in, you feel it. Hailing from St. Thomas, Ontario, Sam Taylor brings a fiery blend of Chicago-style blues, soulful vocals, and electrifying guitar work that has earned him national acclaim. A born performer, Sam has been on stage since the age of seven and now leads a powerhouse band that’s turning heads across Canada. In 2024, the group took home the Maple Blues Award for New Artist or Group of the Year, solidifying their rising-star status. With a sound rooted in tradition but delivered with youthful grit and passion, Little Magic Sam has shared stages with legends and recorded at Memphis’ iconic Sun Studio. His latest EP Step Back—tracked live to mono tape using vintage gear—proves he’s not just honoring the blues; he’s bringing it to life for a new generation. About the Aurora Winter Blues Festival Get ready to warm up your winter! The Aurora Winter Blues Festival is back with four nights of toe-tapping, soul-shaking, heart-thumping music. Presented by the Aurora Cultural Centre, AWBF is your mid-winter escape into the world of blues, roots, and everything in between. It’s cozy, it’s cool, and it’s the perfect way to turn up the heat this February. This presentation is made possible with the support of Season Sponsor Funders The Aurora Cultural Centre participates in the Access 2 Program and supports removing the barriers to arts access for patrons with disabilities and their support persons. To purchase tickets using an Access 2 card, please contact the Box Office at (365) 500-3313 or email rleisure@aurora.ca RETURN TO THE PERFORMING ARTS 2025/26 PAGE",
+  "startDate": "2026-03-02T00:30:00Z",
+  "endDate": "2026-03-02T03:00:00Z",
+  "allDay": false,
+  "use_daily_schedule": true,
+  "daily_schedule": [
+    {
+      "date": "2026-03-01",
+      "all_day": false,
+      "start_time": "19:30",
+      "end_time": "22:00"
+    }
+  ],
+  "category": "Arts & Culture",
+  "town": "Aurora",
+  "locationName": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "address": "Aurora Town Square – Davide De Simone Performance Hall, 50 Victoria Street, Aurora, Ontario, L4G 1G4, Canada",
+  "priceType": "Paid",
+  "eventUrl": "https://auroraculturalcentre.ca/event/little-magic-sam-awbf-2526/",
+  "icsUrl": "https://auroraculturalcentre.ca/events/list/?ical=1",
+  "featured": false,
+  "hidden": false,
+  "archived": false,
+  "status": "published",
+  "source": "feed",
+  "sourceRef": "10002619-1772393400-1772402400@auroraculturalcentre.ca",
+  "updatedAt": "2025-12-01T08:40:20Z"
+}
