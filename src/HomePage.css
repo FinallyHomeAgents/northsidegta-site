@@ -306,6 +306,10 @@ main { padding-top: 0; }
 .hero__grid {
   display: grid;
   grid-template-columns: 1fr;
+  height: auto;
+  min-height: unset;
+  max-height: none;
+  overflow: visible;
 }
 @media (min-width: 1024px) {
   .hero__grid { grid-template-columns: 44% 56%; }
@@ -1588,9 +1592,10 @@ main { padding-top: 0; }
 @media (min-width: 1024px) {
   .hero__grid {
     grid-template-columns: 50% 50%;
-    height: calc(100vh - 80px - 45px - 137px);
-    min-height: 480px;
-    max-height: 680px;
+    height: auto;
+    min-height: unset;
+    max-height: none;
+    overflow: visible;
   }
 }
 
@@ -1676,7 +1681,7 @@ main { padding-top: 0; }
 
 /* Production hero bug fixes: isolate media layers and keep logo rail clean/visible. */
 .hero__grid {
-  overflow: hidden;
+  overflow: visible;
 }
 
 .hero__copy {
@@ -1704,7 +1709,10 @@ main { padding-top: 0; }
 
 @media (min-width: 1024px) {
   .hero__grid {
-    min-height: 480px;
+    height: auto;
+    min-height: unset;
+    max-height: none;
+    overflow: visible;
   }
 
   .hero__copy,
