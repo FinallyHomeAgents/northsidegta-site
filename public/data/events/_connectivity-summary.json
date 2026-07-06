@@ -1,7 +1,0 @@
-{
-  "timestamp": "2026-07-06T12:10:46.663Z",
-  "passed": 0,
-  "failed": 0,
-  "skipped": true,
-  "reason": "network disabled in CI (set EVENTS_ALLOW_NETWORK=true to enable)"
-}

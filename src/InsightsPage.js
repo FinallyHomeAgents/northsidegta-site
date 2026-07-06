@@ -73,7 +73,7 @@ function useInfiniteFeed(items) {
 
 function InsightsHero() {
   return (
-    <section className="space-y-8">
+    <section className="space-y-6">
       <div className="mx-auto max-w-3xl space-y-3 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.42em] text-emerald-600">Insights</p>
         <h1 className="text-3xl font-semibold tracking-tight text-emerald-900 sm:text-4xl">
@@ -87,7 +87,7 @@ function InsightsHero() {
         <img
           src="/uploads/insights-hero-finally-home-agents.jpg"
           alt="Person typing on a laptop that shows the words Community Insights, with a fireplace and coffee in the background, representing NorthSide GTA real estate insights."
-          className="h-auto w-full object-cover"
+          className="h-[220px] w-full object-cover sm:h-[280px] lg:h-[320px]"
           loading="lazy"
           decoding="async"
         />
@@ -223,7 +223,7 @@ export default function InsightsPage() {
 
       <HeaderShell />
 
-      <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
+      <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <InsightsHero />
         <MinimalSearch value={query} onChange={setQuery} />
 
@@ -234,7 +234,7 @@ export default function InsightsPage() {
         )}
 
         {!error && loading && (
-          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <div
                 key={index}
@@ -250,13 +250,13 @@ export default function InsightsPage() {
         )}
 
         {!loading && !hasResults && (
-          <div className="mt-10 rounded-3xl border border-emerald-100 bg-white/80 p-10 text-center text-sm text-slate-600 shadow-sm">
+          <div className="mt-8 rounded-3xl border border-emerald-100 bg-white/80 p-10 text-center text-sm text-slate-600 shadow-sm">
             {query ? "No insights match your search yet." : "No insights published just yet. Check back soon."}
           </div>
         )}
 
         {hasResults && (
-          <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <section className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {visibleItems.map((item) => (
               <InsightCard key={item.slug} item={item} />
             ))}
