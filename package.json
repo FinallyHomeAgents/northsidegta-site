@@ -9,7 +9,7 @@
     "pretest": "node scripts/sync-site-seo.js",
     "prebuild": "node scripts/sync-site-seo.js && node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
     "build": "react-scripts build",
-    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-tastehub-html.js && node scripts/generate-static-route-html.js && node scripts/inject-homepage-static-html.js && node scripts/generate-sitemap.js && node scripts/check-insight-images.js && cp build/index.html build/404.html",
+    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-tastehub-html.js && node scripts/generate-static-route-html.js && node scripts/inject-community-static-html.js && node scripts/inject-homepage-static-html.js && node scripts/generate-sitemap.js && node scripts/check-insight-images.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
@@ -59,7 +59,7 @@
     "react-scripts": "5.0.1",
     "resend": "^6.0.3",
     "rrule": "^2.8.1",
-    "rss-parser": "^3.13.0",
+    "rss-parser": "^13.0.0",
     "undici": "^7.16.0",
     "zod": "^3.23.8"
   },
