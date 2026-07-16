@@ -16,6 +16,13 @@
       "destination": "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
       "statusCode": 308
     },
+    { "source": "/georgina", "destination": "/communities/georgina", "statusCode": 308 },
+    { "source": "/east-gwillimbury", "destination": "/communities/east-gwillimbury", "statusCode": 308 },
+    { "source": "/newmarket", "destination": "/communities/newmarket", "statusCode": 308 },
+    { "source": "/aurora", "destination": "/communities/aurora", "statusCode": 308 },
+    { "source": "/stouffville", "destination": "/communities/stouffville", "statusCode": 308 },
+    { "source": "/uxbridge", "destination": "/communities/uxbridge", "statusCode": 308 },
+    { "source": "/scugog", "destination": "/communities/scugog", "statusCode": 308 },
     { "source": "/admin", "destination": "/cms", "statusCode": 308 },
     { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
   ],
