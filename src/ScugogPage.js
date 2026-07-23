@@ -449,6 +449,7 @@ const PAGE_BODY_HTML = `
 
 `;
 
+
 export default function ScugogPage() {
   const containerRef = useRef(null);
 

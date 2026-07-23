@@ -457,6 +457,7 @@ const PAGE_BODY_HTML = `
 
 `;
 
+
 export default function StouffvillePage() {
   const containerRef = useRef(null);
 

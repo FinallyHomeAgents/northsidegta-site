@@ -49,7 +49,7 @@ const TOWNS = [
     name: "Georgina",
     x: 50.25,
     y: 26.74,
-    url: "/georgina",
+    url: "/communities/georgina",
     blurb: "Lake life, beaches, and room to roam.",
     logo: TOWN_LOGO_PATHS.georgina,
     ratings: {
@@ -68,7 +68,7 @@ const TOWNS = [
     name: "East Gwillimbury",
     x: 40.55,
     y: 33.94,
-    url: "/east-gwillimbury",
+    url: "/communities/east-gwillimbury",
     blurb: "New builds, schools & fast 404 access.",
     logo: TOWN_LOGO_PATHS["east-gwillimbury"],
     ratings: {
@@ -87,7 +87,7 @@ const TOWNS = [
     name: "Newmarket",
     x: 35.6,
     y: 42.86,
-    url: "/newmarket",
+    url: "/communities/newmarket",
     blurb: "Shops, dining, and GO convenience.",
     logo: TOWN_LOGO_PATHS.newmarket,
     ratings: {
@@ -106,7 +106,7 @@ const TOWNS = [
     name: "Aurora",
     x: 40.0,
     y: 49.14,
-    url: "/aurora",
+    url: "/communities/aurora",
     blurb: "Mature neighbourhoods, schools, and quiet streets.",
     logo: TOWN_LOGO_PATHS.aurora,
     ratings: {
@@ -125,7 +125,7 @@ const TOWNS = [
     name: "Stouffville",
     x: 48.3,
     y: 46.86,
-    url: "/stouffville",
+    url: "/communities/stouffville",
     blurb: "Family streets, parks & a lively Main Street.",
     logo: TOWN_LOGO_PATHS.stouffville,
     ratings: {
@@ -144,7 +144,7 @@ const TOWNS = [
     name: "Scugog",
     x: 65.45,
     y: 43.74,
-    url: "/scugog",
+    url: "/communities/scugog",
     blurb: "Port Perry heritage + lakefront sunsets.",
     logo: TOWN_LOGO_PATHS.scugog,
     ratings: {
@@ -163,7 +163,7 @@ const TOWNS = [
     name: "Uxbridge",
     x: 55.55,
     y: 41.6,
-    url: "/uxbridge",
+    url: "/communities/uxbridge",
     blurb: "Trail capital vibes and small-town charm.",
     logo: TOWN_LOGO_PATHS.uxbridge,
     ratings: {
