@@ -44,7 +44,11 @@ async function main() {
   routes.forEach((entry) => {
     const { route, meta } = entry;
     try {
-      const headFragments = buildHeadFragments(baseDoc, template.doctype, baseTags, meta);
+      let headFragments = buildHeadFragments(baseDoc, template.doctype, baseTags, meta);
+      const townBody = loadCommunityBody(route);
+      if (townBody) {
+        headFragments = injectStaticBody(headFragments, townBody);
+      }
       const targetPath = getOutputPath(outputRoot, route);
       const targetDir = path.dirname(targetPath);
       fs.mkdirSync(targetDir, { recursive: true });
@@ -69,6 +73,34 @@ async function main() {
     });
     process.exitCode = 1;
   }
+}
+
+const COMMUNITY_COMPONENTS = {
+  "/communities/georgina": "GeorginaPage.js",
+  "/communities/east-gwillimbury": "EastGwillimburyPage.js",
+  "/communities/newmarket": "NewmarketPage.js",
+  "/communities/aurora": "AuroraPage.js",
+  "/communities/stouffville": "StouffvillePage.js",
+  "/communities/uxbridge": "UxbridgePage.js",
+  "/communities/scugog": "ScugogPage.js",
+};
+
+function loadCommunityBody(route) {
+  const component = COMMUNITY_COMPONENTS[route];
+  if (!component) return "";
+  const source = fs.readFileSync(path.join(__dirname, "..", "src", component), "utf8");
+  const match = source.match(/const PAGE_BODY_HTML = `([\s\S]*?)`;\s*\n/);
+  if (!match) throw new Error(`Unable to extract PAGE_BODY_HTML from ${component}`);
+  return match[1];
+}
+
+function injectStaticBody(html, body) {
+  const doc = parse(html, { comment: true });
+  const root = doc.querySelector("#root");
+  if (!root) throw new Error("Template is missing #root element");
+  root.setAttribute("data-prerender", "community");
+  root.set_content(`<div data-static-community-content>${body}</div>`);
+  return doc.toString();
 }
 
 function buildHeadFragments(baseHtml, doctype, baseTags, routeMeta) {
@@ -203,4 +235,6 @@ module.exports = {
   stringifyTag,
   stringifyJsonLdScript,
   getOutputPath,
+  loadCommunityBody,
+  injectStaticBody,
 };

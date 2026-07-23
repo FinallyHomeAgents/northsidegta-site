@@ -48,7 +48,7 @@ seo:
 ---
 # Launching NorthSide TasteHub: A Community Food Vote for the NorthSide GTA
 
-If you live in any of the towns we think of as the <span style="color:#32610E;">NorthSide GTA</span> — places like [Uxbridge](/uxbridge), [Georgina](/georgina), [East Gwillimbury](/east-gwillimbury), [Newmarket](/newmarket), [Aurora](/aurora), [Stouffville](/stouffville), or [Scugog](/scugog) — you already know this:
+If you live in any of the towns we think of as the <span style="color:#32610E;">NorthSide GTA</span> — places like [Uxbridge](/communities/uxbridge), [Georgina](/communities/georgina), [East Gwillimbury](/communities/east-gwillimbury), [Newmarket](/communities/newmarket), [Aurora](/communities/aurora), [Stouffville](/communities/stouffville), or [Scugog](/communities/scugog) — you already know this:
 
 **Where you eat is a big part of why you love your town.**
 

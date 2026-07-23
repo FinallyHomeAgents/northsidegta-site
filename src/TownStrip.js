@@ -17,13 +17,13 @@ const CLOSEST_TO_FURTHEST = [
 ];
 
 const TOWNS = [
-  { id: "georgina",         name: "Georgina",         href: "/georgina",         img: "/assets/town-logos/georgina.webp",        blurb: "Lake life & beaches." },
-  { id: "uxbridge",         name: "Uxbridge",         href: "/uxbridge",         img: "/assets/town-logos/uxbridge.webp",        blurb: "Trails & small-town charm." },
-  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/east-gwillimbury", img: "/assets/town-logos/east-gwillimbury.webp", blurb: "New builds & 404 access." },
-  { id: "newmarket",        name: "Newmarket",        href: "/newmarket",        img: "/assets/town-logos/newmarket.webp",       blurb: "Shops, dining, GO train." },
-  { id: "stouffville",      name: "Stouffville",      href: "/stouffville",      img: "/assets/town-logos/stouffville.webp",     blurb: "Family streets & parks." },
-  { id: "aurora",           name: "Aurora",           href: "/aurora",           img: "/assets/town-logos/aurora.webp",          blurb: "Schools & quiet streets." },
-  { id: "scugog",           name: "Scugog",           href: "/scugog",           img: "/assets/town-logos/scugog.webp",          blurb: "Heritage & lakefront." },
+  { id: "georgina",         name: "Georgina",         href: "/communities/georgina",         img: "/assets/town-logos/georgina.webp",        blurb: "Lake life & beaches." },
+  { id: "uxbridge",         name: "Uxbridge",         href: "/communities/uxbridge",         img: "/assets/town-logos/uxbridge.webp",        blurb: "Trails & small-town charm." },
+  { id: "east-gwillimbury", name: "East Gwillimbury", href: "/communities/east-gwillimbury", img: "/assets/town-logos/east-gwillimbury.webp", blurb: "New builds & 404 access." },
+  { id: "newmarket",        name: "Newmarket",        href: "/communities/newmarket",        img: "/assets/town-logos/newmarket.webp",       blurb: "Shops, dining, GO train." },
+  { id: "stouffville",      name: "Stouffville",      href: "/communities/stouffville",      img: "/assets/town-logos/stouffville.webp",     blurb: "Family streets & parks." },
+  { id: "aurora",           name: "Aurora",           href: "/communities/aurora",           img: "/assets/town-logos/aurora.webp",          blurb: "Schools & quiet streets." },
+  { id: "scugog",           name: "Scugog",           href: "/communities/scugog",           img: "/assets/town-logos/scugog.webp",          blurb: "Heritage & lakefront." },
 ];
 
 function onImgError(e, townId) {
