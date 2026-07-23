@@ -461,6 +461,7 @@ const PAGE_BODY_HTML = `
 
 `;
 
+
 export default function AuroraPage() {
   const containerRef = useRef(null);
 
