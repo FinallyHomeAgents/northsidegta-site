@@ -453,7 +453,18 @@ function baseAgentNode() {
     url: SITE_URL,
     brand: { "@type": "Brand", name: "NorthSide GTA", url: SITE_URL },
     parentOrganization: { "@type": "Organization", name: "HomeLife Optimum Realty, Brokerage" },
-    employee: [{ "@type": "Person", name: "Matthew Mulhall" }, { "@type": "Person", name: "Landon Mulhall" }],
+    telephone: "+1-647-668-4646",
+    email: "finallyhomeagents@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Newmarket",
+      addressRegion: "ON",
+      addressCountry: "CA",
+    },
+    employee: [
+      { "@type": "Person", name: "Matthew Mulhall", jobTitle: "Real Estate Agent" },
+      { "@type": "Person", name: "Landon Mulhall", jobTitle: "Real Estate Agent" },
+    ],
     areaServed: areaServedPlaces(),
   };
 }
@@ -482,6 +493,15 @@ function makePageSchema({ path, title, description, pageType = "WebPage", image,
       provider: { "@id": `${SITE_URL}/#finally-home-agents` },
       areaServed: areaServedPlaces(town ? [town] : CORE_TOWNS),
       description,
+    });
+  }
+  if (town) {
+    graph.push({
+      "@type": "Place",
+      "@id": `${url}#place`,
+      name: `${town}, Ontario`,
+      url,
+      containedInPlace: { "@type": "AdministrativeArea", name: "Ontario" },
     });
   }
   if (collectionItems) {
@@ -536,13 +556,13 @@ const COMMUNITY_ITEMS = [
 ];
 
 const TOWN_REMEDIATION = [
-  ["/communities/georgina", "Georgina", "Georgina Real Estate | Buying & Selling in Georgina | Finally Home Agents", "Buy or sell in Georgina with Finally Home Agents. Compare Keswick, Sutton, Jackson's Point, lake access, local market trends, and NorthSide GTA lifestyle fit."],
-  ["/communities/east-gwillimbury", "East Gwillimbury", "East Gwillimbury Real Estate | Finally Home Agents", "Buy or sell in East Gwillimbury with Finally Home Agents. Compare Holland Landing, Sharon, Queensville, Mount Albert, commute options, and local market fit."],
-  ["/communities/newmarket", "Newmarket", "Newmarket Real Estate | Buying & Selling in Newmarket | Finally Home Agents", "Buy or sell in Newmarket with Finally Home Agents. Compare Main Street, GO Transit access, schools, established neighbourhoods, and local market trends."],
-  ["/communities/aurora", "Aurora", "Aurora Real Estate | Buying & Selling in Aurora | Finally Home Agents", "Buy or sell in Aurora with Finally Home Agents. Compare established neighbourhoods, schools, GO Transit access, luxury homes, and NorthSide GTA market trends."],
-  ["/communities/stouffville", "Stouffville", "Stouffville Real Estate | Buying & Selling in Stouffville | Finally Home Agents", "Buy or sell in Stouffville with Finally Home Agents. Compare family neighbourhoods, Main Street, GO Transit, newer homes, and Whitchurch-Stouffville market trends."],
-  ["/communities/uxbridge", "Uxbridge", "Uxbridge Real Estate | Buying & Selling in Uxbridge | Finally Home Agents", "Buy or sell in Uxbridge with Finally Home Agents. Compare trails, golf, rural properties, family neighbourhoods, and NorthSide GTA market trends."],
-  ["/communities/scugog", "Scugog", "Scugog Real Estate | Port Perry Homes | Finally Home Agents", "Buy or sell in Scugog with Finally Home Agents. Compare Port Perry, Lake Scugog, waterfront homes, small-town lifestyle, and local market trends."],
+  ["/communities/georgina", "Georgina", "Georgina Real Estate & Homes | Moving to Georgina | Finally Home Agents", "Explore Georgina real estate north of Toronto, including homes in Keswick, Sutton, and Jackson's Point, with local guidance from Finally Home Agents."],
+  ["/communities/east-gwillimbury", "East Gwillimbury", "East Gwillimbury Real Estate & Homes | Moving to East Gwillimbury | Finally Home Agents", "Explore East Gwillimbury real estate north of Toronto, including Holland Landing, Sharon, Queensville, and Mount Albert, with Finally Home Agents."],
+  ["/communities/newmarket", "Newmarket", "Newmarket Real Estate & Homes | Moving to Newmarket | Finally Home Agents", "Explore Newmarket real estate north of Toronto, from Main Street and established neighbourhoods to GO Transit access, with Finally Home Agents."],
+  ["/communities/aurora", "Aurora", "Aurora Real Estate & Homes | Moving to Aurora | Finally Home Agents", "Explore Aurora real estate north of Toronto, including established neighbourhoods, luxury homes, schools, and GO Transit access, with Finally Home Agents."],
+  ["/communities/stouffville", "Stouffville", "Stouffville Real Estate & Homes | Moving to Stouffville | Finally Home Agents", "Explore Stouffville real estate north of Toronto, including Main Street, family neighbourhoods, newer homes, and GO Transit, with Finally Home Agents."],
+  ["/communities/uxbridge", "Uxbridge", "Uxbridge Real Estate & Homes | Moving to Uxbridge | Finally Home Agents", "Explore Uxbridge real estate north of Toronto, including family neighbourhoods, rural properties, trails, and golf, with Finally Home Agents."],
+  ["/communities/scugog", "Scugog", "Scugog Real Estate & Homes | Moving to Scugog | Finally Home Agents", "Explore Scugog real estate north of Toronto, including Port Perry, Lake Scugog, waterfront homes, and small-town living, with Finally Home Agents."],
 ];
 
 const SEO_REMEDIATION_ROUTE_META_CONFIGS = [

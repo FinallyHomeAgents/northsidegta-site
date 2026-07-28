@@ -1,6 +1,15 @@
 {
   "redirects": [
     {
+      "source": "/(.*)",
+      "has": [
+        { "type": "host", "value": "www.northsidegta.ca" }
+      ],
+      "destination": "https://northsidegta.ca/$1",
+      "statusCode": 301
+    },
+    { "source": "/videos", "destination": "/media", "statusCode": 301 },
+    {
       "source": "/",
       "has": [
         { "type": "host", "value": "5670thomasdr.ca" }
