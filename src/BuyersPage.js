@@ -168,7 +168,7 @@ const PHOTO_GRID = [
 const MARKET_WATCH_TOWNS = MARKET_DATA.datasets.marketWatch.towns;
 const MARKET_SNAPSHOT = COMMUNITIES.map((town) => {
   const townMarket = MARKET_WATCH_TOWNS[TOWN_DATA[town].slug];
-  return [town, townMarket.averageSold, `${townMarket.daysOnMarket} days avg`, townMarket.yearOverYear];
+  return [town, townMarket.averageSold, `${townMarket.daysOnMarket} days avg`, `↓ ${townMarket.yearOverYear}`];
 });
 
 const PROCESS_STEPS = [

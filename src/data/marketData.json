@@ -2,42 +2,42 @@
   "lastUpdated": "April 2026",
   "datasets": {
     "marketWatch": {
-      "source": "TRREB Market Watch · April 2026",
+      "source": "TRREB Market Watch",
       "towns": {
         "aurora": {
           "averageSold": "$1,153,153",
           "daysOnMarket": "26",
-          "yearOverYear": "↓ 12.3%"
+          "yearOverYear": "-12.3%"
         },
         "newmarket": {
           "averageSold": "$998,202",
           "daysOnMarket": "24",
-          "yearOverYear": "↓ 9.2%"
+          "yearOverYear": "-9.2%"
         },
         "stouffville": {
           "averageSold": "$1,186,821",
           "daysOnMarket": "27",
-          "yearOverYear": "↓ 10.2%"
+          "yearOverYear": "-10.2%"
         },
         "uxbridge": {
           "averageSold": "$1,023,606",
           "daysOnMarket": "37",
-          "yearOverYear": "↓ 7.3%"
+          "yearOverYear": "-7.3%"
         },
         "georgina": {
           "averageSold": "$767,732",
           "daysOnMarket": "24",
-          "yearOverYear": "↓ 7.8%"
+          "yearOverYear": "-7.8%"
         },
         "east-gwillimbury": {
           "averageSold": "$1,038,275",
           "daysOnMarket": "31",
-          "yearOverYear": "↓ 4.4%"
+          "yearOverYear": "-4.4%"
         },
         "scugog": {
           "averageSold": "$865,895",
           "daysOnMarket": "37",
-          "yearOverYear": "↓ 6.4%"
+          "yearOverYear": "-6.4%"
         }
       }
     },

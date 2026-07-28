@@ -434,9 +434,10 @@ async function main() {
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
 
+  fs.rmSync(outputDir, { recursive: true, force: true });
+  fs.mkdirSync(outputDir, { recursive: true });
+
   if (!entries.length) {
-    fs.rmSync(outputDir, { recursive: true, force: true });
-    fs.mkdirSync(outputDir, { recursive: true });
     console.warn("[generate-insights-data] No insight entries found.");
     return;
   }

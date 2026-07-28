@@ -3,11 +3,24 @@
 const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
+const { loadPublishedInsights } = require("./utils/publishedInsights");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
 const insightDataDir = path.join(rootDir, "public", "data", "insights");
 const origin = "https://northsidegta.ca";
+const marketData = require(path.join(rootDir, "src", "data", "marketData.json"));
+const retiredInsightSlugs = [
+  "lando-test-2",
+  "lando-test",
+  "sample-launch",
+  "sample-rich-media",
+  "test4",
+  "test5",
+  "testing-123",
+  "testpage",
+  "testpage2",
+];
 
 const townNames = {
   georgina: "Georgina",
@@ -125,16 +138,36 @@ for (const [slug, town] of Object.entries(townNames)) {
 staticChecks.forEach(checkRoute);
 checkRoute({ route: "/", schema: ["RealEstateAgent", "FAQPage"] });
 
-const insightFiles = fs
-  .readdirSync(insightDataDir)
-  .filter((name) => name.endsWith(".json") && name !== "index.json")
-  .sort();
+const publishedInsights = loadPublishedInsights(path.join(rootDir, "public"), "verify-prerendered-seo");
+const publishedInsightSlugs = new Set(publishedInsights.map(({ slug }) => slug));
+const vercelConfig = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
+const rewritesBySource = new Map(
+  (vercelConfig.rewrites || []).map(({ source, destination }) => [source, destination]),
+);
+
+retiredInsightSlugs.forEach((slug) => {
+  if (publishedInsightSlugs.has(slug)) {
+    failures.push(`/insights/${slug}: retired slug is present in the published index`);
+  }
+  if (rewritesBySource.get(`/insights/${slug}`) !== "/api/removed-insight") {
+    failures.push(`/insights/${slug}: retired slug is missing its HTTP 410 rewrite`);
+  }
+});
 
 let checkedInsights = 0;
-for (const fileName of insightFiles) {
-  const insight = JSON.parse(fs.readFileSync(path.join(insightDataDir, fileName), "utf8"));
-  if (insight.draft === true) continue;
+for (const { slug: publishedSlug } of publishedInsights) {
+  const fileName = `${publishedSlug}.json`;
+  const filePath = path.join(insightDataDir, fileName);
+  if (!fs.existsSync(filePath)) {
+    failures.push(`/insights/${publishedSlug}: missing published insight data`);
+    continue;
+  }
+  const insight = JSON.parse(fs.readFileSync(filePath, "utf8"));
   const slug = insight.slug || fileName.replace(/\.json$/i, "");
+  if (slug !== publishedSlug) {
+    failures.push(`/insights/${publishedSlug}: payload slug is ${slug}`);
+    continue;
+  }
   const articleText = parse(String(insight.bodyHtml || "")).text.replace(/\s+/g, " ").trim();
   const bodyExcerpt = articleText.split(/\s+/).slice(0, 8).join(" ");
   checkRoute({
@@ -145,6 +178,55 @@ for (const fileName of insightFiles) {
   });
   checkedInsights += 1;
 }
+
+const generatedInsightSlugs = fs
+  .readdirSync(path.join(buildDir, "insights"), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(buildDir, "insights", entry.name, "index.html")))
+  .map((entry) => entry.name)
+  .sort();
+
+const unexpectedInsightSlugs = generatedInsightSlugs.filter((slug) => !publishedInsightSlugs.has(slug));
+const missingInsightSlugs = [...publishedInsightSlugs].filter((slug) => !generatedInsightSlugs.includes(slug));
+if (unexpectedInsightSlugs.length) {
+  failures.push(`generated unpublished insight pages: ${unexpectedInsightSlugs.join(", ")}`);
+}
+if (missingInsightSlugs.length) {
+  failures.push(`missing published insight pages: ${missingInsightSlugs.join(", ")}`);
+}
+
+const sitemapPath = path.join(buildDir, "sitemap.xml");
+if (!fs.existsSync(sitemapPath)) {
+  failures.push("sitemap.xml: missing from production build");
+} else {
+  const sitemap = fs.readFileSync(sitemapPath, "utf8");
+  const sitemapInsightSlugs = [...sitemap.matchAll(/<loc>https:\/\/northsidegta\.ca\/insights\/([^<]+)<\/loc>/g)]
+    .map((match) => match[1])
+    .sort();
+  const unexpectedSitemapSlugs = sitemapInsightSlugs.filter((slug) => !publishedInsightSlugs.has(slug));
+  const missingSitemapSlugs = [...publishedInsightSlugs].filter((slug) => !sitemapInsightSlugs.includes(slug));
+  if (unexpectedSitemapSlugs.length) {
+    failures.push(`sitemap.xml advertises unpublished insights: ${unexpectedSitemapSlugs.join(", ")}`);
+  }
+  if (missingSitemapSlugs.length) {
+    failures.push(`sitemap.xml is missing published insights: ${missingSitemapSlugs.join(", ")}`);
+  }
+}
+
+const homepageText = readRoute("/")?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
+const marketWatch = marketData.datasets.marketWatch;
+[
+  marketData.lastUpdated,
+  marketWatch.source,
+  ...Object.values(marketWatch.towns).flatMap(({ averageSold, daysOnMarket, yearOverYear }) => [
+    averageSold,
+    `${daysOnMarket} days on market`,
+    yearOverYear,
+  ]),
+].forEach((value) => {
+  if (!homepageText.includes(value)) {
+    failures.push(`/: homepage market snapshot is missing shared value "${value}"`);
+  }
+});
 
 function walkIndexFiles(dir) {
   const files = [];
