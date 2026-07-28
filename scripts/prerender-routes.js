@@ -1,144 +1,103 @@
 #!/usr/bin/env node
 
+process.env.BABEL_ENV = "production";
+process.env.NODE_ENV = "production";
+
+require.extensions[".css"] = () => {};
+require.extensions[".svg"] = () => {};
+require("@babel/register")({
+  extensions: [".js", ".jsx"],
+  presets: ["react-app"],
+  ignore: [/node_modules/],
+});
+
 const fs = require("fs");
-const http = require("http");
 const path = require("path");
-const chromium = require("@sparticuz/chromium");
-const puppeteer = require("puppeteer-core");
+const React = require("react");
+const { renderToStaticMarkup } = require("react-dom/server");
+const { MemoryRouter } = require("react-router-dom");
+const { HelmetProvider } = require("react-helmet-async");
+const { parse } = require("node-html-parser");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
-const insightDataDir = path.join(rootDir, "public", "data", "insights");
 
-function contentType(filePath) {
-  const extension = path.extname(filePath).toLowerCase();
-  return {
-    ".css": "text/css",
-    ".html": "text/html; charset=utf-8",
-    ".ico": "image/x-icon",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".js": "text/javascript",
-    ".json": "application/json",
-    ".png": "image/png",
-    ".svg": "image/svg+xml",
-    ".webp": "image/webp",
-  }[extension] || "application/octet-stream";
-}
+const routeModules = {
+  "/about": "../src/AboutPage",
+  "/buyers": "../src/BuyersPage",
+  "/sellers": "../src/SellersPage",
+  "/homeanalysis": "../src/HomeAnalysisPage",
+  "/media": "../src/MediaPage",
+  "/contact": "../src/ContactPage",
+  "/insights": "../src/InsightsPage",
+  "/communities": "../src/CommunitiesPage",
+  "/communities/georgina": "../src/GeorginaPage",
+  "/communities/east-gwillimbury": "../src/EastGwillimburyPage",
+  "/communities/newmarket": "../src/NewmarketPage",
+  "/communities/aurora": "../src/AuroraPage",
+  "/communities/stouffville": "../src/StouffvillePage",
+  "/communities/uxbridge": "../src/UxbridgePage",
+  "/communities/scugog": "../src/ScugogPage",
+};
 
-function safeBuildPath(urlPath) {
-  const decoded = decodeURIComponent(urlPath.split("?")[0]);
-  const relative = decoded.replace(/^\/+/, "");
-  const candidate = path.resolve(buildDir, relative);
-  return candidate === buildDir || candidate.startsWith(`${buildDir}${path.sep}`)
-    ? candidate
-    : null;
-}
+function renderRoute(route, modulePath) {
+  const routeUrl = `https://northsidegta.ca${route}`;
+  global.window = {
+    location: { href: routeUrl, origin: "https://northsidegta.ca", pathname: route, search: "", hash: "" },
+  };
+  global.document = { referrer: "" };
 
-function resolveRequest(urlPath) {
-  const candidate = safeBuildPath(urlPath);
-  if (!candidate) return null;
-  if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) return candidate;
-  if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
-    const indexPath = path.join(candidate, "index.html");
-    if (fs.existsSync(indexPath)) return indexPath;
-  }
-  return path.join(buildDir, "index.html");
-}
+  const Component = require(modulePath).default;
+  if (!Component) throw new Error(`No default component export from ${modulePath}`);
 
-async function loadRoutes() {
-  const { STATIC_ROUTE_META_CONFIGS } = await import(
-    "../src/components/seo/staticRouteMetaConfigs.mjs"
+  return renderToStaticMarkup(
+    React.createElement(
+      HelmetProvider,
+      null,
+      React.createElement(
+        MemoryRouter,
+        { initialEntries: [route] },
+        React.createElement(Component)
+      )
+    )
   );
-  const routes = new Set(
-    STATIC_ROUTE_META_CONFIGS
-      .filter((entry) => entry?.route && entry?.meta)
-      .map((entry) => entry.route)
-  );
-
-  if (fs.existsSync(insightDataDir)) {
-    fs.readdirSync(insightDataDir)
-      .filter((name) => name.endsWith(".json") && name !== "index.json")
-      .forEach((name) => {
-        const data = JSON.parse(
-          fs.readFileSync(path.join(insightDataDir, name), "utf8")
-        );
-        const slug = data.slug || name.replace(/\.json$/i, "");
-        if (slug) routes.add(`/insights/${slug}`);
-      });
-  }
-
-  return [...routes].filter((route) => route !== "/");
 }
 
-async function main() {
-  if (!fs.existsSync(path.join(buildDir, "index.html"))) {
-    throw new Error("build/index.html does not exist; run this after react-scripts build");
+function injectRoute(route, markup) {
+  const outputPath = path.join(buildDir, route.replace(/^\//, ""), "index.html");
+  if (!fs.existsSync(outputPath)) {
+    throw new Error(`Missing generated route file: ${path.relative(rootDir, outputPath)}`);
   }
 
-  const routes = await loadRoutes();
-  const server = http.createServer((request, response) => {
-    const filePath = resolveRequest(request.url || "/");
-    if (!filePath || !fs.existsSync(filePath)) {
-      response.writeHead(404);
-      response.end("Not found");
-      return;
-    }
-    response.writeHead(200, { "Content-Type": contentType(filePath) });
-    fs.createReadStream(filePath).pipe(response);
-  });
+  const doc = parse(fs.readFileSync(outputPath, "utf8"), { comment: true });
+  const root = doc.querySelector("#root");
+  if (!root) throw new Error(`${route} is missing #root`);
+  root.set_content(markup);
 
-  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-  const { port } = server.address();
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    executablePath: await chromium.executablePath(),
-    headless: chromium.headless,
-  });
-  const page = await browser.newPage();
+  let html = doc.toString();
+  if (!/^<!DOCTYPE html>/i.test(html)) html = `<!DOCTYPE html>\n${html}`;
+  fs.writeFileSync(outputPath, html, "utf8");
+}
+
+function main() {
   const failures = [];
+  let rendered = 0;
 
-  try {
-    for (const route of routes) {
-      try {
-        await page.goto(`http://127.0.0.1:${port}${route}`, {
-          waitUntil: "networkidle0",
-          timeout: 60_000,
-        });
-        await page.waitForSelector("#root main, #root [role=main]", {
-          timeout: 15_000,
-        }).catch(() => page.waitForSelector("#root > *", { timeout: 5_000 }));
-
-        const html = await page.content();
-        const outputPath = path.join(
-          buildDir,
-          route.replace(/^\/+/, ""),
-          "index.html"
-        );
-        fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        fs.writeFileSync(outputPath, `<!DOCTYPE html>\n${html}`, "utf8");
-      } catch (error) {
-        failures.push(`${route}: ${error.message}`);
-      }
+  for (const [route, modulePath] of Object.entries(routeModules)) {
+    try {
+      injectRoute(route, renderRoute(route, modulePath));
+      rendered += 1;
+    } catch (error) {
+      failures.push(`${route}: ${error.message}`);
     }
-  } finally {
-    await browser.close();
-    await new Promise((resolve) => server.close(resolve));
   }
 
   if (failures.length) {
-    failures.forEach((failure) =>
-      console.error(`[prerender-routes] ${failure}`)
-    );
-    throw new Error(`Failed to prerender ${failures.length} route(s)`);
+    failures.forEach((failure) => console.error(`[prerender-routes] ${failure}`));
+    process.exit(1);
   }
 
-  console.log(
-    `[prerender-routes] Rendered full crawlable HTML for ${routes.length} routes`
-  );
+  console.log(`[prerender-routes] Server-rendered full HTML for ${rendered} routes`);
 }
 
-main().catch((error) => {
-  console.error(`[prerender-routes] ${error.message}`);
-  process.exit(1);
-});
+main();

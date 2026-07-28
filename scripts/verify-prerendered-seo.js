@@ -14,7 +14,7 @@ const checks = [
   ["/communities/east-gwillimbury", "East Gwillimbury", "East Gwillimbury"],
   ["/communities/uxbridge", "Uxbridge", "Uxbridge"],
   ["/about", "Finally Home Agents", "Matthew and Landon"],
-  ["/buyers", "Buying", "buyer"],
+  ["/buyers", "You don't have to leave the city", "buyer"],
 ];
 
 const insightFile = fs
