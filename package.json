@@ -9,8 +9,7 @@
     "pretest": "node scripts/sync-site-seo.js",
     "prebuild": "node scripts/sync-site-seo.js && node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
     "build": "react-scripts build",
-    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-tastehub-html.js && node scripts/generate-static-route-html.js && node scripts/inject-homepage-static-html.js && PLAYWRIGHT_BROWSERS_PATH=0 node scripts/prerender-routes.js && node scripts/verify-prerendered-seo.js && node scripts/generate-sitemap.js && node scripts/check-insight-images.js && cp build/index.html build/404.html",
-    "postinstall": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium",
+    "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-tastehub-html.js && node scripts/generate-static-route-html.js && node scripts/inject-homepage-static-html.js && node scripts/prerender-routes.js && node scripts/verify-prerendered-seo.js && node scripts/generate-sitemap.js && node scripts/check-insight-images.js && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
     "ingest:events": "node scripts/ingest-events.js",
     "events:backfill-daily": "node scripts/backfill-daily-schedule.mjs",
@@ -78,8 +77,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.46.1",
+    "@sparticuz/chromium": "^131.0.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "ajv": "^8.17.1",
+    "puppeteer-core": "^23.11.1",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   }

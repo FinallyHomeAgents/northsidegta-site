@@ -3,7 +3,8 @@
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
-const { chromium } = require("playwright");
+const chromium = require("@sparticuz/chromium");
+const puppeteer = require("puppeteer-core");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
@@ -89,7 +90,11 @@ async function main() {
 
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const { port } = server.address();
-  const browser = await chromium.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
+  });
   const page = await browser.newPage();
   const failures = [];
 
@@ -97,7 +102,7 @@ async function main() {
     for (const route of routes) {
       try {
         await page.goto(`http://127.0.0.1:${port}${route}`, {
-          waitUntil: "networkidle",
+          waitUntil: "networkidle0",
           timeout: 60_000,
         });
         await page.waitForSelector("#root main, #root [role=main]", {
