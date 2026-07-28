@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
 import { BUYER_FAQS, BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
+import MARKET_DATA from "./data/marketData.json";
 
 const COMMUNITIES = [
   "Aurora",
@@ -164,15 +165,11 @@ const PHOTO_GRID = [
   },
 ];
 
-const MARKET_SNAPSHOT = [
-  ["Aurora", "$1,153,153", "26 days avg", "↓ 12.3%"],
-  ["Newmarket", "$998,202", "24 days avg", "↓ 9.2%"],
-  ["Stouffville", "$1,186,821", "27 days avg", "↓ 10.2%"],
-  ["Uxbridge", "$1,023,606", "37 days avg", "↓ 7.3%"],
-  ["Georgina", "$767,732", "24 days avg", "↓ 7.8%"],
-  ["East Gwillimbury", "$1,038,275", "31 days avg", "↓ 4.4%"],
-  ["Scugog", "$865,895", "37 days avg", "↓ 6.4%"],
-];
+const MARKET_WATCH_TOWNS = MARKET_DATA.datasets.marketWatch.towns;
+const MARKET_SNAPSHOT = COMMUNITIES.map((town) => {
+  const townMarket = MARKET_WATCH_TOWNS[TOWN_DATA[town].slug];
+  return [town, townMarket.averageSold, `${townMarket.daysOnMarket} days avg`, townMarket.yearOverYear];
+});
 
 const PROCESS_STEPS = [
   ["01", "Town strategy", "We map lifestyle, commute, school needs, and budget to the right shortlist before you chase listings."],
@@ -645,7 +642,7 @@ export default function BuyersPage() {
           <SectionHeader
             eyebrow="03 / Market Context"
             title="A quick read on where budgets are landing"
-            lead="April 2026 · TRREB Market Watch. Use this as context, then let us apply it to your budget and timing."
+            lead={`${MARKET_DATA.lastUpdated} · TRREB Market Watch. Use this as context, then let us apply it to your budget and timing.`}
           />
           <div className="market-grid">
             {MARKET_SNAPSHOT.map(([town, price, days, yoy]) => (
@@ -658,7 +655,7 @@ export default function BuyersPage() {
             ))}
           </div>
           <div className="market-followup">
-            <p className="attribution">Source: TRREB Market Watch · April 2026. Figures rounded; not a guarantee of value.</p>
+            <p className="attribution">Source: {MARKET_DATA.datasets.marketWatch.source}. Figures rounded; not a guarantee of value.</p>
             <button type="button" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
           </div>
         </div>

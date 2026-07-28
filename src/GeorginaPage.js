@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import MARKET_DATA from "./data/marketData.json";
 
+const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns.georgina;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -195,10 +197,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in Georgina</h1>
     <p class="hero-sub">Lake Simcoe, more space, shoreline communities, beaches, marinas, and one of York Region's most accessible price points.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$875,000</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">65 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">38d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">7.5 mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
 </section>
@@ -218,7 +220,7 @@ const PAGE_BODY_HTML = `
       <!-- INTRO -->
       <div class="sec">
         <div class="sec-eyebrow">About Georgina</div>
-        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — and who are comfortable with the commute trade-off. With 7.5 months of inventory, it is currently a buyer's market with meaningful negotiating room, particularly on non-waterfront properties.</p>
+        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — and who are comfortable with the commute trade-off. With ${TOWN_MARKET.monthsInventory} months of inventory, it is currently a buyer's market with meaningful negotiating room, particularly on non-waterfront properties.</p>
         <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
           <a href="#contact" class="btn-primary" style="font-size:13px;padding:10px 20px;">Get local guidance</a>
           <a href="https://northsidegta.ca/neighbourhood-guide" class="btn-secondary" style="font-size:13px;padding:9px 18px;">Compare all towns</a>
@@ -326,7 +328,7 @@ const PAGE_BODY_HTML = `
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
-          <strong>Market note:</strong> Waterfront properties in Georgina have historically held value relative to the broader market. The overall market has 7.5 months of inventory, which gives buyers meaningful negotiating room.
+          <strong>Market note:</strong> Waterfront properties in Georgina have historically held value relative to the broader market. The overall market has ${TOWN_MARKET.monthsInventory} months of inventory, which gives buyers meaningful negotiating room.
         </div>
       </div>
 
@@ -387,15 +389,15 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$875,000</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$910,000</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$815,000</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$590,000</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">38d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">97%</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">7.5</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">Buyer's market</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">TRREB MLS® 2025–2026. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
+        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
+        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
+        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
+        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

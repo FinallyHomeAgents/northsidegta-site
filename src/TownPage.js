@@ -25,6 +25,7 @@ import {
   FiMap,
 } from "react-icons/fi";
 import { getTownLifestyleCopy } from "./content/towns/lifestyleCopy";
+import MARKET_DATA from "./data/marketData.json";
 
 const CATEGORY_LABELS = {
   housePrices: "House Prices",
@@ -119,6 +120,7 @@ export default function TownPage() {
   }
 
   const slug = (town.slug || "").toLowerCase();
+  const sharedTownMarket = MARKET_DATA.datasets.communityGuide.towns[slug];
   const lifestyleCopy = getTownLifestyleCopy(slug);
   const isUxbridge = slug === "uxbridge";
 
@@ -179,7 +181,10 @@ export default function TownPage() {
           townName={town.name}
           townSlug={slug}
           hero={town.hero}
-          snapshot={town.snapshot}
+          snapshot={{
+            ...town.snapshot,
+            homePriceRange: sharedTownMarket?.homePriceRange,
+          }}
           ratings={ratings}
           ratingScaleMax={5}
           lifestyleHighlights={lifestyleHighlights}

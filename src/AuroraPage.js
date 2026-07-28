@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import MARKET_DATA from "./data/marketData.json";
 
+const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns.aurora;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -195,10 +197,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in Aurora</h1>
     <p class="hero-sub">Established neighbourhoods, strong schools, heritage streets, GO access, and one of the most complete lifestyles in the NorthSide GTA.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1,122,000</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">35 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">24d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">4.2 mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
 </section>
@@ -397,15 +399,15 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,122,000</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,561,000</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$918,000</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$720,000</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">24d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">97%</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">4.2</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">Buyer's market</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">TRREB MLS® 2025–2026. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
+        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
+        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
+        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
+        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

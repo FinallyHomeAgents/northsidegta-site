@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import MARKET_DATA from "./data/marketData.json";
 
+const GUIDE_MARKET = MARKET_DATA.datasets.communityGuide;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -348,10 +350,10 @@ const PAGE_SCHEMA = `{
     {
       "@type":"FAQPage",
       "mainEntity":[
-        {"@type":"Question","name":"What is the average home price in Aurora Ontario 2026?","acceptedAnswer":{"@type":"Answer","text":"The average sold price in Aurora is approximately $1,122,000 across all home types (TRREB MLS Q1 2026). Detached homes average around $1,561,000. It is currently a buyer's market with approximately 4.2 months of inventory."}},
+        {"@type":"Question","name":"What is the average home price in Aurora Ontario 2026?","acceptedAnswer":{"@type":"Answer","text":"The average sold price in Aurora is approximately ${GUIDE_MARKET.towns.aurora.averageSold} across all home types (TRREB MLS Q1 2026). Detached homes average around ${GUIDE_MARKET.towns.aurora.detachedAverage}. It is currently a buyer's market with approximately ${GUIDE_MARKET.towns.aurora.monthsInventory} months of inventory."}},
         {"@type":"Question","name":"Which towns north of Toronto have GO Train access?","acceptedAnswer":{"@type":"Answer","text":"Aurora and Newmarket are served by the GO Barrie line with service to Union Station. Stouffville is served by the GO Stouffville line. East Gwillimbury, Georgina, Uxbridge, and Scugog are car-dependent for Toronto commuting."}},
         {"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront living across communities including Keswick, Sutton, and Jackson's Point. It is one of York Region's most affordable municipalities and is popular with remote workers and buyers seeking waterfront access."}},
-        {"@type":"Question","name":"What is the most affordable town north of Toronto?","acceptedAnswer":{"@type":"Answer","text":"Georgina has the lowest average sold price among the NorthSide GTA communities at approximately $875,000 (TRREB 2025–2026). Scugog ($960,000) and Uxbridge ($990,000) are also below the $1M average mark."}},
+        {"@type":"Question","name":"What is the most affordable town north of Toronto?","acceptedAnswer":{"@type":"Answer","text":"Georgina has the lowest average sold price among the NorthSide GTA communities at approximately ${GUIDE_MARKET.towns.georgina.averageSold} (TRREB 2025–2026). Scugog (${GUIDE_MARKET.towns.scugog.averageSold}) and Uxbridge (${GUIDE_MARKET.towns.uxbridge.averageSold}) are also below the $1M average mark."}},
         {"@type":"Question","name":"What is Uxbridge Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Uxbridge is officially Canada's Trail Capital, with over 300 kilometres of trails on the Oak Ridges Moraine. It is also known for its equestrian community, heritage downtown, Dagmar Ski Resort, and active arts and theatre scene."}}
       ]
     }
@@ -777,7 +779,7 @@ const PAGE_BODY_HTML = `
   <div class="faq-wrap">
     <details class="faq-item">
       <summary class="faq-summary">What is the average home price in Aurora, Ontario in 2026? <span class="faq-icon">+</span></summary>
-      <p class="faq-answer">The average sold price in Aurora is approximately $1,122,000 across all home types (TRREB MLS Q1 2026). Detached homes average around $1,561,000 and townhomes around $918,000. It is currently a buyer's market with approximately 4.2 months of inventory.</p>
+      <p class="faq-answer">The average sold price in Aurora is approximately ${GUIDE_MARKET.towns.aurora.averageSold} across all home types (TRREB MLS Q1 2026). Detached homes average around ${GUIDE_MARKET.towns.aurora.detachedAverage} and townhomes around ${GUIDE_MARKET.towns.aurora.townhouseAverage}. It is currently a buyer's market with approximately ${GUIDE_MARKET.towns.aurora.monthsInventory} months of inventory.</p>
     </details>
     <details class="faq-item">
       <summary class="faq-summary">Which towns north of Toronto have GO Train access? <span class="faq-icon">+</span></summary>
@@ -785,7 +787,7 @@ const PAGE_BODY_HTML = `
     </details>
     <details class="faq-item">
       <summary class="faq-summary">Which community north of Toronto is most affordable? <span class="faq-icon">+</span></summary>
-      <p class="faq-answer">Georgina has the lowest average sold price among these seven communities at approximately $875,000 (TRREB 2025–2026). Scugog ($960,000) and Uxbridge ($990,000) are also below the $1M average. All three are currently in buyer's market conditions.</p>
+      <p class="faq-answer">Georgina has the lowest average sold price among these seven communities at approximately ${GUIDE_MARKET.towns.georgina.averageSold} (TRREB 2025–2026). Scugog (${GUIDE_MARKET.towns.scugog.averageSold}) and Uxbridge (${GUIDE_MARKET.towns.uxbridge.averageSold}) are also below the $1M average. All three are currently in buyer's market conditions.</p>
     </details>
     <details class="faq-item">
       <summary class="faq-summary">How long is the commute from these communities to Toronto? <span class="faq-icon">+</span></summary>

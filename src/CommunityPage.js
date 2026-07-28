@@ -8,7 +8,6 @@ import EventFilters from './community/EventFilters'
 import EventCard from './community/EventCard'
 import EventCalendar from './community/EventCalendar'
 import CalendarFilterBar from './community/CalendarFilterBar'
-import EventMap from './community/EventMap'
 import EventModal from './community/EventModal'
 import CommunityStories from './community/CommunityStories'
 import {
@@ -22,6 +21,7 @@ import { getStaticRouteMeta } from './components/seo/staticRouteMetaExports'
 import { buildCommunityEventsSchema } from './lib/structuredData/communityPage'
 import { getCanonicalEventUrl, toAbsoluteUrl, getSiteOrigin } from './community/shareUtils'
 
+const EventMap = React.lazy(() => import('./community/EventMap'))
 const VIEW_STORAGE_KEY = 'northside-community-view'
 const monthFormatter = new Intl.DateTimeFormat('en-CA', {
   month: 'long',
@@ -460,7 +460,9 @@ export default function CommunityPage() {
                   {view === 'map' && (
                     <section>
                       {filteredEvents.length ? (
-                        <EventMap events={filteredEvents} onSelectEvent={setSelectedEvent} />
+                        <React.Suspense fallback={null}>
+                          <EventMap events={filteredEvents} onSelectEvent={setSelectedEvent} />
+                        </React.Suspense>
                       ) : (
                         emptyState
                       )}
@@ -500,4 +502,3 @@ export default function CommunityPage() {
   )
 }
 const COMMUNITY_ROUTE_META = getStaticRouteMeta('/community') || {}
-
