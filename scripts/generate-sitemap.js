@@ -7,10 +7,10 @@ const rootDir = path.resolve(__dirname, '..')
 const publicDir = path.join(rootDir, 'public')
 const buildDir = path.join(rootDir, 'build')
 const eventsDir = path.join(publicDir, 'data', 'events')
-const insightsDir = path.join(publicDir, 'data', 'insights')
 const collectionsDir = path.join(publicDir, 'data', 'collections')
 const townsPath = path.join(rootDir, 'src', 'towns.json')
 const siteConfigPath = path.join(rootDir, 'config', 'site.json')
+const { loadPublishedInsights } = require('./utils/publishedInsights')
 
 function loadJson(filePath, fallback) {
   if (!fs.existsSync(filePath)) return fallback
@@ -59,30 +59,6 @@ function loadEvents(dirPath) {
     }
   }
   return events
-}
-
-function loadInsights(dirPath) {
-  if (!fs.existsSync(dirPath)) return []
-  const files = fs.readdirSync(dirPath).filter((name) => name.endsWith('.json') && name !== 'index.json')
-  const insights = []
-  for (const file of files) {
-    const fullPath = path.join(dirPath, file)
-    try {
-      const insight = JSON.parse(fs.readFileSync(fullPath, 'utf8'))
-      const slug =
-        typeof insight.slug === 'string' && insight.slug.trim()
-          ? insight.slug.trim()
-          : file.replace(/\.json$/i, '')
-      if (!slug || insight.draft === true) continue
-      insights.push({
-        slug,
-        updatedAt: insight.updatedAt || insight.publishDate || insight.date,
-      })
-    } catch (error) {
-      console.warn(`[generate-sitemap] Skipping insight ${file}: ${error.message}`)
-    }
-  }
-  return insights
 }
 
 function buildAbsoluteUrl(origin, relativePath) {
@@ -149,13 +125,13 @@ function main() {
     staticRoutes.push({ path: `/collections/${slug}`, changefreq: 'monthly', priority: '0.6' })
   })
 
-  const insights = loadInsights(insightsDir)
+  const insights = loadPublishedInsights(publicDir, 'generate-sitemap')
   insights.forEach((insight) => {
     staticRoutes.push({
       path: `/insights/${insight.slug}`,
       changefreq: 'monthly',
       priority: '0.6',
-      lastmod: sanitizeDate(insight.updatedAt),
+      lastmod: sanitizeDate(insight.updatedAt || insight.publishDate || insight.date),
     })
   })
 

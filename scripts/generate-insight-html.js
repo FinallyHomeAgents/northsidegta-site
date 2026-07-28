@@ -20,6 +20,7 @@ const {
   finalizeHtml,
 } = require("./utils/staticMeta");
 const { getMetaTagHtmlList } = require("../src/components/seo/metaTagUtils.js");
+const { loadPublishedInsights } = require("./utils/publishedInsights");
 
 const OG_FALLBACK_IMAGE = "/Images/og-home.jpg";
 const DESCRIPTION_LENGTH = 160;
@@ -80,12 +81,9 @@ function main() {
   }
   fs.mkdirSync(outputRoot, { recursive: true });
 
-  const files = fs
-    .readdirSync(dataDir)
-    .filter((name) => name.toLowerCase().endsWith(".json"))
-    .sort();
+  const publishedInsights = loadPublishedInsights(template.publicDir, "generate-insight-html");
 
-  if (files.length === 0) {
+  if (publishedInsights.length === 0) {
     console.log("[generate-insight-html] No insights to process.");
     return;
   }
@@ -93,8 +91,13 @@ function main() {
   const failures = [];
   let created = 0;
 
-  files.forEach((fileName) => {
+  publishedInsights.forEach(({ slug: publishedSlug }) => {
+    const fileName = `${publishedSlug}.json`;
     const filePath = path.join(dataDir, fileName);
+    if (!fs.existsSync(filePath)) {
+      failures.push({ file: fileName, reason: "Published insight data file is missing" });
+      return;
+    }
     let payload;
     try {
       payload = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -107,6 +110,13 @@ function main() {
     const slug = sanitizeSlug(payload.slug, fallbackSlug);
     if (!slug) {
       failures.push({ file: fileName, reason: "Missing slug" });
+      return;
+    }
+    if (slug !== publishedSlug) {
+      failures.push({
+        file: fileName,
+        reason: `Published index slug ${publishedSlug} does not match payload slug ${slug}`,
+      });
       return;
     }
 
