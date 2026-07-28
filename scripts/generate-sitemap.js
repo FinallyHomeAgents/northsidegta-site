@@ -7,6 +7,7 @@ const rootDir = path.resolve(__dirname, '..')
 const publicDir = path.join(rootDir, 'public')
 const buildDir = path.join(rootDir, 'build')
 const eventsDir = path.join(publicDir, 'data', 'events')
+const insightsDir = path.join(publicDir, 'data', 'insights')
 const collectionsDir = path.join(publicDir, 'data', 'collections')
 const townsPath = path.join(rootDir, 'src', 'towns.json')
 const siteConfigPath = path.join(rootDir, 'config', 'site.json')
@@ -60,6 +61,30 @@ function loadEvents(dirPath) {
   return events
 }
 
+function loadInsights(dirPath) {
+  if (!fs.existsSync(dirPath)) return []
+  const files = fs.readdirSync(dirPath).filter((name) => name.endsWith('.json') && name !== 'index.json')
+  const insights = []
+  for (const file of files) {
+    const fullPath = path.join(dirPath, file)
+    try {
+      const insight = JSON.parse(fs.readFileSync(fullPath, 'utf8'))
+      const slug =
+        typeof insight.slug === 'string' && insight.slug.trim()
+          ? insight.slug.trim()
+          : file.replace(/\.json$/i, '')
+      if (!slug || insight.draft === true) continue
+      insights.push({
+        slug,
+        updatedAt: insight.updatedAt || insight.publishDate || insight.date,
+      })
+    } catch (error) {
+      console.warn(`[generate-sitemap] Skipping insight ${file}: ${error.message}`)
+    }
+  }
+  return insights
+}
+
 function buildAbsoluteUrl(origin, relativePath) {
   const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`
   return `${origin.replace(/\/$/, '')}${normalizedPath}`
@@ -100,6 +125,10 @@ function main() {
     { path: '/about', changefreq: 'yearly', priority: '0.5' },
     { path: '/contact', changefreq: 'yearly', priority: '0.5' },
     { path: '/community', changefreq: 'daily', priority: '0.8' },
+    { path: '/insights', changefreq: 'weekly', priority: '0.8' },
+    { path: '/media', changefreq: 'weekly', priority: '0.6' },
+    { path: '/tastehub', changefreq: 'weekly', priority: '0.7' },
+    { path: '/neighbourhood-guide', changefreq: 'monthly', priority: '0.8' },
     { path: '/collections', changefreq: 'monthly', priority: '0.6' },
   ]
 
@@ -118,6 +147,16 @@ function main() {
   const collections = loadCollections(collectionsDir)
   collections.forEach((slug) => {
     staticRoutes.push({ path: `/collections/${slug}`, changefreq: 'monthly', priority: '0.6' })
+  })
+
+  const insights = loadInsights(insightsDir)
+  insights.forEach((insight) => {
+    staticRoutes.push({
+      path: `/insights/${insight.slug}`,
+      changefreq: 'monthly',
+      priority: '0.6',
+      lastmod: sanitizeDate(insight.updatedAt),
+    })
   })
 
   const events = loadEvents(eventsDir)

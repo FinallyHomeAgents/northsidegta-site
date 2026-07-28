@@ -44,7 +44,6 @@
       "driveToToronto": "~35–45 minutes",
       "goTrainLabel": "Transit to Union Station",
       "goTrainTime": "~70–95 minutes (Bus to East Gwillimbury GO + Train)",
-      "homePriceRange": "~$800K–$950K",
       "highways": "Hwy 404 north terminus; Hwy 48; Lake Simcoe regional connectors",
       "transitSummary": "YRT/GO Bus routes linking to East Gwillimbury or Newmarket GO for trains into Toronto"
     },
@@ -187,7 +186,6 @@
       "driveToToronto": "~35–55 minutes",
       "goTrainLabel": "GO Train to Union Station",
       "goTrainTime": "~60–70 minutes",
-      "homePriceRange": "~$1.1M–$1.4M",
       "highways": "Hwy 404 access; Green Lane and Queensville Sideroad as major corridors",
       "transitSummary": "GO Barrie Line trains + GO Bus and YRT service"
     },
@@ -330,7 +328,6 @@
       "driveToToronto": "~25–40 minutes",
       "goTrainLabel": "GO Train to Union Station",
       "goTrainTime": "~60–70 minutes",
-      "homePriceRange": "~$750K–$1.1M",
       "highways": "Hwy 404; Davis Dr and Mulock Dr east–west; Yonge/Bathurst north–south",
       "transitSummary": "GO Barrie Line; YRT/GO Bus; Viva Blue rapid transit connecting south toward the TTC"
     },
@@ -473,7 +470,6 @@
       "driveToToronto": "~30\u201345 minutes",
       "goTrainLabel": "GO Train to Union Station",
       "goTrainTime": "~45\u201355 minutes",
-      "homePriceRange": "~$1.1M–$1.6M",
       "highways": "Hwy 404 access with quick links to 407/401 and west toward Hwy 400",
       "transitSummary": "GO Barrie Line trains; YRT/GO Bus; Viva Blue along Yonge Street"
     },
@@ -616,7 +612,6 @@
       "driveToToronto": "~30–45 minutes",
       "goTrainLabel": "GO Train to Union Station",
       "goTrainTime": "~60–65 minutes",
-      "homePriceRange": "~$1.0M–$1.4M",
       "highways": "Hwy 404 via Stouffville Rd/Bloomington; Hwy 48; 407",
       "transitSummary": "GO Train and GO Bus service on the Stouffville Line; YRT routes connecting into Markham/Richmond Hill"
     },
@@ -759,7 +754,6 @@
       "driveToToronto": "~50–70 minutes",
       "goTrainLabel": "Transit to Union Station",
       "goTrainTime": "~80–110 minutes (GO Bus + Train)",
-      "homePriceRange": "~$1.0M–$1.4M",
       "highways": "Hwy 47 to Hwy 404; Durham roads to Hwy 12, 7/7A, and 407",
       "transitSummary": "GO Bus service with connections to Old Elm/Stouffville GO for rail into Toronto"
     },
@@ -902,7 +896,6 @@
       "driveToToronto": "~45–60 minutes",
       "goTrainLabel": "Transit to Union Station",
       "goTrainTime": "~90–110 minutes (DRT to Whitby/Oshawa GO + Train)",
-      "homePriceRange": "~$800K–$1.0M",
       "highways": "Hwys 7/7A, 12, and 57 with access to 407/401",
       "transitSummary": "Durham Region Transit connections to Whitby/Oshawa GO for train service"
     },

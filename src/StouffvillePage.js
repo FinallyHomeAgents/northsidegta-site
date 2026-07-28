@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import MARKET_DATA from "./data/marketData.json";
 
+const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns.stouffville;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -167,7 +169,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"Is Stouffville a good place to live?","acceptedAnswer":{"@type":"Answer","text":"Stouffville combines newer homes, strong schools, GO Train access, and a heritage Main Street in a way that works well for families relocating from the inner GTA. It is one of York Region's fastest-growing communities."}},{"@type":"Question","name":"What is Stouffville Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Stouffville is known for its rapid residential growth, new construction developments, heritage Main Street, Ballantrae Golf & Country Club, and a strong community character. It is a popular destination for families moving from Toronto, Markham, or Richmond Hill."}},{"@type":"Question","name":"What is the housing market like in Stouffville?","acceptedAnswer":{"@type":"Answer","text":"As of early 2026, Stouffville has approximately 6 months of inventory — a buyer's market. Average sold price across all property types is approximately $1,114,000. Detached homes average around $1,280,000. Data from TRREB MLS® 2025–2026."}}]
+      "mainEntity":[{"@type":"Question","name":"Is Stouffville a good place to live?","acceptedAnswer":{"@type":"Answer","text":"Stouffville combines newer homes, strong schools, GO Train access, and a heritage Main Street in a way that works well for families relocating from the inner GTA. It is one of York Region's fastest-growing communities."}},{"@type":"Question","name":"What is Stouffville Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Stouffville is known for its rapid residential growth, new construction developments, heritage Main Street, Ballantrae Golf & Country Club, and a strong community character. It is a popular destination for families moving from Toronto, Markham, or Richmond Hill."}},{"@type":"Question","name":"What is the housing market like in Stouffville?","acceptedAnswer":{"@type":"Answer","text":"As of early 2026, Stouffville has approximately ${Number(TOWN_MARKET.monthsInventory)} months of inventory — a buyer's market. Average sold price across all property types is approximately ${TOWN_MARKET.averageSold}. Detached homes average around ${TOWN_MARKET.detachedAverage}. Data from ${MARKET_DATA.datasets.communityGuide.source}."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -195,10 +197,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in Stouffville</h1>
     <p class="hero-sub">A fast-growing family town with GO access, newer homes, parks, schools, and a Main Street that still feels local.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">$1,114,000</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
       <div class="hstat"><div class="hstat-val">40 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">28d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">6.0 mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
     </div>
   </div>
 </section>
@@ -328,7 +330,7 @@ const PAGE_BODY_HTML = `
           </div>
           <div class="fit-item fit-watch">
             <div class="fit-label">Things to weigh up</div>
-            <p>With 6 months of inventory, buyers have real negotiating room. GO Train service to Union is approximately 65 minutes — longer than Aurora or Newmarket.</p>
+            <p>With ${Number(TOWN_MARKET.monthsInventory)} months of inventory, buyers have real negotiating room. GO Train service to Union is approximately 65 minutes — longer than Aurora or Newmarket.</p>
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
@@ -353,7 +355,7 @@ const PAGE_BODY_HTML = `
       <div class="faq-answer">Stouffville is known for its rapid residential growth, new construction developments, heritage Main Street, Ballantrae Golf & Country Club, and a strong community character. It is a popular destination for families moving from Toronto, Markham, or Richmond Hill.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">What is the housing market like in Stouffville? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">As of early 2026, Stouffville has approximately 6 months of inventory — a buyer's market. Average sold price across all property types is approximately $1,114,000. Detached homes average around $1,280,000. Data from TRREB MLS® 2025–2026.</div>
+      <div class="faq-answer">As of early 2026, Stouffville has approximately ${Number(TOWN_MARKET.monthsInventory)} months of inventory — a buyer's market. Average sold price across all property types is approximately ${TOWN_MARKET.averageSold}. Detached homes average around ${TOWN_MARKET.detachedAverage}. Data from ${MARKET_DATA.datasets.communityGuide.source}.</div>
     </details>
       </div>
 
@@ -393,15 +395,15 @@ const PAGE_BODY_HTML = `
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
         <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">$1,114,000</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">$1,280,000</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">$890,000</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">$680,000</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">28d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">99%</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">6.0</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">Buyer's market</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">TRREB MLS® 2025–2026. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
+        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
+        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
+        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
+        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
+        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
+        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
+        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

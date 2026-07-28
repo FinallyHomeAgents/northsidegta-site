@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 
+process.env.BABEL_ENV = "production";
+process.env.NODE_ENV = "production";
+require("@babel/register")({
+  extensions: [".js", ".jsx"],
+  presets: ["react-app"],
+  ignore: [/node_modules/],
+});
+
 const fs = require("fs");
 const path = require("path");
-const markupSource = fs.readFileSync(path.join(process.cwd(), "src", "homepageMarkup.js"), "utf8");
-const markupMatch = markupSource.match(/String\.raw`([\s\S]*)`;?\s*$/);
-if (!markupMatch) {
-  throw new Error("Unable to read homepage markup source");
-}
-const HOMEPAGE_MARKUP = markupMatch[1].replace(/\\`/g, "`").replace(/\\\$\{/g, "${");
+const { HOMEPAGE_MARKUP } = require("../src/homepageMarkup");
 
 const buildIndex = path.join(process.cwd(), "build", "index.html");
 if (!fs.existsSync(buildIndex)) {

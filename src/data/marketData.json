@@ -1,0 +1,127 @@
+{
+  "lastUpdated": "April 2026",
+  "datasets": {
+    "marketWatch": {
+      "source": "TRREB Market Watch · April 2026",
+      "towns": {
+        "aurora": {
+          "averageSold": "$1,153,153",
+          "daysOnMarket": "26",
+          "yearOverYear": "↓ 12.3%"
+        },
+        "newmarket": {
+          "averageSold": "$998,202",
+          "daysOnMarket": "24",
+          "yearOverYear": "↓ 9.2%"
+        },
+        "stouffville": {
+          "averageSold": "$1,186,821",
+          "daysOnMarket": "27",
+          "yearOverYear": "↓ 10.2%"
+        },
+        "uxbridge": {
+          "averageSold": "$1,023,606",
+          "daysOnMarket": "37",
+          "yearOverYear": "↓ 7.3%"
+        },
+        "georgina": {
+          "averageSold": "$767,732",
+          "daysOnMarket": "24",
+          "yearOverYear": "↓ 7.8%"
+        },
+        "east-gwillimbury": {
+          "averageSold": "$1,038,275",
+          "daysOnMarket": "31",
+          "yearOverYear": "↓ 4.4%"
+        },
+        "scugog": {
+          "averageSold": "$865,895",
+          "daysOnMarket": "37",
+          "yearOverYear": "↓ 6.4%"
+        }
+      }
+    },
+    "communityGuide": {
+      "source": "TRREB MLS® 2025–2026",
+      "towns": {
+        "aurora": {
+          "homePriceRange": "~$1.1M–$1.6M",
+          "averageSold": "$1,122,000",
+          "detachedAverage": "$1,561,000",
+          "townhouseAverage": "$918,000",
+          "condoAverage": "$720,000",
+          "daysOnMarket": "24",
+          "saleToListRatio": "97%",
+          "monthsInventory": "4.2",
+          "marketType": "Buyer's market"
+        },
+        "newmarket": {
+          "homePriceRange": "~$750K–$1.1M",
+          "averageSold": "$1,048,000",
+          "detachedAverage": "$1,142,000",
+          "townhouseAverage": "$820,000",
+          "condoAverage": "$544,000",
+          "daysOnMarket": "17",
+          "saleToListRatio": "98%",
+          "monthsInventory": "1.6",
+          "marketType": "Balanced market"
+        },
+        "stouffville": {
+          "homePriceRange": "~$1.0M–$1.4M",
+          "averageSold": "$1,114,000",
+          "detachedAverage": "$1,280,000",
+          "townhouseAverage": "$890,000",
+          "condoAverage": "$680,000",
+          "daysOnMarket": "28",
+          "saleToListRatio": "99%",
+          "monthsInventory": "6.0",
+          "marketType": "Buyer's market"
+        },
+        "east-gwillimbury": {
+          "homePriceRange": "~$1.1M–$1.4M",
+          "averageSold": "$1,150,000",
+          "detachedAverage": "$1,550,000",
+          "townhouseAverage": "$890,000",
+          "condoAverage": "$680,000",
+          "daysOnMarket": "30",
+          "saleToListRatio": "98%",
+          "monthsInventory": "4.5",
+          "marketType": "Buyer's market"
+        },
+        "georgina": {
+          "homePriceRange": "~$800K–$950K",
+          "averageSold": "$875,000",
+          "detachedAverage": "$910,000",
+          "townhouseAverage": "$815,000",
+          "condoAverage": "$590,000",
+          "daysOnMarket": "38",
+          "saleToListRatio": "97%",
+          "monthsInventory": "7.5",
+          "marketType": "Buyer's market"
+        },
+        "uxbridge": {
+          "homePriceRange": "~$1.0M–$1.4M",
+          "averageSold": "$990,000",
+          "detachedAverage": "$1,200,000",
+          "townhouseAverage": "$750,000",
+          "condoAverage": "$527,000",
+          "daysOnMarket": "34",
+          "saleToListRatio": "97%",
+          "monthsInventory": "4.0",
+          "marketType": "Balanced market"
+        },
+        "scugog": {
+          "homePriceRange": "~$800K–$1.0M",
+          "averageSold": "$960,000",
+          "detachedAverage": "$1,099,000",
+          "townhouseAverage": "$762,000",
+          "condoAverage": "$800,000",
+          "daysOnMarket": "36",
+          "saleToListRatio": "98%",
+          "monthsInventory": "5.5",
+          "marketType": "Buyer's market"
+        }
+      }
+    }
+  }
+}

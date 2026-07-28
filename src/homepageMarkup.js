@@ -1,3 +1,7 @@
+import MARKET_DATA from "./data/marketData.json";
+
+const MARKET_WATCH = MARKET_DATA.datasets.marketWatch;
+
 export const HOMEPAGE_MARKUP = String.raw`
 <main>
 
@@ -650,7 +654,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$767,732</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.georgina.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Georgina Real Estate →</span>
               </div>
@@ -672,7 +676,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$1,038,275</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns["east-gwillimbury"].averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore East Gwillimbury Real Estate →</span>
               </div>
@@ -694,7 +698,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$998,202</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.newmarket.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Newmarket Real Estate →</span>
               </div>
@@ -716,7 +720,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$1,153,153</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.aurora.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Aurora Real Estate →</span>
               </div>
@@ -738,7 +742,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$1,186,821</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.stouffville.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Stouffville Real Estate →</span>
               </div>
@@ -760,7 +764,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$1,023,606</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.uxbridge.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Uxbridge Real Estate →</span>
               </div>
@@ -782,7 +786,7 @@ export const HOMEPAGE_MARKUP = String.raw`
               <div class="community-card__footer">
                 <div>
                   <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">$865,895</span>
+                  <span class="community-card__price">${MARKET_WATCH.towns.scugog.averageSold}</span>
                 </div>
                 <span class="community-card__cta">Explore Scugog Real Estate →</span>
               </div>
@@ -802,7 +806,7 @@ export const HOMEPAGE_MARKUP = String.raw`
           <h2 class="market-snapshot__heading" id="market-heading">NorthSide GTA Market Snapshot</h2>
           <p class="market-snapshot__date">Last updated: April 2026 · Updated monthly</p>
         </div>
-        <span class="market-snapshot__source">Source: TRREB Market Watch, April 2026</span>
+        <span class="market-snapshot__source">Source: ${MARKET_WATCH.source.replace(" · ", ", ")}</span>
       </div>
 
       <p class="market-context">
@@ -813,43 +817,43 @@ export const HOMEPAGE_MARKUP = String.raw`
         
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--down">↓ -7.8%</span></div>
-          <span class="market-card__price">$767,732</span>
-          <span class="market-card__meta">Avg · 24 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.georgina.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.georgina.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">East Gwillimbury</span><span class="market-card__yoy market-card__yoy--down">↓ -4.4%</span></div>
-          <span class="market-card__price">$1,038,275</span>
-          <span class="market-card__meta">Avg · 31 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns["east-gwillimbury"].averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns["east-gwillimbury"].daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Newmarket</span><span class="market-card__yoy market-card__yoy--down">↓ -9.2%</span></div>
-          <span class="market-card__price">$998,202</span>
-          <span class="market-card__meta">Avg · 24 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.newmarket.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.newmarket.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Aurora</span><span class="market-card__yoy market-card__yoy--down">↓ -12.3%</span></div>
-          <span class="market-card__price">$1,153,153</span>
-          <span class="market-card__meta">Avg · 26 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.aurora.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.aurora.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Whitchurch-Stouffville</span><span class="market-card__yoy market-card__yoy--down">↓ -10.2%</span></div>
-          <span class="market-card__price">$1,186,821</span>
-          <span class="market-card__meta">Avg · 27 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.stouffville.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.stouffville.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Uxbridge</span><span class="market-card__yoy market-card__yoy--down">↓ -7.3%</span></div>
-          <span class="market-card__price">$1,023,606</span>
-          <span class="market-card__meta">Avg · 37 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.uxbridge.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.uxbridge.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
           <div class="market-card__top"><span class="market-card__name">Scugog</span><span class="market-card__yoy market-card__yoy--down">↓ -6.4%</span></div>
-          <span class="market-card__price">$865,895</span>
-          <span class="market-card__meta">Avg · 37 days on market · YoY</span>
+          <span class="market-card__price">${MARKET_WATCH.towns.scugog.averageSold}</span>
+          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.scugog.daysOnMarket} days on market · YoY</span>
         </div>
       </div>
 
       <p class="market-snapshot__disclaimer">
-        Source: TRREB Market Watch · April 2026. Figures are rounded and may vary by property type, location, and condition.
+        Source: ${MARKET_WATCH.source}. Figures are rounded and may vary by property type, location, and condition.
       </p>
       <p class="market-snapshot__legal">
         Not a guarantee of value. Not intended to solicit clients already under contract with a brokerage.

@@ -30,6 +30,9 @@ const routeModules = {
   "/media": "../src/MediaPage",
   "/contact": "../src/ContactPage",
   "/insights": "../src/InsightsPage",
+  "/tastehub": "../src/TasteHubPage",
+  "/community": "../src/CommunityPage",
+  "/neighbourhood-guide": "../src/NeighbourhoodGuidePage",
   "/communities": "../src/CommunitiesPage",
   "/communities/georgina": "../src/GeorginaPage",
   "/communities/east-gwillimbury": "../src/EastGwillimburyPage",
@@ -44,8 +47,13 @@ function renderRoute(route, modulePath) {
   const routeUrl = `https://northsidegta.ca${route}`;
   global.window = {
     location: { href: routeUrl, origin: "https://northsidegta.ca", pathname: route, search: "", hash: "" },
+    localStorage: {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    },
   };
-  global.document = { referrer: "" };
+  global.document = { referrer: "", body: { style: {} } };
 
   const Component = require(modulePath).default;
   if (!Component) throw new Error(`No default component export from ${modulePath}`);
@@ -88,7 +96,7 @@ function main() {
       injectRoute(route, renderRoute(route, modulePath));
       rendered += 1;
     } catch (error) {
-      failures.push(`${route}: ${error.message}`);
+      failures.push(`${route}: ${error.stack || error.message}`);
     }
   }
 
