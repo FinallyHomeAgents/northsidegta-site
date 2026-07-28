@@ -128,6 +128,18 @@ function main() {
       stripSeoTags(head);
       headFragments.forEach((fragment) => appendHeadTag(head, fragment));
 
+      const articleSchema = buildArticleSchema(payload, metaConfig);
+      appendHeadTag(
+        head,
+        `<script type="application/ld+json">${JSON.stringify(articleSchema).replace(/</g, "\\u003c")}</script>`,
+      );
+
+      const root = doc.querySelector("#root");
+      if (!root) {
+        throw new Error("Template is missing #root element");
+      }
+      root.set_content(buildStaticArticleMarkup(payload));
+
       const html = finalizeHtml(doc, template.doctype);
       const targetDir = path.join(outputRoot, slug);
       fs.mkdirSync(targetDir, { recursive: true });
@@ -153,6 +165,55 @@ function main() {
     });
     process.exitCode = 1;
   }
+}
+
+function buildStaticArticleMarkup(data) {
+  const title = cleanString(data.title) || "NorthSide GTA Insight";
+  const bodyHtml = typeof data.bodyHtml === "string" ? data.bodyHtml : "";
+  const excerpt = cleanString(data.excerpt);
+  const byline = cleanString(data.author) || "Matthew Mulhall";
+  return [
+    '<main id="main-content">',
+    '<article class="insight-article">',
+    `<h1>${escapeHtml(title)}</h1>`,
+    `<p>By ${escapeHtml(byline)}</p>`,
+    excerpt ? `<p>${escapeHtml(excerpt)}</p>` : "",
+    `<div>${bodyHtml}</div>`,
+    "</article>",
+    "</main>",
+  ].join("");
+}
+
+function buildArticleSchema(data, meta) {
+  const title = cleanString(data.title) || cleanString(meta.title);
+  const published = parseIsoDate(data.publishDate);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description: cleanString(meta.description),
+    url: cleanString(meta.canonicalUrl),
+    mainEntityOfPage: cleanString(meta.canonicalUrl),
+    author: {
+      "@type": "Person",
+      name: cleanString(data.author) || "Matthew Mulhall",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Finally Home Agents",
+      url: "https://northsidegta.ca",
+    },
+    ...(published ? { datePublished: published } : {}),
+    ...(meta.ogImage ? { image: meta.ogImage } : {}),
+  };
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function computeInsightMeta(data, slug, origin) {
