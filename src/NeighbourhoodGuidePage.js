@@ -633,6 +633,7 @@ const PAGE_BODY_HTML = `
       <div class="omc-price">At $1,000,000</div>
       <p class="omc-desc">A newer or updated 4-bed detached in communities like Keswick (including Simcoe Landing), often with a nice lot and modern family layout. Waterfront and triple-garage homes are typically above this budget.</p>
       <a href="/communities/georgina" class="omc-link">View Georgina guide &rarr;</a>
+      <a href="/moving-to-georgina-from-toronto" class="omc-link" style="display:block;margin-top:7px;">Moving from Toronto? Read the Honest 2026 Guide &rarr;</a>
     </div>
     <div class="omc" style="--omc-c:#2a3a1a;">
       <div class="omc-header">

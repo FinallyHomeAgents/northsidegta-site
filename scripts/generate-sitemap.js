@@ -95,6 +95,7 @@ function main() {
   const staticRoutes = [
     { path: '/', changefreq: 'weekly', priority: '1.0' },
     { path: '/buyers', changefreq: 'weekly', priority: '0.9' },
+    { path: '/moving-to-georgina-from-toronto', changefreq: 'monthly', priority: '0.8' },
     { path: '/sellers', changefreq: 'weekly', priority: '0.9' },
     { path: '/homeanalysis', changefreq: 'monthly', priority: '0.7' },
     { path: '/communities', changefreq: 'monthly', priority: '0.8' },

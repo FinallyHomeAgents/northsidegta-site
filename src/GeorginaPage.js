@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import CommunityComplianceFooter from "./components/CommunityComplianceFooter";
 import MARKET_DATA from "./data/marketData.json";
 
 const TOWN_MARKET = MARKET_DATA.municipalities.georgina;
@@ -49,6 +50,10 @@ img{max-width:100%;display:block;}
 .breadcrumb{font-size:12px;color:var(--ink4);padding:16px 0 0;}
 .breadcrumb a{color:var(--green);}
 .breadcrumb span{margin:0 5px;}
+.moving-guide-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:20px 0 0;padding:17px 20px;border:1px solid var(--gborder);border-radius:var(--rl);background:linear-gradient(135deg,var(--gpale),#fff);box-shadow:var(--sh);}
+.moving-guide-banner strong{display:block;color:var(--green);font-family:var(--fd);font-size:17px;}
+.moving-guide-banner span{display:block;margin-top:3px;color:var(--ink3);font-size:12px;}
+.moving-guide-banner a{flex:0 0 auto;border-radius:24px;background:var(--green);padding:10px 17px;color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
 .page-grid{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start;padding:28px 0 60px;}
 .sec{background:var(--paper);border-radius:var(--rxl);border:1px solid var(--border);padding:24px;margin-bottom:20px;box-shadow:var(--sh);}
 .sec h2{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:14px;letter-spacing:-0.01em;}
@@ -148,7 +153,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .fit-watch{background:#fffbeb;border-color:#fde68a;}
 .fit-watch .fit-label{font-weight:600;color:#78350f;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
 .fit-item p{color:var(--ink2);line-height:1.6;}
-@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}}
+@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}.moving-guide-banner{align-items:flex-start;flex-direction:column;}}
 @media(max-width:640px){.container{padding:0 16px;}.topnav{padding:0 16px;}.topnav-right .topnav-link{display:none;}.hero{height:360px;}}
 `;
 const PAGE_SCHEMA = `{
@@ -213,6 +218,13 @@ const PAGE_BODY_HTML = `
     <a href="https://northsidegta.ca/neighbourhood-guide">Neighbourhood guide</a><span>&rsaquo;</span>
     <span>Georgina</span>
   </nav>
+  <aside class="moving-guide-banner" aria-label="Moving to Georgina guide">
+    <div>
+      <strong>Moving from Toronto?</strong>
+      <span>Prices, commute, communities, and the trade-offs to know before you move.</span>
+    </div>
+    <a href="/moving-to-georgina-from-toronto">Read the Honest 2026 Guide &rarr;</a>
+  </aside>
   <div class="page-grid">
 
     <!-- MAIN COLUMN -->
@@ -440,13 +452,6 @@ const PAGE_BODY_HTML = `
   </div><!-- /grid -->
 </div><!-- /container -->
 
-<footer class="compliance" role="contentinfo">
-  <div class="compliance-inner">
-    <p><strong>Market data disclaimer:</strong> Market information is provided for general guidance only and may change. Buyers should confirm current pricing, availability, school boundaries, commute times, and property details before making decisions. Average sold prices sourced from TRREB MLS® data and regional market reports (Q3 2025–Q2 2026). Drive times are off-peak estimates via Hwy 404 to the DVP/401 interchange. <strong>TasteHub disclaimer:</strong> TasteHub results are community-powered and are not paid rankings or endorsements. <strong>Restaurant disclaimer:</strong> Local favourites are included for community context only and are not ranked by Finally Home Agents unless clearly identified as community voting results. <strong>School disclaimer:</strong> School ratings from Fraser Institute 2024/2025. School ratings and boundaries can change. Buyers should verify directly with the relevant school board before purchasing. <strong>Registrant information (TRESA):</strong> <strong>Matthew Mulhall</strong> and <strong>Landon Mulhall</strong>, Sales Representatives, Finally Home Agents Team, <strong>HomeLife Optimum Realty, Brokerage</strong>, regulated by the <strong>Real Estate Council of Ontario (RECO)</strong> under the <em>Trust in Real Estate Services Act, 2002 (TRESA)</em>. MLS® is a registered trademark of CREA. © 2026 Finally Home Agents Team | HomeLife Optimum Realty, Brokerage | <a href="https://northsidegta.ca">northsidegta.ca</a></p>
-  </div>
-</footer>
-
-
 `;
 
 
@@ -502,5 +507,5 @@ export default function GeorginaPage() {
       <meta property="og:image" content="https://northsidegta.ca/Images/georgina-banner.jpg" />
       <link rel="canonical" href="https://northsidegta.ca/communities/georgina" />
       <script type="application/ld+json">{JSON.stringify(schemaObject)}</script>
-    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /></>);
+    </Helmet><HeaderShell /><style>{PAGE_STYLE}</style><div ref={containerRef} dangerouslySetInnerHTML={{ __html: PAGE_BODY_HTML }} /><CommunityComplianceFooter /></>);
 }

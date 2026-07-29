@@ -2,18 +2,24 @@
   "period": "June 2026",
   "source": "TRREB Market Watch, June 2026",
   "homeType": "All Home Types",
+  "toronto": {
+    "condoAverage": null,
+    "detachedAverage": null
+  },
   "municipalities": {
     "aurora": {
       "name": "Aurora",
       "averageSalePrice": "$1,239,892",
       "salesCount": 76,
-      "avgLdom": 46
+      "avgLdom": 46,
+      "yearOverYear": "-6.7%"
     },
     "newmarket": {
       "name": "Newmarket",
       "averageSalePrice": "$1,018,511",
       "salesCount": 88,
-      "avgLdom": 38
+      "avgLdom": 38,
+      "yearOverYear": "-4.1%"
     },
     "stouffville": {
       "name": "Whitchurch-Stouffville",
@@ -31,7 +37,8 @@
       "name": "Georgina",
       "averageSalePrice": "$794,410",
       "salesCount": 85,
-      "avgLdom": 52
+      "avgLdom": 52,
+      "yearOverYear": "-7.2%"
     },
     "uxbridge": {
       "name": "Uxbridge",

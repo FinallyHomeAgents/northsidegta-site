@@ -50,6 +50,7 @@ import CoffeePage, { BookCoffeeAliasPage } from "./CoffeePage";
 import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 import KeswickLowerPricedHomesPage from "./KeswickLowerPricedHomesPage";
 import UnlockPage from "./UnlockPage";
+import MovingToGeorginaFromTorontoPage from "./MovingToGeorginaFromTorontoPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -109,6 +110,7 @@ function App() {
           <Route path="/listings/33-st-augustine-drive-brooklin" element={<StAugustineDriveListingPage />} />
           <Route path="/about"        element={<AboutPage />} />
           <Route path="/buyers"       element={<BuyersPage />} />
+          <Route path="/moving-to-georgina-from-toronto" element={<MovingToGeorginaFromTorontoPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
           <Route path="/community"    element={<CommunityPage />} />
           <Route path="/communities"  element={<CommunitiesPage />} />
