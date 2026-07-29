@@ -35,6 +35,13 @@ const townNames = {
 const staticChecks = [
   { route: "/about", h1: "About Finally Home Agents", body: "Matthew and Landon" },
   { route: "/buyers", h1: "You don't have to leave the city", body: "Town strategy" },
+  {
+    route: "/moving-to-georgina-from-toronto",
+    h1: "Moving to Georgina from Toronto: The Honest 2026 Guide",
+    body: "What your Toronto money buys in Georgina",
+    title: "Moving to Georgina from Toronto (2026 Guide) | Finally Home Agents",
+    schema: ["Article", "FAQPage", "BreadcrumbList"],
+  },
   { route: "/sellers", h1: "A Better Sale Starts Before the Listing Goes Live", body: "seller" },
   { route: "/homeanalysis", h1: "What’s Your Home Worth", body: "NorthSide GTA Market" },
   { route: "/contact", h1: "Glad you found us", body: "Matthew" },
@@ -340,6 +347,46 @@ Object.entries(marketData.municipalities).forEach(([slug, town]) => {
     }
   });
 });
+
+const movingGuideRoute = "/moving-to-georgina-from-toronto";
+const movingGuideDoc = readRoute(movingGuideRoute);
+const movingGuideText = movingGuideDoc?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
+const movingGuideHtml = movingGuideDoc?.toString() || "";
+[
+  marketData.period,
+  `Source: ${marketData.source}`,
+  marketData.homeType,
+  ...["georgina", "newmarket", "aurora"].flatMap((slug) => {
+    const town = marketData.municipalities[slug];
+    return [
+      town.averageSalePrice,
+      String(town.salesCount),
+      String(town.avgLdom),
+      town.yearOverYear,
+    ];
+  }),
+].forEach((value) => {
+  if (!movingGuideText.includes(value)) {
+    failures.push(`${movingGuideRoute}: moving guide is missing shared market value "${value}"`);
+  }
+});
+
+[
+  'href="/communities/georgina"',
+  'href="/tastehub?town=georgina"',
+  'href="/neighbourhood-guide"',
+  'href="/buyers#town-match"',
+  'href="/contact"',
+  'href="https://wa.me/16476684646"',
+].forEach((value) => {
+  if (!movingGuideHtml.includes(value)) {
+    failures.push(`${movingGuideRoute}: missing outbound link ${value}`);
+  }
+});
+
+if (marketData.toronto?.condoAverage == null && /The average Toronto condo now sells for/.test(movingGuideText)) {
+  failures.push(`${movingGuideRoute}: Toronto comparison must be hidden while placeholder values are null`);
+}
 
 const robots = fs.readFileSync(path.join(rootDir, "public", "robots.txt"), "utf8");
 if (

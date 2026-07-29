@@ -59,6 +59,7 @@
   "rewrites": [
     { "source": "/about", "destination": "/about/index.html" },
     { "source": "/buyers", "destination": "/buyers/index.html" },
+    { "source": "/moving-to-georgina-from-toronto", "destination": "/moving-to-georgina-from-toronto/index.html" },
     { "source": "/sellers", "destination": "/sellers/index.html" },
     { "source": "/homeanalysis", "destination": "/homeanalysis/index.html" },
     { "source": "/contact", "destination": "/contact/index.html" },

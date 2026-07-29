@@ -16,6 +16,16 @@ const COMMUNITIES = [
   "Scugog",
 ];
 
+const MOVING_FROM_TORONTO_GUIDES = [
+  { town: "Georgina", href: "/moving-to-georgina-from-toronto" },
+  { town: "East Gwillimbury" },
+  { town: "Uxbridge" },
+  { town: "Newmarket" },
+  { town: "Aurora" },
+  { town: "Stouffville" },
+  { town: "Scugog" },
+];
+
 const TOWN_DATA = {
   Aurora: {
     slug: "aurora",
@@ -610,6 +620,30 @@ export default function BuyersPage() {
         </div>
       </section>
 
+      <section className="moving-guides-strip" aria-labelledby="moving-guides-heading">
+        <div className="buyers-container moving-guides-strip__inner">
+          <div>
+            <p className="buyers-eyebrow">Moving from Toronto?</p>
+            <h2 id="moving-guides-heading">Start with an honest town guide.</h2>
+            <p>
+              Read the live Georgina guide now. Six more Toronto-to-town guides are coming next,
+              and this list is ready to grow with them.
+            </p>
+          </div>
+          <ul>
+            {MOVING_FROM_TORONTO_GUIDES.map(({ town, href }) => (
+              <li key={town}>
+                {href ? (
+                  <a href={href}>Moving to {town} from Toronto →</a>
+                ) : (
+                  <span>Moving to {town} from Toronto <em>Coming soon</em></span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section className="buyers-section white-section" id="town-match">
         <div className="buyers-container split-section">
           <SectionHeader
@@ -780,6 +814,14 @@ const BUYERS_STYLES = `
   .community-tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .community-tags span { border: 1px solid #e2ddd5; border-radius: 999px; background: #fff; padding: 4px 9px; color: var(--primary); font-size: 11.5px; font-weight: 600; }
   .community-strip p { flex-basis: 100%; margin: 2px 0 0; color: var(--muted); font-size: 11.5px; }
+  .moving-guides-strip { border-bottom: 1px solid #e8e4db; background: #eef3e6; padding: 30px 32px; }
+  .moving-guides-strip__inner { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1.2fr); gap: 34px; align-items: center; }
+  .moving-guides-strip h2 { margin: 0; color: var(--primary); font-family: "Playfair Display", Georgia, serif; font-size: 27px; line-height: 1.14; }
+  .moving-guides-strip p:not(.buyers-eyebrow) { margin: 10px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+  .moving-guides-strip ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .moving-guides-strip li a, .moving-guides-strip li span { display: flex; min-height: 43px; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid #d8dfcf; border-radius: 4px; background: #fff; padding: 9px 12px; color: var(--primary); font-size: 12px; font-weight: 650; text-decoration: none; }
+  .moving-guides-strip li span { color: var(--muted); font-weight: 500; }
+  .moving-guides-strip li em { flex: 0 0 auto; color: #8a7450; font-size: 9px; font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; }
 
   .split-section { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(340px, 600px); gap: 34px; align-items: start; }
   .quiz-card { width: 100%; max-width: 600px; background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 26px; box-shadow: 0 22px 70px rgba(26,26,26,0.07); }
@@ -887,7 +929,7 @@ const BUYERS_STYLES = `
   .mobile-cta-bar { display: none; }
 
   @media (max-width: 900px) {
-    .split-section, .cta-grid { grid-template-columns: 1fr; }
+    .split-section, .cta-grid, .moving-guides-strip__inner { grid-template-columns: 1fr; }
     .market-grid, .process-grid, .reviews-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
@@ -900,13 +942,14 @@ const BUYERS_STYLES = `
   }
 
   @media (max-width: 640px) {
-    .buyers-hero, .buyers-section, .community-strip { padding-left: 20px; padding-right: 20px; }
+    .buyers-hero, .buyers-section, .community-strip, .moving-guides-strip { padding-left: 20px; padding-right: 20px; }
     .buyers-section { padding-top: 34px; padding-bottom: 34px; }
     .dark-section { padding-bottom: 104px; }
     .buyers-hero { padding-top: 58px; }
     .buyers-hero h1 { font-size: 32px; }
     .buyers-section-header h2 { font-size: 29px; }
     .trust-strip, .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
+    .moving-guides-strip ul { grid-template-columns: 1fr; }
     .quiz-card, .consultation-card { padding: 22px; }
     .buyers-faq-item summary { align-items: flex-start; padding: 16px; font-size: 17px; }
     .buyers-faq-item p { padding: 14px 16px 17px; font-size: 13.5px; }
