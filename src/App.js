@@ -51,6 +51,8 @@ import PowerOfSaleSupportPage from "./PowerOfSaleSupportPage";
 import KeswickLowerPricedHomesPage from "./KeswickLowerPricedHomesPage";
 import UnlockPage from "./UnlockPage";
 import MovingToGeorginaFromTorontoPage from "./MovingToGeorginaFromTorontoPage";
+import MovingToEastGwillimburyFromTorontoPage from "./MovingToEastGwillimburyFromTorontoPage";
+import MovingToUxbridgeFromTorontoPage from "./MovingToUxbridgeFromTorontoPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -111,6 +113,8 @@ function App() {
           <Route path="/about"        element={<AboutPage />} />
           <Route path="/buyers"       element={<BuyersPage />} />
           <Route path="/moving-to-georgina-from-toronto" element={<MovingToGeorginaFromTorontoPage />} />
+          <Route path="/moving-to-east-gwillimbury-from-toronto" element={<MovingToEastGwillimburyFromTorontoPage />} />
+          <Route path="/moving-to-uxbridge-from-toronto" element={<MovingToUxbridgeFromTorontoPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
           <Route path="/community"    element={<CommunityPage />} />
           <Route path="/communities"  element={<CommunitiesPage />} />

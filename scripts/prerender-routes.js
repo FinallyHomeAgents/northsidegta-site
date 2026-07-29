@@ -26,6 +26,8 @@ const routeModules = {
   "/about": "../src/AboutPage",
   "/buyers": "../src/BuyersPage",
   "/moving-to-georgina-from-toronto": "../src/MovingToGeorginaFromTorontoPage",
+  "/moving-to-east-gwillimbury-from-toronto": "../src/MovingToEastGwillimburyFromTorontoPage",
+  "/moving-to-uxbridge-from-toronto": "../src/MovingToUxbridgeFromTorontoPage",
   "/sellers": "../src/SellersPage",
   "/homeanalysis": "../src/HomeAnalysisPage",
   "/media": "../src/MediaPage",

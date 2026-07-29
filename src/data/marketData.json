@@ -1,5 +1,6 @@
 {
   "period": "June 2026",
+  "lastUpdated": "June 2026",
   "source": "TRREB Market Watch, June 2026",
   "homeType": "All Home Types",
   "toronto": {
@@ -25,13 +26,15 @@
       "name": "Whitchurch-Stouffville",
       "averageSalePrice": "$1,329,155",
       "salesCount": 54,
-      "avgLdom": 41
+      "avgLdom": 41,
+      "yearOverYear": "+4.7%"
     },
     "east-gwillimbury": {
       "name": "East Gwillimbury",
       "averageSalePrice": "$1,062,808",
       "salesCount": 39,
-      "avgLdom": 57
+      "avgLdom": 57,
+      "yearOverYear": "-11.7%"
     },
     "georgina": {
       "name": "Georgina",
@@ -44,7 +47,8 @@
       "name": "Uxbridge",
       "averageSalePrice": "$1,140,111",
       "salesCount": 33,
-      "avgLdom": 47
+      "avgLdom": 47,
+      "yearOverYear": "+7.0%"
     },
     "scugog": {
       "name": "Scugog",

@@ -34,12 +34,12 @@ function BudgetBuyCard({ content }) {
   return (
     <aside className="moving-guide__budget-card" aria-labelledby="moving-guide-budget-heading">
       <div>
-        <p className="moving-guide__eyebrow">The $800K comparison</p>
-        <h3 id="moving-guide-budget-heading">{content.heading}</h3>
-        <p>{content.body}</p>
+        <p className="moving-guide__eyebrow">{content.budgetCard.eyebrow}</p>
+        <h3 id="moving-guide-budget-heading">{content.budgetCard.heading}</h3>
+        <p>{content.budgetCard.body}</p>
       </div>
       <img
-        src="/assets/town-logos/georgina.webp"
+        src={content.badgeImage}
         alt=""
         aria-hidden="true"
         width="108"
@@ -54,12 +54,12 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
   const schema = useMemo(() => buildSchema(content), [buildSchema, content]);
   const canonical = `https://northsidegta.ca${content.route}`;
   const markets = MARKET_DATA.municipalities;
-  const georgina = markets.georgina;
-  const comparisonTowns = ["georgina", "newmarket", "aurora"];
+  const primaryMarket = markets[content.marketKey];
+  const comparisonTowns = content.comparisonTowns;
   const toronto = MARKET_DATA.toronto || {};
   const showTorontoComparison =
     toronto.condoAverage != null && toronto.detachedAverage != null;
-  const georginaTrend = getMarketTrend(georgina.yearOverYear);
+  const primaryTrend = getMarketTrend(primaryMarket.yearOverYear);
 
   return (
     <>
@@ -116,14 +116,19 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
             <p className="moving-guide__hero-intro">{content.intro}</p>
             <p className="moving-guide__byline">
               By Matthew Mulhall, Finally Home Agents · Updated{" "}
-              <span data-market="lastUpdated">{MARKET_DATA.period}</span>
+              <span data-market="lastUpdated">
+                {MARKET_DATA.lastUpdated || MARKET_DATA.period}
+              </span>
             </p>
             <div className="moving-guide__hero-actions">
               <a className="moving-guide__button moving-guide__button--gold" href={QUIZ_URL}>
                 Take the Town Match Quiz
               </a>
-              <a className="moving-guide__button moving-guide__button--light" href="/communities/georgina">
-                Full Georgina community profile
+              <a
+                className="moving-guide__button moving-guide__button--light"
+                href={content.communityProfilePath}
+              >
+                Full {content.town} community profile
               </a>
             </div>
             <p className="moving-guide__source moving-guide__source--hero">
@@ -134,29 +139,32 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
 
         <div className="moving-guide__container moving-guide__body">
           <section className="moving-guide__section" aria-labelledby="moving-guide-money-heading">
-            <p className="moving-guide__eyebrow">Toronto budget, Georgina space</p>
-            <h2 id="moving-guide-money-heading">What your Toronto money buys in Georgina</h2>
-            <div className="moving-guide__stats" aria-label={`${MARKET_DATA.period} Georgina market snapshot`}>
+            <p className="moving-guide__eyebrow">{content.money.eyebrow}</p>
+            <h2 id="moving-guide-money-heading">{content.money.heading}</h2>
+            <div
+              className="moving-guide__stats"
+              aria-label={`${MARKET_DATA.period} ${content.town} market snapshot`}
+            >
               <MarketStat
                 label="Average sale price"
-                value={georgina.averageSalePrice}
-                marketKey="georgina.averageSold"
+                value={primaryMarket.averageSalePrice}
+                marketKey={`${content.marketKey}.averageSold`}
               />
               <MarketStat
                 label="Sales count"
-                value={georgina.salesCount}
-                marketKey="georgina.salesCount"
+                value={primaryMarket.salesCount}
+                marketKey={`${content.marketKey}.salesCount`}
               />
               <MarketStat
                 label="Avg. LDOM"
-                value={`${georgina.avgLdom} days`}
-                marketKey="georgina.daysOnMarket"
+                value={`${primaryMarket.avgLdom} days`}
+                marketKey={`${content.marketKey}.daysOnMarket`}
               />
               <MarketStat
                 label="Year over year"
-                value={georginaTrend.label}
-                marketKey="georgina.yearOverYear"
-                className={`moving-guide__stat--${georginaTrend.direction}`}
+                value={primaryTrend.label}
+                marketKey={`${content.marketKey}.yearOverYear`}
+                className={`moving-guide__stat--${primaryTrend.direction}`}
               />
             </div>
             <p className="moving-guide__source">
@@ -168,35 +176,33 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
                 detached averages {marketValue(toronto.detachedAverage)} (TRREB).
               </p>
             ) : null}
-            <p>
-              In practical terms, the price of a modest Toronto condo puts a detached house with a
-              yard within reach in Keswick — and waterfront-area living within reach for less than
-              a Toronto semi.
-            </p>
-            <BudgetBuyCard content={content.budgetCard} />
+            <p>{content.money.body}</p>
+            <BudgetBuyCard content={content} />
           </section>
 
           <aside className="moving-guide__callout" aria-label="Toronto land transfer tax comparison">
             <div className="moving-guide__callout-mark" aria-hidden="true">$</div>
             <p>
-              <strong>The number Toronto buyers forget:</strong> leaving Toronto means no municipal
-              land transfer tax. On a $770,000 purchase, that's roughly{" "}
-              <strong>$11,500 staying in your pocket</strong> — Toronto is the only municipality in
-              Ontario that charges a second land transfer tax on top of the provincial one.
+              <strong>{content.landTransferTax.headline}</strong>{" "}
+              {content.landTransferTax.beforeSavings}{" "}
+              <strong>{content.landTransferTax.savings}</strong>{" "}
+              {content.landTransferTax.afterSavings}
             </p>
           </aside>
 
           <section className="moving-guide__section" aria-labelledby="moving-guide-communities-heading">
-            <p className="moving-guide__eyebrow">Choose your corner of the lake</p>
-            <h2 id="moving-guide-communities-heading">Keswick, Sutton, or Jackson's Point?</h2>
-            <p>Georgina isn't one place — choosing your corner of it is the real decision.</p>
-            <figure className="moving-guide__feature-image">
-              <img
-                src={content.communityImage}
-                alt={content.communityImageAlt}
-                loading="lazy"
-              />
-            </figure>
+            <p className="moving-guide__eyebrow">{content.communitiesSection.eyebrow}</p>
+            <h2 id="moving-guide-communities-heading">{content.communitiesSection.heading}</h2>
+            <p>{content.communitiesSection.intro}</p>
+            {content.communityImage ? (
+              <figure className="moving-guide__feature-image">
+                <img
+                  src={content.communityImage}
+                  alt={content.communityImageAlt}
+                  loading="lazy"
+                />
+              </figure>
+            ) : null}
             <div className="moving-guide__town-grid">
               {content.communities.map(({ heading, body }) => (
                 <article className="moving-guide__town-card" key={heading}>
@@ -205,13 +211,13 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
                 </article>
               ))}
             </div>
-            <p className="moving-guide__aside-copy">
-              Also worth knowing: Pefferlaw and Udora for rural properties and acreage.
-            </p>
+            {content.communitiesSection.aside ? (
+              <p className="moving-guide__aside-copy">{content.communitiesSection.aside}</p>
+            ) : null}
             <div className="moving-guide__mini-cta">
               <p>
-                <strong>Not sure which corner fits you?</strong> Tell us your budget and lifestyle
-                — we'll tell you where to look (and where not to).
+                <strong>{content.communitiesSection.miniCtaLead}</strong>{" "}
+                {content.communitiesSection.miniCtaBody}
               </p>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 Ask us on WhatsApp →
@@ -220,9 +226,9 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
           </section>
 
           <section className="moving-guide__section" aria-labelledby="moving-guide-family-heading">
-            <p className="moving-guide__eyebrow">Life beyond the listing</p>
-            <h2 id="moving-guide-family-heading">Raising kids in Georgina</h2>
-            <p>This is the question behind most moves north, so here's the real picture.</p>
+            <p className="moving-guide__eyebrow">{content.familySection.eyebrow}</p>
+            <h2 id="moving-guide-family-heading">{content.familySection.heading}</h2>
+            <p>{content.familySection.intro}</p>
             <div className="moving-guide__family-grid">
               {content.familyCards.map(({ icon, heading, body }) => (
                 <article className="moving-guide__family-card" key={heading}>
@@ -233,48 +239,34 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
               ))}
             </div>
             <p className="moving-guide__lifestyle-link">
-              Looking for the places locals actually eat?{" "}
-              <a href="/tastehub?town=georgina">Explore Georgina on TasteHub →</a>
+              {content.familySection.tasteHubLead}{" "}
+              <a href={content.tasteHubPath}>{content.familySection.tasteHubLabel}</a>
             </p>
           </section>
 
           <section className="moving-guide__section moving-guide__commute" aria-labelledby="moving-guide-commute-heading">
-            <p className="moving-guide__eyebrow">The trade-off to pressure-test</p>
-            <h2 id="moving-guide-commute-heading">The honest commute</h2>
-            <p>We won't sugar-coat this — Georgina is a commitment if you work downtown daily.</p>
+            <p className="moving-guide__eyebrow">{content.commute.eyebrow}</p>
+            <h2 id="moving-guide-commute-heading">{content.commute.heading}</h2>
+            <p>{content.commute.intro}</p>
             <div className="moving-guide__commute-grid">
-              <article>
-                <h3>Driving</h3>
-                <p>
-                  Highway 404 now reaches the edge of Keswick, making it highway nearly
-                  door-to-door. Plan on roughly an hour to north Toronto in normal traffic, more
-                  to the downtown core at peak.
-                </p>
-              </article>
-              <article>
-                <h3>GO Transit</h3>
-                <p>
-                  No train station in Georgina itself. The GO 67 Keswick–North York bus runs down
-                  the 404 corridor, and the nearest train stations are East Gwillimbury GO and
-                  Newmarket GO — about 20–25 minutes' drive from Keswick, with all-day service to
-                  Union.
-                </p>
-              </article>
+              {content.commute.items.map(({ heading, body }) => (
+                <article key={heading}>
+                  <h3>{heading}</h3>
+                  <p>{body}</p>
+                </article>
+              ))}
             </div>
             <div className="moving-guide__callout moving-guide__callout--inside">
               <p>
-                <strong>The honest read:</strong> Georgina works best for hybrid workers, people
-                working anywhere in York Region or north Toronto, and anyone whose office days are
-                2–3 per week. Downtown five days a week? Let's talk honestly about whether East
-                Gwillimbury or Newmarket fits better — that conversation is literally what we do.
+                <strong>The honest read:</strong> {content.commute.honestRead}
               </p>
             </div>
           </section>
 
           <section className="moving-guide__section" aria-labelledby="moving-guide-market-heading">
-            <p className="moving-guide__eyebrow">Three-town comparison</p>
+            <p className="moving-guide__eyebrow">{content.marketSection.eyebrow}</p>
             <div className="moving-guide__section-heading-row">
-              <h2 id="moving-guide-market-heading">Georgina market snapshot</h2>
+              <h2 id="moving-guide-market-heading">{content.marketSection.heading}</h2>
               <a href="/neighbourhood-guide">Compare all seven towns →</a>
             </div>
             <div className="moving-guide__table-wrap">
@@ -337,29 +329,19 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
               <span data-market="lastUpdated">{MARKET_DATA.period}</span> · Source:{" "}
               {MARKET_DATA.source} · {MARKET_DATA.homeType}
             </p>
-            <p>
-              Georgina is the lowest-priced town in the NorthSide GTA — the affordability gap
-              versus Newmarket and Aurora is why so many Toronto movers start their search here.
-            </p>
+            <p>{content.marketSection.conclusion}</p>
           </section>
 
           <aside className="moving-guide__review" aria-label="Client review">
             <div className="moving-guide__stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <blockquote>
-              “What really stood out was that Matt understood our priorities as a family and
-              ensured that these priorities were held in high regard throughout the whole process.”
-            </blockquote>
-            <p>Larissa Halko · Buyer &amp; Seller · Google Reviews (5.0 rating)</p>
+            <blockquote>“{content.review.quote}”</blockquote>
+            <p>{content.review.attribution}</p>
           </aside>
 
           <section className="moving-guide__cta" aria-labelledby="moving-guide-cta-heading">
-            <p className="moving-guide__eyebrow">Two minutes, no pressure</p>
-            <h2 id="moving-guide-cta-heading">Is Georgina right for you?</h2>
-            <p>
-              Not sure whether Georgina, East Gwillimbury, or somewhere else north fits your family
-              best? That's exactly what our Town Match Quiz figures out — two minutes, no contact
-              info required to see your result.
-            </p>
+            <p className="moving-guide__eyebrow">{content.cta.eyebrow}</p>
+            <h2 id="moving-guide-cta-heading">{content.cta.heading}</h2>
+            <p>{content.cta.body}</p>
             <div className="moving-guide__cta-actions">
               <a className="moving-guide__button moving-guide__button--gold" href={QUIZ_URL}>
                 Take the Town Match Quiz →
