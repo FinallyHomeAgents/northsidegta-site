@@ -30,7 +30,7 @@ const scugogMovingGuide = {
     eyebrow: "Toronto budget, Port Perry waterfront",
     heading: "What your Toronto money buys in Scugog",
     body:
-      "Scugog is the second-most affordable town we serve — and unlike most affordable markets, the discount comes with a waterfront and one of Ontario's most loved heritage downtowns, not instead of them.",
+      "Scugog is among the more affordable towns we serve — and unlike many accessible markets, the value comes with a waterfront and one of Ontario's most loved heritage downtowns, not instead of them.",
   },
   budgetCard: {
     eyebrow: "The $900K comparison",
@@ -146,7 +146,7 @@ const scugogMovingGuide = {
     eyebrow: "Three-town comparison",
     heading: "Scugog market snapshot",
     conclusion: [
-      "Scugog underprices Uxbridge with a comparable countryside — the difference is drive time. For lake-town value, its only real rival in our seven is ",
+      "Scugog and Uxbridge both deliver countryside living — the practical difference is drive time. For lake-town value, its closest counterpart in our seven is ",
       { label: "Georgina", href: "/moving-to-georgina-from-toronto" },
       ", an hour closer to the city on the 404 side.",
     ],
@@ -166,7 +166,7 @@ const scugogMovingGuide = {
     {
       question: "Is Port Perry a good place to live?",
       answer:
-        "Port Perry offers one of Ontario's most celebrated heritage main streets, a lakefront park and trail system, its own full-service hospital, and small-town community life — at the second-lowest price point of the seven NorthSide GTA towns. The trade-off is distance: it's the furthest of our communities from Toronto.",
+        "Port Perry offers one of Ontario's most celebrated heritage main streets, a lakefront park and trail system, its own full-service hospital, and small-town community life — at one of the more accessible price points of the seven NorthSide GTA towns. The trade-off is distance: it's the furthest of our communities from Toronto.",
     },
     {
       question: "How far is Port Perry from Toronto?",

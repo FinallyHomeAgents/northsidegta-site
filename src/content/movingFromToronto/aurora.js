@@ -21,7 +21,7 @@ const auroraMovingGuide = {
   kicker: "Relocation Guide · Aurora",
   heading: "Moving to Aurora from Toronto: The Honest 2026 Guide",
   intro:
-    "Aurora is the schools-and-established-streets move — mature tree-lined neighbourhoods, an IB high school, one of Canada's most storied private schools, and a GO train to Union. It's the priciest town we serve, and for the families who choose it, that's exactly the point.",
+    "Aurora is the schools-and-established-streets move — mature tree-lined neighbourhoods, an IB high school, one of Canada's most storied private schools, and a GO train to Union. It's one of the priciest towns we serve, and for the families who choose it, that's exactly the point.",
   money: {
     eyebrow: "Toronto budget, established Aurora",
     heading: "What your Toronto money buys in Aurora",
@@ -114,7 +114,7 @@ const auroraMovingGuide = {
       icon: "🛒",
       heading: "The honest trade-off",
       body: [
-        "You pay for all of it — Aurora is the priciest town we serve, and inventory in the best pockets is tight. If the budget fights you here, ",
+        "You pay for all of it — Aurora is one of the priciest towns we serve, and inventory in the best pockets is tight. If the budget fights you here, ",
         { label: "Newmarket", href: "/moving-to-newmarket-from-toronto" },
         " delivers 90% of the convenience at a real discount; we'll tell you honestly which side of that line you're on.",
       ],
@@ -146,7 +146,7 @@ const auroraMovingGuide = {
     eyebrow: "Three-town comparison",
     heading: "Aurora market snapshot",
     conclusion:
-      "Aurora carries the premium of the seven towns — buyers pay for established streets, schools, and scarcity. The current market's softness is the best negotiating window Aurora buyers have had in years.",
+      "Aurora sits among the premium markets of the seven towns — buyers pay for established streets, schools, and scarcity. The current market's softness is the best negotiating window Aurora buyers have had in years.",
   },
   review: {
     quote:
@@ -163,7 +163,7 @@ const auroraMovingGuide = {
     {
       question: "Is Aurora a good place to live?",
       answer:
-        "Aurora combines established tree-lined neighbourhoods, strong schools including a regional IB program, GO train service to Union, and a historic downtown — it's consistently ranked among the GTA's most desirable family towns, at the highest price point of the communities north of Toronto.",
+        "Aurora combines established tree-lined neighbourhoods, strong schools including a regional IB program, GO train service to Union, and a historic downtown — it's consistently ranked among the GTA's most desirable family towns, at one of the higher price points of the communities north of Toronto.",
     },
     {
       question: "How far is Aurora from Toronto?",
@@ -178,7 +178,7 @@ const auroraMovingGuide = {
     {
       question: "Is Aurora expensive?",
       answer:
-        "It's the priciest of the seven NorthSide GTA towns — buyers pay for mature neighbourhoods, schools, and scarcity. It still runs well below comparable Toronto neighbourhoods, and leaving Toronto saves roughly $21,000 in municipal land transfer tax on a typical Aurora purchase.",
+        "It's among the priciest of the seven NorthSide GTA towns — buyers pay for mature neighbourhoods, schools, and scarcity. It still runs well below comparable Toronto neighbourhoods, and leaving Toronto saves roughly $21,000 in municipal land transfer tax on a typical Aurora purchase.",
     },
     {
       question: "What are the best neighbourhoods in Aurora?",

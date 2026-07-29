@@ -174,7 +174,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is the most affordable municipality in York Region by average sale price."}},{"@type":"Question","name":"Is Georgina a good place to live?","acceptedAnswer":{"@type":"Answer","text":"Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — particularly those with remote work arrangements. The primary trade-offs are a longer commute to Toronto and car-dependence for daily needs."}},{"@type":"Question","name":"What communities are in Georgina?","acceptedAnswer":{"@type":"Answer","text":"Georgina includes Keswick (the largest urban centre), Keswick South, Keswick North, Sutton, Jackson's Point, Pefferlaw, Baldwin, Belhaven, Virginia, and historic lakeshore communities along Lake Simcoe."}}]
+      "mainEntity":[{"@type":"Question","name":"What is Georgina Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is one of York Region's more accessible municipalities by average sale price."}},{"@type":"Question","name":"Is Georgina a good place to live?","acceptedAnswer":{"@type":"Answer","text":"Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — particularly those with remote work arrangements. The primary trade-offs are a longer commute to Toronto and car-dependence for daily needs."}},{"@type":"Question","name":"What communities are in Georgina?","acceptedAnswer":{"@type":"Answer","text":"Georgina includes Keswick (the largest urban centre), Keswick South, Keswick North, Sutton, Jackson's Point, Pefferlaw, Baldwin, Belhaven, Virginia, and historic lakeshore communities along Lake Simcoe."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -356,7 +356,7 @@ const PAGE_BODY_HTML = `
         <h2>Frequently asked questions</h2>
         <details class="faq-item">
       <summary class="faq-summary">What is Georgina Ontario known for? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is the most affordable municipality in York Region by average sale price.</div>
+      <div class="faq-answer">Georgina is known for Lake Simcoe waterfront access, recreational fishing (perch and walleye), summer boating, seasonal ice fishing, and communities including Keswick, Sutton, and Jackson's Point. It is one of York Region's more accessible municipalities by average sale price.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Is Georgina a good place to live? <span class="faq-icon">+</span></summary>
       <div class="faq-answer">Georgina is a strong option for buyers who want more space, waterfront access, or a different pace — particularly those with remote work arrangements. The primary trade-offs are a longer commute to Toronto and car-dependence for daily needs.</div>

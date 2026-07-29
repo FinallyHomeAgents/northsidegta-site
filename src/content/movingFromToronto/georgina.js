@@ -135,7 +135,7 @@ const georginaMovingGuide = {
     eyebrow: "Three-town comparison",
     heading: "Georgina market snapshot",
     conclusion:
-      "Georgina is the lowest-priced town in the NorthSide GTA — the affordability gap versus Newmarket and Aurora is why so many Toronto movers start their search here.",
+      "Georgina remains one of the most accessible price points in the NorthSide GTA — the affordability gap versus Newmarket and Aurora is why so many Toronto movers start their search here.",
   },
   review: {
     quote:
@@ -152,7 +152,7 @@ const georginaMovingGuide = {
     {
       question: "Is Georgina a good place to live?",
       answer:
-        "Georgina offers the most affordable homeownership in the GTA's northern communities, with Lake Simcoe beaches, ice fishing, trails, and new recreation facilities like the MURC. It suits families wanting space and lake access, and hybrid workers who don't commute downtown daily.",
+        "Georgina offers one of the most affordable paths to homeownership in the GTA's northern communities, with Lake Simcoe beaches, ice fishing, trails, and new recreation facilities like the MURC. It suits families wanting space and lake access, and hybrid workers who don't commute downtown daily.",
     },
     {
       question: "Is Georgina a good place to raise kids?",

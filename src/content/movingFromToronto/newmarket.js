@@ -26,7 +26,7 @@ const newmarketMovingGuide = {
     eyebrow: "Toronto budget, Newmarket convenience",
     heading: "What your Toronto money buys in Newmarket",
     body:
-      "Newmarket is York Region's highest-volume market — the most listings, the most sales, the most choice. That works both ways: you'll find the right house faster, but well-priced homes in strong school zones move quickly. Preparation matters here more than anywhere else we serve.",
+      "Newmarket is one of York Region's higher-volume markets — with a broad mix of listings, steady sales, and meaningful choice. That works both ways: you'll find the right house faster, but well-priced homes in strong school zones move quickly. Preparation matters here more than anywhere else we serve.",
   },
   budgetCard: {
     eyebrow: "The $1M comparison",
@@ -146,7 +146,7 @@ const newmarketMovingGuide = {
     conclusion: [
       "Newmarket runs meaningfully below ",
       { label: "Aurora", href: "/moving-to-aurora-from-toronto" },
-      " at similar convenience — that gap is why it's consistently York Region's busiest market.",
+      " at similar convenience — that gap is why it's consistently one of York Region's busier markets.",
     ],
   },
   review: {

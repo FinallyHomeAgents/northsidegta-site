@@ -115,7 +115,7 @@ const stouffvilleMovingGuide = {
       icon: "🛒",
       heading: "The honest trade-off",
       body:
-        "Stouffville grew fast, and it shows in spots — school portables, weekend Main Street crowds, and 404-corridor pricing that's closer to Aurora than to Georgina. You're paying for the train and the village, and the market knows it.",
+        "Stouffville grew fast, and it shows in spots — school portables, weekend Main Street crowds, and 404-corridor pricing that often sits nearer Aurora's premium than Georgina's more accessible range. You're paying for the train and the village, and the market knows it.",
     },
   ],
   commute: {
@@ -144,7 +144,7 @@ const stouffvilleMovingGuide = {
     eyebrow: "Three-town comparison",
     heading: "Stouffville market snapshot",
     conclusion: [
-      "Stouffville trades near Aurora's range — the premium is for the village-plus-train combination. Buyers wanting the same countryside for less should look at our ",
+      "Stouffville often trades in Aurora's broader price range — the premium is for the village-plus-train combination. Buyers wanting similar countryside may find better value in our ",
       { label: "Uxbridge guide", href: "/moving-to-uxbridge-from-toronto" },
       ".",
     ],

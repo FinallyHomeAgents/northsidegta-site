@@ -25,7 +25,7 @@ const uxbridgeMovingGuide = {
     eyebrow: "Toronto budget, Uxbridge space",
     heading: "What your Toronto money buys in Uxbridge",
     body:
-      "Uxbridge isn't the cheapest town we serve — it's the one where your money buys a different kind of life. In-town heritage homes with mature trees, newer family subdivisions, and beyond the town line: acreage, workshops, barns, and privacy.",
+      "Uxbridge isn't primarily a lowest-price move — it's where your money buys a different kind of life. In-town heritage homes with mature trees, newer family subdivisions, and beyond the town line: acreage, workshops, barns, and privacy.",
   },
   budgetCard: {
     eyebrow: "The $1M comparison",

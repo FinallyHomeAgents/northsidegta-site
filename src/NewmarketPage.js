@@ -173,7 +173,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is Newmarket Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is York Region's highest-volume real estate market."}},{"@type":"Question","name":"Is Newmarket a good place to buy a home in 2026?","acceptedAnswer":{"@type":"Answer","text":"In ${MARKET_DATA.period}, Newmarket recorded ${TOWN_MARKET.salesCount} sales across all home types, an exact average sale price of ${TOWN_MARKET.averageSalePrice}, and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"What are the best areas in Newmarket?","acceptedAnswer":{"@type":"Answer","text":"Stonehaven-Wyndham is consistently in demand for its school catchment and access to the 404. Armitage and Bristol-London are popular with families. Central Newmarket suits buyers who want walkability and proximity to Main Street amenities."}}]
+      "mainEntity":[{"@type":"Question","name":"What is Newmarket Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is one of York Region's more active real estate markets."}},{"@type":"Question","name":"Is Newmarket a good place to buy a home in 2026?","acceptedAnswer":{"@type":"Answer","text":"In ${MARKET_DATA.period}, Newmarket recorded ${TOWN_MARKET.salesCount} sales across all home types, an exact average sale price of ${TOWN_MARKET.averageSalePrice}, and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"What are the best areas in Newmarket?","acceptedAnswer":{"@type":"Answer","text":"Stonehaven-Wyndham is consistently in demand for its school catchment and access to the 404. Armitage and Bristol-London are popular with families. Central Newmarket suits buyers who want walkability and proximity to Main Street amenities."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -232,7 +232,7 @@ const PAGE_BODY_HTML = `
       <!-- INTRO -->
       <div class="sec">
         <div class="sec-eyebrow">About Newmarket</div>
-        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Newmarket is the NorthSide GTA's most active real estate market and arguably its most practical town for buyers who want city-level convenience without the city price. A walkable Main Street, reliable GO service, and established neighbourhoods like Stonehaven-Wyndham make it a consistent first choice for families relocating from North Toronto, Thornhill, or Markham.</p>
+        <p style="font-size:14px;color:var(--ink2);line-height:1.8;">Newmarket is one of the NorthSide GTA's more active real estate markets and a practical town for buyers who want city-level convenience without the city price. A walkable Main Street, reliable GO service, and established neighbourhoods like Stonehaven-Wyndham make it a consistent first choice for families relocating from North Toronto, Thornhill, or Markham.</p>
         <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
           <a href="#contact" class="btn-primary" style="font-size:13px;padding:10px 20px;">Get local guidance</a>
           <a href="https://northsidegta.ca/neighbourhood-guide" class="btn-secondary" style="font-size:13px;padding:9px 18px;">Compare all towns</a>
@@ -346,7 +346,7 @@ const PAGE_BODY_HTML = `
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
-          <strong>Market note:</strong> Newmarket consistently posts the highest transaction volume in York Region. Rental demand from GO commuters provides a practical floor for investment properties.
+          <strong>Market note:</strong> Newmarket consistently posts strong transaction volume in York Region. Rental demand from GO commuters provides a practical floor for investment properties.
         </div>
       </div>
 
@@ -361,7 +361,7 @@ const PAGE_BODY_HTML = `
         <h2>Frequently asked questions</h2>
         <details class="faq-item">
       <summary class="faq-summary">What is Newmarket Ontario known for? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is York Region's highest-volume real estate market.</div>
+      <div class="faq-answer">Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is one of York Region's more active real estate markets.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Is Newmarket a good place to buy a home in 2026? <span class="faq-icon">+</span></summary>
       <div class="faq-answer">In ${MARKET_DATA.period}, Newmarket recorded ${TOWN_MARKET.salesCount} sales across all home types, an exact average sale price of ${TOWN_MARKET.averageSalePrice}, and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}.</div>
