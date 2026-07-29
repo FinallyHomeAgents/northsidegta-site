@@ -1,0 +1,30 @@
+# NorthSide GTA
+
+NorthSide GTA is a real estate and community-information website covering seven communities north of Toronto.
+The site is operated by Finally Home Agents.
+
+## Communities
+
+- Aurora: York Region community with established neighbourhoods, parks, GO Transit, and Highway 404 access.
+  https://northsidegta.ca/communities/aurora
+- Newmarket: York Region community centred on Main Street, Southlake Regional Health Centre, GO Transit, and local amenities.
+  https://northsidegta.ca/communities/newmarket
+- Whitchurch-Stouffville: York Region community combining Stouffville's urban area, rural land, Main Street, and GO Transit.
+  https://northsidegta.ca/communities/stouffville
+- Uxbridge: Durham Region township known for trails, rural landscapes, its historic downtown, and an equestrian community.
+  https://northsidegta.ca/communities/uxbridge
+- Georgina: York Region municipality on Lake Simcoe that includes Keswick, Sutton, Jackson's Point, and Pefferlaw.
+  https://northsidegta.ca/communities/georgina
+- East Gwillimbury: York Region municipality that includes Holland Landing, Sharon, Queensville, and Mount Albert.
+  https://northsidegta.ca/communities/east-gwillimbury
+- Scugog: Durham Region township centred on Port Perry and Lake Scugog, with rural and waterfront communities.
+  https://northsidegta.ca/communities/scugog
+
+## Organization
+
+Finally Home Agents is Matthew Mulhall and Landon Mulhall.
+They work with HomeLife Optimum Realty, Brokerage.
+Ontario real estate registration is regulated by the Real Estate Council of Ontario (RECO).
+
+Contact: https://northsidegta.ca/contact
+Sitemap: https://northsidegta.ca/sitemap.xml

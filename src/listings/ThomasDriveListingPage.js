@@ -122,7 +122,8 @@ export default function ThomasDriveListingPage() {
         provider: {
           "@type": "RealEstateAgent",
           name: "Finally Home Agents",
-          url: "https://northsidegta.ca/",
+          alternateName: "NorthSide GTA",
+          url: "https://northsidegta.ca",
         },
       },
       {

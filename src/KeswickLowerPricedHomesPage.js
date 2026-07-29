@@ -128,7 +128,7 @@ export default function KeswickLowerPricedHomesPage() {
       {/* TODO: if /Images/seo/keswick-lower-priced-homes-og.jpg is unavailable, configure a safe fallback OG image in staticRouteMetaConfigs.mjs. */}
       <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"WebPage",name:"More Buyers Are Suddenly Looking at Keswick",url:"https://northsidegta.ca/keswick-lower-priced-homes",description:meta.description})}</script>
       <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Home",item:"https://northsidegta.ca/"},{"@type":"ListItem",position:2,name:"Keswick Lower Priced Homes",item:"https://northsidegta.ca/keswick-lower-priced-homes"}]})}</script>
-      <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"RealEstateAgent",name:"Finally Home Agents",legalName:"Finally Home Agents | HomeLife Optimum Realty, Brokerage",areaServed:["Keswick","Georgina","York Region"],url:"https://northsidegta.ca/keswick-lower-priced-homes"})}</script>
+      <script type="application/ld+json">{JSON.stringify({"@context":"https://schema.org","@type":"RealEstateAgent",name:"Finally Home Agents",alternateName:"NorthSide GTA",legalName:"Finally Home Agents | HomeLife Optimum Realty, Brokerage",areaServed:["Keswick","Georgina","York Region"],url:"https://northsidegta.ca"})}</script>
     </Helmet>
     <HeaderShell />
     <main className="mx-auto max-w-6xl space-y-12 px-4 py-8 md:py-12">

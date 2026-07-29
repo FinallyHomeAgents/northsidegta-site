@@ -164,7 +164,7 @@ const PAGE_SCHEMA = `{
         {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},
         {"@type":"Person","name":"Landon Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}}
       ],
-      "publisher":{"@type":"Organization","name":"Finally Home Agents Team","url":"https://northsidegta.ca"},
+      "publisher":{"@type":"Organization","name":"Finally Home Agents","alternateName":"NorthSide GTA","url":"https://northsidegta.ca"},
       "about":{"@type":"City","name":"Newmarket","containedInPlace":{"@type":"AdministrativeArea","name":"York Region, Ontario"}}
     },
     {
@@ -173,7 +173,8 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"RealEstateAgent",
-      "name":"Finally Home Agents Team",
+      "name":"Finally Home Agents",
+      "alternateName":"NorthSide GTA",
       "url":"https://northsidegta.ca",
       "employee":[
         {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative"},

@@ -19,6 +19,7 @@ if (!fs.existsSync(buildIndex)) {
 }
 
 const homeUrl = "https://northsidegta.ca/";
+const entityUrl = "https://northsidegta.ca";
 const title = "NorthSide GTA Real Estate | Finally Home Agents";
 const description = "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.";
 const image = "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg";
@@ -32,8 +33,8 @@ const faq = [
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "Organization", "@id": `${homeUrl}#organization`, name: "Finally Home Agents", alternateName: "NorthSide GTA", url: homeUrl, telephone: "+16476684646", foundingDate: "2017", parentOrganization: { "@type": "Organization", name: "HomeLife Optimum Realty, Brokerage" }, sameAs: ["https://www.instagram.com/finallyhomeagents/", "https://www.facebook.com/finallyhomeagents/"] },
-    { "@type": ["RealEstateAgent", "LocalBusiness"], "@id": `${homeUrl}#realestateagent`, name: "Finally Home Agents — NorthSide GTA", url: homeUrl, image, telephone: "+16476684646", areaServed: ["Aurora", "Newmarket", "Whitchurch-Stouffville", "Uxbridge", "Georgina", "East Gwillimbury", "Scugog"], employee: [{ "@type": "Person", name: "Matthew Mulhall", telephone: "+16476684646" }, { "@type": "Person", name: "Landon Mulhall", telephone: "+14164554594" }] },
+    { "@type": "Organization", "@id": `${homeUrl}#organization`, name: "Finally Home Agents", alternateName: "NorthSide GTA", url: entityUrl, telephone: "+16476684646", foundingDate: "2017", parentOrganization: { "@type": "Organization", name: "HomeLife Optimum Realty, Brokerage" }, sameAs: ["https://www.instagram.com/finallyhomeagents/", "https://www.facebook.com/finallyhomeagents/"] },
+    { "@type": ["RealEstateAgent", "LocalBusiness"], "@id": `${homeUrl}#realestateagent`, name: "Finally Home Agents", alternateName: "NorthSide GTA", url: entityUrl, image, telephone: "+16476684646", areaServed: ["Aurora", "Newmarket", "Whitchurch-Stouffville", "Uxbridge", "Georgina", "East Gwillimbury", "Scugog"], employee: [{ "@type": "Person", name: "Matthew Mulhall", telephone: "+16476684646" }, { "@type": "Person", name: "Landon Mulhall", telephone: "+14164554594" }] },
     { "@type": "WebSite", "@id": `${homeUrl}#website`, url: homeUrl, name: "NorthSide GTA", publisher: { "@id": `${homeUrl}#organization` }, potentialAction: { "@type": "SearchAction", target: "https://northsidegta.ca/search?q={search_term_string}", "query-input": "required name=search_term_string" } },
     { "@type": "WebPage", "@id": `${homeUrl}#webpage`, url: homeUrl, name: title, description, isPartOf: { "@id": `${homeUrl}#website` }, about: { "@id": `${homeUrl}#realestateagent` }, datePublished: "2017-01-01", dateModified: "2026-06-03", breadcrumb: { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "NorthSide GTA", item: homeUrl }] } },
     { "@type": "FAQPage", "@id": `${homeUrl}#faq`, mainEntity: faq.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) },

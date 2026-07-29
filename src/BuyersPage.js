@@ -6,6 +6,7 @@ import { getFormEndpoint } from "./components/contact/contactConfig";
 import { BUYER_FAQS, BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
 import MARKET_DATA from "./data/marketData.json";
 
+const { getMarketTrend } = require("./utils/marketTrend");
 const COMMUNITIES = [
   "Aurora",
   "Newmarket",
@@ -168,7 +169,12 @@ const PHOTO_GRID = [
 const MARKET_WATCH_TOWNS = MARKET_DATA.datasets.marketWatch.towns;
 const MARKET_SNAPSHOT = COMMUNITIES.map((town) => {
   const townMarket = MARKET_WATCH_TOWNS[TOWN_DATA[town].slug];
-  return [town, townMarket.averageSold, `${townMarket.daysOnMarket} days avg`, `↓ ${townMarket.yearOverYear}`];
+  return {
+    town,
+    price: townMarket.averageSold,
+    days: `${townMarket.daysOnMarket} days avg`,
+    trend: getMarketTrend(townMarket.yearOverYear),
+  };
 });
 
 const PROCESS_STEPS = [
@@ -645,12 +651,12 @@ export default function BuyersPage() {
             lead={`${MARKET_DATA.lastUpdated} · TRREB Market Watch. Use this as context, then let us apply it to your budget and timing.`}
           />
           <div className="market-grid">
-            {MARKET_SNAPSHOT.map(([town, price, days, yoy]) => (
+            {MARKET_SNAPSHOT.map(({ town, price, days, trend }) => (
               <article className="market-card" key={town}>
                 <h3>{town}</h3>
                 <strong>{price}</strong>
                 <span>{days}</span>
-                <em>{yoy}</em>
+                <em className={`market-change market-change--${trend.direction}`}>{trend.label}</em>
               </article>
             ))}
           </div>
@@ -821,7 +827,10 @@ const BUYERS_STYLES = `
   .market-card h3 { margin: 0 0 10px; color: var(--primary); font-size: 13px; font-weight: 700; }
   .market-card strong { display: block; font-size: 18px; color: var(--text); }
   .market-card span, .market-card em { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; font-style: normal; }
-  .market-card em { color: var(--accent); font-weight: 700; }
+  .market-card em { font-weight: 700; }
+  .market-card em.market-change--down { color: #f43f5e; }
+  .market-card em.market-change--up { color: #22c55e; }
+  .market-card em.market-change--neutral { color: var(--muted); }
   .attribution { margin: 0; color: var(--muted); font-size: 10.5px; }
   .market-followup { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; }
   .market-followup button { flex-shrink: 0; border: 1px solid var(--border); border-radius: 3px; background: #fff; color: var(--primary); padding: 9px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }

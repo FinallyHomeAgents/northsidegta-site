@@ -1271,6 +1271,7 @@ export default function ThankYou209BarriePage() {
             about: {
               "@type": "RealEstateAgent",
               name: "Finally Home Agents",
+              alternateName: "NorthSide GTA",
               areaServed: [
                 "Georgina",
                 "East Gwillimbury",

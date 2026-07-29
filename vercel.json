@@ -42,6 +42,20 @@
     { "source": "/admin", "destination": "/cms", "statusCode": 308 },
     { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
   ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/about", "destination": "/about/index.html" },
     { "source": "/buyers", "destination": "/buyers/index.html" },
