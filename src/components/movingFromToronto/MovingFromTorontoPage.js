@@ -30,6 +30,24 @@ function MarketStat({ label, value, marketKey, className = "" }) {
   );
 }
 
+function RichText({ value }) {
+  if (!Array.isArray(value)) {
+    return value;
+  }
+
+  return value.map((part, index) => {
+    if (typeof part === "string") {
+      return <React.Fragment key={`text-${index}`}>{part}</React.Fragment>;
+    }
+
+    return (
+      <a href={part.href} key={`${part.href}-${index}`}>
+        {part.label}
+      </a>
+    );
+  });
+}
+
 function BudgetBuyCard({ content }) {
   return (
     <aside className="moving-guide__budget-card" aria-labelledby="moving-guide-budget-heading">
@@ -234,7 +252,7 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
                 <article className="moving-guide__family-card" key={heading}>
                   <span className="moving-guide__family-icon" aria-hidden="true">{icon}</span>
                   <h3>{heading}</h3>
-                  <p>{body}</p>
+                  <p><RichText value={body} /></p>
                 </article>
               ))}
             </div>
@@ -258,7 +276,7 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
             </div>
             <div className="moving-guide__callout moving-guide__callout--inside">
               <p>
-                <strong>The honest read:</strong> {content.commute.honestRead}
+                <strong>The honest read:</strong> <RichText value={content.commute.honestRead} />
               </p>
             </div>
           </section>
@@ -329,7 +347,7 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
               <span data-market="lastUpdated">{MARKET_DATA.period}</span> · Source:{" "}
               {MARKET_DATA.source} · {MARKET_DATA.homeType}
             </p>
-            <p>{content.marketSection.conclusion}</p>
+            <p><RichText value={content.marketSection.conclusion} /></p>
           </section>
 
           <aside className="moving-guide__review" aria-label="Client review">

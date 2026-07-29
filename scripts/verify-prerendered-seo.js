@@ -31,10 +31,42 @@ const { uxbridgeMovingGuide } = require(path.join(
   "movingFromToronto",
   "uxbridge.js",
 ));
+const { newmarketMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "newmarket.js",
+));
+const { auroraMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "aurora.js",
+));
+const { stouffvilleMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "stouffville.js",
+));
+const { scugogMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "scugog.js",
+));
 const movingGuides = [
   georginaMovingGuide,
   eastGwillimburyMovingGuide,
   uxbridgeMovingGuide,
+  newmarketMovingGuide,
+  auroraMovingGuide,
+  stouffvilleMovingGuide,
+  scugogMovingGuide,
 ];
 const retiredInsightSlugs = [
   "lando-test-2",
@@ -411,6 +443,12 @@ movingGuides.forEach((guide) => {
     }
   });
 
+  (guide.crossGuideLinks || []).forEach((href) => {
+    if (!movingGuideHtml.includes(`href="${href}"`)) {
+      failures.push(`${guide.route}: missing cross-guide link href="${href}"`);
+    }
+  });
+
   const faqSchema = schemaNodes(movingGuideDoc, guide.route).find((node) =>
     nodeHasType(node, "FAQPage"),
   );
@@ -435,10 +473,7 @@ movingGuides.forEach((guide) => {
   }
 });
 
-[
-  eastGwillimburyMovingGuide,
-  uxbridgeMovingGuide,
-].forEach((guide) => {
+movingGuides.forEach((guide) => {
   const communityHtml = readRoute(guide.communityProfilePath)?.toString() || "";
   if (!communityHtml.includes(`href="${guide.route}"`)) {
     failures.push(`${guide.communityProfilePath}: missing moving-guide banner link`);

@@ -3,15 +3,27 @@ import sellersSchemaModule from "../../lib/structuredData/sellersPage.js";
 import movingGuideContentModule from "../../content/movingFromToronto/georgina.js";
 import eastGwillimburyMovingGuideModule from "../../content/movingFromToronto/eastGwillimbury.js";
 import uxbridgeMovingGuideModule from "../../content/movingFromToronto/uxbridge.js";
+import newmarketMovingGuideModule from "../../content/movingFromToronto/newmarket.js";
+import auroraMovingGuideModule from "../../content/movingFromToronto/aurora.js";
+import stouffvilleMovingGuideModule from "../../content/movingFromToronto/stouffville.js";
+import scugogMovingGuideModule from "../../content/movingFromToronto/scugog.js";
 
 const { buildSellersPageSchema, SELLERS_PAGE_TITLE, SELLERS_PAGE_DESCRIPTION } = sellersSchemaModule;
 const { georginaMovingGuide, buildMovingGuideSchema } = movingGuideContentModule;
 const { eastGwillimburyMovingGuide } = eastGwillimburyMovingGuideModule;
 const { uxbridgeMovingGuide } = uxbridgeMovingGuideModule;
+const { newmarketMovingGuide } = newmarketMovingGuideModule;
+const { auroraMovingGuide } = auroraMovingGuideModule;
+const { stouffvilleMovingGuide } = stouffvilleMovingGuideModule;
+const { scugogMovingGuide } = scugogMovingGuideModule;
 const MOVING_GUIDES = [
   georginaMovingGuide,
   eastGwillimburyMovingGuide,
   uxbridgeMovingGuide,
+  newmarketMovingGuide,
+  auroraMovingGuide,
+  stouffvilleMovingGuide,
+  scugogMovingGuide,
 ];
 
 const DEFAULT_GLOBAL_META_CONFIG = {

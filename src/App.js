@@ -53,6 +53,10 @@ import UnlockPage from "./UnlockPage";
 import MovingToGeorginaFromTorontoPage from "./MovingToGeorginaFromTorontoPage";
 import MovingToEastGwillimburyFromTorontoPage from "./MovingToEastGwillimburyFromTorontoPage";
 import MovingToUxbridgeFromTorontoPage from "./MovingToUxbridgeFromTorontoPage";
+import MovingToNewmarketFromTorontoPage from "./MovingToNewmarketFromTorontoPage";
+import MovingToAuroraFromTorontoPage from "./MovingToAuroraFromTorontoPage";
+import MovingToStouffvilleFromTorontoPage from "./MovingToStouffvilleFromTorontoPage";
+import MovingToPortPerryScugogFromTorontoPage from "./MovingToPortPerryScugogFromTorontoPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -115,6 +119,10 @@ function App() {
           <Route path="/moving-to-georgina-from-toronto" element={<MovingToGeorginaFromTorontoPage />} />
           <Route path="/moving-to-east-gwillimbury-from-toronto" element={<MovingToEastGwillimburyFromTorontoPage />} />
           <Route path="/moving-to-uxbridge-from-toronto" element={<MovingToUxbridgeFromTorontoPage />} />
+          <Route path="/moving-to-newmarket-from-toronto" element={<MovingToNewmarketFromTorontoPage />} />
+          <Route path="/moving-to-aurora-from-toronto" element={<MovingToAuroraFromTorontoPage />} />
+          <Route path="/moving-to-stouffville-from-toronto" element={<MovingToStouffvilleFromTorontoPage />} />
+          <Route path="/moving-to-port-perry-scugog-from-toronto" element={<MovingToPortPerryScugogFromTorontoPage />} />
           <Route path="/sellers"      element={<SellersPage />} />
           <Route path="/community"    element={<CommunityPage />} />
           <Route path="/communities"  element={<CommunitiesPage />} />
