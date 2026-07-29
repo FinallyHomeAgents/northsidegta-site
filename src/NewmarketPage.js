@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import MARKET_DATA from "./data/marketData.json";
 
-const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns.newmarket;
+const TOWN_MARKET = MARKET_DATA.municipalities.newmarket;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -169,7 +169,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is Newmarket Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is York Region's highest-volume real estate market."}},{"@type":"Question","name":"Is Newmarket a good place to buy a home in 2026?","acceptedAnswer":{"@type":"Answer","text":"Newmarket's average days on market sat at ${TOWN_MARKET.daysOnMarket} in early 2026 — the fastest pace in York Region. It offers strong value compared with Aurora while maintaining GO Train access and established neighbourhood stock. Market data from ${MARKET_DATA.datasets.communityGuide.source}."}},{"@type":"Question","name":"What are the best areas in Newmarket?","acceptedAnswer":{"@type":"Answer","text":"Stonehaven-Wyndham is consistently in demand for its school catchment and access to the 404. Armitage and Bristol-London are popular with families. Central Newmarket suits buyers who want walkability and proximity to Main Street amenities."}}]
+      "mainEntity":[{"@type":"Question","name":"What is Newmarket Ontario known for?","acceptedAnswer":{"@type":"Answer","text":"Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is York Region's highest-volume real estate market."}},{"@type":"Question","name":"Is Newmarket a good place to buy a home in 2026?","acceptedAnswer":{"@type":"Answer","text":"In ${MARKET_DATA.period}, Newmarket recorded ${TOWN_MARKET.salesCount} sales across all home types, an exact average sale price of ${TOWN_MARKET.averageSalePrice}, and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"What are the best areas in Newmarket?","acceptedAnswer":{"@type":"Answer","text":"Stonehaven-Wyndham is consistently in demand for its school catchment and access to the 404. Armitage and Bristol-London are popular with families. Central Newmarket suits buyers who want walkability and proximity to Main Street amenities."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -198,10 +198,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in Newmarket</h1>
     <p class="hero-sub">A connected NorthSide GTA town with Main Street energy, GO access, established neighbourhoods, shopping, parks, and practical day-to-day convenience.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSalePrice}</div><div class="hstat-lbl">Avg. sale price</div></div>
       <div class="hstat"><div class="hstat-val">45 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.salesCount}</div><div class="hstat-lbl">Sales</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.avgLdom}d</div><div class="hstat-lbl">Avg. LDOM</div></div>
     </div>
   </div>
 </section>
@@ -331,7 +331,7 @@ const PAGE_BODY_HTML = `
           </div>
           <div class="fit-item fit-watch">
             <div class="fit-label">Things to weigh up</div>
-            <p>With average days on market at 17, well-priced listings in strong school zones move quickly. Budget preparation matters here.</p>
+            <p>Well-priced listings in strong school zones can move quickly. Budget preparation matters here.</p>
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
@@ -353,7 +353,7 @@ const PAGE_BODY_HTML = `
       <div class="faq-answer">Newmarket is known as one of York Region's most connected and active communities. It has a walkable Main Street, direct GO Train service on the Barrie line, Southlake Regional Health Centre, and Upper Canada Mall. It is York Region's highest-volume real estate market.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Is Newmarket a good place to buy a home in 2026? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">Newmarket's average days on market sat at ${TOWN_MARKET.daysOnMarket} in early 2026 — the fastest pace in York Region. It offers strong value compared with Aurora while maintaining GO Train access and established neighbourhood stock. Market data from ${MARKET_DATA.datasets.communityGuide.source}.</div>
+      <div class="faq-answer">In ${MARKET_DATA.period}, Newmarket recorded ${TOWN_MARKET.salesCount} sales across all home types, an exact average sale price of ${TOWN_MARKET.averageSalePrice}, and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">What are the best areas in Newmarket? <span class="faq-icon">+</span></summary>
       <div class="faq-answer">Stonehaven-Wyndham is consistently in demand for its school catchment and access to the 404. Armitage and Bristol-London are popular with families. Central Newmarket suits buyers who want walkability and proximity to Main Street amenities.</div>
@@ -395,16 +395,11 @@ const PAGE_BODY_HTML = `
 
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
-        <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <h3>Market snapshot · ${MARKET_DATA.period}</h3>
+        <div class="prow"><span class="pk">Average sale price</span><span class="pv">${TOWN_MARKET.averageSalePrice}</span></div>
+        <div class="prow"><span class="pk">Sales count</span><span class="pv">${TOWN_MARKET.salesCount}</span></div>
+        <div class="prow"><span class="pk">Avg. LDOM</span><span class="pv">${TOWN_MARKET.avgLdom}</span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.55);margin-top:10px;line-height:1.6;">Source: ${MARKET_DATA.source}. ${MARKET_DATA.homeType}. Not an appraisal.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

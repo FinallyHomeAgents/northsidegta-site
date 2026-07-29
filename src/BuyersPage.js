@@ -6,7 +6,6 @@ import { getFormEndpoint } from "./components/contact/contactConfig";
 import { BUYER_FAQS, BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
 import MARKET_DATA from "./data/marketData.json";
 
-const { getMarketTrend } = require("./utils/marketTrend");
 const COMMUNITIES = [
   "Aurora",
   "Newmarket",
@@ -166,14 +165,14 @@ const PHOTO_GRID = [
   },
 ];
 
-const MARKET_WATCH_TOWNS = MARKET_DATA.datasets.marketWatch.towns;
+const MARKET_WATCH_TOWNS = MARKET_DATA.municipalities;
 const MARKET_SNAPSHOT = COMMUNITIES.map((town) => {
   const townMarket = MARKET_WATCH_TOWNS[TOWN_DATA[town].slug];
   return {
     town,
-    price: townMarket.averageSold,
-    days: `${townMarket.daysOnMarket} days avg`,
-    trend: getMarketTrend(townMarket.yearOverYear),
+    price: townMarket.averageSalePrice,
+    sales: `Sales count ${townMarket.salesCount}`,
+    avgLdom: `Avg. LDOM ${townMarket.avgLdom}`,
   };
 });
 
@@ -648,20 +647,20 @@ export default function BuyersPage() {
           <SectionHeader
             eyebrow="03 / Market Context"
             title="A quick read on where budgets are landing"
-            lead={`${MARKET_DATA.lastUpdated} · TRREB Market Watch. Use this as context, then let us apply it to your budget and timing.`}
+            lead={`${MARKET_DATA.period} · ${MARKET_DATA.homeType}. Use this as context, then let us apply it to your budget and timing.`}
           />
           <div className="market-grid">
-            {MARKET_SNAPSHOT.map(({ town, price, days, trend }) => (
+            {MARKET_SNAPSHOT.map(({ town, price, sales, avgLdom }) => (
               <article className="market-card" key={town}>
                 <h3>{town}</h3>
                 <strong>{price}</strong>
-                <span>{days}</span>
-                <em className={`market-change market-change--${trend.direction}`}>{trend.label}</em>
+                <span>{sales}</span>
+                <em className="market-change">{avgLdom}</em>
               </article>
             ))}
           </div>
           <div className="market-followup">
-            <p className="attribution">Source: {MARKET_DATA.datasets.marketWatch.source}. Figures rounded; not a guarantee of value.</p>
+            <p className="attribution">Source: {MARKET_DATA.source}. Exact municipal all-home-types figures; not a guarantee of value.</p>
             <button type="button" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
           </div>
         </div>

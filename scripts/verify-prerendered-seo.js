@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
 const { loadPublishedInsights } = require("./utils/publishedInsights");
-const { getMarketTrend } = require("../src/utils/marketTrend");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
@@ -309,14 +308,14 @@ if (!fs.existsSync(sitemapPath)) {
 }
 
 const homepageText = readRoute("/")?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
-const marketWatch = marketData.datasets.marketWatch;
 [
-  marketData.lastUpdated,
-  marketWatch.source,
-  ...Object.values(marketWatch.towns).flatMap(({ averageSold, daysOnMarket, yearOverYear }) => [
-    averageSold,
-    `${daysOnMarket} days on market`,
-    yearOverYear,
+  marketData.period,
+  marketData.source,
+  marketData.homeType,
+  ...Object.values(marketData.municipalities).flatMap(({ averageSalePrice, salesCount, avgLdom }) => [
+    averageSalePrice,
+    `Sales count ${salesCount}`,
+    `Avg. LDOM ${avgLdom}`,
   ]),
 ].forEach((value) => {
   if (!homepageText.includes(value)) {
@@ -324,26 +323,22 @@ const marketWatch = marketData.datasets.marketWatch;
   }
 });
 
-[
-  ["-7.8%", "down", "↓ -7.8%"],
-  ["+3.0%", "up", "↑ +3.0%"],
-  ["0.0%", "neutral", "0.0%"],
-].forEach(([value, direction, label]) => {
-  const trend = getMarketTrend(value);
-  if (trend.direction !== direction || trend.label !== label) {
-    failures.push(`market trend ${value}: expected ${direction} / "${label}", received ${trend.direction} / "${trend.label}"`);
-  }
-});
-
-const homepageDoc = readRoute("/");
-Object.entries(marketWatch.towns).forEach(([slug, town]) => {
-  const trend = getMarketTrend(town.yearOverYear);
-  const matchingTrend = homepageDoc
-    ?.querySelectorAll(`.market-card__yoy--${trend.direction}`)
-    .find((node) => node.text.replace(/\s+/g, " ").trim() === trend.label);
-  if (!matchingTrend) {
-    failures.push(`/: missing ${slug} market trend class/label ${trend.direction} / "${trend.label}"`);
-  }
+Object.entries(marketData.municipalities).forEach(([slug, town]) => {
+  const route = `/communities/${slug}`;
+  const communityText = readRoute(route)?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
+  [
+    marketData.period,
+    `Source: ${marketData.source}`,
+    town.averageSalePrice,
+    "Sales count",
+    String(town.salesCount),
+    "Avg. LDOM",
+    String(town.avgLdom),
+  ].forEach((value) => {
+    if (!communityText.includes(value)) {
+      failures.push(`${route}: community market snapshot is missing shared value "${value}"`);
+    }
+  });
 });
 
 const robots = fs.readFileSync(path.join(rootDir, "public", "robots.txt"), "utf8");
@@ -411,7 +406,7 @@ console.log(
 console.log("[audit] PASS — 7 community pages: unique H1/title, self canonical, BreadcrumbList");
 console.log("[audit] PASS — 10 static pages: crawlable body content and self canonicals");
 console.log(`[audit] PASS — ${checkedInsights} published insights: body content and Article JSON-LD`);
-console.log("[audit] PASS — homepage: FAQPage, RealEstateAgent, shared market data, sign-aware YoY");
+console.log("[audit] PASS — homepage and community snapshots: exact shared June 2026 market data");
 console.log("[audit] PASS — sitemap: published non-www URLs only; rendered heads: zero www references");
 console.log("[audit] PASS — cache: HTML/fallback revalidate, hashed assets immutable, retired insights 410/no-store");
 console.log("[audit] PASS — AI search: llms.txt, permissive robots, consistent site entity JSON-LD");

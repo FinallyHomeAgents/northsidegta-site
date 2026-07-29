@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import MARKET_DATA from "./data/marketData.json";
 
-const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns["east-gwillimbury"];
+const TOWN_MARKET = MARKET_DATA.municipalities["east-gwillimbury"];
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -169,7 +169,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is East Gwillimbury Ontario like?","acceptedAnswer":{"@type":"Answer","text":"East Gwillimbury is York Region's fastest-growing municipality, spanning Sharon, Queensville, Holland Landing, and Mount Albert. It is known for larger new-construction homes, significant infrastructure investment, and the HALP recreation centre opened in 2025."}},{"@type":"Question","name":"Is East Gwillimbury a good place to buy?","acceptedAnswer":{"@type":"Answer","text":"For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. It is currently a buyer's market with approximately ${TOWN_MARKET.monthsInventory} months of inventory. Daily commuting requires car travel."}},{"@type":"Question","name":"Does East Gwillimbury have GO Train service?","acceptedAnswer":{"@type":"Answer","text":"No — East Gwillimbury does not currently have a GO Train station. The closest stations are in Aurora and Newmarket. Residents primarily commute via Highway 404. The Bradford bypass is improving east-west access."}}]
+      "mainEntity":[{"@type":"Question","name":"What is East Gwillimbury Ontario like?","acceptedAnswer":{"@type":"Answer","text":"East Gwillimbury is York Region's fastest-growing municipality, spanning Sharon, Queensville, Holland Landing, and Mount Albert. It is known for larger new-construction homes, significant infrastructure investment, and the HALP recreation centre opened in 2025."}},{"@type":"Question","name":"Is East Gwillimbury a good place to buy?","acceptedAnswer":{"@type":"Answer","text":"For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. In ${MARKET_DATA.period}, it recorded ${TOWN_MARKET.salesCount} all-home-types sales at an exact average sale price of ${TOWN_MARKET.averageSalePrice} and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"Does East Gwillimbury have GO Train service?","acceptedAnswer":{"@type":"Answer","text":"No — East Gwillimbury does not currently have a GO Train station. The closest stations are in Aurora and Newmarket. Residents primarily commute via Highway 404. The Bradford bypass is improving east-west access."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -198,10 +198,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in East Gwillimbury</h1>
     <p class="hero-sub">Newer communities, larger lots, family-focused growth, and quick access to Highway 404 across Sharon, Queensville, Holland Landing, and Mount Albert.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSalePrice}</div><div class="hstat-lbl">Avg. sale price</div></div>
       <div class="hstat"><div class="hstat-val">50 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.salesCount}</div><div class="hstat-lbl">Sales</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.avgLdom}d</div><div class="hstat-lbl">Avg. LDOM</div></div>
     </div>
   </div>
 </section>
@@ -347,7 +347,7 @@ const PAGE_BODY_HTML = `
       <div class="faq-answer">East Gwillimbury is York Region's fastest-growing municipality, spanning Sharon, Queensville, Holland Landing, and Mount Albert. It is known for larger new-construction homes, significant infrastructure investment, and the HALP recreation centre opened in 2025.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Is East Gwillimbury a good place to buy? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. It is currently a buyer's market with approximately ${TOWN_MARKET.monthsInventory} months of inventory. Daily commuting requires car travel.</div>
+      <div class="faq-answer">For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. In ${MARKET_DATA.period}, it recorded ${TOWN_MARKET.salesCount} all-home-types sales at an exact average sale price of ${TOWN_MARKET.averageSalePrice} and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Does East Gwillimbury have GO Train service? <span class="faq-icon">+</span></summary>
       <div class="faq-answer">No — East Gwillimbury does not currently have a GO Train station. The closest stations are in Aurora and Newmarket. Residents primarily commute via Highway 404. The Bradford bypass is improving east-west access.</div>
@@ -389,16 +389,11 @@ const PAGE_BODY_HTML = `
 
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
-        <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <h3>Market snapshot · ${MARKET_DATA.period}</h3>
+        <div class="prow"><span class="pk">Average sale price</span><span class="pv">${TOWN_MARKET.averageSalePrice}</span></div>
+        <div class="prow"><span class="pk">Sales count</span><span class="pv">${TOWN_MARKET.salesCount}</span></div>
+        <div class="prow"><span class="pk">Avg. LDOM</span><span class="pv">${TOWN_MARKET.avgLdom}</span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.55);margin-top:10px;line-height:1.6;">Source: ${MARKET_DATA.source}. ${MARKET_DATA.homeType}. Not an appraisal.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

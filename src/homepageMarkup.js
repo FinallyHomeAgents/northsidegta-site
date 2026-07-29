@@ -1,10 +1,6 @@
 import MARKET_DATA from "./data/marketData.json";
 
-const { getMarketTrend } = require("./utils/marketTrend");
-const MARKET_WATCH = MARKET_DATA.datasets.marketWatch;
-const MARKET_TRENDS = Object.fromEntries(
-  Object.entries(MARKET_WATCH.towns).map(([slug, town]) => [slug, getMarketTrend(town.yearOverYear)])
-);
+const MARKET_TOWNS = MARKET_DATA.municipalities;
 
 export const HOMEPAGE_MARKUP = String.raw`
 <main>
@@ -657,8 +653,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.georgina.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.georgina.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Georgina Real Estate →</span>
               </div>
@@ -679,8 +675,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns["east-gwillimbury"].averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS["east-gwillimbury"].averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore East Gwillimbury Real Estate →</span>
               </div>
@@ -701,8 +697,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.newmarket.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.newmarket.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Newmarket Real Estate →</span>
               </div>
@@ -723,8 +719,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.aurora.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.aurora.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Aurora Real Estate →</span>
               </div>
@@ -745,8 +741,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.stouffville.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.stouffville.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Stouffville Real Estate →</span>
               </div>
@@ -767,8 +763,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.uxbridge.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.uxbridge.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Uxbridge Real Estate →</span>
               </div>
@@ -789,8 +785,8 @@ export const HOMEPAGE_MARKUP = String.raw`
               </ul>
               <div class="community-card__footer">
                 <div>
-                  <span class="community-card__price-label">Avg. price · Apr 2026</span>
-                  <span class="community-card__price">${MARKET_WATCH.towns.scugog.averageSold}</span>
+                  <span class="community-card__price-label">Avg. sale price · ${MARKET_DATA.period}</span>
+                  <span class="community-card__price">${MARKET_TOWNS.scugog.averageSalePrice}</span>
                 </div>
                 <span class="community-card__cta">Explore Scugog Real Estate →</span>
               </div>
@@ -808,56 +804,56 @@ export const HOMEPAGE_MARKUP = String.raw`
       <div class="market-snapshot__header">
         <div>
           <h2 class="market-snapshot__heading" id="market-heading">NorthSide GTA Market Snapshot</h2>
-          <p class="market-snapshot__date">Last updated: ${MARKET_DATA.lastUpdated} · Updated monthly</p>
+          <p class="market-snapshot__date">${MARKET_DATA.period} · ${MARKET_DATA.homeType}</p>
         </div>
-        <span class="market-snapshot__source">Source: ${MARKET_WATCH.source}, ${MARKET_DATA.lastUpdated}</span>
+        <span class="market-snapshot__source">Source: ${MARKET_DATA.source}</span>
       </div>
 
       <p class="market-context">
-        Prices across the NorthSide GTA are down year-over-year — giving buyers more room to negotiate and more time to decide than at any point in the last three years.
+        A consistent all-home-types view of average sale price, sales, and average listing days on market across all seven municipalities.
       </p>
 
       <div class="market-cards" role="list" aria-label="Market data by community">
         
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.georgina.direction}">${MARKET_TRENDS.georgina.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.georgina.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.georgina.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Georgina</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.georgina.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.georgina.salesCount} · Avg. LDOM ${MARKET_TOWNS.georgina.avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">East Gwillimbury</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS["east-gwillimbury"].direction}">${MARKET_TRENDS["east-gwillimbury"].label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns["east-gwillimbury"].averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns["east-gwillimbury"].daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">East Gwillimbury</span></div>
+          <span class="market-card__price">${MARKET_TOWNS["east-gwillimbury"].averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS["east-gwillimbury"].salesCount} · Avg. LDOM ${MARKET_TOWNS["east-gwillimbury"].avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Newmarket</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.newmarket.direction}">${MARKET_TRENDS.newmarket.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.newmarket.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.newmarket.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Newmarket</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.newmarket.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.newmarket.salesCount} · Avg. LDOM ${MARKET_TOWNS.newmarket.avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Aurora</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.aurora.direction}">${MARKET_TRENDS.aurora.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.aurora.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.aurora.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Aurora</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.aurora.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.aurora.salesCount} · Avg. LDOM ${MARKET_TOWNS.aurora.avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Whitchurch-Stouffville</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.stouffville.direction}">${MARKET_TRENDS.stouffville.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.stouffville.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.stouffville.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Whitchurch-Stouffville</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.stouffville.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.stouffville.salesCount} · Avg. LDOM ${MARKET_TOWNS.stouffville.avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Uxbridge</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.uxbridge.direction}">${MARKET_TRENDS.uxbridge.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.uxbridge.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.uxbridge.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Uxbridge</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.uxbridge.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.uxbridge.salesCount} · Avg. LDOM ${MARKET_TOWNS.uxbridge.avgLdom}</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Scugog</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.scugog.direction}">${MARKET_TRENDS.scugog.label}</span></div>
-          <span class="market-card__price">${MARKET_WATCH.towns.scugog.averageSold}</span>
-          <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.scugog.daysOnMarket} days on market · YoY</span>
+          <div class="market-card__top"><span class="market-card__name">Scugog</span></div>
+          <span class="market-card__price">${MARKET_TOWNS.scugog.averageSalePrice}</span>
+          <span class="market-card__meta">Sales count ${MARKET_TOWNS.scugog.salesCount} · Avg. LDOM ${MARKET_TOWNS.scugog.avgLdom}</span>
         </div>
       </div>
 
       <p class="market-snapshot__disclaimer">
-        Source: ${MARKET_WATCH.source}, ${MARKET_DATA.lastUpdated}. Figures are rounded and may vary by property type, location, and condition.
+        Source: ${MARKET_DATA.source}. ${MARKET_DATA.homeType}.
       </p>
       <p class="market-snapshot__legal">
         Not a guarantee of value. Not intended to solicit clients already under contract with a brokerage.
