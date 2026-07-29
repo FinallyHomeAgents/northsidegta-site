@@ -138,6 +138,7 @@ export function buildGlobalGraph() {
     "@type": ["LocalBusiness", "RealEstateAgent"],
     "@id": `${BASE_URL}/#finally-home-agents`,
     name: "Finally Home Agents",
+    alternateName: "NorthSide GTA",
     url: BASE_URL,
     telephone: "647-668-4646",
     email: "contact@finallyhomeagents.com",

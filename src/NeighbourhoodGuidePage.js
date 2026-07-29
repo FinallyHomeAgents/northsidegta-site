@@ -339,7 +339,8 @@ const PAGE_SCHEMA = `{
       "dateModified":"2026-05-24",
       "publisher":{
         "@type":"RealEstateAgent",
-        "name":"Finally Home Agents Team",
+        "name":"Finally Home Agents",
+        "alternateName":"NorthSide GTA",
         "url":"https://northsidegta.ca",
         "employee":[
           {"@type":"Person","name":"Matthew Mulhall","jobTitle":"Sales Representative","worksFor":{"@type":"Organization","name":"HomeLife Optimum Realty"}},

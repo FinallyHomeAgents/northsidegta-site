@@ -1,6 +1,10 @@
 import MARKET_DATA from "./data/marketData.json";
 
+const { getMarketTrend } = require("./utils/marketTrend");
 const MARKET_WATCH = MARKET_DATA.datasets.marketWatch;
+const MARKET_TRENDS = Object.fromEntries(
+  Object.entries(MARKET_WATCH.towns).map(([slug, town]) => [slug, getMarketTrend(town.yearOverYear)])
+);
 
 export const HOMEPAGE_MARKUP = String.raw`
 <main>
@@ -816,37 +820,37 @@ export const HOMEPAGE_MARKUP = String.raw`
       <div class="market-cards" role="list" aria-label="Market data by community">
         
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.georgina.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Georgina</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.georgina.direction}">${MARKET_TRENDS.georgina.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.georgina.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.georgina.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">East Gwillimbury</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns["east-gwillimbury"].yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">East Gwillimbury</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS["east-gwillimbury"].direction}">${MARKET_TRENDS["east-gwillimbury"].label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns["east-gwillimbury"].averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns["east-gwillimbury"].daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Newmarket</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.newmarket.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Newmarket</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.newmarket.direction}">${MARKET_TRENDS.newmarket.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.newmarket.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.newmarket.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Aurora</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.aurora.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Aurora</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.aurora.direction}">${MARKET_TRENDS.aurora.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.aurora.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.aurora.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Whitchurch-Stouffville</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.stouffville.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Whitchurch-Stouffville</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.stouffville.direction}">${MARKET_TRENDS.stouffville.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.stouffville.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.stouffville.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Uxbridge</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.uxbridge.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Uxbridge</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.uxbridge.direction}">${MARKET_TRENDS.uxbridge.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.uxbridge.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.uxbridge.daysOnMarket} days on market · YoY</span>
         </div>
         <div class="market-card" role="listitem">
-          <div class="market-card__top"><span class="market-card__name">Scugog</span><span class="market-card__yoy market-card__yoy--down">↓ ${MARKET_WATCH.towns.scugog.yearOverYear}</span></div>
+          <div class="market-card__top"><span class="market-card__name">Scugog</span><span class="market-card__yoy market-card__yoy--${MARKET_TRENDS.scugog.direction}">${MARKET_TRENDS.scugog.label}</span></div>
           <span class="market-card__price">${MARKET_WATCH.towns.scugog.averageSold}</span>
           <span class="market-card__meta">Avg · ${MARKET_WATCH.towns.scugog.daysOnMarket} days on market · YoY</span>
         </div>

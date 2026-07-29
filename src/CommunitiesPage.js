@@ -127,7 +127,9 @@ const structuredData = {
       description: PAGE_DESCRIPTION,
       about: {
         "@type": "RealEstateAgent",
-        name: "Finally Home Agents — NorthSide GTA",
+        name: "Finally Home Agents",
+        alternateName: "NorthSide GTA",
+        url: "https://northsidegta.ca",
       },
     },
     {

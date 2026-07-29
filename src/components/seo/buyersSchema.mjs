@@ -93,6 +93,7 @@ export const BUYERS_SCHEMA = {
       "@type": "RealEstateAgent",
       "@id": `${SITE_URL}/#realestateagent`,
       name: "Finally Home Agents",
+      alternateName: "NorthSide GTA",
       url: SITE_URL,
       image: BUYERS_SEO_IMAGE,
       telephone: "+16476684646",

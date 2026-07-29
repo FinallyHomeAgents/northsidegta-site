@@ -211,6 +211,7 @@ function buildArticleSchema(data, meta) {
     publisher: {
       "@type": "Organization",
       name: "Finally Home Agents",
+      alternateName: "NorthSide GTA",
       url: "https://northsidegta.ca",
     },
     ...(published ? { datePublished: published } : {}),

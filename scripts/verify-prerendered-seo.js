@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
 const { loadPublishedInsights } = require("./utils/publishedInsights");
+const { getMarketTrend } = require("../src/utils/marketTrend");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
@@ -47,6 +48,7 @@ const staticChecks = [
 
 const failures = [];
 let checkedRoutes = 0;
+const checkedTownTitles = [];
 
 function routeFile(route) {
   if (route === "/") return path.join(buildDir, "index.html");
@@ -66,28 +68,80 @@ function expectedCanonical(route) {
   return route === "/" ? `${origin}/` : `${origin}${route}`;
 }
 
-function schemaTypes(doc) {
-  const types = new Set();
+function schemaNodes(doc, route) {
+  const nodes = [];
+  const visit = (value) => {
+    if (!value || typeof value !== "object") return;
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+    nodes.push(value);
+    Object.values(value).forEach(visit);
+  };
+
   doc.querySelectorAll('script[type="application/ld+json"]').forEach((node) => {
     try {
-      const schema = JSON.parse(node.text);
-      const visit = (value) => {
-        if (!value || typeof value !== "object") return;
-        if (Array.isArray(value)) {
-          value.forEach(visit);
-          return;
-        }
-        const type = value["@type"];
-        if (Array.isArray(type)) type.forEach((item) => types.add(item));
-        else if (type) types.add(type);
-        Object.values(value).forEach(visit);
-      };
-      visit(schema);
+      visit(JSON.parse(node.text));
     } catch (error) {
-      failures.push(`invalid JSON-LD (${error.message})`);
+      failures.push(`${route}: invalid JSON-LD (${error.message})`);
     }
   });
+  return nodes;
+}
+
+function schemaTypes(nodes) {
+  const types = new Set();
+  nodes.forEach((node) => {
+    const type = node["@type"];
+    if (Array.isArray(type)) type.forEach((item) => types.add(item));
+    else if (type) types.add(type);
+  });
   return types;
+}
+
+function nodeHasType(node, expectedType) {
+  const type = node?.["@type"];
+  return Array.isArray(type) ? type.includes(expectedType) : type === expectedType;
+}
+
+function validateSiteEntity(nodes, route) {
+  nodes.filter((node) => nodeHasType(node, "RealEstateAgent")).forEach((node) => {
+    if (node.name !== "Finally Home Agents") {
+      failures.push(`${route}: RealEstateAgent name is "${node.name || "<missing>"}"`);
+    }
+    if (node.alternateName !== "NorthSide GTA") {
+      failures.push(`${route}: RealEstateAgent alternateName is "${node.alternateName || "<missing>"}"`);
+    }
+    if (node.url !== origin) {
+      failures.push(`${route}: RealEstateAgent url is "${node.url || "<missing>"}"`);
+    }
+  });
+
+  nodes
+    .filter((node) => typeof node.name === "string" && /^Finally Home Agents(?:\s|$)/.test(node.name))
+    .forEach((node) => {
+      if (node.name !== "Finally Home Agents") {
+        failures.push(`${route}: inconsistent JSON-LD entity name "${node.name}"`);
+      }
+    });
+
+  nodes.filter((node) => nodeHasType(node, "Article") || nodeHasType(node, "BlogPosting")).forEach((article) => {
+    const publisher = article.publisher;
+    if (!publisher || typeof publisher !== "object") {
+      failures.push(`${route}: Article is missing a publisher reference`);
+      return;
+    }
+    if (publisher.name && publisher.name !== "Finally Home Agents") {
+      failures.push(`${route}: Article publisher name is "${publisher.name}"`);
+    }
+    if (publisher.name && publisher.alternateName !== "NorthSide GTA") {
+      failures.push(`${route}: Article publisher alternateName is "${publisher.alternateName || "<missing>"}"`);
+    }
+    if (publisher.name && publisher.url !== origin) {
+      failures.push(`${route}: Article publisher url is "${publisher.url || "<missing>"}"`);
+    }
+  });
 }
 
 function checkRoute({ route, h1, body, title, schema = [] }) {
@@ -118,21 +172,30 @@ function checkRoute({ route, h1, body, title, schema = [] }) {
     failures.push(`${route}: initial HTML is missing "${body}"`);
   }
 
-  const types = schemaTypes(doc);
+  const nodes = schemaNodes(doc, route);
+  const types = schemaTypes(nodes);
+  validateSiteEntity(nodes, route);
   schema.forEach((type) => {
     if (!types.has(type)) failures.push(`${route}: missing ${type} JSON-LD`);
   });
+
+  return { title: actualTitle, canonical, h1: actualH1, body: bodyText };
 }
 
 for (const [slug, town] of Object.entries(townNames)) {
   const route = `/communities/${slug}`;
-  checkRoute({
+  const result = checkRoute({
     route,
     h1: `Living in ${town}`,
     body: town,
     title: `${town} Real Estate & Homes | Moving to ${town} | Finally Home Agents`,
     schema: ["BreadcrumbList"],
   });
+  if (result?.title) checkedTownTitles.push(result.title);
+}
+
+if (new Set(checkedTownTitles).size !== Object.keys(townNames).length) {
+  failures.push("community pages do not have seven unique titles");
 }
 
 staticChecks.forEach(checkRoute);
@@ -144,6 +207,39 @@ const vercelConfig = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"
 const rewritesBySource = new Map(
   (vercelConfig.rewrites || []).map(({ source, destination }) => [source, destination]),
 );
+const cacheRules = vercelConfig.headers || [];
+const cacheHeaderFor = (source) =>
+  cacheRules
+    .find((rule) => rule.source === source)
+    ?.headers?.find(({ key }) => key.toLowerCase() === "cache-control")
+    ?.value;
+const htmlCacheRuleIndex = cacheRules.findIndex((rule) => rule.source === "/(.*)");
+const staticCacheRuleIndex = cacheRules.findIndex((rule) => rule.source === "/static/(.*)");
+
+if (cacheHeaderFor("/(.*)") !== "public, max-age=0, must-revalidate") {
+  failures.push("vercel.json: catch-all HTML/SPA fallback cache policy is not max-age=0, must-revalidate");
+}
+if (cacheHeaderFor("/static/(.*)") !== "public, max-age=31536000, immutable") {
+  failures.push("vercel.json: hashed static assets are not configured as immutable");
+}
+if (htmlCacheRuleIndex === -1 || staticCacheRuleIndex <= htmlCacheRuleIndex) {
+  failures.push("vercel.json: immutable /static override must follow the catch-all cache rule");
+}
+cacheRules.forEach((rule) => {
+  const value = rule.headers
+    ?.find(({ key }) => key.toLowerCase() === "cache-control")
+    ?.value || "";
+  const maxAge = Number(value.match(/(?:^|,\s*)max-age=(\d+)/i)?.[1] || 0);
+  const sharedMaxAge = Number(value.match(/(?:^|,\s*)s-maxage=(\d+)/i)?.[1] || 0);
+  if ((maxAge > 0 || sharedMaxAge > 0) && rule.source !== "/static/(.*)") {
+    failures.push(`vercel.json: non-static route ${rule.source} has a long cache TTL (${value})`);
+  }
+});
+
+const removedInsightApi = fs.readFileSync(path.join(rootDir, "api", "removed-insight.js"), "utf8");
+if (!/status\(410\)/.test(removedInsightApi) || !/Cache-Control["'],\s*["']no-store/.test(removedInsightApi)) {
+  failures.push("api/removed-insight.js: retired insight response must be 410 with Cache-Control: no-store");
+}
 
 retiredInsightSlugs.forEach((slug) => {
   if (publishedInsightSlugs.has(slug)) {
@@ -228,6 +324,57 @@ const marketWatch = marketData.datasets.marketWatch;
   }
 });
 
+[
+  ["-7.8%", "down", "↓ -7.8%"],
+  ["+3.0%", "up", "↑ +3.0%"],
+  ["0.0%", "neutral", "0.0%"],
+].forEach(([value, direction, label]) => {
+  const trend = getMarketTrend(value);
+  if (trend.direction !== direction || trend.label !== label) {
+    failures.push(`market trend ${value}: expected ${direction} / "${label}", received ${trend.direction} / "${trend.label}"`);
+  }
+});
+
+const homepageDoc = readRoute("/");
+Object.entries(marketWatch.towns).forEach(([slug, town]) => {
+  const trend = getMarketTrend(town.yearOverYear);
+  const matchingTrend = homepageDoc
+    ?.querySelectorAll(`.market-card__yoy--${trend.direction}`)
+    .find((node) => node.text.replace(/\s+/g, " ").trim() === trend.label);
+  if (!matchingTrend) {
+    failures.push(`/: missing ${slug} market trend class/label ${trend.direction} / "${trend.label}"`);
+  }
+});
+
+const robots = fs.readFileSync(path.join(rootDir, "public", "robots.txt"), "utf8");
+if (
+  !/User-agent:\s*\*/i.test(robots) ||
+  !/Allow:\s*\/\s*$/im.test(robots) ||
+  /User-agent:\s*(GPTBot|ClaudeBot|Claude-Web|PerplexityBot|Google-Extended)/i.test(robots)
+) {
+  failures.push("robots.txt: AI crawlers are not covered solely by the permissive wildcard policy");
+}
+
+const llmsPath = path.join(rootDir, "public", "llms.txt");
+if (!fs.existsSync(llmsPath)) {
+  failures.push("llms.txt: missing");
+} else {
+  const llms = fs.readFileSync(llmsPath, "utf8");
+  const llmsLines = llms.split(/\r?\n/).length;
+  if (llmsLines > 60) failures.push(`llms.txt: ${llmsLines} lines exceeds the 60-line limit`);
+  [
+    "Matthew Mulhall",
+    "Landon Mulhall",
+    "HomeLife Optimum Realty",
+    "RECO",
+    `${origin}/contact`,
+    `${origin}/sitemap.xml`,
+    ...Object.keys(townNames).map((slug) => `${origin}/communities/${slug}`),
+  ].forEach((value) => {
+    if (!llms.includes(value)) failures.push(`llms.txt: missing "${value}"`);
+  });
+}
+
 function walkIndexFiles(dir) {
   const files = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -241,9 +388,16 @@ function walkIndexFiles(dir) {
 for (const filePath of walkIndexFiles(buildDir)) {
   const doc = parse(fs.readFileSync(filePath, "utf8"));
   const head = doc.querySelector("head")?.toString() || "";
+  const relativeRoute = path.relative(buildDir, filePath);
   if (/www\.northsidegta\.ca/i.test(head)) {
-    failures.push(`${path.relative(buildDir, filePath)}: rendered head contains www.northsidegta.ca`);
+    failures.push(`${relativeRoute}: rendered head contains www.northsidegta.ca`);
   }
+  validateSiteEntity(schemaNodes(doc, relativeRoute), relativeRoute);
+}
+
+const sitemap = fs.readFileSync(sitemapPath, "utf8");
+if (/www\.northsidegta\.ca/i.test(sitemap)) {
+  failures.push("sitemap.xml contains www.northsidegta.ca");
 }
 
 if (failures.length) {
@@ -254,3 +408,10 @@ if (failures.length) {
 console.log(
   `[verify-prerendered-seo] ${checkedRoutes} route checks and ${checkedInsights} insight checks passed`,
 );
+console.log("[audit] PASS — 7 community pages: unique H1/title, self canonical, BreadcrumbList");
+console.log("[audit] PASS — 10 static pages: crawlable body content and self canonicals");
+console.log(`[audit] PASS — ${checkedInsights} published insights: body content and Article JSON-LD`);
+console.log("[audit] PASS — homepage: FAQPage, RealEstateAgent, shared market data, sign-aware YoY");
+console.log("[audit] PASS — sitemap: published non-www URLs only; rendered heads: zero www references");
+console.log("[audit] PASS — cache: HTML/fallback revalidate, hashed assets immutable, retired insights 410/no-store");
+console.log("[audit] PASS — AI search: llms.txt, permissive robots, consistent site entity JSON-LD");
