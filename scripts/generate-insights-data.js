@@ -50,25 +50,8 @@ function renderMarkdownToHtml(markdown) {
   });
 }
 
-function cleanupEmptyDirectories(...dirs) {
-  dirs.forEach((dir) => {
-    if (!dir) return;
-    if (!fs.existsSync(dir)) return;
-    try {
-      const entries = fs.readdirSync(dir);
-      if (entries.length === 0) {
-        fs.rmSync(dir, { recursive: true, force: true });
-      }
-    } catch (error) {
-      console.warn(
-        `[generate-insights-data] Failed to clean up ${path.relative(rootDir, dir)}: ${error.message}`,
-      );
-    }
-  });
-}
-
-function moveFilesRecursively(sourceDir, collisions) {
-  let movedCount = 0;
+function copyFilesRecursively(sourceDir, collisions) {
+  let copiedCount = 0;
   let entries = [];
   try {
     entries = fs.readdirSync(sourceDir, { withFileTypes: true });
@@ -82,8 +65,7 @@ function moveFilesRecursively(sourceDir, collisions) {
   entries.forEach((entry) => {
     const sourcePath = path.join(sourceDir, entry.name);
     if (entry.isDirectory()) {
-      movedCount += moveFilesRecursively(sourcePath, collisions);
-      cleanupEmptyDirectories(sourcePath);
+      copiedCount += copyFilesRecursively(sourcePath, collisions);
       return;
     }
 
@@ -91,6 +73,11 @@ function moveFilesRecursively(sourceDir, collisions) {
 
     const targetPath = path.join(uploadsDir, entry.name);
     if (fs.existsSync(targetPath)) {
+      const sourceBuffer = fs.readFileSync(sourcePath);
+      const targetBuffer = fs.readFileSync(targetPath);
+      if (sourceBuffer.equals(targetBuffer)) {
+        return;
+      }
       collisions.push({
         source: path.relative(rootDir, sourcePath),
         target: path.relative(rootDir, targetPath),
@@ -98,19 +85,19 @@ function moveFilesRecursively(sourceDir, collisions) {
       return;
     }
 
-    fs.renameSync(sourcePath, targetPath);
-    movedCount += 1;
+    fs.copyFileSync(sourcePath, targetPath);
+    copiedCount += 1;
   });
 
-  return movedCount;
+  return copiedCount;
 }
 
-function moveNestedInsightAssets() {
+function copyNestedInsightAssets() {
   if (!fs.existsSync(contentDir)) return;
 
   fs.mkdirSync(uploadsDir, { recursive: true });
 
-  let movedCount = 0;
+  let copiedCount = 0;
   const collisions = [];
 
   const entries = fs
@@ -122,17 +109,12 @@ function moveNestedInsightAssets() {
     const nestedUploadsDir = path.join(baseDir, "public", "uploads", "insights");
     if (!fs.existsSync(nestedUploadsDir)) return;
 
-    movedCount += moveFilesRecursively(nestedUploadsDir, collisions);
-    cleanupEmptyDirectories(
-      nestedUploadsDir,
-      path.join(baseDir, "public", "uploads"),
-      path.join(baseDir, "public"),
-    );
+    copiedCount += copyFilesRecursively(nestedUploadsDir, collisions);
   });
 
-  if (movedCount > 0) {
+  if (copiedCount > 0) {
     console.log(
-      `[generate-insights-data] Moved ${movedCount} nested asset${movedCount === 1 ? "" : "s"} into ${path.relative(
+      `[generate-insights-data] Copied ${copiedCount} nested asset${copiedCount === 1 ? "" : "s"} into ${path.relative(
         rootDir,
         uploadsDir,
       )}`,
@@ -141,7 +123,7 @@ function moveNestedInsightAssets() {
 
   collisions.forEach(({ source, target }) => {
     console.warn(
-      `[generate-insights-data] Skipped moving ${source} — destination already exists at ${target}. Delete or rename the nested file if it is outdated.`,
+      `[generate-insights-data] Skipped copying ${source} — a different file already exists at ${target}. Delete or rename the nested file if it is outdated.`,
     );
   });
 }
@@ -424,7 +406,12 @@ async function main() {
     process.exit(0);
   }
 
-  moveNestedInsightAssets();
+  copyNestedInsightAssets();
+
+  if (process.argv.includes("--assets-only")) {
+    console.log("[generate-insights-data] Nested insight assets are ready for development.");
+    return;
+  }
 
   const pollsBySlug = await mapPollsBySlug();
 

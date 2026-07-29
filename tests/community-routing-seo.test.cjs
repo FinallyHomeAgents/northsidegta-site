@@ -1,11 +1,44 @@
+process.env.BABEL_ENV = 'test'
+process.env.NODE_ENV = 'test'
+
 const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const path = require('node:path')
 const { test } = require('node:test')
 const { parse } = require('node-html-parser')
+const React = require('react')
+const { renderToStaticMarkup } = require('react-dom/server')
+const { HelmetProvider } = require('react-helmet-async')
+const { MemoryRouter } = require('react-router-dom')
+
+require.extensions['.css'] = () => {}
+require.extensions['.svg'] = () => {}
+require('@babel/register')({
+  extensions: ['.js', '.jsx'],
+  presets: ['react-app'],
+  ignore: [/node_modules/],
+})
 
 const root = path.resolve(__dirname, '..')
 const slugs = ['georgina','east-gwillimbury','newmarket','aurora','stouffville','uxbridge','scugog']
+const communityComponents = {
+  georgina: 'GeorginaPage',
+  'east-gwillimbury': 'EastGwillimburyPage',
+  newmarket: 'NewmarketPage',
+  aurora: 'AuroraPage',
+  stouffville: 'StouffvillePage',
+  uxbridge: 'UxbridgePage',
+  scugog: 'ScugogPage',
+}
+const movingGuideComponents = {
+  '/moving-to-georgina-from-toronto': 'MovingToGeorginaFromTorontoPage',
+  '/moving-to-east-gwillimbury-from-toronto': 'MovingToEastGwillimburyFromTorontoPage',
+  '/moving-to-newmarket-from-toronto': 'MovingToNewmarketFromTorontoPage',
+  '/moving-to-aurora-from-toronto': 'MovingToAuroraFromTorontoPage',
+  '/moving-to-stouffville-from-toronto': 'MovingToStouffvilleFromTorontoPage',
+  '/moving-to-uxbridge-from-toronto': 'MovingToUxbridgeFromTorontoPage',
+  '/moving-to-port-perry-scugog-from-toronto': 'MovingToPortPerryScugogFromTorontoPage',
+}
 const townNames = new Map([
   ['georgina','Georgina'], ['east-gwillimbury','East Gwillimbury'], ['newmarket','Newmarket'],
   ['aurora','Aurora'], ['stouffville','Stouffville'], ['uxbridge','Uxbridge'], ['scugog','Scugog'],
@@ -24,6 +57,55 @@ function schemaGraphs(meta) {
   const schema = meta.schema
   const nodes = schema?.['@graph'] || [schema]
   return nodes.filter(Boolean)
+}
+function renderRouteComponent(route, componentName) {
+  global.window = {
+    location: { href: `${site}${route}`, origin: site, pathname: route, search: '', hash: '' },
+    localStorage: {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    },
+  }
+  global.document = { referrer: '', body: { style: {} } }
+
+  const Component = require(path.join(root, 'src', componentName)).default
+  const originalConsoleError = console.error
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('useLayoutEffect does nothing on the server')
+    ) {
+      return
+    }
+    originalConsoleError(...args)
+  }
+
+  let markup
+  try {
+    markup = renderToStaticMarkup(
+      React.createElement(
+        HelmetProvider,
+        null,
+        React.createElement(
+          MemoryRouter,
+          { initialEntries: [route] },
+          React.createElement(Component),
+        ),
+      ),
+    )
+  } finally {
+    console.error = originalConsoleError
+  }
+  return parse(markup)
+}
+function assertComplianceFooter(doc, route) {
+  const footer = doc.querySelector('footer[role="contentinfo"]')
+  assert.ok(footer, `${route} rendered without a contentinfo footer`)
+  const footerText = footer.text.replace(/\s+/g, ' ').trim()
+  assert.match(footerText, /Registrant information \(TRESA\)/)
+  assert.match(footerText, /Real Estate Council of Ontario \(RECO\)/)
+  assert.match(footerText, /Trust in Real Estate Services Act, 2002 \(TRESA\)/)
 }
 
 test('legacy slash and non-slash community routes are permanent 308 redirects that preserve queries', () => {
@@ -63,18 +145,26 @@ test('community SEO metadata is unique, self-referencing, breadcrumbed, and non-
 })
 
 test('React community pages keep town H1/content shell and include matching runtime SEO', () => {
-  const files = { georgina:'Georgina', 'east-gwillimbury':'EastGwillimbury', newmarket:'Newmarket', aurora:'Aurora', stouffville:'Stouffville', uxbridge:'Uxbridge', scugog:'Scugog' }
-  for (const [slug, component] of Object.entries(files)) {
+  for (const [slug, pageName] of Object.entries(communityComponents)) {
     const town = townNames.get(slug)
-    const source = read(`src/${component}Page.js`)
+    const source = read(`src/${pageName}.js`)
     assert.match(source, new RegExp(`<h1>Living in ${town}<\\/h1>`))
     assert.match(source, /class="page-grid"/)
     assert.match(source, /<HeaderShell \/>/)
-    assert.match(source, /<footer[^>]*role="contentinfo"/)
     assert.match(source, new RegExp(`<meta property="og:url" content="${site}/communities/${slug}" \\/>`))
     assert.match(source, new RegExp(`<link rel="canonical" href="${site}/communities/${slug}" \\/>`))
     assert.doesNotMatch(source, /COMMUNITY_BREADCRUMB_SCHEMA/)
     assert.doesNotMatch(source, /https:\/\/www\.northsidegta\.ca/)
+  }
+})
+
+test('community pages and moving guides render the shared TRESA/RECO compliance footer', () => {
+  for (const [slug, componentName] of Object.entries(communityComponents)) {
+    const route = `/communities/${slug}`
+    assertComplianceFooter(renderRouteComponent(route, componentName), route)
+  }
+  for (const [route, componentName] of Object.entries(movingGuideComponents)) {
+    assertComplianceFooter(renderRouteComponent(route, componentName), route)
   }
 })
 

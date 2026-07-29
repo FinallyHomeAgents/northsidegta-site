@@ -148,7 +148,11 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .fit-watch{background:#fffbeb;border-color:#fde68a;}
 .fit-watch .fit-label{font-weight:600;color:#78350f;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
 .fit-item p{color:var(--ink2);line-height:1.6;}
-@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}}
+.moving-guide-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:20px 0 0;padding:17px 20px;border:1px solid var(--gborder);border-radius:var(--rl);background:linear-gradient(135deg,var(--gpale),#fff);box-shadow:var(--sh);}
+.moving-guide-banner strong{display:block;color:var(--green);font-family:var(--fd);font-size:17px;}
+.moving-guide-banner span{display:block;margin-top:3px;color:var(--ink3);font-size:12px;}
+.moving-guide-banner a{flex:0 0 auto;border-radius:24px;background:var(--green);padding:10px 17px;color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
+@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}.moving-guide-banner{align-items:flex-start;flex-direction:column;}}
 @media(max-width:640px){.container{padding:0 16px;}.topnav{padding:0 16px;}.topnav-right .topnav-link{display:none;}.hero{height:360px;}}
 `;
 const PAGE_SCHEMA = `{
@@ -213,6 +217,13 @@ const PAGE_BODY_HTML = `
     <a href="https://northsidegta.ca/neighbourhood-guide">Neighbourhood guide</a><span>&rsaquo;</span>
     <span>Scugog</span>
   </nav>
+  <aside class="moving-guide-banner" aria-label="Moving to Scugog guide">
+    <div>
+      <strong>Moving from Toronto?</strong>
+      <span>Prices, commute, Port Perry, waterfront, and the trade-offs to know before you move.</span>
+    </div>
+    <a href="/moving-to-port-perry-scugog-from-toronto">Read the Honest 2026 Guide &rarr;</a>
+  </aside>
   <div class="page-grid">
 
     <!-- MAIN COLUMN -->

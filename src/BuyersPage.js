@@ -20,10 +20,10 @@ const MOVING_FROM_TORONTO_GUIDES = [
   { town: "Georgina", href: "/moving-to-georgina-from-toronto" },
   { town: "East Gwillimbury", href: "/moving-to-east-gwillimbury-from-toronto" },
   { town: "Uxbridge", href: "/moving-to-uxbridge-from-toronto" },
-  { town: "Newmarket" },
-  { town: "Aurora" },
-  { town: "Stouffville" },
-  { town: "Scugog" },
+  { town: "Newmarket", href: "/moving-to-newmarket-from-toronto" },
+  { town: "Aurora", href: "/moving-to-aurora-from-toronto" },
+  { town: "Stouffville", href: "/moving-to-stouffville-from-toronto" },
+  { town: "Scugog", href: "/moving-to-port-perry-scugog-from-toronto" },
 ];
 
 const TOWN_DATA = {
@@ -626,8 +626,8 @@ export default function BuyersPage() {
             <p className="buyers-eyebrow">Moving from Toronto?</p>
             <h2 id="moving-guides-heading">Start with an honest town guide.</h2>
             <p>
-              Read the live Georgina, East Gwillimbury, and Uxbridge guides now. Four more
-              Toronto-to-town guides are coming next, and this list is ready to grow with them.
+              Compare all seven NorthSide GTA towns with real prices, commute trade-offs,
+              neighbourhood guidance, and the details Toronto movers need before choosing.
             </p>
           </div>
           <ul>

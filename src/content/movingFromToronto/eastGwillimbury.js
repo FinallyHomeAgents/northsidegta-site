@@ -141,7 +141,7 @@ const eastGwillimburyMovingGuide = {
     eyebrow: "Three-town comparison",
     heading: "East Gwillimbury market snapshot",
     conclusion:
-      "East Gwillimbury sits between Georgina's affordability and Aurora's price point — but no other town in the NorthSide GTA gives you a newer house for the money.",
+      "East Gwillimbury often sits between Georgina's accessibility and Aurora's premium — and few NorthSide GTA towns offer as much newer-house value for the money.",
   },
   review: {
     quote:

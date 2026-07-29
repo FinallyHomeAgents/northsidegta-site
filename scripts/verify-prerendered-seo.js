@@ -31,10 +31,42 @@ const { uxbridgeMovingGuide } = require(path.join(
   "movingFromToronto",
   "uxbridge.js",
 ));
+const { newmarketMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "newmarket.js",
+));
+const { auroraMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "aurora.js",
+));
+const { stouffvilleMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "stouffville.js",
+));
+const { scugogMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "scugog.js",
+));
 const movingGuides = [
   georginaMovingGuide,
   eastGwillimburyMovingGuide,
   uxbridgeMovingGuide,
+  newmarketMovingGuide,
+  auroraMovingGuide,
+  stouffvilleMovingGuide,
+  scugogMovingGuide,
 ];
 const retiredInsightSlugs = [
   "lando-test-2",
@@ -57,6 +89,38 @@ const townNames = {
   uxbridge: "Uxbridge",
   scugog: "Scugog",
 };
+const marketRankingSourceFiles = [
+  ...[
+    "georgina",
+    "eastGwillimbury",
+    "newmarket",
+    "aurora",
+    "stouffville",
+    "uxbridge",
+    "scugog",
+  ].map((name) => path.join(rootDir, "src", "content", "movingFromToronto", `${name}.js`)),
+  ...[
+    "Georgina",
+    "EastGwillimbury",
+    "Newmarket",
+    "Aurora",
+    "Stouffville",
+    "Uxbridge",
+    "Scugog",
+  ].map((name) => path.join(rootDir, "src", `${name}Page.js`)),
+];
+const fragileMarketRankingPatterns = [
+  /\b(?:is|it's|offers|at)\s+(?:the\s+)?(?:priciest|cheapest|lowest-priced|most affordable|second-most affordable|second-lowest|highest-volume)\b/i,
+  /\bthe highest (?:transaction volume|price point)\b/i,
+  /\bthe lowest (?:average|price|price point)\b/i,
+  /\b(?:York Region's|NorthSide GTA's)\s+highest-volume\b/i,
+  /\bthe NorthSide GTA's most active real estate market\b/i,
+  /\b(?:consistently|currently)\s+(?:posts|has)\s+the highest\b/i,
+  /\bunderprices\b/i,
+  /\bpricing (?:that's|that is) closer to\b/i,
+  /\btrades near Aurora's range\b/i,
+  /\bno other town\b/i,
+];
 
 const staticChecks = [
   { route: "/about", h1: "About Finally Home Agents", body: "Matthew and Landon" },
@@ -411,6 +475,12 @@ movingGuides.forEach((guide) => {
     }
   });
 
+  (guide.crossGuideLinks || []).forEach((href) => {
+    if (!movingGuideHtml.includes(`href="${href}"`)) {
+      failures.push(`${guide.route}: missing cross-guide link href="${href}"`);
+    }
+  });
+
   const faqSchema = schemaNodes(movingGuideDoc, guide.route).find((node) =>
     nodeHasType(node, "FAQPage"),
   );
@@ -435,10 +505,7 @@ movingGuides.forEach((guide) => {
   }
 });
 
-[
-  eastGwillimburyMovingGuide,
-  uxbridgeMovingGuide,
-].forEach((guide) => {
+movingGuides.forEach((guide) => {
   const communityHtml = readRoute(guide.communityProfilePath)?.toString() || "";
   if (!communityHtml.includes(`href="${guide.route}"`)) {
     failures.push(`${guide.communityProfilePath}: missing moving-guide banner link`);
@@ -461,6 +528,17 @@ if (
 ) {
   failures.push("/communities/east-gwillimbury: still contains the incorrect no-GO-station claim");
 }
+
+marketRankingSourceFiles.forEach((filePath) => {
+  const source = fs.readFileSync(filePath, "utf8");
+  fragileMarketRankingPatterns.forEach((pattern) => {
+    if (pattern.test(source)) {
+      failures.push(
+        `${path.relative(rootDir, filePath)}: contains month-fragile absolute market ranking (${pattern})`,
+      );
+    }
+  });
+});
 
 const robots = fs.readFileSync(path.join(rootDir, "public", "robots.txt"), "utf8");
 if (
@@ -528,6 +606,7 @@ console.log("[audit] PASS — 7 community pages: unique H1/title, self canonical
 console.log("[audit] PASS — 10 static pages: crawlable body content and self canonicals");
 console.log(`[audit] PASS — ${checkedInsights} published insights: body content and Article JSON-LD`);
 console.log("[audit] PASS — homepage and community snapshots: exact shared June 2026 market data");
+console.log("[audit] PASS — guide and community copy: no month-fragile absolute market rankings");
 console.log("[audit] PASS — sitemap: published non-www URLs only; rendered heads: zero www references");
 console.log("[audit] PASS — cache: HTML/fallback revalidate, hashed assets immutable, retired insights 410/no-store");
 console.log("[audit] PASS — AI search: llms.txt, permissive robots, consistent site entity JSON-LD");
