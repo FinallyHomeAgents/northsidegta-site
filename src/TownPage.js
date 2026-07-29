@@ -120,7 +120,7 @@ export default function TownPage() {
   }
 
   const slug = (town.slug || "").toLowerCase();
-  const sharedTownMarket = MARKET_DATA.datasets.communityGuide.towns[slug];
+  const sharedTownMarket = MARKET_DATA.municipalities[slug];
   const lifestyleCopy = getTownLifestyleCopy(slug);
   const isUxbridge = slug === "uxbridge";
 
@@ -183,7 +183,12 @@ export default function TownPage() {
           hero={town.hero}
           snapshot={{
             ...town.snapshot,
-            homePriceRange: sharedTownMarket?.homePriceRange,
+            averageSalePrice: sharedTownMarket?.averageSalePrice,
+            salesCount: sharedTownMarket?.salesCount,
+            avgLdom: sharedTownMarket?.avgLdom,
+            marketPeriod: MARKET_DATA.period,
+            marketSource: MARKET_DATA.source,
+            marketHomeType: MARKET_DATA.homeType,
           }}
           ratings={ratings}
           ratingScaleMax={5}

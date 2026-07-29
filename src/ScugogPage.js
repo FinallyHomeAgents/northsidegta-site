@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import MARKET_DATA from "./data/marketData.json";
 
-const TOWN_MARKET = MARKET_DATA.datasets.communityGuide.towns.scugog;
+const TOWN_MARKET = MARKET_DATA.municipalities.scugog;
 const PAGE_STYLE = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -198,10 +198,10 @@ const PAGE_BODY_HTML = `
     <h1>Living in Scugog</h1>
     <p class="hero-sub">Port Perry heritage, Lake Scugog waterfront, small-town character, and a slower pace within reach of the GTA.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSold}</div><div class="hstat-lbl">Avg. sold</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSalePrice}</div><div class="hstat-lbl">Avg. sale price</div></div>
       <div class="hstat"><div class="hstat-val">75 min</div><div class="hstat-lbl">Off-peak to DVP</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.daysOnMarket}d</div><div class="hstat-lbl">Avg. on mkt</div></div>
-      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.monthsInventory} mo</div><div class="hstat-lbl">Inventory</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.salesCount}</div><div class="hstat-lbl">Sales</div></div>
+      <div class="hstat"><div class="hstat-val">${TOWN_MARKET.avgLdom}d</div><div class="hstat-lbl">Avg. LDOM</div></div>
     </div>
   </div>
 </section>
@@ -327,7 +327,7 @@ const PAGE_BODY_HTML = `
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
-          <strong>Market note:</strong> Waterfront and heritage properties have historically held value relative to the broader local market. Non-waterfront inventory is soft, with ${TOWN_MARKET.monthsInventory} months available and buyers holding meaningful negotiating room.
+          <strong>Market note:</strong> Waterfront, heritage, and non-waterfront properties can behave differently, so municipality-wide figures should be paired with a property-specific comparison.
         </div>
       </div>
 
@@ -387,16 +387,11 @@ const PAGE_BODY_HTML = `
 
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
-        <h3>Market snapshot</h3>
-        <div class="prow"><span class="pk">All types avg.</span><span class="pv">${TOWN_MARKET.averageSold}</span></div>
-        <div class="prow"><span class="pk">Detached avg.</span><span class="pv">${TOWN_MARKET.detachedAverage}</span></div>
-        <div class="prow"><span class="pk">Townhouse avg.</span><span class="pv">${TOWN_MARKET.townhouseAverage}</span></div>
-        <div class="prow"><span class="pk">Condo / apt avg.</span><span class="pv">${TOWN_MARKET.condoAverage}</span></div>
-        <div class="prow"><span class="pk">Days on market</span><span class="pv">${TOWN_MARKET.daysOnMarket}d</span></div>
-        <div class="prow"><span class="pk">Sale / list ratio</span><span class="pv">${TOWN_MARKET.saleToListRatio}</span></div>
-        <div class="prow"><span class="pk">Months inventory</span><span class="pv">${TOWN_MARKET.monthsInventory}</span></div>
-        <div class="prow"><span class="pk">Market type</span><span class="pv"><span class="mkt-pill">${TOWN_MARKET.marketType}</span></span></div>
-        <p style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">${MARKET_DATA.datasets.communityGuide.source}. Not an appraisal. Confirm with a registered agent before decisions.</p>
+        <h3>Market snapshot · ${MARKET_DATA.period}</h3>
+        <div class="prow"><span class="pk">Average sale price</span><span class="pv">${TOWN_MARKET.averageSalePrice}</span></div>
+        <div class="prow"><span class="pk">Sales count</span><span class="pv">${TOWN_MARKET.salesCount}</span></div>
+        <div class="prow"><span class="pk">Avg. LDOM</span><span class="pv">${TOWN_MARKET.avgLdom}</span></div>
+        <p style="font-size:10px;color:rgba(255,255,255,0.55);margin-top:10px;line-height:1.6;">Source: ${MARKET_DATA.source}. ${MARKET_DATA.homeType}. Not an appraisal.</p>
       </div>
 
       <!-- WHAT $1M BUYS -->

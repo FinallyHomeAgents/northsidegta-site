@@ -7,6 +7,7 @@ import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
 import { getFormEndpoint } from "./components/contact/contactConfig";
 import { trackEvent, trackEventOnce } from "./utils/analytics";
 import { CANONICAL_TESTIMONIALS } from "./data/testimonials";
+import MARKET_DATA from "./data/marketData.json";
 
 const priceBands = [
   { label: "Under $600K", copy: "Smaller homes, condos, townhomes, or properties with trade-offs." },
@@ -24,14 +25,12 @@ const buyerInsights = [
   { title: "The best options move differently", copy: "Some homes sit. Some move quickly. The difference is usually price, condition, presentation, and how well the home matches buyer demand." },
 ];
 
+const georginaMarket = MARKET_DATA.municipalities.georgina;
 const marketStats = {
-  lastUpdated: "May 2026",
-  sources: ["REALTOR.ca", "Zolo", "Property.ca", "Town of Georgina", "TRREB where available"],
   cards: [
-    { label: "Current listing depth", text: "Public portals show meaningful active inventory across Georgina and Keswick, giving buyers more to compare than in tighter markets." },
-    { label: "Lower-price search demand", text: "Buyer searches around homes under $700K and $800K remain highly relevant for Keswick and Georgina." },
-    { label: "More time to compare", text: "Some listings are taking longer to sell, which can create more room for careful review and negotiation." },
-    { label: "Relative affordability", text: "Georgina has been cited by municipal economic development sources as one of York Region’s more approachable detached markets at specific points in time." },
+    { label: "Average sale price", text: georginaMarket.averageSalePrice },
+    { label: "Sales count", text: String(georginaMarket.salesCount) },
+    { label: "Avg. LDOM", text: String(georginaMarket.avgLdom) },
   ],
 };
 
@@ -143,7 +142,7 @@ export default function KeswickLowerPricedHomesPage() {
 
       <section><h2 className="text-3xl font-semibold">What buyers are noticing in Keswick right now</h2><p className="mt-2 text-[#3d4c45]">The opportunity is not that every home is a deal. It is that more buyers are comparing Keswick because the inventory mix can create options that feel harder to find farther south.</p><div className="mt-5 grid gap-4 md:grid-cols-2">{buyerInsights.map((item) => <article key={item.title} className="rounded-2xl border bg-white p-5"><h3 className="font-semibold">{item.title}</h3><p className="mt-2 text-sm text-[#48534e]">{item.copy}</p></article>)}</div><blockquote className="mt-5 rounded-xl border-l-4 border-[#12261c] bg-white p-4 italic">Low price alone is not the strategy. The strategy is knowing which lower-priced homes are actually worth pursuing.</blockquote></section>
 
-      <section><h2 className="text-3xl font-semibold">The market context behind the opportunity</h2><div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{marketStats.cards.map((card) => <article key={card.label} className="rounded-2xl border bg-white p-4"><p className="text-xs uppercase tracking-wide text-[#4f6058]">{card.label}</p><p className="mt-2 text-sm">{card.text}</p></article>)}</div><p className="mt-3 text-xs text-gray-600">Market figures and public listing observations are based on sources available at the time of publication, including public listing portals and municipal market references. Confirm current data before relying on it. Last updated: {marketStats.lastUpdated}. Sources: {marketStats.sources.join(", ")}.</p></section>
+      <section><h2 className="text-3xl font-semibold">Georgina market snapshot · {MARKET_DATA.period}</h2><div className="mt-4 grid gap-4 md:grid-cols-3">{marketStats.cards.map((card) => <article key={card.label} className="rounded-2xl border bg-white p-4"><p className="text-xs uppercase tracking-wide text-[#4f6058]">{card.label}</p><p className="mt-2 text-sm">{card.text}</p></article>)}</div><p className="mt-3 text-xs text-gray-600">Source: {MARKET_DATA.source}. {MARKET_DATA.homeType}. Keswick is included within the Georgina municipality figures. Confirm property-specific data before relying on it.</p></section>
 
       <section><h2 className="text-3xl font-semibold">What “lower-priced” really means in Keswick</h2><p className="mt-2 text-[#3d4c45]">A lower asking price can mean opportunity, but it can also mean trade-offs. Some homes need updates. Some have location compromises. Some are smaller than buyers expect. Some are simply priced closer to where today’s buyers are willing to act.</p><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{lowerPricedMeaning.map((item) => <div key={item} className="rounded-xl border bg-white p-4 text-sm font-medium">{item}</div>)}</div><button onClick={() => jumpToForm("Help me separate opportunity from risk")} className="mt-4 rounded-full border border-[#12261c] px-5 py-2">Help me separate opportunity from risk</button></section>
 

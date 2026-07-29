@@ -344,7 +344,9 @@ export default function TownPageLayout({
     { key: "population", label: "Population" },
     { key: "driveToToronto", label: driveLabel },
     { key: "goTrainTime", label: goTrainLabel },
-    { key: "homePriceRange", label: "Typical Home Price" },
+    { key: "averageSalePrice", label: "Average Sale Price" },
+    { key: "salesCount", label: "Sales Count" },
+    { key: "avgLdom", label: "Avg. LDOM" },
     { key: "highways", label: "Highways" },
     { key: "transitSummary", label: "Transit" },
   ];
@@ -439,6 +441,11 @@ export default function TownPageLayout({
                 </a>
               )}
             </div>
+            {snapshot?.marketPeriod && snapshot?.marketSource && (
+              <p className="mt-2 text-xs text-gray-500">
+                {snapshot.marketPeriod} · {snapshot.marketHomeType}. Source: {snapshot.marketSource}.
+              </p>
+            )}
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {snapshotFields.map((field) => (
                 <SnapshotRow key={field.key} label={field.label} value={snapshot?.[field.key]} />
