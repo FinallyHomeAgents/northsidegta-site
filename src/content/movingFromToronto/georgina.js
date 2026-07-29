@@ -13,14 +13,42 @@ const georginaMovingGuide = {
   badgeImageAlt: "Georgina NorthSide GTA town badge",
   communityImage: "/uploads/insights/georgina-keswick-lakefront-aerial-2026.jpg",
   communityImageAlt: "Aerial view of Keswick homes along the Lake Simcoe shoreline in Georgina",
+  marketKey: "georgina",
+  comparisonTowns: ["georgina", "newmarket", "aurora"],
+  communityProfilePath: "/communities/georgina",
+  tasteHubPath: "/tastehub?town=georgina",
   kicker: "Relocation Guide · Georgina",
   heading: "Moving to Georgina from Toronto: The Honest 2026 Guide",
   intro:
     "Sell a Toronto condo, buy a detached house on the Lake Simcoe side of the GTA — that's the trade more Toronto families are making every year. Here's what that move actually looks like: the good, the trade-offs, and the numbers.",
+  money: {
+    eyebrow: "Toronto budget, Georgina space",
+    heading: "What your Toronto money buys in Georgina",
+    body:
+      "In practical terms, the price of a modest Toronto condo puts a detached house with a yard within reach in Keswick — and waterfront-area living within reach for less than a Toronto semi.",
+  },
   budgetCard: {
+    eyebrow: "The $800K comparison",
     heading: "What does $800K buy in Georgina?",
     body:
       "A detached 3–4 bed family home in Keswick with a garage and real backyard — or a renovated bungalow near the lake in Sutton or Jackson's Point. In Toronto, $800K is a two-bed condo with maintenance fees.",
+  },
+  landTransferTax: {
+    headline: "The number Toronto buyers forget:",
+    beforeSavings:
+      "leaving Toronto means no municipal land transfer tax. On a $770,000 purchase, that's roughly",
+    savings: "$11,500 staying in your pocket",
+    afterSavings:
+      "— Toronto is the only municipality in Ontario that charges a second land transfer tax on top of the provincial one.",
+  },
+  communitiesSection: {
+    eyebrow: "Choose your corner of the lake",
+    heading: "Keswick, Sutton, or Jackson's Point?",
+    intro: "Georgina isn't one place — choosing your corner of it is the real decision.",
+    aside: "Also worth knowing: Pefferlaw and Udora for rural properties and acreage.",
+    miniCtaLead: "Not sure which corner fits you?",
+    miniCtaBody:
+      "Tell us your budget and lifestyle — we'll tell you where to look (and where not to).",
   },
   communities: [
     {
@@ -39,6 +67,13 @@ const georginaMovingGuide = {
         "Steps to Lake Simcoe, marinas, beaches, and cottage-country character in a year-round community. Waterfront living here is still attainable in a way that stopped being true in most of Ontario years ago.",
     },
   ],
+  familySection: {
+    eyebrow: "Life beyond the listing",
+    heading: "Raising kids in Georgina",
+    intro: "This is the question behind most moves north, so here's the real picture.",
+    tasteHubLead: "Looking for the places locals actually eat?",
+    tasteHubLabel: "Explore Georgina on TasteHub →",
+  },
   familyCards: [
     {
       icon: "🏊",
@@ -77,6 +112,42 @@ const georginaMovingGuide = {
         "Fewer restaurants and big-box stores than Newmarket or Aurora — you'll drive 20 minutes for some errands. Most families call it a fair trade for the mortgage payment and the lake.",
     },
   ],
+  commute: {
+    eyebrow: "The trade-off to pressure-test",
+    heading: "The honest commute",
+    intro: "We won't sugar-coat this — Georgina is a commitment if you work downtown daily.",
+    items: [
+      {
+        heading: "Driving",
+        body:
+          "Highway 404 now reaches the edge of Keswick, making it highway nearly door-to-door. Plan on roughly an hour to north Toronto in normal traffic, more to the downtown core at peak.",
+      },
+      {
+        heading: "GO Transit",
+        body:
+          "No train station in Georgina itself. The GO 67 Keswick–North York bus runs down the 404 corridor, and the nearest train stations are East Gwillimbury GO and Newmarket GO — about 20–25 minutes' drive from Keswick, with all-day service to Union.",
+      },
+    ],
+    honestRead:
+      "Georgina works best for hybrid workers, people working anywhere in York Region or north Toronto, and anyone whose office days are 2–3 per week. Downtown five days a week? Let's talk honestly about whether East Gwillimbury or Newmarket fits better — that conversation is literally what we do.",
+  },
+  marketSection: {
+    eyebrow: "Three-town comparison",
+    heading: "Georgina market snapshot",
+    conclusion:
+      "Georgina is the lowest-priced town in the NorthSide GTA — the affordability gap versus Newmarket and Aurora is why so many Toronto movers start their search here.",
+  },
+  review: {
+    quote:
+      "What really stood out was that Matt understood our priorities as a family and ensured that these priorities were held in high regard throughout the whole process.",
+    attribution: "Larissa Halko · Buyer & Seller · Google Reviews (5.0 rating)",
+  },
+  cta: {
+    eyebrow: "Two minutes, no pressure",
+    heading: "Is Georgina right for you?",
+    body:
+      "Not sure whether Georgina, East Gwillimbury, or somewhere else north fits your family best? That's exactly what our Town Match Quiz figures out — two minutes, no contact info required to see your result.",
+  },
   faqs: [
     {
       question: "Is Georgina a good place to live?",

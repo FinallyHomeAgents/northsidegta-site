@@ -10,6 +10,32 @@ const buildDir = path.join(rootDir, "build");
 const insightDataDir = path.join(rootDir, "public", "data", "insights");
 const origin = "https://northsidegta.ca";
 const marketData = require(path.join(rootDir, "src", "data", "marketData.json"));
+const { georginaMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "georgina.js",
+));
+const { eastGwillimburyMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "eastGwillimbury.js",
+));
+const { uxbridgeMovingGuide } = require(path.join(
+  rootDir,
+  "src",
+  "content",
+  "movingFromToronto",
+  "uxbridge.js",
+));
+const movingGuides = [
+  georginaMovingGuide,
+  eastGwillimburyMovingGuide,
+  uxbridgeMovingGuide,
+];
 const retiredInsightSlugs = [
   "lando-test-2",
   "lando-test",
@@ -35,13 +61,13 @@ const townNames = {
 const staticChecks = [
   { route: "/about", h1: "About Finally Home Agents", body: "Matthew and Landon" },
   { route: "/buyers", h1: "You don't have to leave the city", body: "Town strategy" },
-  {
-    route: "/moving-to-georgina-from-toronto",
-    h1: "Moving to Georgina from Toronto: The Honest 2026 Guide",
-    body: "What your Toronto money buys in Georgina",
-    title: "Moving to Georgina from Toronto (2026 Guide) | Finally Home Agents",
+  ...movingGuides.map((guide) => ({
+    route: guide.route,
+    h1: guide.heading,
+    body: guide.money.heading,
+    title: guide.title,
     schema: ["Article", "FAQPage", "BreadcrumbList"],
-  },
+  })),
   { route: "/sellers", h1: "A Better Sale Starts Before the Listing Goes Live", body: "seller" },
   { route: "/homeanalysis", h1: "What’s Your Home Worth", body: "NorthSide GTA Market" },
   { route: "/contact", h1: "Glad you found us", body: "Matthew" },
@@ -348,44 +374,92 @@ Object.entries(marketData.municipalities).forEach(([slug, town]) => {
   });
 });
 
-const movingGuideRoute = "/moving-to-georgina-from-toronto";
-const movingGuideDoc = readRoute(movingGuideRoute);
-const movingGuideText = movingGuideDoc?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
-const movingGuideHtml = movingGuideDoc?.toString() || "";
-[
-  marketData.period,
-  `Source: ${marketData.source}`,
-  marketData.homeType,
-  ...["georgina", "newmarket", "aurora"].flatMap((slug) => {
-    const town = marketData.municipalities[slug];
-    return [
-      town.averageSalePrice,
-      String(town.salesCount),
-      String(town.avgLdom),
-      town.yearOverYear,
-    ];
-  }),
-].forEach((value) => {
-  if (!movingGuideText.includes(value)) {
-    failures.push(`${movingGuideRoute}: moving guide is missing shared market value "${value}"`);
+movingGuides.forEach((guide) => {
+  const movingGuideDoc = readRoute(guide.route);
+  const movingGuideText =
+    movingGuideDoc?.querySelector("body")?.text.replace(/\s+/g, " ").trim() || "";
+  const movingGuideHtml = movingGuideDoc?.toString() || "";
+  [
+    marketData.period,
+    `Source: ${marketData.source}`,
+    marketData.homeType,
+    ...guide.comparisonTowns.flatMap((slug) => {
+      const town = marketData.municipalities[slug];
+      return [
+        town.averageSalePrice,
+        String(town.salesCount),
+        String(town.avgLdom),
+        town.yearOverYear,
+      ];
+    }),
+  ].forEach((value) => {
+    if (!movingGuideText.includes(value)) {
+      failures.push(`${guide.route}: moving guide is missing shared market value "${value}"`);
+    }
+  });
+
+  [
+    `href="${guide.communityProfilePath}"`,
+    `href="${guide.tasteHubPath}"`,
+    'href="/neighbourhood-guide"',
+    'href="/buyers#town-match"',
+    'href="/contact"',
+    'href="https://wa.me/16476684646"',
+  ].forEach((value) => {
+    if (!movingGuideHtml.includes(value)) {
+      failures.push(`${guide.route}: missing outbound link ${value}`);
+    }
+  });
+
+  const faqSchema = schemaNodes(movingGuideDoc, guide.route).find((node) =>
+    nodeHasType(node, "FAQPage"),
+  );
+  if (faqSchema?.mainEntity?.length !== 7) {
+    failures.push(`${guide.route}: expected 7 FAQPage questions`);
+  }
+
+  if (
+    marketData.toronto?.condoAverage == null &&
+    /The average Toronto condo now sells for/.test(movingGuideText)
+  ) {
+    failures.push(
+      `${guide.route}: Toronto comparison must be hidden while placeholder values are null`,
+    );
+  }
+});
+
+const buyersHtml = readRoute("/buyers")?.toString() || "";
+movingGuides.forEach((guide) => {
+  if (!buyersHtml.includes(`href="${guide.route}"`)) {
+    failures.push(`/buyers: missing moving-guide link to ${guide.route}`);
   }
 });
 
 [
-  'href="/communities/georgina"',
-  'href="/tastehub?town=georgina"',
-  'href="/neighbourhood-guide"',
-  'href="/buyers#town-match"',
-  'href="/contact"',
-  'href="https://wa.me/16476684646"',
-].forEach((value) => {
-  if (!movingGuideHtml.includes(value)) {
-    failures.push(`${movingGuideRoute}: missing outbound link ${value}`);
+  eastGwillimburyMovingGuide,
+  uxbridgeMovingGuide,
+].forEach((guide) => {
+  const communityHtml = readRoute(guide.communityProfilePath)?.toString() || "";
+  if (!communityHtml.includes(`href="${guide.route}"`)) {
+    failures.push(`${guide.communityProfilePath}: missing moving-guide banner link`);
   }
 });
 
-if (marketData.toronto?.condoAverage == null && /The average Toronto condo now sells for/.test(movingGuideText)) {
-  failures.push(`${movingGuideRoute}: Toronto comparison must be hidden while placeholder values are null`);
+const eastGwillimburyCommunityText =
+  readRoute("/communities/east-gwillimbury")
+    ?.querySelector("body")
+    ?.text.replace(/\s+/g, " ")
+    .trim() || "";
+if (!eastGwillimburyCommunityText.includes("East Gwillimbury GO station")) {
+  failures.push("/communities/east-gwillimbury: missing correct East Gwillimbury GO station copy");
+}
+if (
+  /East Gwillimbury (?:does not currently have|has no) a GO Train station/i.test(
+    eastGwillimburyCommunityText,
+  ) ||
+  /There is no GO Train station/i.test(eastGwillimburyCommunityText)
+) {
+  failures.push("/communities/east-gwillimbury: still contains the incorrect no-GO-station claim");
 }
 
 const robots = fs.readFileSync(path.join(rootDir, "public", "robots.txt"), "utf8");

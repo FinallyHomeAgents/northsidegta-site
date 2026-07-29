@@ -18,8 +18,8 @@ const COMMUNITIES = [
 
 const MOVING_FROM_TORONTO_GUIDES = [
   { town: "Georgina", href: "/moving-to-georgina-from-toronto" },
-  { town: "East Gwillimbury" },
-  { town: "Uxbridge" },
+  { town: "East Gwillimbury", href: "/moving-to-east-gwillimbury-from-toronto" },
+  { town: "Uxbridge", href: "/moving-to-uxbridge-from-toronto" },
   { town: "Newmarket" },
   { town: "Aurora" },
   { town: "Stouffville" },
@@ -626,8 +626,8 @@ export default function BuyersPage() {
             <p className="buyers-eyebrow">Moving from Toronto?</p>
             <h2 id="moving-guides-heading">Start with an honest town guide.</h2>
             <p>
-              Read the live Georgina guide now. Six more Toronto-to-town guides are coming next,
-              and this list is ready to grow with them.
+              Read the live Georgina, East Gwillimbury, and Uxbridge guides now. Four more
+              Toronto-to-town guides are coming next, and this list is ready to grow with them.
             </p>
           </div>
           <ul>

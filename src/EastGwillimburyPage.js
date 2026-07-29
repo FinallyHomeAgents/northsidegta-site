@@ -49,6 +49,10 @@ img{max-width:100%;display:block;}
 .breadcrumb{font-size:12px;color:var(--ink4);padding:16px 0 0;}
 .breadcrumb a{color:var(--green);}
 .breadcrumb span{margin:0 5px;}
+.moving-guide-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:20px 0 0;padding:17px 20px;border:1px solid var(--gborder);border-radius:var(--rl);background:linear-gradient(135deg,var(--gpale),#fff);box-shadow:var(--sh);}
+.moving-guide-banner strong{display:block;color:var(--green);font-family:var(--fd);font-size:17px;}
+.moving-guide-banner span{display:block;margin-top:3px;color:var(--ink3);font-size:12px;}
+.moving-guide-banner a{flex:0 0 auto;border-radius:24px;background:var(--green);padding:10px 17px;color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
 .page-grid{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start;padding:28px 0 60px;}
 .sec{background:var(--paper);border-radius:var(--rxl);border:1px solid var(--border);padding:24px;margin-bottom:20px;box-shadow:var(--sh);}
 .sec h2{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:14px;letter-spacing:-0.01em;}
@@ -148,7 +152,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .fit-watch{background:#fffbeb;border-color:#fde68a;}
 .fit-watch .fit-label{font-weight:600;color:#78350f;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
 .fit-item p{color:var(--ink2);line-height:1.6;}
-@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}}
+@media(max-width:760px){.page-grid{grid-template-columns:1fr;}.hero-content{padding:24px 20px 28px;}.hero-stats{flex-wrap:wrap;}.highlight-grid{grid-template-columns:1fr;}.fit-grid{grid-template-columns:1fr;}.moving-guide-banner{align-items:flex-start;flex-direction:column;}}
 @media(max-width:640px){.container{padding:0 16px;}.topnav{padding:0 16px;}.topnav-right .topnav-link{display:none;}.hero{height:360px;}}
 `;
 const PAGE_SCHEMA = `{
@@ -169,7 +173,7 @@ const PAGE_SCHEMA = `{
     },
     {
       "@type":"FAQPage",
-      "mainEntity":[{"@type":"Question","name":"What is East Gwillimbury Ontario like?","acceptedAnswer":{"@type":"Answer","text":"East Gwillimbury is York Region's fastest-growing municipality, spanning Sharon, Queensville, Holland Landing, and Mount Albert. It is known for larger new-construction homes, significant infrastructure investment, and the HALP recreation centre opened in 2025."}},{"@type":"Question","name":"Is East Gwillimbury a good place to buy?","acceptedAnswer":{"@type":"Answer","text":"For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. In ${MARKET_DATA.period}, it recorded ${TOWN_MARKET.salesCount} all-home-types sales at an exact average sale price of ${TOWN_MARKET.averageSalePrice} and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"Does East Gwillimbury have GO Train service?","acceptedAnswer":{"@type":"Answer","text":"No — East Gwillimbury does not currently have a GO Train station. The closest stations are in Aurora and Newmarket. Residents primarily commute via Highway 404. The Bradford bypass is improving east-west access."}}]
+      "mainEntity":[{"@type":"Question","name":"What is East Gwillimbury Ontario like?","acceptedAnswer":{"@type":"Answer","text":"East Gwillimbury is York Region's fastest-growing municipality, spanning Sharon, Queensville, Holland Landing, and Mount Albert. It is known for larger new-construction homes, significant infrastructure investment, and the HALP recreation centre opened in 2025."}},{"@type":"Question","name":"Is East Gwillimbury a good place to buy?","acceptedAnswer":{"@type":"Answer","text":"For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. In ${MARKET_DATA.period}, it recorded ${TOWN_MARKET.salesCount} all-home-types sales at an exact average sale price of ${TOWN_MARKET.averageSalePrice} and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}."}},{"@type":"Question","name":"Does East Gwillimbury have GO Train service?","acceptedAnswer":{"@type":"Answer","text":"Yes. East Gwillimbury GO station on Green Lane, near Holland Landing, is on the Barrie line with direct service to Union Station — roughly 70 minutes downtown. Highway 404 also serves drivers, and the Bradford Bypass is improving east-west access."}}]
     },
     {
       "@type":"RealEstateAgent",
@@ -213,6 +217,13 @@ const PAGE_BODY_HTML = `
     <a href="https://northsidegta.ca/neighbourhood-guide">Neighbourhood guide</a><span>&rsaquo;</span>
     <span>East Gwillimbury</span>
   </nav>
+  <aside class="moving-guide-banner" aria-label="Moving to East Gwillimbury guide">
+    <div>
+      <strong>Moving from Toronto?</strong>
+      <span>Prices, commute, communities, and the trade-offs to know before you move.</span>
+    </div>
+    <a href="/moving-to-east-gwillimbury-from-toronto">Read the Honest 2026 Guide &rarr;</a>
+  </aside>
   <div class="page-grid">
 
     <!-- MAIN COLUMN -->
@@ -264,7 +275,7 @@ const PAGE_BODY_HTML = `
           <div style="background:var(--cream);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--ink2);line-height:1.75;">
             <div><strong>Distance to DVP/401:</strong> 60 km</div>
             <div><strong>Off-peak drive time:</strong> approximately 50 minutes</div>
-            <div><strong>Transit:</strong> Highway 404 and Bradford bypass — no GO Train station</div>
+            <div><strong>Transit:</strong> East Gwillimbury GO station on Green Lane — direct Barrie-line service to Union in roughly 70 minutes</div>
             <div style="margin-top:8px;font-size:12px;color:var(--ink4);">Drive times are off-peak estimates. Peak-hour commute times are typically 30–60% longer depending on conditions.</div>
           </div>
         </div>
@@ -325,7 +336,7 @@ const PAGE_BODY_HTML = `
           </div>
           <div class="fit-item fit-watch">
             <div class="fit-label">Things to weigh up</div>
-            <p>East Gwillimbury is car-dependent. There is no GO Train station. Daily commuting requires highway driving, typically 45 to 60 minutes off-peak to central Toronto.</p>
+            <p>East Gwillimbury has its own GO station on Green Lane with direct Barrie-line service to Union in roughly 70 minutes. Highway 404 also makes it practical for drivers, though peak traffic still requires planning.</p>
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">
@@ -350,7 +361,7 @@ const PAGE_BODY_HTML = `
       <div class="faq-answer">For buyers who want newer construction and larger lots at a reasonable York Region price point, East Gwillimbury offers strong value compared with nearby options. In ${MARKET_DATA.period}, it recorded ${TOWN_MARKET.salesCount} all-home-types sales at an exact average sale price of ${TOWN_MARKET.averageSalePrice} and an Avg. LDOM of ${TOWN_MARKET.avgLdom}. Source: ${MARKET_DATA.source}.</div>
     </details><details class="faq-item">
       <summary class="faq-summary">Does East Gwillimbury have GO Train service? <span class="faq-icon">+</span></summary>
-      <div class="faq-answer">No — East Gwillimbury does not currently have a GO Train station. The closest stations are in Aurora and Newmarket. Residents primarily commute via Highway 404. The Bradford bypass is improving east-west access.</div>
+      <div class="faq-answer">Yes. East Gwillimbury GO station on Green Lane, near Holland Landing, is on the Barrie line with direct service to Union Station — roughly 70 minutes downtown. Highway 404 also serves drivers, and the Bradford Bypass is improving east-west access.</div>
     </details>
       </div>
 
