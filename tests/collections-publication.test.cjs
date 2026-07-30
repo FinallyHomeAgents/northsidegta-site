@@ -46,6 +46,10 @@ test("collection loader returns only public records and reports malformed JSON",
     path.join(fixtureDir, "test2.json"),
     JSON.stringify({ slug: "test2", published: true }),
   );
+  fs.writeFileSync(
+    path.join(fixtureDir, "route-filename.json"),
+    JSON.stringify({ slug: "different-configured-slug", published: true }),
+  );
   fs.writeFileSync(path.join(fixtureDir, "broken.json"), "{");
 
   const invalid = [];
@@ -53,9 +57,21 @@ test("collection loader returns only public records and reports malformed JSON",
     onInvalid: failure => invalid.push(failure),
   });
 
-  assert.deepEqual(publicEntries.map(({ slug }) => slug), ["legacy"]);
+  assert.deepEqual(publicEntries.map(({ slug }) => slug), ["legacy", "route-filename"]);
   assert.equal(invalid.length, 1);
   assert.equal(invalid[0].file, "broken.json");
+});
+
+test("retired configured slugs stay excluded even when the filename differs", t => {
+  const fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), "northside-retired-collection-"));
+  t.after(() => fs.rmSync(fixtureDir, { recursive: true, force: true }));
+
+  fs.writeFileSync(
+    path.join(fixtureDir, "innocent-filename.json"),
+    JSON.stringify({ slug: "test-collection", published: true }),
+  );
+
+  assert.deepEqual(loadPublicCollections(fixtureDir), []);
 });
 
 test("repository sources, tombstones, and legitimate collections stay aligned", () => {
@@ -73,6 +89,7 @@ test("repository sources, tombstones, and legitimate collections stay aligned", 
   const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
   const rewrites = new Map(vercel.rewrites.map(({ source, destination }) => [source, destination]));
   const removedHandler = fs.readFileSync(path.join(ROOT, "api", "removed-collection.js"), "utf8");
+  const curatedPage = fs.readFileSync(path.join(ROOT, "src", "CuratedPage.js"), "utf8");
 
   assert.ok(publicSlugs.includes("northside-gta-under-900k"));
   assert.ok(publicSlugs.includes("detached-homes-georgina"));
@@ -83,4 +100,5 @@ test("repository sources, tombstones, and legitimate collections stay aligned", 
   });
   assert.match(removedHandler, /status\(410\)/);
   assert.match(removedHandler, /Cache-Control["'],\s*["']no-store/);
+  assert.match(curatedPage, /const canonicalSlug = slugValue;/);
 });
