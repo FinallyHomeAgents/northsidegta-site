@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
+const { loadPublicCollections } = require("./utils/publicCollections");
 const imageSizeModule = require("image-size");
 const imageSize =
   typeof imageSizeModule === "function"
@@ -65,26 +66,15 @@ if (fs.existsSync(outputRoot)) {
 }
 fs.mkdirSync(outputRoot, { recursive: true });
 
-const files = fs
-  .readdirSync(dataDir)
-  .filter(name => name.toLowerCase().endsWith(".json"))
-  .sort();
-
 let created = 0;
 const failures = [];
+const collections = loadPublicCollections(dataDir, {
+  caller: "generate-curated-html",
+  onInvalid: failure => failures.push(failure),
+});
 
-for (const file of files) {
-  const filePath = path.join(dataDir, file);
-  let raw;
-  try {
-    raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
-  } catch (error) {
-    failures.push({ file, reason: `Invalid JSON (${error.message})` });
-    continue;
-  }
-
-  const fallbackSlug = file.replace(/\.json$/i, "");
-  const slug = sanitizeSlug(fallbackSlug, fallbackSlug);
+for (const { data: raw, file, slug: configuredSlug } of collections) {
+  const slug = sanitizeSlug(configuredSlug, file.replace(/\.json$/i, ""));
 
   if (!slug) {
     failures.push({ file, reason: "Missing slug" });
