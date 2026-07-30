@@ -4,10 +4,15 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("node-html-parser");
 const { loadPublishedInsights } = require("./utils/publishedInsights");
+const {
+  RETIRED_COLLECTION_SLUGS,
+  loadPublicCollections,
+} = require("./utils/publicCollections");
 
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, "build");
 const insightDataDir = path.join(rootDir, "public", "data", "insights");
+const collectionDataDir = path.join(rootDir, "public", "data", "collections");
 const origin = "https://northsidegta.ca";
 const marketData = require(path.join(rootDir, "src", "data", "marketData.json"));
 const { georginaMovingGuide } = require(path.join(
@@ -299,6 +304,10 @@ checkRoute({ route: "/", schema: ["RealEstateAgent", "FAQPage"] });
 
 const publishedInsights = loadPublishedInsights(path.join(rootDir, "public"), "verify-prerendered-seo");
 const publishedInsightSlugs = new Set(publishedInsights.map(({ slug }) => slug));
+const publicCollections = loadPublicCollections(collectionDataDir, {
+  caller: "verify-prerendered-seo",
+});
+const publicCollectionSlugs = new Set(publicCollections.map(({ slug }) => slug));
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(rootDir, "vercel.json"), "utf8"));
 const rewritesBySource = new Map(
   (vercelConfig.rewrites || []).map(({ source, destination }) => [source, destination]),
@@ -346,6 +355,20 @@ retiredInsightSlugs.forEach((slug) => {
   }
 });
 
+const removedCollectionApi = fs.readFileSync(path.join(rootDir, "api", "removed-collection.js"), "utf8");
+if (!/status\(410\)/.test(removedCollectionApi) || !/Cache-Control["'],\s*["']no-store/.test(removedCollectionApi)) {
+  failures.push("api/removed-collection.js: retired collection response must be 410 with Cache-Control: no-store");
+}
+
+RETIRED_COLLECTION_SLUGS.forEach((slug) => {
+  if (publicCollectionSlugs.has(slug)) {
+    failures.push(`/collections/${slug}: retired slug is present in the public collection set`);
+  }
+  if (rewritesBySource.get(`/collections/${slug}`) !== "/api/removed-collection") {
+    failures.push(`/collections/${slug}: retired slug is missing its HTTP 410 rewrite`);
+  }
+});
+
 let checkedInsights = 0;
 for (const { slug: publishedSlug } of publishedInsights) {
   const fileName = `${publishedSlug}.json`;
@@ -386,6 +409,21 @@ if (missingInsightSlugs.length) {
   failures.push(`missing published insight pages: ${missingInsightSlugs.join(", ")}`);
 }
 
+const generatedCollectionSlugs = fs
+  .readdirSync(path.join(buildDir, "collections"), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(buildDir, "collections", entry.name, "index.html")))
+  .map((entry) => entry.name)
+  .sort();
+
+const unexpectedCollectionSlugs = generatedCollectionSlugs.filter((slug) => !publicCollectionSlugs.has(slug));
+const missingCollectionSlugs = [...publicCollectionSlugs].filter((slug) => !generatedCollectionSlugs.includes(slug));
+if (unexpectedCollectionSlugs.length) {
+  failures.push(`generated non-public collection pages: ${unexpectedCollectionSlugs.join(", ")}`);
+}
+if (missingCollectionSlugs.length) {
+  failures.push(`missing public collection pages: ${missingCollectionSlugs.join(", ")}`);
+}
+
 const sitemapPath = path.join(buildDir, "sitemap.xml");
 if (!fs.existsSync(sitemapPath)) {
   failures.push("sitemap.xml: missing from production build");
@@ -401,6 +439,26 @@ if (!fs.existsSync(sitemapPath)) {
   }
   if (missingSitemapSlugs.length) {
     failures.push(`sitemap.xml is missing published insights: ${missingSitemapSlugs.join(", ")}`);
+  }
+
+  const sitemapCollectionSlugs = [...sitemap.matchAll(/<loc>https:\/\/northsidegta\.ca\/collections\/([^<]+)<\/loc>/g)]
+    .map((match) => match[1])
+    .sort();
+  const unexpectedSitemapCollectionSlugs = sitemapCollectionSlugs.filter(
+    (slug) => !publicCollectionSlugs.has(slug),
+  );
+  const missingSitemapCollectionSlugs = [...publicCollectionSlugs].filter(
+    (slug) => !sitemapCollectionSlugs.includes(slug),
+  );
+  if (unexpectedSitemapCollectionSlugs.length) {
+    failures.push(
+      `sitemap.xml advertises non-public collections: ${unexpectedSitemapCollectionSlugs.join(", ")}`,
+    );
+  }
+  if (missingSitemapCollectionSlugs.length) {
+    failures.push(
+      `sitemap.xml is missing public collections: ${missingSitemapCollectionSlugs.join(", ")}`,
+    );
   }
 }
 
