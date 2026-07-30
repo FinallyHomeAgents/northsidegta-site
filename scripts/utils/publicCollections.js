@@ -13,14 +13,19 @@ const retiredCollectionSlugs = new Set(RETIRED_COLLECTION_SLUGS);
 const publicStatuses = new Set(["public", "published"]);
 
 function resolveCollectionSlug(data, fileName = "") {
+  const fileSlug = String(fileName).replace(/\.json$/i, "").trim();
+  if (fileSlug) return fileSlug;
   const configuredSlug = typeof data?.slug === "string" ? data.slug.trim() : "";
-  if (configuredSlug) return configuredSlug;
-  return String(fileName).replace(/\.json$/i, "").trim();
+  return configuredSlug;
 }
 
 function isPublicCollection(data, slug) {
-  const normalizedSlug = typeof slug === "string" ? slug.trim().toLowerCase() : "";
-  if (!normalizedSlug || retiredCollectionSlugs.has(normalizedSlug)) return false;
+  const candidateSlugs = [slug, data?.slug]
+    .filter((value) => typeof value === "string" && value.trim())
+    .map((value) => value.trim().toLowerCase());
+  if (!candidateSlugs.length || candidateSlugs.some((value) => retiredCollectionSlugs.has(value))) {
+    return false;
+  }
 
   if (
     data?.published === false ||
