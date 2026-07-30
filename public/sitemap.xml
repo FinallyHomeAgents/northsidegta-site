@@ -167,11 +167,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://northsidegta.ca/collections/landontest</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://northsidegta.ca/collections/northside-georgina-under700k</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -203,26 +198,6 @@
   </url>
   <url>
     <loc>https://northsidegta.ca/collections/northsidegta</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northsidegta.ca/collections/slugtest</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northsidegta.ca/collections/test-collection</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northsidegta.ca/collections/test2</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://northsidegta.ca/collections/test3</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

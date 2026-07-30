@@ -18,6 +18,12 @@ collections:
     identifier_field: 'slug'
     slug: '{{slug}}'
     fields:
+      - name: 'published'
+        label: 'Include on public site and sitemap'
+        widget: 'boolean'
+        required: false
+        default: true
+        hint: 'Turn this off to keep the collection record in the CMS without publishing its page.'
       - name: 'headline'
         label: 'Headline'
       - name: 'subheadline'

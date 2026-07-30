@@ -11,6 +11,7 @@ const collectionsDir = path.join(publicDir, 'data', 'collections')
 const townsPath = path.join(rootDir, 'src', 'towns.json')
 const siteConfigPath = path.join(rootDir, 'config', 'site.json')
 const { loadPublishedInsights } = require('./utils/publishedInsights')
+const { loadPublicCollections } = require('./utils/publicCollections')
 
 function loadJson(filePath, fallback) {
   if (!fs.existsSync(filePath)) return fallback
@@ -21,25 +22,6 @@ function loadJson(filePath, fallback) {
     console.warn(`[generate-sitemap] Failed to parse ${path.relative(rootDir, filePath)}: ${error.message}`)
     return fallback
   }
-}
-
-function loadCollections(dirPath) {
-  if (!fs.existsSync(dirPath)) return []
-  const entries = []
-  const files = fs.readdirSync(dirPath).filter((name) => name.endsWith('.json'))
-  for (const file of files) {
-    const fullPath = path.join(dirPath, file)
-    try {
-      const data = JSON.parse(fs.readFileSync(fullPath, 'utf8'))
-      const slug = typeof data.slug === 'string' && data.slug.trim() ? data.slug.trim() : file.replace(/\.json$/i, '')
-      if (slug) {
-        entries.push(slug)
-      }
-    } catch (error) {
-      console.warn(`[generate-sitemap] Skipping collection ${file}: ${error.message}`)
-    }
-  }
-  return entries
 }
 
 function loadEvents(dirPath) {
@@ -127,8 +109,8 @@ function main() {
       staticRoutes.push({ path: `/communities/${slug.trim()}`, changefreq: 'monthly', priority: '0.8' })
     })
 
-  const collections = loadCollections(collectionsDir)
-  collections.forEach((slug) => {
+  const collections = loadPublicCollections(collectionsDir, { caller: 'generate-sitemap' })
+  collections.forEach(({ slug }) => {
     staticRoutes.push({ path: `/collections/${slug}`, changefreq: 'monthly', priority: '0.6' })
   })
 
