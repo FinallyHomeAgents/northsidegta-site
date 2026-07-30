@@ -73,8 +73,8 @@ const collections = loadPublicCollections(dataDir, {
   onInvalid: failure => failures.push(failure),
 });
 
-for (const { data: raw, file, slug: configuredSlug } of collections) {
-  const slug = sanitizeSlug(configuredSlug, file.replace(/\.json$/i, ""));
+for (const { data: raw, file, slug: routeSlug } of collections) {
+  const slug = sanitizeSlug(routeSlug, file.replace(/\.json$/i, ""));
 
   if (!slug) {
     failures.push({ file, reason: "Missing slug" });
