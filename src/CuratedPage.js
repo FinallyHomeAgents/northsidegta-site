@@ -115,8 +115,7 @@ export default function CuratedPage() {
   const whatsappHref = typeof page.whatsappUrl === "string" ? page.whatsappUrl.trim() : "";
 
   const slugValue = typeof slug === "string" ? slug.trim() : "";
-  const canonicalSlug =
-    (typeof page.slug === "string" && page.slug.trim()) || slugValue || "";
+  const canonicalSlug = slugValue;
   const slugText = slugValue ? slugValue.replace(/[-_]+/g, " ").trim() : "";
   const heroAltText = `${headline || slugText || "NorthSide GTA"} hero image`;
   const canonicalUrl = absoluteUrl(`/collections/${encodeURIComponent(canonicalSlug)}`);
