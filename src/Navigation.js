@@ -1,6 +1,7 @@
 // src/Navigation.js
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import TerritoryRule, { TOWN_ORDER } from "./components/brand/TerritoryRule";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -48,6 +49,11 @@ export default function Navigation() {
   const communitiesWrapperRef = useRef(null);
   const location = useLocation();
   const communityActive = isCommunityPath(location.pathname);
+  const activeTown = TOWN_ORDER.find(
+    (slug) =>
+      location.pathname === `/communities/${slug}` ||
+      location.pathname.startsWith(`/communities/${slug}/`)
+  );
 
   useEffect(() => {
     setMenuOpen(false);
@@ -78,26 +84,30 @@ export default function Navigation() {
         }
       `}</style>
 
-      <div className="northside-global-header border-b border-emerald-100/80 bg-white shadow-[0_1px_18px_rgba(15,23,42,0.06)]">
+      <div
+        className="northside-global-header border-b border-emerald-100/80 bg-white shadow-[0_1px_18px_rgba(15,23,42,0.06)]"
+        style={{ fontFamily: "'Blinker', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" }}
+      >
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[80px] lg:px-8">
           <Link
             to="/"
-            className="group flex min-w-0 items-center gap-3 rounded-2xl pr-3 transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70 sm:gap-3"
+            className="group flex min-w-0 items-center gap-[13px] rounded-2xl pr-3 transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70"
             aria-label="NorthSide GTA home"
           >
             <img
-              src="/Images/fha-badge.png"
-              alt="Finally Home Agents logo"
-              className="hidden h-10 w-10 flex-shrink-0 rounded-full object-contain md:block"
+              src="/Images/brand/northsidegta-sign.png"
+              alt="NorthSide GTA"
+              className="h-[46px] w-auto flex-shrink-0 sm:h-[58px]"
               loading="eager"
               decoding="async"
             />
-            <span className="flex min-w-0 flex-col leading-none">
-              <span className="whitespace-nowrap text-[22px] font-semibold tracking-[-0.035em] text-slate-950 sm:text-[24px]">
+            <span className="flex min-w-0 flex-col items-start gap-[5px]">
+              <span className="whitespace-nowrap text-[26px] font-bold leading-[0.92] tracking-[-0.025em] text-emerald-950 sm:text-[34.6px]">
                 NorthSide GTA
               </span>
-              <span className="mt-1 max-w-[210px] truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-green/80 sm:max-w-none sm:text-[11px]">
-                Served by Finally Home Agents
+              <TerritoryRule active={activeTown} />
+              <span className="whitespace-nowrap text-[7.2px] font-semibold leading-none tracking-[0.2em] text-brand-green sm:text-[9.5px] sm:tracking-[0.235em]">
+                REAL ESTATE NORTH OF TORONTO
               </span>
             </span>
           </Link>
@@ -179,6 +189,15 @@ export default function Navigation() {
             >
               Let’s Talk
             </Link>
+
+            <span className="ml-3 hidden items-center gap-2 border-l border-slate-200 pl-3 2xl:flex">
+              <img src="/Images/brand/fha-seal.png" alt="Finally Home Agents" className="h-8 w-auto" loading="lazy" />
+              <span className="text-[10px] leading-tight text-slate-500">
+                Finally Home Agents
+                <br />
+                HomeLife Optimum Realty
+              </span>
+            </span>
           </nav>
 
           <button
