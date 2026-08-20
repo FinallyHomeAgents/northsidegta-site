@@ -136,42 +136,101 @@ const SCORE_MATRIX = {
   wfh: { "East Gwillimbury": 3, Uxbridge: 2, Scugog: 2, Georgina: 2 },
 };
 
-const PHOTO_GRID = [
+const HERO_ROTATION = [
   {
-    image: "/Images/newmarket-banner.jpg",
-    position: "center 52%",
-    label: "Main Street, Newmarket",
-    sublabel: "Historic · Walkable · GO Train",
+    src: "/uploads/sold-home-newmarket-finally-home-agents.webp",
+    caption: "Sold · Newmarket",
+    sub: "Another family finally home",
+    alt: "Sold With Finally Home Agents sign in front of a brick two-storey home in Newmarket, Ontario",
   },
   {
-    image: "/Images/aurora-banner.jpg",
+    src: "/uploads/coming-soon-home-east-gwillimbury-finally-home-agents.webp",
+    caption: "Coming soon · East Gwillimbury",
+    sub: "Real listings, real streets",
+    alt: "Finally Home Agents coming soon sign in front of a two-storey brick home in East Gwillimbury, Ontario",
+  },
+  {
+    src: "/uploads/matthew-landon-mulhall-finally-home-agents.webp",
+    caption: "Matt & Landon",
+    sub: "Your agents up here",
+    alt: "Matthew and Landon Mulhall of Finally Home Agents",
+  },
+  {
+    src: "/uploads/coming-soon-bungalow-georgina-finally-home-agents.webp",
+    caption: "Coming soon · Georgina",
+    sub: "Every price point, every town",
+    alt: "Finally Home Agents coming soon sign on the lawn of a bungalow in Georgina, Ontario",
+  },
+  {
+    src: "/uploads/finally-home-cup-trophy-mill-run-golf-club-uxbridge.webp",
+    caption: "The Finally Home Cup · Uxbridge",
+    sub: "We live here too",
+    alt: "Finally Home Cup golf trophy on the fairway at Mill Run Golf Club in Uxbridge, Ontario",
+  },
+];
+
+const PROOF_CARDS = [
+  {
+    image: "/uploads/coming-soon-sign-newmarket-finally-home-agents.webp",
+    position: "center 40%",
+    label: "Step 1 — Coming Soon · Newmarket",
+    sublabel: "Positioned and marketed before it hits the MLS",
+    alt: "Finally Home Agents coming soon sign in front of a brick two-storey home in Newmarket, Ontario",
+  },
+  {
+    image: "/uploads/sold-home-newmarket-finally-home-agents.webp",
+    position: "center 40%",
+    label: "Step 2 — SOLD · same house",
+    sublabel: "From sign-up to sold, start to finish",
+    alt: "Sold With Finally Home Agents sign in front of the same Newmarket home",
+  },
+  {
+    image: "/uploads/finally-home-agents-just-sold-door-hanger.webp",
     position: "center 45%",
-    label: "Aurora community trails",
-    sublabel: "Parks · Schools · Neighbourhoods",
+    label: "Step 3 — the street finds out",
+    sublabel: "“We just sold a home down the street”",
+    alt: "Finally Home Agents door hanger reading 'This could be your sign — we just sold a home down the street'",
+  },
+];
+
+const COMMUNITY_MEDIA = [
+  {
+    type: "image",
+    src: "/uploads/finally-home-cup-team-finally-mill-run-uxbridge.webp",
+    position: "center 42%",
+    label: "Team Finally · the Finally Home Cup",
+    alt: "Finally Home Cup golf tournament team photo at Mill Run Golf Club in Uxbridge",
+    span: "wide",
   },
   {
-    image: "/Images/stouffville-banner.jpg",
-    position: "center 48%",
-    label: "Stouffville heritage district",
-    sublabel: "Village feel · GO Train · Trails",
+    type: "video",
+    src: "/uploads/golf-carts-finally-home-cup-mill-run-uxbridge.mp4",
+    poster: "/uploads/golf-carts-finally-home-cup-mill-run-uxbridge-poster.webp",
+    label: "Cup day at Mill Run · Uxbridge",
+    alt: "Golf carts lined up for the Finally Home Cup tournament",
+    span: "tall",
   },
   {
-    image: "/Images/uxbridge-banner.jpg",
-    position: "center 46%",
-    label: "Uxbridge trail system",
-    sublabel: "Trail Capital of Canada",
+    type: "image",
+    src: "/uploads/matthew-mulhall-mill-run-cup-champion-uxbridge.webp",
+    position: "center 42%",
+    label: "Matthew with the Mill Run Cup",
+    alt: "Matthew Mulhall holding the Mill Run Cup trophy in Uxbridge, Ontario",
   },
   {
-    image: "/Images/georgina-banner.jpg",
-    position: "center 44%",
-    label: "Lake Simcoe waterfront",
-    sublabel: "Georgina · Keswick · Sutton",
+    type: "image",
+    src: "/uploads/golf-swing-sunset-mill-run-golf-club-uxbridge.webp",
+    position: "center 45%",
+    label: "League nights at Mill Run",
+    alt: "Golfer teeing off at sunset at Mill Run Golf Club in Uxbridge, Ontario",
+    span: "wide",
   },
   {
-    image: "/Images/eastgwillimbury-banner.jpg",
-    position: "center 50%",
-    label: "East Gwillimbury new builds",
-    sublabel: "404 Corridor · Growing fast",
+    type: "image",
+    src: "/uploads/finally-home-cup-mill-run-golf-club-sign-uxbridge.webp",
+    position: "center 55%",
+    label: "Our tournament takes over Mill Run every summer",
+    alt: "Mill Run Golf Club marquee sign displaying Finally Home Cup in Uxbridge, Ontario",
   },
 ];
 
@@ -261,7 +320,7 @@ function BuyersFaqSection() {
     <section className="buyers-section tinted-section buyers-faq-section">
       <div className="buyers-container">
         <SectionHeader
-          eyebrow="06 / Buyer FAQ"
+          eyebrow="07 / Buyer FAQ"
           title="Buyer Questions We Hear Most Often"
           lead="Buying north of Toronto is not just about finding a house. It is about choosing the right town, commute, lifestyle, and long-term fit before you make a move."
         />
@@ -394,6 +453,46 @@ export function TownMatchQuiz({ variant = "buyers", onComplete } = {}) {
       <button className="quiz-next" type="button" disabled={!selected} onClick={nextStep}>
         {step === QUESTIONS.length - 1 ? "See my match →" : "Next"}
       </button>
+    </div>
+  );
+}
+
+function HeroRotator() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const timer = window.setInterval(
+      () => setActive((current) => (current + 1) % HERO_ROTATION.length),
+      5200
+    );
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="hero-rotator" role="img" aria-label={HERO_ROTATION[active].alt}>
+      {HERO_ROTATION.map(({ src, caption, sub, alt }, index) => (
+        <figure key={src} className={`hero-slide${index === active ? " active" : ""}`} aria-hidden={index !== active}>
+          <img src={src} alt={index === active ? alt : ""} loading={index === 0 ? "eager" : "lazy"} />
+          <figcaption>
+            <strong>{caption}</strong>
+            <span>{sub}</span>
+          </figcaption>
+        </figure>
+      ))}
+      <div className="hero-dots" aria-hidden="true">
+        {HERO_ROTATION.map((slide, index) => (
+          <button
+            key={slide.src}
+            type="button"
+            tabIndex={-1}
+            className={index === active ? "on" : ""}
+            onClick={() => setActive(index)}
+          />
+        ))}
+      </div>
+      <div className="hero-chip hero-chip-rating"><span className="hero-chip-stars">★★★★★</span> 5.0 on Google</div>
     </div>
   );
 }
@@ -572,6 +671,7 @@ export default function BuyersPage() {
         <meta name="author" content="Finally Home Agents" />
         <meta name="publisher" content="Finally Home Agents" />
         <link rel="canonical" href="https://northsidegta.ca/buyers" />
+        <link rel="preload" as="image" href="/uploads/sold-home-newmarket-finally-home-agents.webp" />
         <meta property="og:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
         <meta property="og:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
         <meta property="og:url" content="https://northsidegta.ca/buyers" />
@@ -592,20 +692,23 @@ export default function BuyersPage() {
       <style>{BUYERS_STYLES}</style>
 
       <section className="buyers-hero">
-        <img className="buyers-hero-bg" src="/uploads/northside-gta-finally-home-agents-hero.jpg" alt="" aria-hidden="true" />
-        <div className="buyers-container hero-inner">
-          <p className="buyers-eyebrow buyers-eyebrow-dark">Buying North of Toronto</p>
-          <h1>You don't have to leave the city. You get to.</h1>
-          <p className="hero-subhead">A guided buyer path for Toronto families moving north: match the right town, understand the market, then pressure-test the shortlist with Matt & Landon.</p>
-          <div className="hero-actions">
-            <button type="button" className="hero-primary" onClick={() => scrollToSection("town-match")}>Find My Town →</button>
-            <button type="button" className="hero-ghost" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
+        <div className="hero-glow" aria-hidden="true" />
+        <div className="buyers-container hero-grid">
+          <div className="hero-copy">
+            <p className="buyers-eyebrow buyers-eyebrow-dark hero-fade">Buying North of Toronto</p>
+            <h1 className="hero-fade hero-delay-1">You don't have to leave the city. <em>You get to.</em></h1>
+            <p className="hero-subhead hero-fade hero-delay-2">A guided buyer path for Toronto families moving north: match the right town, understand the market, then pressure-test the shortlist with Matt & Landon.</p>
+            <div className="hero-actions hero-fade hero-delay-3">
+              <button type="button" className="hero-primary" onClick={() => scrollToSection("town-match")}>Find My Town <span aria-hidden="true">→</span></button>
+              <button type="button" className="hero-ghost" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
+            </div>
+            <div className="trust-strip hero-fade hero-delay-4">
+              {[ ["5.0 ★", "Google Rating"], ["7", "Communities Served"], ["RECO", "Registered · Ontario"], ["HomeLife", "Optimum Realty"] ].map(([stat, label]) => (
+                <div key={stat}><strong>{stat}</strong><span>{label}</span></div>
+              ))}
+            </div>
           </div>
-          <div className="trust-strip">
-            {[ ["5.0 ★", "Google Rating"], ["7", "Communities Served"], ["RECO", "Registered · Ontario"], ["HomeLife", "Optimum Realty"] ].map(([stat, label]) => (
-              <div key={stat}><strong>{stat}</strong><span>{label}</span></div>
-            ))}
-          </div>
+          <HeroRotator />
         </div>
       </section>
 
@@ -658,17 +761,14 @@ export default function BuyersPage() {
       <section className="buyers-section tinted-section">
         <div className="buyers-container">
           <SectionHeader
-            eyebrow="02 / Life Up Here"
-            title="This is what you're actually moving to"
-            lead="Not just a bigger house — a different kind of morning. School drop-off without gridlock. A backyard that gets used. Communities built around real life."
+            eyebrow="02 / Real Results"
+            title="From Coming Soon to SOLD — the same house"
+            lead="No stock photos here. This is one of our actual Newmarket listings, from the day the sign went up to the day the neighbours got the news."
           />
           <div className="photo-grid">
-            {PHOTO_GRID.map(({ image, position, label, sublabel }) => (
-              <figure
-                className="photo-card"
-                key={label}
-                style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.72)), url(${image})`, backgroundPosition: position }}
-              >
+            {PROOF_CARDS.map(({ image, position, label, sublabel, alt }) => (
+              <figure className="photo-card" key={label}>
+                <img src={image} alt={alt} loading="lazy" style={{ objectPosition: position }} />
                 <figcaption><strong>{label}</strong><span>{sublabel}</span></figcaption>
               </figure>
             ))}
@@ -721,7 +821,31 @@ export default function BuyersPage() {
 
       <section className="buyers-section white-section">
         <div className="buyers-container">
-          <SectionHeader eyebrow="05 / Client Proof" title="Real moves. Real families." compact>
+          <SectionHeader
+            eyebrow="05 / Community"
+            title="We don't just sell here. We live here."
+            lead="The Finally Home Cup at Mill Run Golf Club in Uxbridge, league nights, and the people we get to call neighbours. When we say local, this is what we mean."
+          />
+          <div className="community-grid">
+            {COMMUNITY_MEDIA.map(({ type, src, poster, position, label, alt, span }) => (
+              <figure className={`community-card${span === "wide" ? " community-card-wide" : ""}${span === "tall" ? " community-card-tall" : ""}`} key={src}>
+                {type === "video" ? (
+                  <video autoPlay loop muted playsInline preload="metadata" poster={poster} aria-label={alt}>
+                    <source src={src} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={src} alt={alt} loading="lazy" style={{ objectPosition: position }} />
+                )}
+                <figcaption>{label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="buyers-section tinted-section">
+        <div className="buyers-container">
+          <SectionHeader eyebrow="06 / Client Proof" title="Real moves. Real families." compact>
             <p className="buyers-lead">All reviews from Google. <a href="https://share.google/GJz2QTQ8GqZIifaNH" target="_blank" rel="noreferrer">See all Google reviews →</a></p>
           </SectionHeader>
           <div className="reviews-grid">
@@ -742,7 +866,7 @@ export default function BuyersPage() {
       <section className="buyers-section dark-section" id="cta-section">
         <div className="buyers-container cta-grid">
           <SectionHeader
-            eyebrow="07 / Start the Conversation"
+            eyebrow="08 / Start the Conversation"
             title="Want a town shortlist built around your actual move?"
             lead="Tell us where you’re coming from, what matters most, and when you’re thinking of moving. We’ll help you narrow the right NorthSide GTA towns before you waste time on the wrong homes."
             dark
@@ -792,13 +916,51 @@ const BUYERS_STYLES = `
   .buyers-lead a { color: var(--primary); font-weight: 600; text-decoration: none; }
   .buyers-lead-dark { color: rgba(255,255,255,0.65); }
 
-  .buyers-hero { position: relative; overflow: hidden; background: var(--primary); padding: 72px 32px 44px; }
-  .buyers-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; }
-  .buyers-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(35,71,10,0.95), rgba(35,71,10,0.74), rgba(35,71,10,0.45)); }
-  .hero-inner { position: relative; z-index: 1; max-width: 760px; margin-left: max(calc((100vw - 1120px) / 2), 0px); }
-  .buyers-hero h1 { margin: 0; max-width: 640px; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 38px; line-height: 1.08; font-weight: 600; letter-spacing: -0.02em; }
-  .hero-subhead { max-width: 610px; margin: 16px 0 0; color: rgba(255,255,255,0.76); font-size: 14px; line-height: 1.75; }
+  .buyers-hero { position: relative; overflow: hidden; padding: 56px 32px 48px; background:
+    radial-gradient(1000px 560px at 88% 8%, rgba(105,160,50,0.42), transparent 62%),
+    radial-gradient(720px 460px at 4% 100%, rgba(168,201,122,0.20), transparent 60%),
+    linear-gradient(128deg, #16300a 0%, #23470a 46%, #2e5c11 100%); }
+  .buyers-hero::before { content: ""; position: absolute; inset: 0; opacity: 0.5; background-image: radial-gradient(rgba(255,255,255,0.085) 1px, transparent 1.4px); background-size: 26px 26px; }
+  .hero-glow { position: absolute; top: -140px; right: -80px; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(168,201,122,0.28), transparent 65%); filter: blur(10px); animation: hero-glow-drift 9s ease-in-out infinite alternate; }
+  @keyframes hero-glow-drift { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-50px,36px,0) scale(1.12); } }
+  .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, 420px); gap: 48px; align-items: center; }
+  .buyers-hero h1 { margin: 0; max-width: 540px; color: #fff; font-family: "Playfair Display", Georgia, serif; font-size: 42px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; }
+  .buyers-hero h1 em { display: inline-block; font-style: italic; color: #d3ecab; background-image: linear-gradient(transparent 72%, rgba(168,201,122,0.32) 72%); }
+  .hero-subhead { max-width: 560px; margin: 16px 0 0; color: rgba(255,255,255,0.78); font-size: 14.5px; line-height: 1.75; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .hero-primary span { display: inline-block; margin-left: 6px; transition: transform 180ms ease; }
+  .hero-primary:hover span { transform: translateX(4px); }
+
+  .hero-fade { opacity: 0; transform: translateY(14px); animation: hero-fade-up 640ms cubic-bezier(0.22, 0.85, 0.35, 1) forwards; }
+  .hero-delay-1 { animation-delay: 90ms; }
+  .hero-delay-2 { animation-delay: 180ms; }
+  .hero-delay-3 { animation-delay: 270ms; }
+  .hero-delay-4 { animation-delay: 380ms; }
+  @keyframes hero-fade-up { to { opacity: 1; transform: translateY(0); } }
+
+  .hero-rotator { position: relative; aspect-ratio: 3 / 4; max-height: 560px; width: 100%; border-radius: 14px; overflow: visible; opacity: 0; animation: hero-visual-in 800ms cubic-bezier(0.22, 0.85, 0.35, 1) 240ms forwards; }
+  @keyframes hero-visual-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-slide { position: absolute; inset: 0; margin: 0; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.24); box-shadow: 0 34px 80px rgba(8,20,2,0.5); opacity: 0; transition: opacity 1100ms ease; }
+  .hero-slide.active { opacity: 1; }
+  .hero-slide img { width: 100%; height: 100%; object-fit: cover; transform: scale(1); }
+  .hero-slide.active img { animation: hero-slide-drift 5600ms ease-out forwards; }
+  @keyframes hero-slide-drift { from { transform: scale(1.06); } to { transform: scale(1); } }
+  .hero-slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(10,24,2,0.72)); }
+  .hero-slide figcaption { position: absolute; z-index: 1; left: 18px; right: 18px; bottom: 16px; color: #fff; }
+  .hero-slide figcaption strong { display: block; font-size: 14.5px; font-weight: 700; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+  .hero-slide figcaption span { display: block; margin-top: 3px; color: rgba(255,255,255,0.82); font-size: 12px; }
+  .hero-dots { position: absolute; z-index: 2; right: 16px; bottom: 18px; display: flex; gap: 6px; }
+  .hero-dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,0.38); cursor: pointer; transition: background 200ms ease, transform 200ms ease; }
+  .hero-dots button.on { background: #fff; transform: scale(1.25); }
+  .hero-chip { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 700; box-shadow: 0 14px 34px rgba(8,20,2,0.4); }
+  .hero-chip-rating { top: -14px; left: -20px; background: #fff; color: var(--primary); animation: hero-chip-float 7s ease-in-out infinite alternate; }
+  .hero-chip-stars { color: #e0a51e; letter-spacing: 1px; font-size: 11px; }
+  @keyframes hero-chip-float { from { translate: 0 0; } to { translate: 0 -8px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade, .hero-rotator { opacity: 1; transform: none; animation: none; }
+    .hero-slide, .hero-slide.active img, .hero-chip, .hero-glow { animation: none; transition: none; }
+  }
   .hero-actions button, .result-actions button, .result-actions a, .quiz-next, .submit-button, .mobile-cta-bar button { border-radius: 3px; border: 0; font-weight: 600; cursor: pointer; transition: transform 160ms ease, opacity 160ms ease; }
   .hero-actions button:hover, .result-actions button:hover, .result-actions a:hover, .quiz-next:hover, .submit-button:hover, .mobile-cta-bar button:hover { transform: translateY(-1px); }
   .hero-primary { background: #fff; color: var(--primary); padding: 12px 20px; }
@@ -855,12 +1017,22 @@ const BUYERS_STYLES = `
   .also-card a { color: var(--primary); font-size: 12px; font-weight: 600; text-decoration: none; }
   .retake-button { margin-top: 18px; padding: 0; border: 0; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
 
-  .photo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .photo-card { position: relative; overflow: hidden; min-height: 142px; margin: 0; border-radius: 5px; background-color: #1a3a0a; background-size: cover; background-repeat: no-repeat; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
-  .photo-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(26,58,10,0.3), rgba(26,58,10,0)); }
-  .photo-card figcaption { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 12px; color: #fff; }
-  .photo-card strong { display: block; font-size: 13px; font-weight: 600; }
-  .photo-card span { display: block; margin-top: 3px; color: rgba(255,255,255,0.72); font-size: 11.5px; }
+  .photo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; counter-reset: proof; }
+  .photo-card { position: relative; overflow: hidden; margin: 0; aspect-ratio: 4 / 5; border-radius: 8px; background-color: #1a3a0a; border: 1px solid var(--border); box-shadow: 0 18px 45px rgba(26,26,26,0.09); }
+  .photo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
+  .photo-card:hover img { transform: scale(1.03); }
+  .photo-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(10,24,2,0.78)); pointer-events: none; }
+  .photo-card figcaption { position: absolute; z-index: 1; left: 16px; right: 16px; bottom: 14px; color: #fff; }
+  .photo-card strong { display: block; font-size: 14px; font-weight: 700; text-shadow: 0 1px 6px rgba(0,0,0,0.45); }
+  .photo-card span { display: block; margin-top: 4px; color: rgba(255,255,255,0.8); font-size: 12px; line-height: 1.45; }
+
+  .community-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 200px; gap: 12px; }
+  .community-card { position: relative; overflow: hidden; margin: 0; border-radius: 8px; background: #1a3a0a; border: 1px solid var(--border); }
+  .community-card-wide { grid-column: span 2; }
+  .community-card-tall { grid-row: span 2; }
+  .community-card img, .community-card video { width: 100%; height: 100%; object-fit: cover; }
+  .community-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 58%, rgba(10,24,2,0.72)); pointer-events: none; }
+  .community-card figcaption { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 11px; color: #fff; font-size: 12.5px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.45); }
 
   .market-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
   .market-card, .process-card, .review-card { border: 1px solid var(--border); border-radius: 5px; background: #fff; }
@@ -928,6 +1100,13 @@ const BUYERS_STYLES = `
 
   .mobile-cta-bar { display: none; }
 
+  @media (max-width: 1020px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero-rotator { max-width: 420px; margin: 0 auto; }
+    .hero-chip-rating { left: -8px; }
+    .community-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 190px; }
+  }
+
   @media (max-width: 900px) {
     .split-section, .cta-grid, .moving-guides-strip__inner { grid-template-columns: 1fr; }
     .market-grid, .process-grid, .reviews-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -945,10 +1124,15 @@ const BUYERS_STYLES = `
     .buyers-hero, .buyers-section, .community-strip, .moving-guides-strip { padding-left: 20px; padding-right: 20px; }
     .buyers-section { padding-top: 34px; padding-bottom: 34px; }
     .dark-section { padding-bottom: 104px; }
-    .buyers-hero { padding-top: 58px; }
-    .buyers-hero h1 { font-size: 32px; }
+    .buyers-hero { padding-top: 46px; }
+    .buyers-hero h1 { font-size: 33px; }
     .buyers-section-header h2 { font-size: 29px; }
-    .trust-strip, .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
+    .hero-rotator { max-width: 340px; }
+    .trust-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .community-grid { grid-template-columns: 1fr; grid-auto-rows: 230px; }
+    .community-card-wide { grid-column: auto; }
+    .community-card-tall { grid-row: auto; min-height: 380px; }
+    .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
     .moving-guides-strip ul { grid-template-columns: 1fr; }
     .quiz-card, .consultation-card { padding: 22px; }
     .buyers-faq-item summary { align-items: flex-start; padding: 16px; font-size: 17px; }
