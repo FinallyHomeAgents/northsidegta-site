@@ -29,6 +29,11 @@ test("buyers static HTML shell includes route SEO before JavaScript runs", async
 
   assert.match(html, /<link rel="canonical" href="https:\/\/northsidegta\.ca\/buyers"/);
   assert.match(html, /<meta property="og:url" content="https:\/\/northsidegta\.ca\/buyers"/);
+  assert.match(html, /<title[^>]*>Buying a Home North of Toronto \| Finally Home Agents<\/title>/);
+  assert.match(
+    html,
+    /<meta name="description" content="Compare Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog with local buyer guidance from Finally Home Agents\."/,
+  );
   assert.match(
     html,
     /<meta property="og:image" content="https:\/\/northsidegta\.ca\/uploads\/buyers-page-seo\.jpg"/,
@@ -37,6 +42,8 @@ test("buyers static HTML shell includes route SEO before JavaScript runs", async
     html,
     /<meta name="twitter:image" content="https:\/\/northsidegta\.ca\/uploads\/buyers-page-seo\.jpg"/,
   );
+  assert.match(html, /<meta property="og:image:alt" content="Finally Home Agents buyer guidance for communities north of Toronto"/);
+  assert.match(html, /<meta name="twitter:image:alt" content="Finally Home Agents buyer guidance for communities north of Toronto"/);
   assert.match(html, /<meta name="author" content="Finally Home Agents"/);
   assert.match(html, /<meta name="publisher" content="Finally Home Agents"/);
   assert.match(html, /<script type="application\/ld\+json"[^>]*>/);

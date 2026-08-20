@@ -1,4 +1,4 @@
-import { BUYERS_SCHEMA } from "./buyersSchema.mjs";
+import { BUYERS_SCHEMA, BUYERS_SEO } from "./buyersSchema.mjs";
 import sellersSchemaModule from "../../lib/structuredData/sellersPage.js";
 import movingGuideContentModule from "../../content/movingFromToronto/georgina.js";
 import eastGwillimburyMovingGuideModule from "../../content/movingFromToronto/eastGwillimbury.js";
@@ -89,15 +89,16 @@ const STATIC_ROUTE_META_CONFIGS = [
     route: "/buyers",
     meta: {
       route: "/buyers",
-      documentTitle: "Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA",
-      title: "Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA",
-      description:
-        "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call.",
-      canonicalUrl: "https://northsidegta.ca/buyers",
+      documentTitle: BUYERS_SEO.title,
+      title: BUYERS_SEO.title,
+      description: BUYERS_SEO.description,
+      canonicalUrl: BUYERS_SEO.url,
       ogType: "website",
-      ogImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
+      ogImage: BUYERS_SEO.image,
+      ogImageAlt: BUYERS_SEO.imageAlt,
       twitterCard: "summary_large_image",
-      twitterImage: "https://northsidegta.ca/uploads/buyers-page-seo.jpg",
+      twitterImage: BUYERS_SEO.image,
+      twitterImageAlt: BUYERS_SEO.imageAlt,
       siteName: "NorthSide GTA",
       additionalMeta: [
         { name: "robots", content: "index,follow" },
@@ -590,7 +591,7 @@ const TOWN_REMEDIATION = [
 
 const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
   { route: "/", meta: routeMeta({ route: "/", title: "NorthSide GTA Real Estate | Finally Home Agents", description: "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "WebSite" }) },
-  { route: "/buyers", meta: routeMeta({ route: "/buyers", title: "Buying a Home North of Toronto | Finally Home Agents", description: "Buying north of Toronto? Compare Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog with local buyer guidance.", image: `${SITE_URL}/uploads/buyers-page-seo.jpg`, schema: BUYERS_SCHEMA }) },
+  { route: "/buyers", meta: routeMeta({ route: "/buyers", title: BUYERS_SEO.title, description: BUYERS_SEO.description, image: BUYERS_SEO.image, imageAlt: BUYERS_SEO.imageAlt, schema: BUYERS_SCHEMA }) },
   ...MOVING_GUIDES.map((guide) => ({
     route: guide.route,
     meta: routeMeta({

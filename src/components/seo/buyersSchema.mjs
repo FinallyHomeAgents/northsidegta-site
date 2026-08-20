@@ -2,6 +2,15 @@ const BUYERS_SEO_IMAGE = "https://northsidegta.ca/uploads/buyers-page-seo.jpg";
 const SITE_URL = "https://northsidegta.ca";
 const BUYERS_URL = `${SITE_URL}/buyers`;
 
+export const BUYERS_SEO = Object.freeze({
+  title: "Buying a Home North of Toronto | Finally Home Agents",
+  description:
+    "Compare Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog with local buyer guidance from Finally Home Agents.",
+  image: BUYERS_SEO_IMAGE,
+  imageAlt: "Finally Home Agents buyer guidance for communities north of Toronto",
+  url: BUYERS_URL,
+});
+
 const PRIMARY_SERVICE_AREAS = [
   "Aurora, Ontario",
   "Newmarket, Ontario",
@@ -119,9 +128,8 @@ export const BUYERS_SCHEMA = {
       "@type": "WebPage",
       "@id": `${BUYERS_URL}#webpage`,
       url: BUYERS_URL,
-      name: "Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA",
-      description:
-        "Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.",
+      name: BUYERS_SEO.title,
+      description: BUYERS_SEO.description,
       inLanguage: "en-CA",
       image: BUYERS_SEO_IMAGE,
       about: { "@id": `${SITE_URL}/#realestateagent` },
