@@ -1,9 +1,9 @@
 // src/BuyersPage.js
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Footer from "./Footer";
 import { getFormEndpoint } from "./components/contact/contactConfig";
-import { BUYER_FAQS, BUYERS_SCHEMA } from "./components/seo/buyersSchema.mjs";
+import { BUYER_FAQS, BUYERS_SCHEMA, BUYERS_SEO } from "./components/seo/buyersSchema.mjs";
 import MARKET_DATA from "./data/marketData.json";
 
 const COMMUNITIES = [
@@ -171,25 +171,25 @@ const HERO_ROTATION = [
 
 const PROOF_CARDS = [
   {
+    image: "/uploads/finally-home-agents-just-sold-door-hanger.webp",
+    position: "center 45%",
+    label: "Step 1 — boots on the ground",
+    sublabel: "Local outreach puts your home in front of neighbourhood buyers",
+    alt: "Finally Home Agents door hanger used for local neighbourhood real estate outreach",
+  },
+  {
     image: "/uploads/coming-soon-sign-newmarket-finally-home-agents.webp",
     position: "center 40%",
-    label: "Step 1 — Coming Soon · Newmarket",
+    label: "Step 2 — Coming Soon · Newmarket",
     sublabel: "Positioned and marketed before it hits the MLS",
     alt: "Finally Home Agents coming soon sign in front of a brick two-storey home in Newmarket, Ontario",
   },
   {
     image: "/uploads/sold-home-newmarket-finally-home-agents.webp",
     position: "center 40%",
-    label: "Step 2 — SOLD · same house",
+    label: "Step 3 — SOLD · same house",
     sublabel: "From sign-up to sold, start to finish",
     alt: "Sold With Finally Home Agents sign in front of the same Newmarket home",
-  },
-  {
-    image: "/uploads/finally-home-agents-just-sold-door-hanger.webp",
-    position: "center 45%",
-    label: "Step 3 — the street finds out",
-    sublabel: "“We just sold a home down the street”",
-    alt: "Finally Home Agents door hanger reading 'This could be your sign — we just sold a home down the street'",
   },
 ];
 
@@ -213,7 +213,7 @@ const COMMUNITY_MEDIA = [
   {
     type: "image",
     src: "/uploads/matthew-mulhall-mill-run-cup-champion-uxbridge.webp",
-    position: "center 42%",
+    position: "center 8%",
     label: "Matthew with the Mill Run Cup",
     alt: "Matthew Mulhall holding the Mill Run Cup trophy in Uxbridge, Ontario",
   },
@@ -298,6 +298,33 @@ function renderFaqAnswer(answer, linkedTowns) {
   });
 }
 
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    updatePreference();
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", updatePreference);
+    } else {
+      mediaQuery.addListener?.(updatePreference);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", updatePreference);
+      } else {
+        mediaQuery.removeListener?.(updatePreference);
+      }
+    };
+  }, []);
+
+  return prefersReducedMotion;
+}
+
 function scrollToSection(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -329,7 +356,6 @@ function BuyersFaqSection() {
             <details
               className="buyers-faq-item"
               key={question}
-              defaultOpen={index === 0}
               ref={(node) => applyInitialFaqOpen(node, index)}
             >
               <summary>{question}</summary>
@@ -459,41 +485,96 @@ export function TownMatchQuiz({ variant = "buyers", onComplete } = {}) {
 
 function HeroRotator() {
   const [active, setActive] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
+    if (typeof window === "undefined" || prefersReducedMotion) return undefined;
     const timer = window.setInterval(
       () => setActive((current) => (current + 1) % HERO_ROTATION.length),
       5200
     );
     return () => window.clearInterval(timer);
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
-    <div className="hero-rotator" role="img" aria-label={HERO_ROTATION[active].alt}>
+    <div className="hero-rotator">
       {HERO_ROTATION.map(({ src, caption, sub, alt }, index) => (
         <figure key={src} className={`hero-slide${index === active ? " active" : ""}`} aria-hidden={index !== active}>
-          <img src={src} alt={index === active ? alt : ""} loading={index === 0 ? "eager" : "lazy"} />
+          <img
+            src={src}
+            alt={index === active ? alt : ""}
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchpriority={index === 0 ? "high" : "auto"}
+          />
           <figcaption>
             <strong>{caption}</strong>
             <span>{sub}</span>
           </figcaption>
         </figure>
       ))}
-      <div className="hero-dots" aria-hidden="true">
+      <div className="hero-dots" role="group" aria-label="Choose hero image">
         {HERO_ROTATION.map((slide, index) => (
           <button
             key={slide.src}
             type="button"
-            tabIndex={-1}
             className={index === active ? "on" : ""}
             onClick={() => setActive(index)}
+            aria-label={`Show ${slide.caption}`}
+            aria-pressed={index === active}
           />
         ))}
       </div>
       <div className="hero-chip hero-chip-rating"><span className="hero-chip-stars">★★★★★</span> 5.0 on Google</div>
     </div>
+  );
+}
+
+function VisibilityVideo({ src, poster, alt }) {
+  const videoRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const shouldPlay = isVisible && !prefersReducedMotion;
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.15 }
+    );
+    observer.observe(video);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    if (!shouldPlay) {
+      video.pause();
+      return undefined;
+    }
+
+    video.load();
+    const playPromise = video.play();
+    playPromise?.catch(() => {
+      // Muted autoplay can still be blocked by browser or device policy.
+    });
+
+    return () => video.pause();
+  }, [shouldPlay, src]);
+
+  return (
+    <video ref={videoRef} loop muted playsInline preload="none" poster={poster} aria-label={alt}>
+      {shouldPlay && <source src={src} type="video/mp4" />}
+    </video>
   );
 }
 
@@ -663,28 +744,28 @@ export default function BuyersPage() {
   return (
     <main className="buyers-page">
       <Helmet>
-        <title>Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA</title>
-        <meta
-          name="description"
-          content="Buying a home north of Toronto? Finally Home Agents guides buyers across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog. Local expertise, town-by-town guidance, and a free strategy call."
-        />
+        <title>{BUYERS_SEO.title}</title>
+        <meta name="description" content={BUYERS_SEO.description} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="author" content="Finally Home Agents" />
         <meta name="publisher" content="Finally Home Agents" />
-        <link rel="canonical" href="https://northsidegta.ca/buyers" />
+        <link rel="canonical" href={BUYERS_SEO.url} />
         <link rel="preload" as="image" href="/uploads/sold-home-newmarket-finally-home-agents.webp" />
-        <meta property="og:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
-        <meta property="og:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
-        <meta property="og:url" content="https://northsidegta.ca/buyers" />
+        <meta property="og:title" content={BUYERS_SEO.title} />
+        <meta property="og:description" content={BUYERS_SEO.description} />
+        <meta property="og:url" content={BUYERS_SEO.url} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta property="og:image" content={BUYERS_SEO.image} />
+        <meta property="og:image:alt" content={BUYERS_SEO.imageAlt} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="en_CA" />
         <meta property="og:site_name" content="NorthSide GTA" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Buying a Home North of Toronto | Finally Home Agents | NorthSide GTA" />
-        <meta name="twitter:description" content="Find the right community north of Toronto. Town-by-town buyer guidance from Finally Home Agents across the NorthSide GTA." />
-        <meta name="twitter:image" content="https://northsidegta.ca/uploads/buyers-page-seo.jpg" />
+        <meta name="twitter:title" content={BUYERS_SEO.title} />
+        <meta name="twitter:description" content={BUYERS_SEO.description} />
+        <meta name="twitter:image" content={BUYERS_SEO.image} />
+        <meta name="twitter:image:alt" content={BUYERS_SEO.imageAlt} />
         <meta name="twitter:site" content="@northsidegta" />
         <script type="application/ld+json">{JSON.stringify(BUYERS_SCHEMA)}</script>
       </Helmet>
@@ -762,8 +843,8 @@ export default function BuyersPage() {
         <div className="buyers-container">
           <SectionHeader
             eyebrow="02 / Real Results"
-            title="From Coming Soon to SOLD — the same house"
-            lead="No stock photos here. This is one of our actual Newmarket listings, from the day the sign went up to the day the neighbours got the news."
+            title="From local outreach to SOLD"
+            lead="No stock photos here. This is how we build awareness on the ground, bring an actual Newmarket listing to market, and carry it through to SOLD."
           />
           <div className="photo-grid">
             {PROOF_CARDS.map(({ image, position, label, sublabel, alt }) => (
@@ -830,9 +911,7 @@ export default function BuyersPage() {
             {COMMUNITY_MEDIA.map(({ type, src, poster, position, label, alt, span }) => (
               <figure className={`community-card${span === "wide" ? " community-card-wide" : ""}${span === "tall" ? " community-card-tall" : ""}`} key={src}>
                 {type === "video" ? (
-                  <video autoPlay loop muted playsInline preload="metadata" poster={poster} aria-label={alt}>
-                    <source src={src} type="video/mp4" />
-                  </video>
+                  <VisibilityVideo src={src} poster={poster} alt={alt} />
                 ) : (
                   <img src={src} alt={alt} loading="lazy" style={{ objectPosition: position }} />
                 )}
@@ -949,9 +1028,11 @@ const BUYERS_STYLES = `
   .hero-slide figcaption { position: absolute; z-index: 1; left: 18px; right: 18px; bottom: 16px; color: #fff; }
   .hero-slide figcaption strong { display: block; font-size: 14.5px; font-weight: 700; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
   .hero-slide figcaption span { display: block; margin-top: 3px; color: rgba(255,255,255,0.82); font-size: 12px; }
-  .hero-dots { position: absolute; z-index: 2; right: 16px; bottom: 18px; display: flex; gap: 6px; }
-  .hero-dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,0.38); cursor: pointer; transition: background 200ms ease, transform 200ms ease; }
-  .hero-dots button.on { background: #fff; transform: scale(1.25); }
+  .hero-dots { position: absolute; z-index: 2; right: 8px; bottom: 8px; display: flex; }
+  .hero-dots button { position: relative; width: 28px; height: 28px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+  .hero-dots button::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: rgba(255,255,255,0.38); transition: background 200ms ease, transform 200ms ease; }
+  .hero-dots button.on::after { background: #fff; transform: scale(1.25); }
+  .hero-dots button:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 50%; }
   .hero-chip { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 8px 14px; font-size: 12px; font-weight: 700; box-shadow: 0 14px 34px rgba(8,20,2,0.4); }
   .hero-chip-rating { top: -14px; left: -20px; background: #fff; color: var(--primary); animation: hero-chip-float 7s ease-in-out infinite alternate; }
   .hero-chip-stars { color: #e0a51e; letter-spacing: 1px; font-size: 11px; }
@@ -1114,10 +1195,10 @@ const BUYERS_STYLES = `
 
   @media (max-width: 768px) {
     .buyers-page { padding-bottom: 82px; }
-    .mobile-cta-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: var(--primary); border-top: 2px solid var(--accent); padding: 11px 18px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -12px 30px rgba(0,0,0,0.18); }
-    .mobile-cta-bar strong { display: block; color: #fff; font-size: 13px; font-weight: 600; }
-    .mobile-cta-bar span { display: block; color: rgba(255,255,255,0.65); font-size: 12px; }
-    .mobile-cta-bar button { flex-shrink: 0; background: #fff; color: var(--primary); padding: 9px 18px; font-size: 12px; }
+    .mobile-cta-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--primary); border-top: 2px solid var(--accent); padding: 11px 96px calc(11px + env(safe-area-inset-bottom)) 18px; box-shadow: 0 -12px 30px rgba(0,0,0,0.18); }
+    .mobile-cta-bar strong { display: block; color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .mobile-cta-bar span { display: none; }
+    .mobile-cta-bar button { flex-shrink: 0; background: #fff; color: var(--primary); padding: 9px 12px; font-size: 11.5px; }
   }
 
   @media (max-width: 640px) {
@@ -1129,9 +1210,10 @@ const BUYERS_STYLES = `
     .buyers-section-header h2 { font-size: 29px; }
     .hero-rotator { max-width: 340px; }
     .trust-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .community-grid { grid-template-columns: 1fr; grid-auto-rows: 230px; }
+    .community-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .community-card { height: 230px; min-height: 0; }
     .community-card-wide { grid-column: auto; }
-    .community-card-tall { grid-row: auto; min-height: 380px; }
+    .community-card-tall { grid-row: auto; height: 380px; min-height: 0; }
     .photo-grid, .market-grid, .process-grid, .reviews-grid, .also-grid, .form-two-col { grid-template-columns: 1fr; }
     .moving-guides-strip ul { grid-template-columns: 1fr; }
     .quiz-card, .consultation-card { padding: 22px; }
