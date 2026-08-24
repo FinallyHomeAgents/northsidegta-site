@@ -7,7 +7,7 @@
     "start": "react-scripts start",
     "prestart": "node scripts/sync-site-seo.js && node scripts/generate-insights-data.js --assets-only && node scripts/check-insight-images.js",
     "pretest": "node scripts/sync-site-seo.js",
-    "prebuild": "node scripts/sync-site-seo.js && node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
+    "prebuild": "node scripts/validate-market-data.js && node scripts/sync-site-seo.js && node scripts/generate-insights-data.js && node scripts/generate-insights-index.js",
     "build": "react-scripts build",
     "postbuild": "node scripts/generate-curated-html.js && node scripts/generate-insight-html.js && node scripts/generate-event-html.js && node scripts/generate-tastehub-html.js && node scripts/generate-static-route-html.js && node scripts/inject-homepage-static-html.js && node scripts/prerender-routes.js && node scripts/generate-sitemap.js && node scripts/verify-prerendered-seo.js && node scripts/check-insight-images.js --require-generated-data && cp build/index.html build/404.html",
     "generate:curated": "node scripts/generate-curated-html.js",
@@ -26,7 +26,8 @@
     "insights:migrate-images": "node scripts/migrate-insight-image-paths.js",
     "insights:check-images": "node scripts/check-insight-images.js",
     "seed:spotlights": "ts-node --transpile-only scripts/seedTownSpotlightsFromGoogle.ts",
-    "seo:check": "node scripts/seo-check.cjs"
+    "seo:check": "node scripts/seo-check.cjs",
+    "data:validate": "node scripts/validate-market-data.js"
   },
   "dependencies": {
     "@fastify/busboy": "^3.2.0",

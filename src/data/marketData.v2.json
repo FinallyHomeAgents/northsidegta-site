@@ -1,0 +1,2278 @@
+{
+  "_readme": "Monthly figures come from the TRREB Market Watch PDF. Community figures come from the quarterly TRREB Community Housing Market Report. Never publish a value you have not eyeballed against the source PDF. Run `npm run data:validate` before committing.",
+  "schemaVersion": 2,
+  "monthly": {
+    "period": "2026-06",
+    "periodLabel": "June 2026",
+    "source": "TRREB Market Watch, June 2026",
+    "sourceUrl": "https://trreb.ca/market-data/market-watch/",
+    "verifiedBy": null,
+    "verifiedOn": null
+  },
+  "community": {
+    "period": null,
+    "periodLabel": null,
+    "source": null,
+    "sourceUrl": "https://trreb.ca/market-data/community-reports/",
+    "verifiedBy": null,
+    "verifiedOn": null
+  },
+  "homeTypes": {
+    "all": "All Home Types",
+    "detached": "Detached",
+    "semi": "Semi-Detached",
+    "townhouse": "Att/Row/Townhouse",
+    "condoTownhouse": "Condo Townhouse",
+    "condoApt": "Condo Apartment"
+  },
+  "toronto": {
+    "cityWide": {
+      "all": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      },
+      "detached": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      },
+      "semi": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      },
+      "townhouse": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      },
+      "condoTownhouse": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      },
+      "condoApt": {
+        "avg": null,
+        "median": null,
+        "sales": null,
+        "newListings": null,
+        "ldom": null,
+        "yoy": null
+      }
+    },
+    "districts": {
+      "C07": {
+        "name": "Willowdale / Newtonbrook West",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "C14": {
+        "name": "Newtonbrook East / Willowdale East",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "C13": {
+        "name": "Don Mills / Banbury",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "C15": {
+        "name": "Bayview Village / Hillcrest Village",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E02": {
+        "name": "The Beaches",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E03": {
+        "name": "Danforth Village / East York",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E04": {
+        "name": "Wexford / Clairlea",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E05": {
+        "name": "Agincourt / L'Amoreaux",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E07": {
+        "name": "Milliken / Agincourt North",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "E11": {
+        "name": "Malvern / Rouge",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "W05": {
+        "name": "Downsview / Humbermede",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "W08": {
+        "name": "Islington / Kingsway South",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      },
+      "W10": {
+        "name": "Rexdale / Thistletown",
+        "byType": {
+          "all": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "detached": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "semi": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "townhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoTownhouse": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          },
+          "condoApt": {
+            "avg": null,
+            "median": null,
+            "sales": null,
+            "newListings": null,
+            "ldom": null,
+            "yoy": null
+          }
+        }
+      }
+    }
+  },
+  "municipalities": {
+    "georgina": {
+      "name": "Georgina",
+      "region": "York",
+      "byType": {
+        "all": {
+          "avg": 794410,
+          "median": null,
+          "sales": 85,
+          "newListings": null,
+          "ldom": 52,
+          "yoy": -7.2
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "keswick-and-lake-drive": {
+          "name": "Keswick & Lake Drive",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "sutton-and-jacksons-point": {
+          "name": "Sutton & Jackson's Point",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "pefferlaw-and-rural-georgina": {
+          "name": "Pefferlaw & Rural Georgina",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "east-gwillimbury": {
+      "name": "East Gwillimbury",
+      "region": "York",
+      "byType": {
+        "all": {
+          "avg": 1062808,
+          "median": null,
+          "sales": 39,
+          "newListings": null,
+          "ldom": 57,
+          "yoy": -11.7
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "sharon-and-sharon-village": {
+          "name": "Sharon & Sharon Village",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "queensville-and-holland-landing": {
+          "name": "Queensville & Holland Landing",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "mount-albert-and-rural-east-gwillimbury": {
+          "name": "Mount Albert & Rural East Gwillimbury",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "newmarket": {
+      "name": "Newmarket",
+      "region": "York",
+      "byType": {
+        "all": {
+          "avg": 1018511,
+          "median": null,
+          "sales": 88,
+          "newListings": null,
+          "ldom": 38,
+          "yoy": -4.1
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "historic-downtown-and-main-street": {
+          "name": "Historic Downtown & Main Street",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "stonehaven-and-leslie-valley": {
+          "name": "Stonehaven & Leslie Valley",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "glenway-and-southwest-newmarket": {
+          "name": "Glenway & Southwest Newmarket",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "aurora": {
+      "name": "Aurora",
+      "region": "York",
+      "byType": {
+        "all": {
+          "avg": 1239892,
+          "median": null,
+          "sales": 76,
+          "newListings": null,
+          "ldom": 46,
+          "yoy": -6.7
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "aurora-village": {
+          "name": "Aurora Village",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "bayview-wellington": {
+          "name": "Bayview Wellington",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "aurora-highlands": {
+          "name": "Aurora Highlands",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "stouffville": {
+      "name": "Whitchurch-Stouffville",
+      "region": "York",
+      "byType": {
+        "all": {
+          "avg": 1329155,
+          "median": null,
+          "sales": 54,
+          "newListings": null,
+          "ldom": 41,
+          "yoy": 4.7
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "downtown-and-main-street": {
+          "name": "Downtown & Main Street",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "ballantrae-and-surrounding-communities": {
+          "name": "Ballantrae & Surrounding Communities",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "new-north-stouffville": {
+          "name": "New North Stouffville",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "uxbridge": {
+      "name": "Uxbridge",
+      "region": "Durham",
+      "byType": {
+        "all": {
+          "avg": 1140111,
+          "median": null,
+          "sales": 33,
+          "newListings": null,
+          "ldom": 47,
+          "yoy": 7.0
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "uxbridge-town-centre": {
+          "name": "Uxbridge Town Centre",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "coral-creek-and-quaker-village": {
+          "name": "Coral Creek & Quaker Village",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "rural-uxbridge-and-hamlets": {
+          "name": "Rural Uxbridge & Hamlets",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    },
+    "scugog": {
+      "name": "Scugog",
+      "region": "Durham",
+      "byType": {
+        "all": {
+          "avg": 990492,
+          "median": null,
+          "sales": 31,
+          "newListings": null,
+          "ldom": 55,
+          "yoy": 9.6
+        },
+        "detached": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "semi": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "townhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoTownhouse": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        },
+        "condoApt": {
+          "avg": null,
+          "median": null,
+          "sales": null,
+          "newListings": null,
+          "ldom": null,
+          "yoy": null
+        }
+      },
+      "communities": {
+        "downtown-port-perry": {
+          "name": "Downtown Port Perry",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "lakefront-communities": {
+          "name": "Lakefront Communities",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        },
+        "rural-scugog-and-hamlets": {
+          "name": "Rural Scugog & Hamlets",
+          "byType": {
+            "all": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "detached": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "semi": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "townhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoTownhouse": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            },
+            "condoApt": {
+              "avg": null,
+              "median": null,
+              "sales": null,
+              "newListings": null,
+              "ldom": null,
+              "yoy": null
+            }
+          }
+        }
+      }
+    }
+  }
+}
