@@ -52,6 +52,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://northsidegta.ca/what-my-home-buys</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://northsidegta.ca/homeanalysis</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

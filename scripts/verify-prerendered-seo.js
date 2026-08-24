@@ -138,6 +138,8 @@ const staticChecks = [
     schema: ["Article", "FAQPage", "BreadcrumbList"],
   })),
   { route: "/sellers", h1: "A Better Sale Starts Before the Listing Goes Live", body: "seller" },
+  { route: "/what-my-home-buys", h1: "Your Toronto home is worth", body: "NorthSide GTA house prices at a glance",
+    schema: ["WebApplication", "FAQPage", "BreadcrumbList"] },
   { route: "/homeanalysis", h1: "What’s Your Home Worth", body: "NorthSide GTA Market" },
   { route: "/contact", h1: "Glad you found us", body: "Matthew" },
   { route: "/insights", h1: "NorthSide GTA Insights", body: "market" },
