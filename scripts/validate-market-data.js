@@ -42,7 +42,7 @@ try {
 
 // ---------- freshness ----------
 function monthsSince(period) {
-  const m = /^(\d{4})-(\d{2})$/.exec(period || "");
+  const m = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(period || "");
   if (!m) return null;
   const then = new Date(Number(m[1]), Number(m[2]) - 1, 1);
   const now = new Date();
@@ -52,6 +52,8 @@ function monthsSince(period) {
 const age = monthsSince(doc?.monthly?.period);
 if (age === null) {
   err(`monthly.period must look like "2026-06" (got ${JSON.stringify(doc?.monthly?.period)})`);
+} else if (age < 0) {
+  err(`monthly.period cannot be in the future (got ${JSON.stringify(doc.monthly.period)})`);
 } else if (age > LIMITS.maxMonthsStale) {
   err(`monthly data is ${age} months old (${doc.monthly.periodLabel}). ` +
       `The page states a date publicly — stale figures are a misleading representation, not just a stale page.`);
@@ -65,8 +67,19 @@ if (!doc?.monthly?.verifiedBy || !doc?.monthly?.verifiedOn) {
 
 // ---------- per-metric checks ----------
 function checkMetric(where, type, m) {
-  if (!m || m.avg == null) return false;           // unpopulated slot, fine
-  const { avg, median, sales, ldom, yoy } = m;
+  if (!m) return false;
+  const { avg, median, sales, newListings, ldom, yoy } = m;
+
+  const invalidOptionalMetrics = new Set();
+  for (const [field, value] of Object.entries({ median, sales, newListings, ldom, yoy })) {
+    if (value != null && (typeof value !== "number" || !Number.isFinite(value))) {
+      const displayed = typeof value === "number" ? String(value) : JSON.stringify(value);
+      err(`${where} · ${type}: ${field} must be a finite number, got ${displayed}`);
+      invalidOptionalMetrics.add(field);
+    }
+  }
+
+  if (avg == null) return false;                    // unpopulated slot, fine
 
   if (typeof avg !== "number" || !Number.isFinite(avg)) {
     err(`${where} · ${type}: avg must be a number, got ${JSON.stringify(avg)}`);
@@ -75,19 +88,21 @@ function checkMetric(where, type, m) {
   if (avg < LIMITS.avgMin || avg > LIMITS.avgMax)
     err(`${where} · ${type}: avg ${avg.toLocaleString()} is outside ${LIMITS.avgMin.toLocaleString()}–${LIMITS.avgMax.toLocaleString()}. Almost always a column misread.`);
 
-  if (median != null) {
+  if (median != null && !invalidOptionalMetrics.has("median")) {
     if (median < avg * 0.45 || median > avg * 1.6)
       err(`${where} · ${type}: median ${median.toLocaleString()} vs avg ${avg.toLocaleString()} — implausible gap, check the row alignment.`);
   }
-  if (sales != null) {
+  if (sales != null && !invalidOptionalMetrics.has("sales")) {
     if (sales < 1) err(`${where} · ${type}: sales must be at least 1, got ${sales}`);
     else if (sales < LIMITS.lowSampleSales)
       warn(`${where} · ${type}: only ${sales} sales. Real, but too thin to quote as "the average" without a caveat on the page.`);
   }
-  if (ldom != null && (ldom < LIMITS.ldomMin || ldom > LIMITS.ldomMax))
+  if (ldom != null && !invalidOptionalMetrics.has("ldom") &&
+      (ldom < LIMITS.ldomMin || ldom > LIMITS.ldomMax))
     err(`${where} · ${type}: days on market ${ldom} outside ${LIMITS.ldomMin}–${LIMITS.ldomMax}`);
 
-  if (yoy != null && (yoy < LIMITS.yoyMin || yoy > LIMITS.yoyMax))
+  if (yoy != null && !invalidOptionalMetrics.has("yoy") &&
+      (yoy < LIMITS.yoyMin || yoy > LIMITS.yoyMax))
     err(`${where} · ${type}: year-over-year ${yoy}% outside ±${LIMITS.yoyMax}%. Verify before publishing.`);
 
   return true;
@@ -141,6 +156,7 @@ for (const [slug, mu] of Object.entries(munis)) {
   for (const [ckey, c] of Object.entries(mu.communities || {}))
     crossCheck(`${mu.name || slug} \u203a ${c.name || ckey}`, c.byType);
 }
+crossCheck("Toronto (city-wide)", doc?.toronto?.cityWide);
 for (const [code, d] of Object.entries(doc?.toronto?.districts || {}))
   crossCheck(`Toronto ${code}`, d.byType);
 
