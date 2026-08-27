@@ -14,6 +14,7 @@ import TOWNS_RAW from "./towns.json";
 const SITE = "https://northsidegta.ca";
 const PATH = "/what-my-home-buys";
 const DEFAULT_VALUE = 1250000;
+const DEFAULT_FORMSPREE_ID = "xblkwrzj";
 const MIN = 500000;
 const MAX = 3000000;
 const DIRECT_GO_RAIL_TOWNS = new Set([
@@ -176,7 +177,7 @@ export default function BuyingPowerPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const formspreeId = (process.env.REACT_APP_FORMSPREE_ID || "").trim();
+  const formspreeId = (process.env.REACT_APP_FORMSPREE_ID || DEFAULT_FORMSPREE_ID).trim();
   const period = MARKET.monthly?.periodLabel || "";
   const source = MARKET.monthly?.source || "TRREB Market Watch";
 
