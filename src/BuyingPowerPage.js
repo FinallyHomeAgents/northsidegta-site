@@ -45,6 +45,17 @@ const TRADEOFFS = {
     "Strong space and lifestyle value, but the greatest distance from Toronto and major employment centres.",
 };
 
+// Approximate each town mark's dominant colour; these can be adjusted by hand.
+const TOWN_ACCENTS = {
+  georgina: "#1D4B91",
+  "east-gwillimbury": "#07599B",
+  newmarket: "#183960",
+  aurora: "#0B5599",
+  stouffville: "#2352A5",
+  uxbridge: "#008A4B",
+  scugog: "#138ACA",
+};
+
 const cad = (n) =>
   new Intl.NumberFormat("en-CA", {
     style: "currency",
@@ -86,6 +97,8 @@ function buildTowns() {
       transitSummary: t.snapshot?.transitSummary || "",
       hoods,
       tradeoff: TRADEOFFS[t.slug] || "",
+      logo: `/assets/town-logos/${t.slug}.webp`,
+      accent: TOWN_ACCENTS[t.slug],
       href: `/communities/${t.slug}`,
     };
   }).filter((t) => t.avg);
@@ -102,7 +115,7 @@ function band(ratio) {
     return {
       tone: "level",
       head: "Right at the market",
-      sub: "Your budget is near the town-wide average, with the result depending on home type, location and condition.",
+      sub: "Your budget is near the town-wide average, with the result based on home type, location and condition.",
     };
   if (ratio < 1.5)
     return {
@@ -114,12 +127,12 @@ function band(ratio) {
     return {
       tone: "good",
       head: "Well above the market",
-      sub: "Your budget reaches well above the local average, including premium options depending on location and condition.",
+      sub: "Your budget reaches well above the local average, including premium options based on location and condition.",
     };
   return {
     tone: "good",
     head: "Top of the market",
-    sub: "Your budget reaches well into the upper end of the local market, including larger lots and premium properties depending on location and condition.",
+    sub: "Your budget reaches well into the upper end of the local market, including larger lots and premium properties based on location and condition.",
   };
 }
 
@@ -374,9 +387,24 @@ export default function BuyingPowerPage() {
           {String(i + 1).padStart(2, "0")}
         </span>
         <div>
-          <h3 className="m-0 pr-8 text-xl font-bold tracking-tight">
-            <a href={t.href} className="hover:underline">{t.name}</a>
-          </h3>
+          <div className="flex items-center gap-2 pr-8">
+            <h3 className="m-0 text-xl font-bold tracking-tight">
+              <a href={t.href} className="hover:underline">{t.name}</a>
+            </h3>
+            <span
+              className="inline-flex h-8 w-8 flex-none items-center justify-center rounded-full bg-white ring-1"
+              style={{ "--tw-ring-color": t.accent }}
+            >
+              <img
+                src={t.logo}
+                alt=""
+                width={32}
+                height={32}
+                className="h-full w-full rounded-full object-contain p-0.5"
+                loading="lazy"
+              />
+            </span>
+          </div>
           <span className="mt-1 block font-mono text-[11px] uppercase tracking-wide text-gray-500">
             Avg {cad(t.avg)}
             {t.sales != null && ` · ${t.sales} sales`}
@@ -409,19 +437,19 @@ export default function BuyingPowerPage() {
         </div>
         {t.hoods.length > 0 && (
           <div className="border-t border-gray-100 pt-3">
-            <p className="m-0 mb-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.13em] text-gray-500">
-              Entry point
-            </p>
-            {t.median ? (
-              <p className="m-0 text-[13.5px] text-gray-700">
-                Half of sales under <strong>{cad(t.median)}</strong>
-              </p>
-            ) : (
-              <span className="inline-block rounded-sm bg-amber-50 px-1.5 py-0.5 font-mono text-[11px] text-amber-800">
-                Community data pending
-              </span>
+            {t.median != null && (
+              <>
+                <p className="m-0 mb-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.13em] text-gray-500">
+                  Entry point
+                </p>
+                <p className="m-0 text-[13.5px] text-gray-700">
+                  Half of sales under <strong>{cad(t.median)}</strong>
+                </p>
+              </>
             )}
-            <p className="m-0 mt-1.5 text-[13px] text-gray-500">{t.hoods.join(" · ")}</p>
+            <p className={`m-0 text-[13px] text-gray-500 ${t.median != null ? "mt-1.5" : ""}`}>
+              {t.hoods.join(" · ")}
+            </p>
           </div>
         )}
         {t.tradeoff && (
@@ -625,7 +653,22 @@ export default function BuyingPowerPage() {
                 {cheapest.map((t) => (
                   <tr key={t.slug}>
                     <td className="border-b border-gray-100 px-4 py-3 text-left text-sm font-semibold">
-                      <a href={t.href} className="hover:underline">{t.name}</a>
+                      <div className="flex items-center gap-2">
+                        <a href={t.href} className="hover:underline">{t.name}</a>
+                        <span
+                          className="inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-white ring-1"
+                          style={{ "--tw-ring-color": t.accent }}
+                        >
+                          <img
+                            src={t.logo}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className="h-full w-full rounded-full object-contain p-0.5"
+                            loading="lazy"
+                          />
+                        </span>
+                      </div>
                     </td>
                     <td className="border-b border-gray-100 px-4 py-3 text-right font-mono text-sm tabular-nums">{cad(t.avg)}</td>
                     <td className="border-b border-gray-100 px-4 py-3 text-right font-mono text-sm tabular-nums">{t.sales ?? "—"}</td>
@@ -700,7 +743,9 @@ export default function BuyingPowerPage() {
           404 and Steeles Avenue.
         </p>
       </main>
-      <CommunityComplianceFooter />
+      <CommunityComplianceFooter
+        marketDataSentence={`Average sold prices sourced from TRREB MLS® data and regional market reports (${period}).`}
+      />
     </>
   );
 }

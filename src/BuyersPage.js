@@ -876,6 +876,7 @@ export default function BuyersPage() {
           </div>
           <div className="market-followup">
             <p className="attribution">Source: {MARKET_DATA.source}. Exact municipal all-home-types figures; not a guarantee of value.</p>
+            <a href="/what-my-home-buys">See what your home buys up north</a>
             <button type="button" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
           </div>
         </div>
@@ -1127,7 +1128,7 @@ const BUYERS_STYLES = `
   .market-card em.market-change--neutral { color: var(--muted); }
   .attribution { margin: 0; color: var(--muted); font-size: 10.5px; }
   .market-followup { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; }
-  .market-followup button { flex-shrink: 0; border: 1px solid var(--border); border-radius: 3px; background: #fff; color: var(--primary); padding: 9px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .market-followup button, .market-followup a { flex-shrink: 0; border: 1px solid var(--border); border-radius: 3px; background: #fff; color: var(--primary); padding: 9px 14px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; }
 
   .process-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
   .process-card { padding: 18px 16px; }

@@ -1180,6 +1180,7 @@ export const HOMEPAGE_MARKUP = String.raw`
       <div class="final-cta__buttons">
         <a href="/contact" class="btn btn--white-on-dark">Book a Real Estate Call →</a>
         <a href="/homeanalysis" class="btn btn--ghost-on-dark">Get a Home Value Opinion</a>
+        <a href="/what-my-home-buys" class="btn btn--ghost-on-dark">See what your home buys up north</a>
       </div>
     </div>
   </section>
