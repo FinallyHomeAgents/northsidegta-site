@@ -16,6 +16,12 @@ const PATH = "/what-my-home-buys";
 const DEFAULT_VALUE = 1250000;
 const MIN = 500000;
 const MAX = 3000000;
+const DIRECT_GO_RAIL_TOWNS = new Set([
+  "aurora",
+  "east-gwillimbury",
+  "newmarket",
+  "stouffville",
+]);
 
 /* ------------------------------------------------------------------ *
  * Editorial: the honest drawback for each town.
@@ -72,7 +78,7 @@ function buildTowns() {
       ldom: all.ldom ?? null,
       yoy: typeof all.yoy === "number" ? all.yoy : null,
       drive404: t.commute?.to404SteelesMinutes ?? null,
-      goTrain: Boolean(goText) && !/bus/i.test(goText),
+      goTrain: DIRECT_GO_RAIL_TOWNS.has(t.slug),
       goText,
       summary: t.summary || "",
       highlights: Array.isArray(t.highlights) ? t.highlights.slice(0, 3) : [],
