@@ -121,6 +121,7 @@ details[open] .faq-icon{transform:rotate(45deg);}
 .cta-card{background:var(--green);border-radius:var(--rxl);padding:22px;}
 .cta-card h3{font-family:var(--fd);font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;}
 .cta-card p{font-size:13px;color:rgba(255,255,255,0.72);margin-bottom:16px;line-height:1.65;}
+.buying-power-link{display:inline-block;color:#fff;font-size:13px;font-weight:600;margin:0 0 16px;text-decoration:underline;text-underline-offset:3px;}
 .agent-sm{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
 .asm{background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;}
 .asm-name{font-weight:600;font-size:13px;color:#fff;}
@@ -424,6 +425,7 @@ const PAGE_BODY_HTML = `
       <div class="cta-card">
         <h3>Talk to a local real estate agent</h3>
         <p>We can help you compare neighbourhoods, understand current pricing, and decide whether Stouffville fits your lifestyle, budget, and timing.</p>
+        <a href="/what-my-home-buys" class="buying-power-link">See what your home buys across all seven towns &rarr;</a>
         <div class="agent-sm">
           <div class="asm"><div class="asm-name">Matthew Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
           <div class="asm"><div class="asm-name">Landon Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
