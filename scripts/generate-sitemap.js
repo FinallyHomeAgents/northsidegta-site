@@ -85,6 +85,7 @@ function main() {
     { path: '/moving-to-stouffville-from-toronto', changefreq: 'monthly', priority: '0.8' },
     { path: '/moving-to-port-perry-scugog-from-toronto', changefreq: 'monthly', priority: '0.8' },
     { path: '/sellers', changefreq: 'weekly', priority: '0.9' },
+    { path: '/what-my-home-buys', changefreq: 'monthly', priority: '0.9' },
     { path: '/homeanalysis', changefreq: 'monthly', priority: '0.7' },
     { path: '/communities', changefreq: 'monthly', priority: '0.8' },
     { path: '/about', changefreq: 'yearly', priority: '0.5' },

@@ -33,6 +33,7 @@ const routeModules = {
   "/moving-to-stouffville-from-toronto": "../src/MovingToStouffvilleFromTorontoPage",
   "/moving-to-port-perry-scugog-from-toronto": "../src/MovingToPortPerryScugogFromTorontoPage",
   "/sellers": "../src/SellersPage",
+  "/what-my-home-buys": "../src/BuyingPowerPage",
   "/homeanalysis": "../src/HomeAnalysisPage",
   "/media": "../src/MediaPage",
   "/contact": "../src/ContactPage",
