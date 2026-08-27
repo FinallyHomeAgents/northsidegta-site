@@ -24,19 +24,19 @@ const MAX = 3000000;
  * ------------------------------------------------------------------ */
 const TRADEOFFS = {
   georgina:
-    "No GO station. Every commute starts with a drive to East Gwillimbury or a long bus.",
+    "Major urban amenities and Toronto are farther away, in exchange for lake access, space and value.",
   "east-gwillimbury":
     "Still filling in. Newest housing stock of the seven, but the amenities are behind the building.",
   newmarket:
-    "The busiest of the seven. Every amenity, and the traffic that comes with them.",
+    "Full-service amenities also bring more traffic and less of an escape-from-the-city feel.",
   aurora:
-    "You pay a premium for the schools and the established feel — and much of the stock needs updating.",
+    "Its established setting and strong location generally come with a higher entry price.",
   stouffville:
-    "Priciest of the seven and rising while others fall. One rail line, running less often than Barrie.",
+    "A sought-after family market, but pricing can narrow the value advantage of moving north.",
   uxbridge:
-    "No GO station and the second-longest drive to the 404. Countryside over convenience.",
+    "Land and outdoor access come with fewer big-city conveniences and a drive-focused location.",
   scugog:
-    "The furthest out. No GO station, and a Toronto commute realistically means a car every day.",
+    "Strong space and lifestyle value, but the greatest distance from Toronto and major employment centres.",
 };
 
 const cad = (n) =>
@@ -74,6 +74,10 @@ function buildTowns() {
       drive404: t.commute?.to404SteelesMinutes ?? null,
       goTrain: Boolean(goText) && !/bus/i.test(goText),
       goText,
+      summary: t.summary || "",
+      highlights: Array.isArray(t.highlights) ? t.highlights.slice(0, 3) : [],
+      highways: t.snapshot?.highways || "",
+      transitSummary: t.snapshot?.transitSummary || "",
       hoods,
       tradeoff: TRADEOFFS[t.slug] || "",
       href: `/communities/${t.slug}`,
@@ -86,30 +90,30 @@ function band(ratio) {
     return {
       tone: "over",
       head: "Below the average home",
-      sub: "You'd be looking at condos, townhomes, or a detached that needs work.",
+      sub: "Your budget is below the town-wide average; options may include smaller homes or properties needing work.",
     };
   if (ratio < 1.1)
     return {
       tone: "level",
       head: "Right at the market",
-      sub: "A typical detached in an established pocket. No stretch, no surplus.",
+      sub: "Your budget is near the town-wide average, with the result depending on home type, location and condition.",
     };
   if (ratio < 1.5)
     return {
       tone: "good",
       head: "Comfortably above average",
-      sub: "Larger detached, a better lot, or a newer build — with room to negotiate.",
+      sub: "Your budget is above the local average and may open up more size, lot or condition choices.",
     };
   if (ratio < 2.2)
     return {
       tone: "good",
       head: "Well above the market",
-      sub: "Premium neighbourhoods, big lots, or an executive home outright.",
+      sub: "Your budget reaches well above the local average, including premium options depending on location and condition.",
     };
   return {
     tone: "good",
     head: "Top of the market",
-    sub: "Estate lots, waterfront, or a custom build — the best this town has.",
+    sub: "Your budget reaches well into the upper end of the local market, including larger lots and premium properties depending on location and condition.",
   };
 }
 
@@ -135,6 +139,13 @@ function Chip({ tone = "neutral", children }) {
       {children}
     </span>
   );
+}
+
+function transitLabel(town) {
+  if (town.goTrain) return "GO rail + local transit";
+  if (/GO Bus/i.test(town.transitSummary)) return "GO bus connection";
+  if (/Durham Region Transit/i.test(town.transitSummary)) return "DRT + GO connection";
+  return "Driving focused";
 }
 
 export default function BuyingPowerPage() {
@@ -213,11 +224,20 @@ export default function BuyingPowerPage() {
       }. Source: ${source}.`,
     },
     {
-      q: "Which towns north of Toronto have a GO train station?",
-      a: `${towns.filter((t) => t.goTrain).map((t) => t.name).join(", ")} are served by GO train. ${towns
-        .filter((t) => !t.goTrain)
-        .map((t) => t.name)
-        .join(", ")} are not — commuting from those towns means driving or a connecting bus.`,
+      q: "Which NorthSide GTA towns are easiest for commuting?",
+      a: "Aurora, Newmarket and East Gwillimbury combine Highway 404 access with Barrie Line GO rail. Stouffville has its own GO line and road access toward Markham, the 404 and 407. The right choice depends on whether your destination and schedule favour driving or transit; all drive estimates here are off-peak to Highway 404 and Steeles.",
+    },
+    {
+      q: "Which towns are best if I want more land or a larger lot?",
+      a: "Uxbridge, Scugog and Georgina generally offer the strongest mix of rural, estate and larger-lot possibilities. Availability and price vary significantly by neighbourhood, servicing, waterfront location and property condition.",
+    },
+    {
+      q: "Which towns north of Toronto have GO train service?",
+      a: `${towns.filter((t) => t.goTrain).map((t) => t.name).join(", ")} have local GO rail service. Georgina and Uxbridge have GO Bus connections toward rail, while Scugog has Durham Region Transit connections toward Whitby or Oshawa GO. Check current schedules for a specific trip.`,
+    },
+    {
+      q: "Which towns feel more urban, and which feel more rural?",
+      a: "Newmarket and Aurora offer the most complete urban-style amenities and established neighbourhoods. East Gwillimbury and Stouffville mix newer subdivisions with rural edges. Georgina, Uxbridge and Scugog lean further toward lake, trail, small-town and countryside lifestyles.",
     },
     {
       q: "Which NorthSide GTA town is the most affordable?",
@@ -364,13 +384,22 @@ export default function BuyingPowerPage() {
         <div className="flex flex-wrap gap-1.5">
           <Chip tone={left >= 0 ? "good" : "bad"}>{shortDelta(left)} vs average</Chip>
           <Chip tone={pct >= 0 ? "good" : "bad"}>{pct >= 0 ? "+" : ""}{pct}% buying power</Chip>
-          {t.drive404 != null && <Chip>{t.drive404} min to 404</Chip>}
-          <Chip tone={t.goTrain ? "good" : "bad"}>{t.goTrain ? "GO train" : "No GO train"}</Chip>
+          {t.drive404 != null && <Chip>~{t.drive404} min to 404/Steeles</Chip>}
+          <Chip tone={t.goTrain ? "good" : "neutral"}>{transitLabel(t)}</Chip>
           {t.yoy != null && (
             <span className="hidden min-[420px]:inline">
               <Chip tone={t.yoy >= 0 ? "bad" : "good"}>{t.yoy >= 0 ? "+" : ""}{t.yoy}% YoY</Chip>
             </span>
           )}
+        </div>
+        <div className="border-t border-gray-100 pt-3">
+          <p className="m-0 mb-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.13em] text-gray-500">
+            Why people choose it
+          </p>
+          <p className="m-0 text-[13.5px] font-medium leading-relaxed text-gray-700">
+            {t.highlights.join(" · ")}
+          </p>
+          {t.summary && <p className="m-0 mt-1.5 text-[13px] leading-relaxed text-gray-500">{t.summary}</p>}
         </div>
         {t.hoods.length > 0 && (
           <div className="border-t border-gray-100 pt-3">
@@ -410,7 +439,7 @@ export default function BuyingPowerPage() {
         <title>What Does My Toronto Home Buy North of the City? | NorthSide GTA</title>
         <meta
           name="description"
-          content={`Compare what your Toronto home is worth against average prices in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge and Scugog. ${period} TRREB figures, plus the commute and the trade-offs.`}
+          content={`Compare what your Toronto home could buy across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge and Scugog. ${period} TRREB figures, lifestyle, access and trade-offs.`}
         />
         <link rel="canonical" href={`${SITE}${PATH}`} />
         <meta name="robots" content="index, follow" />
@@ -436,9 +465,8 @@ export default function BuyingPowerPage() {
             Your Toronto home is worth <span className="text-brand-green">more house</span> up here.
           </h1>
           <p className="mt-2.5 sm:mt-5 max-w-[55ch] text-[15px] sm:text-lg text-gray-700">
-            Enter what your place is worth. We&apos;ll show you what it buys in each of the seven towns
-            north of the city
-            <span className="hidden sm:inline"> — including the parts nobody tells you</span>.
+            Enter what your current home is worth and compare that budget across seven NorthSide GTA
+            communities — including prices, lifestyle, access and the trade-offs that matter.
           </p>
 
           <div className="mt-5 sm:mt-9 rounded border border-gray-200 bg-white p-[17px] sm:p-8 shadow-sm">
@@ -508,7 +536,7 @@ export default function BuyingPowerPage() {
                     The average home there is <strong>{Math.abs(bestPct)}% above</strong> your number.
                   </>
                 )}
-                {!best.goTrain && " No GO train, though."}
+                {best.highlights[0] && ` ${best.highlights[0]} is one of the lifestyle draws.`}
               </span>
             </div>
           )}
@@ -519,7 +547,7 @@ export default function BuyingPowerPage() {
           <div className="flex flex-wrap gap-1.5">
             {[
               ["power", "Most house"],
-              ["commute", "Shortest commute"],
+              ["commute", "Closest to Toronto"],
               ["price", "Cheapest first"],
             ].map(([key, label]) => (
               <button
@@ -558,6 +586,14 @@ export default function BuyingPowerPage() {
             </p>
           </div>
 
+          <p className="mt-5 max-w-[78ch] text-[15px] leading-relaxed text-gray-700">
+            Price is only one part of the move. Aurora and Newmarket offer established, full-service centres;
+            East Gwillimbury and Stouffville balance growing neighbourhoods with regional access; and Georgina,
+            Uxbridge and Scugog trade a longer trip to Toronto for lake, trail, small-town or rural living.
+            Highway 404 is a key route for York Region communities, while Highways 48, 7/7A, 12 and 407 help
+            connect the eastern towns. GO rail, GO Bus, YRT and Durham Region Transit options vary by community.
+          </p>
+
           <div className="mt-5 overflow-x-auto rounded border border-gray-200 bg-white">
             <table className="w-full min-w-[660px] border-collapse">
               <caption className="sr-only">
@@ -565,7 +601,7 @@ export default function BuyingPowerPage() {
               </caption>
               <thead>
                 <tr className="bg-gray-50">
-                  {["Town", "Avg price", "Sales", "Days on market", "Year over year", "Drive to 404", "GO train"].map(
+                  {["Town", "Avg price", "Sales", "Days on market", "Year over year", "Drive to 404/Steeles", "Transit access"].map(
                     (h, i) => (
                       <th
                         key={h}
@@ -592,9 +628,9 @@ export default function BuyingPowerPage() {
                       {t.yoy != null ? `${t.yoy >= 0 ? "+" : ""}${t.yoy}%` : "—"}
                     </td>
                     <td className="border-b border-gray-100 px-4 py-3 text-right font-mono text-sm tabular-nums">
-                      {t.drive404 != null ? `${t.drive404} min` : "—"}
+                      {t.drive404 != null ? `~${t.drive404} min` : "—"}
                     </td>
-                    <td className="border-b border-gray-100 px-4 py-3 text-right font-mono text-sm">{t.goTrain ? "Yes" : "No"}</td>
+                    <td className="border-b border-gray-100 px-4 py-3 text-right font-mono text-xs">{transitLabel(t)}</td>
                   </tr>
                 ))}
               </tbody>

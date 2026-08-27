@@ -28,6 +28,10 @@ function periodMonthsAgo(monthsAgo) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
+function periodMonthsFromNow(monthsAhead) {
+  return periodMonthsAgo(-monthsAhead);
+}
+
 function cloneBaseDocument() {
   return JSON.parse(JSON.stringify(BASE_DOCUMENT));
 }
@@ -118,14 +122,16 @@ for (const [period, displayed] of invalidPeriods) {
   });
 }
 
-test("rejects future monthly period 2027-06", (t) => {
+const futurePeriod = periodMonthsFromNow(1);
+
+test(`rejects future monthly period ${futurePeriod}`, (t) => {
   const result = runValidator(t, (doc) => {
-    doc.monthly.period = "2027-06";
+    doc.monthly.period = futurePeriod;
   });
 
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.equal(result.stderr, "");
-  assert.ok(result.stdout.includes('monthly.period cannot be in the future (got "2027-06")'));
+  assert.ok(result.stdout.includes(`monthly.period cannot be in the future (got "${futurePeriod}")`));
   assert.match(result.stdout, /  ERROR  /);
 });
 
