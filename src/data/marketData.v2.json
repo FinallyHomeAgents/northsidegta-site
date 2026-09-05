@@ -2,10 +2,10 @@
   "_readme": "Monthly figures come from the TRREB Market Watch PDF. Community figures come from the quarterly TRREB Community Housing Market Report. Never publish a value you have not eyeballed against the source PDF. Run `npm run data:validate` before committing.",
   "schemaVersion": 2,
   "monthly": {
-    "period": "2026-06",
-    "periodLabel": "June 2026",
-    "source": "TRREB Market Watch, June 2026",
-    "sourceUrl": "https://trreb.ca/market-data/market-watch/",
+    "period": "2026-08",
+    "periodLabel": "August 2026",
+    "source": "TRREB Market Watch, August 2026",
+    "sourceUrl": "https://trreb.ca/wp-content/files/market-stats/market-watch/mw2608.pdf",
     "verifiedBy": null,
     "verifiedOn": null
   },
@@ -774,12 +774,12 @@
       "region": "York",
       "byType": {
         "all": {
-          "avg": 794410,
+          "avg": 819910,
           "median": null,
-          "sales": 85,
+          "sales": 57,
           "newListings": null,
-          "ldom": 52,
-          "yoy": -7.2
+          "ldom": 60,
+          "yoy": -4.4
         },
         "detached": {
           "avg": null,
@@ -989,12 +989,12 @@
       "region": "York",
       "byType": {
         "all": {
-          "avg": 1062808,
+          "avg": 1058938,
           "median": null,
-          "sales": 39,
+          "sales": 29,
           "newListings": null,
-          "ldom": 57,
-          "yoy": -11.7
+          "ldom": 60,
+          "yoy": -13.1
         },
         "detached": {
           "avg": null,
@@ -1204,12 +1204,12 @@
       "region": "York",
       "byType": {
         "all": {
-          "avg": 1018511,
+          "avg": 1048321,
           "median": null,
-          "sales": 88,
+          "sales": 83,
           "newListings": null,
-          "ldom": 38,
-          "yoy": -4.1
+          "ldom": 49,
+          "yoy": 5.3
         },
         "detached": {
           "avg": null,
@@ -1419,12 +1419,12 @@
       "region": "York",
       "byType": {
         "all": {
-          "avg": 1239892,
+          "avg": 1105004,
           "median": null,
-          "sales": 76,
+          "sales": 49,
           "newListings": null,
-          "ldom": 46,
-          "yoy": -6.7
+          "ldom": 65,
+          "yoy": -18.7
         },
         "detached": {
           "avg": null,
@@ -1634,12 +1634,12 @@
       "region": "York",
       "byType": {
         "all": {
-          "avg": 1329155,
+          "avg": 1158512,
           "median": null,
-          "sales": 54,
+          "sales": 47,
           "newListings": null,
-          "ldom": 41,
-          "yoy": 4.7
+          "ldom": 57,
+          "yoy": -5.3
         },
         "detached": {
           "avg": null,
@@ -1849,12 +1849,12 @@
       "region": "Durham",
       "byType": {
         "all": {
-          "avg": 1140111,
+          "avg": 1194026,
           "median": null,
-          "sales": 33,
+          "sales": 19,
           "newListings": null,
-          "ldom": 47,
-          "yoy": 7.0
+          "ldom": 67,
+          "yoy": -0.7
         },
         "detached": {
           "avg": null,
@@ -2064,12 +2064,12 @@
       "region": "Durham",
       "byType": {
         "all": {
-          "avg": 990492,
+          "avg": 819217,
           "median": null,
-          "sales": 31,
+          "sales": 18,
           "newListings": null,
-          "ldom": 55,
-          "yoy": 9.6
+          "ldom": 36,
+          "yoy": -8.5
         },
         "detached": {
           "avg": null,
