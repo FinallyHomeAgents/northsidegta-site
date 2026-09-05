@@ -1,7 +1,7 @@
 {
-  "period": "June 2026",
-  "lastUpdated": "June 2026",
-  "source": "TRREB Market Watch, June 2026",
+  "period": "August 2026",
+  "lastUpdated": "August 2026",
+  "source": "TRREB Market Watch, August 2026",
   "homeType": "All Home Types",
   "toronto": {
     "condoAverage": null,
@@ -10,52 +10,52 @@
   "municipalities": {
     "aurora": {
       "name": "Aurora",
-      "averageSalePrice": "$1,239,892",
-      "salesCount": 76,
-      "avgLdom": 46,
-      "yearOverYear": "-6.7%"
+      "averageSalePrice": "$1,105,004",
+      "salesCount": 49,
+      "avgLdom": 65,
+      "yearOverYear": "-18.7%"
     },
     "newmarket": {
       "name": "Newmarket",
-      "averageSalePrice": "$1,018,511",
-      "salesCount": 88,
-      "avgLdom": 38,
-      "yearOverYear": "-4.1%"
+      "averageSalePrice": "$1,048,321",
+      "salesCount": 83,
+      "avgLdom": 49,
+      "yearOverYear": "+5.3%"
     },
     "stouffville": {
       "name": "Whitchurch-Stouffville",
-      "averageSalePrice": "$1,329,155",
-      "salesCount": 54,
-      "avgLdom": 41,
-      "yearOverYear": "+4.7%"
+      "averageSalePrice": "$1,158,512",
+      "salesCount": 47,
+      "avgLdom": 57,
+      "yearOverYear": "-5.3%"
     },
     "east-gwillimbury": {
       "name": "East Gwillimbury",
-      "averageSalePrice": "$1,062,808",
-      "salesCount": 39,
-      "avgLdom": 57,
-      "yearOverYear": "-11.7%"
+      "averageSalePrice": "$1,058,938",
+      "salesCount": 29,
+      "avgLdom": 60,
+      "yearOverYear": "-13.1%"
     },
     "georgina": {
       "name": "Georgina",
-      "averageSalePrice": "$794,410",
-      "salesCount": 85,
-      "avgLdom": 52,
-      "yearOverYear": "-7.2%"
+      "averageSalePrice": "$819,910",
+      "salesCount": 57,
+      "avgLdom": 60,
+      "yearOverYear": "-4.4%"
     },
     "uxbridge": {
       "name": "Uxbridge",
-      "averageSalePrice": "$1,140,111",
-      "salesCount": 33,
-      "avgLdom": 47,
-      "yearOverYear": "+7.0%"
+      "averageSalePrice": "$1,194,026",
+      "salesCount": 19,
+      "avgLdom": 67,
+      "yearOverYear": "-0.7%"
     },
     "scugog": {
       "name": "Scugog",
-      "averageSalePrice": "$990,492",
-      "salesCount": 31,
-      "avgLdom": 55,
-      "yearOverYear": "+9.6%"
+      "averageSalePrice": "$819,217",
+      "salesCount": 18,
+      "avgLdom": 36,
+      "yearOverYear": "-8.5%"
     }
   }
 }
