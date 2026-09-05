@@ -665,7 +665,7 @@ console.log(
 console.log("[audit] PASS — 7 community pages: unique H1/title, self canonical, BreadcrumbList");
 console.log("[audit] PASS — 10 static pages: crawlable body content and self canonicals");
 console.log(`[audit] PASS — ${checkedInsights} published insights: body content and Article JSON-LD`);
-console.log("[audit] PASS — homepage and community snapshots: exact shared June 2026 market data");
+console.log(`[audit] PASS — homepage and community snapshots: exact shared ${marketData.period} market data`);
 console.log("[audit] PASS — guide and community copy: no month-fragile absolute market rankings");
 console.log("[audit] PASS — sitemap: published non-www URLs only; rendered heads: zero www references");
 console.log("[audit] PASS — cache: HTML/fallback revalidate, hashed assets immutable, retired insights 410/no-store");
