@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
 import HeaderShell from "./components/HeaderShell";
@@ -6,6 +7,7 @@ import HeaderShell from "./components/HeaderShell";
 import { HOMEPAGE_MARKUP } from "./homepageMarkup";
 
 const TownMatchModal = lazy(() => import("./components/modals/TownMatchModal"));
+const EditorialTerrainMap = lazy(() => import("./components/EditorialTerrainMap"));
 
 const HOME_TITLE = "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Finally Home Agents";
 const HOME_DESCRIPTION = "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.";
@@ -146,6 +148,7 @@ function trackHeroEvent(name, params) {
 export default function HomePage() {
   const [isTownMatchOpen, setIsTownMatchOpen] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [mapTarget, setMapTarget] = useState(null);
 
   const openTownMatch = useCallback(() => {
     trackHeroEvent("hero_option_click", { option: "guided", label: "Help me find the right town" });
@@ -160,6 +163,10 @@ export default function HomePage() {
     }
     setIsTownMatchOpen(false);
   }, [quizCompleted]);
+
+  useEffect(() => {
+    setMapTarget(document.getElementById("editorial-terrain-map-root"));
+  }, []);
 
   useEffect(() => {
     function animateCounter(el) {
@@ -320,6 +327,7 @@ export default function HomePage() {
       </DynamicMetaTags>
       <HeaderShell />
       <div className="homepage-v4" dangerouslySetInnerHTML={{ __html: HOMEPAGE_MARKUP }} />
+      {mapTarget && createPortal(<Suspense fallback={<div className="terrain-loading" role="status">Preparing the NorthSide terrain…</div>}><EditorialTerrainMap /></Suspense>, mapTarget)}
       {isTownMatchOpen && (
         <Suspense fallback={null}>
           <TownMatchModal

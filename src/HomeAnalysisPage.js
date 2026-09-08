@@ -160,7 +160,7 @@ export default function HomeAnalysisPage() {
 
   // UTM/device helpers
   const utm = useMemo(() => new URLSearchParams(window.location.search), []);
-  const device = useMemo(() => (/Mobi/i.test(navigator.userAgent) ? "mobile" : "desktop"), []);
+  const device = useMemo(() => (typeof navigator !== "undefined" && /Mobi/i.test(navigator.userAgent) ? "mobile" : "desktop"), []);
 
   // Formspree ID
   const formspreeId = useMemo(() => {
