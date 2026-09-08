@@ -3,14 +3,41 @@ import { COMMUNITIES, CONTEXT, FILTERS } from "./editorialTerrainData";
 
 const ROUTE = "M520 664 C528 615 535 570 540 520 C548 447 545 380 548 310 C551 250 553 187 554 122";
 
+function MapIcon({ name, size = 20 }) {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+  };
+
+  if (name === "car") return <svg {...common}><path d="m5 17-1-5 2-5h12l2 5-1 5"/><path d="M5 12h14M7 17v2m10-2v2"/><circle cx="7" cy="14.5" r="1"/><circle cx="17" cy="14.5" r="1"/></svg>;
+  if (name === "boat") return <svg {...common}><path d="m5 15 3-8 3 8m0 0V4l6 7-6 1"/><path d="M3 17c2 2 4 2 6 0 2 2 4 2 6 0 2 2 4 2 6 0"/></svg>;
+  if (name === "walk") return <svg {...common}><circle cx="13" cy="4" r="2"/><path d="m10 22 2-8-3-3 2-4 4 3 3 1M12 14l4 3 1 5M9 11l-4 3"/></svg>;
+  if (name === "tree") return <svg {...common}><path d="m12 3-5 7h3l-5 7h14l-5-7h3zM12 17v4"/></svg>;
+  if (name === "home") return <svg {...common}><path d="m3 11 9-8 9 8M5 10v10h14V10M9 20v-6h6v6"/></svg>;
+  if (name === "people") return <svg {...common}><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2"/><path d="M3 20c0-4 2-7 6-7s6 3 6 7M15 14c3 0 5 2 5 6"/></svg>;
+  if (name === "leaf") return <svg {...common}><path d="M20 4C10 4 5 9 5 15c0 3 2 5 5 5 6 0 10-7 10-16Z"/><path d="M4 21c3-5 7-8 12-11"/></svg>;
+  return <svg {...common}><circle cx="12" cy="12" r="8"/></svg>;
+}
+
 export default function EditorialTerrainMap() {
-  const [activeFilter, setActiveFilter] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("commute");
   const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState("georgina");
   const [entered, setEntered] = useState(false);
+  const [balance, setBalance] = useState(58);
   const closeRef = useRef(null);
   const mapRef = useRef(null);
-  const reducedMotion = useMemo(() => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches, []);
+  const reducedMotion = useMemo(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    []
+  );
   const activeTown = COMMUNITIES.find((town) => town.id === selected);
   const filter = FILTERS.find((item) => item.id === activeFilter);
 
@@ -27,52 +54,156 @@ export default function EditorialTerrainMap() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => { if (selected) closeRef.current?.focus(); }, [selected]);
+  useEffect(() => {
+    if (selected && document.activeElement?.classList.contains("terrain__region")) {
+      closeRef.current?.focus();
+    }
+  }, [selected]);
 
   const selectTown = (town) => {
     setSelected(town.id);
     window.gtag?.("event", "map_community_select", { community: town.name });
   };
 
+  const closeTown = () => {
+    const townName = activeTown?.name;
+    setSelected(null);
+    requestAnimationFrame(() => {
+      if (townName) mapRef.current?.querySelector(`[data-town-name="${townName}"]`)?.focus();
+    });
+  };
+
   return (
-    <section ref={mapRef} className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""}`} style={{ "--camera-x": `${activeTown?.camera[0] || 0}px`, "--camera-y": `${activeTown?.camera[1] || 0}px` }} aria-label="Editorial terrain map of the NorthSide GTA">
+    <section
+      ref={mapRef}
+      className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""}`}
+      aria-label="Interactive aerial map of the NorthSide GTA"
+    >
       <div className="terrain__filters" aria-label="Discover communities by lifestyle">
-        {FILTERS.map((item) => <button key={item.id} type="button" aria-pressed={activeFilter === item.id} onClick={() => setActiveFilter(activeFilter === item.id ? null : item.id)}><span aria-hidden="true">{item.icon}</span>{item.label}</button>)}
+        {FILTERS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            aria-pressed={activeFilter === item.id}
+            onClick={() => setActiveFilter(activeFilter === item.id ? null : item.id)}
+          >
+            <MapIcon name={item.icon} size={18} />
+            <span>{item.label}</span>
+          </button>
+        ))}
       </div>
+
       <div className="terrain__viewport">
         <svg className="terrain__map" viewBox="110 45 1060 660" role="group" aria-label="Select one of seven NorthSide GTA communities">
           <defs>
-            <linearGradient id="terrain-water" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#9fc7c7"/><stop offset="1" stopColor="#c7ddda"/></linearGradient>
-            <linearGradient id="terrain-land" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#284a2d"/><stop offset=".6" stopColor="#173a24"/><stop offset="1" stopColor="#0d291c"/></linearGradient>
-            <pattern id="terrain-contours" width="90" height="50" patternUnits="userSpaceOnUse"><path d="M-10 42 Q20 8 55 29 T105 15" fill="none" stroke="#c6bd86" strokeOpacity=".18" strokeWidth="1"/></pattern>
-            <filter id="terrain-shadow"><feDropShadow dx="0" dy="10" stdDeviation="10" floodColor="#05150c" floodOpacity=".38"/></filter>
-            <filter id="terrain-glow"><feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="#e3c66c" floodOpacity=".85"/></filter>
+            <filter id="terrain-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="#ffe083" floodOpacity=".95"/>
+            </filter>
+            <filter id="terrain-pin-glow" x="-100%" y="-100%" width="300%" height="300%">
+              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#ffc55d" floodOpacity=".9"/>
+            </filter>
           </defs>
-          <path className="terrain__water" d="M95 40H1180V142L1085 137 980 152 875 126 805 91 730 78 660 91 590 76 490 106 420 135 398 112 340 113 305 135 235 105 165 125 95 115ZM95 640 Q330 625 555 653 T1180 646V720H95Z"/>
-          <text className="terrain__water-label" x="660" y="67">LAKE SIMCOE</text><text className="terrain__water-label" x="650" y="690">LAKE ONTARIO</text>
-          <g className="terrain__context">{CONTEXT.map((area) => <g key={area.name}><path d={area.path}/><text x={area.label[0]} y={area.label[1]}>{area.name}</text></g>)}</g>
-          <path className="terrain__base" d="M165 125L235 105 305 135 340 113 398 112 420 135 490 106 590 76 660 91 730 78 805 91 875 126 1050 148 1070 374 1140 520 1140 640 165 640Z"/>
-          <path className="terrain__contours" d="M165 125L235 105 305 135 340 113 398 112 420 135 490 106 590 76 660 91 730 78 805 91 875 126 1050 148 1070 374 1140 520 1140 640 165 640Z"/>
+
+          <text className="terrain__water-label" x="650" y="68">LAKE SIMCOE</text>
+          <text className="terrain__water-label" x="650" y="691">LAKE ONTARIO</text>
+
+          <g className="terrain__context">
+            {CONTEXT.map((area) => (
+              <g key={area.name}>
+                <path d={area.path}/>
+                <circle className="terrain__place-dot" cx={area.dot[0]} cy={area.dot[1]} r="4"/>
+                <text x={area.label[0]} y={area.label[1]}>{area.name}</text>
+              </g>
+            ))}
+          </g>
+
           <g className={`terrain__regions ${hovered || selected || filter ? "has-focus" : ""}`}>
             {COMMUNITIES.map((town) => {
-              const emphasized = town.id === hovered || town.id === selected || (!hovered && !selected && filter?.towns.includes(town.id));
-              return <g key={town.id} className={`terrain__region ${emphasized ? "is-emphasized" : ""} ${selected === town.id ? "is-selected" : ""} ${filter && !filter.towns.includes(town.id) ? "is-filtered" : ""}`} role="button" tabIndex="0" aria-label={`Explore ${town.name}. ${town.subtitle}`} aria-pressed={selected === town.id} onPointerEnter={() => setHovered(town.id)} onPointerLeave={() => setHovered(null)} onFocus={() => setHovered(town.id)} onBlur={() => setHovered(null)} onClick={() => selectTown(town)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectTown(town); } }}>
-                <path className="terrain__region-shadow" d={town.path}/><path className="terrain__region-fill" d={town.path}/><text className="terrain__town-name" x={town.label[0]} y={town.label[1]} textAnchor="middle">{town.name.includes("–") ? <><tspan x={town.label[0]} dy="-8">Whitchurch–</tspan><tspan x={town.label[0]} dy="28">Stouffville</tspan></> : town.name}</text><text className="terrain__town-sub" x={town.label[0]} y={town.label[1]+23} textAnchor="middle">{town.subtitle}</text>
-              </g>;
+              const emphasized = town.id === hovered || town.id === selected || (!hovered && filter?.towns.includes(town.id));
+              return (
+                <g
+                  key={town.id}
+                  className={`terrain__region ${emphasized ? "is-emphasized" : ""} ${selected === town.id ? "is-selected" : ""} ${filter && !filter.towns.includes(town.id) ? "is-filtered" : ""}`}
+                  role="button"
+                  tabIndex="0"
+                  data-town-name={town.name}
+                  aria-label={`Explore ${town.name}. ${town.subtitle}`}
+                  aria-pressed={selected === town.id}
+                  onPointerEnter={() => setHovered(town.id)}
+                  onPointerLeave={() => setHovered(null)}
+                  onFocus={() => setHovered(town.id)}
+                  onBlur={() => setHovered(null)}
+                  onClick={() => selectTown(town)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      selectTown(town);
+                    }
+                  }}
+                >
+                  <path className="terrain__region-shadow" d={town.path}/>
+                  <path className="terrain__region-fill" d={town.path}/>
+                  <circle className="terrain__place-dot terrain__place-dot--town" cx={town.dot[0]} cy={town.dot[1]} r="4.5"/>
+                  <text className="terrain__town-name" x={town.label[0]} y={town.label[1]} textAnchor="middle">
+                    {town.name.includes("–") ? (
+                      <><tspan x={town.label[0]} dy="-8">Whitchurch–</tspan><tspan x={town.label[0]} dy="27">Stouffville</tspan></>
+                    ) : town.name}
+                  </text>
+                  <text className="terrain__town-sub" x={town.label[0]} y={town.label[1] + 23} textAnchor="middle">{town.subtitle}</text>
+                </g>
+              );
             })}
           </g>
-          <path className={`terrain__route ${entered ? "is-drawn" : ""} ${selected ? "is-active" : ""}`} d={ROUTE}/><rect className="terrain__shield" x="538" y="180" width="31" height="21" rx="5"/><text className="terrain__shield-text" x="553.5" y="195" textAnchor="middle">404</text>
-          <ellipse className="terrain__lake-small" cx="1010" cy="300" rx="18" ry="54" transform="rotate(12 1010 300)"/><text className="terrain__lake-small-label" x="1010" y="298" textAnchor="middle">LAKE</text><text className="terrain__lake-small-label" x="1010" y="311" textAnchor="middle">SCUGOG</text>
-          <g className="terrain__toronto"><path d="M365 640v-34h8v34m10 0v-50h9v50m14 0v-75h10v75m16 0v-45h10v45m20 0v-86h9v86m18 0v-53h10v53"/><text x="420" y="672">Toronto</text></g>
+
+          <path className={`terrain__route ${entered ? "is-drawn" : ""}`} d={ROUTE}/>
+          <rect className="terrain__shield" x="538" y="180" width="31" height="21" rx="5"/>
+          <text className="terrain__shield-text" x="553.5" y="195" textAnchor="middle">404</text>
+          <text className="terrain__lake-small-label" x="1014" y="294" textAnchor="middle">LAKE</text>
+          <text className="terrain__lake-small-label" x="1014" y="307" textAnchor="middle">SCUGOG</text>
+          <g className="terrain__toronto"><circle cx="522" cy="644" r="5"/><text x="543" y="651">Toronto</text></g>
         </svg>
-        <div className="terrain__status" aria-live="polite">{filter ? `${filter.label}: ${filter.towns.length} communities emphasized` : "Select a community to explore"}</div>
-        {activeTown && <aside className="terrain-card" aria-label={`${activeTown.name} community details`}>
-          <button ref={closeRef} className="terrain-card__close" type="button" aria-label={`Close ${activeTown.name} details`} onClick={() => { setSelected(null); mapRef.current?.querySelector(`[aria-label^="Explore ${activeTown.name}"]`)?.focus(); }}>×</button>
-          <img src={activeTown.image} alt={`${activeTown.name} community`} width="420" height="190"/>
-          <div className="terrain-card__body"><p className="terrain-card__eyebrow">{activeTown.subtitle}</p><h3>{activeTown.name}</h3><p>{activeTown.description}</p><p className="terrain-card__travel"><span aria-hidden="true">↗</span>{activeTown.travel}</p><a href={activeTown.url} onClick={() => window.gtag?.("event", "map_community_cta", { community: activeTown.name })}>Explore {activeTown.name} <span aria-hidden="true">→</span></a></div>
-        </aside>}
+
+        <div className="terrain__compass" aria-hidden="true"><span>N</span><i/><b/></div>
+        <div className="terrain__scale" aria-hidden="true"><span>0</span><span>10</span><span>15 km</span><i/></div>
+
+        <label className="terrain-balance">
+          <span className="terrain-balance__city" aria-hidden="true">▥</span>
+          <span>Closer to Toronto</span>
+          <input type="range" min="0" max="100" value={balance} onChange={(event) => setBalance(Number(event.target.value))} aria-label="Balance proximity to Toronto with space and nature"/>
+          <span>More space + nature</span>
+          <span className="terrain-balance__nature" aria-hidden="true">▲</span>
+        </label>
+
+        <p className="sr-only" aria-live="polite">
+          {filter ? `${filter.label}: ${filter.towns.length} communities emphasized.` : "All communities shown."}
+        </p>
+
+        {activeTown && (
+          <aside className="terrain-card" aria-label={`${activeTown.name} community details`}>
+            <button ref={closeRef} className="terrain-card__close" type="button" aria-label={`Close ${activeTown.name} details`} onClick={closeTown}>×</button>
+            <div className="terrain-card__heading">
+              <h3>{activeTown.name}</h3>
+              <p>{activeTown.subtitle}</p>
+            </div>
+            <img src={activeTown.image} alt={`${activeTown.name} community`} width="420" height="190"/>
+            <div className="terrain-card__body">
+              <div className="terrain-card__travel">
+                <div><strong>{activeTown.travel}</strong><span>to Downtown Toronto</span></div>
+                <div className="terrain-card__gauge" aria-label={`${activeTown.commuteScore} out of 100 commute score`} style={{ "--score": `${activeTown.commuteScore * 1.8}deg` }}><MapIcon name="car" size={22}/></div>
+              </div>
+              <ul>
+                {activeTown.highlights.map((highlight) => (
+                  <li key={highlight.title}>
+                    <span><MapIcon name={highlight.icon} size={18}/></span>
+                    <div><strong>{highlight.title}</strong><small>{highlight.detail}</small></div>
+                  </li>
+                ))}
+              </ul>
+              <a href={activeTown.url} onClick={() => window.gtag?.("event", "map_community_cta", { community: activeTown.name })}>Explore {activeTown.name} <span aria-hidden="true">→</span></a>
+            </div>
+          </aside>
+        )}
       </div>
-      <p className="terrain__hint">Hover, tap or use Tab to discover each community</p>
       {reducedMotion && <span className="sr-only">Map animations are disabled according to your motion preference.</span>}
     </section>
   );
