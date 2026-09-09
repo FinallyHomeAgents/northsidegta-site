@@ -4,13 +4,13 @@
 import React, { useMemo } from "react";
 
 const TOWNS = [
-  { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/Images/towns/georgina.jpg" },
-  { name: "East Gwillimbury",   slug: "east-gwillimbury",   href: "/communities/east-gwillimbury",   icon: "/Images/towns/east-gwillimbury.jpg" },
-  { name: "Newmarket",          slug: "newmarket",          href: "/communities/newmarket",          icon: "/Images/towns/newmarket.jpg" },
-  { name: "Aurora",             slug: "aurora",             href: "/communities/aurora",             icon: "/Images/towns/aurora.jpg" },
-  { name: "Stouffville",        slug: "stouffville",        href: "/communities/stouffville",        icon: "/Images/towns/stouffville.jpg" },
-  { name: "Uxbridge",           slug: "uxbridge",           href: "/communities/uxbridge",           icon: "/Images/towns/uxbridge.jpg" },
-  { name: "Scugog",             slug: "scugog",             href: "/communities/scugog",             icon: "/Images/towns/scugog.jpg" },
+  { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/assets/town-logos/georgina.webp" },
+  { name: "East Gwillimbury",   slug: "east-gwillimbury",   href: "/communities/east-gwillimbury",   icon: "/assets/town-logos/east-gwillimbury.webp" },
+  { name: "Newmarket",          slug: "newmarket",          href: "/communities/newmarket",          icon: "/assets/town-logos/newmarket.webp" },
+  { name: "Aurora",             slug: "aurora",             href: "/communities/aurora",             icon: "/assets/town-logos/aurora.webp" },
+  { name: "Stouffville",        slug: "stouffville",        href: "/communities/stouffville",        icon: "/assets/town-logos/stouffville.webp" },
+  { name: "Uxbridge",           slug: "uxbridge",           href: "/communities/uxbridge",           icon: "/assets/town-logos/uxbridge.webp" },
+  { name: "Scugog",             slug: "scugog",             href: "/communities/scugog",             icon: "/assets/town-logos/scugog.webp" },
 ];
 
 const LIST_CLASS = "coverage-strip__list";
@@ -35,13 +35,13 @@ export default function CoverageStrip({ className = "" }) {
                   aria-label={`Explore ${town.name}`}
                   className="group inline-flex min-h-9 items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-slate-600 transition duration-150 hover:bg-white hover:text-brand-green hover:shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green/70 md:px-2.5"
                 >
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white ring-1 ring-emerald-100 transition duration-150 group-hover:ring-emerald-200 md:h-7 md:w-7">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white p-0.5 ring-1 ring-emerald-100 transition duration-150 group-hover:ring-emerald-200 md:h-8 md:w-8">
                     <img
                       src={town.icon}
                       alt=""
                       width={28}
                       height={28}
-                      className="h-full w-full rounded-full object-cover"
+                      className="h-full w-full object-contain"
                       loading="lazy"
                     />
                   </span>
