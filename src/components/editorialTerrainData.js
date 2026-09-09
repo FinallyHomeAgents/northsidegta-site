@@ -8,7 +8,7 @@ export const FILTERS = [
 
 export const COMMUNITIES = [
   {
-    id: "georgina", name: "Georgina", subtitle: "Keswick · Sutton", url: "/communities/georgina", image: "/Images/georgina-banner.jpg", travel: "~ 55 min", commuteScore: 72,
+    id: "georgina", name: "Georgina", subtitle: "Keswick · Sutton", url: "/communities/georgina", image: "/Images/georgina-banner.jpg", travel: "~ 55 min", commuteScore: 72, balanceScore: 78,
     path: "M490 106 L590 76 660 91 730 78 805 91 875 126 875 194 490 194Z", label: [683, 145], dot: [684, 116],
     highlights: [
       { icon: "tree", title: "4-season lake lifestyle", detail: "Beaches, boating, year-round recreation" },
@@ -17,7 +17,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "east-gwillimbury", name: "East Gwillimbury", subtitle: "Holland Landing", url: "/communities/east-gwillimbury", image: "/Images/eastgwillimbury-banner.jpg", travel: "~ 45 min", commuteScore: 78,
+    id: "east-gwillimbury", name: "East Gwillimbury", subtitle: "Holland Landing", url: "/communities/east-gwillimbury", image: "/Images/eastgwillimbury-banner.jpg", travel: "~ 45 min", commuteScore: 78, balanceScore: 50,
     path: "M420 194 L680 194 680 315 420 315Z", label: [550, 251], dot: [550, 216],
     highlights: [
       { icon: "home", title: "Space for growing families", detail: "Newer homes and generous properties" },
@@ -26,7 +26,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "newmarket", name: "Newmarket", subtitle: "Old Main", url: "/communities/newmarket", image: "/Images/newmarket-banner.jpg", travel: "~ 40 min", commuteScore: 84,
+    id: "newmarket", name: "Newmarket", subtitle: "Old Main", url: "/communities/newmarket", image: "/Images/newmarket-banner.jpg", travel: "~ 40 min", commuteScore: 84, balanceScore: 30,
     path: "M420 315 L548 315 548 407 420 407Z", label: [483, 357], dot: [483, 329],
     highlights: [
       { icon: "walk", title: "Walkable historic Main Street", detail: "Independent dining and local events" },
@@ -35,7 +35,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "aurora", name: "Aurora", subtitle: "Town Park", url: "/communities/aurora", image: "/Images/aurora-banner.jpg", travel: "~ 35 min", commuteScore: 90,
+    id: "aurora", name: "Aurora", subtitle: "Town Park", url: "/communities/aurora", image: "/Images/aurora-banner.jpg", travel: "~ 35 min", commuteScore: 90, balanceScore: 18,
     path: "M420 407 L548 407 548 510 420 510Z", label: [483, 455], dot: [483, 426],
     highlights: [
       { icon: "home", title: "Mature neighbourhoods", detail: "Leafy streets and established homes" },
@@ -44,7 +44,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "stouffville", name: "Whitchurch–Stouffville", subtitle: "Stouffville", url: "/communities/stouffville", image: "/Images/stouffville-banner.jpg", travel: "~ 45 min", commuteScore: 76,
+    id: "stouffville", name: "Whitchurch–Stouffville", subtitle: "Stouffville", url: "/communities/stouffville", image: "/Images/stouffville-banner.jpg", travel: "~ 45 min", commuteScore: 76, balanceScore: 42,
     path: "M548 315 L680 315 680 510 548 510Z", label: [614, 404], dot: [614, 351],
     highlights: [
       { icon: "walk", title: "Main Street character", detail: "Local shops, patios and community events" },
@@ -53,7 +53,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "uxbridge", name: "Uxbridge", subtitle: "Trail Capital", url: "/communities/uxbridge", image: "/Images/uxbridge-banner.jpg", travel: "~ 60 min", commuteScore: 60,
+    id: "uxbridge", name: "Uxbridge", subtitle: "Trail Capital", url: "/communities/uxbridge", image: "/Images/uxbridge-banner.jpg", travel: "~ 60 min", commuteScore: 60, balanceScore: 82,
     path: "M680 194 L875 194 875 510 680 510Z", label: [776, 354], dot: [776, 322],
     highlights: [
       { icon: "tree", title: "Canada's Trail Capital", detail: "An exceptional network of routes" },
@@ -62,7 +62,7 @@ export const COMMUNITIES = [
     ],
   },
   {
-    id: "scugog", name: "Scugog", subtitle: "Port Perry · Lake Scugog", url: "/communities/scugog", image: "/Images/scugog-banner.jpg", travel: "~ 70 min", commuteScore: 48,
+    id: "scugog", name: "Scugog", subtitle: "Port Perry · Lake Scugog", url: "/communities/scugog", image: "/Images/scugog-banner.jpg", travel: "~ 70 min", commuteScore: 48, balanceScore: 94,
     path: "M875 194 L1055 194 1070 374 1035 510 875 510Z", label: [970, 405], dot: [970, 372],
     highlights: [
       { icon: "boat", title: "Port Perry waterfront", detail: "A lively centre on Lake Scugog" },
@@ -71,6 +71,12 @@ export const COMMUNITIES = [
     ],
   },
 ];
+
+export function getBalanceMatches(balance, count = 2) {
+  return [...COMMUNITIES]
+    .sort((a, b) => Math.abs(a.balanceScore - balance) - Math.abs(b.balanceScore - balance))
+    .slice(0, count);
+}
 
 export const CONTEXT = [
   { name: "Bradford", path: "M165 125 L235 105 305 135 340 113 370 128 398 112 420 135 420 315 165 315Z", label: [275, 240], dot: [275, 215] },

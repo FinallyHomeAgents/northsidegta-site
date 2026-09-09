@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { COMMUNITIES, CONTEXT, FILTERS } from "./editorialTerrainData";
+import { COMMUNITIES, CONTEXT, FILTERS, getBalanceMatches } from "./editorialTerrainData";
 
 const ROUTE = "M520 664 C528 615 535 570 540 520 C548 447 545 380 548 310 C551 250 553 187 554 122";
 
@@ -32,6 +32,7 @@ export default function EditorialTerrainMap() {
   const [selected, setSelected] = useState("georgina");
   const [entered, setEntered] = useState(false);
   const [balance, setBalance] = useState(58);
+  const [balanceActive, setBalanceActive] = useState(false);
   const closeRef = useRef(null);
   const mapRef = useRef(null);
   const reducedMotion = useMemo(
@@ -40,6 +41,8 @@ export default function EditorialTerrainMap() {
   );
   const activeTown = COMMUNITIES.find((town) => town.id === selected);
   const filter = FILTERS.find((item) => item.id === activeFilter);
+  const balanceMatches = useMemo(() => getBalanceMatches(balance), [balance]);
+  const balanceMatchIds = balanceMatches.map((town) => town.id);
 
   useEffect(() => {
     const node = mapRef.current;
@@ -73,10 +76,19 @@ export default function EditorialTerrainMap() {
     });
   };
 
+  const updateBalance = (event) => {
+    const nextBalance = Number(event.target.value);
+    const [closestTown] = getBalanceMatches(nextBalance, 1);
+    setBalance(nextBalance);
+    setBalanceActive(true);
+    setActiveFilter(null);
+    setSelected(closestTown.id);
+  };
+
   return (
     <section
       ref={mapRef}
-      className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""}`}
+      className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""} ${balanceActive ? "terrain--balance-active" : ""}`}
       aria-label="Interactive aerial map of the NorthSide GTA"
     >
       <div className="terrain__filters" aria-label="Discover communities by lifestyle">
@@ -85,7 +97,10 @@ export default function EditorialTerrainMap() {
             key={item.id}
             type="button"
             aria-pressed={activeFilter === item.id}
-            onClick={() => setActiveFilter(activeFilter === item.id ? null : item.id)}
+            onClick={() => {
+              setBalanceActive(false);
+              setActiveFilter(activeFilter === item.id ? null : item.id);
+            }}
           >
             <MapIcon name={item.icon} size={18} />
             <span>{item.label}</span>
@@ -119,11 +134,13 @@ export default function EditorialTerrainMap() {
 
           <g className={`terrain__regions ${hovered || selected || filter ? "has-focus" : ""}`}>
             {COMMUNITIES.map((town) => {
-              const emphasized = town.id === hovered || town.id === selected || (!hovered && filter?.towns.includes(town.id));
+              const balanceMatch = balanceActive && balanceMatchIds.includes(town.id);
+              const emphasized = town.id === hovered || town.id === selected || (!hovered && (filter?.towns.includes(town.id) || balanceMatch));
+              const splitName = town.name.includes("–");
               return (
                 <g
                   key={town.id}
-                  className={`terrain__region ${emphasized ? "is-emphasized" : ""} ${selected === town.id ? "is-selected" : ""} ${filter && !filter.towns.includes(town.id) ? "is-filtered" : ""}`}
+                  className={`terrain__region ${emphasized ? "is-emphasized" : ""} ${selected === town.id ? "is-selected" : ""} ${balanceMatch ? "is-balance-match" : ""} ${filter && !filter.towns.includes(town.id) ? "is-filtered" : ""}`}
                   role="button"
                   tabIndex="0"
                   data-town-name={town.name}
@@ -145,11 +162,11 @@ export default function EditorialTerrainMap() {
                   <path className="terrain__region-fill" d={town.path}/>
                   <circle className="terrain__place-dot terrain__place-dot--town" cx={town.dot[0]} cy={town.dot[1]} r="4.5"/>
                   <text className="terrain__town-name" x={town.label[0]} y={town.label[1]} textAnchor="middle">
-                    {town.name.includes("–") ? (
+                    {splitName ? (
                       <><tspan x={town.label[0]} dy="-8">Whitchurch–</tspan><tspan x={town.label[0]} dy="27">Stouffville</tspan></>
                     ) : town.name}
                   </text>
-                  <text className="terrain__town-sub" x={town.label[0]} y={town.label[1] + 23} textAnchor="middle">{town.subtitle}</text>
+                  <text className="terrain__town-sub" x={town.label[0]} y={town.label[1] + (splitName ? 53 : 23)} textAnchor="middle">{town.subtitle}</text>
                 </g>
               );
             })}
@@ -169,10 +186,16 @@ export default function EditorialTerrainMap() {
         <label className="terrain-balance">
           <span className="terrain-balance__city" aria-hidden="true">▥</span>
           <span>Closer to Toronto</span>
-          <input type="range" min="0" max="100" value={balance} onChange={(event) => setBalance(Number(event.target.value))} aria-label="Balance proximity to Toronto with space and nature"/>
+          <input type="range" min="0" max="100" value={balance} onChange={updateBalance} aria-label="Balance proximity to Toronto with space and nature" aria-describedby="terrain-balance-status"/>
           <span>More space + nature</span>
           <span className="terrain-balance__nature" aria-hidden="true">▲</span>
         </label>
+
+        <p id="terrain-balance-status" className="sr-only" aria-live="polite">
+          {balanceActive
+            ? `${balanceMatches[0].name} is the closest match, followed by ${balanceMatches[1].name}.`
+            : "Move the slider to highlight communities that best match your preferred balance."}
+        </p>
 
         <p className="sr-only" aria-live="polite">
           {filter ? `${filter.label}: ${filter.towns.length} communities emphasized.` : "All communities shown."}
