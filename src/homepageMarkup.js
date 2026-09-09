@@ -10,10 +10,10 @@ export const HOMEPAGE_MARKUP = String.raw`
     <div class="hero__grid">
 
       
-      <div class="hero__copy hero-animate" style="--hero-poster: url('/assets/homepage/matthew-landon-northside-gta.jpg')">
-        <video autoplay loop muted playsinline aria-hidden="true" class="agent-video" poster="/assets/homepage/matthew-landon-northside-gta.jpg" style="filter: brightness(1.15) contrast(1.05);">
+      <div class="hero__copy hero-animate">
+        <video autoplay loop muted playsinline aria-hidden="true" class="agent-video" poster="/assets/homepage/matthew-landon-northside-gta.jpg">
           <source src="/assets/homepage/matthew-landon-hero.mp4" type="video/mp4">
-          <img src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true" style="filter: brightness(1.15) contrast(1.05);">
+          <img src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true">
         </video>
         <div class="hero__video-overlay hero__video-overlay--side" aria-hidden="true"></div>
         <div class="hero__video-overlay hero__video-overlay--bottom" aria-hidden="true"></div>
@@ -101,31 +101,31 @@ export const HOMEPAGE_MARKUP = String.raw`
       <p class="focus-community-rail__label"><span>Explore by community</span></p>
       <div class="focus-community-rail__track">
         <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/georgina.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/georgina.webp" alt="Georgina official municipal logo" width="829" height="759" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Georgina</strong><small>Lakeside living</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/east-gwillimbury.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury official municipal logo" width="278" height="190" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>East Gwillimbury</strong><small>Family focused</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/newmarket.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/newmarket.webp" alt="Newmarket official municipal logo" width="281" height="190" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Newmarket</strong><small>Urban convenience</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/aurora.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/aurora.webp" alt="Aurora official municipal logo" width="363" height="196" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Aurora</strong><small>Timeless appeal</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/stouffville.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/stouffville.webp" alt="Stouffville official municipal logo" width="604" height="158" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Stouffville</strong><small>Small-town feel</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/uxbridge.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/uxbridge.webp" alt="Uxbridge official municipal logo" width="248" height="188" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Uxbridge</strong><small>Natural beauty</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
-          <img class="focus-community-rail__photo" src="/Images/towns/scugog.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <img class="focus-community-rail__photo" src="/assets/town-logos/scugog.webp" alt="Scugog official municipal logo" width="550" height="210" loading="eager" decoding="async">
           <span class="focus-community-rail__body"><span><strong>Scugog</strong><small>More to explore</small></span><b aria-hidden="true">›</b></span>
         </a>
       </div>
