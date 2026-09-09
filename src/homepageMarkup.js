@@ -10,7 +10,7 @@ export const HOMEPAGE_MARKUP = String.raw`
     <div class="hero__grid">
 
       
-      <div class="hero__copy hero-animate">
+      <div class="hero__copy hero-animate" style="--hero-poster: url('/assets/homepage/matthew-landon-northside-gta.jpg')">
         <video autoplay loop muted playsinline aria-hidden="true" class="agent-video" poster="/assets/homepage/matthew-landon-northside-gta.jpg" style="filter: brightness(1.15) contrast(1.05);">
           <source src="/assets/homepage/matthew-landon-hero.mp4" type="video/mp4">
           <img src="/assets/homepage/matthew-landon-northside-gta.jpg" alt="" aria-hidden="true" style="filter: brightness(1.15) contrast(1.05);">
