@@ -102,31 +102,31 @@ export const HOMEPAGE_MARKUP = String.raw`
       <div class="focus-community-rail__track">
         <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/georgina.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/georgina.webp" alt="" width="720" height="300"><span><strong>Georgina</strong><small>Lakeside living</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Georgina</strong><small>Lakeside living</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/east-gwillimbury.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/east-gwillimbury.webp" alt="" width="720" height="300"><span><strong>East Gwillimbury</strong><small>Family focused</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>East Gwillimbury</strong><small>Family focused</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/newmarket.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/newmarket.webp" alt="" width="720" height="300"><span><strong>Newmarket</strong><small>Urban convenience</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Newmarket</strong><small>Urban convenience</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/aurora.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/aurora.webp" alt="" width="720" height="300"><span><strong>Aurora</strong><small>Timeless appeal</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Aurora</strong><small>Timeless appeal</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/stouffville.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/stouffville.webp" alt="" width="720" height="300"><span><strong>Stouffville</strong><small>Small-town feel</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Stouffville</strong><small>Small-town feel</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/uxbridge.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/uxbridge.webp" alt="" width="720" height="300"><span><strong>Uxbridge</strong><small>Natural beauty</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Uxbridge</strong><small>Natural beauty</small></span><b aria-hidden="true">›</b></span>
         </a>
         <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
           <img class="focus-community-rail__photo" src="/Images/towns/scugog.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
-          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/scugog.webp" alt="" width="720" height="300"><span><strong>Scugog</strong><small>More to explore</small></span><b aria-hidden="true">›</b></span>
+          <span class="focus-community-rail__body"><span><strong>Scugog</strong><small>More to explore</small></span><b aria-hidden="true">›</b></span>
         </a>
       </div>
     </nav>
