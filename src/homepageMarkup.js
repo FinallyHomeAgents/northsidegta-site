@@ -86,16 +86,12 @@ export const HOMEPAGE_MARKUP = String.raw`
       
       <div class="hero__map-panel">
         <div class="hero__map-frame editorial-terrain-host" id="northside-map-container">
-          <div class="hero__map-title">
-            <span>Real estate north of Toronto</span>
-            <strong>This is NorthSide GTA.</strong>
-          </div>
           <div id="editorial-terrain-map-root" aria-label="Loading the interactive NorthSide GTA map"></div>
           <noscript><img src="/assets/homepage/northside-map.svg" alt="NorthSide GTA communities map" width="1600" height="900"></noscript>
         </div>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
-          NorthSide GTA focus communities · guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
+          Seven focus communities · local guidance across York and Durham
         </div>
       </div>
 
