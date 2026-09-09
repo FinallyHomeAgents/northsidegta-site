@@ -27,9 +27,9 @@ function MapIcon({ name, size = 20 }) {
 }
 
 export default function EditorialTerrainMap() {
-  const [activeFilter, setActiveFilter] = useState("commute");
+  const [activeFilter, setActiveFilter] = useState(null);
   const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState("georgina");
+  const [selected, setSelected] = useState(null);
   const [entered, setEntered] = useState(false);
   const [balance, setBalance] = useState(58);
   const [balanceActive, setBalanceActive] = useState(false);
