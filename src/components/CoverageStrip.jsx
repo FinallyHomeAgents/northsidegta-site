@@ -4,13 +4,13 @@
 import React, { useMemo } from "react";
 
 const TOWNS = [
-  { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/assets/town-logos/georgina.webp" },
-  { name: "East Gwillimbury",   slug: "east-gwillimbury",   href: "/communities/east-gwillimbury",   icon: "/assets/town-logos/east-gwillimbury.webp" },
-  { name: "Newmarket",          slug: "newmarket",          href: "/communities/newmarket",          icon: "/assets/town-logos/newmarket.webp" },
-  { name: "Aurora",             slug: "aurora",             href: "/communities/aurora",             icon: "/assets/town-logos/aurora.webp" },
-  { name: "Stouffville",        slug: "stouffville",        href: "/communities/stouffville",        icon: "/assets/town-logos/stouffville.webp" },
-  { name: "Uxbridge",           slug: "uxbridge",           href: "/communities/uxbridge",           icon: "/assets/town-logos/uxbridge.webp" },
-  { name: "Scugog",             slug: "scugog",             href: "/communities/scugog",             icon: "/assets/town-logos/scugog.webp" },
+  { name: "Georgina",           slug: "georgina",           href: "/communities/georgina",           icon: "/Images/towns/georgina.jpg" },
+  { name: "East Gwillimbury",   slug: "east-gwillimbury",   href: "/communities/east-gwillimbury",   icon: "/Images/towns/east-gwillimbury.jpg" },
+  { name: "Newmarket",          slug: "newmarket",          href: "/communities/newmarket",          icon: "/Images/towns/newmarket.jpg" },
+  { name: "Aurora",             slug: "aurora",             href: "/communities/aurora",             icon: "/Images/towns/aurora.jpg" },
+  { name: "Stouffville",        slug: "stouffville",        href: "/communities/stouffville",        icon: "/Images/towns/stouffville.jpg" },
+  { name: "Uxbridge",           slug: "uxbridge",           href: "/communities/uxbridge",           icon: "/Images/towns/uxbridge.jpg" },
+  { name: "Scugog",             slug: "scugog",             href: "/communities/scugog",             icon: "/Images/towns/scugog.jpg" },
 ];
 
 const LIST_CLASS = "coverage-strip__list";
@@ -41,7 +41,7 @@ export default function CoverageStrip({ className = "" }) {
                       alt=""
                       width={28}
                       height={28}
-                      className="h-full w-full rounded-full object-contain p-0.5"
+                      className="h-full w-full rounded-full object-cover"
                       loading="lazy"
                     />
                   </span>
