@@ -91,21 +91,27 @@ export default function EditorialTerrainMap() {
       className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""} ${balanceActive ? "terrain--balance-active" : ""}`}
       aria-label="Interactive aerial map of the NorthSide GTA"
     >
-      <div className="terrain__filters" aria-label="Discover communities by lifestyle">
-        {FILTERS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-pressed={activeFilter === item.id}
-            onClick={() => {
-              setBalanceActive(false);
-              setActiveFilter(activeFilter === item.id ? null : item.id);
-            }}
-          >
-            <MapIcon name={item.icon} size={18} />
-            <span>{item.label}</span>
-          </button>
-        ))}
+      <div className="terrain__masthead">
+        <div className="terrain__intro">
+          <strong>This is NorthSide GTA.</strong>
+          <span>Explore the communities, compare the lifestyle, and discover where you fit.</span>
+        </div>
+        <div className="terrain__filters" aria-label="Discover communities by lifestyle">
+          {FILTERS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={activeFilter === item.id}
+              onClick={() => {
+                setBalanceActive(false);
+                setActiveFilter(activeFilter === item.id ? null : item.id);
+              }}
+            >
+              <MapIcon name={item.icon} size={18} />
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="terrain__viewport">
