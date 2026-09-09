@@ -78,30 +78,6 @@ export const HOMEPAGE_MARKUP = String.raw`
 
       
       <div class="hero__map-panel">
-        <div class="options-bar" aria-label="Choose how to explore NorthSide GTA towns">
-          <button class="opt opt--guided" type="button" data-hero-option="guided">
-            <span class="opt-tag">Guided Path</span>
-            <span class="opt-title">Help me find the right town</span>
-            <span class="opt-action">Take the Town Match Quiz →</span>
-          </button>
-          <button class="opt opt--self" type="button" data-hero-option="self-guided">
-            <span class="opt-tag">Self-Guided</span>
-            <span class="opt-title">I'll explore the towns myself</span>
-            <span class="opt-action">Browse the Map Below <span class="opt-action__arrow" aria-hidden="true">↓</span></span>
-          </button>
-        </div>
-        <div class="hero__map-header">
-          <div>
-            <p class="map-label">Explore the NorthSide GTA</p>
-            <p class="map-sublabel">Tap any focus community to learn more</p>
-          </div>
-          <div class="map-interactive-badge">
-            <span class="pulse-dot pulse-dot--green"></span>
-            <span>Interactive</span>
-          </div>
-        </div>
-
-        
         <div class="hero__map-frame editorial-terrain-host" id="northside-map-container">
           <div id="editorial-terrain-map-root" aria-label="Loading the interactive NorthSide GTA map"></div>
           <noscript><img src="/assets/homepage/northside-map.svg" alt="NorthSide GTA communities map" width="1600" height="900"></noscript>

@@ -1745,11 +1745,12 @@ main { padding-top: 0; }
   background: #062b27;
 }
 
-#editorial-terrain-map-root { min-height: inherit; }
+#editorial-terrain-map-root { height: inherit; min-height: inherit; }
 
 .terrain {
   --amber: #f0bd55;
   position: relative;
+  height: inherit;
   min-height: inherit;
   overflow: hidden;
   color: #f8f2dd;
@@ -1815,7 +1816,7 @@ main { padding-top: 0; }
 }
 .terrain__filters button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
-.terrain__viewport { position: relative; z-index: 2; min-height: inherit; }
+.terrain__viewport { position: relative; z-index: 2; height: inherit; min-height: inherit; }
 
 .terrain__map {
   position: absolute;
@@ -1899,6 +1900,12 @@ main { padding-top: 0; }
   transform: translateY(-3px);
 }
 .terrain__region.is-selected .terrain__region-fill { fill: rgba(82, 145, 42, 0.52); stroke-width: 3; }
+.terrain__region.is-balance-match .terrain__region-fill {
+  fill: rgba(91, 153, 51, 0.48);
+  stroke: #fff0a7;
+  stroke-width: 2.75;
+  filter: url(#terrain-glow);
+}
 .terrain__region:focus-visible .terrain__region-fill { stroke: #fff; stroke-width: 4; }
 
 .terrain__town-name {
@@ -2050,6 +2057,58 @@ main { padding-top: 0; }
   .terrain-balance { width: calc(64% - 44px); min-width: 0; }
   .terrain-balance > span:not(.terrain-balance__city):not(.terrain-balance__nature) { display: none; }
   .terrain-balance { grid-template-columns: auto 1fr auto; }
+}
+
+@media (min-width: 1024px) {
+  .editorial-terrain-host {
+    height: clamp(460px, calc(100svh - 285px), 680px);
+    min-height: 460px;
+  }
+
+  .terrain__map { min-height: 0; }
+
+  .focus-community-rail {
+    padding: 8px 10px 9px;
+  }
+
+  .focus-community-rail__label {
+    margin-bottom: 5px;
+    font-size: 8px;
+  }
+
+  .focus-community-rail__tile {
+    min-height: 78px;
+  }
+
+  .focus-community-rail__tile img,
+  .focus-community-rail__logo {
+    max-height: 68%;
+  }
+
+  .hero__map-footer {
+    padding-block: 6px;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 800px) {
+  .terrain-card {
+    top: 62px;
+  }
+
+  .terrain-card__heading { padding: 10px 14px 8px; }
+  .terrain-card__heading h3 { font-size: 26px; }
+  .terrain-card__heading p { margin-top: 5px; }
+  .terrain-card img { width: calc(100% - 20px); height: 100px; margin-inline: 10px; }
+  .terrain-card__body { padding: 9px 14px 12px; }
+  .terrain-card__travel { padding-bottom: 7px; }
+  .terrain-card__travel strong { font-size: 16px; }
+  .terrain-card ul { gap: 5px; margin-top: 7px; }
+  .terrain-card li { grid-template-columns: 28px 1fr; gap: 7px; }
+  .terrain-card li > span { width: 27px; height: 27px; }
+  .terrain-card li > span svg { width: 15px; height: 15px; }
+  .terrain-card li small { display: none; }
+  .terrain-card a { margin-top: 7px; padding: 8px 10px; }
 }
 
 @media (max-width: 700px) {
