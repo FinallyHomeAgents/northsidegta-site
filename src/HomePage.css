@@ -3324,10 +3324,14 @@ main { padding-top: 0; }
 
   .homepage-v4 .hero--concept .hero__map-frame,
   .homepage-v4 .hero--concept .editorial-terrain-host,
-  .homepage-v4 .hero--concept #editorial-terrain-map-root,
+  .homepage-v4 .hero--concept #editorial-terrain-map-root {
+    height: auto;
+    min-height: 656px;
+  }
+
   .homepage-v4 .hero--concept .terrain {
     height: auto;
-    min-height: 0;
+    min-height: 656px;
   }
 
   .homepage-v4 .terrain__masthead {
