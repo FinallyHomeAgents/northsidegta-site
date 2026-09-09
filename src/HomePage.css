@@ -2744,3 +2744,399 @@ main { padding-top: 0; }
     display: none;
   }
 }
+
+/* Final desktop integration: one continuous reveal, with map controls outside the geography. */
+.homepage-v4 .hero--concept {
+  overflow: hidden;
+  background: #f7f4ed;
+}
+
+.homepage-v4 .hero--concept .hero__copy {
+  background:
+    radial-gradient(circle at 86% 18%, rgba(86, 128, 70, 0.2), transparent 36%),
+    linear-gradient(145deg, #061a0b 0%, #0a2615 58%, #06322c 100%);
+}
+
+.homepage-v4 .hero--concept .agent-video {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
+  opacity: 1;
+  filter: brightness(1.06) contrast(1.02) saturate(0.95);
+}
+
+.homepage-v4 .hero--concept .hero__video-overlay--side {
+  background: linear-gradient(90deg,
+    rgba(5, 22, 9, 0.99) 0%,
+    rgba(5, 22, 9, 0.97) 28%,
+    rgba(5, 22, 9, 0.79) 47%,
+    rgba(5, 22, 9, 0.19) 72%,
+    rgba(6, 43, 39, 0.22) 100%);
+}
+
+.homepage-v4 .hero--concept .hero__video-overlay--bottom {
+  background: linear-gradient(180deg,
+    rgba(5, 19, 7, 0.02) 0%,
+    rgba(5, 19, 7, 0.02) 63%,
+    rgba(5, 19, 7, 0.78) 100%);
+}
+
+.homepage-v4 .hero--concept .hero__copy-inner {
+  justify-content: flex-start;
+}
+
+.homepage-v4 .hero--concept .hero__heading {
+  max-width: 520px;
+  margin-top: 17px;
+  font-size: clamp(2.65rem, 3.2vw, 3.45rem);
+}
+
+.homepage-v4 .hero--concept .hero__intro {
+  max-width: 350px;
+  margin-top: 13px;
+}
+
+.homepage-v4 .hero--concept .hero__ctas {
+  flex-direction: row;
+  gap: 8px;
+  width: min(100%, 440px);
+  margin-top: 17px;
+}
+
+.homepage-v4 .hero--concept .hero__ctas .hero__cta {
+  min-height: 40px;
+  padding-inline: 15px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.homepage-v4 .hero--concept .hero__ctas .hero__cta--primary {
+  flex: 0 1 190px;
+}
+
+.homepage-v4 .hero--concept .hero__ctas .hero__cta--secondary {
+  flex: 0 1 214px;
+}
+
+.homepage-v4 .hero--concept .hero__divider {
+  margin: 17px 0 12px;
+}
+
+.homepage-v4 .hero--concept .hero__agents-label {
+  margin-bottom: 7px;
+}
+
+.homepage-v4 .hero--concept .hero__agents-attribution {
+  margin-top: 8px;
+}
+
+.homepage-v4 .hero--concept .hero-badges {
+  margin-top: auto;
+  padding-top: 13px;
+}
+
+.homepage-v4 .hero--concept .hero-badge {
+  min-width: 0;
+  padding: 3px 10px;
+}
+
+.homepage-v4 .hero--concept .hero-badge__text strong {
+  font-size: 13px;
+}
+
+.homepage-v4 .hero--concept .hero-badge__text span {
+  font-size: 9px;
+}
+
+.homepage-v4 .hero--concept .hero__map-frame,
+.homepage-v4 .hero--concept #editorial-terrain-map-root,
+.homepage-v4 .hero--concept .terrain {
+  height: 100%;
+  min-height: 0;
+}
+
+.homepage-v4 .terrain {
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-v4 .terrain__masthead {
+  position: relative;
+  z-index: 9;
+  top: auto;
+  right: auto;
+  left: auto;
+  flex: 0 0 auto;
+  padding: 13px 22px 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(226, 217, 172, 0.26);
+  border-radius: 0;
+  background: linear-gradient(90deg, #06382f 0%, #052e29 100%);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.homepage-v4 .terrain__intro {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 3px 9px;
+}
+
+.homepage-v4 .terrain__intro strong {
+  flex: 0 0 auto;
+  font-size: clamp(1.45rem, 1.7vw, 1.9rem);
+}
+
+.homepage-v4 .terrain__intro span {
+  max-width: 350px;
+  margin: 0;
+  font-size: 10px;
+  text-align: right;
+}
+
+.homepage-v4 .terrain__masthead .terrain__filters {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  width: 100%;
+  min-height: 36px;
+  overflow: visible;
+  padding: 0;
+  transform: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.homepage-v4 .terrain__masthead .terrain__filters button {
+  min-height: 36px;
+  margin: 0;
+  border: 1px solid rgba(226, 217, 172, 0.32);
+  background: rgba(3, 25, 22, 0.18);
+  font-size: 11px;
+}
+
+.homepage-v4 .terrain__viewport {
+  position: relative;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.homepage-v4 .terrain__map {
+  min-height: 0;
+  transform-origin: 50% 50%;
+}
+
+.homepage-v4 .focus-community-rail--full {
+  padding: 7px clamp(16px, 2vw, 32px) 9px;
+  background: #f7f4ed;
+}
+
+.homepage-v4 .focus-community-rail--full .focus-community-rail__label {
+  margin-bottom: 5px;
+}
+
+.homepage-v4 .focus-community-rail--full .focus-community-rail__track {
+  gap: 9px;
+}
+
+.homepage-v4 .focus-community-rail--full .focus-community-rail__tile {
+  display: grid;
+  grid-template-rows: 60px auto;
+  padding: 5px;
+  border: 1px solid rgba(94, 105, 81, 0.14);
+  border-radius: 11px;
+  background: #fffefb;
+}
+
+.homepage-v4 .focus-community-rail--full .focus-community-rail__photo {
+  width: 100%;
+  height: 60px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  background: #f5f2e9;
+  object-fit: contain;
+  object-position: center;
+}
+
+.homepage-v4 .focus-community-rail--full .focus-community-rail__body {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  padding: 5px 5px 2px;
+}
+
+.homepage-v4 .focus-community-rail--full strong {
+  display: block;
+  font-size: clamp(0.72rem, 0.78vw, 0.88rem);
+}
+
+.homepage-v4 .focus-community-rail--full small {
+  margin-top: 2px;
+  font-size: 6.5px;
+}
+
+.homepage-v4 .focus-community-rail--full b {
+  font-size: 19px;
+}
+
+@media (min-width: 1024px) {
+  .homepage-v4 .hero--concept .hero__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: clamp(550px, calc(100svh - 340px), 590px);
+    min-height: 550px;
+    max-height: 590px;
+    overflow: hidden;
+    background: #06322c;
+  }
+
+  .homepage-v4 .hero--concept .hero__grid::after {
+    position: absolute;
+    z-index: 8;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    display: block;
+    width: 34px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, rgba(5, 44, 38, 0.36), transparent);
+    content: "";
+    pointer-events: none;
+  }
+
+  .homepage-v4 .hero--concept .hero__copy {
+    height: 100%;
+    min-height: 0;
+    padding: clamp(29px, 2.35vw, 40px) clamp(28px, 3.1vw, 50px) 20px;
+  }
+
+  .homepage-v4 .hero--concept .hero__map-panel {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin-left: 0;
+    background: #062b27;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .homepage-v4 .hero--concept .editorial-terrain-host {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  .homepage-v4 .hero--concept .hero__map-footer {
+    display: none;
+  }
+
+  .homepage-v4 .focus-community-rail--full {
+    padding-right: clamp(74px, 4.7vw, 96px);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+  .homepage-v4 .hero--concept .hero__copy {
+    padding-inline: 28px;
+  }
+
+  .homepage-v4 .hero--concept .hero__heading {
+    font-size: clamp(2.35rem, 3.65vw, 2.85rem);
+  }
+
+  .homepage-v4 .hero--concept .hero__ctas {
+    flex-direction: column;
+    width: min(100%, 280px);
+  }
+
+  .homepage-v4 .hero--concept .hero__ctas .hero__cta {
+    flex-basis: auto;
+  }
+
+  .homepage-v4 .terrain__intro span {
+    display: none;
+  }
+
+  .homepage-v4 .terrain__masthead {
+    padding-inline: 14px;
+  }
+
+  .homepage-v4 .terrain__masthead .terrain__filters {
+    gap: 4px;
+  }
+
+  .homepage-v4 .terrain__masthead .terrain__filters button {
+    gap: 4px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .homepage-v4 .hero--concept .hero__ctas {
+    flex-direction: row;
+  }
+
+  .homepage-v4 .hero--concept .agent-video {
+    object-position: 58% center;
+  }
+
+  .homepage-v4 .focus-community-rail--full .focus-community-rail__tile {
+    flex: 0 0 170px;
+  }
+}
+
+@media (max-width: 700px) {
+  .homepage-v4 .hero--concept .hero__ctas {
+    flex-direction: column;
+  }
+
+  .homepage-v4 .terrain__masthead {
+    padding: 14px 12px 10px;
+  }
+
+  .homepage-v4 .terrain__intro {
+    display: block;
+  }
+
+  .homepage-v4 .terrain__intro span {
+    margin-top: 5px;
+    max-width: none;
+    text-align: left;
+  }
+
+  .homepage-v4 .terrain__masthead .terrain__filters {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .homepage-v4 .terrain__masthead .terrain__filters button {
+    flex: 0 0 112px;
+    margin-inline: 3px;
+  }
+
+  .homepage-v4 .terrain__viewport {
+    min-height: 676px;
+  }
+
+  .homepage-v4 .terrain__map {
+    top: 0;
+  }
+
+  .homepage-v4 .focus-community-rail--full .focus-community-rail__tile {
+    grid-template-rows: 58px auto;
+  }
+
+  .homepage-v4 .focus-community-rail--full .focus-community-rail__photo {
+    height: 58px;
+  }
+}
