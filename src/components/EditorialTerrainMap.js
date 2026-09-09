@@ -27,9 +27,9 @@ function MapIcon({ name, size = 20 }) {
 }
 
 export default function EditorialTerrainMap() {
-  const [activeFilter, setActiveFilter] = useState("commute");
+  const [activeFilter, setActiveFilter] = useState(null);
   const [hovered, setHovered] = useState(null);
-  const [selected, setSelected] = useState("georgina");
+  const [selected, setSelected] = useState(null);
   const [entered, setEntered] = useState(false);
   const [balance, setBalance] = useState(58);
   const [balanceActive, setBalanceActive] = useState(false);
@@ -91,21 +91,27 @@ export default function EditorialTerrainMap() {
       className={`terrain ${entered ? "terrain--entered" : ""} ${selected ? "terrain--selected" : ""} ${balanceActive ? "terrain--balance-active" : ""}`}
       aria-label="Interactive aerial map of the NorthSide GTA"
     >
-      <div className="terrain__filters" aria-label="Discover communities by lifestyle">
-        {FILTERS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-pressed={activeFilter === item.id}
-            onClick={() => {
-              setBalanceActive(false);
-              setActiveFilter(activeFilter === item.id ? null : item.id);
-            }}
-          >
-            <MapIcon name={item.icon} size={18} />
-            <span>{item.label}</span>
-          </button>
-        ))}
+      <div className="terrain__masthead">
+        <div className="terrain__intro">
+          <strong>This is NorthSide GTA.</strong>
+          <span>Explore the communities, compare the lifestyle, and discover where you fit.</span>
+        </div>
+        <div className="terrain__filters" aria-label="Discover communities by lifestyle">
+          {FILTERS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={activeFilter === item.id}
+              onClick={() => {
+                setBalanceActive(false);
+                setActiveFilter(activeFilter === item.id ? null : item.id);
+              }}
+            >
+              <MapIcon name={item.icon} size={18} />
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="terrain__viewport">

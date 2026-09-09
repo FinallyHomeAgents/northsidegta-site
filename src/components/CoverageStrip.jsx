@@ -35,13 +35,13 @@ export default function CoverageStrip({ className = "" }) {
                   aria-label={`Explore ${town.name}`}
                   className="group inline-flex min-h-9 items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-slate-600 transition duration-150 hover:bg-white hover:text-brand-green hover:shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green/70 md:px-2.5"
                 >
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white ring-1 ring-emerald-100 transition duration-150 group-hover:ring-emerald-200 md:h-7 md:w-7">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white p-0.5 ring-1 ring-emerald-100 transition duration-150 group-hover:ring-emerald-200 md:h-8 md:w-8">
                     <img
                       src={town.icon}
                       alt=""
                       width={28}
                       height={28}
-                      className="h-full w-full rounded-full object-contain p-0.5"
+                      className="h-full w-full object-contain"
                       loading="lazy"
                     />
                   </span>

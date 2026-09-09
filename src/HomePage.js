@@ -82,8 +82,8 @@ const structuredData = {
         containedInPlace: { "@type": "AdministrativeArea", name: "Greater Toronto Area" },
       })),
       employee: [
-        { "@type": "Person", name: "Matthew Mulhall", telephone: "+16476684646", jobTitle: "Sales Representative" },
-        { "@type": "Person", name: "Landon Mulhall", telephone: "+14164554594", jobTitle: "Sales Representative" },
+        { "@type": "Person", name: "Matthew Mulhall", telephone: "+16476684646", jobTitle: "Real Estate Agent" },
+        { "@type": "Person", name: "Landon Mulhall", telephone: "+14164554594", jobTitle: "Real Estate Agent" },
       ],
       openingHoursSpecification: [
         { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
