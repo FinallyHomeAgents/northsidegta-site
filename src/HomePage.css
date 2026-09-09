@@ -3225,7 +3225,7 @@ main { padding-top: 0; }
     max-width: none;
     height: 330px;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
     filter: brightness(1.05) contrast(1.02) saturate(0.94);
   }
 
@@ -3374,10 +3374,18 @@ main { padding-top: 0; }
 
   .homepage-v4 .terrain__map {
     top: 0;
-    width: 155%;
+    width: 135%;
     height: 500px;
     min-height: 0;
-    margin-left: -21%;
+    margin-left: -17.5%;
+  }
+
+  .homepage-v4 .terrain__town-name {
+    font-size: 29px;
+  }
+
+  .homepage-v4 .terrain__town-sub {
+    font-size: 9.5px;
   }
 
   .homepage-v4 .terrain-balance {
