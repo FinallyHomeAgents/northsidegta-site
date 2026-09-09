@@ -6,7 +6,7 @@ export const HOMEPAGE_MARKUP = String.raw`
 <main>
 
   
-  <section class="hero" aria-labelledby="hero-heading">
+  <section class="hero hero--concept" aria-labelledby="hero-heading">
     <div class="hero__grid">
 
       
@@ -19,25 +19,32 @@ export const HOMEPAGE_MARKUP = String.raw`
         <div class="hero__video-overlay hero__video-overlay--bottom" aria-hidden="true"></div>
         <div class="hero__copy-inner">
           <section class="hero__brand-section" aria-label="NorthSide GTA introduction">
-            <span class="hero__eyebrow">NorthSide GTA · Real Estate Platform</span>
+            <span class="hero__eyebrow">NorthSide GTA · Real Estate North of Toronto</span>
 
             <h1 class="hero__heading" id="hero-heading">
-              NorthSide GTA Real Estate,
-              <span class="hero__heading-em">Guided by Finally Home Agents.</span>
+              Welcome to
+              <span class="hero__heading-em">NorthSide GTA.</span>
             </h1>
 
             <p class="hero__intro">
-              Buy or sell north of Toronto with trusted local guidance — community by community, decision by decision.
+              Discover seven distinct communities—and the one that feels like home.
             </p>
+
+            <div class="hero__ctas" aria-label="Start exploring NorthSide GTA">
+              <a class="hero__cta hero__cta--primary" href="#communities">Find your NorthSide <span aria-hidden="true">→</span></a>
+              <a class="hero__cta hero__cta--secondary" href="#finally-home-agents">Meet the Finally Home Agents</a>
+            </div>
           </section>
 
           <div class="hero__divider" aria-hidden="true"></div>
 
-          <section class="hero__agents" aria-label="Meet Finally Home Agents">
+          <section class="hero__agents" id="finally-home-agents" aria-label="Meet Finally Home Agents">
             <p class="hero__agents-label">Finally Home Agents</p>
-            <h2 class="hero__agents-title">Meet Matthew &amp; Landon Mulhall</h2>
-            <p class="hero__agents-copy">Two agents, seven communities, one focus — helping you find the right home north of Toronto before you start chasing listings.</p>
-            <p class="hero__agents-attribution">HomeLife Optimum Realty, Brokerage · Licensed by RECO</p>
+            <div class="hero__agent-names">
+              <p><strong>Landon Mulhall</strong><span>Real Estate Agent</span></p>
+              <p><strong>Matthew Mulhall</strong><span>Real Estate Agent</span></p>
+            </div>
+            <p class="hero__agents-attribution">HomeLife Optimum Realty, Brokerage</p>
           </section>
 
           <div class="hero-badges" aria-label="NorthSide GTA trust signals">
@@ -79,43 +86,13 @@ export const HOMEPAGE_MARKUP = String.raw`
       
       <div class="hero__map-panel">
         <div class="hero__map-frame editorial-terrain-host" id="northside-map-container">
+          <div class="hero__map-title">
+            <span>Real estate north of Toronto</span>
+            <strong>This is NorthSide GTA.</strong>
+          </div>
           <div id="editorial-terrain-map-root" aria-label="Loading the interactive NorthSide GTA map"></div>
           <noscript><img src="/assets/homepage/northside-map.svg" alt="NorthSide GTA communities map" width="1600" height="900"></noscript>
         </div>
-
-        <nav class="focus-community-rail" aria-label="NorthSide GTA focus communities">
-          <p class="focus-community-rail__label">NorthSide GTA focus communities</p>
-          <div class="focus-community-rail__track">
-            <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--georgina" src="/assets/town-logos/georgina.webp" alt="Georgina" width="720" height="300" loading="eager" decoding="async">
-              <span>Georgina</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--east-gwillimbury" src="/assets/town-logos/east-gwillimbury.webp" alt="East Gwillimbury" width="720" height="300" loading="eager" decoding="async">
-              <span>East Gwillimbury</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--newmarket" src="/assets/town-logos/newmarket.webp" alt="Newmarket" width="720" height="300" loading="eager" decoding="async">
-              <span>Newmarket</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--aurora" src="/assets/town-logos/aurora.webp" alt="Aurora" width="720" height="300" loading="eager" decoding="async">
-              <span>Aurora</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--stouffville" src="/assets/town-logos/stouffville.webp" alt="Whitchurch-Stouffville" width="720" height="300" loading="eager" decoding="async">
-              <span>Stouffville</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--uxbridge" src="/assets/town-logos/uxbridge.webp" alt="Uxbridge" width="720" height="300" loading="eager" decoding="async">
-              <span>Uxbridge</span>
-            </a>
-            <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
-              <img class="focus-community-rail__logo focus-community-rail__logo--scugog" src="/assets/town-logos/scugog.webp" alt="Scugog" width="720" height="300" loading="eager" decoding="async">
-              <span>Scugog</span>
-            </a>
-          </div>
-        </nav>
 
         <div class="hero__map-footer" id="map-caption" aria-live="polite">
           NorthSide GTA focus communities · guidance also available in King, Bradford, Vaughan, Richmond Hill, Markham, Pickering, Ajax, Whitby, and Oshawa
@@ -123,6 +100,40 @@ export const HOMEPAGE_MARKUP = String.raw`
       </div>
 
     </div>
+
+    <nav class="focus-community-rail focus-community-rail--full" id="communities" aria-label="Explore NorthSide GTA by community">
+      <p class="focus-community-rail__label"><span>Explore by community</span></p>
+      <div class="focus-community-rail__track">
+        <a class="focus-community-rail__tile" href="/communities/georgina" aria-label="Explore Georgina Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/georgina.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/georgina.webp" alt="" width="720" height="300"><span><strong>Georgina</strong><small>Lakeside living</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/east-gwillimbury" aria-label="Explore East Gwillimbury Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/east-gwillimbury.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/east-gwillimbury.webp" alt="" width="720" height="300"><span><strong>East Gwillimbury</strong><small>Family focused</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/newmarket" aria-label="Explore Newmarket Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/newmarket.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/newmarket.webp" alt="" width="720" height="300"><span><strong>Newmarket</strong><small>Urban convenience</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/aurora" aria-label="Explore Aurora Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/aurora.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/aurora.webp" alt="" width="720" height="300"><span><strong>Aurora</strong><small>Timeless appeal</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/stouffville" aria-label="Explore Stouffville Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/stouffville.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/stouffville.webp" alt="" width="720" height="300"><span><strong>Stouffville</strong><small>Small-town feel</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/uxbridge" aria-label="Explore Uxbridge Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/uxbridge.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/uxbridge.webp" alt="" width="720" height="300"><span><strong>Uxbridge</strong><small>Natural beauty</small></span><b aria-hidden="true">›</b></span>
+        </a>
+        <a class="focus-community-rail__tile" href="/communities/scugog" aria-label="Explore Scugog Real Estate">
+          <img class="focus-community-rail__photo" src="/Images/towns/scugog.jpg" alt="" width="640" height="360" loading="eager" decoding="async">
+          <span class="focus-community-rail__body"><img class="focus-community-rail__logo" src="/assets/town-logos/scugog.webp" alt="" width="720" height="300"><span><strong>Scugog</strong><small>More to explore</small></span><b aria-hidden="true">›</b></span>
+        </a>
+      </div>
+    </nav>
   </section>
 
   
