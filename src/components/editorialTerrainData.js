@@ -81,9 +81,9 @@ export function getBalanceMatches(balance, count = 2) {
 export const CONTEXT = [
   { id: "bradford", name: "Bradford", path: "M165 125 L235 105 305 135 340 113 370 128 398 112 420 135 420 300 165 300Z", label: [275, 230], dot: [275, 205] },
   { id: "king", name: "King", path: "M165 300 L420 300 420 475 165 475Z", label: [280, 385], dot: [280, 360] },
-  { id: "vaughan", name: "Vaughan", path: "M165 475 L360 475 360 585 165 585Z", label: [260, 535], dot: [260, 510] },
-  { id: "richmond-hill", name: "Richmond Hill", path: "M360 475 L510 475 510 535 360 535Z", label: [435, 514], dot: [435, 490] },
-  { id: "markham", name: "Markham", path: "M510 475 L680 475 680 585 360 585 360 535 510 535Z", label: [565, 548], dot: [565, 523] },
+  { id: "vaughan", name: "Vaughan", path: "M165 475 L360 475 360 545 165 545Z", label: [260, 521], dot: [260, 493] },
+  { id: "richmond-hill", name: "Richmond Hill", path: "M360 475 L510 475 510 525 360 525Z", label: [435, 511], dot: [435, 487] },
+  { id: "markham", name: "Markham", path: "M510 475 L680 475 680 545 360 545 360 525 510 525Z", label: [580, 521], dot: [580, 493] },
   { id: "pickering", name: "Pickering", path: "M680 475 L810 475 810 635 680 635Z", label: [745, 555], dot: [745, 530] },
   { id: "ajax", name: "Ajax", path: "M810 475 L905 475 905 638 810 635Z", label: [858, 555], dot: [858, 530] },
   { id: "whitby", name: "Whitby", path: "M905 475 L1010 475 1010 638 905 638Z", label: [957, 555], dot: [957, 530] },
@@ -91,7 +91,7 @@ export const CONTEXT = [
 ];
 
 export const TORONTO = {
-  path: "M165 585 L680 585 680 635 C640 640 615 652 575 648 C535 643 510 654 470 658 C425 662 390 651 350 648 C300 644 245 651 205 645 L165 642Z",
-  label: [420, 623],
-  dot: [520, 603],
+  path: "M165 545 L680 545 680 635 C640 640 615 652 575 648 C535 643 510 654 470 658 C425 662 390 651 350 648 C300 644 245 651 205 645 L165 642Z",
+  label: [445, 571],
+  dot: [520, 558],
 };
