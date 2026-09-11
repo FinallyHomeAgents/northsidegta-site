@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { COMMUNITIES, CONTEXT, FILTERS, getBalanceMatches } from "./editorialTerrainData";
+import { COMMUNITIES, CONTEXT, FILTERS, TORONTO, getBalanceMatches } from "./editorialTerrainData";
 
-const ROUTE = "M520 664 C528 615 535 570 540 520 C548 447 545 380 548 310 C551 250 553 187 554 122";
+const ROUTE = "M520 558 C528 535 535 505 540 475 C548 415 545 355 548 300 C551 244 553 184 554 122";
 
 function MapIcon({ name, size = 20 }) {
   const common = {
@@ -130,12 +130,19 @@ export default function EditorialTerrainMap() {
 
           <g className="terrain__context">
             {CONTEXT.map((area) => (
-              <g key={area.name}>
+              <g key={area.id} className={`terrain__context-area terrain__context-area--${area.id}`}>
                 <path d={area.path}/>
                 <circle className="terrain__place-dot" cx={area.dot[0]} cy={area.dot[1]} r="4"/>
                 <text x={area.label[0]} y={area.label[1]}>{area.name}</text>
               </g>
             ))}
+          </g>
+
+          <g className="terrain__toronto">
+            <path d={TORONTO.path}/>
+            <circle cx={TORONTO.dot[0]} cy={TORONTO.dot[1]} r="5"/>
+            <text className="terrain__toronto-name" x={TORONTO.label[0]} y={TORONTO.label[1]} textAnchor="middle">Toronto</text>
+            <text className="terrain__toronto-sub" x={TORONTO.label[0]} y={TORONTO.label[1] + 19} textAnchor="middle">CITY OF TORONTO</text>
           </g>
 
           <g className={`terrain__regions ${hovered || selected || filter ? "has-focus" : ""}`}>
@@ -183,7 +190,6 @@ export default function EditorialTerrainMap() {
           <text className="terrain__shield-text" x="553.5" y="195" textAnchor="middle">404</text>
           <text className="terrain__lake-small-label" x="1014" y="294" textAnchor="middle">LAKE</text>
           <text className="terrain__lake-small-label" x="1014" y="307" textAnchor="middle">SCUGOG</text>
-          <g className="terrain__toronto"><circle cx="522" cy="644" r="5"/><text x="543" y="651">Toronto</text></g>
         </svg>
 
         <div className="terrain__compass" aria-hidden="true"><span>N</span><i/><b/></div>

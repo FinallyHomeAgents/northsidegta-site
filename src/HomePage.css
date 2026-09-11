@@ -1850,6 +1850,12 @@ main { padding-top: 0; }
   stroke-width: 1.1;
 }
 
+.terrain__context-area--vaughan path,
+.terrain__context-area--richmond-hill path,
+.terrain__context-area--markham path {
+  fill: rgba(7, 37, 27, 0.27);
+}
+
 .terrain__context text {
   fill: #fff4d9;
   font: 500 14px var(--font-serif);
@@ -1944,8 +1950,27 @@ main { padding-top: 0; }
 .terrain__shield { fill: #f6f0da; stroke: #40512c; stroke-width: 1.2; }
 .terrain__shield-text { fill: #24341e; font: 800 10px var(--font-sans); }
 .terrain__lake-small-label { fill: #91cbd0; font: 700 7px var(--font-sans); letter-spacing: 0.12em; }
-.terrain__toronto circle { fill: #fff; stroke: #f1c75d; stroke-width: 2; filter: url(#terrain-pin-glow); }
-.terrain__toronto text { fill: #f5dfaa; font: italic 22px var(--font-serif); paint-order: stroke; stroke: #133228; stroke-width: 4px; }
+.terrain__toronto path {
+  fill: rgba(7, 45, 37, 0.46);
+  stroke: rgba(255, 223, 128, 0.84);
+  stroke-width: 1.8;
+}
+.terrain__toronto circle { fill: #fff; stroke: #f1c75d; stroke-width: 2.4; filter: url(#terrain-pin-glow); }
+.terrain__toronto-name {
+  fill: #fff3ca;
+  font: italic 28px var(--font-serif);
+  paint-order: stroke;
+  stroke: #0b2d25;
+  stroke-width: 5px;
+}
+.terrain__toronto-sub {
+  fill: #e9bd63;
+  font: 700 7px var(--font-sans);
+  letter-spacing: 0.28em;
+  paint-order: stroke;
+  stroke: #0b2d25;
+  stroke-width: 3px;
+}
 
 .terrain__compass,
 .terrain__scale { position: absolute; z-index: 4; color: rgba(231, 238, 223, 0.78); font-size: 9px; }
