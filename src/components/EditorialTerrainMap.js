@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { COMMUNITIES, CONTEXT, FILTERS, TORONTO, getBalanceMatches } from "./editorialTerrainData";
 
-const ROUTE = "M520 603 C528 565 535 523 540 475 C548 415 545 355 548 300 C551 244 553 184 554 122";
+const ROUTE = "M520 558 C528 535 535 505 540 475 C548 415 545 355 548 300 C551 244 553 184 554 122";
 
 function MapIcon({ name, size = 20 }) {
   const common = {
