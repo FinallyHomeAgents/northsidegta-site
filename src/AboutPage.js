@@ -196,6 +196,14 @@ export default function AboutPage() {
                     {member.awards}
                   </p>
                   <div>
+                    {member.profileUrl && (
+                      <Link
+                        to={member.profileUrl}
+                        className="mr-3 inline-flex items-center gap-2 rounded-full bg-emerald-700 px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                      >
+                        Meet {member.name.split(" ")[0]}
+                      </Link>
+                    )}
                     <a
                       href={member.email}
                       className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-5 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100 hover:text-emerald-900"

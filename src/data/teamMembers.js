@@ -6,6 +6,7 @@ const teamMembers = [
     awards: "Multiple Top Agent Award Winner, HomeLife Optimum Realty.",
     image: "/Images/matthew.jpg",
     email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
+    profileUrl: "/agents/matthew-mulhall",
   },
   {
     name: "Landon Mulhall",

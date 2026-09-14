@@ -72,6 +72,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://northsidegta.ca/agents/matthew-mulhall</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://northsidegta.ca/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>

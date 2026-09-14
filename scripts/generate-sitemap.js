@@ -89,6 +89,7 @@ function main() {
     { path: '/homeanalysis', changefreq: 'monthly', priority: '0.7' },
     { path: '/communities', changefreq: 'monthly', priority: '0.8' },
     { path: '/about', changefreq: 'yearly', priority: '0.5' },
+    { path: '/agents/matthew-mulhall', changefreq: 'yearly', priority: '0.7' },
     { path: '/contact', changefreq: 'yearly', priority: '0.5' },
     { path: '/community', changefreq: 'daily', priority: '0.8' },
     { path: '/insights', changefreq: 'weekly', priority: '0.8' },
