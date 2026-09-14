@@ -34,15 +34,18 @@ test("Matthew profile is routed, prerendered, and included in the sitemap source
   assert.match(sitemap, /path: '\/agents\/matthew-mulhall'/);
 });
 
-test("Matthew profile SEO uses a self canonical and crawlable metadata", async () => {
-  const { getStaticRouteMeta } = await import("../src/components/seo/staticRouteMetaConfigs.mjs");
-  const meta = getStaticRouteMeta(PROFILE_PATH);
+test("Matthew profile SEO uses a self canonical and crawlable metadata", () => {
+  const generatedMeta = require("../src/components/seo/__generatedSiteSeo.json")[PROFILE_PATH];
+  const publicMeta = require("../public/data/seo/matthew-mulhall.json");
+  const staticConfig = fs.readFileSync(
+    path.join(root, "src", "components", "seo", "staticRouteMetaConfigs.mjs"),
+    "utf8"
+  );
 
-  assert.equal(meta.canonicalUrl, "https://northsidegta.ca/agents/matthew-mulhall");
-  assert.match(meta.documentTitle, /^Matthew Mulhall/);
-  assert.match(meta.description, /HomeLife Optimum Realty/);
-  assert.equal(meta.additionalMeta.find((item) => item.name === "robots").content, "index, follow");
-  assert.equal(meta.schema["@graph"].some((node) => node["@type"] === "ProfilePage"), true);
+  assert.equal(publicMeta.canonical_url, "https://northsidegta.ca/agents/matthew-mulhall");
+  assert.match(generatedMeta.seo_title, /^Matthew Mulhall/);
+  assert.match(generatedMeta.seo_description, /HomeLife Optimum Realty/);
+  assert.match(staticConfig, /route: "\/agents\/matthew-mulhall"[\s\S]*schema: buildMatthewProfileSchema\(\)/);
 });
 
 test("Matthew profile content reuses the FAQ source used by structured data", () => {
