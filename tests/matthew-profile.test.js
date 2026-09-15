@@ -53,3 +53,20 @@ test("Matthew profile content reuses the FAQ source used by structured data", ()
   assert.match(page, /faqEntries\.map/);
   assert.doesNotMatch(page, /best realtor|#1 realtor in/i);
 });
+
+test("Matthew profile uses the solo portrait in both the page and person schema", () => {
+  const portrait = "/assets/agents/matthew-mulhall-solo-portrait.jpg";
+  const page = fs.readFileSync(path.join(root, "src", "MatthewMulhallPage.js"), "utf8");
+  const person = buildMatthewProfileSchema()["@graph"].find((node) => node["@type"] === "Person");
+
+  assert.ok(fs.existsSync(path.join(root, "public", portrait)));
+  assert.ok(page.includes(`src="${portrait}"`));
+  assert.equal(person.image, `https://northsidegta.ca${portrait}`);
+  assert.match(page, /aspect-\[4\/5\]/);
+});
+
+test("SEO scripts retain executable permissions", () => {
+  for (const script of ["generate-sitemap.js", "seo-check.cjs"]) {
+    assert.notEqual(fs.statSync(path.join(root, "scripts", script)).mode & 0o111, 0);
+  }
+});

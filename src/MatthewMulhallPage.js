@@ -208,12 +208,12 @@ export default function MatthewMulhallPage() {
               <div className="absolute -inset-5 rounded-[2.6rem] border border-white/10 bg-white/5 blur-sm" aria-hidden="true" />
               <figure className="relative overflow-hidden rounded-[2.25rem] border border-white/15 bg-white/10 p-3 shadow-[0_35px_100px_rgba(0,0,0,0.38)]">
                 <img
-                  src="/Images/matthew.jpg"
+                  src="/assets/agents/matthew-mulhall-solo-portrait.jpg"
                   alt="Matthew Mulhall, NorthSide GTA real estate agent with Finally Home Agents"
-                  width="400"
-                  height="400"
+                  width="1122"
+                  height="1402"
                   fetchPriority="high"
-                  className="aspect-square w-full rounded-[1.7rem] object-cover"
+                  className="aspect-[4/5] w-full rounded-[1.7rem] object-cover"
                 />
                 <figcaption className="flex items-center justify-between gap-4 px-3 pb-2 pt-4 text-sm text-emerald-50/80">
                   <span>HomeLife Optimum Realty, Brokerage</span>

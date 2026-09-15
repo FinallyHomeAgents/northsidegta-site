@@ -66,7 +66,7 @@ function buildMatthewProfileSchema() {
         "@id": `${SITE_URL}/#matthew-mulhall`,
         name: "Matthew Mulhall",
         url: PROFILE_URL,
-        image: `${SITE_URL}/Images/matthew.jpg`,
+        image: `${SITE_URL}/assets/agents/matthew-mulhall-solo-portrait.jpg`,
         jobTitle: "Sales Representative",
         description:
           "NorthSide GTA real estate agent licensed since 2009, serving buyers, sellers, and Toronto-area households moving north.",
