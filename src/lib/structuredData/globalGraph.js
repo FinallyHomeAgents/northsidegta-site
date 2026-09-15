@@ -210,13 +210,13 @@ export function buildGlobalGraph() {
     "@type": "Person",
     "@id": `${BASE_URL}/#matthew-mulhall`,
     name: "Matthew Mulhall",
-    jobTitle: "Realtor®, Real Estate Agent",
+    url: `${BASE_URL}/agents/matthew-mulhall`,
+    image: `${BASE_URL}/assets/agents/matthew-mulhall-solo-portrait.jpg`,
+    jobTitle: "Sales Representative",
+    description:
+      "NorthSide GTA real estate agent licensed since 2009, serving buyers, sellers, and Toronto-area households moving north.",
     worksFor: { "@id": `${BASE_URL}/#finally-home-agents` },
     affiliation: [{ "@id": northsideBrand["@id"] }, { "@id": homelifeOptimum["@id"] }],
-    image: `${BASE_URL}/Images/matthew.jpg`,
-    description:
-      "Matthew Mulhall is a NorthSide GTA Realtor® focused on strategic pricing, negotiation, and community-first service for buyers and sellers.",
-    sameAs: ["https://www.facebook.com/MGLMREALESTATE"],
   };
 
   const landonMulhall = {

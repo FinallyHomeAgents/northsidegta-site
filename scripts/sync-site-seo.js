@@ -57,6 +57,17 @@ function buildSiteSeoMap() {
       seo_description: cleanString(data.seo_description || data.seoDescription),
       seo_image: cleanString(data.seo_image || data.seoImage),
     };
+    // The profile uses this build-time snapshot for social and search metadata.
+    // Preserve the existing override behavior of other routes.
+    if (route === "/agents/matthew-mulhall") {
+      Object.assign(map[route], {
+        og_title: cleanString(data.og_title),
+        og_description: cleanString(data.og_description),
+        og_image: cleanString(data.og_image),
+        og_image_alt: cleanString(data.og_image_alt),
+        canonical_url: cleanString(data.canonical_url),
+      });
+    }
   }
 
   return map;

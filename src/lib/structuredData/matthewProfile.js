@@ -1,6 +1,54 @@
 const SITE_URL = "https://northsidegta.ca";
 const PROFILE_PATH = "/agents/matthew-mulhall";
 const PROFILE_URL = `${SITE_URL}${PROFILE_PATH}`;
+const profileSeo = require("../../components/seo/__generatedSiteSeo.json")[PROFILE_PATH];
+
+// Identity consistency with the site-wide graph is covered by regression tests.
+const MATTHEW_IDENTITY = {
+  "@type": "Person",
+  "@id": `${SITE_URL}/#matthew-mulhall`,
+  name: "Matthew Mulhall",
+  url: PROFILE_URL,
+  image: `${SITE_URL}/assets/agents/matthew-mulhall-solo-portrait.jpg`,
+  jobTitle: "Sales Representative",
+  description:
+    "NorthSide GTA real estate agent licensed since 2009, serving buyers, sellers, and Toronto-area households moving north.",
+};
+
+// Both prerendered HTML and client navigation consume the same SEO source.
+function buildMatthewProfileMeta() {
+  const image = `${SITE_URL}${profileSeo.og_image}`;
+  return {
+    route: PROFILE_PATH,
+    ignoreSiteSeo: true,
+    documentTitle: profileSeo.seo_title,
+    title: profileSeo.seo_title,
+    description: profileSeo.seo_description,
+    canonicalUrl: profileSeo.canonical_url,
+    ogType: "profile",
+    ogTitle: profileSeo.og_title,
+    ogDescription: profileSeo.og_description,
+    ogImage: image,
+    ogImageAlt: profileSeo.og_image_alt,
+    twitterCard: "summary_large_image",
+    twitterTitle: profileSeo.og_title,
+    twitterDescription: profileSeo.og_description,
+    twitterImage: image,
+    twitterImageAlt: profileSeo.og_image_alt,
+    siteName: "NorthSide GTA",
+    additionalMeta: [
+      { name: "robots", content: "index, follow" },
+      { property: "og:locale", content: "en_CA" },
+      { property: "og:image:secure_url", content: image },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "profile:first_name", content: "Matthew" },
+      { property: "profile:last_name", content: "Mulhall" },
+      { name: "author", content: "Matthew Mulhall" },
+      { name: "publisher", content: "Finally Home Agents" },
+    ],
+    schema: buildMatthewProfileSchema(),
+  };
+}
 
 const serviceAreas = [
   ["Georgina", "georgina"],
@@ -61,15 +109,7 @@ function buildMatthewProfileSchema() {
         breadcrumb: { "@id": `${PROFILE_URL}#breadcrumb` },
         mainEntity: { "@id": `${SITE_URL}/#matthew-mulhall` },
       },
-      {
-        "@type": "Person",
-        "@id": `${SITE_URL}/#matthew-mulhall`,
-        name: "Matthew Mulhall",
-        url: PROFILE_URL,
-        image: `${SITE_URL}/assets/agents/matthew-mulhall-solo-portrait.jpg`,
-        jobTitle: "Sales Representative",
-        description:
-          "NorthSide GTA real estate agent licensed since 2009, serving buyers, sellers, and Toronto-area households moving north.",
+      Object.assign({}, MATTHEW_IDENTITY, {
         telephone: "+1-647-668-4646",
         email: "contact@finallyhomeagents.com",
         worksFor: { "@id": `${SITE_URL}/#finally-home-agents` },
@@ -94,8 +134,7 @@ function buildMatthewProfileSchema() {
           "#1 Individual Agent at HomeLife Optimum Realty, 2025",
         ],
         mainEntityOfPage: { "@id": `${PROFILE_URL}#profile-page` },
-        sameAs: ["https://www.facebook.com/MGLMREALESTATE"],
-      },
+      }),
       {
         "@type": "BreadcrumbList",
         "@id": `${PROFILE_URL}#breadcrumb`,
@@ -139,6 +178,8 @@ function buildMatthewProfileSchema() {
 module.exports = {
   PROFILE_PATH,
   PROFILE_URL,
+  MATTHEW_IDENTITY,
+  buildMatthewProfileMeta,
   faqEntries,
   buildMatthewProfileSchema,
 };

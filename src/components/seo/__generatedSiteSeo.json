@@ -12,7 +12,12 @@
   "/agents/matthew-mulhall": {
     "seo_title": "Matthew Mulhall | NorthSide GTA Real Estate Agent",
     "seo_description": "Meet Matthew Mulhall, a three-time #1 individual agent at HomeLife Optimum Realty helping buyers and sellers across Georgina and the NorthSide GTA.",
-    "seo_image": "/uploads/og-about-northsidegta.jpg"
+    "seo_image": "/assets/agents/matthew-mulhall-profile-og-v1.jpg",
+    "og_title": "Meet Matthew Mulhall | NorthSide GTA Real Estate Agent",
+    "og_description": "Moving north from Toronto or buying or selling locally? Meet Matthew Mulhall of Finally Home Agents for local insight, a clear plan, and advice without pressure.",
+    "og_image": "/assets/agents/matthew-mulhall-profile-og-v1.jpg",
+    "og_image_alt": "Matthew Mulhall in a light blue jacket beside his name, NorthSide GTA Real Estate Agent, and Finally Home Agents branding.",
+    "canonical_url": "https://northsidegta.ca/agents/matthew-mulhall"
   },
   "/buyers": {
     "seo_title": "Buying a Home North of Toronto | Buyers Guide | Finally Home Agents | NorthSide GTA",
