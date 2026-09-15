@@ -11,6 +11,7 @@ const ROUTES = [
   '/communities/georgina', '/communities/newmarket', '/communities/aurora',
   '/communities/stouffville', '/communities/uxbridge', '/communities/scugog',
   '/communities/east-gwillimbury', '/contact', '/about', '/sign', '/vip',
+  '/agents/matthew-mulhall',
 ];
 const HOME_TITLE = 'NorthSide GTA Real Estate | Finally Home Agents';
 const NOINDEX = new Set(['/sign', '/vip']);

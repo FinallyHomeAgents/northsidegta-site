@@ -129,6 +129,7 @@ const fragileMarketRankingPatterns = [
 
 const staticChecks = [
   { route: "/about", h1: "About Finally Home Agents", body: "Matthew and Landon" },
+  { route: "/agents/matthew-mulhall", h1: "Matthew Mulhall", body: "NorthSide GTA Real Estate Agent", schema: ["ProfilePage", "Person", "FAQPage", "BreadcrumbList"] },
   { route: "/buyers", h1: "You don't have to leave the city", body: "Town strategy" },
   ...movingGuides.map((guide) => ({
     route: guide.route,

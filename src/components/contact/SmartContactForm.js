@@ -11,7 +11,13 @@ const INTENT_OPTIONS = [
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function SmartContactForm({ config, formRef, whatsappChannel }) {
+export default function SmartContactForm({
+  config,
+  formRef,
+  whatsappChannel,
+  trackingRoute = "/contact",
+  sourceLabel = "Contact page",
+}) {
   const [intent, setIntent] = useState("buy");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -79,7 +85,7 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
       setShowErrors(true);
       Object.entries(validations).forEach(([field, reason]) => {
         trackEvent("contact_form_validation_error", {
-          route: "/contact",
+          route: trackingRoute,
           field,
           reason,
         });
@@ -97,6 +103,8 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
       if (phone) payload.append("phone", phone);
       payload.append("intent", intent);
       if (message) payload.append("message", message);
+      payload.append("source_page", sourceLabel);
+      payload.append("source_route", trackingRoute);
       if (intent === "buy" && buyerOptIn) {
         payload.append("wantListings", "Yes");
       }
@@ -122,9 +130,9 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
       }
 
       setSuccess(true);
-      trackEvent("contact_form_success_view", { route: "/contact" });
+      trackEvent("contact_form_success_view", { route: trackingRoute });
       trackEvent("contact_form_submit", {
-        route: "/contact",
+        route: trackingRoute,
         buyer_or_seller: intent,
         opted_home_value: intent === "sell" && sellerOptIn,
         opted_daily_listings: intent === "buy" && buyerOptIn,
@@ -157,7 +165,7 @@ export default function SmartContactForm({ config, formRef, whatsappChannel }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() =>
-                trackEvent("click_whatsapp", { route: "/contact", source: "form_success" })
+                trackEvent("click_whatsapp", { route: trackingRoute, source: "form_success" })
               }
               className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#25D366] to-[#128C7E] px-4 py-3 text-white shadow-lg shadow-emerald-900/20 transition hover:brightness-105"
             >

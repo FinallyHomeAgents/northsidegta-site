@@ -24,6 +24,7 @@ const buildDir = path.join(rootDir, "build");
 
 const routeModules = {
   "/about": "../src/AboutPage",
+  "/agents/matthew-mulhall": "../src/MatthewMulhallPage",
   "/buyers": "../src/BuyersPage",
   "/moving-to-georgina-from-toronto": "../src/MovingToGeorginaFromTorontoPage",
   "/moving-to-east-gwillimbury-from-toronto": "../src/MovingToEastGwillimburyFromTorontoPage",
