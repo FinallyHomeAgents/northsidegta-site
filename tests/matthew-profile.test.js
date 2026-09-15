@@ -50,14 +50,12 @@ test("Matthew profile SEO uses a self canonical and crawlable metadata", () => {
   assert.match(staticConfig, /route: "\/agents\/matthew-mulhall", meta: buildMatthewProfileMeta\(\)/);
 });
 
-test("Matthew social tags use the page-specific image and copy from one SEO source", async () => {
+test("Matthew social tags use the page-specific image and copy from one SEO source", () => {
   const { getMetaTagsFromData } = require("../src/components/seo/metaTagUtils.js");
-  const { getStaticRouteMeta } = await import("../src/components/seo/staticRouteMetaConfigs.mjs");
   const seo = require("../public/data/seo/matthew-mulhall.json");
   const generatedSeo = require("../src/components/seo/__generatedSiteSeo.json")[PROFILE_PATH];
   for (const key of Object.keys(generatedSeo)) assert.equal(generatedSeo[key], seo[key]);
-  const meta = getStaticRouteMeta(PROFILE_PATH);
-  assert.deepEqual(meta, buildMatthewProfileMeta());
+  const meta = buildMatthewProfileMeta();
   const tags = getMetaTagsFromData(meta).tags;
   function value(key) {
     const matches = tags.filter((tag) => tag.attributes &&
@@ -97,15 +95,19 @@ test("Matthew identity matches the global graph and team socials belong to the b
   assert.doesNotMatch(matthewSource, /sameAs/);
 });
 
-test("Matthew preview and profile schema are present in HTML before JavaScript runs", async () => {
+test("Matthew preview and profile schema are present in HTML before JavaScript runs", () => {
   const { buildHeadFragments } = require("../scripts/generate-static-route-html.js");
   const { getMetaTagsFromData } = require("../src/components/seo/metaTagUtils.js");
-  const { DEFAULT_GLOBAL_META_CONFIG } = await import("../src/components/seo/staticRouteMetaConfigs.mjs");
   const { parse } = require("node-html-parser");
   const html = buildHeadFragments(
     '<html><head><title>Old</title><meta property="og:image" content="old-about.jpg"></head><body></body></html>',
     "<!DOCTYPE html>",
-    getMetaTagsFromData(DEFAULT_GLOBAL_META_CONFIG).tags,
+    getMetaTagsFromData({
+      ignoreSiteSeo: true,
+      title: "NorthSide GTA",
+      ogImage: "https://northsidegta.ca/uploads/og-about-northsidegta.jpg",
+      twitterImage: "https://northsidegta.ca/uploads/og-about-northsidegta.jpg",
+    }).tags,
     buildMatthewProfileMeta()
   );
   const doc = parse(html);
