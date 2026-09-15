@@ -17,7 +17,7 @@ const { newmarketMovingGuide } = newmarketMovingGuideModule;
 const { auroraMovingGuide } = auroraMovingGuideModule;
 const { stouffvilleMovingGuide } = stouffvilleMovingGuideModule;
 const { scugogMovingGuide } = scugogMovingGuideModule;
-const { buildMatthewProfileSchema } = matthewProfileSchemaModule;
+const { buildMatthewProfileMeta } = matthewProfileSchemaModule;
 const MOVING_GUIDES = [
   georginaMovingGuide,
   eastGwillimburyMovingGuide,
@@ -610,7 +610,7 @@ const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
   { route: "/communities", meta: routeMeta({ route: "/communities", title: "NorthSide GTA Communities | Compare Towns North of Toronto", description: "Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog with Finally Home Agents.", image: COMMUNITY_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },
   { route: "/contact", meta: routeMeta({ route: "/contact", title: "Contact Finally Home Agents | NorthSide GTA Real Estate", description: "Contact Matthew and Landon Mulhall for buying, selling, and local real estate guidance across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-contact-northsidegta.jpg`, pageType: "ContactPage" }) },
   { route: "/about", meta: routeMeta({ route: "/about", title: "About Finally Home Agents | NorthSide GTA Real Estate", description: "Meet Matthew and Landon Mulhall of Finally Home Agents, helping buyers and sellers across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-about-northsidegta.jpg` }) },
-  { route: "/agents/matthew-mulhall", meta: routeMeta({ route: "/agents/matthew-mulhall", title: "Matthew Mulhall | NorthSide GTA Real Estate Agent", description: "Meet Matthew Mulhall, a three-time #1 individual agent at HomeLife Optimum Realty helping buyers and sellers across Georgina and the NorthSide GTA.", image: `${SITE_URL}/uploads/og-about-northsidegta.jpg`, imageAlt: "Matthew and Landon Mulhall of Finally Home Agents in the NorthSide GTA", pageType: "ProfilePage", schema: buildMatthewProfileSchema() }) },
+  { route: "/agents/matthew-mulhall", meta: buildMatthewProfileMeta() },
   { route: "/what-my-home-buys", meta: routeMeta({ route: "/what-my-home-buys", title: "What Does My Toronto Home Buy North of the City? | NorthSide GTA", description: "Compare what your Toronto home could buy in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge and Scugog \u2014 including lifestyle, access and trade-offs.", image: HOME_IMAGE, serviceType: "Home value comparison" }) },
   { route: "/homeanalysis", meta: routeMeta({ route: "/homeanalysis", title: "Get a Home Value Opinion | NorthSide GTA | Finally Home Agents", description: "Find out what your home in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog could sell for today.", image: SELLERS_IMAGE, serviceType: "Home value opinion" }) },
   { route: "/neighbourhood-guide", meta: routeMeta({ route: "/neighbourhood-guide", title: "NorthSide GTA Neighbourhood Guide | Finally Home Agents", description: "Compare home prices, commute times, schools, lifestyle, and local favourites across Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },

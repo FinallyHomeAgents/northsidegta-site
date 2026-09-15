@@ -30,21 +30,11 @@ const {
   PROFILE_PATH,
   faqEntries,
   buildMatthewProfileSchema,
+  buildMatthewProfileMeta,
 } = require("./lib/structuredData/matthewProfile");
 
 const profileSchema = buildMatthewProfileSchema();
-const routeMeta = getStaticRouteMeta(PROFILE_PATH) || {
-  route: PROFILE_PATH,
-  documentTitle: "Matthew Mulhall | NorthSide GTA Real Estate Agent",
-  title: "Matthew Mulhall | NorthSide GTA Real Estate Agent",
-  description:
-    "Meet Matthew Mulhall, a three-time #1 individual agent at HomeLife Optimum Realty helping buyers and sellers across Georgina and the NorthSide GTA.",
-  canonicalUrl: `https://northsidegta.ca${PROFILE_PATH}`,
-  ogType: "profile",
-  ogImage: "/uploads/og-about-northsidegta.jpg",
-  ogImageAlt: "Matthew and Landon Mulhall of Finally Home Agents in the NorthSide GTA",
-  siteName: "NorthSide GTA",
-};
+const routeMeta = getStaticRouteMeta(PROFILE_PATH) || buildMatthewProfileMeta();
 
 const communities = [
   {
