@@ -11,7 +11,7 @@ const ROUTES = [
   '/communities/georgina', '/communities/newmarket', '/communities/aurora',
   '/communities/stouffville', '/communities/uxbridge', '/communities/scugog',
   '/communities/east-gwillimbury', '/contact', '/about', '/sign', '/vip',
-  '/agents/matthew-mulhall',
+  '/agents/matthew-mulhall', '/agents/landon-mulhall',
 ];
 const HOME_TITLE = 'NorthSide GTA Real Estate | Finally Home Agents';
 const NOINDEX = new Set(['/sign', '/vip']);
@@ -61,7 +61,12 @@ for (const route of ROUTES) {
   assert(!/\.svg(?:$|[?#])/i.test(ogImage), `og:image uses SVG: ${ogImage}`, errors);
   assert(!/\.svg(?:$|[?#])/i.test(twitterImage), `twitter:image uses SVG: ${twitterImage}`, errors);
   assert(!doc.querySelector('meta[name="keywords"]'), 'meta keywords present', errors);
-  assert(get(doc, 'meta[name="author"]') === 'Finally Home Agents', 'missing author', errors);
+  const expectedAuthor = route === '/agents/matthew-mulhall'
+    ? 'Matthew Mulhall'
+    : route === '/agents/landon-mulhall'
+      ? 'Landon Mulhall'
+      : 'Finally Home Agents';
+  assert(get(doc, 'meta[name="author"]') === expectedAuthor, 'missing author', errors);
   assert(get(doc, 'meta[name="publisher"]') === 'Finally Home Agents', 'missing publisher', errors);
   assert(jsonLdCount > 0, 'missing JSON-LD', errors);
 

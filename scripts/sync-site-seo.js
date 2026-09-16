@@ -59,7 +59,7 @@ function buildSiteSeoMap() {
     };
     // The profile uses this build-time snapshot for social and search metadata.
     // Preserve the existing override behavior of other routes.
-    if (route === "/agents/matthew-mulhall") {
+    if (route.startsWith("/agents/")) {
       Object.assign(map[route], {
         og_title: cleanString(data.og_title),
         og_description: cleanString(data.og_description),

@@ -8,6 +8,7 @@ import auroraMovingGuideModule from "../../content/movingFromToronto/aurora.js";
 import stouffvilleMovingGuideModule from "../../content/movingFromToronto/stouffville.js";
 import scugogMovingGuideModule from "../../content/movingFromToronto/scugog.js";
 import matthewProfileSchemaModule from "../../lib/structuredData/matthewProfile.js";
+import landonProfileSchemaModule from "../../lib/structuredData/landonProfile.js";
 
 const { buildSellersPageSchema, SELLERS_PAGE_TITLE, SELLERS_PAGE_DESCRIPTION } = sellersSchemaModule;
 const { georginaMovingGuide, buildMovingGuideSchema } = movingGuideContentModule;
@@ -18,6 +19,7 @@ const { auroraMovingGuide } = auroraMovingGuideModule;
 const { stouffvilleMovingGuide } = stouffvilleMovingGuideModule;
 const { scugogMovingGuide } = scugogMovingGuideModule;
 const { buildMatthewProfileMeta } = matthewProfileSchemaModule;
+const { buildLandonProfileMeta } = landonProfileSchemaModule;
 const MOVING_GUIDES = [
   georginaMovingGuide,
   eastGwillimburyMovingGuide,
@@ -611,6 +613,7 @@ const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
   { route: "/contact", meta: routeMeta({ route: "/contact", title: "Contact Finally Home Agents | NorthSide GTA Real Estate", description: "Contact Matthew and Landon Mulhall for buying, selling, and local real estate guidance across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-contact-northsidegta.jpg`, pageType: "ContactPage" }) },
   { route: "/about", meta: routeMeta({ route: "/about", title: "About Finally Home Agents | NorthSide GTA Real Estate", description: "Meet Matthew and Landon Mulhall of Finally Home Agents, helping buyers and sellers across Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.", image: `${SITE_URL}/uploads/og-about-northsidegta.jpg` }) },
   { route: "/agents/matthew-mulhall", meta: buildMatthewProfileMeta() },
+  { route: "/agents/landon-mulhall", meta: buildLandonProfileMeta() },
   { route: "/what-my-home-buys", meta: routeMeta({ route: "/what-my-home-buys", title: "What Does My Toronto Home Buy North of the City? | NorthSide GTA", description: "Compare what your Toronto home could buy in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge and Scugog \u2014 including lifestyle, access and trade-offs.", image: HOME_IMAGE, serviceType: "Home value comparison" }) },
   { route: "/homeanalysis", meta: routeMeta({ route: "/homeanalysis", title: "Get a Home Value Opinion | NorthSide GTA | Finally Home Agents", description: "Find out what your home in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog could sell for today.", image: SELLERS_IMAGE, serviceType: "Home value opinion" }) },
   { route: "/neighbourhood-guide", meta: routeMeta({ route: "/neighbourhood-guide", title: "NorthSide GTA Neighbourhood Guide | Finally Home Agents", description: "Compare home prices, commute times, schools, lifestyle, and local favourites across Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },
