@@ -27,7 +27,9 @@
     "insights:check-images": "node scripts/check-insight-images.js",
     "seed:spotlights": "ts-node --transpile-only scripts/seedTownSpotlightsFromGoogle.ts",
     "seo:check": "node scripts/seo-check.cjs",
-    "data:validate": "node scripts/validate-market-data.js"
+    "data:validate": "node scripts/validate-market-data.js",
+    "life:dev": "node scripts/life/dev.mjs",
+    "test:life": "node --test tests/life/*.test.mjs"
   },
   "dependencies": {
     "@fastify/busboy": "^3.2.0",
