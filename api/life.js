@@ -11,11 +11,11 @@ import {
   verifySession,
   destinationReady,
   publicPost,
-} from '../lib/life/core.mjs'
-import { createStore, configured } from '../lib/life/store.mjs'
-import { generate } from '../lib/life/generate.mjs'
-import { prepareImage, publishDestination } from '../lib/life/publish.mjs'
-import { publicPage } from '../lib/life/public.mjs'
+} from '../lib/life/core.js'
+import { createStore, configured } from '../lib/life/store.js'
+import { generate } from '../lib/life/generate.js'
+import { prepareImage, publishDestination } from '../lib/life/publish.js'
+import { publicPage } from '../lib/life/public.js'
 export const config = {
   api: { bodyParser: { sizeLimit: '4mb' } },
   maxDuration: 60,

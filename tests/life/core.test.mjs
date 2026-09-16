@@ -7,9 +7,9 @@ import {
   publicPost,
   destinationReady,
   DESTINATIONS,
-} from '../../lib/life/core.mjs'
-import { publicPage } from '../../lib/life/public.mjs'
-import { publishDestination } from '../../lib/life/publish.mjs'
+} from '../../lib/life/core.js'
+import { publicPage } from '../../lib/life/public.js'
+import { publishDestination } from '../../lib/life/publish.js'
 const photo =
   'data:image/jpeg;base64,' +
   Buffer.from([255, 216, 255, 224, 0, 0]).toString('base64')
