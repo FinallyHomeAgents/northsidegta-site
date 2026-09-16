@@ -111,6 +111,10 @@ export default function AboutPage() {
                 <p>
                   Pair that with decades of combined experience, a network of trusted partners, and a dedication to strategic negotiation, and you get a boutique team that delivers championship-level results.
                 </p>
+                <p className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-semibold text-emerald-800 md:justify-start">
+                  <Link className="underline decoration-emerald-300 underline-offset-4 hover:decoration-emerald-700" to="/agents/matthew-mulhall">Meet Matthew Mulhall</Link>
+                  <Link className="underline decoration-emerald-300 underline-offset-4 hover:decoration-emerald-700" to="/agents/landon-mulhall">Meet Landon Mulhall</Link>
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-6 text-center sm:grid-cols-2">

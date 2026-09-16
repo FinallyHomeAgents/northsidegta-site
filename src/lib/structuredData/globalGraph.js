@@ -223,13 +223,14 @@ export function buildGlobalGraph() {
     "@type": "Person",
     "@id": `${BASE_URL}/#landon-mulhall`,
     name: "Landon Mulhall",
-    jobTitle: "Realtor®, Real Estate Agent",
+    url: `${BASE_URL}/agents/landon-mulhall`,
+    jobTitle: "Real Estate Professional",
     worksFor: { "@id": `${BASE_URL}/#finally-home-agents` },
     affiliation: [{ "@id": northsideBrand["@id"] }, { "@id": homelifeOptimum["@id"] }],
-    image: `${BASE_URL}/Images/landon.jpg`,
+    image: `${BASE_URL}/assets/agents/landon-mulhall-solo-portrait.jpg`,
     description:
-      "Landon Mulhall helps NorthSide GTA clients navigate buying, selling, and renting with clear communication and local insight.",
-    sameAs: [],
+      "NorthSide GTA real estate professional and Finally Home Agents co-founder, licensed since 2022, helping buyers and sellers compare communities north of Toronto.",
+    sameAs: ["https://www.instagram.com/lando.realtor/"],
   };
 
   const website = {

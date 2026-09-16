@@ -59,6 +59,7 @@ import MovingToAuroraFromTorontoPage from "./MovingToAuroraFromTorontoPage";
 import MovingToStouffvilleFromTorontoPage from "./MovingToStouffvilleFromTorontoPage";
 import MovingToPortPerryScugogFromTorontoPage from "./MovingToPortPerryScugogFromTorontoPage";
 import MatthewMulhallPage from "./MatthewMulhallPage";
+import LandonMulhallPage from "./LandonMulhallPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -118,6 +119,7 @@ function App() {
           <Route path="/listings/33-st-augustine-drive-brooklin" element={<StAugustineDriveListingPage />} />
           <Route path="/about"        element={<AboutPage />} />
           <Route path="/agents/matthew-mulhall" element={<MatthewMulhallPage />} />
+          <Route path="/agents/landon-mulhall" element={<LandonMulhallPage />} />
           <Route path="/buyers"       element={<BuyersPage />} />
           <Route path="/moving-to-georgina-from-toronto" element={<MovingToGeorginaFromTorontoPage />} />
           <Route path="/moving-to-east-gwillimbury-from-toronto" element={<MovingToEastGwillimburyFromTorontoPage />} />
