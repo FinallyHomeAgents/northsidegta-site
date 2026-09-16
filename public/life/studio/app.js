@@ -121,7 +121,7 @@ function render() {
         ? 'Your library'
         : 'Studio settings'
   $('#app').innerHTML =
-    `<div class="shell"><aside class="sidebar">${brand}<nav aria-label="Main navigation">${nav()}</nav><div class="sidebar-footer"><strong>Matthew & Landon</strong><br>Finally Home Agents<br><br>Discover what makes it home.</div></aside><main class="workspace"><header class="topbar"><span class="crumb">NorthSide GTA Life &nbsp; / &nbsp; ${title}</span><div class="mobile-brand">${brand}</div><div class="account"><span>${esc(session.user)}</span><span class="avatar">${session.user === 'Matthew' ? 'MM' : 'LM'}</span></div></header><div id="content"></div></main><nav class="mobile-nav" aria-label="Mobile navigation">${nav()}</nav></div>`
+    `<div class="shell"><aside class="sidebar">${brand}<nav aria-label="Main navigation">${nav()}</nav><div class="sidebar-footer"><strong>Matthew & Landon</strong><br>Finally Home Agents<br><br>Discover what makes it home.</div></aside><main class="workspace"><header class="topbar"><span class="crumb">NorthSide GTA Life &nbsp; / &nbsp; ${title}</span><div class="mobile-brand">${brand}</div><div class="account"><span>${esc(session.user)}</span><span class="avatar">${session.user === 'Matthew' ? 'MM' : 'LM'}</span></div></header>${session.local ? '<div class="notice">Local preview · Saved on this computer. Test publishing does not update northsidegta.ca.</div>' : ''}<div id="content"></div></main><nav class="mobile-nav" aria-label="Mobile navigation">${nav()}</nav></div>`
   document
     .querySelectorAll('[data-view]')
     .forEach((b) => (b.onclick = () => navigate(b.dataset.view)))

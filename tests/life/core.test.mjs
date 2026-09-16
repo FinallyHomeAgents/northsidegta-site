@@ -90,3 +90,69 @@ test('published or uncertain destinations are not submitted twice', async () => 
   assert.equal(result.status, 'needs_review')
   assert.equal(saved, 0)
 })
+
+test('Facebook publishing records confirmation and sends the Facebook caption', async () => {
+  const originalFetch = globalThis.fetch
+  const destination = DESTINATIONS.find((d) => d.id === 'facebook_northside')
+  const env = {
+    LIFE_NORTHSIDE_PAGE_ID: 'page',
+    LIFE_NORTHSIDE_PAGE_ACCESS_TOKEN: 'test-only',
+    LIFE_META_GRAPH_VERSION: 'v23.0',
+    BLOB_READ_WRITE_TOKEN: 'test-only',
+  }
+  const d = {
+    results: {},
+    imageUrl: 'https://example.test/approved.jpg',
+    facebook: 'Facebook-specific copy',
+    instagram: 'Instagram-specific copy',
+  }
+  const states = []
+  globalThis.fetch = async (url, options) => {
+    assert.equal(url, 'https://graph.facebook.com/v23.0/page/photos')
+    assert.equal(options.body.get('caption'), 'Facebook-specific copy')
+    assert.equal(d.results.facebook_northside.status, 'needs_review')
+    return {
+      ok: true,
+      json: async () => ({ id: 'photo-1', post_id: 'post-1' }),
+    }
+  }
+  try {
+    const result = await publishDestination(d, destination, env, async () =>
+      states.push(d.results.facebook_northside.status)
+    )
+    assert.equal(result.status, 'published')
+    assert.equal(result.externalId, 'post-1')
+    assert.deepEqual(states, ['needs_review', 'published'])
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test('ambiguous social failure stays uncertain and does not claim success', async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => {
+    throw new Error('network timeout')
+  }
+  try {
+    const d = {
+      results: {},
+      imageUrl: 'https://example.test/approved.jpg',
+      facebook: 'Caption',
+    }
+    const result = await publishDestination(
+      d,
+      DESTINATIONS.find((d) => d.id === 'facebook_northside'),
+      {
+        LIFE_NORTHSIDE_PAGE_ID: 'page',
+        LIFE_NORTHSIDE_PAGE_ACCESS_TOKEN: 'test-only',
+        LIFE_META_GRAPH_VERSION: 'v23.0',
+        BLOB_READ_WRITE_TOKEN: 'test-only',
+      },
+      async () => {}
+    )
+    assert.equal(result.status, 'needs_review')
+    assert.match(result.message, /automatic retry is paused/)
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
