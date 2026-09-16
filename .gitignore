@@ -3,3 +3,7 @@ build/
 
 build/
 public/uploads/insights/video/
+
+.life-local/
+.env*
+.vercel/

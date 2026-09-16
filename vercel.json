@@ -43,6 +43,8 @@
     { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
   ],
   "headers": [
+    {"source": "/life/studio/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}, {"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "same-origin"}, {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.public.blob.vercel-storage.com; connect-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}]},
+
     {
       "source": "/(.*)",
       "headers": [
@@ -57,6 +59,11 @@
     }
   ],
   "rewrites": [
+    {"source": "/life", "destination": "/api/life?action=feed-page"},
+    {"source": "/life/", "destination": "/api/life?action=feed-page"},
+    {"source": "/life/posts/:id", "destination": "/api/life?action=story&id=:id"},
+    {"source": "/life/studio", "destination": "/life/studio/index.html"},
+    {"source": "/life/studio/", "destination": "/life/studio/index.html"},
     { "source": "/about", "destination": "/about/index.html" },
     { "source": "/buyers", "destination": "/buyers/index.html" },
     { "source": "/moving-to-georgina-from-toronto", "destination": "/moving-to-georgina-from-toronto/index.html" },
