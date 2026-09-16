@@ -28,7 +28,9 @@ test('connection credentials are encrypted and tamper resistant; setup requires 
   assert.throws(() => unseal(encrypted, { ...env, LIFE_CONNECTION_KEY: 'cd'.repeat(32) }))
   assert.equal(metaConfigured(env), true)
   assert.equal(metaConfigured({ ...env, LIFE_META_REDIRECT_URI: 'http://studio.example/api/life?action=meta-callback' }), false)
-  assert.equal(metaConfigured({ ...env, LIFE_META_CONFIG_ID: '' }), false)
+  assert.equal(metaConfigured({ ...env, LIFE_META_CONFIG_ID: '' }), true)
+  const fallback = { ...env, LIFE_CONNECTION_KEY: undefined }
+  assert.equal(unseal(seal({ token: 'test' }, fallback), fallback).token, 'test')
 })
 test('Meta login binds browser/session, consumes state, hides tokens, and saves shared credentials outside drafts', async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'life-meta-'))

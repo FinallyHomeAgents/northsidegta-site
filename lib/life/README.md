@@ -57,10 +57,12 @@ The studio now supports server-side Facebook Login for Business, followed by exp
 Before enabling the button, configure on the server:
 
 - `LIFE_META_APP_ID`, `LIFE_META_APP_SECRET`: Meta developer app credentials.
-- `LIFE_META_CONFIG_ID`: Facebook Login for Business configuration using **User access tokens**, with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, `instagram_basic`, `instagram_content_publish`.
+- `LIFE_META_CONFIG_ID`: optional Facebook Login for Business configuration using **User access tokens**, with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, `instagram_basic`, `instagram_content_publish`.
 - `LIFE_META_GRAPH_VERSION`: supported version selected for that app.
 - `LIFE_META_REDIRECT_URI`: exact, stable HTTPS callback, for example `https://northsidegta.ca/api/life?action=meta-callback`. Register exactly the same URI in Meta. For a private preview use its stable branch alias; login must start on that same hostname. Preview protection must allow the account owner to complete the return flow.
-- `LIFE_CONNECTION_KEY`: dedicated random 32-byte key encoded as 64 hex characters. Keep it server-only and backed up securely; changing it requires reconnecting saved accounts.
+- `LIFE_CONNECTION_KEY`: dedicated random 32-byte key encoded as 64 hex characters. Keep it server-only and backed up securely; changing it requires reconnecting saved accounts. When omitted, a domain-separated encryption key is derived from the server-side Meta App Secret; rotating that secret also requires reconnection.
+
+For standard Facebook Login, omit LIFE_META_CONFIG_ID; the studio requests the five listed permissions directly.
 
 Add Matthew/Landon to the Meta developer app's roles for the private pilot and complete any Meta-required account/business verification. Production/public use may require Meta App Review and approved permission access. Residents submitting photos later do not need social publishing permissions; keep these connections restricted to Matthew and Landon.
 
