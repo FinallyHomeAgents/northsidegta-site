@@ -16,14 +16,15 @@ import { createStore, configured } from '../lib/life/store.js'
 import { generate } from '../lib/life/generate.js'
 import { prepareImage, publishDestination } from '../lib/life/publish.js'
 import { publicPage } from '../lib/life/public.js'
+import { connectionEnv, metaConfigured, metaAction } from '../lib/life/meta.js'
 export const config = {
   api: { bodyParser: { sizeLimit: '4mb' } },
   maxDuration: 60,
 }
 const idValid = (id) => /^[a-f0-9-]{36}$/.test(id || '')
 export default async function handler(req, res) {
-  const env = process.env,
-    local = env.LIFE_LOCAL_DEV === '1' && !env.VERCEL
+  let env = process.env
+  const local = env.LIFE_LOCAL_DEV === '1' && !env.VERCEL
   res.setHeader('Cache-Control', 'no-store')
   res.setHeader('X-Content-Type-Options', 'nosniff')
   const query =
@@ -38,12 +39,15 @@ export default async function handler(req, res) {
       ?.slice(13)
     const user = verifySession(token, sessionSecret(env))
     const ready = configured(env) || local
+    if (user && ready && ['session', 'publish'].includes(action))
+      env = await connectionEnv(env, await createStore(env))
     if (req.method === 'GET' && action === 'session')
       return res.json({
         user,
         local,
         storage: ready,
         ai: Boolean(env.OPENAI_API_KEY),
+        metaLogin: Boolean(user && metaConfigured(env)),
         signInConfigured: Boolean(sessionSecret(env)),
         destinations: user
           ? DESTINATIONS.map((d) => ({
@@ -147,6 +151,8 @@ export default async function handler(req, res) {
       )
       return res.json({ user: body.person })
     }
+    if (action === 'meta-callback' && req.method === 'GET' && ready)
+      return await metaAction(req, res, { action, query, body, user, env, store: await createStore(env) })
     if (!user) return res.status(401).json({ error: 'Sign in to continue.' })
     if (action === 'logout' && req.method === 'POST') {
       res.setHeader(
@@ -156,6 +162,8 @@ export default async function handler(req, res) {
       return res.json({ ok: true })
     }
     const store = await createStore(env)
+    if (action.startsWith('meta-'))
+      return await metaAction(req, res, { action, query, body, user, env, store })
     if (action === 'drafts' && req.method === 'GET')
       return res.json({
         drafts: (await store.list()).map(

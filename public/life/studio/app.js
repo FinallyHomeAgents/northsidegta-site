@@ -440,7 +440,25 @@ function renderSettings() {
       'A little housekeeping.',
       'Your accounts, your iPhone, your studio.'
     ) +
-    `<div class="settings-grid"><section class="card"><h2>Connections</h2><div class="connection-line"><span>Shared draft library</span><span class="pill">${session.local ? 'Local preview' : session.storage ? 'Connected' : 'Not connected'}</span></div><div class="connection-line"><span>AI captions</span><span class="pill">${session.ai ? 'Configured' : 'Starter captions only'}</span></div>${session.destinations.map((d) => `<div class="connection-line"><span>${d.kind}<br><small>${esc(d.label)}</small></span><span class="pill">${d.ready ? 'Configured' : 'Not connected'}</span></div>`).join('')}<p class="small-note">Configured means credentials are present. The platform confirms a post only after publishing succeeds. Account setup happens securely on the server.</p></section><section><div class="card"><h2>Keep Life on your iPhone.</h2><p>Open this studio in Safari:</p><ol><li>Tap the Share button.</li><li>Choose <strong>Add to Home Screen</strong>.</li><li>Tap Add. Look for NorthSide Life.</li></ol><p>An internet connection is needed to save drafts and publish.</p></div><div class="card" style="margin-top:20px"><h2>${esc(session.user)}’s studio</h2><p>Matthew & Landon Mulhall<br>Finally Home Agents<br>HomeLife Optimum Realty, Brokerage</p><a class="text-link" href="/life/" target="_blank" rel="noopener">Open the community page ↗</a><div class="action-row"><button class="secondary" id="signout">Sign out</button></div></div></section></div>`
+    `<div class="settings-grid"><section class="card"><h2>Connections</h2><div class="connection-line"><span>Shared draft library</span><span class="pill">${session.local ? 'Local preview' : session.storage ? 'Connected' : 'Not connected'}</span></div><div class="connection-line"><span>AI captions</span><span class="pill">${session.ai ? 'Configured' : 'Starter captions only'}</span></div>${session.destinations.map((d) => `<div class="connection-line"><span>${d.kind}<br><small>${esc(d.label)}</small></span><span class="pill">${d.ready ? 'Configured' : 'Not connected'}</span></div>`).join('')}<div class="action-row"><button class="primary" id="connect-meta">Connect Facebook & Instagram</button></div><p class="small-note">${session.metaLogin ? "Sign in securely with Meta, then choose your Pages and linked Instagram accounts. Saved connections are shared by Matthew and Landon. Meta may occasionally ask you to reconnect." : "One-time Meta setup is needed before account login is available."}</p><div id="meta-options"></div><p class="small-note">Configured means credentials are present. The platform confirms a post only after publishing succeeds. Account setup happens securely on the server.</p></section><section><div class="card"><h2>Keep Life on your iPhone.</h2><p>Open this studio in Safari:</p><ol><li>Tap the Share button.</li><li>Choose <strong>Add to Home Screen</strong>.</li><li>Tap Add. Look for NorthSide Life.</li></ol><p>An internet connection is needed to save drafts and publish.</p></div><div class="card" style="margin-top:20px"><h2>${esc(session.user)}’s studio</h2><p>Matthew & Landon Mulhall<br>Finally Home Agents<br>HomeLife Optimum Realty, Brokerage</p><a class="text-link" href="/life/" target="_blank" rel="noopener">Open the community page ↗</a><div class="action-row"><button class="secondary" id="signout">Sign out</button></div></div></section></div>`
+  $('#connect-meta').onclick = () => task('Opening secure Meta login', async () => {
+    if (!session.metaLogin) { toast('The Meta developer app needs connecting on the server first. Your Facebook password is never entered here.'); return }
+    const { url } = await api('meta-start', {})
+    location.assign(url)
+  })
+  if (new URLSearchParams(location.search).get('meta') === 'choose') {
+    task('Loading your accounts', async () => {
+      const { pages } = await api('meta-options')
+      $('#meta-options').innerHTML = `<h3>Choose accounts to save</h3><p>These connections will be available to both Matthew and Landon.</p>${['northside', 'finallyhome'].map(brand => `<label class="field"><span>${brand === 'northside' ? 'NorthSide GTA' : 'Finally Home Agents'}</span><select id="meta-${brand}"><option value="">Leave unchanged</option>${pages.map(p => `<option value="${esc(p.id)}">${esc(p.name)}${p.instagram ? ' · @' + esc(p.instagram) : ' · Facebook only'}</option>`).join('')}</select></label>`).join('')}<button class="primary" id="save-meta">Save selected connections</button><p class="small-note">Missing an Instagram account? It must be a professional account linked to its Facebook Page.</p>`
+      $('#save-meta').onclick = () => task('Saving your connections', async () => {
+        await api('meta-save', { northside: $('#meta-northside').value, finallyhome: $('#meta-finallyhome').value })
+        history.replaceState(null, '', location.pathname)
+        session = await api('session')
+        render()
+        toast('Connections saved for Matthew and Landon.')
+      })
+    })
+  }
   $('#signout').onclick = () =>
     task('Signing out', async () => {
       await api('logout', {})
@@ -461,7 +479,10 @@ window.addEventListener('offline', () =>
 )
 try {
   session = await api('session')
+  const metaStatus = new URLSearchParams(location.search).get('meta')
+  if (metaStatus) view = 'settings'
   render()
+  if (metaStatus && metaStatus !== 'choose') toast({ cancelled: 'Meta login was cancelled. Your existing connections are unchanged.', expired: 'This connection attempt expired. Please connect again.', permissions: 'Meta did not grant all publishing permissions. Reconnect and allow the requested access.', failed: 'Meta connection could not be completed. Check the developer setup and try again.' }[metaStatus] || 'Please check your connections.')
 } catch (e) {
   $('#app').innerHTML =
     `<div class="loading-screen">${brand}<p>Could not connect to the studio.</p><button class="primary" onclick="location.reload()">Try again</button></div>`

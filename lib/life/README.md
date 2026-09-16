@@ -26,7 +26,7 @@ The existing site CMS username/password can sign both team members in. No GitHub
 - `LIFE_NORTHSIDE_PAGE_ACCESS_TOKEN`, `LIFE_NORTHSIDE_PAGE_ID`, `LIFE_NORTHSIDE_IG_USER_ID`.
 - `LIFE_FINALLYHOME_PAGE_ACCESS_TOKEN`, `LIFE_FINALLYHOME_PAGE_ID`, `LIFE_FINALLYHOME_IG_USER_ID`.
 
-Use authorised Page access tokens with applicable Facebook photo publishing and Instagram professional-account publishing permissions. Never put credentials in browser code or commit them. Token presence is shown as configured, not proof permissions are valid. End-to-end social publishing needs an owner-approved real post after configuration. OAuth onboarding is not implemented in this pilot.
+Use authorised Page access tokens with applicable Facebook photo publishing and Instagram professional-account publishing permissions. Never put credentials in browser code or commit them. Token presence is shown as configured, not proof permissions are valid. End-to-end social publishing needs an owner-approved real post after configuration. The optional Settings login flow is described below; environment-configured tokens remain supported.
 
 ## Supported today
 
@@ -49,3 +49,21 @@ No video editing, carousel publishing, scheduling, native location tags, EXIF lo
 5. Review then merge the feature branch for production routes.
 
 No sample posts or local test records are part of the deployable source.
+
+## Connect Facebook & Instagram from Settings
+
+The studio now supports server-side Facebook Login for Business, followed by explicit selection of the two brands' Pages. Each Instagram account must be a professional account linked to its Page. This does not collect Facebook passwords. Page access tokens are encrypted with AES-256-GCM in a separate private Redis record and shared by both studio users. State and pending selections expire after ten minutes; state is single-use and bound to an HttpOnly browser cookie. Saving is additionally bound to the original studio session. Tokens are never included in session responses, public feeds, or draft summaries.
+
+Before enabling the button, configure on the server:
+
+- `LIFE_META_APP_ID`, `LIFE_META_APP_SECRET`: Meta developer app credentials.
+- `LIFE_META_CONFIG_ID`: Facebook Login for Business configuration using **User access tokens**, with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, `instagram_basic`, `instagram_content_publish`.
+- `LIFE_META_GRAPH_VERSION`: supported version selected for that app.
+- `LIFE_META_REDIRECT_URI`: exact, stable HTTPS callback, for example `https://northsidegta.ca/api/life?action=meta-callback`. Register exactly the same URI in Meta. For a private preview use its stable branch alias; login must start on that same hostname. Preview protection must allow the account owner to complete the return flow.
+- `LIFE_CONNECTION_KEY`: dedicated random 32-byte key encoded as 64 hex characters. Keep it server-only and backed up securely; changing it requires reconnecting saved accounts.
+
+Add Matthew/Landon to the Meta developer app's roles for the private pilot and complete any Meta-required account/business verification. Production/public use may require Meta App Review and approved permission access. Residents submitting photos later do not need social publishing permissions; keep these connections restricted to Matthew and Landon.
+
+Settings reports credential presence, not continuous validity. Meta can revoke or expire access; use Connect again when needed. Disconnect/revocation can currently be managed in Facebook Business Integrations; a dedicated in-studio disconnect/health monitor is not yet implemented. AI captions still require a separately provisioned `OPENAI_API_KEY` and API billing; a ChatGPT subscription does not configure this integration.
+
+Validation: mocked OAuth tests cover cookie/state binding, replay rejection, session binding, account mismatch rejection, encrypted persistence, and no draft/token leakage. Live Meta authorization and a real approved post still require owner setup and verification.
