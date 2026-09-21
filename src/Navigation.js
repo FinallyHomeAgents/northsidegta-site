@@ -1,6 +1,8 @@
 // src/Navigation.js
 import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import CommunitySign from "./components/brand/CommunitySign";
+import "./components/brand/CommunitySign.css";
 import TerritoryRule, { TOWN_ORDER } from "./components/brand/TerritoryRule";
 
 const NAV_LINKS = [
@@ -91,23 +93,20 @@ export default function Navigation() {
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[80px] lg:px-8">
           <Link
             to="/"
-            className="group flex min-w-0 items-center gap-[13px] rounded-2xl pr-3 transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70"
+            className="group flex min-w-0 items-center gap-2 sm:gap-[13px] rounded-2xl pr-1 sm:pr-3 transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green/70"
             aria-label="NorthSide GTA home"
           >
-            <img
-              src="/Images/brand/northsidegta-sign.png"
-              alt="NorthSide GTA"
-              className="h-[46px] w-auto flex-shrink-0 sm:h-[58px]"
-              loading="eager"
-              decoding="async"
-            />
+            <CommunitySign />
             <span className="flex min-w-0 flex-col items-start gap-[5px]">
-              <span className="whitespace-nowrap text-[26px] font-bold leading-[0.92] tracking-[-0.025em] text-emerald-950 sm:text-[34.6px]">
+              <span className="whitespace-nowrap text-[26px] font-bold leading-[0.92] tracking-[-0.025em] text-[#14220D] sm:text-[34.6px]">
                 NorthSide GTA
               </span>
               <TerritoryRule active={activeTown} />
-              <span className="whitespace-nowrap text-[7.2px] font-semibold leading-none tracking-[0.2em] text-brand-green sm:text-[9.5px] sm:tracking-[0.235em]">
-                REAL ESTATE NORTH OF TORONTO
+              <span className="northside-brand-tagline">
+                <span>REAL ESTATE</span>{" "}
+                <strong className="northside-brand-north">NORTH</strong>{" "}
+                <span>OF</span>{" "}
+                <strong className="northside-brand-toronto">TORONTO</strong>
               </span>
             </span>
           </Link>
