@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Footer from "./Footer";
+import { trackEvent } from "./utils/analytics";
 import { getFormEndpoint } from "./components/contact/contactConfig";
 import { BUYER_FAQS, BUYERS_SCHEMA, BUYERS_SEO } from "./components/seo/buyersSchema.mjs";
 import MARKET_DATA from "./data/marketData.json";
@@ -166,30 +167,6 @@ const HERO_ROTATION = [
     caption: "The Finally Home Cup · Uxbridge",
     sub: "We live here too",
     alt: "Finally Home Cup golf trophy on the fairway at Mill Run Golf Club in Uxbridge, Ontario",
-  },
-];
-
-const PROOF_CARDS = [
-  {
-    image: "/uploads/finally-home-agents-just-sold-door-hanger.webp",
-    position: "center 45%",
-    label: "Step 1 — boots on the ground",
-    sublabel: "Local outreach puts your home in front of neighbourhood buyers",
-    alt: "Finally Home Agents door hanger used for local neighbourhood real estate outreach",
-  },
-  {
-    image: "/uploads/coming-soon-sign-newmarket-finally-home-agents.webp",
-    position: "center 40%",
-    label: "Step 2 — Coming Soon · Newmarket",
-    sublabel: "Positioned and marketed before it hits the MLS",
-    alt: "Finally Home Agents coming soon sign in front of a brick two-storey home in Newmarket, Ontario",
-  },
-  {
-    image: "/uploads/sold-home-newmarket-finally-home-agents.webp",
-    position: "center 40%",
-    label: "Step 3 — SOLD · same house",
-    sublabel: "From sign-up to sold, start to finish",
-    alt: "Sold With Finally Home Agents sign in front of the same Newmarket home",
   },
 ];
 
@@ -594,12 +571,19 @@ function ConsultationForm() {
   async function handleSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
-    if (!form.reportValidity()) return;
+    if (status === "sending" || !form.reportValidity()) return;
+    if (new FormData(form).get("_gotcha")) return;
     setStatus("sending");
     setError("");
 
     const data = Object.fromEntries(new FormData(form).entries());
     data.towns = selectedTowns.join(", ");
+    data.source_route = "/buyers";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact.trim()) && data.contact.replace(/\D/g, "").length < 10) {
+      setStatus("idle");
+      setError("Please enter a valid email address or phone number.");
+      return;
+    }
 
     try {
       const response = await fetch(form.action, {
@@ -613,6 +597,7 @@ function ConsultationForm() {
         throw new Error(result.error || "Sorry, something went wrong. Please try again.");
       }
 
+      trackEvent("buyer_form_submit", { route: "/buyers", moving_from: data.moving_from });
       setStatus("success");
       form.reset();
       setSelectedTowns([]);
@@ -634,7 +619,7 @@ function ConsultationForm() {
         ) : (
           <form action={formEndpoint} method="POST" onSubmit={handleSubmit}>
             <input type="hidden" name="_subject" value="New buyer inquiry — NorthSide GTA" />
-            <input type="hidden" name="_next" value="" />
+            <div style={{ position: "absolute", left: "-10000px" }} aria-hidden="true"><label>Leave this blank<input name="_gotcha" tabIndex={-1} autoComplete="off" /></label></div>
             <input type="hidden" name="towns" value={selectedTowns.join(", ")} />
 
             <div className="form-two-col">
@@ -652,6 +637,7 @@ function ConsultationForm() {
               <span>Where are you moving from?</span>
               <select name="moving_from" required defaultValue="">
                 <option value="" disabled>Select one</option>
+                <option>Already in the NorthSide GTA</option>
                 <option>Toronto — downtown / midtown</option>
                 <option>Toronto — east end</option>
                 <option>Toronto — west end</option>
@@ -777,8 +763,8 @@ export default function BuyersPage() {
         <div className="buyers-container hero-grid">
           <div className="hero-copy">
             <p className="buyers-eyebrow buyers-eyebrow-dark hero-fade">Buying North of Toronto</p>
-            <h1 className="hero-fade hero-delay-1">You don't have to leave the city. <em>You get to.</em></h1>
-            <p className="hero-subhead hero-fade hero-delay-2">A guided buyer path for Toronto families moving north: match the right town, understand the market, then pressure-test the shortlist with Matt & Landon.</p>
+            <h1 className="hero-fade hero-delay-1">Your next home. <em>Your kind of community.</em></h1>
+            <p className="hero-subhead hero-fade hero-delay-2">Moving north from Toronto or making your next move close to home? Matthew and Landon help you compare neighbourhoods, evaluate homes, and plan your purchase across all seven NorthSide GTA communities.</p>
             <div className="hero-actions hero-fade hero-delay-3">
               <button type="button" className="hero-primary" onClick={() => scrollToSection("town-match")}>Find My Town <span aria-hidden="true">→</span></button>
               <button type="button" className="hero-ghost" onClick={() => scrollToSection("cta-section")}>Book a Strategy Call</button>
@@ -841,18 +827,10 @@ export default function BuyersPage() {
 
       <section className="buyers-section tinted-section">
         <div className="buyers-container">
-          <SectionHeader
-            eyebrow="02 / Real Results"
-            title="From local outreach to SOLD"
-            lead="No stock photos here. This is how we build awareness on the ground, bring an actual Newmarket listing to market, and carry it through to SOLD."
-          />
-          <div className="photo-grid">
-            {PROOF_CARDS.map(({ image, position, label, sublabel, alt }) => (
-              <figure className="photo-card" key={label}>
-                <img src={image} alt={alt} loading="lazy" style={{ objectPosition: position }} />
-                <figcaption><strong>{label}</strong><span>{sublabel}</span></figcaption>
-              </figure>
-            ))}
+          <SectionHeader eyebrow="02 / Your Next Move" title="Local move or a new community?" lead="Start with the questions that fit your situation." />
+          <div className="market-grid">
+            <article className="market-card"><h3>Already live here?</h3><p>Upsizing, downsizing, or moving between towns? We’ll help you evaluate neighbourhoods, compare homes, and coordinate buying with selling.</p><a href="#cta-section">Plan my local purchase →</a></article>
+            <article className="market-card"><h3>Moving north from Toronto?</h3><p>Compare your budget, commute, and everyday needs across seven communities before narrowing your home search.</p><a href="#town-match">Find my town →</a></article>
           </div>
         </div>
       </section>
@@ -947,8 +925,8 @@ export default function BuyersPage() {
         <div className="buyers-container cta-grid">
           <SectionHeader
             eyebrow="08 / Start the Conversation"
-            title="Want a town shortlist built around your actual move?"
-            lead="Tell us where you’re coming from, what matters most, and when you’re thinking of moving. We’ll help you narrow the right NorthSide GTA towns before you waste time on the wrong homes."
+            title="Let’s plan your next home purchase."
+            lead="Tell us whether you’re moving locally or coming from Toronto, what you need in your next home, and your timing. We can help with a town shortlist, a neighbourhood search, or coordinating a purchase with your sale."
             dark
           />
           <ConsultationForm />

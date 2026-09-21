@@ -97,7 +97,7 @@ function main() {
     { path: '/media', changefreq: 'weekly', priority: '0.6' },
     { path: '/tastehub', changefreq: 'weekly', priority: '0.7' },
     { path: '/neighbourhood-guide', changefreq: 'monthly', priority: '0.8' },
-    { path: '/collections', changefreq: 'monthly', priority: '0.6' },
+    { path: '/life/', changefreq: 'weekly', priority: '0.7' },
   ]
 
   if (includeArchive) {

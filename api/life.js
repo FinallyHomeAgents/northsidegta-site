@@ -1,4 +1,5 @@
 import crypto from 'node:crypto'
+import { lifeSitemap } from '../lib/life/sitemap.js'
 import {
   PEOPLE,
   DESTINATIONS,
@@ -41,6 +42,13 @@ export default async function handler(req, res) {
     const ready = configured(env) || local
     if (user && ready && ['session', 'publish'].includes(action))
       env = await connectionEnv(env, await createStore(env))
+    if (req.method === 'GET' && action === 'sitemap') {
+      if (!ready) return res.status(503).send('Life storage is unavailable.')
+      const store = await createStore(env)
+      const xml = lifeSitemap(await store.list())
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+      return res.status(200).send(xml)
+    }
     if (req.method === 'GET' && action === 'session')
       return res.json({
         user,

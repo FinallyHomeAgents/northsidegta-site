@@ -3,6 +3,7 @@ Allow: /
 
 # Sitemap location
 Sitemap: https://northsidegta.ca/sitemap.xml
+Sitemap: https://northsidegta.ca/life/sitemap.xml
 
 # Explicitly block irrelevant files/folders (good housekeeping)
 Disallow: /admin/

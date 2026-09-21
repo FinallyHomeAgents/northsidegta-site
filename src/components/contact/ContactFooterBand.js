@@ -103,7 +103,7 @@ export default function ContactFooterBand({ config, channels = [] }) {
                         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
                           <WhatsAppIcon className="h-4 w-4 text-white" />
                         </span>
-                        Instant concierge reply
+                        Message Matthew & Landon
                       </a>
                     </dd>
                   </div>

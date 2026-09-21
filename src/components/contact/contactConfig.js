@@ -13,8 +13,8 @@ const DEFAULT_REVIEWS = CANONICAL_TESTIMONIALS.map((review) => ({
 
 const DEFAULT_CONFIG = {
   heroHeadline: "Glad you found us — let’s talk.",
-  heroSubhead: "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
-  responsePledge: "We reply within 1 hour, 9am–9pm.",
+  heroSubhead: "Buying or selling locally, or moving north from Toronto? Tell us what you’re planning.",
+  responsePledge: "We usually reply within 1 hour, 9am–9pm.",
   coverageLine:
     "Aurora • Uxbridge • Georgina • Scugog • Stouffville • East Gwillimbury • Newmarket • NorthSide GTA & beyond",
   heroBackgroundImage: "/Images/northsidegta-map-bg.jpg",
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG = {
   heroSecondaryCtaLabel: "Chat on WhatsApp",
   whatsappConciergeLabel: "Concierge on WhatsApp — priority replies",
   defaultWhatsAppNumber: "16476684646",
-  contactMicrocopy: "We usually reply in minutes.",
+  contactMicrocopy: "Matthew or Landon will follow up personally.",
   trustBullets: [
     "Local experts: we don’t just work here — we live here.",
     "Concierge-level guidance from first chat to closing.",
@@ -36,7 +36,7 @@ const DEFAULT_CONFIG = {
   reviewsDisclaimer: "Real reviews from real clients.",
   showSchedulingCard: false,
   schedulingLabel: "Book a Call",
-  schedulingSubcopy: "Pick a time that works for you and we’ll confirm within the hour.",
+  schedulingSubcopy: "Pick a time that works for you and we’ll confirm availability.",
   schedulingUrl: "",
   footerAgents: [
     {
@@ -55,7 +55,7 @@ const DEFAULT_CONFIG = {
       brokerage: "HomeLife Optimum Realty Brokerage",
       email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
       emailLabel: "contact@finallyhomeagents.com",
-      phoneLabel: "647-668-4646",
+      phoneLabel: "416-455-4594",
     },
   ],
   footerBrokerageCopy: "Finally Home Agents • HomeLife Optimum Realty Brokerage",
@@ -66,7 +66,7 @@ const DEFAULT_CONFIG = {
     { label: "Buyer’s Guide", href: "/buyers" },
   ],
   formThankYouMessage:
-    "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
+    "Thanks! We got your message. Matthew or Landon will follow up personally.",
   seoTitle: "Contact Finally Home Agents | NorthSide GTA Real Estate Experts",
   seoDescription:
     "Talk to NorthSide GTA real estate experts for buying and selling guidance across Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, and Newmarket.",

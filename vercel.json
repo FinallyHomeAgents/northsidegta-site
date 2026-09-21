@@ -59,6 +59,9 @@
     }
   ],
   "rewrites": [
+    {"source": "/life/sitemap.xml", "destination": "/api/life?action=sitemap"},
+    {"source": "/collections", "destination": "/api/collections-index"},
+    {"source": "/collections/", "destination": "/api/collections-index"},
     {"source": "/life", "destination": "/api/life?action=feed-page"},
     {"source": "/life/", "destination": "/api/life?action=feed-page"},
     {"source": "/life/posts/:id", "destination": "/api/life?action=story&id=:id"},
