@@ -53,12 +53,12 @@ export default function ContactFooterBand({ config, channels = [] }) {
               </div>
 
               <dl className="mt-6 space-y-3 text-sm text-emerald-100">
-                {formattedCall && (
+                {(agent.phoneHref || formattedCall) && (
                   <div>
                     <dt className="text-xs uppercase tracking-[0.28em] text-emerald-200">Call or text</dt>
                     <dd>
                       <a
-                        href={callChannel.href}
+                        href={agent.phoneHref || callChannel.href}
                         onClick={() =>
                           trackEvent("click_call", { route: "/contact", source: "footer" })
                         }
@@ -103,7 +103,7 @@ export default function ContactFooterBand({ config, channels = [] }) {
                         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
                           <WhatsAppIcon className="h-4 w-4 text-white" />
                         </span>
-                        Instant concierge reply
+                        Message Matthew & Landon
                       </a>
                     </dd>
                   </div>

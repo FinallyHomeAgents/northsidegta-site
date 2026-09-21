@@ -26,7 +26,7 @@
   "schedulingSubcopy": "Pick a time that works for you and we’ll confirm quickly.",
   "showSchedulingCard": false,
   "heroBackgroundOpacity": 0.22,
-  "heroSubhead": "Buying or selling in the NorthSide GTA? We reply within 1 hour, 9am–9pm.",
+  "heroSubhead": "Buying or selling locally, or moving north from Toronto? Tell us what you’re planning.",
   "trustBadges": [
     {
       "label": "5.0 ★ on Google",
@@ -42,7 +42,8 @@
       "brokerage": "HomeLife Optimum Realty Brokerage",
       "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
       "emailLabel": "contact@finallyhomeagents.com",
-      "phoneLabel": "647-668-4646"
+      "phoneLabel": "647-668-4646",
+      "phoneHref": "tel:+16476684646"
     },
     {
       "name": "Landon Mulhall",
@@ -51,13 +52,14 @@
       "brokerage": "HomeLife Optimum Realty Brokerage",
       "email": "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
       "emailLabel": "contact@finallyhomeagents.com",
-      "phoneLabel": "647-668-4646"
+      "phoneLabel": "416-455-4594",
+      "phoneHref": "tel:+14164554594"
     }
   ],
   "footerAreas": "Serving Aurora, Uxbridge, Georgina, Scugog, Stouffville, East Gwillimbury, Newmarket — and the broader NorthSide GTA",
   "heroBackgroundBlendMode": "multiply",
   "heroPrimaryCtaLabel": "Send a Message",
-  "formThankYouMessage": "Thanks! We got your message and we’ll reply within the hour (9am–9pm).",
+  "formThankYouMessage": "Thanks! We got your message. Matthew or Landon will follow up personally.",
   "heroHeadline": "Glad you found us — let’s talk.",
   "whatsappConciergeLabel": "Priority concierge replies for buyers & sellers.",
   "heroBackgroundImage": "/Images/northsidegta-map-bg.jpg",
@@ -68,7 +70,7 @@
     "Fast, human replies (9am–9pm).",
     "Neighborhood intel you won’t find on portals."
   ],
-  "contactMicrocopy": "We usually reply in minutes.",
+  "contactMicrocopy": "Matthew or Landon will follow up personally.",
   "responsePledge": "We usually reply within 1 hour, 9am–9pm.",
   "reviews": [
     {

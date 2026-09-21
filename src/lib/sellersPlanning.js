@@ -38,6 +38,7 @@ export function validateSellerPlanningForm(form = {}) {
 export function buildSellerPlanningPayload({ form = {}, attribution = {}, currentPageUrl = "", timestamp = new Date().toISOString() } = {}) {
   return {
     ...form,
+    _gotcha: form.nickname || "",
     goals: Array.isArray(form.goals) ? form.goals.join(", ") : form.goals || "",
     address: form.address || "Private",
     not_under_contract: form.notUnderContract ? "Yes" : "No",

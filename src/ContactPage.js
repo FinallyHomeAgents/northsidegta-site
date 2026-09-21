@@ -103,7 +103,7 @@ function ContactPageV2() {
                   <span className="flex flex-col text-left text-sm leading-tight">
                     <span>{config.heroSecondaryCtaLabel || "Chat on WhatsApp"}</span>
                     <span className="text-[11px] font-medium text-emerald-100">
-                      Concierge replies in minutes
+                      Message Matthew & Landon
                     </span>
                   </span>
                 </a>

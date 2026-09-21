@@ -99,6 +99,7 @@ export default function SmartContactForm({
     try {
       const payload = new FormData();
       payload.append("name", name);
+      payload.append("_gotcha", honeypot);
       if (email) payload.append("email", email);
       if (phone) payload.append("phone", phone);
       payload.append("intent", intent);
