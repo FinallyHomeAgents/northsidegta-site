@@ -1,0 +1,33 @@
+.northside-community-sign {
+  display: block;
+  width: 52px;
+  height: 46px;
+  flex: 0 0 auto;
+}
+.northside-sign-welcome, .northside-sign-emblem-desktop { display: none; }
+.northside-brand-tagline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4em;
+  width: 100%;
+  padding-top: 2px;
+  white-space: nowrap;
+  font-size: 7.2px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+  color: #596452;
+}
+.northside-brand-north { font-size: 1.07em; font-weight: 700; color: #315817; }
+.northside-brand-toronto { font-weight: 600; color: #343A36; }
+@media (min-width: 640px) {
+  .northside-community-sign { width: 67px; height: 58px; }
+  .northside-brand-tagline { font-size: 9.5px; letter-spacing: 0.16em; }
+}
+@media (min-width: 1024px) {
+  .northside-community-sign { width: 76px; height: 66px; }
+  .northside-sign-welcome { display: block; }
+  .northside-sign-emblem-mobile { display: none; }
+  .northside-sign-emblem-desktop { display: block; }
+}
