@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET' && action === 'sitemap') {
       if (!ready) return res.status(503).send('Life storage is unavailable.')
       const store = await createStore(env)
-      const xml = lifeSitemap(await store.list())
+      const xml = lifeSitemap(await store.listForSitemap())
       res.setHeader('Content-Type', 'application/xml; charset=utf-8')
       return res.status(200).send(xml)
     }

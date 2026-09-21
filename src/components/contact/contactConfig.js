@@ -47,6 +47,7 @@ const DEFAULT_CONFIG = {
       email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Matthew",
       emailLabel: "contact@finallyhomeagents.com",
       phoneLabel: "647-668-4646",
+      phoneHref: "tel:+16476684646",
     },
     {
       name: "Landon Mulhall",
@@ -56,6 +57,7 @@ const DEFAULT_CONFIG = {
       email: "mailto:contact@finallyhomeagents.com?subject=Hello%20Landon",
       emailLabel: "contact@finallyhomeagents.com",
       phoneLabel: "416-455-4594",
+      phoneHref: "tel:+14164554594",
     },
   ],
   footerBrokerageCopy: "Finally Home Agents • HomeLife Optimum Realty Brokerage",
