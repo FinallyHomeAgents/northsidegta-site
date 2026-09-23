@@ -1,4 +1,3 @@
-import MoveQuestions from "./components/MoveQuestions";
 // src/BuyersPage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -251,15 +250,6 @@ const LINKED_TOWNS_PATTERN = new RegExp(
   "g"
 );
 
-function applyInitialFaqOpen(node, index) {
-  if (!node || index !== 0 || node.dataset.initialOpenApplied === "true") {
-    return;
-  }
-
-  node.open = true;
-  node.dataset.initialOpenApplied = "true";
-}
-
 function renderFaqAnswer(answer, linkedTowns) {
   return answer.split(LINKED_TOWNS_PATTERN).map((part, index) => {
     const href = FAQ_TOWN_LINKS[part];
@@ -322,7 +312,7 @@ function BuyersFaqSection() {
   const linkedTowns = new Set();
 
   return (
-    <section className="buyers-section tinted-section buyers-faq-section">
+    <section className="buyers-section tinted-section buyers-faq-section" id="buyers-faq">
       <div className="buyers-container">
         <SectionHeader
           eyebrow="07 / Buyer FAQ"
@@ -330,17 +320,17 @@ function BuyersFaqSection() {
           lead="Buying north of Toronto is not just about finding a house. It is about choosing the right town, commute, lifestyle, and long-term fit before you make a move."
         />
         <div className="buyers-faq-list">
-          {BUYER_FAQS.map(({ question, answer }, index) => (
+          {BUYER_FAQS.map(({ question, answer }) => (
             <details
               className="buyers-faq-item"
               key={question}
-              ref={(node) => applyInitialFaqOpen(node, index)}
             >
               <summary>{question}</summary>
               <p>{renderFaqAnswer(answer, linkedTowns)}</p>
             </details>
           ))}
         </div>
+        <p className="buyers-lead" style={{ marginTop: 20 }}>Have a move in mind? <a href="#cta-section">Plan my next move →</a></p>
       </div>
     </section>
   );
@@ -902,8 +892,6 @@ export default function BuyersPage() {
         </div>
       </section>
 
-      <MoveQuestions audience="buyers" />
-
       <section className="buyers-section tinted-section">
         <div className="buyers-container">
           <SectionHeader eyebrow="06 / Client Proof" title="Real moves. Real families." compact>
@@ -1128,6 +1116,7 @@ const BUYERS_STYLES = `
   .buyers-faq-list { display: grid; gap: 10px; max-width: 920px; }
   .buyers-faq-item { border: 1px solid var(--border); border-radius: 6px; background: #fff; box-shadow: 0 16px 45px rgba(26,26,26,0.045); overflow: hidden; }
   .buyers-faq-item summary { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; color: var(--primary); font-family: "Playfair Display", Georgia, serif; font-size: 19px; line-height: 1.22; font-weight: 600; cursor: pointer; list-style: none; }
+  .buyers-faq-item summary:focus-visible { outline: 3px solid var(--primary); outline-offset: -4px; }
   .buyers-faq-item summary::-webkit-details-marker { display: none; }
   .buyers-faq-item summary::after { content: "+"; flex: 0 0 auto; width: 28px; height: 28px; border: 1px solid #d8d2c6; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--accent); font-family: Inter, system-ui, sans-serif; font-size: 18px; line-height: 1; transition: transform 160ms ease, background 160ms ease, color 160ms ease; }
   .buyers-faq-item[open] summary { border-bottom: 1px solid #eee8df; }

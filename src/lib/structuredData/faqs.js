@@ -28,50 +28,41 @@ const buyersFaq = [
 
 const sellersFaq = [
   {
-    question: "How early should we talk before listing?",
-    answer:
-      "Ideally, a few months before you plan to sell. That gives us time to review the property, discuss timing, and identify which improvements are worth doing before the home reaches the market. Some sellers contact us much earlier, and that is completely fine. A good plan is more useful than rushing into a listing.",
+    "question": "How early should we talk before listing?",
+    "answer": "Ideally, a few months before you plan to sell. That gives us time to review the property, discuss timing, and identify which improvements are worth doing before the home reaches the market. Some sellers contact us much earlier, and that is completely fine. A good plan is more useful than rushing into a listing. We begin by discussing your goals, timing and property, then work through pricing, preparation, presentation and how to keep you informed."
   },
   {
-    question: "Do we need to renovate before selling?",
-    answer:
-      "Usually not. Most homes benefit more from targeted preparation than a major renovation. We look at the condition of the property, the likely buyer, and the current market, then recommend the repairs, cleaning, landscaping, or updates most likely to improve presentation and buyer confidence. We will also tell you when spending more is unlikely to produce a worthwhile return.",
+    "question": "Do we need to renovate before selling?",
+    "answer": "Usually not. Most homes benefit more from targeted preparation than a major renovation. We look at the condition of the property, the likely buyer, and the current market, then recommend the repairs, cleaning, landscaping, or updates most likely to improve presentation and buyer confidence. We will also tell you when spending more is unlikely to produce a worthwhile return."
   },
   {
-    question: "Can we sell and buy at the same time?",
-    answer:
-      "Yes. Many of our clients need to coordinate both moves. We help compare the risks of buying first versus selling first, then build the offer, financing, closing-date, and condition strategy around your situation. The right order depends on your finances, the type of home you are selling, and how competitive the market is for the property you want to buy.",
+    "question": "Can we sell and buy at the same time?",
+    "answer": "Yes. Many of our clients need to coordinate both moves. We help compare the risks of buying first versus selling first, then build the offer, financing, closing-date, and condition strategy around your situation. The right order depends on your finances, the type of home you are selling, and how competitive the market is for the property you want to buy. We also help you focus on the space you need and the neighbourhood connections you want to keep when looking for your next home."
   },
   {
-    question: "Do you work across all NorthSide GTA communities?",
-    answer:
-      "Yes. Our primary service area includes Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog. We also work throughout nearby York Region and Durham communities.\n\nIf your property is elsewhere in Ontario, we can still help. Where the market falls outside our direct area of expertise, we will connect you with a strong local agent we trust and remain available to help guide the process.\n\nEvery selling strategy is adjusted to the property, the local buyer pool, and the conditions in that specific market.",
+    "question": "Do you work across all NorthSide GTA communities?",
+    "answer": "Yes. Our primary service area includes Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog. We also work throughout nearby York Region and Durham communities.\n\nIf your property is elsewhere in Ontario, we can still help. Where the market falls outside our direct area of expertise, we will connect you with a strong local agent we trust and remain available to help guide the process.\n\nEvery selling strategy is adjusted to the property, the local buyer pool, and the conditions in that specific market."
   },
   {
-    question: "Will we get pressured to list right away?",
-    answer:
-      "No. The first conversation is simply a chance to understand the property, your timing, and what you are trying to accomplish.\n\nIt also gives both sides an opportunity to determine whether the working relationship feels right before any commitment is made. We will explain your options, recommend the most sensible next steps, and leave the timing and decision with you.",
+    "question": "Will we get pressured to list right away?",
+    "answer": "No. The first conversation is simply a chance to understand the property, your timing, and what you are trying to accomplish.\n\nIt also gives both sides an opportunity to determine whether the working relationship feels right before any commitment is made. We will explain your options, recommend the most sensible next steps, and leave the timing and decision with you."
   },
   {
-    question: "What happens after we submit the planning form?",
-    answer:
-      "Matthew or Landon will review the information personally and reach out within 24 hours. The first step is a straightforward conversation about the property, your timing, and what would be most helpful. From there, we may recommend a property visit, a pricing and market review, or a preparation plan. There is no automated valuation and no obligation to list.",
+    "question": "What happens after we submit the planning form?",
+    "answer": "Matthew or Landon will review the information personally and reach out within 24 hours. The first step is a straightforward conversation about the property, your timing, and what would be most helpful. From there, we may recommend a property visit, a pricing and market review, or a preparation plan. There is no automated valuation and no obligation to list."
   },
   {
-    question: "How do you determine the right list price?",
-    answer:
-      "We look at more than recent comparable sales. The property’s condition, location, unique features, current competition, buyer activity, and local market momentum all help determine the right strategy.\n\nOur goal is not simply to list your home. It is to position it to sell. The list price influences which buyers notice the property, how they interpret it, and how much activity the launch creates. We explain the available pricing options, the risks and advantages of each, and recommend the approach most likely to produce the strongest overall result.",
+    "question": "How do you determine the right list price?",
+    "answer": "We look at more than recent comparable sales. The property’s condition, location, unique features, current competition, buyer activity, and local market momentum all help determine the right strategy.\n\nOur goal is not simply to list your home. It is to position it to sell. The list price influences which buyers notice the property, how they interpret it, and how much activity the launch creates. We explain the available pricing options, the risks and advantages of each, and recommend the approach most likely to produce the strongest overall result."
   },
   {
-    question: "What is included in your marketing?",
-    answer:
-      "Every listing includes a strategy built around the property and the buyers most likely to respond to it. Depending on the home, that may include professional photography, video, drone footage, floor plans, listing copy, MLS exposure, social media, digital promotion, open houses, agent outreach, and property-specific web presentation.\n\nThe marketing is not treated as a checklist. The presentation, timing, and distribution should all work together to position the home properly.\n\nDo not add staging as a promised included service.",
+    "question": "What is included in your marketing?",
+    "answer": "Every listing includes a strategy built around the property and the buyers most likely to respond to it. Depending on the home, that may include professional photography, video, drone footage, floor plans, listing copy, MLS exposure, social media, digital promotion, open houses, agent outreach, and property-specific web presentation.\n\nThe marketing is not treated as a checklist. The presentation, timing, and distribution should all work together to position the home properly."
   },
   {
-    question: "What should we do before putting the home on the market?",
-    answer:
-      "We begin with a property review and identify what is worth addressing before the listing goes live. That may include repairs, decluttering, cleaning, paint, landscaping, exterior presentation, or minor updates.\n\nNot every home needs major work. We focus on the improvements most likely to strengthen buyer confidence and presentation, and we will also tell you where spending more is unlikely to make sense.",
-  },
+    "question": "My home didn't sell. How could you help?",
+    "answer": "We would review the previous approach with you and discuss pricing, preparation, photography and marketing. For one growing family whose home had previously been listed without selling, our work covered those areas, with clear communication and negotiation support. Their home sold, and we helped them find a larger home nearby."
+  }
 ];
 
 const TOWN_FAQS = {
