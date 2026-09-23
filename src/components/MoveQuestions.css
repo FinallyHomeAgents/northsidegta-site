@@ -1,0 +1,14 @@
+.move-questions { padding: 36px 20px; background: #f3f8ed; color: #17251b; scroll-margin-top: 120px; }
+.move-questions__inner { max-width: 920px; margin: 0 auto; }
+.move-questions h2 { margin: 0 0 20px; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; font-weight: 600; }
+.move-questions__list { border: 1px solid #d7e0d0; border-radius: 16px; overflow: hidden; background: white; }
+.move-questions details + details { border-top: 1px solid #d7e0d0; }
+.move-questions summary { padding: 16px 20px; min-height: 52px; cursor: pointer; font-weight: 600; line-height: 1.5; }
+.move-questions summary::marker { color: #32610e; }
+.move-questions details p { margin: 0; padding: 0 20px 20px; font-size: 15px; line-height: 1.75; color: #475549; }
+.move-questions summary:focus-visible { outline: 3px solid #32610e; outline-offset: -4px; border-radius: 6px; }
+.move-questions__contact { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; }
+.move-questions__contact p { margin: 0; flex: 1 1 280px; line-height: 1.6; }
+.move-questions__contact a { display: inline-block; padding: 12px 20px; border-radius: 999px; background: #32610e; color: white; font-weight: 600; text-decoration: none; text-align: center; }
+.move-questions__contact a:hover { background: #23470a; }
+.move-questions__contact a:focus-visible { outline: 3px solid #17251b; outline-offset: 3px; }

@@ -1,3 +1,4 @@
+import MoveQuestions from "./components/MoveQuestions";
 // src/BuyersPage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -900,6 +901,8 @@ export default function BuyersPage() {
           </div>
         </div>
       </section>
+
+      <MoveQuestions audience="buyers" />
 
       <section className="buyers-section tinted-section">
         <div className="buyers-container">

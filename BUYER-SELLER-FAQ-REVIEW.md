@@ -1,12 +1,12 @@
 # Buyers and Sellers: compact FAQ proposal
 
-Draft for Matthew's review. Proposed additions to the existing Buyers and Sellers pages; this document does not change the live website.
+Copy and implementation notes for Matthew's review. The PR now implements these questions on the Buyers and Sellers preview pages. Production changes only after merge/deployment.
 
 Use three collapsed questions per page. Each opens a short answer. Keep the contact invitation visible below the questions. On the website, use native details/summary controls or an accessible equivalent, with keyboard support, visible focus, and comfortable touch targets.
 
 ## Buyers page
 
-Suggested placement: after the explanation of how Matthew and Landon work with buyers, before the next contact section.
+Implemented placement: after the buyer service/process sections, before “Real moves. Real families.” Anchor: /buyers#buyers-move-questions.
 
 ### Questions about your next move
 
@@ -34,11 +34,11 @@ We start by understanding your next-home priorities and discussing the sale of y
 **Visible contact invitation:** Have a move in mind? Let's talk through your priorities.
 
 **Button:** Plan my next move  
-**Destination:** Existing contact or consultation flow; confirm the site's actual URL during implementation.
+**Destination:** Existing on-page inquiry form (#cta-section for buyers; #seller-planning for sellers).
 
 ## Sellers page
 
-Suggested placement: after the selling-process explanation, before the next contact section.
+Implemented placement: immediately after the selling-process section, before the team section. Anchor: /sellers#sellers-move-questions.
 
 ### Questions about selling and moving
 
@@ -66,7 +66,7 @@ We would discuss your goals, timing and property, then work through pricing, pre
 **Visible contact invitation:** Need more space, but have a home to sell? Let's talk through your next move.
 
 **Button:** Plan my sale and purchase  
-**Destination:** Existing contact or consultation flow; confirm the site's actual URL during implementation.
+**Destination:** Existing on-page inquiry form (#cta-section for buyers; #seller-planning for sellers).
 
 ## Review notes — not website copy
 
