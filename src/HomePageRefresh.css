@@ -488,3 +488,49 @@
  .homepage-v4 .community-grid{grid-template-columns:1fr!important}
  .homepage-v4 .communities{padding-top:78px!important}
 }
+
+
+/* v3: specificity + contrast corrections from PR review */
+.homepage-v4 .hero--concept .hero__copy {
+  min-height: 760px !important;
+  padding: clamp(38px, 5vw, 82px) !important;
+  background: #132f14 !important;
+}
+.homepage-v4 .hero--concept .agent-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.homepage-v4 .hero--concept .hero__heading {
+  max-width: 11ch !important;
+  font-size: clamp(3.4rem, 6vw, 6.6rem) !important;
+  line-height: .92 !important;
+  letter-spacing: -.045em !important;
+}
+.homepage-v4 .hero--concept .hero__heading-em {
+  display: block !important;
+  color: #dbe9ce !important;
+}
+.homepage-v4 .hero--concept .hero__intro {
+  font-size: clamp(1rem, 1.2vw, 1.16rem) !important;
+  line-height: 1.65 !important;
+  color: rgba(255,255,255,.84) !important;
+}
+.homepage-v4 .market-snapshot,
+.homepage-v4 .market-section {
+  background: #f4efe5 !important;
+}
+@media (max-width: 1023px) {
+  .homepage-v4 .hero--concept .hero__copy { min-height: 600px !important; }
+}
+@media (max-width: 639px) {
+  .homepage-v4 .hero--concept .hero__copy {
+    min-height: 650px !important;
+    padding: 34px 22px !important;
+  }
+  .homepage-v4 .hero--concept .hero__heading {
+    font-size: clamp(2.7rem, 14vw, 4.25rem) !important;
+  }
+}
