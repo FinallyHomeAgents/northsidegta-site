@@ -454,3 +454,37 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* v2: unmistakable editorial refresh */
+.homepage-v4 .hero--concept { padding: clamp(14px, 2vw, 30px) !important; }
+.homepage-v4 .hero__grid { max-width: 88rem !important; border-radius: 36px !important; }
+.homepage-v4 .hero__copy { min-height: 760px !important; }
+.homepage-v4 .hero__heading { font-size: clamp(3.4rem, 6vw, 6.6rem) !important; }
+.homepage-v4 .hero__map-panel { min-height: 760px !important; }
+.homepage-v4 .focus-community-rail { max-width: 88rem !important; margin-top: 18px !important; }
+.homepage-v4 .proof-bar { padding-top: 36px !important; }
+.homepage-v4 .pathways { padding-top: 36px !important; }
+.homepage-v4 .communities { padding-top: 120px !important; }
+.homepage-v4 .community-grid { grid-template-columns: repeat(12, minmax(0,1fr)) !important; }
+.homepage-v4 .community-card { grid-column: span 4; min-height: 480px; }
+.homepage-v4 .community-card:nth-child(1),
+.homepage-v4 .community-card:nth-child(4) { grid-column: span 8; }
+.homepage-v4 .community-card:nth-child(1) .community-card__link,
+.homepage-v4 .community-card:nth-child(4) .community-card__link { display:grid; grid-template-columns:1.12fr .88fr; }
+.homepage-v4 .community-card:nth-child(1) .community-card__img-wrap,
+.homepage-v4 .community-card:nth-child(4) .community-card__img-wrap { aspect-ratio:auto; min-height:100%; }
+@media(max-width:1023px){
+ .homepage-v4 .hero__copy,.homepage-v4 .hero__map-panel{min-height:600px!important}
+ .homepage-v4 .community-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .homepage-v4 .community-card,.homepage-v4 .community-card:nth-child(1),.homepage-v4 .community-card:nth-child(4){grid-column:span 1;min-height:0}
+ .homepage-v4 .community-card:nth-child(1) .community-card__link,.homepage-v4 .community-card:nth-child(4) .community-card__link{display:flex}
+ .homepage-v4 .community-card:nth-child(1) .community-card__img-wrap,.homepage-v4 .community-card:nth-child(4) .community-card__img-wrap{aspect-ratio:16/9;min-height:0}
+}
+@media(max-width:639px){
+ .homepage-v4 .hero__grid{border-radius:24px!important}
+ .homepage-v4 .hero__copy{min-height:650px!important}
+ .homepage-v4 .hero__map-panel{min-height:460px!important}
+ .homepage-v4 .community-grid{grid-template-columns:1fr!important}
+ .homepage-v4 .communities{padding-top:78px!important}
+}
