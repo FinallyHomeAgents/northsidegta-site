@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import "./HomePage.css";
+import "./HomePageRefresh.css";
 import HeaderShell from "./components/HeaderShell";
 
 import { HOMEPAGE_MARKUP } from "./homepageMarkup";
