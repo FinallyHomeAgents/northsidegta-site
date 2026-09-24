@@ -3492,3 +3492,169 @@ main { padding-top: 0; }
     padding: 32px 24px;
   }
 }
+
+
+/* ==========================================================
+   HOMEPAGE POLISH — visual-only progressive enhancement
+   Keeps existing layout/sizing/content intact.
+   ========================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .homepage-v4 .hero__cta,
+  .homepage-v4 .btn,
+  .homepage-v4 .focus-community-rail__tile,
+  .homepage-v4 .community-card {
+    will-change: transform;
+  }
+
+  .homepage-v4 .hero__cta,
+  .homepage-v4 .btn {
+    transition:
+      transform 220ms cubic-bezier(.2,.8,.2,1),
+      box-shadow 220ms ease,
+      background-color 220ms ease,
+      border-color 220ms ease;
+  }
+
+  .homepage-v4 .hero__cta:hover,
+  .homepage-v4 .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .homepage-v4 .focus-community-rail__tile {
+    transition:
+      transform 260ms cubic-bezier(.2,.8,.2,1),
+      box-shadow 260ms ease,
+      border-color 260ms ease,
+      background-color 260ms ease;
+  }
+
+  .homepage-v4 .focus-community-rail__tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(35,71,10,.10);
+  }
+
+  .homepage-v4 .community-card {
+    transition:
+      transform 300ms cubic-bezier(.2,.8,.2,1),
+      box-shadow 300ms ease,
+      border-color 300ms ease;
+  }
+
+  .homepage-v4 .community-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(35,92,13,.22);
+    box-shadow: 0 20px 46px rgba(35,71,10,.11);
+  }
+
+  .homepage-v4 .community-card__img {
+    transition: transform 420ms cubic-bezier(.2,.8,.2,1), filter 420ms ease;
+  }
+
+  .homepage-v4 .community-card:hover .community-card__img {
+    transform: scale(1.035);
+    filter: saturate(1.04);
+  }
+
+  .homepage-v4 .community-card__cta {
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+
+  .homepage-v4 .community-card:hover .community-card__cta {
+    transform: translateX(3px);
+  }
+}
+
+.homepage-v4 .hero--concept .hero__copy-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.homepage-v4 .hero--concept .hero__eyebrow {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.homepage-v4 .hero--concept .hero__cta--secondary,
+.homepage-v4 .hero--concept .hero-badge {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.homepage-v4 .hero--concept .hero__map-frame {
+  box-shadow: inset 0 0 0 1px rgba(35,71,10,.06);
+}
+
+.homepage-v4 .focus-community-rail__track {
+  scroll-snap-type: x proximity;
+}
+
+.homepage-v4 .focus-community-rail__tile {
+  scroll-snap-align: start;
+}
+
+.homepage-v4 .pathways__grid {
+  border: 1px solid rgba(35,71,10,.06);
+}
+
+.homepage-v4 .pathway {
+  position: relative;
+  isolation: isolate;
+}
+
+.homepage-v4 .pathway::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,.055), transparent 42%);
+}
+
+.homepage-v4 .community-card {
+  isolation: isolate;
+}
+
+.homepage-v4 .community-card__img-wrap {
+  position: relative;
+}
+
+.homepage-v4 .community-card__img-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 -1px rgba(35,71,10,.06);
+}
+
+.homepage-v4 .pill {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.homepage-v4 :is(.hero__cta, .btn, .focus-community-rail__tile, .community-card__link):focus-visible {
+  outline: 3px solid rgba(35,92,13,.38);
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .homepage-v4 .focus-community-rail__track {
+    scroll-padding-inline: 2px;
+  }
+
+  .homepage-v4 .hero__ctas .hero__cta {
+    min-height: 46px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homepage-v4 .hero__cta,
+  .homepage-v4 .btn,
+  .homepage-v4 .focus-community-rail__tile,
+  .homepage-v4 .community-card,
+  .homepage-v4 .community-card__img,
+  .homepage-v4 .community-card__cta {
+    transition: none !important;
+    transform: none !important;
+  }
+}
