@@ -1,6 +1,7 @@
 import React,{useMemo,useState}from"react";
 import{Helmet}from"react-helmet-async";
 import"./PlayYourBudgetPage.css";
+import NorthsideBoard3D from"./components/NorthsideBoard3D";
 
 const TOWNS=[
 ["Georgina","georgina","Lake living · space · waterfront possibilities"],
@@ -30,12 +31,7 @@ export default function PlayYourBudgetPage(){
    <div className="budget"><div><span>YOUR BUDGET</span><strong>{label}</strong></div><input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)}/><small><b>$500K</b><b>$4M+</b></small></div>
    <div className="wants"><span className="step">01</span><div><h2>What should your next home give you?</h2><p>Pick up to four.</p></div><div className="chips">{WANTS.map(w=><button key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div></div>
   </section>
-  <section className="table"><div id="pyb-board" className={"board "+(revealed?"revealed":"")}>
-   <div className="lake"><span>LAKE SIMCOE</span></div><div className="start"><small>START HERE</small><strong>TORONTO</strong><b>↑</b></div>
-   {TOWNS.map(([name,cls,note],i)=><article className={"property "+cls} style={{"--d":i*80+"ms"}} key={name}><i/><div className="mini-house"><b/><span/></div><h3>{name}</h3><p>{note}</p></article>)}
-   <div className="stack"><span>WHAT'S</span><strong>POSSIBLE?</strong><small>NORTHSIDE GTA</small></div><Dice rolling={rolling}/>
-   {revealed&&<div className="reveal"><small>YOUR SEARCH STARTS HERE</small><strong>Now let us find the actual homes.</strong><p>We'll personally search what's for sale right now around your {label} budget and priorities.</p></div>}
-  </div></section>
+  <section className="table table-3d"><div id="pyb-board" className={"board3d-shell "+(revealed?"revealed":"")}><div className="board3d-copy"><span>THE NORTHSIDE BOARD</span><strong>{label}</strong><small>{wants.length?wants.join(" · "):"Set your priorities above"}</small></div><NorthsideBoard3D rolling={rolling} revealed={revealed}/>{revealed&&<div className="reveal reveal-3d"><small>YOUR SEARCH STARTS HERE</small><strong>Now let us find the actual homes.</strong><p>We'll personally search what's for sale right now around your {label} budget and priorities.</p></div>}</div></section>
   <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>The roll is the fun part. Your budget and wish list guide where we'd start looking.</p></div><button className="roll-btn" onClick={()=>setGate(true)}>ROLL THE DICE <span>↗</span></button></section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
   {gate&&<div className="modal-bg" onMouseDown={()=>setGate(false)}><div className="modal" role="dialog" aria-modal="true" onMouseDown={e=>e.stopPropagation()}><button className="close" onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2>Unlock your roll.</h2><p>Tell us where to send the homes we uncover for you.</p><form onSubmit={roll}><label>First name<input required autoFocus value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label><label>Email<input required type="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label><label>Phone <small>optional</small><input type="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label><button>UNLOCK MY ROLL →</button></form><small className="privacy">This starts a real home-search conversation with Finally Home Agents.</small></div></div>}
