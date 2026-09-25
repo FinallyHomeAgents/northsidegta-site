@@ -23,7 +23,7 @@ export default function PlayYourBudgetPage(){
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section className="pyb-hero">
-   <img className="pyb-logo" src="/assets/play-your-budget/northside-logo.webp" alt="NorthSide GTA"/>
+   <img className="pyb-logo" src="/Images/northsidegta-logo.svg" alt="NorthSide GTA"/>
    <p className="eyebrow">YOUR BUDGET · YOUR WISH LIST · YOUR NEXT MOVE</p>
    <h1>What could your next home look like <em>up here?</em></h1>
    <p className="intro">Set the number. Tell us what matters. Then roll the dice and we'll show you where we'd start the search.</p>
