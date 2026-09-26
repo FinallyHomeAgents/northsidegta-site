@@ -1,6 +1,4 @@
-import React,{lazy,useEffect,useMemo,useRef,useState}from"react";
-
-const NorthsideBoard3D = lazy(() => import("./components/NorthsideBoard3D"));
+import React,{useEffect,useMemo,useRef,useState}from"react";
 import{Helmet}from"react-helmet-async";
 import"./PlayYourBudgetPage.css";
 
@@ -36,7 +34,14 @@ export default function PlayYourBudgetPage(){
    <div className="budget"><div><span>YOUR BUDGET</span><strong>{label}</strong></div><input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)}/><small><b>$500K</b><b>$4M+</b></small></div>
    <div className="wants"><span className="step">01</span><div><h2>What should your next home give you?</h2><p>Pick up to four.</p></div><div className="chips">{WANTS.map(w=><button key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div></div>
   </section>
-  <section className="table table-3d"><div id="pyb-board" className={"board3d-shell "+(revealed?"revealed":"")}><div className="board3d-copy"><span>THE NORTHSIDE BOARD</span><strong>{label}</strong><small>{wants.length?wants.join(" · "):"Set your priorities above"}</small></div>{typeof window !== "undefined" ? <React.Suspense fallback={<div className="pyb-board-loading" aria-hidden="true"/>}><NorthsideBoard3D rolling={rolling} revealed={revealed}/></React.Suspense> : <div className="pyb-board-static" aria-hidden="true"><span>LAKE SIMCOE</span><strong>Explore the NorthSide</strong></div>}{revealed&&<div className="reveal reveal-3d"><small>YOUR SEARCH STARTS HERE</small><strong>Now let us find the actual homes.</strong><p>We'll personally search what's for sale right now around your {label} budget and priorities.</p></div>}</div></section>
+  <section className="table table-3d"><div id="pyb-board" className={"board3d-shell "+(revealed?"revealed":"")}><div className="board3d-copy"><span>THE NORTHSIDE BOARD</span><strong>{label}</strong><small>{wants.length?wants.join(" · "):"Set your priorities above"}</small></div><div className={"pyb-visual-board "+(rolling?"is-rolling ":"")+(revealed?"is-revealed":"")} aria-label="Interactive NorthSide property board">
+<div className="vboard-lake"><span>LAKE SIMCOE</span></div>
+<div className="vboard-path"/>
+{TOWNS.map(([name,cls],i)=><div className={"vboard-space v-"+cls} key={name} style={{"--i":i}}><span className="vbar"/><div className="vhouse"><i/><b/><em/></div><strong>{name}</strong></div>)}
+<div className="vboard-start"><small>START HERE</small><strong>TORONTO</strong><b>↑</b></div>
+<div className="vboard-deck"><small>WHAT'S</small><strong>POSSIBLE?</strong><span>NORTHSIDE GTA</span></div>
+<div className="real-dice" aria-hidden="true"><div className="real-die die-one"><i/><i/><i/><i/><i/></div><div className="real-die die-two"><i/><i/><i/></div></div>
+</div>{revealed&&<div className="reveal reveal-3d"><small>YOUR SEARCH STARTS HERE</small><strong>Now let us find the actual homes.</strong><p>We'll personally search what's for sale right now around your {label} budget and priorities.</p></div>}</div></section>
   <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>The roll is the fun part. Your budget and wish list guide where we'd start looking.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>setGate(true)}>ROLL THE DICE <span>↗</span></button></section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
   {gate&&<div className="modal-bg" onMouseDown={()=>setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" onMouseDown={e=>e.stopPropagation()}><button className="close" onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2>Unlock your roll.</h2><p>Tell us where to send the homes we uncover for you.</p><form onSubmit={roll}><label>First name<input required autoFocus value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label><label>Email<input required type="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label><label>Phone <small>optional</small><input type="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label><button>UNLOCK MY ROLL →</button></form><small className="privacy">This starts a real home-search conversation with Finally Home Agents.</small></div></div>}
