@@ -61,3 +61,11 @@
 .board3d-shell{position:relative!important;display:block!important;height:760px!important;min-height:620px!important;background:#241a12!important;overflow:hidden!important}
 .pyb-visual-board{display:block!important;visibility:visible!important;opacity:1!important;z-index:3!important;min-height:560px!important}
 @media(max-width:760px){.board3d-shell{height:620px!important;min-height:620px!important}.pyb-visual-board{inset:12px!important;height:auto!important;min-height:590px!important}}
+
+/* Independent board stage — intentionally avoids legacy .board/.board3d-shell layout */
+.pyb-board-stage{position:relative;display:block;width:min(1280px,96vw);height:760px;margin:0 auto;background:#1c140e;border-radius:28px;overflow:hidden;box-shadow:0 45px 100px #000b}
+.pyb-board-surface{position:absolute;display:block;left:4%;right:4%;top:7%;bottom:5%;background:linear-gradient(145deg,#ddd0b1,#b7a889);border:20px solid #3b291b;border-radius:22px;box-shadow:inset 0 0 0 3px #725b3e,inset 0 0 80px #604b3266,0 30px 55px #0009;overflow:hidden}
+.pyb-board-proof{position:absolute;z-index:50;right:22px;top:22px;padding:7px 10px;background:#d9e8c8;color:#17311c;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.13em}
+.pyb-board-stage.is-rolling .die-one{animation:domRoll1 1.55s cubic-bezier(.18,.75,.25,1)}.pyb-board-stage.is-rolling .die-two{animation:domRoll2 1.55s cubic-bezier(.18,.75,.25,1)}
+.pyb-board-stage.is-revealed .vboard-space{transform:translateY(-6px) scale(1.025);filter:saturate(1.15) brightness(1.05)}
+@media(max-width:760px){.pyb-board-stage{width:100%;height:640px;border-radius:0}.pyb-board-surface{left:10px;right:10px;top:62px;bottom:12px;border-width:10px;border-radius:16px}.pyb-board-proof{right:12px;top:14px}.board3d-copy{left:14px;top:12px}}
