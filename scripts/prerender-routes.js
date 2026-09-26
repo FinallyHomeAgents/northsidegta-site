@@ -36,6 +36,7 @@ const routeModules = {
   "/moving-to-port-perry-scugog-from-toronto": "../src/MovingToPortPerryScugogFromTorontoPage",
   "/sellers": "../src/SellersPage",
   "/what-my-home-buys": "../src/BuyingPowerPage",
+  "/play-your-budget": "../src/PlayYourBudgetPage",
   "/homeanalysis": "../src/HomeAnalysisPage",
   "/media": "../src/MediaPage",
   "/contact": "../src/ContactPage",
@@ -93,7 +94,8 @@ function injectRoute(route, markup) {
   root.set_content(markup);
 
   let html = doc.toString();
-  if (!/^<!DOCTYPE html>/i.test(html)) html = `<!DOCTYPE html>\n${html}`;
+  if (!/^<!DOCTYPE html>/i.test(html)) html = `<!DOCTYPE html>
+${html}`;
   fs.writeFileSync(outputPath, html, "utf8");
 }
 
