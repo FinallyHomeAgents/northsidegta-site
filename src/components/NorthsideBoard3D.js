@@ -1,6 +1,6 @@
 import React,{Suspense,useEffect,useMemo,useRef}from"react";
 import{Canvas,useFrame}from"@react-three/fiber";
-import{ContactShadows,Environment,Float,Html,PresentationControls,RoundedBox}from"@react-three/drei";
+import{ContactShadows,Html,PresentationControls,RoundedBox}from"@react-three/drei";
 import{Physics,RigidBody,CuboidCollider}from"@react-three/rapier";
 import*as THREE from"three";
 
@@ -51,7 +51,7 @@ function Die({position,impulse,torque,rolling,index}){
 }
 
 function CameraRig({rolling,revealed}){
- useFrame(({camera},delta)=>{const target=rolling?new THREE.Vector3(0,7.1,8.6):revealed?new THREE.Vector3(0,8.7,10.4):new THREE.Vector3(0,9.5,11.8);camera.position.lerp(target,1-Math.pow(.002,delta));camera.lookAt(0,0,0)});
+ useFrame(({camera},delta)=>{const target=rolling?new THREE.Vector3(0,6.2,7.2):revealed?new THREE.Vector3(0,6.8,8.2):new THREE.Vector3(0,7.2,8.6);camera.position.lerp(target,1-Math.pow(.002,delta));camera.lookAt(0,0,0)});
  return null
 }
 
@@ -74,11 +74,11 @@ function BoardScene({rolling,revealed}){
 
 export default function NorthsideBoard3D({rolling=false,revealed=false}){
  return <div className="pyb-canvas-wrap">
-  <Canvas shadows dpr={[1,1.65]} camera={{position:[0,9.5,11.8],fov:38}} gl={{antialias:true,toneMapping:THREE.ACESFilmicToneMapping,toneMappingExposure:1.05}}>
+  <Canvas shadows dpr={[1,1.35]} camera={{position:[0,7.2,8.6],fov:43}} gl={{antialias:true,toneMapping:THREE.ACESFilmicToneMapping,toneMappingExposure:1.35}}>
    <color attach="background" args={["#17130f"]}/>
    <fog attach="fog" args={["#17130f",15,25]}/>
-   <ambientLight intensity={.65}/><directionalLight castShadow position={[-5,10,6]} intensity={2.4} color="#ffd9a8" shadow-mapSize={[2048,2048]}/><pointLight position={[6,6,-4]} intensity={1.2} color="#cbe0ff"/>
-   <Suspense fallback={null}><Environment preset="apartment"/><PresentationControls global polar={[-.08,.18]} azimuth={[-.18,.18]} config={{mass:2,tension:240}} snap={{mass:3,tension:220}}><BoardScene rolling={rolling} revealed={revealed}/></PresentationControls><ContactShadows position={[0,-.3,0]} opacity={.55} scale={16} blur={2.4} far={7}/></Suspense>
+   <hemisphereLight intensity={1.25} color="#fff2d6" groundColor="#332417"/><ambientLight intensity={1.15}/><directionalLight castShadow position={[-4,9,5]} intensity={3.1} color="#ffd9a8" shadow-mapSize={[1024,1024]}/><pointLight position={[5,5,-3]} intensity={1.8} color="#d9e7ff"/>
+   <Suspense fallback={null}><PresentationControls global polar={[-.08,.18]} azimuth={[-.18,.18]} config={{mass:2,tension:240}} snap={{mass:3,tension:220}}><BoardScene rolling={rolling} revealed={revealed}/></PresentationControls><ContactShadows position={[0,-.3,0]} opacity={.55} scale={16} blur={2.4} far={7}/></Suspense>
    <CameraRig rolling={rolling} revealed={revealed}/>
   </Canvas>
   <div className="pyb-canvas-vignette"/>
