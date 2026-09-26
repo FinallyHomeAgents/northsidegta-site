@@ -165,8 +165,7 @@ function main() {
       if (entry.priority) parts.push(`    <priority>${entry.priority}</priority>`)
       if (entry.lastmod) parts.push(`    <lastmod>${entry.lastmod}</lastmod>`)
       parts.push('  </url>')
-      return parts.join('
-')
+      return parts.join('\\n')
     })
 
   const sitemap = [
@@ -177,8 +176,7 @@ function main() {
     '',
     '</urlset>',
     '',
-  ].join('
-')
+  ].join('\\n')
 
   const publicTarget = path.join(publicDir, 'sitemap.xml')
   const buildTarget = path.join(buildDir, 'sitemap.xml')
