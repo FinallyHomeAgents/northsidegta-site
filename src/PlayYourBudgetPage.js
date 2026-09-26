@@ -19,11 +19,11 @@ function Dice({rolling}){return <div className={"pyb-dice "+(rolling?"rolling":"
 const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
 export default function PlayYourBudgetPage(){
  const modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
- const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:""});
+ const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:""}),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null);
  const label=useMemo(()=>money(budget),[budget]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
  const toggle=w=>setWants(a=>a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a);
- const roll=e=>{e.preventDefault();if(!lead.name||!lead.email)return;setGate(false);setRevealed(false);setRolling(true);setTimeout(()=>{setRolling(false);setRevealed(true);document.querySelector("#pyb-board")?.scrollIntoView({behavior:"smooth",block:"center"})},1600)};
+ const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);setRolling(true);const a=Math.floor(Math.random()*6)+1,b=Math.floor(Math.random()*6)+1;setDice([a,b]);const total=a+b;setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step++;setPosition(p=>(p+1)%TOWNS.length);if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setPosition(p=>{setLanded(TOWNS[p][0]);return p})}},380)},1450)};\n const roll=e=>{e.preventDefault();if(!lead.name||!lead.email)return;setGate(false);setTimeout(runRoll,260)};
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section className="pyb-hero">
@@ -37,18 +37,18 @@ export default function PlayYourBudgetPage(){
   <section className="table table-3d">
    <div id="pyb-board" className={"pyb-board-stage "+(rolling?"is-rolling ":"")+(revealed?"is-revealed":"")}>
     <div className="board3d-copy"><span>THE NORTHSIDE BOARD</span><strong>{label}</strong><small>{wants.length?wants.join(" · "):"Set your priorities above"}</small></div>
-    <div className="pyb-board-proof">BOARD LIVE</div>
+    <div className="pyb-game-status"><span>{rolling?"ROLLING…":moving?"MOVING "+(dice[0]+dice[1])+" SPACES":landed?"YOU LANDED IN "+landed:"READY TO ROLL"}</span><strong>{dice[0]} + {dice[1]} = {dice[0]+dice[1]}</strong></div>
     <div className="pyb-board-surface">
      <div className="vboard-lake"><span>LAKE SIMCOE</span></div>
-     {TOWNS.map(([name,cls],i)=><div className={"vboard-space v-"+cls} key={name}><span className="vbar"/><div className="vhouse"><i/><b/><em/></div><strong>{name}</strong></div>)}
-     <div className="vboard-start"><small>START HERE</small><strong>TORONTO</strong><b>↑</b></div>
+     {TOWNS.map(([name,cls],i)=><div className={"vboard-space v-"+cls+(position===i?" token-space":"")} key={name}><span className="vbar"/><div className="vhouse"><i/><b/><em/></div><strong>{name}</strong></div>)}
+     <div className="vboard-start"><small>START HERE</small><strong>TORONTO</strong><b>↑</b></div><div className={"game-token token-pos-"+position+(moving?" moving":"")} aria-label="Game piece"><span>⌂</span></div>
      <div className="vboard-deck"><small>WHAT'S</small><strong>POSSIBLE?</strong><span>NORTHSIDE GTA</span></div>
-     <div className="real-dice" aria-hidden="true"><div className="real-die die-one"><i/><i/><i/><i/><i/></div><div className="real-die die-two"><i/><i/><i/></div></div>
+     <div className="real-dice" aria-hidden="true"><div className={"real-die die-one face-"+dice[0]}>{Array.from({length:dice[0]}).map((_,i)=><i key={i}/>)}</div><div className={"real-die die-two face-"+dice[1]}>{Array.from({length:dice[1]}).map((_,i)=><i key={i}/>)}</div></div>
     </div>
     {revealed&&<div className="reveal reveal-3d"><small>YOUR SEARCH STARTS HERE</small><strong>Now let us find the actual homes.</strong><p>We'll personally search what's for sale right now around your {label} budget and priorities.</p></div>}
    </div>
   </section>
-  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>The roll is the fun part. Your budget and wish list guide where we'd start looking.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>setGate(true)}>ROLL THE DICE <span>↗</span></button></section>
+  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>The roll is the fun part. Your budget and wish list guide where we'd start looking.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>lead.email?runRoll():setGate(true)} disabled={rolling||moving}>{landed?"ROLL AGAIN":"ROLL THE DICE"} <span>↗</span></button></section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
   {gate&&<div className="modal-bg" onMouseDown={()=>setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" onMouseDown={e=>e.stopPropagation()}><button className="close" onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2>Unlock your roll.</h2><p>Tell us where to send the homes we uncover for you.</p><form onSubmit={roll}><label>First name<input required autoFocus value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label><label>Email<input required type="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label><label>Phone <small>optional</small><input type="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label><button>UNLOCK MY ROLL →</button></form><small className="privacy">This starts a real home-search conversation with Finally Home Agents.</small></div></div>}
  </main>
