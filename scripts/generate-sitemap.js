@@ -86,6 +86,7 @@ function main() {
     { path: '/moving-to-port-perry-scugog-from-toronto', changefreq: 'monthly', priority: '0.8' },
     { path: '/sellers', changefreq: 'weekly', priority: '0.9' },
     { path: '/what-my-home-buys', changefreq: 'monthly', priority: '0.9' },
+    { path: '/play-your-budget', changefreq: 'weekly', priority: '0.9' },
     { path: '/homeanalysis', changefreq: 'monthly', priority: '0.7' },
     { path: '/communities', changefreq: 'monthly', priority: '0.8' },
     { path: '/about', changefreq: 'yearly', priority: '0.5' },
@@ -164,7 +165,7 @@ function main() {
       if (entry.priority) parts.push(`    <priority>${entry.priority}</priority>`)
       if (entry.lastmod) parts.push(`    <lastmod>${entry.lastmod}</lastmod>`)
       parts.push('  </url>')
-      return parts.join('\n')
+      return parts.join('\\n')
     })
 
   const sitemap = [
@@ -175,7 +176,7 @@ function main() {
     '',
     '</urlset>',
     '',
-  ].join('\n')
+  ].join('\\n')
 
   const publicTarget = path.join(publicDir, 'sitemap.xml')
   const buildTarget = path.join(buildDir, 'sitemap.xml')

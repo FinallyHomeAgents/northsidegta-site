@@ -13,6 +13,7 @@ import ContactPage      from "./ContactPage";
 import VipPage          from "./vip";
 import SignWithUsPage   from "./SignWithUsPage";
 import BuyingPowerPage from "./BuyingPowerPage";
+import PlayYourBudgetPage from "./PlayYourBudgetPage";
 import HomeAnalysisPage from "./HomeAnalysisPage";
 import TownPage         from "./TownPage";
 import ThankYouPage     from "./ThankYouPage";
@@ -147,6 +148,7 @@ function App() {
           <Route path="/vip"          element={<VipPage />} />
           <Route path="/sign"         element={<SignWithUsPage />} />
           <Route path="/what-my-home-buys" element={<BuyingPowerPage />} />
+          <Route path="/play-your-budget" element={<PlayYourBudgetPage />} />
           <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
           <Route path="/insights"     element={<InsightsPage />} />
           <Route path="/insights/:slug" element={<InsightPage />} />
