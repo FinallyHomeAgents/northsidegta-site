@@ -1279,3 +1279,96 @@
   .human h2{font-size:25px}
   .human p{font-size:12px}
 }
+/* PR416 mobile interaction repair */
+.result-layer{
+  position:absolute;
+  inset:0;
+  z-index:90;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(4,10,8,.38);
+  backdrop-filter:blur(2px);
+}
+.result-layer .reveal-3d.premium-card{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  margin:0!important;
+}
+@media(max-width:760px){
+  /* iOS keeps :hover after tapping. Only .active should look selected. */
+  .pyb-priority-control .chips button:not(.active){
+    background:#ffffff0c!important;
+    color:#fff!important;
+    border-color:#ffffff35!important;
+    transform:none!important;
+  }
+  .pyb-priority-control .chips button.active{
+    background:#dcebc8!important;
+    color:#183019!important;
+    border-color:#dcebc8!important;
+    transform:none!important;
+  }
+
+  /* Results must sit above the page, never in the document flow behind controls. */
+  .result-layer{
+    position:fixed!important;
+    inset:0!important;
+    z-index:9996!important;
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:stretch!important;
+    padding:0!important;
+    background:rgba(3,8,6,.58)!important;
+    backdrop-filter:blur(5px)!important;
+  }
+  .result-layer .reveal-3d.premium-card{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:100%!important;
+    max-width:none!important;
+    max-height:min(78vh,720px)!important;
+    overflow:auto!important;
+    margin:0!important;
+    border-radius:20px 20px 0 0!important;
+    padding:18px 16px calc(18px + env(safe-area-inset-bottom))!important;
+    transform:none!important;
+    animation:pybResultSheet .3s cubic-bezier(.2,.82,.2,1) both!important;
+    box-shadow:0 -18px 70px #000a!important;
+  }
+  @keyframes pybResultSheet{
+    from{opacity:0;transform:translateY(28px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .result-close{
+    position:sticky!important;
+    top:0!important;
+    float:right;
+    z-index:3;
+    margin:-3px -3px 0 8px;
+    background:#f6edd8!important;
+  }
+  .premium-card .property-fit-grid{
+    grid-template-columns:1fr!important;
+  }
+  .premium-card .match-actions,
+  .match-actions-three{
+    grid-template-columns:1fr!important;
+  }
+  .match-actions-three .match-primary{
+    grid-column:auto!important;
+  }
+}
+@media(hover:hover){
+  .pyb-priority-control .chips button:hover:not(.active){
+    border-color:#ffffff65;
+    background:#ffffff16;
+    color:#fff;
+    transform:translateY(-1px);
+  }
+}

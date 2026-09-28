@@ -1,5 +1,6 @@
 import React,{useEffect,useMemo,useRef,useState}from"react";
 import{Helmet}from"react-helmet-async";
+import{createPortal}from"react-dom";
 import{trackEvent}from"./utils/analytics";
 import"./PlayYourBudgetPage.css";
 
@@ -147,6 +148,7 @@ export default function PlayYourBudgetPage(){
  const noFreeholdMatch=!bestMatch;
  const matchOptions=bestMatch?.options||[];
  useEffect(()=>{if(revealed){trackEvent("pyb_match_revealed",{budget,match:landed||"no-match",priority_count:wants.length})}},[revealed,landed,budget,wants.length]);
+ useEffect(()=>{if(!revealed||typeof window==="undefined"||window.innerWidth>760)return undefined;const old=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=old}},[revealed]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
  const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
  const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
@@ -243,7 +245,7 @@ export default function PlayYourBudgetPage(){
      <div key={stepTick} className={"game-token premium-token token-pos-"+position+(moving?" moving":"")} aria-label={"Game piece on "+BOARD_SPACES[position][0]}><span><b>⌂</b></span></div>
      <div className="real-dice premium-dice" aria-hidden="true"><RealDie value={dice[0]} className="die-one"/><RealDie value={dice[1]} className="die-two"/><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
     </div>
-    {revealed&&noFreeholdMatch&&<div className="reveal reveal-3d premium-card no-match-card">
+    {revealed&&noFreeholdMatch&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card no-match-card" onMouseDown={e=>e.stopPropagation()}>
       <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>FREEHOLD REALITY CHECK</small>
       <strong>{label}</strong>
@@ -251,8 +253,8 @@ export default function PlayYourBudgetPage(){
       <p>At this budget, we would not tell you there is a strong freehold-house fit anywhere on the NorthSide board. A one-off opportunity can appear, but it would be highly property-specific.</p>
       <div className="match-actions"><a className="match-primary" href="/contact" onClick={()=>trackEvent("pyb_reality_check_contact",{budget})}>ASK US WHAT’S ACTUALLY POSSIBLE →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST BUDGET</button></div>
       <small className="market-disclaimer">Freehold houses only. No condos, condo townhouses, vacant land or raw land.</small>
-     </div>}
-    {revealed&&landedSpace&&<div className="reveal reveal-3d premium-card">
+     </div></div>,document.body)}
+    {revealed&&landedSpace&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card" onMouseDown={e=>e.stopPropagation()}>
       <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>YOUR NORTHSIDE MATCH</small>
       <strong>{landedSpace[0]}</strong>
@@ -266,7 +268,7 @@ export default function PlayYourBudgetPage(){
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
       <div className="match-actions match-actions-three"><a className="match-primary" href={"/contact?source=play-your-budget&community="+encodeURIComponent(landedSpace[0])+"&budget="+budget} onClick={()=>trackEvent("pyb_show_homes",{community:landedSpace[0],budget})}>SHOW ME HOMES AROUND {label} →</a><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
-     </div>}
+     </div></div>,document.body)}
    </div>
   </section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Your match is the starting point.</h2><p>Matthew or Landon can turn your budget, priorities and community match into a real freehold-home search.</p></div></section>
