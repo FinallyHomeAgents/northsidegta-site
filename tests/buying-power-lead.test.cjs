@@ -2,9 +2,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { createHandler } = require('../lib/buying-power/handler.cjs');
 const { comparisonRows } = require('../src/lib/buyingPower.cjs');
-function setup({ failStore = false, failNotify = false, failEmail = false, limit = false } = {}) {
+function setup({ failStore = false, failNotify = false, failEmail = false, limit = false, failLimiter = false } = {}) {
   const records = new Map(); const calls = [];
-  const redis = { incr: async () => limit ? 11 : 1, expire: async () => {},
+  const redis = { eval: async () => { if (failLimiter) throw Error('offline'); return limit ? 60 : 0; },
     set: async (key, record) => { if (failStore) throw Error('offline'); records.set(key, structuredClone(record)); }, zadd: async () => {} };
   const handler = createHandler({ getRedis: () => redis, now: () => new Date('2026-09-28T15:00:00Z'),
     env: { RESEND_API_KEY: 'test', FORMSPREE_ENDPOINT: 'https://formspree.io/f/test' },
@@ -51,7 +51,10 @@ test('agent notification failure remains recoverable in the saved record', async
   assert.equal([...s.records.values()][0].notificationStatus,'failed');
 });
 test('rate limit stops submission before storage and delivery', async () => {
-  const s=setup({limit:true}); const res=await s.send(); assert.equal(res.code,429); assert.equal(s.calls.length,0); assert.equal(s.records.size,0);
+  const s=setup({limit:true}); const res=await s.send(); assert.equal(res.code,429); assert.equal(res.headers['Retry-After'],'60'); assert.equal(s.calls.length,0); assert.equal(s.records.size,0);
+});
+test('rate-limit service failure does not save or send a lead', async () => {
+  const s=setup({failLimiter:true}); const res=await s.send(); assert.equal(res.code,503); assert.equal(s.calls.length,0); assert.equal(s.records.size,0);
 });
 test('honeypot and wrong method never send', async () => {
   const s=setup(); await s.send({nickname:'bot'}); assert.equal((await s.send({},'GET')).code,405); assert.equal(s.calls.length,0);

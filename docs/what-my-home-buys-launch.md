@@ -30,7 +30,7 @@ Formspree is the everyday inbox. Records also live in the existing private Redis
 
 Check new requests each working day, act before `followUpDueAt`, and use the selected contact method. For comparison-only requests, deliver the requested comparison; no sales call or nurture enrolment is authorized. Update the record status/outcome when contacted or booked. Failed `emailStatus` requires manual delivery; failed `notificationStatus` requires manual attention. Server logs identify failures by reference ID, never contact details. This release does not add a CRM interface or automatic delivery-retry job.
 
-Rate limits: 10 submissions per IP/hour and 3 per email/hour, shared across server instances. Storage/rate-limit service failure returns an error rather than claiming the request was received. Customer emails contain server-owned data and fixed links, not user-supplied URLs.
+Rate limits: 10 submissions per IP and 3 per email over the preceding 60 minutes, shared across server instances. A single atomic Redis script checks and reserves both limits; crossing a clock-hour boundary does not reset them. Storage/rate-limit service failure returns an error rather than claiming the request was received. Customer emails contain server-owned data and fixed links, not user-supplied URLs.
 
 ## Events
 
