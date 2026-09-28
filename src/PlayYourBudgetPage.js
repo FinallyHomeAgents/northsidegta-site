@@ -3,38 +3,43 @@ import{Helmet}from"react-helmet-async";
 import"./PlayYourBudgetPage.css";
 
 
-const TOWNS=[
-["Georgina","georgina","Lake living · space · waterfront possibilities"],
-["East Gwillimbury","east","Newer homes · space · family living"],
-["Newmarket","newmarket","Connected · established · amenities"],
-["Aurora","aurora","Established · premium · connected"],
-["Stouffville","stouffville","Community · newer neighbourhoods · access"],
-["Uxbridge","uxbridge","Country living · acreage · privacy"],
-["Scugog","scugog","Small-town life · lake · larger properties"]];
-const SPACES=[
-["Toronto","toronto","Your starting point · compare what the same budget can unlock north"],
-["Scugog","scugog","Small-town life · lake · larger properties"],
-["Uxbridge","uxbridge","Country living · acreage · privacy"],
-["Georgina","georgina","Lake living · space · waterfront possibilities"],
-["East Gwillimbury","east","Newer homes · space · family living"],
-["Newmarket","newmarket","Connected · established · amenities"],
-["Aurora","aurora","Established · premium · connected"],
-["Stouffville","stouffville","Community · newer neighbourhoods · access"]
+const BOARD_SPACES=[
+["Toronto","toronto","From here to a bigger tomorrow"],
+["Scugog","scugog","Space to breathe"],
+["Uxbridge","uxbridge","Acreage living"],
+["Georgina","georgina","Lake life"],
+["East Gwillimbury","east","More space"],
+["Newmarket","newmarket","Established & connected"],
+["Aurora","aurora","Premium community"],
+["Stouffville","stouffville","Small-town feel"]
 ];
+const TOWNS=BOARD_SPACES.slice(1);
+const BOARD_LABELS=TOWNS.map(([name,cls,tagline])=>({name,cls,tagline}));
 const WANTS=["More space","Acreage","Pool","Waterfront","Newer home","Privacy","Better commute","Room for family"];
 const money=v=>v>=4000000?"$4M+":v>=1000000?`$${(v/1000000).toFixed(v%1000000?2:0)}M`:`$${v/1000}K`;
 
-function Dice({rolling}){return <div className={"pyb-dice "+(rolling?"rolling":"")} aria-hidden="true"><div className="die">⚄</div><div className="die">⚂</div></div>}
+const PIP_MAP={
+  1:[5],
+  2:[1,9],
+  3:[1,5,9],
+  4:[1,3,7,9],
+  5:[1,3,5,7,9],
+  6:[1,3,4,6,7,9]
+};
+function RealDie({value,className=""}){
+ const active=new Set(PIP_MAP[value]||[]);
+ return <div className={"real-die "+className} aria-label={value+" on die"}>{Array.from({length:9},(_,i)=><span key={i} className={"pip "+(active.has(i+1)?"on":"")}/>)}</div>
+}
 
 const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
 export default function PlayYourBudgetPage(){
  const modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
  const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:""}),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
  const label=useMemo(()=>money(budget),[budget]);
- const landedSpace=useMemo(()=>SPACES.find(([name])=>name===landed),[landed]);
+ const landedSpace=useMemo(()=>BOARD_SPACES.find(([name])=>name===landed),[landed]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
  const toggle=w=>setWants(a=>a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a);
- const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);setRolling(true);const a=Math.floor(Math.random()*6)+1,b=Math.floor(Math.random()*6)+1;setDice([a,b]);const total=a+b;setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step++;setPosition(p=>(p+1)%TOWNS.length);if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setPosition(p=>{setLanded(TOWNS[p][0]);return p})}},380)},1450)};
+ const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);setRolling(true);const a=Math.floor(Math.random()*6)+1,b=Math.floor(Math.random()*6)+1,total=a+b;setDice([a,b]);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},380)},1450)};
  const roll=e=>{e.preventDefault();if(!lead.name||!lead.email)return;setGate(false);setTimeout(runRoll,260)};
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
@@ -54,11 +59,12 @@ export default function PlayYourBudgetPage(){
      <img className="pyb-board-art" src="/Images/play-your-budget-board.webp" alt="" onLoad={()=>setArtReady(true)} onError={()=>setArtReady(false)}/>
      <div className="vboard-lake"><span>LAKE SIMCOE</span></div>
      {TOWNS.map(([name,cls])=><div className={"vboard-space v-"+cls} key={name}><span className="vbar"/><div className="vhouse"><i/><b/><em/></div><strong>{name}</strong></div>)}
+     <div className="board-art-labels" aria-hidden="true">{BOARD_LABELS.map(({name,cls,tagline})=><div className={"board-art-label art-label-"+cls} key={name}><strong>{name}</strong><small>{tagline}</small></div>)}</div>
      <div className="vboard-start"><small>START HERE</small><strong>TORONTO</strong><b>↑</b></div>
      <div className="vboard-deck"><small>WHAT'S</small><strong>POSSIBLE?</strong><span>NORTHSIDE GTA</span></div>
-     {SPACES.map(([name,cls],i)=><div key={name} className={"board-hotspot hotspot-"+i+(position===i?" is-current":"")} aria-hidden="true"><span>{name}</span></div>)}
-     <div key={stepTick} className={"game-token premium-token token-pos-"+position+(moving?" moving":"")} aria-label={"Game piece on "+SPACES[position][0]}><span><b>⌂</b></span></div>
-     <div className="real-dice premium-dice" aria-hidden="true"><div className={"real-die die-one face-"+dice[0]}>{Array.from({length:dice[0]}).map((_,i)=><i key={i}/>)}</div><div className={"real-die die-two face-"+dice[1]}>{Array.from({length:dice[1]}).map((_,i)=><i key={i}/>)}</div><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
+     {BOARD_SPACES.map(([name,cls],i)=><div key={name} className={"board-hotspot hotspot-"+i+(position===i?" is-current":"")} aria-hidden="true"><span>{name}</span></div>)}
+     <div key={stepTick} className={"game-token premium-token token-pos-"+position+(moving?" moving":"")} aria-label={"Game piece on "+BOARD_SPACES[position][0]}><span><b>⌂</b></span></div>
+     <div className="real-dice premium-dice" aria-hidden="true"><RealDie value={dice[0]} className="die-one"/><RealDie value={dice[1]} className="die-two"/><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
     </div>
     {revealed&&landedSpace&&<div className="reveal reveal-3d premium-card"><small>YOU LANDED IN</small><strong>{landedSpace[0]}</strong><em>{landedSpace[2]}</em><div><span>YOUR BUDGET</span><b>{label}</b></div><p>Now let us personally find the homes worth seeing here.</p></div>}
    </div>
