@@ -939,3 +939,343 @@
   .premium-game .board3d-copy strong{font-size:20px!important}
   .premium-game .pyb-game-status{min-width:104px!important}
 }
+/* PR416 final experience polish */
+.pyb-hero{
+  min-height:0;
+  padding:34px clamp(18px,4vw,64px) 24px;
+  background:
+    radial-gradient(circle at 78% 0%,#49664c66 0,transparent 32%),
+    linear-gradient(135deg,#102f26,#071b17 72%);
+}
+.pyb-hero:after{opacity:.045;background-size:54px 54px}
+.pyb-logo{display:none!important}
+.pyb-hero-inner{
+  position:relative;
+  z-index:2;
+  max-width:1380px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(340px,.78fr) minmax(620px,1.55fr);
+  gap:clamp(28px,4vw,60px);
+  align-items:end;
+}
+.pyb-hero-copy{padding:4px 0 6px}
+.pyb-hero-copy .eyebrow{
+  margin:0 0 10px;
+  font-size:10px;
+  letter-spacing:.19em;
+}
+.pyb h1{
+  max-width:620px;
+  margin:0 0 14px;
+  font-size:clamp(46px,5vw,78px);
+  line-height:.92;
+  letter-spacing:-.05em;
+}
+.pyb h1 em{display:inline}
+.pyb .intro{
+  max-width:600px;
+  margin:0;
+  font-size:clamp(15px,1.45vw,19px);
+  line-height:1.48;
+}
+.pyb-control-panel{
+  display:grid;
+  grid-template-columns:minmax(180px,.72fr) minmax(340px,1.5fr) minmax(190px,.82fr);
+  gap:0;
+  overflow:hidden;
+  border:1px solid #efd68d55;
+  border-radius:18px;
+  background:linear-gradient(145deg,#081b17f5,#0c251fed);
+  box-shadow:0 22px 60px #0006,inset 0 1px #ffffff10;
+  backdrop-filter:blur(14px);
+}
+.pyb-budget-control,.pyb-priority-control,.pyb-action-control{
+  min-width:0;
+  padding:17px 18px;
+}
+.pyb-budget-control,.pyb-priority-control{border-right:1px solid #ffffff18}
+.control-kicker{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.15em;
+  color:#c5d8b6;
+}
+.budget-value{
+  margin:4px 0 7px;
+  font-size:clamp(25px,2.4vw,38px);
+  font-weight:900;
+  letter-spacing:-.035em;
+  color:#fff7e8;
+}
+.pyb-budget-control input{width:100%;accent-color:#d3b368}
+.budget-range{
+  display:flex;
+  justify-content:space-between;
+  margin-top:4px;
+  font-size:8px;
+  font-weight:800;
+  color:#b6c4bc;
+}
+.control-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.control-head>div{display:flex;flex-direction:column;gap:3px}
+.control-head small{font-size:9px;color:#9caf9f}
+.control-head>b{
+  display:grid;
+  place-items:center;
+  min-width:30px;
+  height:24px;
+  border:1px solid #ffffff1f;
+  border-radius:999px;
+  font-size:9px;
+  color:#d8e4d1;
+}
+.pyb-priority-control .chips{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+}
+.pyb-priority-control .chips button{
+  min-width:0;
+  padding:8px 7px;
+  border-radius:8px;
+  font-size:9px;
+  line-height:1.1;
+  white-space:normal;
+}
+.pyb-action-control{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:8px;
+}
+.pyb-action-control .hero-roll-btn{
+  width:100%;
+  min-height:50px;
+  padding:13px 15px;
+  border-radius:11px;
+  background:linear-gradient(180deg,#f0d38d,#d4a951);
+  color:#17261d;
+  box-shadow:0 12px 26px #0005,inset 0 1px #fff8;
+  font-size:10px;
+  letter-spacing:.06em;
+}
+.pyb-action-control p{
+  margin:0;
+  text-align:center;
+  font-size:8px;
+  line-height:1.35;
+  color:#98aa9e;
+}
+.pyb-action-control p.is-tight{color:#ddc08a}
+.table.table-3d{
+  padding:0 0 34px!important;
+  min-height:0!important;
+  background:linear-gradient(#0b211a,#0a0f0c 55%,#0a0d0a);
+}
+.pyb-board-stage{
+  width:min(1400px,98vw)!important;
+  margin:0 auto!important;
+  border-radius:0 0 26px 26px!important;
+  box-shadow:0 42px 100px #000b!important;
+}
+@media(min-width:761px){
+  .pyb-board-stage{height:800px!important}
+  .premium-game .pyb-board-surface{
+    left:2%!important;
+    right:2%!important;
+    top:74px!important;
+    border-width:12px!important;
+  }
+  .premium-game .board3d-copy{top:12px!important;left:2.5%!important}
+  .premium-game .pyb-game-status{top:12px!important;right:2.5%!important}
+}
+.reveal-3d.premium-card{
+  width:min(560px,calc(100% - 36px))!important;
+  padding:16px 20px 15px!important;
+}
+.result-close{
+  position:absolute;
+  top:9px;
+  right:10px;
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border:1px solid #71654838;
+  border-radius:50%;
+  background:#fff8;
+  color:#4c463a;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+.match-actions-three{
+  grid-template-columns:minmax(0,1fr) auto!important;
+}
+.match-actions-three .match-primary{grid-column:1/-1}
+.match-actions .match-secondary{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 13px;
+  border:1px solid #7e8e7f66;
+  border-radius:10px;
+  color:#314b39;
+  font-size:10px;
+  font-weight:900;
+  text-decoration:none;
+}
+.match-actions .match-adjust{min-height:40px!important}
+.human{
+  grid-template-columns:auto minmax(0,760px);
+  justify-content:center;
+  padding:42px 6vw;
+  gap:22px;
+}
+.human h2{font-size:clamp(26px,3vw,42px)}
+.human p{margin-bottom:0}
+
+/* Mobile is intentionally composed as an app-like campaign experience. */
+@media(max-width:760px){
+  .pyb-hero{
+    padding:18px 14px 14px!important;
+  }
+  .pyb-hero-inner{
+    display:block;
+    max-width:none;
+  }
+  .pyb-hero-copy{
+    padding:0 4px 14px;
+  }
+  .pyb-hero-copy .eyebrow{font-size:8px;margin-bottom:7px}
+  .pyb h1{
+    max-width:100%;
+    margin:0 0 9px;
+    font-size:clamp(36px,10.7vw,49px)!important;
+    line-height:.94;
+  }
+  .pyb .intro{
+    max-width:95%;
+    font-size:14px!important;
+    line-height:1.42;
+  }
+  .pyb-control-panel{
+    display:grid;
+    grid-template-columns:1fr;
+    border-radius:15px;
+  }
+  .pyb-budget-control,.pyb-priority-control,.pyb-action-control{
+    padding:13px 14px;
+    border-right:0;
+  }
+  .pyb-budget-control,.pyb-priority-control{border-bottom:1px solid #ffffff16}
+  .budget-value{font-size:29px}
+  .pyb-priority-control .chips{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+  }
+  .pyb-priority-control .chips button{
+    min-height:36px;
+    font-size:10px;
+  }
+  .pyb-action-control{gap:6px}
+  .pyb-action-control .hero-roll-btn{
+    min-height:48px;
+    font-size:10px;
+  }
+  .table.table-3d{
+    padding:0 0 18px!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+  .pyb-board-stage{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    border-radius:0!important;
+    overflow:hidden!important;
+  }
+  .premium-game .pyb-board-surface{
+    width:calc(100% - 8px)!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:1627/967!important;
+    margin:66px auto 4px!important;
+    border-width:5px!important;
+    border-radius:10px!important;
+  }
+  .premium-game .board3d-copy{
+    left:8px!important;
+    top:8px!important;
+    max-width:60%!important;
+    padding:7px 9px!important;
+    border-radius:9px!important;
+  }
+  .premium-game .board3d-copy strong{font-size:20px!important}
+  .premium-game .board3d-copy span{font-size:6px!important}
+  .premium-game .board3d-copy small{font-size:7px!important}
+  .premium-game .pyb-game-status{
+    top:8px!important;
+    right:8px!important;
+    min-width:102px!important;
+    padding:6px 8px!important;
+  }
+  .premium-game .pyb-game-status strong{font-size:12px!important}
+  .premium-game .pyb-game-status span{font-size:5.5px!important}
+  .board-art-label strong{font-size:clamp(6px,2.1vw,9px)!important}
+  .board-art-label small{display:none!important}
+  .premium-dice{
+    left:46%!important;
+    bottom:6%!important;
+    transform:scale(.48)!important;
+  }
+  .game-token.premium-token{width:27px!important;height:27px!important}
+  .game-token.premium-token b{font-size:13px!important}
+
+  .reveal-3d.premium-card{
+    position:fixed!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:8px!important;
+    width:auto!important;
+    max-height:72vh!important;
+    overflow:auto!important;
+    z-index:9998!important;
+    transform:none!important;
+    border-radius:18px!important;
+    padding:16px 16px 14px!important;
+    animation:pybSheetUp .34s cubic-bezier(.2,.82,.2,1) both!important;
+    box-shadow:0 -12px 60px #0009,0 24px 70px #000c!important;
+  }
+  @keyframes pybSheetUp{
+    from{opacity:0;transform:translateY(26px)!important}
+    to{opacity:1;transform:translateY(0)!important}
+  }
+  .premium-card>strong{font-size:29px!important}
+  .premium-card em{font-size:12px!important;margin-bottom:9px!important}
+  .premium-card .match-summary{padding:8px 0!important;margin-bottom:8px!important}
+  .premium-card .property-fit{margin:8px 0 10px!important}
+  .premium-card .property-fit-grid{gap:5px!important}
+  .premium-card .property-fit-row{min-height:35px!important}
+  .premium-card .match-proof{margin:8px 0 9px!important;gap:4px!important}
+  .premium-card .match-proof li{font-size:10px!important}
+  .premium-card>p{font-size:10.5px!important;line-height:1.4!important}
+  .match-actions-three{grid-template-columns:1fr!important}
+  .match-actions-three .match-primary{grid-column:auto}
+  .match-actions .match-secondary,.match-actions .match-adjust{min-height:38px!important}
+  .human{
+    grid-template-columns:auto 1fr;
+    padding:30px 18px;
+    gap:15px;
+  }
+  .human h2{font-size:25px}
+  .human p{font-size:12px}
+}
