@@ -1,5 +1,6 @@
 import React,{useEffect,useMemo,useRef,useState}from"react";
 import{Helmet}from"react-helmet-async";
+import{createPortal}from"react-dom";
 import{trackEvent}from"./utils/analytics";
 import"./PlayYourBudgetPage.css";
 
@@ -244,7 +245,7 @@ export default function PlayYourBudgetPage(){
      <div key={stepTick} className={"game-token premium-token token-pos-"+position+(moving?" moving":"")} aria-label={"Game piece on "+BOARD_SPACES[position][0]}><span><b>⌂</b></span></div>
      <div className="real-dice premium-dice" aria-hidden="true"><RealDie value={dice[0]} className="die-one"/><RealDie value={dice[1]} className="die-two"/><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
     </div>
-    {revealed&&noFreeholdMatch&&<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card no-match-card" onMouseDown={e=>e.stopPropagation()}>
+    {revealed&&noFreeholdMatch&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card no-match-card" onMouseDown={e=>e.stopPropagation()}>
       <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>FREEHOLD REALITY CHECK</small>
       <strong>{label}</strong>
@@ -252,8 +253,8 @@ export default function PlayYourBudgetPage(){
       <p>At this budget, we would not tell you there is a strong freehold-house fit anywhere on the NorthSide board. A one-off opportunity can appear, but it would be highly property-specific.</p>
       <div className="match-actions"><a className="match-primary" href="/contact" onClick={()=>trackEvent("pyb_reality_check_contact",{budget})}>ASK US WHAT’S ACTUALLY POSSIBLE →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST BUDGET</button></div>
       <small className="market-disclaimer">Freehold houses only. No condos, condo townhouses, vacant land or raw land.</small>
-     </div></div>}
-    {revealed&&landedSpace&&<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card" onMouseDown={e=>e.stopPropagation()}>
+     </div></div>,document.body)}
+    {revealed&&landedSpace&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card" onMouseDown={e=>e.stopPropagation()}>
       <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>YOUR NORTHSIDE MATCH</small>
       <strong>{landedSpace[0]}</strong>
@@ -267,7 +268,7 @@ export default function PlayYourBudgetPage(){
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
       <div className="match-actions match-actions-three"><a className="match-primary" href={"/contact?source=play-your-budget&community="+encodeURIComponent(landedSpace[0])+"&budget="+budget} onClick={()=>trackEvent("pyb_show_homes",{community:landedSpace[0],budget})}>SHOW ME HOMES AROUND {label} →</a><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
-     </div></div>}
+     </div></div>,document.body)}
    </div>
   </section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Your match is the starting point.</h2><p>Matthew or Landon can turn your budget, priorities and community match into a real freehold-home search.</p></div></section>
