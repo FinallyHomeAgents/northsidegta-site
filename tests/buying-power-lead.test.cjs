@@ -61,7 +61,8 @@ test('percentage below average uses average as denominator', () => {
   assert.equal(row.percent,-50); assert.equal(row.difference,-500000);
 });
 test('tracking emits one GA4 event and a Meta lead without personal information', async () => {
-  const {trackBuyingPower} = await import('../src/lib/buyingPowerTracking.js');
+  const trackingSource = require('node:fs').readFileSync(require('node:path').join(__dirname, '../src/lib/buyingPowerTracking.js'), 'utf8');
+  const {trackBuyingPower} = await import(`data:text/javascript;base64,${Buffer.from(trackingSource).toString('base64')}`);
   const events=[]; const target={gtag:(...args)=>events.push(args),fbq:(...args)=>events.push(args)};
   trackBuyingPower('generate_lead',{lead_type:'comparison',email:'private@example.com',address:'private',pageUrl:'private'},target);
   assert.equal(events.length,2); assert.equal(events[0][1],'generate_lead'); assert.equal(events[1][1],'Lead');

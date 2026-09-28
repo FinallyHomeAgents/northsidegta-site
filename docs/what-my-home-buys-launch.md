@@ -11,11 +11,11 @@
 
 ## Required launch verification
 
-The Vercel dashboard showed `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `FORMSPREE_ENDPOINT` and `RESEND_API_KEY` in All Environments on 2026-09-28. Presence is verified; delivery is not verified by that fact alone.
+The Vercel dashboard showed `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `FORMSPREE_ENDPOINT` and `RESEND_API_KEY` in All Environments on 2026-09-28. Presence is verified. An authorized preview submission to the team contact address on 2026-09-28 returned HTTP 200, confirmed durable receipt and reported that Resend accepted the comparison email. Inbox arrival still needs the recipient’s confirmation.
 
 Before publishing the Facebook post:
 
-1. Deploy the reviewed branch and submit one explicitly authorized real test to a team-controlled email address. Confirm the comparison arrives, the Formspree notification arrives, and the saved record exists. Local form tests use simulated services and do not establish real delivery.
+1. The authorized preview test has been submitted with campaign `TEST_launch_verification`. Confirm the comparison and Formspree notification arrived in the team inbox. Do not repeat it unnecessarily. Local form tests separately use simulated services.
 2. Confirm who receives the existing Formspree notifications. Default recorded owner: Matthew Mulhall; backup: Landon Mulhall. Optional environment overrides: `BUYING_POWER_LEAD_OWNER`, `BUYING_POWER_LEAD_BACKUP`. These fields do not change Formspree account recipients.
 3. Confirm the verified Resend sender (`FROM_EMAIL`, otherwise `Finally Home Agents <no-reply@northsidegta.ca>`). Replies go to `contact@finallyhomeagents.com`.
 4. Provide GA4 and Meta IDs and connect the base tags/consent handling. The repo currently exposes tracking calls but no GA4 or Meta base installation was found. Do not claim dashboard tracking is live until receipt is observed in GA4 DebugView and Meta Test Events.
