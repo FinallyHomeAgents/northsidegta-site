@@ -139,7 +139,7 @@ function RealDie({value,className=""}){
 const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
 export default function PlayYourBudgetPage(){
  const modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
- const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:"",consent:false,botField:""}),[formStatus,setFormStatus]=useState({loading:false,error:""}),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
+ const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:"",consent:false,botField:""}),[formStatus,setFormStatus]=useState({loading:false,error:""}),[lastSubmittedSignature,setLastSubmittedSignature]=useState(""),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
  const label=useMemo(()=>money(budget),[budget]);
  const landedSpace=useMemo(()=>BOARD_SPACES.find(([name])=>name===landed),[landed]);
  const rankedMatches=useMemo(()=>rankCommunities(budget,wants),[budget,wants]);
@@ -150,9 +150,9 @@ export default function PlayYourBudgetPage(){
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
  const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
  const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
- const roll=async e=>{
-  e.preventDefault();
-  if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return;
+ const leadSignature=()=>JSON.stringify({budget,wants,match:bestMatch?.name||"no-match"});
+ const sendLead=async()=>{
+  if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return false;
   setFormStatus({loading:true,error:""});
   const payload={
    name:lead.name,
@@ -172,13 +172,34 @@ export default function PlayYourBudgetPage(){
    const response=await fetch("/api/play-your-budget-lead",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
    const body=await response.json().catch(()=>({}));
    if(!response.ok)throw new Error(body.error||"Unable to send your request.");
-   trackEvent("pyb_lead_submit",{budget,priority_count:wants.length,match:bestMatch?.name||"no-match"});
-   setGate(false);
+   setLastSubmittedSignature(leadSignature());
    setFormStatus({loading:false,error:""});
-   setTimeout(runRoll,260);
+   trackEvent("pyb_lead_submit",{budget,priority_count:wants.length,match:bestMatch?.name||"no-match"});
+   return true;
   }catch(error){
    setFormStatus({loading:false,error:error?.message||"Something went wrong. Please try again."});
+   return false;
   }
+ };
+ const roll=async e=>{
+  e.preventDefault();
+  const sent=await sendLead();
+  if(!sent)return;
+  setGate(false);
+  setTimeout(runRoll,260);
+ };
+ const revealFromButton=async()=>{
+  trackEvent("pyb_reveal_click",{budget,priority_count:wants.length});
+  if(!lead.email||!lead.consent){
+   trackEvent("pyb_lead_open",{budget,priority_count:wants.length});
+   setGate(true);
+   return;
+  }
+  if(lastSubmittedSignature!==leadSignature()){
+   const sent=await sendLead();
+   if(!sent){setGate(true);return}
+  }
+  runRoll();
  };
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
@@ -230,7 +251,7 @@ export default function PlayYourBudgetPage(){
      </div>}
    </div>
   </section>
-  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>Your budget and priorities determine the match. The roll is how we reveal it.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>{if(lead.email&&lead.consent){trackEvent("pyb_reveal_click",{budget,priority_count:wants.length});runRoll()}else{trackEvent("pyb_lead_open",{budget,priority_count:wants.length});setGate(true)}} disabled={rolling||moving}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button></section>
+  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>Your budget and priorities determine the match. The roll is how we reveal it.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={revealFromButton} disabled={rolling||moving}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button></section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
   {gate&&<div className="modal-bg" onMouseDown={()=>!formStatus.loading&&setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="pyb-modal-title" onMouseDown={e=>e.stopPropagation()}><button className="close" aria-label="Close" disabled={formStatus.loading} onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2 id="pyb-modal-title">See your NorthSide match.</h2><p>We’ll use your budget and priorities to show where we’d start — and what freehold house types your budget can realistically target.</p><form onSubmit={roll}>
 <label>First name<input required autoFocus autoComplete="given-name" value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label>
