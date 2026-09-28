@@ -1372,3 +1372,67 @@
     transform:translateY(-1px);
   }
 }
+/* PR417 desktop-only polish */
+@media(min-width:1024px){
+  .pyb-hero{
+    padding:30px clamp(24px,4vw,64px) 22px!important;
+  }
+  .pyb-hero-inner{
+    max-width:1460px;
+    grid-template-columns:minmax(420px,.78fr) minmax(0,1.42fr);
+    gap:clamp(34px,4vw,64px);
+    align-items:center!important;
+  }
+  .pyb-hero-copy{
+    align-self:center;
+    padding:0;
+  }
+  .pyb h1{
+    max-width:560px;
+    font-size:clamp(52px,4.75vw,76px);
+    margin-bottom:12px;
+  }
+  .pyb .intro{
+    max-width:540px;
+    font-size:clamp(15px,1.3vw,18px);
+  }
+  .pyb-control-panel{
+    width:100%;
+    grid-template-columns:minmax(160px,.72fr) minmax(300px,1.48fr) minmax(205px,.88fr);
+    overflow:visible!important;
+  }
+  .pyb-budget-control,
+  .pyb-priority-control,
+  .pyb-action-control{
+    padding:16px 16px;
+  }
+  .pyb-action-control{
+    min-width:0!important;
+  }
+  .pyb-action-control .hero-roll-btn{
+    min-width:0!important;
+    width:100%!important;
+    white-space:normal;
+    line-height:1.15;
+  }
+  .pyb-action-control p{
+    max-width:220px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .table.table-3d{
+    padding-top:0!important;
+  }
+}
+@media(min-width:1024px) and (max-width:1280px){
+  .pyb-hero-inner{
+    grid-template-columns:minmax(360px,.72fr) minmax(0,1.28fr);
+    gap:30px;
+  }
+  .pyb-control-panel{
+    grid-template-columns:minmax(145px,.68fr) minmax(260px,1.35fr) minmax(180px,.82fr);
+  }
+  .pyb-priority-control .chips{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
