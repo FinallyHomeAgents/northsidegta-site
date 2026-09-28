@@ -149,7 +149,7 @@ export default function PlayYourBudgetPage(){
  useEffect(()=>{if(revealed){trackEvent("pyb_match_revealed",{budget,match:landed||"no-match",priority_count:wants.length})}},[revealed,landed,budget,wants.length]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
  const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
- const focusBoard=()=>document.getElementById("pyb-board")?.scrollIntoView({behavior:"smooth",block:"start"});\n const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
+ const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
  const leadSignature=()=>JSON.stringify({budget,wants,match:bestMatch?.name||"no-match"});
  const sendLead=async()=>{
   if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return false;
@@ -204,16 +204,28 @@ export default function PlayYourBudgetPage(){
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section id="pyb-controls" className="pyb-hero">
-   <img className="pyb-logo" src="/Images/northsidegta-logo.svg" alt="NorthSide GTA"/>
-   <p className="eyebrow">YOUR BUDGET · YOUR WISH LIST · YOUR NEXT MOVE</p>
-   <h1>What could your next home look like <em>up here?</em></h1>
-   <p className="intro">Set the number. Tell us what matters. We’ll find your strongest freehold-house fit — then the dice reveal it.</p>
-   <div className="budget"><div><span>YOUR BUDGET</span><strong>{label}</strong></div><input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/><small><b>$500K</b><b>$4M+</b></small></div>
-   <div className={"budget-market-note "+(noFreeholdMatch?"is-tight":"")}><strong>{noFreeholdMatch?"FREEHOLD HOUSE OPTIONS ARE EXTREMELY LIMITED":"FREEHOLD HOUSE SEARCH"}</strong><span>{noFreeholdMatch?"At this budget we wouldn’t force a town match. Increase the budget to see realistic freehold-house options.":"Detached, semi-detached, freehold townhouse, rural/acreage homes and waterfront homes only. No condos or vacant land."}</span></div>
-   <div className="wants"><span className="step">01</span><div><h2>What should your next home give you?</h2><p>Pick up to four.</p></div><div className="chips">{WANTS.map(w=><button key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div></div>
-   <div className="pyb-hero-cta">
-    <button className="roll-btn hero-roll-btn" onClick={revealFromButton} disabled={rolling||moving||formStatus.loading}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button>
-    <small>Freehold houses only · No condos or vacant land</small>
+   <div className="pyb-hero-inner">
+    <div className="pyb-hero-copy">
+     <p className="eyebrow">PLAY YOUR BUDGET · NORTHSIDE GTA</p>
+     <h1>What could your next home look like <em>up here?</em></h1>
+     <p className="intro">Set your budget. Pick what matters. We’ll calculate your strongest freehold-house fit — then the dice reveal it.</p>
+    </div>
+    <div className="pyb-control-panel">
+     <div className="pyb-budget-control">
+      <div className="control-kicker">YOUR BUDGET</div>
+      <div className="budget-value">{label}</div>
+      <input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/>
+      <div className="budget-range"><span>$500K</span><span>$4M+</span></div>
+     </div>
+     <div className="pyb-priority-control">
+      <div className="control-head"><div><span className="control-kicker">WHAT MATTERS MOST?</span><small>Choose up to four</small></div><b>{wants.length}/4</b></div>
+      <div className="chips">{WANTS.map(w=><button type="button" key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div>
+     </div>
+     <div className="pyb-action-control">
+      <button className="roll-btn hero-roll-btn" onClick={revealFromButton} disabled={rolling||moving||formStatus.loading}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button>
+      <p className={noFreeholdMatch?"is-tight":""}>{noFreeholdMatch?"At this budget, realistic freehold-house options are extremely limited. We won’t force a fake match.":"Freehold houses only · No condos, condo townhouses or vacant land"}</p>
+     </div>
+    </div>
    </div>
   </section>
   <section className="table table-3d">
@@ -232,6 +244,7 @@ export default function PlayYourBudgetPage(){
      <div className="real-dice premium-dice" aria-hidden="true"><RealDie value={dice[0]} className="die-one"/><RealDie value={dice[1]} className="die-two"/><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
     </div>
     {revealed&&noFreeholdMatch&&<div className="reveal reveal-3d premium-card no-match-card">
+      <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>FREEHOLD REALITY CHECK</small>
       <strong>{label}</strong>
       <em>No forced match.</em>
@@ -240,6 +253,7 @@ export default function PlayYourBudgetPage(){
       <small className="market-disclaimer">Freehold houses only. No condos, condo townhouses, vacant land or raw land.</small>
      </div>}
     {revealed&&landedSpace&&<div className="reveal reveal-3d premium-card">
+      <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
       <small>YOUR NORTHSIDE MATCH</small>
       <strong>{landedSpace[0]}</strong>
       <em>{label} · {wants.length?wants.join(" · "):"Your selected priorities"}</em>
@@ -250,13 +264,12 @@ export default function PlayYourBudgetPage(){
       </div>
       <ul className="match-proof">{bestMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
-      <div className="match-actions"><a className="match-primary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0].toUpperCase()} →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST MY MATCH</button></div>
+      <div className="match-actions match-actions-three"><a className="match-primary" href={"/contact?source=play-your-budget&community="+encodeURIComponent(landedSpace[0])+"&budget="+budget} onClick={()=>trackEvent("pyb_show_homes",{community:landedSpace[0],budget})}>SHOW ME HOMES AROUND {label} →</a><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
      </div>}
    </div>
   </section>
-  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>Your budget and priorities determine the match. The roll is how we reveal it.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={revealFromButton} disabled={rolling||moving}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button></section>
-  <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
+  <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Your match is the starting point.</h2><p>Matthew or Landon can turn your budget, priorities and community match into a real freehold-home search.</p></div></section>
   {gate&&<div className="modal-bg" onMouseDown={()=>!formStatus.loading&&setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="pyb-modal-title" onMouseDown={e=>e.stopPropagation()}><button className="close" aria-label="Close" disabled={formStatus.loading} onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2 id="pyb-modal-title">See your NorthSide match.</h2><p>We’ll use your budget and priorities to show where we’d start — and what freehold house types your budget can realistically target.</p><form onSubmit={roll}>
 <label>First name<input required autoFocus autoComplete="given-name" value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label>
 <label>Email<input required type="email" autoComplete="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label>
