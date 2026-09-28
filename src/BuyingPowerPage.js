@@ -4,17 +4,18 @@
 // Renders a full comparison from default state so the prerenderer emits real,
 // crawlable HTML. No window/document access during render.
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
 import CommunityComplianceFooter from "./components/CommunityComplianceFooter";
+import BuyingPowerLeadForm from "./components/BuyingPowerLeadForm";
+import { trackBuyingPower } from "./lib/buyingPowerTracking";
 import MARKET from "./data/marketData.v2.json";
 import TOWNS_RAW from "./towns.json";
 
 const SITE = "https://northsidegta.ca";
 const PATH = "/what-my-home-buys";
 const DEFAULT_VALUE = 1250000;
-const DEFAULT_FORMSPREE_ID = "xblkwrzj";
 const MIN = 500000;
 const MAX = 3000000;
 const DIRECT_GO_RAIL_TOWNS = new Set([
@@ -24,26 +25,22 @@ const DIRECT_GO_RAIL_TOWNS = new Set([
   "stouffville",
 ]);
 
-/* ------------------------------------------------------------------ *
- * Editorial: the honest drawback for each town.
- * Matthew / Landon — these are the highest-risk sentences on the page
- * and the most valuable. Rewrite them in your own words before launch.
- * ------------------------------------------------------------------ */
+// Local lifestyle trade-offs, separate from the monthly market figures.
 const TRADEOFFS = {
   georgina:
     "Major urban amenities and Toronto are farther away, in exchange for lake access, space and value.",
   "east-gwillimbury":
-    "Still filling in. Newest housing stock of the seven, but the amenities are behind the building.",
+    "Newer neighbourhoods continue to grow, and nearby shops and services vary by location.",
   newmarket:
     "Full-service amenities also bring more traffic and less of an escape-from-the-city feel.",
   aurora:
     "Its established setting and strong location generally come with a higher entry price.",
   stouffville:
-    "A sought-after family market, but pricing can narrow the value advantage of moving north.",
+    "Pricing can narrow the value advantage of moving north; compare the home types and locations you want.",
   uxbridge:
     "Land and outdoor access come with fewer big-city conveniences and a drive-focused location.",
   scugog:
-    "Strong space and lifestyle value, but the greatest distance from Toronto and major employment centres.",
+    "Lake and small-town living can mean a longer trip to Toronto, depending on your destination.",
 };
 
 // Approximate each town mark's dominant colour; these can be adjusted by hand.
@@ -93,7 +90,7 @@ function buildTowns() {
       goTrain: DIRECT_GO_RAIL_TOWNS.has(t.slug),
       goText,
       summary: t.summary || "",
-      highlights: Array.isArray(t.highlights) ? t.highlights.slice(0, 3) : [],
+      highlights: Array.isArray(t.highlights) ? t.highlights.slice(0, 3).map(text => text.replace("Top schools", "Schools & parks")) : [],
       highways: t.snapshot?.highways || "",
       transitSummary: t.snapshot?.transitSummary || "",
       hoods,
@@ -109,31 +106,31 @@ function band(ratio) {
   if (ratio < 0.8)
     return {
       tone: "over",
-      head: "Below the average home",
-      sub: "Your budget is below the town-wide average; options may include smaller homes or properties needing work.",
+      head: "Below the local average",
+      sub: "Your comparison amount is below the town-wide average; options may include smaller homes or properties needing work.",
     };
   if (ratio < 1.1)
     return {
       tone: "level",
-      head: "Right at the market",
-      sub: "Your budget is near the town-wide average, with the result based on home type, location and condition.",
+      head: "Near the local average",
+      sub: "Your comparison amount is near the town-wide average, with the result based on home type, location and condition.",
     };
   if (ratio < 1.5)
     return {
       tone: "good",
       head: "Comfortably above average",
-      sub: "Your budget is above the local average and may open up more size, lot or condition choices.",
+      sub: "Your comparison amount is above the local average and may open up more size, lot or condition choices.",
     };
   if (ratio < 2.2)
     return {
       tone: "good",
-      head: "Well above the market",
-      sub: "Your budget reaches well above the local average, including premium options based on location and condition.",
+      head: "Well above the local average",
+      sub: "Your comparison amount reaches well above the local average, while individual home prices still depend on type, location and condition.",
     };
   return {
     tone: "good",
-    head: "Top of the market",
-    sub: "Your budget reaches well into the upper end of the local market, including larger lots and premium properties based on location and condition.",
+    head: "Above the local average",
+    sub: "Your comparison amount reaches well into the upper end of the local market, but this does not establish a price ceiling or guarantee available properties.",
   };
 }
 
@@ -173,11 +170,15 @@ export default function BuyingPowerPage() {
   const [value, setValue] = useState(DEFAULT_VALUE);
   const [address, setAddress] = useState("");
   const [sort, setSort] = useState("power");
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const interacted = useRef(false);
+  function updateValue(next, control) {
+    setValue(next);
+    if (!interacted.current) {
+      interacted.current = true;
+      trackBuyingPower("buyingpower_interaction", { control });
+    }
+  }
 
-  const formspreeId = (process.env.REACT_APP_FORMSPREE_ID || DEFAULT_FORMSPREE_ID).trim();
   const period = MARKET.monthly?.periodLabel || "";
   const source = MARKET.monthly?.source || "TRREB Market Watch";
 
@@ -190,49 +191,8 @@ export default function BuyingPowerPage() {
   }, [towns, sort, value]);
 
   const cheapest = useMemo(() => [...towns].sort((a, b) => a.avg - b.avg), [towns]);
-  const best = ranked[0];
+  const best = cheapest[0];
   const bestPct = best ? Math.round((value / best.avg - 1) * 100) : 0;
-
-  async function onSubmit(e) {
-    e.preventDefault();
-    setError("");
-    if (!formspreeId) {
-      setError("Form is not configured yet. Add REACT_APP_FORMSPREE_ID to your environment.");
-      return;
-    }
-    const fd = new FormData(e.target);
-    if (fd.get("nickname")) return; // honeypot
-
-    setBusy(true);
-    try {
-      const payload = Object.fromEntries(fd.entries());
-      payload.address = address || payload.address || "";
-      payload.estimatedValue = cad(value);
-      payload.topMatch = best ? best.name : "";
-      payload.marketPeriod = period;
-      payload.sourcePage = PATH;
-
-      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
-        method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.errors?.[0]?.message || `Request failed (${res.status})`);
-      }
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: "buyingpower_submit" });
-        if (window.fbq) window.fbq("trackCustom", "BuyingPowerSubmit");
-      } catch (_) {}
-      setSent(true);
-    } catch (err) {
-      setError(err.message || "Something went wrong. Please try again or call us directly.");
-    } finally {
-      setBusy(false);
-    }
-  }
 
   const faqs = [
     {
@@ -303,74 +263,11 @@ export default function BuyingPowerPage() {
   };
 
   const captureCard = (
-    <article
-      key="capture"
-      id="capture"
-      className="rounded border border-brand-green bg-emerald-100 p-[18px] sm:p-6 flex flex-col gap-3 scroll-mt-20"
-    >
-      <p className="font-mono text-[10.5px] uppercase tracking-[0.13em] text-brand-green m-0">
-        Unlock the accurate version
-      </p>
-      <h3 className="text-lg font-bold text-brand-green m-0 leading-snug">
-        These are town averages. Yours will differ.
-      </h3>
-      <p className="text-sm text-gray-700 m-0 leading-relaxed">
-        Give us your details and we&apos;ll rerun this against your own neighbourhood&apos;s sales — plus a
-        real opinion of value on your home, back to you within 24 hours.
-      </p>
-      {sent ? (
-        <p className="text-sm font-semibold text-brand-green m-0">
-          Got it. Matthew or Landon will be in touch within 24 hours.
-        </p>
-      ) : (
-        <form onSubmit={onSubmit} className="flex flex-col gap-2.5">
-          <input
-            name="name"
-            required
-            autoComplete="name"
-            placeholder="Your name"
-            aria-label="Your name"
-            className="w-full rounded border border-gray-200 bg-white px-3 py-3 text-sm min-h-[48px]"
-          />
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="Email"
-            aria-label="Email"
-            className="w-full rounded border border-gray-200 bg-white px-3 py-3 text-sm min-h-[48px]"
-          />
-          <input
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="Phone (optional)"
-            aria-label="Phone, optional"
-            className="w-full rounded border border-gray-200 bg-white px-3 py-3 text-sm min-h-[48px]"
-          />
-          <input name="nickname" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-          <label className="flex gap-2.5 items-start text-[12.5px] text-gray-700 leading-snug cursor-pointer">
-            <input type="checkbox" name="notUnderContract" className="mt-0.5 h-[22px] w-[22px] flex-none accent-[#32610E]" />
-            <span>Not currently under a representation agreement with another brokerage.</span>
-          </label>
-          <label className="flex gap-2.5 items-start text-[12.5px] text-gray-700 leading-snug cursor-pointer">
-            <input type="checkbox" name="marketingConsent" className="mt-0.5 h-[22px] w-[22px] flex-none accent-[#32610E]" />
-            <span>Also send me the monthly NorthSide numbers. I can unsubscribe any time.</span>
-          </label>
-          {error && <p className="text-[13px] text-red-700 m-0">{error}</p>}
-          <button
-            type="submit"
-            disabled={busy}
-            className="min-h-[52px] w-full rounded bg-brand-green px-4 py-3 font-bold text-white disabled:opacity-60"
-          >
-            {busy ? "Sending…" : "Send my real numbers"}
-          </button>
-          <p className="text-center font-mono text-[10px] uppercase tracking-wider text-gray-500 m-0">
-            No spam. No pressure. Reply within 24 hrs.
-          </p>
-        </form>
-      )}
+    <article key="capture" id="save-comparison" className="rounded border border-brand-green bg-emerald-100 p-[18px] sm:p-6 flex flex-col gap-3 scroll-mt-40">
+      <p className="font-mono text-xs uppercase tracking-wider text-brand-green m-0">Keep your comparison</p>
+      <h3 className="text-xl font-bold text-brand-green m-0">Explore now. Compare together later.</h3>
+      <p className="text-sm text-gray-700 m-0">Get all seven town averages in one email to revisit or share with someone planning the move with you.</p>
+      <BuyingPowerLeadForm type="comparison" value={value} towns={towns} />
     </article>
   );
 
@@ -418,7 +315,7 @@ export default function BuyingPowerPage() {
         </div>
         <div className="flex flex-wrap gap-1.5">
           <Chip tone={left >= 0 ? "good" : "bad"}>{shortDelta(left)} vs average</Chip>
-          <Chip tone={pct >= 0 ? "good" : "bad"}>{pct >= 0 ? "+" : ""}{pct}% buying power</Chip>
+          <Chip tone={pct >= 0 ? "good" : "bad"}>{pct >= 0 ? "+" : ""}{pct}% vs average</Chip>
           {t.drive404 != null && <Chip>~{t.drive404} min to 404/Steeles</Chip>}
           <Chip tone={t.goTrain ? "good" : "neutral"}>{transitLabel(t)}</Chip>
           {t.yoy != null && (
@@ -441,10 +338,10 @@ export default function BuyingPowerPage() {
             {t.median != null && (
               <>
                 <p className="m-0 mb-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.13em] text-gray-500">
-                  Entry point
+                  Median sale price
                 </p>
                 <p className="m-0 text-[13.5px] text-gray-700">
-                  Half of sales under <strong>{cad(t.median)}</strong>
+                  Midpoint of recorded sales: <strong>{cad(t.median)}</strong>
                 </p>
               </>
             )}
@@ -481,6 +378,12 @@ export default function BuyingPowerPage() {
         <meta property="og:type" content="website" />
         <meta property="og:title" content="What Does My Toronto Home Buy North of the City?" />
         <meta property="og:url" content={`${SITE}${PATH}`} />
+        <meta property="og:description" content="One home value. Seven towns north of Toronto. Compare prices, lifestyle and trade-offs — free, with no signup required." />
+        <meta property="og:image" content={`${SITE}/Images/seo/what-my-home-buys-og.jpg`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="What could your home buy north of Toronto? Compare seven NorthSide GTA towns." />
+        <meta name="twitter:image" content={`${SITE}/Images/seo/what-my-home-buys-og.jpg`} />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
@@ -497,7 +400,7 @@ export default function BuyingPowerPage() {
             NorthSide GTA · Finally Home Agents
           </p>
           <h1 className="m-0 max-w-[15ch] text-[26px] sm:text-5xl font-extrabold leading-[1.03] tracking-tight text-balance">
-            Your Toronto home is worth <span className="text-brand-green">more house</span> up here.
+            What could your home buy <span className="text-brand-green">north of Toronto?</span>
           </h1>
           <p className="mt-2.5 sm:mt-5 max-w-[55ch] text-[15px] sm:text-lg text-gray-700">
             Enter what your current home is worth and compare that budget across seven NorthSide GTA
@@ -505,26 +408,10 @@ export default function BuyingPowerPage() {
           </p>
 
           <div className="mt-5 sm:mt-9 rounded border border-gray-200 bg-white p-[17px] sm:p-8 shadow-sm">
-            <div className="grid gap-4 sm:gap-6 sm:grid-cols-[1.25fr_1fr]">
-              <div>
-                <label htmlFor="bp-addr" className="mb-2 block text-[13px] font-semibold">
-                  Your current address
-                </label>
-                <input
-                  id="bp-addr"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  autoComplete="street-address"
-                  placeholder="e.g. 42 Wineva Ave, Toronto"
-                  className="min-h-[52px] w-full rounded border border-gray-200 bg-emerald-50/60 px-4 py-3.5 text-base font-semibold"
-                />
-                <span className="mt-1.5 block font-mono text-[10.5px] leading-snug text-gray-500">
-                  Lets us use your neighbourhood&apos;s real sales, not a city-wide average.
-                </span>
-              </div>
+            <div className="grid gap-4 sm:gap-6 sm:grid-cols-[1fr_1fr]">
               <div>
                 <label htmlFor="bp-val" className="mb-2 block text-[13px] font-semibold">
-                  What&apos;s it worth today?
+                  Your estimated home value
                 </label>
                 <div className="flex items-center gap-2 rounded border border-gray-200 bg-emerald-50/60 px-4 py-3">
                   <span className="text-2xl font-bold text-gray-400">$</span>
@@ -534,8 +421,9 @@ export default function BuyingPowerPage() {
                     value={value.toLocaleString("en-CA")}
                     onChange={(e) => {
                       const raw = Number(String(e.target.value).replace(/[^0-9]/g, "")) || 0;
-                      setValue(Math.min(MAX, Math.max(1, raw)));
+                      updateValue(Math.min(MAX, Math.max(1, raw)), "amount");
                     }}
+                    onBlur={() => setValue(Math.min(MAX, Math.max(MIN, value)))}
                     aria-label="Your home value"
                     className="min-h-[44px] w-full border-0 bg-transparent p-0 text-[27px] sm:text-4xl font-bold tabular-nums tracking-tight outline-none"
                   />
@@ -546,31 +434,28 @@ export default function BuyingPowerPage() {
                   max={MAX}
                   step={10000}
                   value={Math.min(MAX, Math.max(MIN, value))}
-                  onChange={(e) => setValue(Number(e.target.value))}
+                  onChange={(e) => updateValue(Number(e.target.value), "slider")}
                   aria-label="Adjust home value"
                   className="mt-4 w-full accent-[#32610E]"
                 />
               </div>
+              <div className="flex flex-col justify-center gap-3">
+                <p className="m-0 text-sm text-gray-700">Compare all seven towns free. No address, email or phone number needed to explore.</p>
+                <a href="#save-comparison" className="rounded bg-brand-green px-4 py-3 text-center font-bold text-white">Email me my comparison</a>
+                <a href="#home-review" className="text-center text-sm font-semibold text-brand-green underline">Not sure what your home is worth?</a>
+              </div>
             </div>
           </div>
 
+          <p className="mt-3 text-xs leading-relaxed text-gray-600">Market data: {period} · {source} · All home types. This compares your estimate with town averages; it does not calculate your available purchase budget. Mortgage balances, selling costs, purchase taxes and moving costs are not deducted.</p>
           {best && (
             <div className="mt-3.5 sm:mt-5 flex flex-wrap items-baseline gap-2.5 rounded border border-brand-green bg-emerald-100 px-4 py-3.5">
               <span className="flex-none font-mono text-[10.5px] uppercase tracking-[0.12em] text-brand-green">
-                Best value
+                Lowest average price
               </span>
               <span className="text-[17px] font-bold tracking-tight">{best.name}</span>
               <span className="w-full text-[13.5px] leading-snug text-gray-700">
-                {bestPct >= 0 ? (
-                  <>
-                    Your money goes <strong>{bestPct}% further</strong> than the average home there — about{" "}
-                    {shortDelta(value - best.avg).replace("+", "")} left over.
-                  </>
-                ) : (
-                  <>
-                    The average home there is <strong>{Math.abs(bestPct)}% above</strong> your number.
-                  </>
-                )}
+                Your comparison amount is <strong>{Math.abs(bestPct)}% {bestPct >= 0 ? "above" : "below"}</strong> the average sale price here — a difference of {cad(Math.abs(value - best.avg))} before mortgage balances and transaction costs.
                 {best.highlights[0] && ` ${best.highlights[0]} is one of the lifestyle draws.`}
               </span>
             </div>
@@ -578,17 +463,16 @@ export default function BuyingPowerPage() {
         </section>
 
         <div className="mb-3.5 mt-6 sm:mt-14 flex flex-wrap items-end justify-between gap-3">
-          <h2 className="m-0 text-2xl sm:text-3xl font-bold tracking-tight">What {cad(value)} buys you</h2>
+          <h2 className="m-0 text-2xl sm:text-3xl font-bold tracking-tight">Compare {cad(value)} across seven towns</h2>
           <div className="flex flex-wrap gap-1.5">
             {[
-              ["power", "Most house"],
-              ["commute", "Closest to Toronto"],
-              ["price", "Cheapest first"],
+              ["power", "Lowest average price"],
+              ["commute", "Shortest drive to 404/Steeles"],
             ].map(([key, label]) => (
               <button
                 key={key}
                 type="button"
-                onClick={() => setSort(key)}
+                onClick={() => { setSort(key); trackBuyingPower("buyingpower_sort", { sort_order: key }); }}
                 aria-pressed={sort === key}
                 className={`min-h-[44px] sm:min-h-0 rounded-full border px-4 py-2 text-[13px] font-semibold ${
                   sort === key
@@ -697,44 +581,10 @@ export default function BuyingPowerPage() {
           </div>
         </section>
 
-        {/* ---------- repeat form ---------- */}
-        <section className="mt-14 rounded border border-gray-200 bg-white p-6 sm:p-9 shadow-sm">
-          <h2 className="m-0 text-2xl font-bold tracking-tight">Want your actual numbers?</h2>
-          <p className="mt-2 mb-6 max-w-[52ch] text-[15px] text-gray-700">
-            Everything above uses town-wide averages. Send us your address and we&apos;ll rerun it against your
-            own neighbourhood&apos;s sales, with a written opinion of value on your home within 24 hours.
-          </p>
-          {sent ? (
-            <p className="m-0 font-semibold text-brand-green">
-              Got it. Matthew or Landon will be in touch within 24 hours.
-            </p>
-          ) : (
-            <form onSubmit={onSubmit} className="grid max-w-2xl gap-3 sm:grid-cols-2">
-              <input name="name" required autoComplete="name" placeholder="Your name" aria-label="Your name"
-                className="min-h-[48px] rounded border border-gray-200 bg-emerald-50/60 px-3 py-3 text-sm" />
-              <input name="email" type="email" required autoComplete="email" placeholder="Email" aria-label="Email"
-                className="min-h-[48px] rounded border border-gray-200 bg-emerald-50/60 px-3 py-3 text-sm" />
-              <input name="address" value={address} onChange={(e) => setAddress(e.target.value)}
-                autoComplete="street-address" placeholder="Your address" aria-label="Your address"
-                className="min-h-[48px] rounded border border-gray-200 bg-emerald-50/60 px-3 py-3 text-sm" />
-              <input name="phone" type="tel" autoComplete="tel" placeholder="Phone (optional)" aria-label="Phone, optional"
-                className="min-h-[48px] rounded border border-gray-200 bg-emerald-50/60 px-3 py-3 text-sm" />
-              <input name="nickname" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-              <label className="flex gap-2.5 items-start text-[13px] text-gray-700 sm:col-span-2 cursor-pointer">
-                <input type="checkbox" name="notUnderContract" className="mt-0.5 h-[22px] w-[22px] flex-none accent-[#32610E]" />
-                <span>I&apos;m not currently under a representation agreement with another brokerage.</span>
-              </label>
-              <label className="flex gap-2.5 items-start text-[13px] text-gray-700 sm:col-span-2 cursor-pointer">
-                <input type="checkbox" name="marketingConsent" className="mt-0.5 h-[22px] w-[22px] flex-none accent-[#32610E]" />
-                <span>Email me the monthly NorthSide GTA numbers. I can unsubscribe any time.</span>
-              </label>
-              {error && <p className="m-0 text-[13px] text-red-700 sm:col-span-2">{error}</p>}
-              <button type="submit" disabled={busy}
-                className="min-h-[52px] rounded bg-brand-green px-6 py-3 font-bold text-white disabled:opacity-60 sm:col-span-2">
-                {busy ? "Sending…" : "Send me my real numbers"}
-              </button>
-            </form>
-          )}
+        <section id="home-review" className="mt-14 scroll-mt-40 rounded border border-gray-200 bg-white p-6 sm:p-9 shadow-sm">
+          <h2 className="m-0 text-2xl font-bold tracking-tight">Start with your own home’s value.</h2>
+          <p className="mt-2 mb-6 max-w-[60ch] text-[15px] text-gray-700">Town averages are a starting point. Share your address and Matthew or Landon will review nearby comparable sales and respond within 24 hours.</p>
+          <div className="max-w-xl"><BuyingPowerLeadForm type="valuation" value={value} address={address} onAddressChange={setAddress} towns={towns} /></div>
         </section>
 
         <p className="mt-10 text-[13px] leading-relaxed text-gray-500">
@@ -745,6 +595,7 @@ export default function BuyingPowerPage() {
         </p>
       </main>
       <CommunityComplianceFooter
+        driveTimeSentence="Drive times on this page are off-peak estimates to Highway 404 and Steeles Avenue."
         marketDataSentence={`Average sold prices sourced from TRREB MLS® data and regional market reports (${period}).`}
       />
     </>
