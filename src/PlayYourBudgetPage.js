@@ -14,7 +14,7 @@ const BOARD_SPACES=[
 ["Stouffville","stouffville","Small-town feel"]
 ];
 const TOWNS=BOARD_SPACES.slice(1);
-const BOARD_LABELS=TOWNS.map(([name,cls,tagline])=>({name,cls,tagline}));
+const BOARD_LABELS=BOARD_SPACES.map(([name,cls,tagline])=>({name,cls,tagline}));
 const WANTS=["More space","Acreage","Pool","Waterfront","Newer home","Privacy","Better commute","Room for family"];
 const money=v=>v>=4000000?"$4M+":v>=1000000?`$${(v/1000000).toFixed(v%1000000?2:0)}M`:`$${v/1000}K`;
 
