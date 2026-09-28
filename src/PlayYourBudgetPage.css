@@ -383,3 +383,90 @@
   .reveal-3d.premium-card{bottom:10px;width:calc(100% - 18px);padding:14px 16px 13px}
   .premium-card>strong{font-size:25px}
 }
+/* PR416 intelligent match result */
+.premium-card .match-summary{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:14px;
+  border-top:1px solid #78694d44;
+  border-bottom:1px solid #78694d44;
+  padding:10px 0;
+  margin:4px 0 10px;
+}
+.premium-card .match-summary span{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.15em;
+  color:#62725f;
+}
+.premium-card .match-summary b{
+  justify-self:end;
+  text-align:right;
+  font-size:14px;
+  color:#1d4d31;
+}
+.match-proof{
+  margin:10px 0 12px;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:6px;
+}
+.match-proof li{
+  position:relative;
+  padding-left:18px;
+  color:#3f4a43;
+  font-size:12px;
+  line-height:1.35;
+}
+.match-proof li:before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  top:-1px;
+  color:#54763f;
+  font-weight:900;
+}
+.match-actions{
+  display:grid!important;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:stretch!important;
+  border:0!important;
+  padding:0!important;
+  margin:14px 0 0!important;
+}
+.match-actions .match-primary,
+.match-actions button{
+  min-height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  padding:11px 14px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.05em;
+  text-decoration:none;
+  cursor:pointer;
+}
+.match-actions .match-primary{
+  background:#174d34;
+  color:#fff;
+  border:1px solid #174d34;
+}
+.match-actions button{
+  background:transparent;
+  color:#314b39;
+  border:1px solid #7e8e7f66;
+}
+.match-actions .match-primary:hover,
+.match-actions button:hover{transform:translateY(-1px)}
+@media(max-width:760px){
+  .premium-card .match-summary{grid-template-columns:1fr;gap:4px}
+  .premium-card .match-summary b{justify-self:start;text-align:left}
+  .match-proof li{font-size:11px}
+  .match-actions{grid-template-columns:1fr!important}
+  .match-actions .match-primary,.match-actions button{min-height:42px}
+}
