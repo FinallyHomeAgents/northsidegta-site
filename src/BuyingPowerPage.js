@@ -263,7 +263,7 @@ export default function BuyingPowerPage() {
   };
 
   const captureCard = (
-    <article key="capture" id="save-comparison" className="rounded border border-brand-green bg-emerald-100 p-[18px] sm:p-6 flex flex-col gap-3 scroll-mt-20">
+    <article key="capture" id="save-comparison" className="rounded border border-brand-green bg-emerald-100 p-[18px] sm:p-6 flex flex-col gap-3 scroll-mt-40">
       <p className="font-mono text-xs uppercase tracking-wider text-brand-green m-0">Keep your comparison</p>
       <h3 className="text-xl font-bold text-brand-green m-0">Explore now. Compare together later.</h3>
       <p className="text-sm text-gray-700 m-0">Get all seven town averages in one email to revisit or share with someone planning the move with you.</p>
@@ -581,7 +581,7 @@ export default function BuyingPowerPage() {
           </div>
         </section>
 
-        <section id="home-review" className="mt-14 scroll-mt-20 rounded border border-gray-200 bg-white p-6 sm:p-9 shadow-sm">
+        <section id="home-review" className="mt-14 scroll-mt-40 rounded border border-gray-200 bg-white p-6 sm:p-9 shadow-sm">
           <h2 className="m-0 text-2xl font-bold tracking-tight">Start with your own home’s value.</h2>
           <p className="mt-2 mb-6 max-w-[60ch] text-[15px] text-gray-700">Town averages are a starting point. Share your address and Matthew or Landon will review nearby comparable sales and respond within 24 hours.</p>
           <div className="max-w-xl"><BuyingPowerLeadForm type="valuation" value={value} address={address} onAddressChange={setAddress} towns={towns} /></div>
