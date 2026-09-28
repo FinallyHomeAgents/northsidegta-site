@@ -28,7 +28,15 @@ const source = {
   metadata: {},
 }
 
-test('auditSource returns structured diagnostics', async () => {
+test('auditSource returns structured diagnostics', async (t) => {
+  // Both network dependencies below are fixtures. Exercise parsing even when
+  // the CI runner blocks real event-source requests by default.
+  const previousCi = process.env.CI
+  process.env.CI = 'false'
+  t.after(() => {
+    if (previousCi === undefined) delete process.env.CI
+    else process.env.CI = previousCi
+  })
   const fetcher = async () => ({
     url: 'https://example.com/events',
     status: 200,
