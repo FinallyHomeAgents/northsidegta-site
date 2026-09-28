@@ -1,5 +1,6 @@
 import React,{useEffect,useMemo,useRef,useState}from"react";
 import{Helmet}from"react-helmet-async";
+import{trackEvent}from"./utils/analytics";
 import"./PlayYourBudgetPage.css";
 
 
@@ -138,17 +139,47 @@ function RealDie({value,className=""}){
 const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
 export default function PlayYourBudgetPage(){
  const modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
- const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:""}),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
+ const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:"",consent:false,botField:""}),[formStatus,setFormStatus]=useState({loading:false,error:""}),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
  const label=useMemo(()=>money(budget),[budget]);
  const landedSpace=useMemo(()=>BOARD_SPACES.find(([name])=>name===landed),[landed]);
  const rankedMatches=useMemo(()=>rankCommunities(budget,wants),[budget,wants]);
  const bestMatch=rankedMatches[0]||null;
  const noFreeholdMatch=!bestMatch;
  const matchOptions=bestMatch?.options||[];
+ useEffect(()=>{if(revealed){trackEvent("pyb_match_revealed",{budget,match:landed||"no-match",priority_count:wants.length})}},[revealed,landed,budget,wants.length]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
- const toggle=w=>setWants(a=>a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a);
+ const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
  const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
- const roll=e=>{e.preventDefault();if(!lead.name||!lead.email)return;setGate(false);setTimeout(runRoll,260)};
+ const roll=async e=>{
+  e.preventDefault();
+  if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return;
+  setFormStatus({loading:true,error:""});
+  const payload={
+   name:lead.name,
+   email:lead.email,
+   phone:lead.phone,
+   consent:lead.consent,
+   botField:lead.botField,
+   budget,
+   budgetLabel:label,
+   priorities:wants,
+   recommendedCommunity:bestMatch?.name||"",
+   propertyTypes:(bestMatch?.options||[]).map(({label,status})=>({label,status})),
+   pageUrl:typeof window!=="undefined"?window.location.href:"",
+   submittedAt:new Date().toISOString()
+  };
+  try{
+   const response=await fetch("/api/play-your-budget-lead",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+   const body=await response.json().catch(()=>({}));
+   if(!response.ok)throw new Error(body.error||"Unable to send your request.");
+   trackEvent("pyb_lead_submit",{budget,priority_count:wants.length,match:bestMatch?.name||"no-match"});
+   setGate(false);
+   setFormStatus({loading:false,error:""});
+   setTimeout(runRoll,260);
+  }catch(error){
+   setFormStatus({loading:false,error:error?.message||"Something went wrong. Please try again."});
+  }
+ };
  return <main className="pyb">
   <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section id="pyb-controls" className="pyb-hero">
@@ -156,7 +187,7 @@ export default function PlayYourBudgetPage(){
    <p className="eyebrow">YOUR BUDGET · YOUR WISH LIST · YOUR NEXT MOVE</p>
    <h1>What could your next home look like <em>up here?</em></h1>
    <p className="intro">Set the number. Tell us what matters. We’ll find your strongest freehold-house fit — then the dice reveal it.</p>
-   <div className="budget"><div><span>YOUR BUDGET</span><strong>{label}</strong></div><input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)}/><small><b>$500K</b><b>$4M+</b></small></div>
+   <div className="budget"><div><span>YOUR BUDGET</span><strong>{label}</strong></div><input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/><small><b>$500K</b><b>$4M+</b></small></div>
    <div className={"budget-market-note "+(noFreeholdMatch?"is-tight":"")}><strong>{noFreeholdMatch?"FREEHOLD HOUSE OPTIONS ARE EXTREMELY LIMITED":"FREEHOLD HOUSE SEARCH"}</strong><span>{noFreeholdMatch?"At this budget we wouldn’t force a town match. Increase the budget to see realistic freehold-house options.":"Detached, semi-detached, freehold townhouse, rural/acreage homes and waterfront homes only. No condos or vacant land."}</span></div>
    <div className="wants"><span className="step">01</span><div><h2>What should your next home give you?</h2><p>Pick up to four.</p></div><div className="chips">{WANTS.map(w=><button key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div></div>
   </section>
@@ -180,7 +211,7 @@ export default function PlayYourBudgetPage(){
       <strong>{label}</strong>
       <em>No forced match.</em>
       <p>At this budget, we would not tell you there is a strong freehold-house fit anywhere on the NorthSide board. A one-off opportunity can appear, but it would be highly property-specific.</p>
-      <div className="match-actions"><a className="match-primary" href="/contact">ASK US WHAT’S ACTUALLY POSSIBLE →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST BUDGET</button></div>
+      <div className="match-actions"><a className="match-primary" href="/contact" onClick={()=>trackEvent("pyb_reality_check_contact",{budget})}>ASK US WHAT’S ACTUALLY POSSIBLE →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST BUDGET</button></div>
       <small className="market-disclaimer">Freehold houses only. No condos, condo townhouses, vacant land or raw land.</small>
      </div>}
     {revealed&&landedSpace&&<div className="reveal reveal-3d premium-card">
@@ -194,13 +225,21 @@ export default function PlayYourBudgetPage(){
       </div>
       <ul className="match-proof">{bestMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
-      <div className="match-actions"><a className="match-primary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]}>EXPLORE {landedSpace[0].toUpperCase()} →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST MY MATCH</button></div>
+      <div className="match-actions"><a className="match-primary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0].toUpperCase()} →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST MY MATCH</button></div>
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
      </div>}
    </div>
   </section>
-  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>Your budget and priorities determine the match. The roll is how we reveal it.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>lead.email?runRoll():setGate(true)} disabled={rolling||moving}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button></section>
+  <section className="roll-panel"><span className="step">02</span><div><p className="eyebrow">READY TO MAKE YOUR MOVE?</p><h2>Roll to reveal your NorthSide.</h2><p>Your budget and priorities determine the match. The roll is how we reveal it.</p></div><button ref={rollTriggerRef} className="roll-btn" onClick={()=>{if(lead.email&&lead.consent){trackEvent("pyb_reveal_click",{budget,priority_count:wants.length});runRoll()}else{trackEvent("pyb_lead_open",{budget,priority_count:wants.length});setGate(true)}} disabled={rolling||moving}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button></section>
   <section className="human"><span className="step">03</span><div><p className="eyebrow">THEN WE TAKE OVER</p><h2>Not an automated list. A real search.</h2><p>We'll use what you told us to personally find the NorthSide homes we'd actually want you to see.</p></div></section>
-  {gate&&<div className="modal-bg" onMouseDown={()=>setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" onMouseDown={e=>e.stopPropagation()}><button className="close" onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2>Unlock your roll.</h2><p>Tell us where to send the homes we uncover for you.</p><form onSubmit={roll}><label>First name<input required autoFocus value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label><label>Email<input required type="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label><label>Phone <small>optional</small><input type="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label><button>UNLOCK MY ROLL →</button></form><small className="privacy">This starts a real home-search conversation with Finally Home Agents.</small></div></div>}
+  {gate&&<div className="modal-bg" onMouseDown={()=>!formStatus.loading&&setGate(false)}><div ref={modalRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="pyb-modal-title" onMouseDown={e=>e.stopPropagation()}><button className="close" aria-label="Close" disabled={formStatus.loading} onClick={()=>setGate(false)}>×</button><p className="eyebrow">ONE MOVE LEFT</p><h2 id="pyb-modal-title">See your NorthSide match.</h2><p>We’ll use your budget and priorities to show where we’d start — and what freehold house types your budget can realistically target.</p><form onSubmit={roll}>
+<label>First name<input required autoFocus autoComplete="given-name" value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label>
+<label>Email<input required type="email" autoComplete="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label>
+<label>Phone <small>optional</small><input type="tel" autoComplete="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label>
+<label className="modal-consent"><input required type="checkbox" checked={lead.consent} onChange={e=>setLead({...lead,consent:e.target.checked})}/><span>I agree that Finally Home Agents may contact me about this home search.</span></label>
+<label className="hp-field" aria-hidden="true">Company<input tabIndex="-1" autoComplete="off" value={lead.botField} onChange={e=>setLead({...lead,botField:e.target.value})}/></label>
+<button disabled={formStatus.loading}>{formStatus.loading?"MATCHING…":"SHOW ME MY MATCH →"}</button>
+{formStatus.error&&<p className="modal-error" role="alert">{formStatus.error}</p>}
+</form><small className="privacy">No spam. Matthew or Landon will follow up personally if there are homes worth showing you.</small></div></div>}
  </main>
 }
