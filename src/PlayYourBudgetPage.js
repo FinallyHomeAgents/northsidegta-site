@@ -233,7 +233,7 @@ export default function PlayYourBudgetPage(){
   <section className="table table-3d">
    <div id="pyb-board" className={"pyb-board-stage premium-game "+(rolling?"is-rolling ":"")+(moving?"is-moving ":"")+(revealed?"is-revealed ":"")+(artReady?"has-board-art":"")}>
     <div className="board3d-copy"><span>THE NORTHSIDE BOARD</span><strong>{label}</strong><small>{wants.length?wants.join(" · "):"Set your priorities above"}</small></div>
-    <div className="pyb-game-status" aria-live="polite"><span>{noFreeholdMatch?"NO REALISTIC FREEHOLD MATCH":rolling?"MATCH LOCKED · ROLLING…":moving?"REVEALING YOUR MATCH":landed?"YOUR MATCH · "+landed:"MATCH READY"}</span><strong>{noFreeholdMatch?label:rolling||moving||landed?dice[0]+" + "+dice[1]+" = "+(dice[0]+dice[1]):bestMatch?.name}</strong></div>
+    <div className="pyb-game-status" aria-live="polite"><span>{noFreeholdMatch?"BUDGET REALITY CHECK":rolling?"MATCH LOCKED · ROLLING…":moving?"REVEALING YOUR MATCH":landed?"YOUR MATCH · "+landed:"READY TO MATCH"}</span><strong>{noFreeholdMatch?label:rolling||moving?dice[0]+" + "+dice[1]+" = "+(dice[0]+dice[1]):landed?landed:"Roll to reveal"}</strong></div>
     <div className="pyb-board-surface">
      <img className="pyb-board-art" src="/Images/play-your-budget-board.webp" alt="" onLoad={()=>setArtReady(true)} onError={()=>setArtReady(false)}/>
      <div className="vboard-lake"><span>LAKE SIMCOE</span></div>
