@@ -10,6 +10,7 @@ const HIDE_TOWN_RAIL_PREFIXES = [
   "/thank-you",
   "/listings",
   "/northside-pass-preview",
+  "/play-your-budget",
 ];
 
 const shouldShowTownRail = (pathname) => (
