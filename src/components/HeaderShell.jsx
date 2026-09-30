@@ -11,6 +11,7 @@ const HIDE_TOWN_RAIL_PREFIXES = [
   "/listings",
   "/northside-pass-preview",
   "/play-your-budget",
+  "/business-network",
 ];
 
 const shouldShowTownRail = (pathname) => (
@@ -30,6 +31,8 @@ export function HeaderShellProvider({ children }) {
 export default function HeaderShell({ global = false }) {
   const { pathname } = useLocation();
   const renderedByAppShell = useContext(HeaderShellContext);
+
+  if (pathname === "/business-network" || pathname.startsWith("/business-network/")) return null;
 
   if (renderedByAppShell && !global) {
     return null;
