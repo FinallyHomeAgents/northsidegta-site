@@ -1,20 +1,7 @@
 import React from "react";
 import Card from "../ui/Card";
 
-const videos = [
-  {
-    title: "Queensville Showcase: 472 Seaview Heights",
-    community: "Queensville · East Gwillimbury",
-    strategy: "Family-home positioning with a polished walkthrough designed to make scale, flow, and neighbourhood feel easy to understand.",
-    embed: "https://listings.wylieford.com/videos/01922f3a-c66a-7001-83e7-0e7fb17543bb",
-  },
-  {
-    title: "Golf Course Estate: 42 Wyndance Way",
-    community: "Uxbridge · Estate property",
-    strategy: "Land and lifestyle emphasis for a property where setting, privacy, and destination value are central to the story.",
-    embed: "https://player.vimeo.com/video/832255969",
-  },
-];
+import videos from "../../data/propertyTourVideos";
 
 export default function SellerMediaSection({ heading = "How We Present Homes to the Market" }) {
   if (!videos.length) return null;
