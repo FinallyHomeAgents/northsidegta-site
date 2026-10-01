@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="same-origin">
+<title>Play Your Budget Leads | NorthSide GTA CMS</title>
+<link rel="stylesheet" href="/cms/play-your-budget-leads/style.css">
+<script defer src="/cms/play-your-budget-leads/app.js"></script>
+</head>
+<body>
+<header><a href="/cms/" class="brand">NorthSide GTA <span>CMS</span></a><nav><a href="/cms/">Back to CMS</a><button id="logout" hidden>Sign out</button></nav></header>
+<main>
+<section class="heading"><p class="eyebrow">BUYER ENQUIRIES</p><h1>Play Your Budget Leads</h1><p>See who explored a match and who’s ready for homes.</p></section>
+<p id="message" class="message" role="status" aria-live="polite"></p>
+<form id="login" class="login-panel" hidden><h2>Sign in to view leads</h2><p>Use your existing website CMS sign-in.</p><label>Username<input name="username" autocomplete="username" required></label><label>Password<input type="password" name="password" autocomplete="current-password" required></label><button type="submit" class="primary">Sign in</button></form>
+<section id="dashboard" hidden>
+<div class="toolbar"><label>Search<input id="search" type="search" placeholder="Name, email or town"></label><label>Interest<select id="stage"><option value="">All leads</option><option value="homes">Homes requested</option><option value="match">Match revealed</option></select></label><label>Follow-up<select id="status"><option value="">All statuses</option><option>New</option><option>Contacted</option><option>Closed</option></select></label><button id="refresh">Refresh</button></div>
+<p id="count" class="count"></p><div id="leads" class="leads"></div><button id="more" class="load-more" hidden>Load more leads</button>
+</section>
+</main>
+<template id="lead-template"><article class="lead"><div class="lead-top"><div><span class="stage"></span><h2 class="name"></h2><p class="time"></p></div><strong class="budget"></strong></div><div class="lead-body"><div class="contact"><a class="email"></a><a class="phone"></a></div><dl class="preferences"><div><dt>Community match</dt><dd class="match"></dd></div><div><dt>Requested towns</dt><dd class="towns"></dd></div><div><dt>Priorities</dt><dd class="priorities"></dd></div><div><dt>Property fit</dt><dd class="property-fit"></dd></div><div><dt>Email notification</dt><dd class="notification"></dd></div></dl><p class="consent">Contact consent received · Play Your Budget</p><form class="follow-up"><label>Status<select name="status"><option>New</option><option>Contacted</option><option>Closed</option></select></label><label class="notes-label">Notes<textarea name="notes" rows="2" maxlength="6000" placeholder="Follow-up notes"></textarea></label><button type="submit">Save follow-up</button><span class="save-status" role="status"></span></form></div></article></template>
+</body>
+</html>

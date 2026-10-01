@@ -21,6 +21,7 @@
       /* Top controls (only visible once CMS UI is mounted) */
       #cms-controls{position:fixed;top:16px;right:16px;z-index:1000;display:none}
       body.cms-loaded #cms-controls{display:block}
+      #budget-leads-link,
       #events-admin-link,
       #smart-list-link{
         margin-right:12px;padding:8px 16px;border-radius:999px;background:rgba(37,99,235,.12);
@@ -50,6 +51,7 @@
   <body>
     <!-- Controls visible once CMS is running -->
     <div id="cms-controls">
+      <a id="budget-leads-link" href="/cms/play-your-budget-leads/">Play Your Budget Leads</a>
       <a id="events-admin-link" href="/community/events-admin" target="_blank" rel="noopener noreferrer">Community Events Admin</a>
       <a id="smart-list-link" href="/tastehub/smart-list" target="_blank" rel="noopener noreferrer">TasteHub Smart List Tool</a>
       <button id="logout-button" type="button">Log out</button>
@@ -236,7 +238,7 @@
           }
         }
 
-        function handleLogout(){ clearStoredTokens(); window.location.replace('/cms/'); }
+        async function handleLogout(){ clearStoredTokens(); try { await fetch('/api/play-your-budget-lead?action=logout', {method:'POST', credentials:'same-origin'}); } finally { window.location.replace('/cms/'); } }
 
         form.addEventListener('submit', handleLogin);
         logoutButton.addEventListener('click', handleLogout);
