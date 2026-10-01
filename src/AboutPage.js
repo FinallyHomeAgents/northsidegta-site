@@ -21,8 +21,8 @@ const communities = [
 const approach = [
   {
     icon: HeartHandshake,
-    title: "A relationship with your agents.",
-    text: "Matthew and Landon stay directly involved, from the first conversation to closing. You know who to call, and we know what matters to you.",
+    title: "An athlete-agent mindset.",
+    text: "We approach representation the way an agent supports a professional athlete: with loyalty, strategy, and your long-term interests at heart. Matthew and Landon stay directly involved from the first conversation to closing.",
   },
   {
     icon: Compass,
@@ -78,6 +78,7 @@ export default function AboutPage() {
                 <p className="about-eyebrow">Co-founder · Finally Home Agents</p>
                 <h3>Matthew Mulhall</h3>
                 <p className="about-role">Sales Representative</p>
+                <p className="about-award"><strong>HomeLife Optimum Realty’s #1 Individual Agent</strong><span>2023 · 2024 · 2025</span></p>
                 <p className="about-body">A real estate agent since 2009 and a dad of twins living in Keswick, Matthew brings experienced negotiation, thoughtful strategy, and a family perspective to every move.</p>
                 <Link className="about-text-link" to="/agents/matthew-mulhall">More about Matthew <ArrowRight size={17} aria-hidden="true" /></Link>
                 <a className="about-phone" href="tel:+16476684646"><Phone size={15} aria-hidden="true" />647-668-4646<span className="sr-only"> — call Matthew</span></a>
