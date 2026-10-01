@@ -1,268 +1,72 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowDown, ArrowRight, ExternalLink, Instagram, Play } from "lucide-react";
 import HeaderShell from "./components/HeaderShell";
-import Footer from "./Footer";
-import HeroPromo from "./components/socials/HeroPromo";
-import IgEmbedCard from "./components/socials/IgEmbedCard";
 import DynamicMetaTags from "./components/seo/DynamicMetaTags";
 import { getStaticRouteMeta } from "./components/seo/staticRouteMetaExports";
-
-function normalize(items = []) {
-  const filtered = items.filter((item) => item && item.published !== false && item.url);
-  return filtered.sort((a, b) => {
-    const pinDelta = (b?.pin ? 1 : 0) - (a?.pin ? 1 : 0);
-    if (pinDelta !== 0) return pinDelta;
-
-    const aDate = a?.date ? new Date(a.date).getTime() : 0;
-    const bDate = b?.date ? new Date(b.date).getTime() : 0;
-    return bDate - aDate;
-  });
-}
+import snapshot from "./data/mediaSnapshot.json";
+import propertyTours from "./data/propertyTourVideos";
+import "./MediaPage.css";
 
 const MEDIA_ROUTE_META = getStaticRouteMeta("/media") || {};
+const isVideo = (url = "") => /\.(mp4|webm)(\?|#|$)/i.test(url);
 
-function ensureInstagramScript() {
-  if (typeof document === "undefined") return;
-  if (document.getElementById("ig-embed")) return;
-  const s = document.createElement("script");
-  s.id = "ig-embed";
-  s.async = true;
-  s.src = "https://www.instagram.com/embed.js";
-  s.onload = () => {
-    window.instgrm?.Embeds?.process?.();
-  };
-  document.body.appendChild(s);
+const { normalizeMedia } = require("./lib/mediaContent");
+
+function ReelCard({ item, index }) {
+  const title = item.title?.trim() || "A moment from the NorthSide";
+  return <article className="media-reel">
+    <a className="media-reel-cover" href={item.url} target="_blank" rel="noreferrer" aria-label={`Watch ${title} on Instagram (opens in a new tab)`}><Instagram size={28} aria-hidden="true" /><span className="media-reel-number">{String(index + 1).padStart(2, "0")}</span><span className="media-reel-cover-title">{title}</span><span className="media-reel-play"><Play size={17} aria-hidden="true" /> Watch on Instagram <ExternalLink size={14} aria-hidden="true" /></span></a>
+    <div className="media-reel-copy"><p className="media-eyebrow">Instagram reel</p><h3>{title}</h3><p>Opens on Instagram</p></div>
+  </article>;
 }
 
-function isVideoFile(url = "") {
-  return /\.(mp4|webm)(\?|#|$)/i.test(url);
+function PropertyPlayer({ tour }) {
+  return <div className="media-tour-player"><a className="media-tour-cover" href={tour.embed} target="_blank" rel="noreferrer" aria-label={`Watch ${tour.title} (opens in a new tab)`}><img src={tour.poster} alt="" loading="lazy" /><span><Play size={24} aria-hidden="true" /><span className="sr-only">Open property film</span></span></a></div>;
 }
 
-function FeaturedHeroCard({ item }) {
-  const src =
-    typeof item?.source_url === "string"
-      ? item.source_url
-      : typeof item?.url === "string"
-        ? item.url
-        : "";
-  const title = item?.title?.trim?.() || "Featured NorthSide GTA reel";
-  const captioned = Boolean(item?.captioned);
-  const useLocalVideo = isVideoFile(src);
-  const cardRef = useRef(null);
-  const videoRef = useRef(null);
-  const [hydrated, setHydrated] = useState(false);
-  const [muted, setMuted] = useState(true);
-
-  useEffect(() => {
-    if (!src || useLocalVideo) return;
-    const el = cardRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return undefined;
-
-    ensureInstagramScript();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && window.instgrm?.Embeds && !hydrated) {
-            window.instgrm.Embeds.process();
-            setHydrated(true);
-          }
-        });
-      },
-      { rootMargin: "200px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hydrated, src, useLocalVideo]);
-
-  useEffect(() => {
-    if (!src || useLocalVideo) return;
-    setHydrated(false);
-  }, [src, useLocalVideo]);
-
-  useEffect(() => {
-    if (!useLocalVideo) return;
-    setMuted(true);
-  }, [src, useLocalVideo]);
-
-  useEffect(() => {
-    if (!useLocalVideo) return;
-    const videoEl = videoRef.current;
-    if (!videoEl) return;
-
-    videoEl.muted = muted;
-    if (!muted) {
-      const playPromise = videoEl.play();
-      if (playPromise instanceof Promise) {
-        playPromise.catch(() => {});
-      }
-    }
-  }, [muted, useLocalVideo]);
-
-  if (!src) return null;
-
-  return (
-    <div className="relative" role="group" aria-label={title}>
-      <span className="mb-3 inline-flex items-center justify-center rounded-full border border-emerald-300/40 bg-emerald-300 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-neutral-900">
-        Featured reel
-      </span>
-      <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-neutral-950/80 shadow-[0_32px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <div ref={cardRef} className="relative">
-          <div className="aspect-video w-full">
-            {useLocalVideo ? (
-              <div className="relative h-full w-full">
-                <video
-                  ref={videoRef}
-                  src={src}
-                  poster={item?.poster_url || undefined}
-                  autoPlay
-                  muted={muted}
-                  loop
-                  playsInline
-                  className="h-full w-full object-cover"
-                  title={title}
-                />
-                <button
-                  type="button"
-                  onClick={() => setMuted((prev) => !prev)}
-                  className="absolute bottom-4 right-4 z-10 rounded-full border border-white/30 bg-black/70 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-lg backdrop-blur-md transition hover:bg-black/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                  aria-pressed={!muted}
-                  aria-label={muted ? "Unmute featured reel" : "Mute featured reel"}
-                >
-                  {muted ? "Unmute" : "Mute"}
-                </button>
-              </div>
-            ) : (
-              <blockquote
-                className="instagram-media h-full w-full"
-                data-instgrm-permalink={src}
-                data-instgrm-version="14"
-                {...(captioned ? { "data-instgrm-captioned": "" } : {})}
-                style={{ background: "#0a0a0a", margin: 0, minHeight: "100%" }}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-      {item?.title && (
-        <p className="mt-4 text-sm font-medium uppercase tracking-[0.2em] text-white/70">
-          {item.title}
-        </p>
-      )}
+function FeaturedVideo({ item }) {
+  const [failed, setFailed] = useState(false);
+  const src = item?.source_url || "";
+  const validSrc = src.startsWith("/") && !src.startsWith("//") || /^https:\/\//.test(src);
+  if (!validSrc) return null;
+  const title = item.title || "NorthSide GTA in motion";
+  return <div className="media-feature">
+    <div className="media-feature-frame">
+      {isVideo(src) ? <video key={src} controls playsInline preload="none" poster={item.poster_url || undefined} onError={() => setFailed(true)} aria-label={title}><source src={src} />Your browser cannot play this video. Use the link below to open it.</video> : <a className="media-feature-external" href={src} target="_blank" rel="noreferrer"><Play size={38} aria-hidden="true" /><span>Watch {title}</span><ExternalLink size={18} aria-hidden="true" /></a>}
     </div>
-  );
+    <div className="media-feature-caption"><div><p className="media-eyebrow">Featured film</p><h2>{title}</h2></div><a href={src} target="_blank" rel="noreferrer">Open video <ExternalLink size={15} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a></div>
+    {failed && <p className="media-notice" role="status">The video couldn’t load here. Try opening it directly using the link above.</p>}
+  </div>;
 }
 
 export default function MediaPage() {
-  const [settings, setSettings] = useState(null);
-  const [items, setItems] = useState([]);
-  const [error, setError] = useState("");
-
+  const [settings, setSettings] = useState(snapshot.settings);
+  const [items, setItems] = useState(() => normalizeMedia(snapshot.items));
+  const [notice, setNotice] = useState(false);
   useEffect(() => {
-    let isMounted = true;
-
-    const load = async () => {
-      try {
-        const [settingsRes, itemsRes] = await Promise.all([
-          fetch("/content/socials-settings.json", { cache: "no-store" }),
-          fetch("/content/socials.json", { cache: "no-store" }),
-        ]);
-
-        if (!settingsRes.ok) throw new Error(`Settings request failed (HTTP ${settingsRes.status})`);
-        if (!itemsRes.ok) throw new Error(`Media list request failed (HTTP ${itemsRes.status})`);
-
-        const [settingsJson, listJson] = await Promise.all([settingsRes.json(), itemsRes.json()]);
-
-        if (!isMounted) return;
-        setSettings(settingsJson);
-        setItems(normalize(listJson?.items || []));
-        setError("");
-      } catch (err) {
-        if (!isMounted) return;
-        setError(err instanceof Error ? err.message : String(err));
-      }
+    const controller = new AbortController();
+    const load = async path => {
+      const response = await fetch(path, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error("Media unavailable");
+      return response.json();
     };
-
-    load();
-    return () => {
-      isMounted = false;
-    };
+    Promise.allSettled([load("/content/socials-settings.json"), load("/content/socials.json")]).then(([config, list]) => {
+      if (controller.signal.aborted) return;
+      const configOk = config.status === "fulfilled" && config.value?.pinned && typeof config.value.pinned === "object";
+      const listOk = list.status === "fulfilled" && Array.isArray(list.value?.items);
+      if (configOk) setSettings(config.value);
+      if (listOk) setItems(normalizeMedia(list.value.items));
+      setNotice(!configOk || !listOk);
+    });
+    return () => controller.abort();
   }, []);
-
-  const heroEnabled = settings?.pinned?.enabled !== false;
-  const showHeroCard = heroEnabled && Boolean(settings?.pinned?.source_url);
-  const hasItems = items.length > 0;
-  const fallbackFeatured = heroEnabled && !showHeroCard && hasItems ? { ...items[0], source_url: items[0]?.url } : null;
-  const heroFeatured = showHeroCard ? settings?.pinned : fallbackFeatured;
-  const heroTitle = settings?.pinned?.title || "NorthSide GTA Videos + Reels";
-  const heroTagline =
-    settings?.pinned?.tagline ||
-    "Quick looks at communities, listings, and life on the NorthSide GTA — in short videos and reels.";
-
-  return (
-    <>
-      <DynamicMetaTags {...MEDIA_ROUTE_META} />
-      <HeaderShell />
-      <main className="relative min-h-screen bg-neutral-950 text-white">
-        <section
-          aria-label="Hero section showing a smartphone with Videos Reels on screen, representing NorthSide GTA real estate media content."
-          className="relative"
-        >
-          <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-20 sm:pb-20 lg:pb-24 lg:pt-24">
-            <div className="max-w-2xl space-y-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300/80">Media</p>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{heroTitle}</h1>
-              {heroTagline && <p className="text-base text-neutral-200 sm:text-lg">{heroTagline}</p>}
-            </div>
-
-            {heroFeatured && (
-              <div className="media-hero-visual relative mt-10">
-                <figure className="overflow-hidden rounded-[2.25rem] border border-white/10 shadow-[0_40px_120px_rgba(7,15,20,0.55)]">
-                  <img
-                    className="h-auto w-full"
-                    src="/uploads/videos-reels-hero-finally-home-agents-side2.jpg"
-                    alt="Hand holding a smartphone showing the words Videos Reels with NorthSide GTA styling, against a blurred city background."
-                  />
-                </figure>
-                <div className="mt-6 w-full lg:absolute lg:right-12 lg:top-1/2 lg:mt-0 lg:w-[min(55%,24rem)] lg:-translate-y-1/2">
-                  <FeaturedHeroCard item={heroFeatured} />
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <div className="mx-auto max-w-6xl px-6">
-          {error && (
-            <div className="mb-6 rounded-2xl border border-red-400/40 bg-red-500/10 p-4 text-sm text-red-100">
-              {error}
-            </div>
-          )}
-        </div>
-
-        <section className="mx-auto max-w-6xl px-6 pb-16">
-          <h2 className="mb-8 text-sm font-semibold uppercase tracking-[0.35em] text-white/60">All videos & reels</h2>
-          {showHeroCard || hasItems ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {showHeroCard && <HeroPromo pinned={settings?.pinned} />}
-              {items.map((item, index) => (
-                <IgEmbedCard
-                  key={`${item.url}-${index}`}
-                  url={item.url}
-                  title={item.title}
-                  captioned={Boolean(item.captioned)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-white/10 bg-neutral-900/60 p-6 text-neutral-300">
-              No items yet — paste Instagram links in CMS → Socials → Media Links.
-            </div>
-          )}
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
+  const featured = settings?.pinned?.enabled !== false ? settings?.pinned : null;
+  return <div className="media-page"><HeaderShell /><DynamicMetaTags {...MEDIA_ROUTE_META} /><main>
+    <section className="media-hero"><div className="media-wrap media-hero-grid"><div><p className="media-eyebrow">The NorthSide, in motion</p><h1>NorthSide GTA<br />Videos <span>+ Reels</span></h1><p className="media-intro">Get a feel for life north of Toronto.</p><p className="media-description">Step inside homes, explore our communities, and get to know the places and people behind NorthSide GTA.</p><a className="media-button" href="#property-tours">Explore the videos <ArrowDown size={18} aria-hidden="true" /></a><p className="media-credit">Local stories. Real homes. Finally Home Agents.</p></div>{featured?.source_url ? <FeaturedVideo key={featured.source_url} item={featured} /> : <div className="media-hero-note"><Play size={42} aria-hidden="true" /><h2>A closer look at the NorthSide.</h2><p>Start with our property tours and short films below.</p></div>}</div></section>
+    <nav className="media-wrap media-section-nav" aria-label="Video sections"><a href="#property-tours">Property tours <ArrowDown size={14} aria-hidden="true" /></a><a href="#reels">Shorts & reels <ArrowDown size={14} aria-hidden="true" /></a><Link to="/sellers">How we market homes <ArrowRight size={14} aria-hidden="true" /></Link></nav>
+    <section className="media-wrap media-section" id="property-tours" aria-labelledby="tours-heading"><div className="media-section-heading"><div><p className="media-eyebrow">Inside the homes</p><h2 id="tours-heading">Take a closer look.</h2></div><p>Walkthroughs from our listing work.<br />See the space, the setting, and the details.</p></div><div className="media-tour-grid">{propertyTours.map(tour => <article className="media-tour" key={tour.embed}><PropertyPlayer tour={tour} /><div className="media-tour-copy"><p className="media-eyebrow">{tour.community}</p><h3>{tour.title}</h3><p>{tour.strategy}</p><a href={tour.embed} target="_blank" rel="noreferrer">Open property film <ExternalLink size={15} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a></div></article>)}</div><p className="media-small">Films open in their original players in a new tab. Featured properties may no longer be available.</p></section>
+    <section className="media-reels-section" id="reels" aria-labelledby="reels-heading"><div className="media-wrap media-section"><div className="media-section-heading"><div><p className="media-eyebrow">A little more local</p><h2 id="reels-heading">Short stories. NorthSide life.</h2></div><p>Quick watches from our Instagram library.<br />Watch the full reels on Instagram.</p></div>{notice && <p className="media-notice" role="status">We couldn’t refresh the latest reels. You can still explore our saved selection below.</p>}{items.length ? <div className="media-reel-grid">{items.map((item,index) => <ReelCard key={item.url} item={item} index={index} />)}</div> : <div className="media-empty"><Instagram size={30} aria-hidden="true" /><h3>More local stories are on the way.</h3><p>In the meantime, explore our property films above or find your next community below.</p><Link to="/communities">Explore the communities <ArrowRight size={17} aria-hidden="true" /></Link></div>}<p className="media-small">Reels open in a new tab on Instagram, which may ask you to sign in.</p></div></section>
+    <section className="media-wrap media-cta"><div><p className="media-eyebrow">See something that feels like home?</p><h2>Let’s turn inspiration into a plan.</h2><p>Talk to Matthew and Landon about your next move—or how we could present your home.</p></div><Link className="media-button" to="/contact">Start a conversation <ArrowRight size={18} aria-hidden="true" /></Link></section>
+    </main><footer className="media-wrap media-footer"><p><strong>Finally Home Agents</strong><br />HomeLife Optimum Realty, Brokerage</p><p>© {new Date().getFullYear()} NorthSide GTA · <Link to="/privacy">Privacy policy</Link><br />Not intended to solicit clients already under contract with a brokerage.</p></footer></div>;
 }
