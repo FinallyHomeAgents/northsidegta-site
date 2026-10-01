@@ -4,7 +4,7 @@ import Navigation from "../Navigation";
 import CoverageStrip from "./CoverageStrip";
 
 const HIDE_TOWN_RAIL_PREFIXES = [
-  "/cms",
+  "/cms",\n  "/business-network",
   "/community/events-admin",
   "/community/events-review",
   "/thank-you",
@@ -32,7 +32,7 @@ export default function HeaderShell({ global = false }) {
   const { pathname } = useLocation();
   const renderedByAppShell = useContext(HeaderShellContext);
 
-  if (pathname === "/business-network" || pathname.startsWith("/business-network/")) return null;
+  if (pathname === "/business-network" || pathname.startsWith("/business-network/") || pathname.startsWith("/cms/good-good")) return null;
 
   if (renderedByAppShell && !global) {
     return null;
