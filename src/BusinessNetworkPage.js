@@ -15,7 +15,9 @@ const principles = [
 export default function BusinessNetworkPage(){
  const [open,setOpen]=useState(false);
  const [step,setStep]=useState(1);
- const [sent,setSent]=useState(false);\n const [submitting,setSubmitting]=useState(false);\n const [submitError,setSubmitError]=useState("");
+ const [sent,setSent]=useState(false);
+ const [submitting,setSubmitting]=useState(false);
+ const [submitError,setSubmitError]=useState("");
  const formRef=useRef(null);
  const [form,setForm]=useState(()=>{
   const empty={name:"",company:"",role:"",email:"",phone:"",website:"",linkedin:"",companySize:"",market:"",category:"",years:"",millRun:"",connection:"",business:"",why:"",contribution:"",example:"",connections:"",expertise:"",whyYou:"",sixMonths:"",goal:"",desiredCategories:"",commit:"",feeComfort:"",referrer:"",agree:false};
