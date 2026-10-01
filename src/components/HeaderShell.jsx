@@ -4,7 +4,8 @@ import Navigation from "../Navigation";
 import CoverageStrip from "./CoverageStrip";
 
 const HIDE_TOWN_RAIL_PREFIXES = [
-  "/cms",\n  "/business-network",
+  "/cms",
+  "/business-network",
   "/community/events-admin",
   "/community/events-review",
   "/thank-you",
