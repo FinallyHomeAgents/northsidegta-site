@@ -62,6 +62,7 @@ import MovingToPortPerryScugogFromTorontoPage from "./MovingToPortPerryScugogFro
 import MatthewMulhallPage from "./MatthewMulhallPage";
 import LandonMulhallPage from "./LandonMulhallPage";
 import BusinessNetworkPage from "./BusinessNetworkPage";
+import GoodGoodApplicationsPage from "./GoodGoodApplicationsPage";
 
 import AuroraPage from "./AuroraPage";
 import NewmarketPage from "./NewmarketPage";
@@ -151,6 +152,7 @@ function App() {
           <Route path="/what-my-home-buys" element={<BuyingPowerPage />} />
           <Route path="/play-your-budget" element={<PlayYourBudgetPage />} />
           <Route path="/business-network" element={<BusinessNetworkPage />} />
+          <Route path="/cms/good-good" element={<GoodGoodApplicationsPage />} />
           <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
           <Route path="/insights"     element={<InsightsPage />} />
           <Route path="/insights/:slug" element={<InsightPage />} />
