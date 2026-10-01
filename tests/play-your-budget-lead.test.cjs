@@ -53,7 +53,7 @@ test('list and follow-up changes are private; cross-origin updates cannot change
   assert.equal((await s.send({ action: 'update', body })).code, 401);
   assert.equal((await s.send({ action: 'update', body, auth: true, origin: 'https://evil.example' })).code, 403);
   const updated = await s.send({ action: 'update', body, auth: true, origin: 'https://northsidegta.ca' });
-  assert.equal(updated.code, 200); assert.equal(updated.data.lead.status, 'Contacted'); assert.equal(updated.data.lead.notes, 'Call Friday');
+  assert.equal(updated.code, 200); assert.equal(updated.data.lead.status, 'Contacted'); assert.equal(updated.data.lead.notes, 'Call Friday'); assert.equal(updated.data.lead.notificationStatus, 'sent');
 });
 test('invalid emails, budgets, towns, missing consent, and unsupported methods never store or deliver', async () => {
   for (const body of [{ email: 'bad' }, { budget: 10 }, { budget: 'NaN' }, { consent: false }, { requestType: 'homes', selectedCommunities: ['Toronto'] }]) {
