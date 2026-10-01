@@ -1436,3 +1436,20 @@
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
+
+/* Home requests stay inside the existing result card. */
+.premium-card .home-request-form{display:grid;gap:14px;text-align:left;margin-top:20px}
+.premium-card .home-request-form h3,.premium-card .home-request-success h3{margin:0;font-size:24px;color:#173b2a}
+.premium-card .home-request-form p,.premium-card .home-request-success p{margin:0;font-size:14px;line-height:1.5;color:#3f4a43}
+.premium-card .home-request-form>label{display:grid;gap:6px;font-size:13px;font-weight:700;color:#314b39}
+.premium-card .home-request-form label small{font-size:11px;font-weight:400}
+.premium-card .home-request-form input:not([type="checkbox"]){width:100%;min-height:46px;border:1px solid #7e8e7f88;border-radius:9px;padding:11px 12px;background:#fffaf0;color:#13221c;font:inherit;font-size:16px}
+.premium-card .home-request-form input:focus-visible{outline:2px solid #245b13;outline-offset:2px}
+.premium-card .home-request-form>.home-request-consent{display:flex;align-items:flex-start;gap:10px;font-weight:400;line-height:1.4}
+.home-request-consent input{width:18px;height:18px;flex-shrink:0;margin:0;accent-color:#174d34}
+.premium-card .home-request-form>.hp-field{display:none}
+.premium-card .home-request-form .home-request-error{color:#962e23}
+.premium-card .home-request-success{display:grid;gap:14px;margin-top:24px}
+.premium-card button:disabled{opacity:.6;cursor:wait}
+.premium-card .match-actions button.match-primary{background:#174d34;color:#fff;border-color:#174d34}
+@media(max-width:760px){.premium-card .home-request-form{gap:12px}.premium-card .home-request-form h3{font-size:21px}}

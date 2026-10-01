@@ -28,6 +28,7 @@ export default async function handler(req, res) {
     return;
   }
 
+  const requestType = body.requestType === 'homes' ? 'Matching homes request' : 'Community match';
   const name = normalizeText(body.name, 120);
   const email = normalizeText(body.email, 180);
   const phone = normalizeText(body.phone, 80);
@@ -68,10 +69,11 @@ export default async function handler(req, res) {
         'Recommended community': recommendedCommunity,
         'Freehold property-type fit': propertyTypes.map((item) => `${item.label}: ${item.status}`).join(' | ') || 'No realistic freehold match',
         Source: 'Play Your Budget',
+        'Request type': requestType,
         'Page URL': pageUrl,
         'Submitted date/time': submittedAt,
         'Contact consent': 'Yes',
-        _subject: `Play Your Budget Lead — ${budgetLabel || 'Budget'} — ${recommendedCommunity} — ${name}`,
+        _subject: `Play Your Budget ${requestType} — ${budgetLabel || 'Budget'} — ${recommendedCommunity} — ${name}`,
         _gotcha: '',
       }),
     });
