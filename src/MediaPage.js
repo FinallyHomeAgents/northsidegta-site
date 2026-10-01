@@ -16,7 +16,7 @@ const { normalizeMedia } = require("./lib/mediaContent");
 function ReelCard({ item, index }) {
   const title = item.title?.trim() || "A moment from the NorthSide";
   return <article className="media-reel">
-    <a className="media-reel-cover" href={item.url} target="_blank" rel="noreferrer" aria-label={`Watch ${title} on Instagram (opens in a new tab)`}><Instagram size={28} aria-hidden="true" /><span className="media-reel-number">{String(index + 1).padStart(2, "0")}</span><span className="media-reel-cover-title">{title}</span><span className="media-reel-play"><Play size={17} aria-hidden="true" /> Watch on Instagram <ExternalLink size={14} aria-hidden="true" /></span></a>
+    <a className={`media-reel-cover${item.poster_url ? " media-reel-has-image" : ""}`} href={item.url} target="_blank" rel="noreferrer" aria-label={`Watch ${title} on Instagram (opens in a new tab)`}>{item.poster_url && <img className="media-reel-image" src={item.poster_url} alt="" loading="lazy" />}<Instagram size={28} aria-hidden="true" /><span className="media-reel-number">{String(index + 1).padStart(2, "0")}</span><span className="media-reel-cover-title">{title}</span><span className="media-reel-play"><Play size={17} aria-hidden="true" /> Watch on Instagram <ExternalLink size={14} aria-hidden="true" /></span></a>
     <div className="media-reel-copy"><p className="media-eyebrow">Instagram reel</p><h3>{title}</h3><p>Opens on Instagram</p></div>
   </article>;
 }

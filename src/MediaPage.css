@@ -76,3 +76,10 @@
 
 .media-page .media-reel > .media-reel-cover { height: 390px; text-decoration: none; }
 .media-page .media-reel-copy > p:last-child { font-size: 13px; color: #5f6b61; }
+
+.media-page .media-reel-cover .media-reel-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.media-page .media-reel-has-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, #0002 0%, transparent 50%, #0009 100%); }
+.media-page .media-reel-has-image > svg, .media-page .media-reel-has-image .media-reel-play { position: relative; z-index: 1; }
+.media-page .media-reel-has-image .media-reel-number, .media-page .media-reel-has-image .media-reel-cover-title { display: none; }
+.media-page .media-reel-has-image .media-reel-play { background: #173b2a; border-color: #ffffff80; }
+.media-page .media-reel > .media-reel-has-image { height: auto; aspect-ratio: 9 / 16; padding: 22px; }

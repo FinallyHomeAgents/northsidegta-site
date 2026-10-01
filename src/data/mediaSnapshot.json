@@ -15,7 +15,8 @@
       "captioned": false,
       "published": true,
       "url": "https://www.instagram.com/reel/DDuMrFONsi9/",
-      "date": "2025-10-31T12:59:00.000-04:00"
+      "date": "2025-10-31T12:59:00.000-04:00",
+      "poster_url": "/uploads/reel-DDuMrFONsi9.jpg"
     },
     {
       "pin": false,
@@ -23,7 +24,8 @@
       "published": true,
       "url": "https://www.instagram.com/reel/C4YApX4Okme/",
       "title": "NorthSideGTA",
-      "date": "2025-10-31T14:00:00.000-04:00"
+      "date": "2025-10-31T14:00:00.000-04:00",
+      "poster_url": "/uploads/reel-C4YApX4Okme.jpg"
     },
     {
       "pin": false,
@@ -31,7 +33,8 @@
       "published": true,
       "url": "https://www.instagram.com/reel/DJ4Vhz5xThm/",
       "title": "Stuck in Traffic Again?",
-      "date": "2025-11-05T09:47:00.000-05:00"
+      "date": "2025-11-05T09:47:00.000-05:00",
+      "poster_url": "/uploads/reel-DJ4Vhz5xThm.jpg"
     }
   ]
 }
