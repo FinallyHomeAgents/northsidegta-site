@@ -1,5 +1,4 @@
 import React,{useEffect,useMemo,useRef,useState}from"react";
-import{Helmet}from"react-helmet-async";
 import{createPortal}from"react-dom";
 import{trackEvent}from"./utils/analytics";
 import"./PlayYourBudgetPage.css";
@@ -17,6 +16,7 @@ const BOARD_SPACES=[
 ];
 const TOWNS=BOARD_SPACES.slice(1);
 const BOARD_LABELS=BOARD_SPACES.map(([name,cls,tagline])=>({name,cls,tagline}));
+const SEARCH_COMMUNITIES=["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","King","Bradford"];
 const WANTS=["More space","Acreage","Pool","Waterfront","Newer home","Privacy","Better commute","Room for family"];
 const COMMUNITY_SLUGS={Georgina:"georgina","East Gwillimbury":"east-gwillimbury",Newmarket:"newmarket",Aurora:"aurora",Stouffville:"stouffville",Uxbridge:"uxbridge",Scugog:"scugog"};
 const MATCH_PROFILES={
@@ -139,34 +139,59 @@ function RealDie({value,className=""}){
 
 const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
 export default function PlayYourBudgetPage(){
- const modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
+ const resultRef=useRef(null),modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
  const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:"",consent:false,botField:""}),[formStatus,setFormStatus]=useState({loading:false,error:""}),[lastSubmittedSignature,setLastSubmittedSignature]=useState(""),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
+ const[homeRequest,setHomeRequest]=useState("match"),[selectedCommunities,setSelectedCommunities]=useState([]),[resultSnapshot,setResultSnapshot]=useState(null);
  const label=useMemo(()=>money(budget),[budget]);
  const landedSpace=useMemo(()=>BOARD_SPACES.find(([name])=>name===landed),[landed]);
  const rankedMatches=useMemo(()=>rankCommunities(budget,wants),[budget,wants]);
  const bestMatch=rankedMatches[0]||null;
- const noFreeholdMatch=!bestMatch;
- const matchOptions=bestMatch?.options||[];
+ const resultMatch=resultSnapshot?.match||null;
+ const resultLabel=resultSnapshot?money(resultSnapshot.budget):label;
+ const resultPriorities=resultSnapshot?.priorities||wants;
+ const noFreeholdMatch=revealed?!resultMatch:!bestMatch;
+ const matchOptions=resultMatch?.options||[];
  useEffect(()=>{if(revealed){trackEvent("pyb_match_revealed",{budget,match:landed||"no-match",priority_count:wants.length})}},[revealed,landed,budget,wants.length]);
- useEffect(()=>{if(!revealed||typeof window==="undefined"||window.innerWidth>760)return undefined;const old=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=old}},[revealed]);
+ useEffect(()=>{if(!revealed){setHomeRequest("match");return undefined}if(typeof window==="undefined")return undefined;const old=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=old}},[revealed]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
- const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
- const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
+ useEffect(()=>{
+  if(!revealed)return undefined;
+  const previous=document.activeElement;
+  const card=resultRef.current;
+  if(!card)return undefined;
+  const focusable=()=>Array.from(card?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.offsetParent!==null);
+  (homeRequest==="form"?card?.querySelector('input:not([tabindex="-1"])'):card)?.focus();
+  const onKey=e=>{
+   if(e.key==="Escape"){if(!formStatus.loading)setRevealed(false);return}
+   if(e.key!=="Tab")return;
+   const els=focusable(),first=els[0],last=els[els.length-1];
+   if(!first){e.preventDefault();return}
+   if(e.shiftKey&&(document.activeElement===first||document.activeElement===card)){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&(document.activeElement===last||document.activeElement===card)){e.preventDefault();first.focus()}
+  };
+  window.addEventListener("keydown",onKey);
+  return()=>{window.removeEventListener("keydown",onKey);previous?.focus?.()};
+ },[revealed,homeRequest,formStatus.loading]);
+ const toggle=w=>{if(rolling||moving||formStatus.loading)return;setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next})};
+ const runRoll=()=>{if(rolling||moving)return;setResultSnapshot({budget,priorities:[...wants],match:bestMatch});setSelectedCommunities(bestMatch?[bestMatch.name]:[]);setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
  const leadSignature=()=>JSON.stringify({budget,wants,match:bestMatch?.name||"no-match"});
- const sendLead=async()=>{
+ const sendLead=async(requestType="match")=>{
   if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return false;
   setFormStatus({loading:true,error:""});
+  const search=requestType==="homes"?resultSnapshot:{budget,priorities:wants,match:bestMatch};
   const payload={
+   requestType,
    name:lead.name,
    email:lead.email,
    phone:lead.phone,
    consent:lead.consent,
    botField:lead.botField,
-   budget,
-   budgetLabel:label,
-   priorities:wants,
-   recommendedCommunity:bestMatch?.name||"",
-   propertyTypes:(bestMatch?.options||[]).map(({label,status})=>({label,status})),
+   budget:search.budget,
+   budgetLabel:money(search.budget),
+   priorities:search.priorities,
+   recommendedCommunity:search.match?.name||"",
+   selectedCommunities:requestType==="homes"?selectedCommunities:[],
+   propertyTypes:(search.match?.options||[]).map(({label,status})=>({label,status})),
    pageUrl:typeof window!=="undefined"?window.location.href:"",
    submittedAt:new Date().toISOString()
   };
@@ -190,6 +215,14 @@ export default function PlayYourBudgetPage(){
   setGate(false);
   setTimeout(runRoll,260);
  };
+ const requestHomes=async e=>{
+  e.preventDefault();
+  if(!selectedCommunities.length){setFormStatus({loading:false,error:"Choose at least one community."});return}
+  if(await sendLead("homes")){
+   setHomeRequest("sent");
+   trackEvent("pyb_home_request_submit",{community:resultSnapshot.match?.name,budget:resultSnapshot.budget,community_count:selectedCommunities.length});
+  }
+ };
  const revealFromButton=async()=>{
   trackEvent("pyb_reveal_click",{budget,priority_count:wants.length});
   if(!lead.email||!lead.consent){
@@ -204,7 +237,6 @@ export default function PlayYourBudgetPage(){
   runRoll();
  };
  return <main className="pyb">
-  <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section id="pyb-controls" className="pyb-hero">
    <div className="pyb-hero-inner">
     <div className="pyb-hero-copy">
@@ -216,12 +248,12 @@ export default function PlayYourBudgetPage(){
      <div className="pyb-budget-control">
       <div className="control-kicker">YOUR BUDGET</div>
       <div className="budget-value">{label}</div>
-      <input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/>
+      <input aria-label="Home budget" disabled={rolling||moving||formStatus.loading} type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/>
       <div className="budget-range"><span>$500K</span><span>$4M+</span></div>
      </div>
      <div className="pyb-priority-control">
       <div className="control-head"><div><span className="control-kicker">WHAT MATTERS MOST?</span><small>Choose up to four</small></div><b>{wants.length}/4</b></div>
-      <div className="chips">{WANTS.map(w=><button type="button" key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div>
+      <div className="chips">{WANTS.map(w=><button type="button" disabled={rolling||moving||formStatus.loading} aria-pressed={wants.includes(w)} key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div>
      </div>
      <div className="pyb-action-control">
       <button className="roll-btn hero-roll-btn" onClick={revealFromButton} disabled={rolling||moving||formStatus.loading}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button>
@@ -246,7 +278,7 @@ export default function PlayYourBudgetPage(){
      <div className="real-dice premium-dice" aria-hidden="true"><RealDie value={dice[0]} className="die-one"/><RealDie value={dice[1]} className="die-two"/><div className="dice-shadow shadow-one"/><div className="dice-shadow shadow-two"/></div>
     </div>
     {revealed&&noFreeholdMatch&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card no-match-card" onMouseDown={e=>e.stopPropagation()}>
-      <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
+      <button className="result-close" type="button" aria-label="Close result" disabled={formStatus.loading} onClick={()=>setRevealed(false)}>×</button>
       <small>FREEHOLD REALITY CHECK</small>
       <strong>{label}</strong>
       <em>No forced match.</em>
@@ -254,19 +286,33 @@ export default function PlayYourBudgetPage(){
       <div className="match-actions"><a className="match-primary" href="/contact" onClick={()=>trackEvent("pyb_reality_check_contact",{budget})}>ASK US WHAT’S ACTUALLY POSSIBLE →</a><button type="button" onClick={()=>document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}>ADJUST BUDGET</button></div>
       <small className="market-disclaimer">Freehold houses only. No condos, condo townhouses, vacant land or raw land.</small>
      </div></div>,document.body)}
-    {revealed&&landedSpace&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>setRevealed(false)}><div className="reveal reveal-3d premium-card" onMouseDown={e=>e.stopPropagation()}>
-      <button className="result-close" type="button" aria-label="Close result" onClick={()=>setRevealed(false)}>×</button>
+    {revealed&&landedSpace&&typeof document!=="undefined"&&createPortal(<div className="result-layer" role="presentation" onMouseDown={()=>!formStatus.loading&&setRevealed(false)}><div ref={resultRef} className="reveal reveal-3d premium-card" role="dialog" aria-modal="true" aria-labelledby="pyb-result-title" tabIndex={-1} onMouseDown={e=>e.stopPropagation()}>
+      <button className="result-close" type="button" aria-label="Close result" disabled={formStatus.loading} onClick={()=>setRevealed(false)}>×</button>
       <small>YOUR NORTHSIDE MATCH</small>
-      <strong>{landedSpace[0]}</strong>
-      <em>{label} · {wants.length?wants.join(" · "):"Your selected priorities"}</em>
-      <div className="match-summary"><span>WHY IT FITS</span><b>{bestMatch?.reasons.length?bestMatch.reasons.join(" + "):"Freehold budget fit"}</b></div>
+      <strong id="pyb-result-title">{landedSpace[0]}</strong>
+      <em>{resultLabel} · {resultPriorities.length?resultPriorities.join(" · "):"Your selected priorities"}</em>
+      {homeRequest==="match"?<><div className="match-summary"><span>WHY IT FITS</span><b>{resultMatch?.reasons.length?resultMatch.reasons.join(" + "):"Freehold budget fit"}</b></div>
       <div className="property-fit">
        <span className="property-fit-title">WHAT YOUR BUDGET CAN TARGET</span>
        <div className="property-fit-grid">{matchOptions.map(option=><div className={"property-fit-row level-"+option.level} key={option.key}><span>{option.label}</span><b>{option.status}</b></div>)}</div>
       </div>
-      <ul className="match-proof">{bestMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
+      <ul className="match-proof">{resultMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
-      <div className="match-actions match-actions-three"><a className="match-primary" href={"/contact?source=play-your-budget&community="+encodeURIComponent(landedSpace[0])+"&budget="+budget} onClick={()=>trackEvent("pyb_show_homes",{community:landedSpace[0],budget})}>SHOW ME HOMES AROUND {label} →</a><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
+      <div className="match-actions match-actions-three"><button type="button" className="match-primary" onClick={()=>{trackEvent("pyb_show_homes",{community:landedSpace[0],budget});setFormStatus({loading:false,error:""});setHomeRequest("form")}}>SHOW ME HOMES AROUND {resultLabel} →</button><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
+      </>:homeRequest==="sent"?<div className="home-request-success" role="status" tabIndex={-1}>
+       <h3>Your request is in.</h3>
+       <p>Matthew or Landon will email you homes to consider in {selectedCommunities.join(", ")} around {resultLabel}.</p>
+       <div className="match-actions"><button type="button" className="match-primary" onClick={()=>setRevealed(false)}>DONE</button></div>
+      </div>:<form className="home-request-form" onSubmit={requestHomes}>
+       <fieldset disabled={formStatus.loading}>
+        <legend>Where should we look?</legend>
+        <p>Your match is selected. Add any other communities you’d consider.</p>
+        <div className="home-community-grid">{SEARCH_COMMUNITIES.map(community=><label className={"home-community-option"+(selectedCommunities.includes(community)?" is-selected":"")} key={community}><input type="checkbox" checked={selectedCommunities.includes(community)} onChange={()=>{setSelectedCommunities(current=>current.includes(community)?current.filter(name=>name!==community):[...current,community]);setFormStatus({loading:false,error:""})}}/><span>{community}{community===landedSpace[0]&&<small>Your match</small>}</span></label>)}</div>
+       </fieldset>
+       <p className="home-request-recipient">We’ll send options to <b>{lead.email}</b>. Availability will depend on your budget and the homes on the market.</p>
+       {formStatus.error&&<p className="home-request-error" role="alert">{formStatus.error}</p>}
+       <div className="match-actions"><button type="submit" className="match-primary" disabled={formStatus.loading||!selectedCommunities.length}>{formStatus.loading?"SENDING…":"EMAIL ME MATCHING HOMES →"}</button><button type="button" disabled={formStatus.loading} onClick={()=>setHomeRequest("match")}>BACK TO MY MATCH</button></div>
+      </form>}
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
      </div></div>,document.body)}
    </div>

@@ -1,3 +1,4 @@
+import cmsSession from '../lib/play-your-budget/session.cjs'
 // /api/cms-login.js
 const REQUIRED_ENV_VARS = ['CMS_LOGIN_USERNAME', 'CMS_LOGIN_PASSWORD']
 const TOKEN_ENV_VARS = ['CMS_GITHUB_TOKEN', 'GITHUB_TOKEN']
@@ -93,5 +94,6 @@ export default async function handler(req, res) {
   }
 
   res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Set-Cookie', cmsSession.cookie(cmsSession.signSession(process.env)))
   res.status(200).json({ token })
 }

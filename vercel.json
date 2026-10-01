@@ -43,6 +43,7 @@
     { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
   ],
   "headers": [
+    {"source": "/cms/play-your-budget-leads/(.*)","headers": [{"key": "Cache-Control","value": "no-store"},{"key": "X-Robots-Tag","value": "noindex, nofollow"},{"key": "X-Content-Type-Options","value": "nosniff"},{"key": "Content-Security-Policy","value": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}]},
     {"source": "/life/studio/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}, {"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "same-origin"}, {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.public.blob.vercel-storage.com; connect-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}]},
 
     {
@@ -59,6 +60,8 @@
     }
   ],
   "rewrites": [
+    {"source": "/cms/play-your-budget-leads","destination": "/cms/play-your-budget-leads/index.html"},
+    {"source": "/cms/play-your-budget-leads/","destination": "/cms/play-your-budget-leads/index.html"},
     {"source": "/life/sitemap.xml", "destination": "/api/life?action=sitemap"},
     {"source": "/collections", "destination": "/api/collections-index"},
     {"source": "/collections/", "destination": "/api/collections-index"},
