@@ -1,5 +1,7 @@
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT || process.env.FORMSPREE_CONTACT_URL || '').trim();
 
+const SEARCH_COMMUNITIES = new Set(["Georgina", "East Gwillimbury", "Newmarket", "Aurora", "Stouffville", "Uxbridge", "Scugog", "King", "Bradford"]);
+
 function normalizeText(value, max = 500) {
   if (typeof value !== 'string') return '';
   return value.replace(/\s+/g, ' ').trim().slice(0, max);
@@ -29,6 +31,13 @@ export default async function handler(req, res) {
   }
 
   const requestType = body.requestType === 'homes' ? 'Matching homes request' : 'Community match';
+  const selectedCommunities = Array.isArray(body.selectedCommunities)
+    ? [...new Set(body.selectedCommunities.filter(value => SEARCH_COMMUNITIES.has(value)))].slice(0, 9)
+    : [];
+  if (body.requestType === 'homes' && !selectedCommunities.length) {
+    res.status(400).json({ ok: false, error: 'Choose at least one community.' });
+    return;
+  }
   const name = normalizeText(body.name, 120);
   const email = normalizeText(body.email, 180);
   const phone = normalizeText(body.phone, 80);
@@ -67,6 +76,7 @@ export default async function handler(req, res) {
         Budget: budgetLabel,
         Priorities: priorities.join(', ') || 'None selected',
         'Recommended community': recommendedCommunity,
+        'Requested communities': selectedCommunities.join(', ') || recommendedCommunity,
         'Freehold property-type fit': propertyTypes.map((item) => `${item.label}: ${item.status}`).join(' | ') || 'No realistic freehold match',
         Source: 'Play Your Budget',
         'Request type': requestType,

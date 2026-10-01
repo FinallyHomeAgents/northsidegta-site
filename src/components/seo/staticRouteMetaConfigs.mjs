@@ -615,7 +615,25 @@ const SEO_REMEDIATION_ROUTE_META_CONFIGS = [
   { route: "/agents/matthew-mulhall", meta: buildMatthewProfileMeta() },
   { route: "/agents/landon-mulhall", meta: buildLandonProfileMeta() },
   { route: "/what-my-home-buys", meta: routeMeta({ route: "/what-my-home-buys", title: "What Does My Toronto Home Buy North of the City? | NorthSide GTA", description: "Compare what your Toronto home could buy in Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge and Scugog \u2014 including lifestyle, access and trade-offs.", image: "https://northsidegta.ca/Images/seo/what-my-home-buys-og.jpg", imageAlt: "What could your home buy north of Toronto? Compare seven NorthSide GTA towns.", serviceType: "Home value comparison" }) },
-  { route: "/play-your-budget", meta: routeMeta({ route: "/play-your-budget", title: "Play Your Budget | NorthSide GTA", description: "Set your budget and home priorities, then explore where we would start your NorthSide GTA home search.", image: HOME_IMAGE, serviceType: "Buyer home search consultation" }) },
+  {
+    route: "/play-your-budget",
+    meta: (() => {
+      const meta = routeMeta({
+        route: "/play-your-budget",
+        title: "Play Your Budget | Find Your NorthSide GTA Home",
+        description: "What could your next home look like north of Toronto? Set your budget, choose your priorities, reveal your community match and request matching freehold homes.",
+        image: `${SITE_URL}/Images/seo/play-your-budget-og.jpg`,
+        imageAlt: "Play Your Budget by NorthSide GTA: a premium property game board with Ontario homes, ivory dice and a gold house token",
+        serviceType: "Buyer home search consultation",
+      });
+      meta.additionalMeta.push(
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:image:type", content: "image/jpeg" },
+      );
+      return meta;
+    })(),
+  },
   { route: "/business-network", meta: routeMeta({ route: "/business-network", title: "GOOD GOOD Business Network | Mill Run", description: "Good business goes both ways. A private business and referral network built around trusted introductions, shared expertise and mutual growth.", image: `${SITE_URL}/Images/good-good-business-network-og.jpg`, imageAlt: "GOOD GOOD Business Network — Good business goes both ways. Founding chapter at Mill Run.", robots: "noindex, follow" }) },
   { route: "/homeanalysis", meta: routeMeta({ route: "/homeanalysis", title: "Get a Home Value Opinion | NorthSide GTA | Finally Home Agents", description: "Find out what your home in Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, or Scugog could sell for today.", image: SELLERS_IMAGE, serviceType: "Home value opinion" }) },
   { route: "/neighbourhood-guide", meta: routeMeta({ route: "/neighbourhood-guide", title: "NorthSide GTA Neighbourhood Guide | Finally Home Agents", description: "Compare home prices, commute times, schools, lifestyle, and local favourites across Aurora, Newmarket, Stouffville, East Gwillimbury, Georgina, Uxbridge, and Scugog.", image: HOME_IMAGE, pageType: "CollectionPage", collectionItems: COMMUNITY_ITEMS }) },

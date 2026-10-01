@@ -1,5 +1,4 @@
 import React,{useEffect,useMemo,useRef,useState}from"react";
-import{Helmet}from"react-helmet-async";
 import{createPortal}from"react-dom";
 import{trackEvent}from"./utils/analytics";
 import"./PlayYourBudgetPage.css";
@@ -17,6 +16,7 @@ const BOARD_SPACES=[
 ];
 const TOWNS=BOARD_SPACES.slice(1);
 const BOARD_LABELS=BOARD_SPACES.map(([name,cls,tagline])=>({name,cls,tagline}));
+const SEARCH_COMMUNITIES=["Georgina","East Gwillimbury","Newmarket","Aurora","Stouffville","Uxbridge","Scugog","King","Bradford"];
 const WANTS=["More space","Acreage","Pool","Waterfront","Newer home","Privacy","Better commute","Room for family"];
 const COMMUNITY_SLUGS={Georgina:"georgina","East Gwillimbury":"east-gwillimbury",Newmarket:"newmarket",Aurora:"aurora",Stouffville:"stouffville",Uxbridge:"uxbridge",Scugog:"scugog"};
 const MATCH_PROFILES={
@@ -141,13 +141,16 @@ const FOCUSABLE='button,[href],input,select,textarea,[tabindex]:not([tabindex="-
 export default function PlayYourBudgetPage(){
  const resultRef=useRef(null),modalRef=useRef(null),rollTriggerRef=useRef(null),previousFocusRef=useRef(null);
  const[budget,setBudget]=useState(1500000),[wants,setWants]=useState(["More space","Privacy"]),[gate,setGate]=useState(false),[rolling,setRolling]=useState(false),[revealed,setRevealed]=useState(false),[lead,setLead]=useState({name:"",email:"",phone:"",consent:false,botField:""}),[formStatus,setFormStatus]=useState({loading:false,error:""}),[lastSubmittedSignature,setLastSubmittedSignature]=useState(""),[dice,setDice]=useState([5,3]),[position,setPosition]=useState(0),[moving,setMoving]=useState(false),[landed,setLanded]=useState(null),[stepTick,setStepTick]=useState(0),[artReady,setArtReady]=useState(false);
- const[homeRequest,setHomeRequest]=useState("match");
+ const[homeRequest,setHomeRequest]=useState("match"),[selectedCommunities,setSelectedCommunities]=useState([]),[resultSnapshot,setResultSnapshot]=useState(null);
  const label=useMemo(()=>money(budget),[budget]);
  const landedSpace=useMemo(()=>BOARD_SPACES.find(([name])=>name===landed),[landed]);
  const rankedMatches=useMemo(()=>rankCommunities(budget,wants),[budget,wants]);
  const bestMatch=rankedMatches[0]||null;
- const noFreeholdMatch=!bestMatch;
- const matchOptions=bestMatch?.options||[];
+ const resultMatch=resultSnapshot?.match||null;
+ const resultLabel=resultSnapshot?money(resultSnapshot.budget):label;
+ const resultPriorities=resultSnapshot?.priorities||wants;
+ const noFreeholdMatch=revealed?!resultMatch:!bestMatch;
+ const matchOptions=resultMatch?.options||[];
  useEffect(()=>{if(revealed){trackEvent("pyb_match_revealed",{budget,match:landed||"no-match",priority_count:wants.length})}},[revealed,landed,budget,wants.length]);
  useEffect(()=>{if(!revealed){setHomeRequest("match");return undefined}if(typeof window==="undefined")return undefined;const old=document.body.style.overflow;document.body.style.overflow="hidden";return()=>{document.body.style.overflow=old}},[revealed]);
  useEffect(()=>{if(!gate)return undefined;previousFocusRef.current=document.activeElement;const old=document.body.style.overflow;document.body.style.overflow="hidden";const key=e=>{if(e.key==="Escape"){setGate(false);return}if(e.key!=="Tab")return;const els=Array.from(modalRef.current?.querySelectorAll(FOCUSABLE)||[]).filter(el=>!el.disabled&&el.getAttribute("aria-hidden")!=="true");if(!els.length){e.preventDefault();return}const first=els[0],last=els[els.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener("keydown",key);return()=>{document.body.style.overflow=old;window.removeEventListener("keydown",key);previousFocusRef.current?.focus?.()}},[gate]);
@@ -169,12 +172,13 @@ export default function PlayYourBudgetPage(){
   window.addEventListener("keydown",onKey);
   return()=>{window.removeEventListener("keydown",onKey);previous?.focus?.()};
  },[revealed,homeRequest,formStatus.loading]);
- const toggle=w=>setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next});
- const runRoll=()=>{if(rolling||moving)return;setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
+ const toggle=w=>{if(rolling||moving||formStatus.loading)return;setWants(a=>{const next=a.includes(w)?a.filter(x=>x!==w):a.length<4?[...a,w]:a;trackEvent("pyb_priority_change",{priority:w,selected:next.includes(w),selected_count:next.length});return next})};
+ const runRoll=()=>{if(rolling||moving)return;setResultSnapshot({budget,priorities:[...wants],match:bestMatch});setSelectedCommunities(bestMatch?[bestMatch.name]:[]);setLanded(null);setRevealed(false);if(!bestMatch){setRevealed(true);return}const target=BOARD_SPACES.findIndex(([name])=>name===bestMatch.name);const distance=(target-position+BOARD_SPACES.length)%BOARD_SPACES.length;const total=rollTotalForDistance(distance);const[a,b]=diceForTotal(total);setDice([a,b]);setRolling(true);setTimeout(()=>{setRolling(false);setMoving(true);let step=0;const timer=setInterval(()=>{step+=1;setPosition(prev=>{const next=(prev+1)%BOARD_SPACES.length;if(step>=total){clearInterval(timer);setMoving(false);setRevealed(true);setLanded(BOARD_SPACES[next][0]);setStepTick(t=>t+1)}return next})},310)},1450)};
  const leadSignature=()=>JSON.stringify({budget,wants,match:bestMatch?.name||"no-match"});
  const sendLead=async(requestType="match")=>{
   if(formStatus.loading||!lead.name||!lead.email||!lead.consent)return false;
   setFormStatus({loading:true,error:""});
+  const search=requestType==="homes"?resultSnapshot:{budget,priorities:wants,match:bestMatch};
   const payload={
    requestType,
    name:lead.name,
@@ -182,11 +186,12 @@ export default function PlayYourBudgetPage(){
    phone:lead.phone,
    consent:lead.consent,
    botField:lead.botField,
-   budget,
-   budgetLabel:label,
-   priorities:wants,
-   recommendedCommunity:bestMatch?.name||"",
-   propertyTypes:(bestMatch?.options||[]).map(({label,status})=>({label,status})),
+   budget:search.budget,
+   budgetLabel:money(search.budget),
+   priorities:search.priorities,
+   recommendedCommunity:search.match?.name||"",
+   selectedCommunities:requestType==="homes"?selectedCommunities:[],
+   propertyTypes:(search.match?.options||[]).map(({label,status})=>({label,status})),
    pageUrl:typeof window!=="undefined"?window.location.href:"",
    submittedAt:new Date().toISOString()
   };
@@ -212,9 +217,10 @@ export default function PlayYourBudgetPage(){
  };
  const requestHomes=async e=>{
   e.preventDefault();
+  if(!selectedCommunities.length){setFormStatus({loading:false,error:"Choose at least one community."});return}
   if(await sendLead("homes")){
    setHomeRequest("sent");
-   trackEvent("pyb_home_request_submit",{community:landedSpace?.[0],budget});
+   trackEvent("pyb_home_request_submit",{community:resultSnapshot.match?.name,budget:resultSnapshot.budget,community_count:selectedCommunities.length});
   }
  };
  const revealFromButton=async()=>{
@@ -231,7 +237,6 @@ export default function PlayYourBudgetPage(){
   runRoll();
  };
  return <main className="pyb">
-  <Helmet><title>Play Your Budget | NorthSide GTA</title><meta name="description" content="Set your budget, choose what matters, and roll to see where we'd start your NorthSide GTA home search."/><link rel="canonical" href="https://northsidegta.ca/play-your-budget"/></Helmet>
   <section id="pyb-controls" className="pyb-hero">
    <div className="pyb-hero-inner">
     <div className="pyb-hero-copy">
@@ -243,12 +248,12 @@ export default function PlayYourBudgetPage(){
      <div className="pyb-budget-control">
       <div className="control-kicker">YOUR BUDGET</div>
       <div className="budget-value">{label}</div>
-      <input aria-label="Home budget" type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/>
+      <input aria-label="Home budget" disabled={rolling||moving||formStatus.loading} type="range" min="500000" max="4000000" step="50000" value={budget} onChange={e=>setBudget(+e.target.value)} onPointerUp={()=>trackEvent("pyb_budget_change",{budget})} onKeyUp={()=>trackEvent("pyb_budget_change",{budget})}/>
       <div className="budget-range"><span>$500K</span><span>$4M+</span></div>
      </div>
      <div className="pyb-priority-control">
       <div className="control-head"><div><span className="control-kicker">WHAT MATTERS MOST?</span><small>Choose up to four</small></div><b>{wants.length}/4</b></div>
-      <div className="chips">{WANTS.map(w=><button type="button" key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div>
+      <div className="chips">{WANTS.map(w=><button type="button" disabled={rolling||moving||formStatus.loading} aria-pressed={wants.includes(w)} key={w} className={wants.includes(w)?"active":""} onClick={()=>toggle(w)}>{w}</button>)}</div>
      </div>
      <div className="pyb-action-control">
       <button className="roll-btn hero-roll-btn" onClick={revealFromButton} disabled={rolling||moving||formStatus.loading}>{noFreeholdMatch?"CHECK MY FREEHOLD OPTIONS":landed?"REVEAL MY UPDATED MATCH":"REVEAL MY MATCH"} <span>↗</span></button>
@@ -285,29 +290,28 @@ export default function PlayYourBudgetPage(){
       <button className="result-close" type="button" aria-label="Close result" disabled={formStatus.loading} onClick={()=>setRevealed(false)}>×</button>
       <small>YOUR NORTHSIDE MATCH</small>
       <strong id="pyb-result-title">{landedSpace[0]}</strong>
-      <em>{label} · {wants.length?wants.join(" · "):"Your selected priorities"}</em>
-      {homeRequest==="match"?<><div className="match-summary"><span>WHY IT FITS</span><b>{bestMatch?.reasons.length?bestMatch.reasons.join(" + "):"Freehold budget fit"}</b></div>
+      <em>{resultLabel} · {resultPriorities.length?resultPriorities.join(" · "):"Your selected priorities"}</em>
+      {homeRequest==="match"?<><div className="match-summary"><span>WHY IT FITS</span><b>{resultMatch?.reasons.length?resultMatch.reasons.join(" + "):"Freehold budget fit"}</b></div>
       <div className="property-fit">
        <span className="property-fit-title">WHAT YOUR BUDGET CAN TARGET</span>
        <div className="property-fit-grid">{matchOptions.map(option=><div className={"property-fit-row level-"+option.level} key={option.key}><span>{option.label}</span><b>{option.status}</b></div>)}</div>
       </div>
-      <ul className="match-proof">{bestMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
+      <ul className="match-proof">{resultMatch?.proof.slice(0,3).map(item=><li key={item}>{item}</li>)}</ul>
       <p>This is where we’d start a freehold-house search based on your budget and priorities. It is a market guide, not a promise of live inventory.</p>
-      <div className="match-actions match-actions-three"><button type="button" className="match-primary" onClick={()=>{trackEvent("pyb_show_homes",{community:landedSpace[0],budget});setFormStatus({loading:false,error:""});setHomeRequest("form")}}>SHOW ME HOMES AROUND {label} →</button><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
+      <div className="match-actions match-actions-three"><button type="button" className="match-primary" onClick={()=>{trackEvent("pyb_show_homes",{community:landedSpace[0],budget});setFormStatus({loading:false,error:""});setHomeRequest("form")}}>SHOW ME HOMES AROUND {resultLabel} →</button><a className="match-secondary" href={"/communities/"+COMMUNITY_SLUGS[landedSpace[0]]} onClick={()=>trackEvent("pyb_explore_community",{community:landedSpace[0],budget})}>EXPLORE {landedSpace[0]}</a><button type="button" className="match-adjust" onClick={()=>{setRevealed(false);document.getElementById("pyb-controls")?.scrollIntoView({behavior:"smooth"})}}>ADJUST MY MATCH</button></div>
       </>:homeRequest==="sent"?<div className="home-request-success" role="status" tabIndex={-1}>
        <h3>Your request is in.</h3>
-       <p>Matthew or Landon will follow up with homes to consider in {landedSpace[0]} around {label}.</p>
+       <p>Matthew or Landon will email you homes to consider in {selectedCommunities.join(", ")} around {resultLabel}.</p>
        <div className="match-actions"><button type="button" className="match-primary" onClick={()=>setRevealed(false)}>DONE</button></div>
       </div>:<form className="home-request-form" onSubmit={requestHomes}>
-       <h3>Let’s find your next home.</h3>
-       <p>Confirm your details and we’ll look for homes that fit your budget and priorities.</p>
-       <label>First name<input required autoComplete="given-name" value={lead.name} onChange={e=>setLead({...lead,name:e.target.value})}/></label>
-       <label>Email<input required type="email" autoComplete="email" value={lead.email} onChange={e=>setLead({...lead,email:e.target.value})}/></label>
-       <label>Phone <small>optional</small><input type="tel" autoComplete="tel" value={lead.phone} onChange={e=>setLead({...lead,phone:e.target.value})}/></label>
-       <label className="home-request-consent"><input required type="checkbox" checked={lead.consent} onChange={e=>setLead({...lead,consent:e.target.checked})}/><span>I agree that Finally Home Agents may contact me about this home search.</span></label>
-       <label className="hp-field" aria-hidden="true">Company<input tabIndex="-1" autoComplete="off" value={lead.botField} onChange={e=>setLead({...lead,botField:e.target.value})}/></label>
+       <fieldset disabled={formStatus.loading}>
+        <legend>Where should we look?</legend>
+        <p>Your match is selected. Add any other communities you’d consider.</p>
+        <div className="home-community-grid">{SEARCH_COMMUNITIES.map(community=><label className={"home-community-option"+(selectedCommunities.includes(community)?" is-selected":"")} key={community}><input type="checkbox" checked={selectedCommunities.includes(community)} onChange={()=>{setSelectedCommunities(current=>current.includes(community)?current.filter(name=>name!==community):[...current,community]);setFormStatus({loading:false,error:""})}}/><span>{community}{community===landedSpace[0]&&<small>Your match</small>}</span></label>)}</div>
+       </fieldset>
+       <p className="home-request-recipient">We’ll send options to <b>{lead.email}</b>. Availability will depend on your budget and the homes on the market.</p>
        {formStatus.error&&<p className="home-request-error" role="alert">{formStatus.error}</p>}
-       <div className="match-actions"><button type="submit" className="match-primary" disabled={formStatus.loading}>{formStatus.loading?"SENDING…":"SEND ME MATCHING HOMES →"}</button><button type="button" disabled={formStatus.loading} onClick={()=>setHomeRequest("match")}>BACK TO MY MATCH</button></div>
+       <div className="match-actions"><button type="submit" className="match-primary" disabled={formStatus.loading||!selectedCommunities.length}>{formStatus.loading?"SENDING…":"EMAIL ME MATCHING HOMES →"}</button><button type="button" disabled={formStatus.loading} onClick={()=>setHomeRequest("match")}>BACK TO MY MATCH</button></div>
       </form>}
       <small className="market-disclaimer">Freehold houses only · No condos or vacant land · Market-calibrated Sep 2026</small>
      </div></div>,document.body)}
