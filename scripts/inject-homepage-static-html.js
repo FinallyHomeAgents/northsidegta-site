@@ -22,7 +22,7 @@ const homeUrl = "https://northsidegta.ca/";
 const entityUrl = "https://northsidegta.ca";
 const title = "NorthSide GTA Real Estate | Finally Home Agents";
 const description = "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.";
-const image = "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg";
+const image = "https://northsidegta.ca/uploads/northside-gta-homepage-social-2026.jpg";
 const faq = [
   ["What is the NorthSide GTA?", "The NorthSide GTA refers to communities north of Toronto including Aurora, Newmarket, Whitchurch-Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog — areas where buyers often find more space, established communities, and lifestyle options while staying connected to the Greater Toronto Area."],
   ["Who helps buyers and sellers in the NorthSide GTA?", "Finally Home Agents — Matthew Mulhall and Landon Mulhall — provide buyer and seller representation across the NorthSide GTA, operating under HomeLife Optimum Realty, Brokerage, and regulated by RECO (Real Estate Council of Ontario)."],

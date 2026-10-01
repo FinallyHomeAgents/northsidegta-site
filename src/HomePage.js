@@ -12,8 +12,8 @@ const HOME_TITLE = "NorthSide GTA Real Estate | Buy & Sell North of Toronto | Fi
 const HOME_DESCRIPTION = "Buy or sell north of Toronto with Finally Home Agents. Explore NorthSide GTA real estate, homes, market data, and community guidance across Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog.";
 const HOME_URL = "https://northsidegta.ca/";
 const ENTITY_URL = "https://northsidegta.ca";
-const HOME_IMAGE = "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg";
-const HOME_IMAGE_ALT = "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog";
+const HOME_IMAGE = "https://northsidegta.ca/uploads/northside-gta-homepage-social-2026.jpg";
+const HOME_IMAGE_ALT = "NorthSide GTA — Find your place north of Toronto. Finally Home Agents, your local real estate team for Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog.";
 
 const FAQS = [
   {

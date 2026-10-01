@@ -38,13 +38,13 @@ const DEFAULT_GLOBAL_META_CONFIG = {
     "Buy or sell north of Toronto with Finally Home Agents. Compare Georgina, East Gwillimbury, Newmarket, Aurora, Stouffville, Uxbridge, and Scugog.",
   canonicalUrl: "https://northsidegta.ca/",
   ogType: "website",
-  ogImage: "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
+  ogImage: "https://northsidegta.ca/uploads/northside-gta-homepage-social-2026.jpg",
   ogImageAlt:
-    "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
+    "NorthSide GTA — Find your place north of Toronto. Finally Home Agents, your local real estate team for Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog.",
   twitterCard: "summary_large_image",
-  twitterImage: "https://northsidegta.ca/uploads/northside-gta-finally-home-agents-hero.jpg",
+  twitterImage: "https://northsidegta.ca/uploads/northside-gta-homepage-social-2026.jpg",
   twitterImageAlt:
-    "Interactive NorthSide GTA real estate map showing Aurora, Newmarket, Stouffville, Uxbridge, Georgina, East Gwillimbury, and Scugog",
+    "NorthSide GTA — Find your place north of Toronto. Finally Home Agents, your local real estate team for Aurora, Newmarket, East Gwillimbury, Georgina, Whitchurch-Stouffville, Uxbridge, and Scugog.",
   siteName: "NorthSide GTA",
   additionalMeta: [
     { name: "robots", content: "index, follow" },
@@ -450,7 +450,7 @@ const INDEX_META = [{ name: "robots", content: "index, follow" }, ...AUTHOR_PUBL
 const NOINDEX_META = [{ name: "robots", content: "noindex, follow" }, ...AUTHOR_PUBLISHER_META];
 const CORE_TOWNS = ["Georgina", "East Gwillimbury", "Newmarket", "Aurora", "Stouffville", "Uxbridge", "Scugog"];
 const COMMUNITY_IMAGE = `${SITE_URL}/uploads/community-page-seo.jpg`;
-const HOME_IMAGE = `${SITE_URL}/uploads/northside-gta-finally-home-agents-hero.jpg`;
+const HOME_IMAGE = `${SITE_URL}/uploads/northside-gta-homepage-social-2026.jpg`;
 const SELLERS_IMAGE = `${SITE_URL}/uploads/sellers-page-seo.jpg`;
 const SELLERS_IMAGE_ALT = "Bright living room with NorthSide GTA and Finally Home Agents branding";
 
