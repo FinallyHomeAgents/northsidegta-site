@@ -9,3 +9,4 @@
 @media(max-width:800px){.bn-position,.bn-founders{padding:80px 24px}.bn-process{padding:70px 24px}.bn-process>div{grid-template-columns:1fr}.bn-process span{flex-direction:row;gap:25px;padding:18px 0;border-right:0;border-bottom:1px solid var(--line)}.bn-meetings{display:block;padding:80px 24px}.bn-meetingfacts{margin-top:50px}.bn-code{padding:70px 24px}.bn-code>div{grid-template-columns:1fr 1fr}.bn-code h3{padding:24px 8px 24px 0}.bn-wordmark>span:last-child{display:flex}}
 
 .bn-review{margin-top:35px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0}.bn-review summary{cursor:pointer;font-size:12px;font-weight:600}.bn-review div{padding:18px 0 4px;font-size:13px;line-height:1.55}.bn-review p{margin:8px 0}.bn-review strong{font-weight:600}
+\n.bn-submiterror{margin-top:24px;padding:13px 15px;border:1px solid #8b1e1e;color:#8b1e1e;font-size:13px;line-height:1.45}.bn-primary:disabled{opacity:.55;cursor:wait}\n
