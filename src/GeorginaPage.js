@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
+import { townAgentHtml, initTownAgent } from "./components/towns/townAgentSection";
+import "./components/towns/townAgentSection.css";
 import HeaderShell from "./components/HeaderShell";
 import CommunityComplianceFooter from "./components/CommunityComplianceFooter";
 import MARKET_DATA from "./data/marketData.json";
@@ -201,7 +203,7 @@ const PAGE_BODY_HTML = `
       <img src="/assets/town-logos/georgina.webp" alt="Georgina NorthSide GTA town badge" class="town-badge">
       <span>York Region &middot; NorthSide GTA</span>
     </div>
-    <h1>Living in Georgina</h1>
+    <h1>Georgina real estate &amp; local living</h1>
     <p class="hero-sub">Lake Simcoe, more space, shoreline communities, beaches, marinas, and one of York Region's most accessible price points.</p>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-val">${TOWN_MARKET.averageSalePrice}</div><div class="hstat-lbl">Avg. sale price</div></div>
@@ -219,6 +221,7 @@ const PAGE_BODY_HTML = `
     <a href="https://northsidegta.ca/neighbourhood-guide">Neighbourhood guide</a><span>&rsaquo;</span>
     <span>Georgina</span>
   </nav>
+${townAgentHtml("georgina", "Georgina")}
   <aside class="moving-guide-banner" aria-label="Moving to Georgina guide">
     <div>
       <strong>Moving from Toronto?</strong>
@@ -226,6 +229,7 @@ const PAGE_BODY_HTML = `
     </div>
     <a href="/moving-to-georgina-from-toronto">Read the Honest 2026 Guide &rarr;</a>
   </aside>
+
   <div class="page-grid">
 
     <!-- MAIN COLUMN -->
@@ -398,7 +402,7 @@ const PAGE_BODY_HTML = `
     </div><!-- /main col -->
 
     <!-- SIDEBAR -->
-    <div id="contact">
+    <div>
 
       <!-- PRICE SNAPSHOT -->
       <div class="price-card">
@@ -416,39 +420,7 @@ const PAGE_BODY_HTML = `
         <p style="font-size:10px;color:var(--ink4);margin-top:8px;">Based on active listings Q1–Q2 2026. Properties vary.</p>
       </div>
 
-      <!-- CTA -->
-      <div class="cta-card">
-        <h3>Talk to a local real estate agent</h3>
-        <p>We can help you compare neighbourhoods, understand current pricing, and decide whether Georgina fits your lifestyle, budget, and timing.</p>
-        <a href="/what-my-home-buys" class="buying-power-link">See what your home buys across all seven towns &rarr;</a>
-        <div class="agent-sm">
-          <div class="asm"><div class="asm-name">Matthew Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
-          <div class="asm"><div class="asm-name">Landon Mulhall</div><div class="asm-role">Sales Representative</div><div class="asm-brok">HomeLife Optimum Realty</div></div>
-        </div>
-        <div class="cta-form">
-          <input type="text" id="sf_name_georgina" placeholder="Your name" autocomplete="name">
-          <input type="email" id="sf_email_georgina" placeholder="Email address" autocomplete="email">
-          <input type="tel" id="sf_phone_georgina" placeholder="Phone (optional)" autocomplete="tel">
-          <select id="sf_tl_georgina">
-            <option value="">Timeline</option>
-            <option>Ready now</option>
-            <option>1–3 months</option>
-            <option>3–6 months</option>
-            <option>6–12 months</option>
-            <option>Just researching</option>
-          </select>
-          <button class="cta-submit" onclick="submitTownLead('georgina','Georgina')">Get local guidance &rarr;</button>
-        </div>
-        <div class="sms-box">
-          <p>Want listings for Georgina? Get quiet text alerts.</p>
-          <p style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px;">No spam. Just relevant listings and local updates.</p>
-          <div class="sms-row">
-            <input type="tel" id="sms_georgina" placeholder="Your phone number">
-            <button class="sms-btn" onclick="submitSMSTown('georgina','Georgina')">Set alerts</button>
-          </div>
-        </div>
-        <p class="reco-note">By submitting you consent to being contacted by Matthew Mulhall and Landon Mulhall, Sales Representatives, Finally Home Agents Team, HomeLife Optimum Realty, Brokerage, under TRESA, governed by RECO. For SMS: standard msg &amp; data rates may apply. Reply STOP to unsubscribe.</p>
-      </div>
+      <a class="btn-secondary" href="#contact">Talk with Matt &amp; Landon &rarr;</a>
 
     </div><!-- /sidebar -->
   </div><!-- /grid -->
@@ -479,25 +451,7 @@ export default function GeorginaPage() {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    window.submitTownLead = (id, town) => {
-      const n = document.getElementById(`sf_name_${id}`)?.value.trim();
-      const em = document.getElementById(`sf_email_${id}`)?.value.trim();
-      if (!n || !em) { alert("Please enter your name and email."); return; }
-      const payload = { name: n, email: em, phone: document.getElementById(`sf_phone_${id}`)?.value, timeline: document.getElementById(`sf_tl_${id}`)?.value, town, source: `NorthSide GTA Neighbourhood Guide v4 — ${town} town page`, timestamp: new Date().toISOString() };
-      fetch("/api/send-lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, casl: true, notRepresented: true, title: `NorthSide GTA local guidance — ${town}`, realmLink: window.location.href }), credentials: "same-origin" }).catch(() => {});
-      const btn = document.querySelector(".cta-submit"); if (btn) { btn.textContent = "✓ Request sent"; btn.disabled = true; }
-    };
-    window.submitSMSTown = (id, town) => {
-      const phone = document.getElementById(`sms_${id}`)?.value.trim();
-      if (!phone) { alert("Please enter your phone number."); return; }
-      const payload = { phone, town, source: `NorthSide SMS opt-in — ${town}`, timestamp: new Date().toISOString() };
-      fetch("/api/sms-optin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), credentials: "same-origin" }).catch(() => {});
-      const smsBox = document.getElementById(`sms_${id}`)?.closest(".sms-box");
-      if (smsBox) smsBox.innerHTML = `<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ${town} listings. Reply STOP to unsubscribe.</p>`;
-    };
-    return () => { delete window.submitTownLead; delete window.submitSMSTown; };
-  }, []);
+  useEffect(() => initTownAgent(containerRef.current, "georgina", "Georgina"), []);
   const schemaObject = useMemo(() => JSON.parse(PAGE_SCHEMA), []);
   return (<><Helmet>
       <title>Living in Georgina, Ontario | Real Estate &amp; Neighbourhood Guide | Finally Home Agents</title>
