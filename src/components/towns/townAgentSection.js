@@ -15,15 +15,16 @@ const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<'
 export function townAgentHtml(slug, town) {
   const name = escape(town);
   return `<section class="town-agent" id="contact" aria-labelledby="town-agent-heading">
+    <div class="town-agent-brand"><img src="/brand/finally-home-agents-card-logo.png" width="64" height="64" alt="Finally Home Agents"><div><strong>Finally Home Agents Team</strong><span>HomeLife Optimum Realty, Brokerage</span></div></div>
     <div class="town-agent-intro">
-      <p class="town-agent-eyebrow">Finally Home Agents · Your ${name} real estate team</p>
-      <h2 id="town-agent-heading">Buying or selling in ${name}?</h2>
-      <p>We’re Matt and Landon Mulhall—the brothers behind NorthSide GTA. Get local advice and a practical plan for your next move.</p>
+      <p class="town-agent-eyebrow">Your ${name} real estate team</p>
+      <h2 id="town-agent-heading">Moving north of Toronto?<br>We’re your guys.</h2>
+      <p>We’re Matthew Mulhall and Landon Mulhall—the brothers behind Finally Home Agents Team and NorthSide GTA. Buying or selling in ${name}? We’ll help you figure out where you fit, what makes sense, and what comes next.</p>
       <div class="town-agent-people">
-        <a href="/agents/matthew-mulhall"><img src="/Images/matthew.jpg" width="52" height="52" alt="Matthew Mulhall" loading="lazy"><span>Matt Mulhall<small>Sales Representative</small></span></a>
+        <a href="/agents/matthew-mulhall"><img src="/Images/matthew.jpg" width="52" height="52" alt="Matthew Mulhall" loading="lazy"><span>Matthew Mulhall<small>Sales Representative</small></span></a>
         <a href="/agents/landon-mulhall"><img src="/Images/landon.jpg" width="52" height="52" alt="Landon Mulhall" loading="lazy"><span>Landon Mulhall<small>Sales Representative</small></span></a>
       </div>
-      <p class="town-agent-brokerage">HomeLife Optimum Realty, Brokerage</p>
+      <div class="town-agent-recognition"><span aria-hidden="true">★</span><p><strong>Matthew Mulhall · Award recognition</strong><small>HomeLife Optimum Realty · 2023, 2024 &amp; 2025</small></p></div>
     </div>
     <div class="town-agent-offer">
       <div class="town-agent-switch" role="group" aria-label="What are you planning?">
@@ -33,7 +34,7 @@ export function townAgentHtml(slug, town) {
       <div data-offer="buy"><h3>Find the right neighbourhood in ${name}.</h3><p>${escape(localFocus[slug])}</p><ul><li>Neighbourhood suggestions based on your priorities</li><li>A realistic conversation about your price range</li><li>Clear next steps—even if you’re just researching</li></ul></div>
       <div data-offer="sell" hidden><h3>Know where to start with your ${name} home.</h3><p>Get a personal starting point for pricing and preparing your home, based on your property and plans.</p><ul><li>Relevant recent sales to discuss</li><li>Preparation priorities before you spend on updates</li><li>A selling timeline that fits your next move</li></ul><p class="town-agent-note">An initial discussion, not an instant valuation or appraisal.</p></div>
       <button type="button" class="town-agent-primary" data-open-form aria-expanded="false" aria-controls="town-agent-form">Request my neighbourhood shortlist →</button>
-      <p class="town-agent-note">A personal email from Matt or Landon. No obligation to book a call.</p>
+      <p class="town-agent-note">A personal email from Matthew or Landon. No obligation to book a call.</p>
     </div>
     <form id="town-agent-form" class="town-agent-form" hidden>
       <div class="town-agent-form-heading"><h3>Tell us a little about your move.</h3><p>We’ll review your note and email you personally. If we need more detail to make useful suggestions, we’ll ask.</p></div>
@@ -100,7 +101,7 @@ export function initTownAgent(container, slug, town) {
       const response = await fetch(getFormEndpoint(), { method: 'POST', body: payload, headers: { Accept: 'application/json' }, signal: controller.signal });
       if (!response.ok) throw new Error('Delivery failed');
       complete = true;
-      status.textContent = 'Thank you—your request has been received. Matt or Landon will follow up by email about your move.';
+      status.textContent = 'Thank you—your request has been received. Matthew or Landon will follow up by email about your move.';
       submit.textContent = 'Request received';
       trackEvent('town_agent_request_success', { town: slug, intent });
     } catch (error) {
