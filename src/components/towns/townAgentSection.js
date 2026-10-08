@@ -24,7 +24,7 @@ export function townAgentHtml(slug, town) {
         <a href="/agents/matthew-mulhall"><img src="/Images/matthew.jpg" width="52" height="52" alt="Matthew Mulhall" loading="lazy"><span>Matthew Mulhall<small>Sales Representative</small></span></a>
         <a href="/agents/landon-mulhall"><img src="/Images/landon.jpg" width="52" height="52" alt="Landon Mulhall" loading="lazy"><span>Landon Mulhall<small>Sales Representative</small></span></a>
       </div>
-      <div class="town-agent-recognition"><span aria-hidden="true">★</span><p><strong>Matthew Mulhall · Award recognition</strong><small>HomeLife Optimum Realty · 2023, 2024 &amp; 2025</small></p></div>
+      <div class="town-agent-recognition"><span aria-hidden="true">★</span><p><strong>Matthew Mulhall · #1 Agent by Sales Volume</strong><small>HomeLife Optimum Realty, Brokerage · 2023, 2024 &amp; 2025</small></p></div>
     </div>
     <div class="town-agent-offer">
       <div class="town-agent-switch" role="group" aria-label="What are you planning?">
