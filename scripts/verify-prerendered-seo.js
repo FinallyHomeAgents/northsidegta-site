@@ -290,7 +290,7 @@ for (const [slug, town] of Object.entries(townNames)) {
   const route = `/communities/${slug}`;
   const result = checkRoute({
     route,
-    h1: `Living in ${town}`,
+    h1: `${town} real estate & local living`,
     body: town,
     title: `${town} Real Estate & Homes | Moving to ${town} | Finally Home Agents`,
     schema: ["BreadcrumbList"],
