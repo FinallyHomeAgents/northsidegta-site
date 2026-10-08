@@ -15,3 +15,5 @@
 .town-agent-recognition>span{color:#876622;font-size:23px}.town-agent-recognition p{margin:0;font-size:12px;line-height:1.5}.town-agent-recognition strong{display:block;font-weight:600}.town-agent-recognition small{display:block;font-size:12px;color:#596453}
 .town-agent-form{padding:22px 28px;background:#fffdf8}.town-agent-people a{font-size:12px}
 @media(max-width:720px){.town-agent{padding:0;gap:0}.town-agent-brand{padding:15px 18px;gap:12px}.town-agent-brand img{width:48px;height:48px}.town-agent-brand strong{font-size:17px}.town-agent-brand span{font-size:13px}.town-agent-intro{padding:20px 18px}.town-agent-offer{padding:20px 18px}.town-agent-form{padding:20px 18px}.town-agent h2{font-size:29px}.town-agent-people a{align-items:flex-start}.town-agent-people small{font-size:11px}.town-agent-recognition{margin-top:15px;padding-top:12px}}
+
+.town-agent .town-agent-award-label{display:block;color:#765615;font-size:14px;font-weight:700;letter-spacing:.02em;margin-bottom:3px}
