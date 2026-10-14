@@ -37,7 +37,7 @@ const routeModules = {
   "/sellers": "../src/SellersPage",
   "/what-my-home-buys": "../src/BuyingPowerPage",
   "/play-your-budget": "../src/PlayYourBudgetPage",
-  "/business-network": "../src/BusinessNetworkPage",
+  "/good-good": "../src/BusinessNetworkPage",
   "/homeanalysis": "../src/HomeAnalysisPage",
   "/media": "../src/MediaPage",
   "/contact": "../src/ContactPage",

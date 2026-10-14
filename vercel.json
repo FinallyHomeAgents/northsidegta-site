@@ -1,5 +1,7 @@
 {
   "redirects": [
+    { "source": "/business-network", "destination": "/good-good", "statusCode": 301 },
+    { "source": "/business-network/", "destination": "/good-good", "statusCode": 301 },
     {
       "source": "/(.*)",
       "has": [

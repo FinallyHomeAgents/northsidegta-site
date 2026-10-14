@@ -32,6 +32,15 @@
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://cdn.pulse.is/livechat/loader.js" data-live-chat-id="68fa76a75fc77f1bca09a31a" async></script>
+    <script>
+      // GOOD GOOD uses its organizer contact link instead of the real-estate chat.
+      if (!/^\/(good-good|business-network)(\/|$)/.test(window.location.pathname)) {
+        const chat = document.createElement('script');
+        chat.src = 'https://cdn.pulse.is/livechat/loader.js';
+        chat.dataset.liveChatId = '68fa76a75fc77f1bca09a31a';
+        chat.async = true;
+        document.body.appendChild(chat);
+      }
+    </script>
   </body>
 </html>

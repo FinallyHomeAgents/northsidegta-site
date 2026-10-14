@@ -151,7 +151,7 @@ function App() {
           <Route path="/sign"         element={<SignWithUsPage />} />
           <Route path="/what-my-home-buys" element={<BuyingPowerPage />} />
           <Route path="/play-your-budget" element={<PlayYourBudgetPage />} />
-          <Route path="/business-network" element={<BusinessNetworkPage />} />
+          <Route path="/good-good" element={<BusinessNetworkPage />} />
           <Route path="/cms/good-good" element={<GoodGoodApplicationsPage />} />
           <Route path="/homeanalysis" element={<HomeAnalysisPage />} />
           <Route path="/insights"     element={<InsightsPage />} />
