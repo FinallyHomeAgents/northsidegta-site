@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "../lib/submitWebsiteInquiry";
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -124,7 +125,7 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
         if (value) payload.append(key, value);
       });
 
-      const response = await fetch(`https://formspree.io/f/${DEFAULT_FORMSPREE_ID}`, {
+      const response = await submitInquiry(`https://formspree.io/f/${DEFAULT_FORMSPREE_ID}`, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -366,3 +367,5 @@ export default function GuidedNarrowForm({ guidedPath, source = "homepage" }) {
     </form>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }

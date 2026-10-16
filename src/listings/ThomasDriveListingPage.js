@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "../lib/submitWebsiteInquiry";
 import React, { useMemo, useState } from "react";
 import HeaderShell from "../components/HeaderShell";
 import Footer from "../Footer";
@@ -71,7 +72,7 @@ function ShowingForm() {
       payload.append("source_page", ROUTE);
       payload.append("lead_type", "Showing Request");
       payload.append("inquiry_type", "listing_showing_request");
-      const response = await fetch(endpoint, { method: "POST", body: payload, headers: { Accept: "application/json" } });
+      const response = await submitInquiry(endpoint, { method: "POST", body: payload, headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error("Request failed");
       setState({ submitting: false, success: true, error: "" });
       setForm({ name: "", email: "", phone: "", showingTime: "", notes: "", hasRealtor: "" });
@@ -232,3 +233,5 @@ export default function ThomasDriveListingPage() {
     <Footer />
   </>;
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }

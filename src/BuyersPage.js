@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 // src/BuyersPage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -577,7 +578,7 @@ function ConsultationForm() {
     }
 
     try {
-      const response = await fetch(form.action, {
+      const response = await submitInquiry(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(data),
@@ -1195,3 +1196,5 @@ const BUYERS_STYLES = `
     .team-photo-block img { height: 150px; object-position: center 30%; }
   }
 `;
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }

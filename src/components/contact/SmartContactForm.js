@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "../../lib/submitWebsiteInquiry";
 import React, { useMemo, useState } from "react";
 import Button from "../ui/Button";
 import { getFormEndpoint } from "./contactConfig";
@@ -118,7 +119,7 @@ export default function SmartContactForm({
         if (value) payload.append(key, value);
       });
 
-      const response = await fetch(formEndpoint, {
+      const response = await submitInquiry(formEndpoint, {
         method: "POST",
         body: payload,
         headers: {
@@ -438,3 +439,5 @@ function LightningIcon({ className = "h-4 w-4 text-white" }) {
     </svg>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

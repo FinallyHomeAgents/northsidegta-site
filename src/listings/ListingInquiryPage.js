@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "../lib/submitWebsiteInquiry";
 import React, { useMemo, useState } from "react";
 import HeaderShell from "../components/HeaderShell";
 import Footer from "../Footer";
@@ -97,7 +98,7 @@ function ListingInquiryForm({ config, agentStatus }) {
       payload.append("agent_status", agentStatus || "not-selected");
       payload.append("inquiry_type", "listing_inquiry");
 
-      const response = await fetch(endpoint, {
+      const response = await submitInquiry(endpoint, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -327,3 +328,5 @@ export default function ListingInquiryPage({ config }) {
     </>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }

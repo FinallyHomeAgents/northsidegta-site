@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 // src/HomeAnalysisPage.js
 // React + Formspree (no backend). Route: /homeanalysis
 
@@ -265,7 +266,7 @@ export default function HomeAnalysisPage() {
         _replyto: form.email || undefined,
       };
 
-      const res = await fetch(endpoint, {
+      const res = await submitInquiry(endpoint, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -681,3 +682,4 @@ export default function HomeAnalysisPage() {
     </div>
   );
 }
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

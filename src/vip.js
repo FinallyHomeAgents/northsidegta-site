@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 // src/VipPage.js
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -49,7 +50,7 @@ export default function VipPage() {
 
   const handleInfoSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("https://formspree.io/f/mwpborow", {
+    const response = await submitInquiry("https://formspree.io/f/mwpborow", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -197,3 +198,5 @@ export default function VipPage() {
     </>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }
