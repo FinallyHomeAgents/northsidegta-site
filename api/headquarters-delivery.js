@@ -1,5 +1,6 @@
 import {timingSafeEqual} from 'node:crypto';
-import {websiteOutbox,drainHeadquartersOutbox} from '../lib/headquarters-capture.mjs';
+const drainHeadquartersOutbox=async env=>(await import('../lib/headquarters-capture.mjs')).drainHeadquartersOutbox(env);
+const websiteOutbox=async env=>(await import('../lib/headquarters-capture.mjs')).websiteOutbox(env);
 export function createDeliveryWorker({env=process.env,drain=drainHeadquartersOutbox,outbox=websiteOutbox}={}){
  return async(req,res)=>{
   res.setHeader('Cache-Control','no-store');
@@ -11,7 +12,7 @@ export function createDeliveryWorker({env=process.env,drain=drainHeadquartersOut
   if(env.NORTHSIDE_HQ_CAPTURE_ENABLED!=='true')return res.status(200).json({ok:true,disabled:true});
   try{
    const result=await drain(env);
-   const queue=await outbox(env).status();
+   const queue=await (await outbox(env)).status();
    // No names, messages, addresses or credentials in scheduler responses/logs.
    if(queue.needsReview>0)console.error('Headquarters delivery needs review:',queue.needsReview);
    return res.status(queue.needsReview>0||result.failed>0?503:200).json({ok:queue.needsReview===0&&result.failed===0,...result,queue});
