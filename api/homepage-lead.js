@@ -1,3 +1,4 @@
+import {queueHomepageInquiry} from '../lib/headquarters-capture.mjs'
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 const DEFAULT_PAGE_URL = 'https://northsidegta.ca/'
 const SUCCESS_MESSAGE_HEADING = 'Thanks — we received your request.'
@@ -126,6 +127,16 @@ export default async function handler(req, res) {
     console.error('[homepage-lead] Formspree endpoint is not configured')
     sendResponse(req, res, 500, { ok: false, error: 'Lead form is not configured right now.' })
     return
+  }
+
+  // Proposed capture hook: disabled until the approved rollout enables it.
+  if (process.env.NORTHSIDE_HQ_CAPTURE_ENABLED === 'true') {
+    try {
+      await queueHomepageInquiry({...payload, submissionId: normalizeText(body.submissionId, 80)})
+    } catch {
+      sendResponse(req, res, 503, { ok: false, error: 'Unable to save your inquiry right now. Please try again.' })
+      return
+    }
   }
 
   try {

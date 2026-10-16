@@ -11,6 +11,30 @@ async function loadHandler() {
   return namespace.default || namespace
 }
 
+test('enabled capture saves a copy before preserving the Formspree notification', async () => {
+  await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',NORTHSIDE_HQ_CAPTURE_ENABLED:'true',KV_REST_API_URL:'https://test.upstash.io',KV_REST_API_TOKEN:'test-only'}, async()=>{
+    const originalFetch=global.fetch; const calls=[];
+    global.fetch=async(url,options)=>{calls.push({url,body:JSON.parse(options.body)});return {ok:true,json:async()=>({result:1})};};
+    try {
+      const handler=await loadHandler();const res=createMockRes();
+      await handler(createPostRequest({body:{name:'TEST',contact:'test@example.invalid',community:'Aurora',submissionId:'11111111-1111-4111-8111-111111111111'}}),res);
+      assert.equal(res.statusCode,200);assert.equal(calls.length,2);
+      assert.equal(calls[0].url,'https://test.upstash.io');
+      assert.equal(calls[0].body[0],'EVAL');
+      assert.equal(calls[1].url,'https://formspree.io/f/testform');
+      assert.equal(calls[1].body.Name,'TEST');
+    } finally {global.fetch=originalFetch;}
+  });
+});
+
+test('capture outage returns a retryable error without falsely confirming receipt', async () => {
+  await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',NORTHSIDE_HQ_CAPTURE_ENABLED:'true',KV_REST_API_URL:'https://test.upstash.io',KV_REST_API_TOKEN:'test-only'}, async()=>{
+    const originalFetch=global.fetch;
+    global.fetch=async()=>{throw Error('simulated outage');};
+    try {const handler=await loadHandler();const res=createMockRes();await handler(createPostRequest({body:{name:'TEST',contact:'test@example.invalid',community:'Aurora'}}),res);assert.equal(res.statusCode,503);assert.equal(res.body.ok,false);}finally{global.fetch=originalFetch;}
+  });
+});
+
 async function withEnv(overrides, fn) {
   const backup = {}
   for (const [key, value] of Object.entries(overrides)) {
