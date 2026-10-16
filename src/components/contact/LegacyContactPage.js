@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "../../lib/submitWebsiteInquiry";
 // Legacy contact page kept for feature-flag fallback
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet-async";
@@ -70,7 +71,7 @@ export default function LegacyContactPage() {
 
   async function handleContactSubmit(e){
     e.preventDefault();
-    const res = await fetch('https://formspree.io/f/mwpborow',{
+    const res = await submitInquiry('https://formspree.io/f/mwpborow',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(formData)
@@ -285,3 +286,5 @@ export default function LegacyContactPage() {
     </>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

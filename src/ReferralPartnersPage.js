@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 import React, { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -138,7 +139,7 @@ function ReferralPartnerForm() {
         if (value) payload.append(key, value);
       });
 
-      const response = await fetch(formEndpoint, {
+      const response = await submitInquiry(formEndpoint, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -644,3 +645,5 @@ export default function ReferralPartnersPage() {
     </>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

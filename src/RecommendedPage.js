@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 import React, { useMemo, useState } from "react";
 import HeaderShell from "./components/HeaderShell";
 import Footer from "./Footer";
@@ -125,7 +126,7 @@ function SellerIntakeForm() {
         if (value) payload.append(key, value);
       });
 
-      const response = await fetch(formEndpoint, {
+      const response = await submitInquiry(formEndpoint, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -590,3 +591,5 @@ export default function RecommendedPage() {
     </>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

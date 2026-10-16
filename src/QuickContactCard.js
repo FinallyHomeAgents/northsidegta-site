@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 // src/QuickContactCard.js
 import React, { useMemo, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
@@ -98,7 +99,7 @@ export default function QuickContactCard({
         if (v) payload.append(k, v);
       });
 
-      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
+      const res = await submitInquiry(`https://formspree.io/f/${formspreeId}`, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -572,3 +573,5 @@ export default function QuickContactCard({
     </div>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "quick-contact"); }

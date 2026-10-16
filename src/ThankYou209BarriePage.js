@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 // src/ThankYou209BarriePage.js
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import HeaderShell from "./components/HeaderShell";
@@ -234,7 +235,7 @@ function BuyerSignupForm() {
         _replyto: form.email || undefined,
       };
 
-      const res = await fetch(endpoint, {
+      const res = await submitInquiry(endpoint, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -1088,7 +1089,7 @@ function CallbackDrawer({ expanded, onExpandedChange }) {
       }
       payload.append("source", "callback");
 
-      const response = await fetch(formEndpoint, {
+      const response = await submitInquiry(formEndpoint, {
         method: "POST",
         body: payload,
         headers: { Accept: "application/json" },
@@ -1379,3 +1380,5 @@ export default function ThankYou209BarriePage() {
     </div>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

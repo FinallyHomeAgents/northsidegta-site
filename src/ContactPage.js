@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 import React, { useMemo, useRef, useState } from "react";
 import HeaderShell from "./components/HeaderShell";
 import SmartContactForm from "./components/contact/SmartContactForm";
@@ -236,7 +237,7 @@ function CallbackFormCard() {
       }
       payload.append("source", "callback");
 
-      const response = await fetch(formEndpoint, {
+      const response = await submitInquiry(formEndpoint, {
         method: "POST",
         body: payload,
         headers: {
@@ -487,3 +488,5 @@ function WhatsAppGlyph({ className = "h-4 w-4 text-[#25D366]" }) {
     </svg>
   );
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "contact"); }

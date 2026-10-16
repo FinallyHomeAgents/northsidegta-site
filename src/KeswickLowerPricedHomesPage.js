@@ -1,3 +1,4 @@
+import { submitWebsiteInquiry } from "./lib/submitWebsiteInquiry";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
@@ -110,7 +111,7 @@ export default function KeswickLowerPricedHomesPage() {
     try {
       const payload = new FormData();
       Object.entries(form).forEach(([k, v]) => v && payload.append(k, v));
-      const res = await fetch(formEndpoint, { method: "POST", body: payload, headers: { Accept: "application/json" } });
+      const res = await submitInquiry(formEndpoint, { method: "POST", body: payload, headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error("failed");
       setSuccess(true);
       trackEvent("keswick_lead_submit", { budget: form.budget, timeline: form.timeline, intent: form.intent });
@@ -168,3 +169,5 @@ export default function KeswickLowerPricedHomesPage() {
     <Footer />
   </div>;
 }
+
+function submitInquiry(endpoint, options) { return submitWebsiteInquiry(endpoint, options, "listing-request"); }
