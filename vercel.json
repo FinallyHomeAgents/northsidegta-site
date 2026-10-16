@@ -122,8 +122,15 @@
   ],
   "crons": [
     {
+      "path": "/api/headquarters-delivery",
+      "schedule": "*/5 * * * *"
+    },
+    {
       "path": "/api/spotlight/refresh",
       "schedule": "0 5 * * 1"
     }
-  ]
+  ],
+  "functions": {
+    "api/headquarters-delivery.js": { "maxDuration": 180 }
+  }
 }

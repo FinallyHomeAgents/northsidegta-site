@@ -194,6 +194,8 @@ export default function HomePage() {
       pageUrl.value = window.location.href;
     }
 
+    let submissionId = null;
+    let submissionFields = null;
     async function handleLeadSubmit(event) {
       event.preventDefault();
 
@@ -205,6 +207,12 @@ export default function HomePage() {
 
       const formData = new FormData(form);
       if (formData.get("bot-field")) return;
+      const fields = JSON.stringify(["name", "contact", "community"].map(key => formData.get(key)));
+      if (!submissionId || fields !== submissionFields) {
+        submissionId = window.crypto.randomUUID();
+        submissionFields = fields;
+      }
+      formData.set("submissionId", submissionId);
 
       if (status) {
         status.textContent = "Sending...";
