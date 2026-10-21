@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { Resend } from 'resend'
 import { DateTime } from 'luxon'
 
@@ -184,6 +185,19 @@ export default async function handler(req, res) {
     return
   }
 
+
+  let hqCapture = null
+  if (process.env.NORTHSIDE_HQ_COFFEE_CAPTURE_ENABLED === 'true') {
+    try {
+      const service = await import('../lib/service-request-capture.mjs')
+      const { getRedisClient } = await import('../lib/communityRanking/kv-client.js')
+      const redis = getRedisClient()
+      const record = { ...payload, id: randomUUID(), receivedAt: new Date().toISOString(), name: payload.fullName }
+      const saved = await service.persistServiceRequest('coffee', record, { redis })
+      hqCapture = { ...saved, outcome: async status => { try { await service.recordServiceNotification('coffee', saved.reference, status, { redis }) } catch { console.error('HQ notification outcome not saved') } } }
+    } catch { return res.status(503).json({ ok: false, error: 'We could not save your request. Please try again.' }) }
+  }
+
   const subject = `Coffee Request (Pending) — ${payload.fullName} — ${payload.requestedDate} ${payload.requestedTime}`
   const prettyTime = formatDateTime(payload.requestedDate, payload.requestedTime)
   const fullAddress = [payload.address1, payload.address2, payload.city, payload.postalCode]
@@ -207,7 +221,7 @@ export default async function handler(req, res) {
   `
 
   try {
-    await resendClient.emails.send({
+    const delivery = await resendClient.emails.send({
       from: LEAD_FROM_EMAIL,
       to: [LEAD_TO_EMAIL],
       subject,
@@ -225,7 +239,10 @@ export default async function handler(req, res) {
         `IP: ${ip}`,
       ].join('\n'),
     })
+    if (delivery?.error || !delivery?.data?.id) throw new Error('Email provider did not confirm acceptance.')
+    if (hqCapture) await hqCapture.outcome('accepted')
   } catch (error) {
+    if (hqCapture) await hqCapture.outcome('failed')
     console.error('[coffee-request] email send failed', error)
     res.status(500).json({ ok: false, error: 'Email send failed.' })
     return

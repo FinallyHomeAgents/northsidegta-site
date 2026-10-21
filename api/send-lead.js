@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 // /api/send-lead.js  (ESM + CORS + validation)
 import { Resend } from 'resend'
 
@@ -126,7 +127,7 @@ export default async function handler(req, res) {
           error: 'Missing required fields (name, email, title, realmLink).',
         })
     }
-    if (!casl || !notRepresented) {
+    if (!casl || !notRepresented || (process.env.NORTHSIDE_HQ_LISTING_EMAIL_CAPTURE_ENABLED === 'true' && (casl !== true || notRepresented !== true))) {
       return res.status(400).json({ ok: false, error: 'Consent required.' })
     }
     if (!isHttpUrl(realmLink)) {
@@ -294,13 +295,30 @@ export default async function handler(req, res) {
     }
     if (bcc) msg.bcc = [bcc]
 
-    // Send
-    const r = await resend.emails.send(msg)
 
-    if (r?.error) {
+  let hqCapture = null
+  if (process.env.NORTHSIDE_HQ_LISTING_EMAIL_CAPTURE_ENABLED === 'true') {
+    try {
+      const service = await import('../lib/service-request-capture.mjs')
+      const { getRedisClient } = await import('../lib/communityRanking/kv-client.js')
+      const redis = getRedisClient()
+      const record = { id: randomUUID(), receivedAt: new Date().toISOString(), name, email, phone, title, slug, casl, notRepresented, realmLink }
+      const saved = await service.persistServiceRequest('listing-email', record, { redis })
+      hqCapture = { ...saved, outcome: async status => { try { await service.recordServiceNotification('listing-email', saved.reference, status, { redis }) } catch { console.error('HQ notification outcome not saved') } } }
+    } catch { return res.status(503).json({ ok: false, error: 'We could not save your request. Please try again.' }) }
+  }
+
+    // Send
+    let r
+    try { r = await resend.emails.send(msg) } catch (error) { if (hqCapture) await hqCapture.outcome('failed'); throw error }
+
+    if (r?.error || !r?.data?.id) {
+      if (hqCapture) await hqCapture.outcome('failed')
       console.error('Resend error:', r.error)
       return res.status(502).json({ ok: false, error: 'Email sending failed.' })
     }
+
+    if (hqCapture) await hqCapture.outcome('accepted')
 
     if (FORMSPREE_ENDPOINT) {
       if (!isHttpUrl(FORMSPREE_ENDPOINT)) {
