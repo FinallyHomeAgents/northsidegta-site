@@ -1,8 +1,11 @@
+import {captureCampaignArrival} from './lib/campaign-journey.mjs';
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { HelmetProvider } from "react-helmet-async";
+
+captureCampaignArrival();
 
 if (process.env.NODE_ENV === "production") {
   const logClientError = (payload) => {

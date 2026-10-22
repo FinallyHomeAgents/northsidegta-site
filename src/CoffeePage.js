@@ -1,3 +1,4 @@
+import {trackedInquiryPage} from "./lib/campaign-journey.mjs";
 import React, { useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import HeaderShell from "./components/HeaderShell";
@@ -168,7 +169,7 @@ export default function CoffeePage() {
         ...form,
         requestedDate: selectedDate,
         requestedTime: selectedTime,
-        sourceUrl: typeof window !== "undefined" ? window.location.href : "https://northsidegta.ca/coffee",
+        sourceUrl: trackedInquiryPage() || "https://northsidegta.ca/coffee",
       };
 
       const response = await fetch("/api/coffee-request", {
