@@ -7,6 +7,15 @@ export async function submitWebsiteInquiry(endpoint, options, source = 'contact'
   }
   const fields = options.body instanceof FormData
     ? Object.fromEntries(options.body.entries()) : JSON.parse(options.body);
+  // Carry only the three supported attribution fields; never copy arbitrary query data.
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_campaign', 'utm_source', 'utm_medium'];
+  if (keys.every(key => params.getAll(key).length === 1)
+    && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(params.get('utm_campaign'))
+    && ['instagram', 'facebook'].includes(params.get('utm_source'))
+    && params.get('utm_medium') === 'organic_social') {
+    for (const key of keys) fields[key] = params.get(key);
+  }
   const pageUrl = 'https://northsidegta.ca' + window.location.pathname;
   const stableFields = Object.fromEntries(Object.entries(fields).filter(([key]) => !/timestamp|submitted_at|submittedAt|_timestamp/i.test(key)));
   const bytes = new TextEncoder().encode(JSON.stringify([url.pathname, source, pageUrl, stableFields]));
