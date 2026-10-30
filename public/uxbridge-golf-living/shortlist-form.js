@@ -8,7 +8,7 @@ form.addEventListener('submit',async event=>{
  const fields=Object.fromEntries(new FormData(form));
  const query=new URLSearchParams(location.search);
  fields.referral_source=['facebook','instagram','personal','group'].includes(query.get('utm_source'))?query.get('utm_source'):'direct-or-search';
- fields.placement=['page','profile','local-group','golf-group','relocation-group','reel','story'].includes(query.get('utm_content'))?query.get('utm_content'):'unspecified';
+ fields.placement=['page','profile','local-group','golf-group','relocation-group','reel','story','pickering-community','markham-community','york-region-community-hub','downtown-toronto-golf-club'].includes(query.get('utm_content'))?query.get('utm_content'):'unspecified';
  const fingerprint=JSON.stringify(fields);
  if(!attempt||attempt.fingerprint!==fingerprint)attempt={fingerprint,body:{...fields,submissionId:crypto.randomUUID()}};
  try{
