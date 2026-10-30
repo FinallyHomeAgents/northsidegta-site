@@ -229,6 +229,7 @@ ${townAgentHtml("uxbridge", "Uxbridge")}
     <a href="/moving-to-uxbridge-from-toronto">Read the Honest 2026 Guide &rarr;</a>
   </aside>
 
+  <p class="container"><a href="/uxbridge-golf-living/">Love golf? Explore our personalized Uxbridge Golf &amp; Home Shortlist &rarr;</a></p>
   <div class="page-grid">
 
     <!-- MAIN COLUMN -->

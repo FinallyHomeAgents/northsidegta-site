@@ -75,6 +75,7 @@ function main() {
   const includeArchive = siteConfig.includeEventsArchiveInSitemap !== false
 
   const staticRoutes = [
+    { path: '/uxbridge-golf-living/', changefreq: 'monthly', priority: '0.8' },
     { path: '/', changefreq: 'weekly', priority: '1.0' },
     { path: '/buyers', changefreq: 'weekly', priority: '0.9' },
     { path: '/moving-to-georgina-from-toronto', changefreq: 'monthly', priority: '0.8' },

@@ -62,6 +62,8 @@
     }
   ],
   "rewrites": [
+    { "source": "/uxbridge-golf-living", "destination": "/uxbridge-golf-living/index.html" },
+    { "source": "/uxbridge-golf-living/", "destination": "/uxbridge-golf-living/index.html" },
     {"source": "/cms/play-your-budget-leads","destination": "/cms/play-your-budget-leads/index.html"},
     {"source": "/cms/play-your-budget-leads/","destination": "/cms/play-your-budget-leads/index.html"},
     {"source": "/life/sitemap.xml", "destination": "/api/life?action=sitemap"},
