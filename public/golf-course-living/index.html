@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Golf Courses & Homes | Uxbridge, Aurora, Stouffville</title>
+<meta name="description" content="Explore selected golf courses and neighbourhoods across Uxbridge, Aurora and Stouffville. Compare public and private golf, lifestyles and homes.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#102c22">
+<style>:root{--ink:#102c22;--green:#244d32;--paper:#f8f6ef;--muted:#5d685f;--gold:#b49862}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}a{color:inherit}header{position:relative;min-height:70vh;background:#102c22;color:#fff}nav{max-width:1220px;margin:auto;padding:23px 28px;display:flex;justify-content:space-between;gap:20px;align-items:center}nav strong{font-size:14px;letter-spacing:.17em}nav a{font-size:12px;letter-spacing:.1em;text-decoration:none}section{padding:82px 28px}.wrap{max-width:1150px;margin:auto}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.19em;font-weight:bold;color:var(--green)}.eyebrow span{color:var(--gold)}h1,h2,h3{line-height:1.12}h1,h2{font-family:Georgia,serif;font-weight:400}h1{font-size:clamp(40px,7vw,82px);letter-spacing:-.035em}h2{font-size:clamp(34px,4vw,58px);letter-spacing:-.035em;margin:12px 0 22px}h3{font-family:Georgia,serif;font-weight:400;font-size:27px;margin:16px 0}p{max-width:720px}.intro{font-size:20px;color:var(--muted)}.button{display:inline-block;background:var(--ink);color:#fff;padding:15px 23px;text-decoration:none;font-size:13px;font-weight:bold;letter-spacing:.045em;border:1px solid var(--ink)}.button:hover{background:#244d32}.towns{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px}.town{padding:34px;background:#fff;border:1px solid #e3e4db;min-height:280px;display:flex;flex-direction:column;justify-content:space-between}.town h3{font-size:34px}.town a{font-size:13px;font-weight:bold;text-decoration:none}.directory{background:#eaece3}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0}.filters select{background:white;border:1px solid #cdd3c8;padding:13px 15px;color:var(--ink);font-size:14px}.courses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.course{background:#fff;border:1px solid #dce1d6;padding:30px;display:flex;flex-direction:column;min-height:335px}.course p{color:#515e55;margin:0 0 22px}.meta{margin-top:auto;display:grid;grid-template-columns:118px 1fr;gap:6px 12px;font-size:13px;padding-top:20px;border-top:1px solid #e5e6e0}.meta span{font-size:10px;color:#7c837d;letter-spacing:.08em}.meta b{font-weight:500}.card-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:25px}.card-links a{font-size:12px;font-weight:bold;text-decoration:none}.dark{background:var(--ink);color:#fff}.dark .intro{color:#cbd8cf}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:40px}.steps h3{font-family:Arial;font-size:16px;font-weight:bold}.steps p{color:#d6ded8;font-size:14px}details{padding:19px 0;border-bottom:1px solid #cbd2c8}summary{cursor:pointer;font-weight:bold}details p{color:var(--muted)}footer{padding:30px;background:#0b2019;color:#c6d3c8;font-size:12px}footer .wrap{display:flex;justify-content:space-between;gap:20px}.notice{background:#fff9df;border-bottom:1px solid #e5d8a6;padding:11px 28px;color:#67522c;font-size:12px;text-align:center}@media(max-width:750px){header{min-height:56vh;background-position:45% center}.towns,.courses,.steps{grid-template-columns:1fr}section{padding:55px 20px}.town{min-height:210px}.course{padding:24px}.meta{grid-template-columns:100px 1fr}nav{padding:20px}footer .wrap{display:block}}
+/* Native, JavaScript-free directory filtering for embedded HTML viewers. */
+.directory .filters{display:grid;grid-template-columns:1fr;gap:15px;margin:29px 0 11px}
+.directory .chip-group{border:0;padding:0;margin:0;min-width:0}
+.directory .chip-group legend{font-size:11px;text-transform:uppercase;letter-spacing:.18em;font-weight:700;color:var(--green);margin-bottom:10px}
+.directory .chips{display:flex;flex-wrap:wrap;gap:8px}
+.directory .filter-chip{position:relative;display:inline-flex;cursor:pointer}
+.directory .filter-chip input{position:absolute;opacity:0;width:100%;height:100%;inset:0;margin:0;cursor:pointer}
+.directory .filter-chip span{display:block;background:#fff;border:1px solid #c7cec3;color:var(--ink);border-radius:999px;font-size:13px;font-weight:600;padding:9px 15px;line-height:1.3;transition:background .15s,border-color .15s,color .15s}
+.directory .filter-chip:hover span{border-color:var(--green)}
+.directory .filter-chip input:checked + span{background:var(--green);color:#fff;border-color:var(--green)}
+.directory .filter-chip input:focus-visible + span{outline:3px solid #b49862;outline-offset:3px}
+.directory .filter-help{font-size:12px;color:var(--muted);margin:0 0 25px}
+.directory .empty-state{display:none;background:#fff;border:1px solid #dce1d6;padding:27px 30px;margin-top:16px}
+.directory .empty-state p{font-size:14px;color:var(--muted);margin-bottom:0}
+/* Town selections */
+.directory:has(#town-uxbridge:checked) .course:not([data-town="Uxbridge"]),
+.directory:has(#town-aurora:checked) .course:not([data-town="Aurora"]),
+.directory:has(#town-stouffville:checked) .course:not([data-town="Stouffville"]),
+/* Access selections, combined with the town selections above */
+.directory:has(#access-public:checked) .course:not([data-access="Public"]),
+.directory:has(#access-semi-private:checked) .course:not([data-access="Semi-private"]),
+.directory:has(#access-private:checked) .course:not([data-access="Private"]),
+.directory:has(#access-membership:checked) .course:not([data-access="Membership"]){display:none}
+/* Empty combinations in the actual 13-course directory */
+
+.directory:has(#town-aurora:checked):has(#access-semi-private:checked) .empty-state,
+.directory:has(#town-aurora:checked):has(#access-membership:checked) .empty-state,
+.directory:has(#town-stouffville:checked):has(#access-semi-private:checked) .empty-state {display:block}
+@media(max-width:750px){.directory .filter-chip span{font-size:12px;padding:9px 12px}.directory .filters{gap:13px}}
+
+/* Local review polish: preserve all artwork without cropping embedded lettering. */
+header{min-height:0;background:#102c22}header nav{max-width:none;background:#102c22;color:#fff}
+.hero-art{display:block;width:100%;height:auto}
+.directory .empty-state{max-width:1150px;margin-left:auto;margin-right:auto}
+.filter-chip span{min-height:44px;display:flex!important;align-items:center}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(max-width:750px){header{min-height:0}nav{gap:12px}nav strong{font-size:12px}nav a{font-size:10px}.meta b{overflow-wrap:anywhere}}
+.editorial-intro{max-width:780px;margin:24px 0 30px;font-size:18px;line-height:1.75}.town-logo-wrap{height:112px;display:flex;align-items:center;margin-bottom:22px}.town-logo{width:auto;height:auto;max-width:170px;max-height:105px;object-fit:contain}.wyndance-feature{background:#e4e8dc;border-top:1px solid #cdd3c5}.wyndance-feature p{max-width:800px}.wyndance-feature details{max-width:800px}.artwork-note{max-width:none;margin:0;padding:10px 28px;background:#eaece3;font-size:12px;color:#5d685f}@media(max-width:750px){.editorial-intro{font-size:16px}.town-logo-wrap{height:95px}.town-logo{max-height:90px}}
+.art-composition{position:relative}.art-label{position:absolute;left:42%;top:24%;width:55%;height:27%;background:#102c22;display:flex;flex-direction:column;justify-content:center;padding:2%;color:#f8f6ef}.art-label strong{font-family:Georgia,serif;font-weight:400;font-size:clamp(18px,4vw,60px);line-height:1.1}.art-label span{font-size:clamp(7px,1.3vw,19px);margin-top:8px;letter-spacing:.04em}.art-label small{font-size:clamp(7px,1.2vw,17px)}.cta-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap}.micro{font-size:12px}.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:35px;max-width:850px}.portrait{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 25%}.light-steps p{color:var(--muted)}.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:55px}form{background:#f8f6ef;padding:30px;color:var(--ink)}form h3{margin-top:0}form label{display:block;font-size:13px;font-weight:bold;margin-bottom:16px}input,textarea,select{width:100%;font:inherit;padding:12px;border:1px solid #a7b4a7;background:#fff;color:var(--ink);margin-top:6px;border-radius:3px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.check{display:flex!important;gap:10px;font-weight:normal}.check input{width:18px;flex-shrink:0;margin:4px 0}.sticky-cta{position:fixed;bottom:18px;right:20px;background:#b49862;color:#102c22;padding:14px 20px;box-shadow:0 4px 20px #0003;text-decoration:none;font-weight:bold;font-size:13px;z-index:5;border:1px solid #eadaba}footer{padding-bottom:90px}@media(max-width:750px){.offer-grid{grid-template-columns:1fr;gap:25px}.agent-grid{gap:14px}.agent-grid h3{font-size:24px}.agent-grid p{font-size:12px}.field-grid{grid-template-columns:1fr}form{padding:22px}.art-label span{margin-top:4px}.sticky-cta{bottom:10px;right:12px;font-size:12px;padding:12px 16px}}#share-card .art-label strong{font-size:48px}#share-card .art-label span{font-size:15px}#share-card .art-label small{font-size:14px}body:has(#share-preview details[open]) .sticky-cta{display:none}@media(min-width:1300px){#share-preview .wrap{max-width:1250px}#share-preview details>div{overflow:visible!important}}.campaign-nav{padding:16px 28px!important;gap:30px!important}.brand-home{display:block;flex-shrink:0}.brand-logo{width:86px;height:86px;object-fit:contain;display:block}.nav-links{display:flex;gap:28px;align-items:center}.nav-links a{font-size:13px;letter-spacing:0;font-weight:600;line-height:1.4}.nav-links .nav-cta{border:1px solid #b49862;padding:13px 18px;color:#f5e2b9}.nav-links a:hover{text-decoration:underline;text-underline-offset:5px}.team-brand{display:flex;gap:22px;align-items:center;background:#102c22;color:#f8f6ef;padding:22px 28px;margin-bottom:32px;width:fit-content}.team-brand p{margin:0;font-size:14px}.team-brand strong{font-size:20px}.footer-brands{display:flex;gap:25px;align-items:center}.footer-brands .brand-logo{width:72px;height:72px}section[id]{scroll-margin-top:20px}a:focus-visible{outline:3px solid #b49862;outline-offset:5px}@media(max-width:600px){.campaign-nav{padding:16px 20px!important;flex-direction:column;align-items:flex-start}.brand-logo{width:76px;height:76px}.nav-links{width:100%;gap:12px;flex-wrap:wrap}.nav-links a{font-size:12px}.nav-links .nav-cta{padding:10px 13px}.team-brand{padding:18px;gap:16px}.team-brand strong{font-size:18px}.footer-brands{margin-bottom:20px}}
+.early-offer{margin-top:36px;border-top:1px solid #c9cdbd;border-bottom:1px solid #c9cdbd;padding:30px 0;display:grid;grid-template-columns:1fr 1.2fr;gap:20px 35px;align-items:center}.early-offer h3{font-size:30px}.early-offer ul{list-style:none;margin:0;padding:0;display:grid;gap:14px;color:var(--muted);font-size:14px}.early-offer strong{color:var(--ink)}.early-offer .button{width:fit-content}.course.compact-hidden{display:none!important}[hidden]{display:none!important}#unsure-town-help{font-size:14px;background:#e6ecdf;padding:14px;border-left:3px solid #b49862}@media(max-width:600px){.early-offer{grid-template-columns:1fr}.early-offer h3{font-size:28px}}
+
+/* Modern campaign composition — original artwork and copy preserved. */
+:root{--paper:#f5f5ee;--ink:#123126;--green:#24543e;--gold:#c9b47b}
+body{font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}
+header .campaign-nav{padding:14px max(24px,calc((100vw - 1200px)/2))!important;border-bottom:1px solid #ffffff1c}
+.hero-refined{position:relative;isolation:isolate;background:#102c22;overflow:hidden}
+.hero-refined .hero-art{display:block;width:100%;height:auto;opacity:1}
+.hero-refined .art-label{position:absolute;left:42%;top:23%;width:56%;height:29%;padding:2.2%;background:linear-gradient(110deg,#102c22 80%,#102c22f5);border-radius:3px;display:flex;flex-direction:column;justify-content:center;gap:6px;box-shadow:0 16px 50px #06180c22}
+.hero-refined .art-label span{font-size:clamp(8px,1vw,14px);letter-spacing:.16em;color:#d8c58d;margin:0}
+.hero-refined .art-label strong{font-family:Arial,Helvetica,sans-serif;font-weight:750;letter-spacing:-.045em;font-size:clamp(22px,3.7vw,58px);line-height:1.04}
+.hero-refined .art-label small{font-size:clamp(9px,1.2vw,17px);color:#e5eadd}
+.hero-action{font-size:clamp(9px,1vw,14px);font-weight:bold;text-underline-offset:5px;margin-top:4px}
+section{padding:64px 28px}.wrap{max-width:1180px}h1{font-family:Arial,Helvetica,sans-serif;font-weight:750;font-size:clamp(40px,5.6vw,76px);line-height:1.03;max-width:1000px;letter-spacing:-.055em}h2{font-size:clamp(32px,4vw,52px)}.editorial-intro{max-width:850px;font-size:17px;line-height:1.75}.intro{font-size:19px}.button{border-radius:7px;padding:16px 22px;transition:background .18s,transform .18s}.button:hover{transform:translateY(-2px)}
+.early-offer{padding:30px;background:#e9eddf;border:1px solid #d4ddca;border-radius:16px;box-shadow:0 12px 32px #163b2b06}.early-offer h3{font-family:Arial,Helvetica,sans-serif;letter-spacing:-.035em;font-size:28px;font-weight:700}.early-offer ul{gap:15px}
+.towns{gap:20px;margin-top:30px}.town{border-radius:12px;padding:26px;min-height:260px}.town h3{font-family:Arial,Helvetica,sans-serif;font-size:30px;font-weight:700;letter-spacing:-.035em}.town-logo-wrap{height:85px;margin-bottom:12px}.town-logo{max-height:80px;max-width:145px}.town a{padding-top:16px}
+.directory{background:#edf0e7}.courses{gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}.course{padding:24px;min-height:290px;border-radius:12px;box-shadow:0 3px 12px #17332604;transition:border-color .18s,box-shadow .18s}.course:hover{border-color:#a6b69c;box-shadow:0 8px 28px #1733260b}.course h3{font-family:Arial,Helvetica,sans-serif;font-size:25px;font-weight:700;letter-spacing:-.03em}.course p{font-size:14px}.course .meta{grid-template-columns:1fr;gap:4px;font-size:12px}.course .meta span:not(:first-child){margin-top:8px}.card-links a{font-size:11px}.directory .filter-chip span{border-radius:8px}.directory .filter-chip input:checked+span{box-shadow:0 3px 10px #17332618}
+.wyndance-feature{background:#e0e6d6}.team-brand{border-radius:10px}.portrait{border-radius:12px}.offer-grid{gap:40px}form{border-radius:16px;box-shadow:0 16px 45px #0002}input,textarea,select{border-radius:6px}details{padding:21px 0}summary{font-size:16px}.sticky-cta{border-radius:8px}.artwork-note{font-size:11px;padding:9px 28px}
+@media(max-width:950px){.courses{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-refined .art-label{top:22%;height:31%;gap:4px}}
+@media(max-width:600px){section{padding:44px 20px}.hero-refined{display:flex;flex-direction:column}.hero-refined .hero-art{width:100%;height:auto}.hero-refined .art-label{left:42%;top:23%;width:56%;height:29%;padding:2%;gap:3px}.hero-refined .art-label strong{font-size:clamp(16px,4.2vw,25px)}.hero-refined .art-label span{display:none}.hero-refined .art-label small{font-size:7px}.hero-refined .hero-action{display:none}.courses{grid-template-columns:1fr}.course{min-height:0}.course .meta{grid-template-columns:110px 1fr;gap:6px 12px}.course .meta span:not(:first-child){margin:0}.early-offer{padding:24px}.towns{gap:14px}.town{min-height:0}.editorial-intro{font-size:16px}.campaign-nav{gap:14px!important}.brand-logo{width:64px;height:64px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}.button:hover{transform:none}}
+
+/* Versioned hero: lettering and unmodified logo assets remain separate from artwork. */
+.golf-hero-v2{background:#102c22;color:#faf6e8}.golf-scene{position:relative;aspect-ratio:1672/652;overflow:hidden}.golf-scene>img{display:block;width:100%;height:auto}.golf-headline{position:absolute;left:44%;top:27%;right:4%;display:flex;flex-direction:column;align-items:flex-start;text-shadow:0 2px 20px #081b19bb}.golf-headline:before{content:"";position:absolute;inset:-35px -30px;z-index:0;background:radial-gradient(ellipse,#092c2466,transparent 72%);pointer-events:none}.golf-headline>*{position:relative}.golf-headline>span{font-size:clamp(8px,1vw,14px);letter-spacing:.17em;color:#fff3d2;margin:0 0 8px}.golf-headline strong{font-size:clamp(38px,5.3vw,80px);letter-spacing:-.055em;line-height:1.02;font-weight:800}.golf-headline b{font-size:clamp(22px,3vw,46px);letter-spacing:-.04em;line-height:1.16;margin:5px 0 12px}.golf-headline a{font-size:clamp(10px,1.1vw,15px);text-underline-offset:5px;color:inherit}.golf-brandbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 5%;border-top:1px solid #cbbb7d77}.golf-brandbar>img{width:90px;height:90px;object-fit:contain}.golf-brandbar>div{text-align:center}.golf-brandbar p{margin:0 0 9px;font-size:clamp(12px,1.6vw,21px);font-weight:700;letter-spacing:.09em;color:#fff7e7}.golf-brandbar span{font-size:clamp(11px,1.15vw,15px);color:#d3c594}
+@media(max-width:600px){.golf-scene{aspect-ratio:auto;overflow:hidden;display:flex;flex-direction:column}.golf-scene>img{width:100%;height:auto;aspect-ratio:1672/652;object-fit:cover;object-position:top}.golf-headline{position:relative;left:auto;right:auto;top:auto;padding:24px 24px 26px;text-shadow:none}.golf-headline:before{display:none}.golf-headline>span{font-size:9px}.golf-headline strong{font-size:44px}.golf-headline b{font-size:29px}.golf-headline a{font-size:13px}.golf-brandbar{padding:14px 18px;gap:10px}.golf-brandbar>img{width:54px;height:54px}.golf-brandbar p{font-size:9px;line-height:1.6;letter-spacing:.04em}.golf-brandbar span{font-size:9px;line-height:1.5;display:block}}
+
+</style>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Our 3 favourite towns north of Toronto for golfers">
+<meta property="og:description" content="Explore 13 selected courses, home-search considerations and a personal golf-and-home shortlist with Matthew Mulhall and Landon Mulhall.">
+<meta property="og:locale" content="en_CA">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@context": "https://schema.org", "@type": "Article", "headline": "Our 3 favourite towns north of Toronto for golfers.", "inLanguage": "en-CA", "author": [{"@type": "Person", "name": "Matthew Mulhall", "jobTitle": "Real Estate Agent"}, {"@type": "Person", "name": "Landon Mulhall", "jobTitle": "Real Estate Agent"}], "publisher": {"@type": "Organization", "name": "Finally Home Agents", "alternateName": "NorthSide GTA", "url": "https://northsidegta.ca"}, "about": ["Golf", "Uxbridge", "Aurora", "Whitchurch\u2013Stouffville", "Real estate"], "url": "https://northsidegta.ca/golf-course-living/", "mainEntityOfPage": "https://northsidegta.ca/golf-course-living/", "image": "https://northsidegta.ca/golf-course-living/golf-and-home-share-v2.jpg"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which towns offer public golf?", "acceptedAnswer": {"@type": "Answer", "text": "Uxbridge, Aurora and Stouffville all have public-access options. Confirm current booking terms with the operators."}}, {"@type": "Question", "name": "Do I need a membership?", "acceptedAnswer": {"@type": "Answer", "text": "No. Several highlighted courses are publicly bookable, while private clubs and membership networks follow different policies."}}, {"@type": "Question", "name": "Does buying nearby include membership?", "acceptedAnswer": {"@type": "Answer", "text": "Some Wyndance Estates homes have been marketed with a deeded ClubLink membership. Confirm the entitlement for the specific property, plus current annual dues, activation or transfer terms and other charges. Living near a course elsewhere does not automatically include membership."}}, {"@type": "Question", "name": "What matters besides course distance?", "acceptedAnswer": {"@type": "Answer", "text": "Work commutes, neighbourhood services, property maintenance, costs and actual address-to-course routes."}}, {"@type": "Question", "name": "Do I have to buy directly on a golf course?", "acceptedAnswer": {"@type": "Answer", "text": "No. We can compare homes beside a course with homes a drive away. Tell us whether a view, club community or convenient golf access matters most. A course-side address does not guarantee access to the club."}}, {"@type": "Question", "name": "What types of homes could we compare?", "acceptedAnswer": {"@type": "Answer", "text": "Your search could include detached homes, bungalows, townhomes or rural properties, depending on current availability and your preferences. We will distinguish homes actually on a course from those nearby, and review ownership and maintenance details."}}, {"@type": "Question", "name": "What budget do I need for a home near golf?", "acceptedAnswer": {"@type": "Answer", "text": "There is no reliable single price for all three towns. Home type, lot, condition and location affect the comparison. Share a comfortable range and we can use current listings and recent comparable sales to help assess the options. This guide does not advertise a starting price or imply that specific homes are available."}}, {"@type": "Question", "name": "What will my golf-and-home shortlist include?", "acceptedAnswer": {"@type": "Answer", "text": "A focused selection of suitable available homes, neighbourhood context, relevant golf options and membership questions to investigate. Tell us your budget, preferred town and must-haves so the response can be specific to you."}}, {"@type": "Question", "name": "Can you help if I need to sell before buying?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Tell us about your current home and your intended move. We can discuss the sale and purchase together, including timing and the information needed to plan the next step."}}, {"@type": "Question", "name": "Are these the only golf courses in the area?", "acceptedAnswer": {"@type": "Answer", "text": "No. This is a curated selection of 13 courses in and around Uxbridge, Aurora and Stouffville, not an exhaustive directory or an objective ranking. Confirm current access and membership terms directly with the clubs."}}]}]}</script>
+<link rel="canonical" href="https://northsidegta.ca/golf-course-living/">
+<meta property="og:url" content="https://northsidegta.ca/golf-course-living/">
+<meta property="og:site_name" content="NorthSide GTA">
+<meta property="og:image" content="https://northsidegta.ca/golf-course-living/golf-and-home-share-v2.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Illustrative golf-and-home scene: More golf. A place to call home. Uxbridge, Aurora and Stouffville.">
+<meta name="twitter:title" content="Our 3 favourite towns north of Toronto for golfers">
+<meta name="twitter:description" content="13 selected courses, neighbourhood considerations and your personal golf-and-home shortlist.">
+<meta name="twitter:image" content="https://northsidegta.ca/golf-course-living/golf-and-home-share-v2.jpg">
+</head>
+<body>
+<div class="notice">PRIVATE REVIEW · Selected courses, not a complete directory · Nothing published</div>
+<header>
+<nav class="campaign-nav" aria-label="Main navigation">
+<a class="brand-home" href="https://northsidegta.ca/" aria-label="NorthSide GTA home">
+<img class="brand-logo" src="assets/1c03447393ba53b3.png" alt="NorthSide GTA" width="1024" height="1024">
+</a>
+<div class="nav-links">
+<a href="#communities">Explore Communities</a>
+<a href="#your-agents">Meet Matthew &amp; Landon</a>
+<a class="nav-cta" href="#shortlist">Get My Shortlist ↗</a>
+</div>
+</nav>
+<div class="golf-hero-v2">
+<div class="golf-scene"><img src="assets/16d681c0eb2dbc51.png" alt="Illustrative golf-and-home scene with a house, golf bag and open fairway" fetchpriority="high">
+<div class="golf-headline"><span>GOLF &amp; HOME / NORTHSIDE GTA</span><strong>More golf.</strong><b>A place to call home.</b><a href="#shortlist">Find my golf-and-home fit ↗</a></div></div>
+<div class="golf-brandbar"><img src="assets/1c03447393ba53b3.png" alt="NorthSide GTA"><div><p>UXBRIDGE · AURORA · STOUFFVILLE</p><span>Explore the lifestyle. Find your next home.</span></div><img src="assets/592b6f1414affa72.png" alt="Finally Home Agents"></div></div>
+</header>
+<p class="artwork-note">Illustrative golf-and-home concept. Not a photograph of a listed property or a featured course.</p>
+<main>
+<section>
+<div class="wrap">
+<div class="eyebrow">NorthSide GTA / Golf & Real Estate</div>
+<h1>Our 3 favourite towns north of Toronto for golfers.</h1>
+<p class="intro">Love golf? These three towns deserve a place on your home-search shortlist.</p>
+<div class="editorial-intro">
+<p>We’re Matthew Mulhall and Landon Mulhall—real estate agents and golfers ourselves. When golf is part of your life, where you live can make room for more of it: a round after work, a regular weekend game, or a club that becomes part of your routine. Uxbridge, Aurora and Stouffville offer different ways to build that lifestyle, from public tee times to private-club communities.</p>
+<p>Here’s a selection worth exploring—and what each could mean for your home search. Start with how you like to play, then consider the neighbourhood, home and everyday routine that fit around it.</p>
+</div>
+<div class="cta-row">
+<a class="button" href="#shortlist">Find my golf-and-home fit</a>
+<a href="#directory">Explore the 13 courses ↓</a>
+</div>
+<p class="micro">A personal shortlist of homes and neighbourhoods—not just another list of golf courses.</p>
+<div class="early-offer">
+<div>
+<span class="eyebrow">Your personal shortlist</span>
+<h3>From “I could live here”<br>to homes worth exploring.</h3>
+</div>
+<ul>
+<li>
+<strong>Homes that fit</strong>
+<br>Your budget, home style and must-haves.</li>
+<li>
+<strong>A neighbourhood comparison</strong>
+<br>Golf access alongside everyday life.</li>
+<li>
+<strong>The details to check</strong>
+<br>Membership terms and property questions.</li>
+</ul>
+<a class="button" href="#shortlist">Build my shortlist →</a>
+</div>
+</div>
+</section>
+<section id="communities" style="padding-top:0">
+<div class="wrap">
+<div class="eyebrow">Explore by town</div>
+<h2>More than a round of golf.</h2>
+<p>Find the combination of golf access, neighbourhood character and everyday convenience that makes a move worthwhile.</p>
+<div class="towns">
+<article class="town" id="uxbridge">
+<div>
+<div class="town-logo-wrap">
+<img class="town-logo" src="assets/0434302324b3ae75.webp" alt="Uxbridge town logo" loading="lazy">
+</div>
+<div class="eyebrow">01 / Durham Region</div>
+<h3>Uxbridge</h3>
+<p>Destination golf, semi-private variety and rural living options.</p>
+</div>
+<a href="https://northsidegta.ca/communities/uxbridge" target="_blank" rel="noopener">Explore Uxbridge →</a>
+</article>
+<article class="town" id="aurora">
+<div>
+<div class="town-logo-wrap">
+<img class="town-logo" src="assets/64faacd57cf94217.webp" alt="Aurora town logo" loading="lazy">
+</div>
+<div class="eyebrow">02 / York Region</div>
+<h3>Aurora</h3>
+<p>Flexible public golf and established neighbourhoods with urban amenities.</p>
+</div>
+<a href="https://northsidegta.ca/communities/aurora" target="_blank" rel="noopener">Explore Aurora →</a>
+</article>
+<article class="town" id="stouffville">
+<div>
+<div class="town-logo-wrap">
+<img class="town-logo" src="assets/931f1aa9a9d3f4f7.webp" alt="Stouffville town logo" loading="lazy">
+</div>
+<div class="eyebrow">03 / York Region</div>
+<h3>Stouffville</h3>
+<p>Multiple daily-fee layouts, membership choices and varied home settings.</p>
+</div>
+<a href="https://northsidegta.ca/communities/stouffville" target="_blank" rel="noopener">Explore Stouffville →</a>
+</article>
+</div>
+</div>
+</section>
+<section class="wyndance-feature">
+<div class="wrap">
+<div class="eyebrow">Uxbridge / A closer look</div>
+<h2>At Wyndance, golf can be part of the home purchase.</h2>
+<p class="intro">A distinctive course. A nearby estate-home community. A different conversation about what comes with the keys.</p>
+<p>Wyndance is Greg Norman’s first Canadian course, built around a former quarry, with an 18-hole layout and the nine-hole Down Under Academy course. For buyers considering Uxbridge, the adjoining Wyndance Estates community adds a real estate angle worth investigating.</p>
+<p>Homes in Wyndance Estates have been marketed with a deeded ClubLink membership included. That is different from having your annual golf costs paid: active golf membership carries annual dues, food-and-beverage minimums and other applicable charges. Confirm the membership entitlement, activation or transfer requirements, and current costs for the specific home with ClubLink and the seller’s documents.</p>
+<p>
+<strong>Where we can help:</strong> compare suitable Wyndance Estates homes with other Uxbridge options, and identify the property and club questions to resolve before you make a decision.</p>
+<details>
+<summary>Membership detail and sources</summary>
+<p>ClubLink’s 2023 homeowner information sheet lists active, social, clubhouse and dormant statuses. It is historical evidence of the arrangement, not a current fee quote. We have deliberately omitted its old prices. Membership inclusion must be verified property by property.</p>
+<p>
+<a href="https://wyndance.clublink.ca/about/" target="_blank" rel="noopener">Wyndance course overview</a> · <a href="https://geraldlawrence.realtor/files/2023/04/Wyndance-2023-Golf-Membership-Info.pdf" target="_blank" rel="noopener">2023 homeowner membership sheet</a> · <a href="https://uploads-ssl.webflow.com/5e49f2b1ae7502831eedf4a9/5f8df3fbb856545c3c61a71e_FeatureSheet-compressed.pdf" target="_blank" rel="noopener">Historical property example</a>
+</p>
+</details>
+</div>
+</section>
+<section class="directory" id="directory">
+<div class="wrap">
+<div class="eyebrow">Our NorthSide golf selection</div>
+<h2>Find your course.<br>Then your neighbourhood.</h2>
+<p>These are selected courses in and around our three featured communities—not every course available. Use the filters to explore public, semi-private and membership options. Confirm current access and booking terms with each club.</p>
+<div class="filters" aria-label="Filter courses">
+<fieldset class="chip-group">
+<legend>Town</legend>
+<div class="chips" role="group" aria-label="Town">
+<label class="filter-chip">
+<input type="radio" name="course-town" id="town-all" value="all" checked>
+<span>All towns</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-town" id="town-uxbridge" value="Uxbridge" >
+<span>Uxbridge</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-town" id="town-aurora" value="Aurora" >
+<span>Aurora</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-town" id="town-stouffville" value="Stouffville" >
+<span>Stouffville</span>
+</label>
+</div>
+</fieldset>
+<fieldset class="chip-group">
+<legend>Access type</legend>
+<div class="chips" role="group" aria-label="Access type">
+<label class="filter-chip">
+<input type="radio" name="course-access" id="access-all" value="all" checked>
+<span>All types</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-access" id="access-public" value="Public" >
+<span>Public</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-access" id="access-semi-private" value="Semi-private" >
+<span>Semi-private</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-access" id="access-private" value="Private" >
+<span>Private</span>
+</label>
+<label class="filter-chip">
+<input type="radio" name="course-access" id="access-membership" value="Membership" >
+<span>Membership</span>
+</label>
+</div>
+</fieldset>
+</div>
+<p class="filter-help">Choose a town and course type to narrow the directory. Use <strong>All towns</strong> and <strong>All types</strong> to reset.</p>
+<p id="course-count" class="filter-help" role="status">Showing 6 of 13 selected courses.</p>
+<div class="courses">
+<article class="course" data-town="Uxbridge" data-access="Membership">
+<div class="eyebrow">Uxbridge <span>·</span> ClubLink membership</div>
+<h3>Wyndance Golf Club</h3>
+<p>Greg Norman design, quarry landscape and nine-hole Down Under Academy course</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Membership</b>
+<span>NEARBY LIVING</span>
+<b>Explore Wyndance Estates; verify home-linked membership terms</b>
+</div>
+<div class="card-links">
+<a href="https://wyndance.clublink.ca/about/" target="_blank" rel="noopener noreferrer">Club information ↗</a>
+<a href="#uxbridge">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Stouffville" data-access="Membership">
+<div class="eyebrow">Stouffville <span>·</span> ClubLink membership</div>
+<h3>Emerald Hills Golf Club</h3>
+<p>27 holes across an Oak Ridges Moraine setting; part of ClubLink</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Membership</b>
+<span>NEARBY LIVING</span>
+<b>Compare nearby Whitchurch–Stouffville neighbourhoods and your everyday routes</b>
+</div>
+<div class="card-links">
+<a href="https://emeraldhills.clublink.ca/about/" target="_blank" rel="noopener noreferrer">Club information ↗</a>
+<a href="#stouffville">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Uxbridge" data-access="Public">
+<div class="eyebrow">Uxbridge <span>·</span> Public</div>
+<h3>Wooden Sticks</h3>
+<p>Destination rounds, dining and stay-and-play</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Public</b>
+<span>NEARBY LIVING</span>
+<b>Established town neighbourhoods and rural properties</b>
+</div>
+<div class="card-links">
+<a href="https://woodensticks.com/public-golf/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#uxbridge">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Uxbridge" data-access="Semi-private">
+<div class="eyebrow">Uxbridge <span>·</span> Semi-private</div>
+<h3>Mill Run Golf Club</h3>
+<p>45 holes: Grind, Grist, Wheel and Highland</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Semi-private</b>
+<span>NEARBY LIVING</span>
+<b>In-town convenience or rural acreage</b>
+</div>
+<div class="card-links">
+<a href="https://www.golfcanada.ca/golf-facility/mill-run-golf-club-en/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#uxbridge">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Uxbridge" data-access="Private">
+<div class="eyebrow">Uxbridge <span>·</span> Private</div>
+<h3>Coppinwood</h3>
+<p>Membership-focused course near Goodwood</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Private</b>
+<span>NEARBY LIVING</span>
+<b>Rural properties and Uxbridge-area access</b>
+</div>
+<div class="card-links">
+<a href="https://coppinwood.com/join/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#uxbridge">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Aurora" data-access="Public">
+<div class="eyebrow">Aurora <span>·</span> Public</div>
+<h3>St. Andrew’s Valley</h3>
+<p>Daily-fee rounds and driving range</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Public</b>
+<span>NEARBY LIVING</span>
+<b>Established neighbourhoods with commute access</b>
+</div>
+<div class="card-links">
+<a href="https://standrewsvalley.com/daily-fees/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#aurora">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Aurora" data-access="Public">
+<div class="eyebrow">Aurora <span>·</span> Public</div>
+<h3>Westview Golf Club</h3>
+<p>27 holes across three nines</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Public</b>
+<span>NEARBY LIVING</span>
+<b>Town living with public golf flexibility</b>
+</div>
+<div class="card-links">
+<a href="https://westviewgolf.ca/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#aurora">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Aurora" data-access="Private">
+<div class="eyebrow">Aurora <span>·</span> Private</div>
+<h3>Beacon Hall</h3>
+<p>Private equity club; membership inquiries</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Private</b>
+<span>NEARBY LIVING</span>
+<b>Evaluate membership alongside home location</b>
+</div>
+<div class="card-links">
+<a href="https://beaconhall.com/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#aurora">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Aurora" data-access="Private">
+<div class="eyebrow">Aurora <span>·</span> Private</div>
+<h3>Magna Golf Club</h3>
+<p>Private club; confirm membership rules</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Private</b>
+<span>NEARBY LIVING</span>
+<b>Compare nearby neighbourhoods and commute</b>
+</div>
+<div class="card-links">
+<a href="https://member.magnagolf.com/About_Us/The_Club.aspx" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#aurora">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Stouffville" data-access="Public">
+<div class="eyebrow">Stouffville <span>·</span> Public</div>
+<h3>Rolling Hills</h3>
+<p>Classic and Challenge; nearby Bethesda Grange is separately branded</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Public</b>
+<span>NEARBY LIVING</span>
+<b>Urban Stouffville, Ballantrae and rural living</b>
+</div>
+<div class="card-links">
+<a href="https://rollinghills.clublink.ca/about/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#stouffville">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Stouffville" data-access="Public">
+<div class="eyebrow">Stouffville <span>·</span> Public</div>
+<h3>Ballantrae Golf Club</h3>
+<p>18 holes and practice facilities</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Public</b>
+<span>NEARBY LIVING</span>
+<b>Ballantrae and surrounding communities</b>
+</div>
+<div class="card-links">
+<a href="https://www.ballantraegolfclub.com/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#stouffville">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Stouffville" data-access="Membership">
+<div class="eyebrow">Stouffville <span>·</span> Membership</div>
+<h3>Station Creek</h3>
+<p>ClubLink membership network</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Membership</b>
+<span>NEARBY LIVING</span>
+<b>Confirm club access and travel routes</b>
+</div>
+<div class="card-links">
+<a href="https://stationcreek.clublink.ca/membership/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#stouffville">Town overview →</a>
+</div>
+</article>
+<article class="course" data-town="Stouffville" data-access="Private">
+<div class="eyebrow">Stouffville <span>·</span> Private</div>
+<h3>St. Andrew’s East</h3>
+<p>Private equity membership model</p>
+<div class="meta">
+<span>COURSE ACCESS</span>
+<b>Private</b>
+<span>NEARBY LIVING</span>
+<b>Compare neighbourhood needs and club membership</b>
+</div>
+<div class="card-links">
+<a href="https://standrewseastgolf.com/pages/membership-inquires/" target="_blank" rel="noopener noreferrer">Official course site ↗</a>
+<a href="#stouffville">Town overview →</a>
+</div>
+</article>
+</div>
+<button type="button" id="course-toggle" class="button" aria-expanded="false" style="margin-top:24px">See all 13 courses ↓</button>
+<p style="margin-top:22px;font-size:12px">Ratings are intentionally omitted pending verified sourcing and publication permissions. No fabricated travel times, green fees or membership availability.</p>
+</div>
+<div class="empty-state" role="status">
+<strong>No courses match these filters.</strong>
+<p>Try another access type, or select <b>All towns</b> and <b>All types</b> to see every course.</p>
+</div>
+</section>
+<section class="dark">
+<div class="wrap">
+<div class="eyebrow" style="color:#d8bf89">Before you buy</div>
+<h2>Choose the lifestyle,<br>not just the postal code.</h2>
+<div class="steps">
+<div>
+<h3>01. How you play</h3>
+<p>Public tee times, shorter rounds or a dedicated private club? Your habits determine which courses make sense.</p>
+</div>
+<div>
+<h3>02. How you live</h3>
+<p>Established neighbourhood, low-maintenance home or rural acreage? Consider upkeep and local services.</p>
+</div>
+<div>
+<h3>03. How you move</h3>
+<p>Test actual drives to golf and work. Distance on a map does not tell you the whole story.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="your-agents">
+<div class="wrap">
+<div class="team-brand">
+<img class="brand-logo" src="assets/592b6f1414affa72.png" alt="Finally Home Agents" width="1024" height="1024">
+<p>Your real estate team<br>
+<strong>Finally Home Agents</strong>
+</p>
+</div>
+<div class="eyebrow">Golfers. Real estate agents. Your next move.</div>
+<h2>We understand why the course matters.<br>And why the home matters more.</h2>
+<p class="intro">We’re golfers ourselves. Let’s turn the lifestyle you have in mind into a practical home search.</p>
+<div class="agent-grid">
+<article>
+<img class="portrait" src="assets/15084ce2b8739606.jpg" alt="Matthew Mulhall, Real Estate Agent at Finally Home Agents" loading="lazy">
+<h3>Matthew Mulhall</h3>
+<p>Real Estate Agent · Finally Home Agents</p>
+</article>
+<article>
+<img class="portrait" src="assets/bc87ef5b6b58b7df.jpg" alt="Landon Mulhall, Real Estate Agent at Finally Home Agents" loading="lazy">
+<h3>Landon Mulhall</h3>
+<p>Real Estate Agent · Finally Home Agents</p>
+</article>
+</div>
+<div class="steps light-steps">
+<div>
+<h3>Find the right setting</h3>
+<p>Tell us whether you want a fairway view, a bungalow, room for family, or simply an easier trip to your regular club.</p>
+</div>
+<div>
+<h3>Compare the whole move</h3>
+<p>We can help compare available homes, neighbourhoods and recent comparable sales—not assume that every home near golf suits your budget.</p>
+</div>
+<div>
+<h3>Ask the property questions</h3>
+<p>Membership entitlements, ownership costs and property details need checking. We help identify what to verify with the seller, club and your professional advisers.</p>
+</div>
+</div>
+<p>HomeLife Optimum Realty, Brokerage</p>
+<a class="button" href="#shortlist">Tell us what your next home looks like</a>
+</div>
+</section>
+<section>
+<div class="wrap">
+<div class="eyebrow">Common questions</div>
+<h2>Good questions before a move.</h2>
+<details>
+<summary>Which towns offer public golf?</summary>
+<p>Uxbridge, Aurora and Stouffville all have public-access options. Confirm current booking terms with the operators.</p>
+</details>
+<details>
+<summary>Do I need a membership?</summary>
+<p>No. Several highlighted courses are publicly bookable, while private clubs and membership networks follow different policies.</p>
+</details>
+<details>
+<summary>Does buying nearby include membership?</summary>
+<p>Some Wyndance Estates homes have been marketed with a deeded ClubLink membership. Confirm the entitlement for the specific property, plus current annual dues, activation or transfer terms and other charges. Living near a course elsewhere does not automatically include membership.</p>
+</details>
+<details>
+<summary>What matters besides course distance?</summary>
+<p>Work commutes, neighbourhood services, property maintenance, costs and actual address-to-course routes.</p>
+</details>
+<details>
+<summary>Do I have to buy directly on a golf course?</summary>
+<p>No. We can compare homes beside a course with homes a drive away. Tell us whether a view, club community or convenient golf access matters most. A course-side address does not guarantee access to the club.</p>
+</details>
+<details>
+<summary>What types of homes could we compare?</summary>
+<p>Your search could include detached homes, bungalows, townhomes or rural properties, depending on current availability and your preferences. We will distinguish homes actually on a course from those nearby, and review ownership and maintenance details.</p>
+</details>
+<details>
+<summary>What budget do I need for a home near golf?</summary>
+<p>There is no reliable single price for all three towns. Home type, lot, condition and location affect the comparison. Share a comfortable range and we can use current listings and recent comparable sales to help assess the options. This guide does not advertise a starting price or imply that specific homes are available.</p>
+</details>
+<details>
+<summary>What will my golf-and-home shortlist include?</summary>
+<p>A focused selection of suitable available homes, neighbourhood context, relevant golf options and membership questions to investigate. Tell us your budget, preferred town and must-haves so the response can be specific to you.</p>
+</details>
+<details>
+<summary>Can you help if I need to sell before buying?</summary>
+<p>Yes. Tell us about your current home and your intended move. We can discuss the sale and purchase together, including timing and the information needed to plan the next step.</p>
+</details>
+<details>
+<summary>Are these the only golf courses in the area?</summary>
+<p>No. This is a curated selection of 13 courses in and around Uxbridge, Aurora and Stouffville, not an exhaustive directory or an objective ranking. Confirm current access and membership terms directly with the clubs.</p>
+</details>
+</div>
+</section>
+<section class="dark" id="shortlist">
+<div class="wrap offer-grid">
+<div>
+<div class="eyebrow" style="color:#d8bf89">Your golf-and-home shortlist</div>
+<h2>Your next round.<br>Your next address.</h2>
+<p class="intro">Tell us what matters. We’ll help connect the golf you enjoy with homes worth considering.</p>
+<ul>
+<li>Suitable available homes based on your preferences</li>
+<li>Neighbourhood and golf-access context</li>
+<li>Membership questions and next steps to investigate</li>
+</ul>
+<p>No obligation to buy. No promise of club access or available inventory.</p>
+<p>Matthew Mulhall · Real Estate Agent<br>Landon Mulhall · Real Estate Agent<br>HomeLife Optimum Realty, Brokerage</p>
+</div>
+<form id="shortlist-form" data-delivery="enabled" data-metrics="enabled">
+<h3>What would a great move look like?</h3><label hidden>Leave this blank<input name="company" tabindex="-1" autocomplete="off"></label>
+<label>Your preferred town<select name="town">
+<option>Open to all three</option>
+<option>Uxbridge</option>
+<option>Aurora</option>
+<option>Stouffville</option>
+<option>Other</option>
+<option>Unsure</option>
+</select>
+</label>
+<label id="other-town-field" hidden>Which town? (optional)<input name="otherTown" maxlength="100" placeholder="Tell us where you’re considering">
+</label>
+<p id="unsure-town-help" hidden>That’s a good place to start. Tell us how you like to live and play, and we can help compare communities.</p>
+<div class="field-grid">
+<label>Home preference<select name="home">
+<option>Open to suggestions</option>
+<option>Bungalow</option>
+<option>Detached home</option>
+<option>Townhome</option>
+<option>Rural property</option>
+</select>
+</label>
+<label>Comfortable budget (optional)<input name="budget" maxlength="100" placeholder="Your preferred range">
+</label>
+</div>
+<label>What matters most? (optional)<textarea name="preferences" maxlength="1500" rows="2" placeholder="Favourite club, fairway view, move timing, or a home to sell…">
+</textarea>
+</label>
+<div class="field-grid">
+<label>Name<input name="name" maxlength="100" autocomplete="name" required>
+</label>
+<label>Email<input name="email" maxlength="200" type="email" autocomplete="email" required>
+</label>
+</div>
+<label class="check">
+<input type="checkbox" name="unrepresented" required> I’m not currently represented by another brokerage for this property search.</label>
+<p class="micro">Your details will be used to respond to this request. This is not a subscription to marketing emails. <a href="#request-privacy">How we use your information</a></p>
+<button class="button" type="submit">Request my personalized shortlist →</button>
+<p class="micro">Matthew or Landon will review your preferences and follow up personally.</p>
+<p id="request-status" role="status">
+</p>
+</form>
+</div>
+</section>
+
+</main>
+<footer>
+<div class="wrap">
+<div class="footer-brands">
+<img class="brand-logo" src="assets/1c03447393ba53b3.png" alt="NorthSide GTA" width="1024" height="1024">
+<img class="brand-logo" src="assets/592b6f1414affa72.png" alt="Finally Home Agents" width="1024" height="1024">
+</div>
+<div>
+<p>NorthSide GTA · Community &amp; lifestyle</p>
+<p>Finally Home Agents · HomeLife Optimum Realty, Brokerage</p>
+<a href="https://northsidegta.ca/contact">Contact our team</a>
+</div>
+<div>Course information may change. Confirm details with each operator.</div>
+</div>
+<details id="request-privacy"><summary>How we use your information</summary><p>Your request and preferences are stored in our shared inquiry inbox so Finally Home Agents can respond. This form does not subscribe you to marketing emails. We also count page views, form starts and saved inquiries by campaign source; those counters do not include your contact details. To ask about your request, email contact@finallyhomeagents.com.</p></details></footer>
+<a class="sticky-cta" href="#shortlist">My golf-and-home shortlist ↗</a>
+<script type="module" src="shortlist-form.js"></script>
+<script>
+const townChoice=document.querySelector('select[name="town"]');
+function updateTown(){document.getElementById('other-town-field').hidden=townChoice.value!=='Other';document.getElementById('unsure-town-help').hidden=townChoice.value!=='Unsure';}
+townChoice.addEventListener('change',updateTown);updateTown();
+let expanded=false;const cards=[...document.querySelectorAll('.course')];const toggle=document.getElementById('course-toggle');
+function updateCourses(){const town=document.querySelector('input[name="course-town"]:checked').value;const access=document.querySelector('input[name="course-access"]:checked').value;let matches=cards.filter(c=>(town==='all'||c.dataset.town===town)&&(access==='all'||c.dataset.access===access));cards.forEach(c=>c.classList.remove('compact-hidden'));if(!expanded)matches.slice(6).forEach(c=>c.classList.add('compact-hidden'));toggle.hidden=matches.length<=6;toggle.textContent=expanded?'Show fewer courses ↑':'See all '+matches.length+' courses ↓';toggle.setAttribute('aria-expanded',String(expanded));document.getElementById('course-count').textContent='Showing '+(expanded?matches.length:Math.min(6,matches.length))+' of '+matches.length+' matching courses.';}
+toggle.addEventListener('click',()=>{expanded=!expanded;updateCourses();});document.querySelectorAll('.filters input').forEach(i=>i.addEventListener('change',()=>{expanded=false;updateCourses();}));updateCourses();
+</script>
+</body>
+</html>

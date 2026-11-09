@@ -208,6 +208,7 @@ export default function TownPage() {
           introContent={null}
           heroLifestyleCard={heroLifestyleCard}
         />
+        {["uxbridge", "aurora", "stouffville"].includes(slug) && (<section style={{maxWidth:1100,margin:"32px auto",padding:"24px"}}><h2>Make room for more golf.</h2><p>Explore selected courses, neighbourhoods and home options in Uxbridge, Aurora and Stouffville.</p><a href="/golf-course-living/">Explore our golf and home guide →</a></section>)}
         {isUxbridge && (
           <section className="mx-auto mt-10 max-w-5xl px-4">
             <div className="rounded-3xl border border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 p-6 shadow-sm">
