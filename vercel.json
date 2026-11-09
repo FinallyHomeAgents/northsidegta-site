@@ -1,20 +1,38 @@
 {
   "redirects": [
-    { "source": "/business-network", "destination": "/good-good", "statusCode": 301 },
-    { "source": "/business-network/", "destination": "/good-good", "statusCode": 301 },
+    {
+      "source": "/business-network",
+      "destination": "/good-good",
+      "statusCode": 301
+    },
+    {
+      "source": "/business-network/",
+      "destination": "/good-good",
+      "statusCode": 301
+    },
     {
       "source": "/(.*)",
       "has": [
-        { "type": "host", "value": "www.northsidegta.ca" }
+        {
+          "type": "host",
+          "value": "www.northsidegta.ca"
+        }
       ],
       "destination": "https://northsidegta.ca/$1",
       "statusCode": 301
     },
-    { "source": "/videos", "destination": "/media", "statusCode": 301 },
+    {
+      "source": "/videos",
+      "destination": "/media",
+      "statusCode": 301
+    },
     {
       "source": "/",
       "has": [
-        { "type": "host", "value": "5670thomasdr.ca" }
+        {
+          "type": "host",
+          "value": "5670thomasdr.ca"
+        }
       ],
       "destination": "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
       "statusCode": 308
@@ -22,105 +40,394 @@
     {
       "source": "/",
       "has": [
-        { "type": "host", "value": "www.5670thomasdr.ca" }
+        {
+          "type": "host",
+          "value": "www.5670thomasdr.ca"
+        }
       ],
       "destination": "https://northsidegta.ca/listings/5670-thomas-drive-baldwin",
       "statusCode": 308
     },
-    { "source": "/georgina", "destination": "/communities/georgina", "statusCode": 308 },
-    { "source": "/east-gwillimbury", "destination": "/communities/east-gwillimbury", "statusCode": 308 },
-    { "source": "/newmarket", "destination": "/communities/newmarket", "statusCode": 308 },
-    { "source": "/aurora", "destination": "/communities/aurora", "statusCode": 308 },
-    { "source": "/stouffville", "destination": "/communities/stouffville", "statusCode": 308 },
-    { "source": "/uxbridge", "destination": "/communities/uxbridge", "statusCode": 308 },
-    { "source": "/scugog", "destination": "/communities/scugog", "statusCode": 308 },
-    { "source": "/georgina/", "destination": "/communities/georgina", "statusCode": 308 },
-    { "source": "/east-gwillimbury/", "destination": "/communities/east-gwillimbury", "statusCode": 308 },
-    { "source": "/newmarket/", "destination": "/communities/newmarket", "statusCode": 308 },
-    { "source": "/aurora/", "destination": "/communities/aurora", "statusCode": 308 },
-    { "source": "/stouffville/", "destination": "/communities/stouffville", "statusCode": 308 },
-    { "source": "/uxbridge/", "destination": "/communities/uxbridge", "statusCode": 308 },
-    { "source": "/scugog/", "destination": "/communities/scugog", "statusCode": 308 },
-    { "source": "/admin", "destination": "/cms", "statusCode": 308 },
-    { "source": "/admin/(.*)", "destination": "/cms/$1", "statusCode": 308 }
+    {
+      "source": "/georgina",
+      "destination": "/communities/georgina",
+      "statusCode": 308
+    },
+    {
+      "source": "/east-gwillimbury",
+      "destination": "/communities/east-gwillimbury",
+      "statusCode": 308
+    },
+    {
+      "source": "/newmarket",
+      "destination": "/communities/newmarket",
+      "statusCode": 308
+    },
+    {
+      "source": "/aurora",
+      "destination": "/communities/aurora",
+      "statusCode": 308
+    },
+    {
+      "source": "/stouffville",
+      "destination": "/communities/stouffville",
+      "statusCode": 308
+    },
+    {
+      "source": "/uxbridge",
+      "destination": "/communities/uxbridge",
+      "statusCode": 308
+    },
+    {
+      "source": "/scugog",
+      "destination": "/communities/scugog",
+      "statusCode": 308
+    },
+    {
+      "source": "/georgina/",
+      "destination": "/communities/georgina",
+      "statusCode": 308
+    },
+    {
+      "source": "/east-gwillimbury/",
+      "destination": "/communities/east-gwillimbury",
+      "statusCode": 308
+    },
+    {
+      "source": "/newmarket/",
+      "destination": "/communities/newmarket",
+      "statusCode": 308
+    },
+    {
+      "source": "/aurora/",
+      "destination": "/communities/aurora",
+      "statusCode": 308
+    },
+    {
+      "source": "/stouffville/",
+      "destination": "/communities/stouffville",
+      "statusCode": 308
+    },
+    {
+      "source": "/uxbridge/",
+      "destination": "/communities/uxbridge",
+      "statusCode": 308
+    },
+    {
+      "source": "/scugog/",
+      "destination": "/communities/scugog",
+      "statusCode": 308
+    },
+    {
+      "source": "/admin",
+      "destination": "/cms",
+      "statusCode": 308
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/cms/$1",
+      "statusCode": 308
+    }
   ],
   "headers": [
-    {"source": "/cms/play-your-budget-leads/(.*)","headers": [{"key": "Cache-Control","value": "no-store"},{"key": "X-Robots-Tag","value": "noindex, nofollow"},{"key": "X-Content-Type-Options","value": "nosniff"},{"key": "Content-Security-Policy","value": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}]},
-    {"source": "/life/studio/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}, {"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "same-origin"}, {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.public.blob.vercel-storage.com; connect-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}]},
-
+    {
+      "source": "/cms/play-your-budget-leads/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/life/studio/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.public.blob.vercel-storage.com; connect-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     },
     {
       "source": "/static/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/uxbridge-golf-living", "destination": "/uxbridge-golf-living/index.html" },
-    { "source": "/uxbridge-golf-living/", "destination": "/uxbridge-golf-living/index.html" },
-    {"source": "/cms/play-your-budget-leads","destination": "/cms/play-your-budget-leads/index.html"},
-    {"source": "/cms/play-your-budget-leads/","destination": "/cms/play-your-budget-leads/index.html"},
-    {"source": "/life/sitemap.xml", "destination": "/api/life?action=sitemap"},
-    {"source": "/collections", "destination": "/api/collections-index"},
-    {"source": "/collections/", "destination": "/api/collections-index"},
-    {"source": "/life", "destination": "/api/life?action=feed-page"},
-    {"source": "/life/", "destination": "/api/life?action=feed-page"},
-    {"source": "/life/posts/:id", "destination": "/api/life?action=story&id=:id"},
-    {"source": "/life/studio", "destination": "/life/studio/index.html"},
-    {"source": "/life/studio/", "destination": "/life/studio/index.html"},
-    { "source": "/about", "destination": "/about/index.html" },
-    { "source": "/buyers", "destination": "/buyers/index.html" },
-    { "source": "/moving-to-georgina-from-toronto", "destination": "/moving-to-georgina-from-toronto/index.html" },
-    { "source": "/moving-to-east-gwillimbury-from-toronto", "destination": "/moving-to-east-gwillimbury-from-toronto/index.html" },
-    { "source": "/moving-to-uxbridge-from-toronto", "destination": "/moving-to-uxbridge-from-toronto/index.html" },
-    { "source": "/moving-to-newmarket-from-toronto", "destination": "/moving-to-newmarket-from-toronto/index.html" },
-    { "source": "/moving-to-aurora-from-toronto", "destination": "/moving-to-aurora-from-toronto/index.html" },
-    { "source": "/moving-to-stouffville-from-toronto", "destination": "/moving-to-stouffville-from-toronto/index.html" },
-    { "source": "/moving-to-port-perry-scugog-from-toronto", "destination": "/moving-to-port-perry-scugog-from-toronto/index.html" },
-    { "source": "/sellers", "destination": "/sellers/index.html" },
-    { "source": "/homeanalysis", "destination": "/homeanalysis/index.html" },
-    { "source": "/contact", "destination": "/contact/index.html" },
-    { "source": "/collections/landontest", "destination": "/api/removed-collection" },
-    { "source": "/collections/slugtest", "destination": "/api/removed-collection" },
-    { "source": "/collections/test-collection", "destination": "/api/removed-collection" },
-    { "source": "/collections/test2", "destination": "/api/removed-collection" },
-    { "source": "/collections/test3", "destination": "/api/removed-collection" },
-    { "source": "/insights", "destination": "/insights/index.html" },
-    { "source": "/insights/lando-test-2", "destination": "/api/removed-insight" },
-    { "source": "/insights/lando-test", "destination": "/api/removed-insight" },
-    { "source": "/insights/sample-launch", "destination": "/api/removed-insight" },
-    { "source": "/insights/sample-rich-media", "destination": "/api/removed-insight" },
-    { "source": "/insights/test4", "destination": "/api/removed-insight" },
-    { "source": "/insights/test5", "destination": "/api/removed-insight" },
-    { "source": "/insights/testing-123", "destination": "/api/removed-insight" },
-    { "source": "/insights/testpage", "destination": "/api/removed-insight" },
-    { "source": "/insights/testpage2", "destination": "/api/removed-insight" },
-    { "source": "/insights/(.*)", "destination": "/insights/$1/index.html" },
-    { "source": "/media", "destination": "/media/index.html" },
-    { "source": "/tastehub", "destination": "/tastehub/index.html" },
-    { "source": "/community", "destination": "/community/index.html" },
-    { "source": "/neighbourhood-guide", "destination": "/neighbourhood-guide/index.html" },
-    { "source": "/communities", "destination": "/communities/index.html" },
-    { "source": "/communities/georgina", "destination": "/communities/georgina/index.html" },
-    { "source": "/communities/east-gwillimbury", "destination": "/communities/east-gwillimbury/index.html" },
-    { "source": "/communities/newmarket", "destination": "/communities/newmarket/index.html" },
-    { "source": "/communities/aurora", "destination": "/communities/aurora/index.html" },
-    { "source": "/communities/stouffville", "destination": "/communities/stouffville/index.html" },
-    { "source": "/communities/uxbridge", "destination": "/communities/uxbridge/index.html" },
-    { "source": "/communities/scugog", "destination": "/communities/scugog/index.html" },
-
-    { "source": "/cms", "destination": "/cms/" },
-    { "source": "/cms/", "destination": "/cms/index.html" },
-    { "source": "/cms/config.yml", "destination": "/config.yml" },
-    { "source": "/cms/(.*)", "destination": "/cms/$1" },
-
-    { "source": "/api/(.*)", "destination": "/api/$1" }
+    {
+      "source": "/golf-course-living",
+      "destination": "/golf-course-living/index.html"
+    },
+    {
+      "source": "/golf-course-living/",
+      "destination": "/golf-course-living/index.html"
+    },
+    {
+      "source": "/uxbridge-golf-living",
+      "destination": "/uxbridge-golf-living/index.html"
+    },
+    {
+      "source": "/uxbridge-golf-living/",
+      "destination": "/uxbridge-golf-living/index.html"
+    },
+    {
+      "source": "/cms/play-your-budget-leads",
+      "destination": "/cms/play-your-budget-leads/index.html"
+    },
+    {
+      "source": "/cms/play-your-budget-leads/",
+      "destination": "/cms/play-your-budget-leads/index.html"
+    },
+    {
+      "source": "/life/sitemap.xml",
+      "destination": "/api/life?action=sitemap"
+    },
+    {
+      "source": "/collections",
+      "destination": "/api/collections-index"
+    },
+    {
+      "source": "/collections/",
+      "destination": "/api/collections-index"
+    },
+    {
+      "source": "/life",
+      "destination": "/api/life?action=feed-page"
+    },
+    {
+      "source": "/life/",
+      "destination": "/api/life?action=feed-page"
+    },
+    {
+      "source": "/life/posts/:id",
+      "destination": "/api/life?action=story&id=:id"
+    },
+    {
+      "source": "/life/studio",
+      "destination": "/life/studio/index.html"
+    },
+    {
+      "source": "/life/studio/",
+      "destination": "/life/studio/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/buyers",
+      "destination": "/buyers/index.html"
+    },
+    {
+      "source": "/moving-to-georgina-from-toronto",
+      "destination": "/moving-to-georgina-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-east-gwillimbury-from-toronto",
+      "destination": "/moving-to-east-gwillimbury-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-uxbridge-from-toronto",
+      "destination": "/moving-to-uxbridge-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-newmarket-from-toronto",
+      "destination": "/moving-to-newmarket-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-aurora-from-toronto",
+      "destination": "/moving-to-aurora-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-stouffville-from-toronto",
+      "destination": "/moving-to-stouffville-from-toronto/index.html"
+    },
+    {
+      "source": "/moving-to-port-perry-scugog-from-toronto",
+      "destination": "/moving-to-port-perry-scugog-from-toronto/index.html"
+    },
+    {
+      "source": "/sellers",
+      "destination": "/sellers/index.html"
+    },
+    {
+      "source": "/homeanalysis",
+      "destination": "/homeanalysis/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/collections/landontest",
+      "destination": "/api/removed-collection"
+    },
+    {
+      "source": "/collections/slugtest",
+      "destination": "/api/removed-collection"
+    },
+    {
+      "source": "/collections/test-collection",
+      "destination": "/api/removed-collection"
+    },
+    {
+      "source": "/collections/test2",
+      "destination": "/api/removed-collection"
+    },
+    {
+      "source": "/collections/test3",
+      "destination": "/api/removed-collection"
+    },
+    {
+      "source": "/insights",
+      "destination": "/insights/index.html"
+    },
+    {
+      "source": "/insights/lando-test-2",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/lando-test",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/sample-launch",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/sample-rich-media",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/test4",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/test5",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/testing-123",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/testpage",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/testpage2",
+      "destination": "/api/removed-insight"
+    },
+    {
+      "source": "/insights/(.*)",
+      "destination": "/insights/$1/index.html"
+    },
+    {
+      "source": "/media",
+      "destination": "/media/index.html"
+    },
+    {
+      "source": "/tastehub",
+      "destination": "/tastehub/index.html"
+    },
+    {
+      "source": "/community",
+      "destination": "/community/index.html"
+    },
+    {
+      "source": "/neighbourhood-guide",
+      "destination": "/neighbourhood-guide/index.html"
+    },
+    {
+      "source": "/communities",
+      "destination": "/communities/index.html"
+    },
+    {
+      "source": "/communities/georgina",
+      "destination": "/communities/georgina/index.html"
+    },
+    {
+      "source": "/communities/east-gwillimbury",
+      "destination": "/communities/east-gwillimbury/index.html"
+    },
+    {
+      "source": "/communities/newmarket",
+      "destination": "/communities/newmarket/index.html"
+    },
+    {
+      "source": "/communities/aurora",
+      "destination": "/communities/aurora/index.html"
+    },
+    {
+      "source": "/communities/stouffville",
+      "destination": "/communities/stouffville/index.html"
+    },
+    {
+      "source": "/communities/uxbridge",
+      "destination": "/communities/uxbridge/index.html"
+    },
+    {
+      "source": "/communities/scugog",
+      "destination": "/communities/scugog/index.html"
+    },
+    {
+      "source": "/cms",
+      "destination": "/cms/"
+    },
+    {
+      "source": "/cms/",
+      "destination": "/cms/index.html"
+    },
+    {
+      "source": "/cms/config.yml",
+      "destination": "/config.yml"
+    },
+    {
+      "source": "/cms/(.*)",
+      "destination": "/cms/$1"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
   ],
   "crons": [
     {
@@ -133,6 +440,8 @@
     }
   ],
   "functions": {
-    "api/headquarters-delivery.js": { "maxDuration": 180 }
+    "api/headquarters-delivery.js": {
+      "maxDuration": 180
+    }
   }
 }
