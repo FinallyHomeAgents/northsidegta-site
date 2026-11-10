@@ -1,7 +1,7 @@
 const form=document.getElementById('shortlist-form'),status=document.getElementById('request-status'),button=form.querySelector('button[type=submit]');
 let busy=false,attempt=null,finished=false;
 // A fixed vocabulary prevents raw URLs or personal data entering aggregate counters.
-const knownPlacements=['page', 'profile', 'local-group', 'golf-group', 'relocation-group', 'reel', 'story', 'pickering-community', 'markham-community', 'york-region-community-hub', 'downtown-toronto-golf-club', 'reel-v17-bio', 'toronto-regional-small-business', 'toronto-business-owners', 'local-business-toronto', 'big-buy-sell-gta', 'ontario-business-marketing','small-business-toronto','gta-business-community','north-york-gta-community'];
+const knownPlacements=['page', 'profile', 'local-group', 'golf-group', 'relocation-group', 'reel', 'story', 'pickering-community', 'markham-community', 'york-region-community-hub', 'downtown-toronto-golf-club', 'reel-v17-bio', 'toronto-regional-small-business', 'toronto-business-owners', 'local-business-toronto', 'big-buy-sell-gta', 'ontario-business-marketing','small-business-toronto','gta-business-community','north-york-gta-community','golf-lovers-toronto-gta','fun-things-toronto'];
 function attribution(){
  const q=new URLSearchParams(location.search),source=q.get('utm_source');
  const term=q.get('utm_term'),content=q.get('utm_content');
