@@ -48,6 +48,16 @@ function buildAbsoluteUrl(origin, relativePath) {
   return `${origin.replace(/\/$/, '')}${normalizedPath}`
 }
 
+function escapeXml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&apos;',
+  }[character]))
+}
+
 function sanitizeDate(value) {
   if (!value) return ''
   const parsed = new Date(value)
@@ -162,13 +172,13 @@ function main() {
     .map((entry) => {
       const parts = [
         '  <url>',
-        `    <loc>${buildAbsoluteUrl(origin, entry.path)}</loc>`,
+        `    <loc>${escapeXml(buildAbsoluteUrl(origin, entry.path))}</loc>`,
       ]
       if (entry.changefreq) parts.push(`    <changefreq>${entry.changefreq}</changefreq>`)
       if (entry.priority) parts.push(`    <priority>${entry.priority}</priority>`)
       if (entry.lastmod) parts.push(`    <lastmod>${entry.lastmod}</lastmod>`)
       parts.push('  </url>')
-      return parts.join('\\n')
+      return parts.join('\n')
     })
 
   const sitemap = [
@@ -179,7 +189,7 @@ function main() {
     '',
     '</urlset>',
     '',
-  ].join('\\n')
+  ].join('\n')
 
   const publicTarget = path.join(publicDir, 'sitemap.xml')
   const buildTarget = path.join(buildDir, 'sitemap.xml')
