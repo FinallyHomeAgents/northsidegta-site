@@ -148,7 +148,10 @@ test('React community pages keep town H1/content shell and include matching runt
   for (const [slug, pageName] of Object.entries(communityComponents)) {
     const town = townNames.get(slug)
     const source = read(`src/${pageName}.js`)
-    assert.match(source, new RegExp(`<h1>Living in ${town}<\\/h1>`))
+    const rendered = renderRouteComponent(`/communities/${slug}`, pageName)
+    const headings = rendered.querySelectorAll('h1')
+    assert.equal(headings.length, 1, `${slug} must render exactly one primary heading`)
+    assert.equal(headings[0].text.replace(/\s+/g, ' ').trim(), `${town} real estate & local living`)
     assert.match(source, /class="page-grid"/)
     assert.match(source, /<HeaderShell \/>/)
     assert.match(source, new RegExp(`<meta property="og:url" content="${site}/communities/${slug}" \\/>`))

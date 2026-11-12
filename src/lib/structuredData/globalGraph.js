@@ -147,10 +147,10 @@ export function buildGlobalGraph() {
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "9131 Keele St #A4",
-      addressLocality: "Vaughan",
+      streetAddress: "10800 Concession Rd 5",
+      addressLocality: "Uxbridge",
       addressRegion: "ON",
-      postalCode: "L4K 0G7",
+      postalCode: "L9P 1R1",
       addressCountry: "CA",
     },
     areaServed: [
@@ -177,7 +177,14 @@ export function buildGlobalGraph() {
     "@type": "Organization",
     "@id": `${BASE_URL}/#homelife-optimum`,
     name: "HomeLife Optimum Realty, Brokerage",
-    address: finallyHomeAgents.address,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "397 Eglinton Ave E #202",
+      addressLocality: "Toronto",
+      addressRegion: "ON",
+      postalCode: "M4P 1M6",
+      addressCountry: "CA",
+    },
     sameAs: [],
   };
 
