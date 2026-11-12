@@ -3,8 +3,25 @@ import assert from 'node:assert/strict';
 import {createWebsiteInquiryHandler,normalizeWebsiteInquiry} from '../lib/website-inquiry.mjs';
 const body=()=>({source:'contact',destination:'mwpborow',submissionId:'dba9ff8a-5226-4b59-8c9a-1cad2cd02a45',pageUrl:'https://northsidegta.ca/contact?secret=omitted',fields:{name:'TEST Inquiry',email:'test@example.invalid',message:'Please call',contact_consent:'Yes'}});
 function harness({queueFails=false,upstreamOk=true,enabled=true}={}){
- const sent=[],queued=[]; const res={statusCode:0,setHeader(){},status(c){this.statusCode=c;return this;},json(v){this.body=v;return this;}};
- const handler=createWebsiteInquiryHandler({env:{NORTHSIDE_HQ_FORMS_ENABLED:String(enabled)},getOutbox:async()=>({command:async()=>1,enqueue:async lead=>{if(queueFails)throw Error();queued.push(lead);}}),fetcher:async(url,opts)=>{sent.push({url,fields:JSON.parse(opts.body)});return {ok:upstreamOk};}});
+ const sent=[],queued=[],receipts=new Map(),rateCounts=new Map();
+ const command=async ([operation,script,keyCount,key,...args])=>{
+  assert.equal(operation,'EVAL');
+  assert.equal(keyCount,1);
+  if(key.startsWith('northside:form-rate:')){
+   const count=(rateCounts.get(key)||0)+1;rateCounts.set(key,count);return count;
+  }
+  assert.ok(key.startsWith('northside:form-notification:v1:'));
+  if(script.includes("local old=redis.call('GET',KEYS[1])")){
+   const old=receipts.get(key);
+   if(old){const receipt=JSON.parse(old);return receipt.fingerprint!==args[0]?'conflict':receipt.state;}
+   receipts.set(key,args[1]);return 'claimed';
+  }
+  assert.ok(script.includes("~=ARGV[1] then return 0"));
+  if(receipts.get(key)!==args[0])return 0;
+  receipts.set(key,args[1]);return 1;
+ };
+ const res={statusCode:0,setHeader(){},status(c){this.statusCode=c;return this;},json(v){this.body=v;return this;}};
+ const handler=createWebsiteInquiryHandler({env:{NORTHSIDE_HQ_FORMS_ENABLED:String(enabled)},getOutbox:async()=>({command,enqueue:async lead=>{if(queueFails)throw Error();queued.push(lead);}}),fetcher:async(url,opts)=>{sent.push({url,fields:JSON.parse(opts.body)});return {ok:upstreamOk};}});
  return {sent,queued,res,run:async(data=body(),headers={})=>handler({method:'POST',headers:{'content-type':'application/json',...headers},body:data},res)};
 }
 test('queues and forwards original fields with conservative consent',async()=>{const h=harness();await h.run();assert.equal(h.res.statusCode,200);assert.equal(h.queued.length,1);assert.deepEqual(h.sent[0].fields,body().fields);assert.equal(h.queued[0].consent.marketing,false);assert.equal(h.queued[0].pageUrl,'https://northsidegta.ca/contact');});
@@ -35,4 +52,24 @@ test('browser retries preserve original payload and reference without browser st
   await assert.rejects(submitWebsiteInquiry('https://evil.example/f/mwpborow',{body:'{}'}));
   assert.equal(requests.length,2);
  }finally{globalThis.window=oldWindow;globalThis.fetch=oldFetch;}
+});
+
+test('successful retries do not send duplicate notifications',async()=>{
+ const h=harness();
+ await h.run();assert.equal(h.res.statusCode,200);
+ await h.run();assert.equal(h.res.statusCode,200);
+ assert.equal(h.sent.length,1);
+});
+test('changed payload for an existing reference cannot send another notification',async()=>{
+ const h=harness();
+ await h.run();assert.equal(h.res.statusCode,200);
+ await h.run({...body(),fields:{...body().fields,message:'Changed inquiry'}});
+ assert.equal(h.res.statusCode,409);
+ assert.equal(h.sent.length,1);
+});
+test('uncertain notification delivery is retained and is not automatically retried',async()=>{
+ const h=harness({upstreamOk:false});
+ await h.run();assert.equal(h.res.statusCode,502);
+ await h.run();assert.equal(h.res.statusCode,503);
+ assert.equal(h.sent.length,1);
 });
