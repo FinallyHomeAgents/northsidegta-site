@@ -72,8 +72,10 @@ const structuredData = {
       parentOrganization: { "@id": `${HOME_URL}#organization` },
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Newmarket",
+        streetAddress: "10800 Concession Rd 5",
+        addressLocality: "Uxbridge",
         addressRegion: "ON",
+        postalCode: "L9P 1R1",
         addressCountry: "CA",
       },
       areaServed: ["Aurora", "Newmarket", "Whitchurch-Stouffville", "Uxbridge", "Georgina", "East Gwillimbury", "Scugog"].map((name) => ({
