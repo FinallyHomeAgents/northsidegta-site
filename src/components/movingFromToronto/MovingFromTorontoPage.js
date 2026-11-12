@@ -368,11 +368,11 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
             <p><RichText value={content.marketSection.conclusion} /></p>
           </section>
 
-          <section className="moving-guide__section" aria-labelledby="moving-guide-related-heading">
+          <section className="moving-guide__section moving-guide__related" aria-labelledby="moving-guide-related-heading">
             <p className="moving-guide__eyebrow">Compare your options</p>
             <h2 id="moving-guide-related-heading">Explore another community</h2>
             <p>Compare the homes, daily life and commuting trade-offs before deciding where to move.</p>
-            <ul>
+            <ul className="moving-guide__related-links">
               {relatedGuides.map(({ href, label }) => (
                 <li key={href}><a href={href}>{label}</a></li>
               ))}
