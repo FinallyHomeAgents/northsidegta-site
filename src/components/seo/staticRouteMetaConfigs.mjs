@@ -487,8 +487,10 @@ function baseAgentNode() {
     email: "finallyhomeagents@gmail.com",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Newmarket",
+      streetAddress: "10800 Concession Rd 5",
+      addressLocality: "Uxbridge",
       addressRegion: "ON",
+      postalCode: "L9P 1R1",
       addressCountry: "CA",
     },
     employee: [
