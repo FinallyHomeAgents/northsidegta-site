@@ -277,7 +277,7 @@ ${townAgentHtml("uxbridge", "Uxbridge")}
           <div style="background:var(--cream);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--ink2);line-height:1.75;">
             <div><strong>Distance to DVP/401:</strong> 75 km</div>
             <div><strong>Off-peak drive time:</strong> approximately 60 minutes</div>
-            <div><strong>Transit:</strong> Car-dependent — Durham Transit only</div>
+            <div><strong>Transit:</strong> GO Transit bus service and Durham Region Transit. GO Train connections are available outside Uxbridge; check current routes and schedules for your trip. <a href="https://www.uxbridge.ca/living-here/transit">Uxbridge transit information</a>.</div>
             <div style="margin-top:8px;font-size:12px;color:var(--ink4);">Drive times are off-peak estimates. Peak-hour commute times are typically 30–60% longer depending on conditions.</div>
           </div>
         </div>
@@ -340,7 +340,7 @@ ${townAgentHtml("uxbridge", "Uxbridge")}
           </div>
           <div class="fit-item fit-watch">
             <div class="fit-label">Things to weigh up</div>
-            <p>Uxbridge has no GO Train service. Car travel is required for all daily needs. Commute to central Toronto is 60 to 75 minutes off-peak. Local employment options are limited.</p>
+            <p>Uxbridge has GO bus and Durham Region Transit service, but no GO Train station. Check current routes and schedules against your commute. A car may still be important, particularly for rural properties.</p>
           </div>
         </div>
         <div style="margin-top:12px;background:var(--cream);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--ink2);">

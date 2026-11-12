@@ -247,7 +247,7 @@ ${townAgentHtml("stouffville", "Stouffville")}
       <!-- SUB-COMMUNITIES -->
       <div class="sec" id="neighbourhoods">
         <h2>Neighbourhoods &amp; areas in Stouffville</h2>
-        <div style="margin-bottom:12px;"><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Stouffville town</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Ballantrae</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Claremont</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Gormley</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Vandorf</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Rural Whitchurch</span></div>
+        <div style="margin-bottom:12px;"><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Stouffville town</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Ballantrae</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Gormley</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Vandorf</span><span style="font-size:12px;padding:4px 11px;border-radius:8px;background:var(--gpale);border:1px solid var(--gborder);color:var(--green2);font-weight:500;display:inline-block;margin:3px 4px 3px 0;">Rural Whitchurch</span></div>
         <p style="font-size:13px;color:var(--ink3);line-height:1.7;">Each area within Stouffville has its own character, price range, and feel. Talk to Matthew or Landon about which sub-community fits your lifestyle and budget best.</p>
       </div>
 
@@ -260,10 +260,6 @@ ${townAgentHtml("stouffville", "Stouffville")}
       <td><div class="school-name">Stouffville District Secondary</div><div class="school-type">Public Secondary</div></td>
       <td class="school-rating">7.9/10</td>
       <td class="school-note">Fraser Institute 2024</td>
-    </tr><tr>
-      <td><div class="school-name">All Saints Catholic SS</div><div class="school-type">Catholic Secondary</div></td>
-      <td class="school-rating">7.7/10</td>
-      <td class="school-note">York Catholic District School Board</td>
     </tr><tr>
       <td><div class="school-name">Barbara Reid Public School</div><div class="school-type">Public Elementary</div></td>
       <td class="school-rating">7.7/10</td>
