@@ -10,6 +10,16 @@ const { getMarketTrend } = require("../../utils/marketTrend");
 const QUIZ_URL = "/buyers#town-match";
 const WHATSAPP_URL = "https://wa.me/16476684646";
 
+const RELOCATION_GUIDES = [
+  { slug: "georgina", label: "Moving to Georgina", href: "/moving-to-georgina-from-toronto" },
+  { slug: "east-gwillimbury", label: "Moving to East Gwillimbury", href: "/moving-to-east-gwillimbury-from-toronto" },
+  { slug: "newmarket", label: "Moving to Newmarket", href: "/moving-to-newmarket-from-toronto" },
+  { slug: "aurora", label: "Moving to Aurora", href: "/moving-to-aurora-from-toronto" },
+  { slug: "stouffville", label: "Moving to Stouffville", href: "/moving-to-stouffville-from-toronto" },
+  { slug: "uxbridge", label: "Moving to Uxbridge", href: "/moving-to-uxbridge-from-toronto" },
+  { slug: "scugog", label: "Moving to Port Perry and Scugog", href: "/moving-to-port-perry-scugog-from-toronto" },
+];
+
 function marketValue(value) {
   if (typeof value === "number") {
     return new Intl.NumberFormat("en-CA", {
@@ -78,6 +88,14 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
   const showTorontoComparison =
     toronto.condoAverage != null && toronto.detachedAverage != null;
   const primaryTrend = getMarketTrend(primaryMarket.yearOverYear);
+  const relatedGuides = RELOCATION_GUIDES.filter(
+    (guide) => guide.href !== content.route && (
+      content.crossGuideLinks
+        ? content.crossGuideLinks.includes(guide.href)
+        : comparisonTowns.includes(guide.slug)
+    )
+  );
+  const showGolfGuide = ["uxbridge", "aurora", "stouffville"].includes(content.slug);
 
   return (
     <>
@@ -350,6 +368,21 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
             <p><RichText value={content.marketSection.conclusion} /></p>
           </section>
 
+          <section className="moving-guide__section" aria-labelledby="moving-guide-related-heading">
+            <p className="moving-guide__eyebrow">Compare your options</p>
+            <h2 id="moving-guide-related-heading">Explore another community</h2>
+            <p>Compare the homes, daily life and commuting trade-offs before deciding where to move.</p>
+            <ul>
+              {relatedGuides.map(({ href, label }) => (
+                <li key={href}><a href={href}>{label}</a></li>
+              ))}
+              <li><a href="/communities">Compare all seven NorthSide GTA communities</a></li>
+              {showGolfGuide && (
+                <li><a href="/golf-course-living/">Compare golf courses and nearby living in Uxbridge, Aurora and Stouffville</a></li>
+              )}
+            </ul>
+          </section>
+
           <aside className="moving-guide__review" aria-label="Client review">
             <div className="moving-guide__stars" aria-label="5 out of 5 stars">★★★★★</div>
             <blockquote>“{content.review.quote}”</blockquote>
@@ -401,3 +434,4 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
     </>
   );
 }
+

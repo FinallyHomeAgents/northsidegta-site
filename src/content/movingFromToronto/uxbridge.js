@@ -4,9 +4,9 @@ const uxbridgeMovingGuide = {
   town: "Uxbridge",
   slug: "uxbridge",
   route: "/moving-to-uxbridge-from-toronto",
-  title: "Moving to Uxbridge from Toronto (2026 Guide) | Finally Home Agents",
+  title: "Moving to Uxbridge: Homes, Rural Living & Commute | NorthSide GTA",
   description:
-    "Thinking of moving to Uxbridge from Toronto? Trail Capital of Canada — acreage, heritage downtown, real prices, and the honest commute, compared for Toronto movers.",
+    "Considering a move from Toronto to Uxbridge? Compare home prices, in-town and rural properties, trails, commuting trade-offs and acreage-buying considerations.",
   heroImage: "/Images/uxbridge-banner.jpg",
   heroImageAlt: "Heritage downtown streetscape in Uxbridge, Ontario",
   badgeImage: "/assets/town-logos/uxbridge.webp",
@@ -189,3 +189,4 @@ module.exports = {
   uxbridgeMovingGuide,
   buildMovingGuideSchema,
 };
+

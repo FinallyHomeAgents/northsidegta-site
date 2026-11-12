@@ -1,6 +1,26 @@
 {
   "redirects": [
     {
+      "source": "/towns",
+      "destination": "/communities",
+      "statusCode": 308
+    },
+    {
+      "source": "/towns/",
+      "destination": "/communities",
+      "statusCode": 308
+    },
+    {
+      "source": "/golf-course-living",
+      "destination": "/golf-course-living/",
+      "statusCode": 308
+    },
+    {
+      "source": "/uxbridge-golf-living",
+      "destination": "/uxbridge-golf-living/",
+      "statusCode": 308
+    },
+    {
       "source": "/business-network",
       "destination": "/good-good",
       "statusCode": 301
@@ -193,16 +213,8 @@
   ],
   "rewrites": [
     {
-      "source": "/golf-course-living",
-      "destination": "/golf-course-living/index.html"
-    },
-    {
       "source": "/golf-course-living/",
       "destination": "/golf-course-living/index.html"
-    },
-    {
-      "source": "/uxbridge-golf-living",
-      "destination": "/uxbridge-golf-living/index.html"
     },
     {
       "source": "/uxbridge-golf-living/",
@@ -445,3 +457,4 @@
     }
   }
 }
+

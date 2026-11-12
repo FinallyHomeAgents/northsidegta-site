@@ -4,9 +4,9 @@ const stouffvilleMovingGuide = {
   town: "Stouffville",
   slug: "stouffville",
   route: "/moving-to-stouffville-from-toronto",
-  title: "Moving to Stouffville from Toronto (2026 Guide) | Finally Home Agents",
+  title: "Moving to Stouffville: Homes, GO Transit & Life | NorthSide GTA",
   description:
-    "Thinking of moving to Whitchurch-Stouffville from Toronto? Main Street village life, GO train to Union, trails, Ballantrae & Musselman's Lake — the honest guide.",
+    "Moving from Toronto to Stouffville? Compare home prices, GO Transit, neighbourhoods and daily life, including Ballantrae and Musselman's Lake.",
   heroImage: "/Images/stouffville-banner.jpg",
   heroImageAlt: "Heritage Main Street in Stouffville, Ontario",
   badgeImage: "/assets/town-logos/stouffville.webp",
@@ -203,3 +203,4 @@ module.exports = {
   stouffvilleMovingGuide,
   buildMovingGuideSchema,
 };
+

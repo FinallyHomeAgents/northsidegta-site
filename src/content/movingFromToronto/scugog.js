@@ -4,9 +4,9 @@ const scugogMovingGuide = {
   town: "Scugog",
   slug: "scugog",
   route: "/moving-to-port-perry-scugog-from-toronto",
-  title: "Moving to Port Perry & Scugog from Toronto (2026 Guide) | Finally Home Agents",
+  title: "Moving to Port Perry: Homes, Lake Life & Commute | NorthSide GTA",
   description:
-    "Thinking of moving to Port Perry or Scugog from Toronto? Lake Scugog waterfront, a heritage main street, real prices, and the honest commute for Toronto movers.",
+    "Moving from Toronto to Port Perry or Scugog? Compare home prices, lakeside and rural neighbourhoods, daily amenities and the commute before choosing a home.",
   heroImage: "/Images/scugog-banner.jpg",
   heroImageAlt: "Lake Scugog waterfront in Port Perry, Ontario",
   badgeImage: "/assets/town-logos/scugog.webp",
@@ -205,3 +205,4 @@ module.exports = {
   scugogMovingGuide,
   buildMovingGuideSchema,
 };
+

@@ -4,7 +4,7 @@ const eastGwillimburyMovingGuide = {
   town: "East Gwillimbury",
   slug: "east-gwillimbury",
   route: "/moving-to-east-gwillimbury-from-toronto",
-  title: "Moving to East Gwillimbury from Toronto (2026 Guide) | Finally Home Agents",
+  title: "Moving to East Gwillimbury: Homes & Commute | NorthSide GTA",
   description:
     "Thinking of moving to East Gwillimbury from Toronto? Holland Landing, Sharon, Queensville & Mount Albert compared — new builds, real prices, the honest commute.",
   heroImage: "/Images/eastgwillimbury-banner.jpg",
@@ -197,3 +197,4 @@ module.exports = {
   eastGwillimburyMovingGuide,
   buildMovingGuideSchema,
 };
+
