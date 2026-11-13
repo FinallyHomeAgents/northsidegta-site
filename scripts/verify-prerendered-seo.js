@@ -514,7 +514,7 @@ movingGuides.forEach((guide) => {
         town.averageSalePrice,
         String(town.salesCount),
         String(town.avgLdom),
-        town.yearOverYear,
+        town.yearOverYear || "Not available",
       ];
     }),
   ].forEach((value) => {

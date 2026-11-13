@@ -198,7 +198,7 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
               />
               <MarketStat
                 label="Year over year"
-                value={primaryTrend.label}
+                value={primaryTrend.label || "Not available"}
                 marketKey={`${content.marketKey}.yearOverYear`}
                 className={`moving-guide__stat--${primaryTrend.direction}`}
               />
@@ -353,7 +353,7 @@ export default function MovingFromTorontoPage({ content, buildSchema }) {
                           data-market={`${slug}.yearOverYear`}
                           key={slug}
                         >
-                          {trend.label}
+                          {trend.label || "Not available"}
                         </td>
                       );
                     })}
