@@ -17,11 +17,11 @@ Attribution is required and already in the page footer.
 
 1. Download the new Market Watch PDF from <https://trreb.ca/market-data/market-watch/>.
 2. Find the **ALL HOME TYPES** section. For each of the seven towns copy: Sales, Average Price,
-   Median Price, New Listings, Avg. LDOM. Year-over-year comes from the same table's comparison column.
+   Median Price, New Listings, Avg. LDOM. The monthly all-types table does not provide municipal\n   year-over-year changes. Leave `yoy` null unless a matching-period comparison has been verified;\n   do not carry forward a previous month's change.
 3. Repeat for the **DETACHED**, **SEMI-DETACHED**, **ATT/ROW/TOWNHOUSE**, **CONDO TOWNHOUSE** and
    **CONDO APARTMENT** sections. Same seven towns each time.
 4. In the same sections, copy the **City of Toronto district** rows listed in `toronto.districts`.
-5. Update `monthly.period` (`YYYY-MM`), `monthly.periodLabel`, `monthly.source`.
+5. Update `monthly.period` (`YYYY-MM`), `monthly.periodLabel`, `monthly.source` and `monthly.sourceUrl`.\n   Also synchronize `src/data/marketData.json`: its month, source, average prices, sales and LDOM\n   power the homepage, town pages and moving guides. Set unverified `yearOverYear` values to null.
 6. Put your name in `monthly.verifiedBy` and today's date in `monthly.verifiedOn`.
    Only sign this once you have looked at the PDF yourself.
 7. Run `npm run data:validate`. Fix anything it flags. It also runs on every build.
