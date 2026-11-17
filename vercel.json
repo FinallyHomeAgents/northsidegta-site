@@ -1,6 +1,16 @@
 {
   "redirects": [
     {
+      "source": "/share-a-photo",
+      "destination": "https://northside-community-photos.alert-shore-8036.chatgpt.site/",
+      "statusCode": 307
+    },
+    {
+      "source": "/share-a-photo/",
+      "destination": "https://northside-community-photos.alert-shore-8036.chatgpt.site/",
+      "statusCode": 307
+    },
+    {
       "source": "/towns",
       "destination": "/communities",
       "statusCode": 308
@@ -457,4 +467,3 @@
     }
   }
 }
-
