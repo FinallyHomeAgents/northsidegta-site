@@ -1,3 +1,4 @@
+import { createSpamGuard } from '../lib/homepage-spam.mjs'
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 const DEFAULT_PAGE_URL = 'https://northsidegta.ca/'
 const SUCCESS_MESSAGE_HEADING = 'Thanks — we received your request.'
@@ -24,8 +25,12 @@ async function readBody(req) {
   }
 
   const chunks = []
+  let bytes = 0
   for await (const chunk of req) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
+    bytes += buffer.length
+    if (bytes > 8192) throw Error('body too large')
+    chunks.push(buffer)
   }
 
   if (!chunks.length) return {}
@@ -86,7 +91,9 @@ function sendResponse(req, res, status, body) {
   res.status(status).send(body.error || 'Unable to submit lead right now.')
 }
 
-export default async function handler(req, res) {
+export function createHomepageHandler({ guard = createSpamGuard(), queueInquiry, fetchImpl = (...args) => fetch(...args) } = {}) {
+return async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store')
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     res.status(405).json({ ok: false, error: 'Method not allowed' })
@@ -96,6 +103,7 @@ export default async function handler(req, res) {
   let body
   try {
     body = await readBody(req)
+    if (!body || typeof body !== 'object' || Array.isArray(body) || Buffer.byteLength(JSON.stringify(body)) > 8192) throw Error('body')
   } catch (error) {
     sendResponse(req, res, 400, { ok: false, error: 'Invalid request body.' })
     return
@@ -117,7 +125,9 @@ export default async function handler(req, res) {
     submittedAt,
   }
 
-  if (!payload.name || !payload.contact || !payload.community) {
+  const communities = new Set(['Aurora', 'Newmarket', 'East Gwillimbury', 'Georgina', 'Stouffville', 'Uxbridge', 'Scugog', 'Not sure yet'])
+  const validContact = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.contact) || /^[+()\d .-]+$/.test(payload.contact) && payload.contact.replace(/\D/g, '').length >= 10 && payload.contact.replace(/\D/g, '').length <= 15
+  if (!payload.name || !validContact || !communities.has(payload.community)) {
     sendResponse(req, res, 400, { ok: false, error: 'Please complete name, contact, and community.' })
     return
   }
@@ -128,19 +138,31 @@ export default async function handler(req, res) {
     return
   }
 
+  let reservation
+  try {
+    reservation = await guard(req, body, payload)
+    if (reservation.duplicate) { sendResponse(req, res, 200, { ok: true }); return }
+  } catch (error) {
+    if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))
+    sendResponse(req, res, error.status || 503, { ok: false, error: error.message || 'Please try again later.' })
+    return
+  }
+
   // Proposed capture hook: disabled until the approved rollout enables it.
   if (process.env.NORTHSIDE_HQ_CAPTURE_ENABLED === 'true') {
     try {
       const {queueHomepageInquiry} = await import('../lib/headquarters-capture.mjs')
-      await queueHomepageInquiry({...payload, submissionId: normalizeText(body.submissionId, 80)})
+      await (queueInquiry || queueHomepageInquiry)({...payload, submissionId: normalizeText(body.submissionId, 80)})
     } catch {
+      await reservation.release().catch(() => {})
       sendResponse(req, res, 503, { ok: false, error: 'Unable to save your inquiry right now. Please try again.' })
       return
     }
   }
 
   try {
-    const formspreeResponse = await fetch(FORMSPREE_ENDPOINT, {
+    const formspreeResponse = await fetchImpl(FORMSPREE_ENDPOINT, {
+      signal: AbortSignal.timeout(10000),
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -166,13 +188,19 @@ export default async function handler(req, res) {
         console.error('[homepage-lead] failed to read Formspree error response', error)
       }
       console.error('[homepage-lead] Formspree error', formspreeResponse.status, responseText)
+      await reservation.release().catch(() => {})
       sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
       return
     }
 
+    await reservation.complete().catch(() => { console.warn('[homepage-lead] Duplicate receipt marker unavailable after delivery') })
     sendResponse(req, res, 200, { ok: true })
   } catch (error) {
     console.error('[homepage-lead] Formspree request failed', error)
+    // An uncertain upstream timeout retains the short lease to avoid immediate double sends.
     sendResponse(req, res, 502, { ok: false, error: 'Unable to send lead right now.' })
   }
 }
+
+}
+export default createHomepageHandler()

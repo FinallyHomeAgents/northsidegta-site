@@ -8,7 +8,7 @@ const require_ = createRequire(__filename)
 async function loadHandler() {
   const moduleUrl = pathToFileURL(require_.resolve('../api/homepage-lead.js')).href
   const namespace = await import(`${moduleUrl}?t=${Date.now()}`)
-  return namespace.default || namespace
+  return namespace.createHomepageHandler({ guard: async () => ({ duplicate: false, release: async () => {}, complete: async () => {} }) })
 }
 
 test('enabled capture saves a copy before preserving the Formspree notification', async () => {
@@ -168,3 +168,40 @@ test('homepage lead returns clear non-JSON errors when Formspree fails', async (
     }
   })
 })
+
+test('guard rejection never forwards or saves a lead', async () => {
+  await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform'},async()=>{
+    const ns=await import(pathToFileURL(require_.resolve('../api/homepage-lead.js')).href+'?guard-test');
+    let calls=0;
+    const handler=ns.createHomepageHandler({guard:async()=>{throw Object.assign(Error('retry'),{status:429,retryAfter:60})},fetchImpl:async()=>{calls++;}});
+    const res=createMockRes();await handler(createPostRequest({body:{name:'Jane',contact:'jane@example.invalid',community:'Aurora'}}),res);
+    assert.equal(res.statusCode,429);assert.equal(res.headers['Retry-After'],'60');assert.equal(calls,0);
+  });
+});
+test('accepted duplicate does not forward again',async()=>{
+  await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform'},async()=>{
+    const ns=await import(pathToFileURL(require_.resolve('../api/homepage-lead.js')).href+'?duplicate-test');let calls=0;
+    const handler=ns.createHomepageHandler({guard:async()=>({duplicate:true}),fetchImpl:async()=>{calls++;}});
+    const res=createMockRes();await handler(createPostRequest({body:{name:'Jane',contact:'jane@example.invalid',community:'Aurora'}}),res);
+    assert.equal(res.statusCode,200);assert.equal(calls,0);
+  });
+});
+test('invalid contact, community and oversized bodies never reach guard',async()=>{
+  const ns=await import(pathToFileURL(require_.resolve('../api/homepage-lead.js')).href+'?invalid-test');let calls=0;
+  const handler=ns.createHomepageHandler({guard:async()=>{calls++;}});
+  for(const extra of [{contact:'nonsense'},{community:'invalid'},{extra:'x'.repeat(9000)}]){
+    const res=createMockRes();await handler(createPostRequest({body:{name:'Jane',contact:'jane@example.invalid',community:'Aurora',...extra}}),res);assert.equal(res.statusCode,400);
+  }assert.equal(calls,0);
+});
+
+test('real default guard blocks a tokenless request before HQ/Formspree',async()=>{
+ await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',TURNSTILE_SECRET_KEY:'fake',KV_REST_API_URL:'https://redis.invalid',KV_REST_API_TOKEN:'fake',NORTHSIDE_HQ_CAPTURE_ENABLED:'true'},async()=>{
+  const original=global.fetch;const calls=[];
+  global.fetch=async(url)=>{calls.push(url);assert.equal(url,'https://redis.invalid');return {ok:true,json:async()=>({result:[1,600]})};};
+  try{
+   const ns=await import(pathToFileURL(require_.resolve('../api/homepage-lead.js')).href+'?real-guard');const res=createMockRes();
+   const request=createPostRequest({body:{name:'Jane',contact:'jane@example.invalid',community:'Aurora'}});request.headers.origin='https://northsidegta.ca';
+   await ns.default(request,res);assert.equal(res.statusCode,400);assert.equal(calls.length,1);
+  }finally{global.fetch=original;}
+ });
+});

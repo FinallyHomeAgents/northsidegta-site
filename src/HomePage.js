@@ -5,6 +5,7 @@ import "./HomePage.css";
 import HeaderShell from "./components/HeaderShell";
 
 import { HOMEPAGE_MARKUP } from "./homepageMarkup";
+import { mountHomepageBotCheck } from "./lib/homepageBotCheck";
 
 const EditorialTerrainMap = lazy(() => import("./components/EditorialTerrainMap"));
 
@@ -196,12 +197,23 @@ export default function HomePage() {
       pageUrl.value = window.location.href;
     }
 
+    let disposed = false;
+    let sending = false;
+    const requestController = new AbortController();
+    const botCheck = form && submitButton ? mountHomepageBotCheck({
+      form, submitButton, siteKey: (process.env.REACT_APP_TURNSTILE_SITE_KEY || "").trim(),
+    }) : null;
     let submissionId = null;
     let submissionFields = null;
     async function handleLeadSubmit(event) {
       event.preventDefault();
 
-      if (!form.reportValidity()) return;
+      if (sending || disposed || !form.reportValidity()) return;
+      const turnstileToken = botCheck?.getToken();
+      if (!turnstileToken) {
+        if (status) status.textContent = "Please complete verification, or email contact@finallyhomeagents.com.";
+        return;
+      }
 
       if (submittedAt) {
         submittedAt.value = new Date().toISOString();
@@ -215,6 +227,9 @@ export default function HomePage() {
         submissionFields = fields;
       }
       formData.set("submissionId", submissionId);
+      formData.set("turnstileToken", turnstileToken);
+      sending = true;
+      botCheck.setBusy(true);
 
       if (status) {
         status.textContent = "Sending...";
@@ -229,13 +244,16 @@ export default function HomePage() {
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify(Object.fromEntries(formData.entries())),
           credentials: "same-origin",
+          signal: requestController.signal,
         });
 
+        if (disposed) return;
         if (!response.ok) {
           const result = await response.json().catch(() => ({}));
           throw new Error(result.error || "Unable to send right now.");
         }
 
+        botCheck.dispose();
         form.innerHTML = `
           <div class="inline-lead__success" role="status" aria-live="polite" tabindex="-1">
             <p>Thanks — we received your request.</p>
@@ -244,18 +262,21 @@ export default function HomePage() {
         `;
         form.querySelector(".inline-lead__success")?.focus();
       } catch (error) {
+        if (disposed) return;
         if (status) {
           status.textContent = error.message || "Sorry, something went wrong. Please try again.";
         }
-        if (submitButton) {
-          submitButton.disabled = false;
-        }
+        sending = false;
+        botCheck.reset();
       }
     }
 
     form?.addEventListener("submit", handleLeadSubmit);
 
     return () => {
+      disposed = true;
+      requestController.abort();
+      botCheck?.dispose();
       observer?.disconnect();
       form?.removeEventListener("submit", handleLeadSubmit);
     };

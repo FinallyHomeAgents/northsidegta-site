@@ -635,6 +635,7 @@ export const HOMEPAGE_MARKUP = String.raw`
         method="POST"
         action="/api/homepage-lead"
       >
+        <noscript><p>This form requires a browser verification check. Please enable JavaScript, or <a href="mailto:contact@finallyhomeagents.com">email us directly</a>.</p></noscript>
         <input type="hidden" name="form-name" value="homepage-lead">
         <input type="hidden" name="sourceUrl" value="/">
         <input type="hidden" name="pageUrl" value="/">
