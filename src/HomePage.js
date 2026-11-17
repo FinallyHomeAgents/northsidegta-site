@@ -201,7 +201,7 @@ export default function HomePage() {
     let sending = false;
     const requestController = new AbortController();
     const botCheck = form && submitButton ? mountHomepageBotCheck({
-      form, submitButton, siteKey: (process.env.REACT_APP_TURNSTILE_SITE_KEY || "").trim(),
+      form, submitButton,
     }) : null;
     let submissionId = null;
     let submissionFields = null;
@@ -209,9 +209,9 @@ export default function HomePage() {
       event.preventDefault();
 
       if (sending || disposed || !form.reportValidity()) return;
-      const turnstileToken = botCheck?.getToken();
-      if (!turnstileToken) {
-        if (status) status.textContent = "Please complete verification, or email contact@finallyhomeagents.com.";
+      const formToken = botCheck?.getToken();
+      if (!formToken) {
+        if (status) status.textContent = "Please wait for the form to get ready, or email contact@finallyhomeagents.com.";
         return;
       }
 
@@ -227,7 +227,7 @@ export default function HomePage() {
         submissionFields = fields;
       }
       formData.set("submissionId", submissionId);
-      formData.set("turnstileToken", turnstileToken);
+      formData.set("formToken", formToken);
       sending = true;
       botCheck.setBusy(true);
 
@@ -248,16 +248,17 @@ export default function HomePage() {
         });
 
         if (disposed) return;
-        if (!response.ok) {
-          const result = await response.json().catch(() => ({}));
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) {
           throw new Error(result.error || "Unable to send right now.");
         }
 
         botCheck.dispose();
         form.innerHTML = `
           <div class="inline-lead__success" role="status" aria-live="polite" tabindex="-1">
-            <p>Thanks — we received your request.</p>
-            <p>We’ll reach out within 24 hours to learn more about what you’re looking for and help you compare your options in the NorthSide GTA.</p>
+            ${result.preview === true
+              ? "<p>Preview test passed. No inquiry was sent.</p>"
+              : "<p>Thanks — we received your request.</p><p>We’ll reach out within 24 hours to learn more about what you’re looking for and help you compare your options in the NorthSide GTA.</p>"}
           </div>
         `;
         form.querySelector(".inline-lead__success")?.focus();

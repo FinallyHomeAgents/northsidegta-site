@@ -141,11 +141,18 @@ return async function handler(req, res) {
   let reservation
   try {
     reservation = await guard(req, body, payload)
-    if (reservation.duplicate) { sendResponse(req, res, 200, { ok: true }); return }
+    if (reservation.duplicate) { sendResponse(req, res, 200, { ok: true, ...(process.env.VERCEL_ENV === 'preview' ? {preview: true} : {}) }); return }
   } catch (error) {
     if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))
     sendResponse(req, res, error.status || 503, { ok: false, error: error.message || 'Please try again later.' })
     return
+  }
+
+  // Preview submissions exercise protection but never create HQ records or send mail.
+  if (process.env.VERCEL_ENV === 'preview') {
+    await reservation.complete().catch(() => {});
+    sendResponse(req, res, 200, { ok: true, preview: true });
+    return;
   }
 
   // Proposed capture hook: disabled until the approved rollout enables it.

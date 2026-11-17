@@ -195,7 +195,7 @@ test('invalid contact, community and oversized bodies never reach guard',async()
 });
 
 test('real default guard blocks a tokenless request before HQ/Formspree',async()=>{
- await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',TURNSTILE_SECRET_KEY:'fake',KV_REST_API_URL:'https://redis.invalid',KV_REST_API_TOKEN:'fake',NORTHSIDE_HQ_CAPTURE_ENABLED:'true'},async()=>{
+ await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',KV_REST_API_URL:'https://redis.invalid',KV_REST_API_TOKEN:'fake',NORTHSIDE_HQ_CAPTURE_ENABLED:'true'},async()=>{
   const original=global.fetch;const calls=[];
   global.fetch=async(url)=>{calls.push(url);assert.equal(url,'https://redis.invalid');return {ok:true,json:async()=>({result:[1,600]})};};
   try{
@@ -203,5 +203,14 @@ test('real default guard blocks a tokenless request before HQ/Formspree',async()
    const request=createPostRequest({body:{name:'Jane',contact:'jane@example.invalid',community:'Aurora'}});request.headers.origin='https://northsidegta.ca';
    await ns.default(request,res);assert.equal(res.statusCode,400);assert.equal(calls.length,1);
   }finally{global.fetch=original;}
+ });
+});
+
+test('preview validates protection but never saves HQ or sends notification',async()=>{
+ await withEnv({FORMSPREE_ENDPOINT:'https://formspree.io/f/testform',VERCEL_ENV:'preview',NORTHSIDE_HQ_CAPTURE_ENABLED:'true'},async()=>{
+  const ns=await import(pathToFileURL(require_.resolve('../api/homepage-lead.js')).href+'?preview');let calls=0,completed=0;
+  const handler=ns.createHomepageHandler({guard:async()=>({duplicate:false,complete:async()=>{completed++}}),queueInquiry:async()=>{calls++},fetchImpl:async()=>{calls++}});
+  const res=createMockRes();await handler(createPostRequest({body:{name:'TEST',contact:'test@example.invalid',community:'Aurora'}}),res);
+  assert.deepEqual(res.body,{ok:true,preview:true});assert.equal(calls,0);assert.equal(completed,1);
  });
 });

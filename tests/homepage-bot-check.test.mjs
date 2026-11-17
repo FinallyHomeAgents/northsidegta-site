@@ -14,48 +14,54 @@ class Element {
   remove() { this.removed = true; }
 }
 const flush = () => new Promise(resolve => setImmediate(resolve));
-function harness({ siteKey = 'test-key', loadError = false, delayed = false } = {}) {
-  const form = new Element(); const button = new Element();
-  let options; let renders = 0; let resets = 0; let removes = 0; let resolve;
-  const api = { render(el, opts) { options = opts; renders++; return 'widget'; }, reset() { resets++; }, remove() { removes++; } };
-  const load = () => delayed ? new Promise(r => { resolve = r; }) : loadError ? Promise.reject(Error('offline')) : Promise.resolve(api);
-  const bot = mountHomepageBotCheck({ form, submitButton: button, siteKey, win: {}, doc: { createElement: () => new Element(), createTextNode: text => ({ text }) }, load });
-  return { bot, button, form, api, release() { resolve(api); }, get options() { return options; }, get renders() { return renders; }, get resets() { return resets; }, get removes() { return removes; } };
+function harness({ fail = false, delayed = false, result = { token: 'valid-session', readyAfterMs: 1000 } } = {}) {
+  const form = new Element(); const button = new Element(); const requests = [];
+  const timers = new Map(); let nextTimer = 0; let resolve;
+  const win = { setTimeout(fn, delay) { const id = ++nextTimer; timers.set(id, {fn, delay}); return id; }, clearTimeout(id) { timers.delete(id); } };
+  const reply = () => ({ ok: true, json: async () => result });
+  const fetchImpl = (url, options) => { requests.push({url, options}); return delayed ? new Promise(r => { resolve = r; }) : fail ? Promise.reject(Error('offline')) : Promise.resolve(reply()); };
+  const bot = mountHomepageBotCheck({ form, submitButton: button, win, doc: { createElement: () => new Element(), createTextNode: text => ({ text }) }, fetchImpl });
+  return { bot, button, form, requests, timers, release() { resolve(reply()); }, fire(delay) { for (const [id,timer] of [...timers]) if (timer.delay === delay) { timers.delete(id); timer.fn(); } } };
 }
-test('missing configuration blocks submit and supplies direct contact', async () => {
-  const h = harness({ siteKey: '' }); await flush();
-  assert.equal(h.renders, 0); assert.equal(h.button.disabled, true); assert.equal(h.bot.getToken(), '');
-  assert.match(h.form.children[0].children[1].textContent, /email us directly/);
-  assert.equal(h.form.children[0].children[3].children[1].href, 'mailto:contact@finallyhomeagents.com');
-});
-test('server-bound token only enables submit once verified; busy cannot be overridden', async () => {
+test('same-origin challenge required and server readiness delay respected', async () => {
   const h = harness(); assert.equal(h.button.disabled, true); await flush();
-  assert.equal(h.options.action, 'homepage_lead'); assert.equal(h.options['response-field'], false);
-  h.options.callback('valid-token'); assert.equal(h.bot.getToken(), 'valid-token'); assert.equal(h.button.disabled, false);
-  h.bot.setBusy(true); h.options.callback('another-token'); assert.equal(h.button.disabled, true);
-  h.bot.reset(); assert.equal(h.bot.getToken(), ''); assert.equal(h.button.disabled, true); assert.equal(h.resets, 1);
-  h.options.callback('new-token'); assert.equal(h.button.disabled, false);
+  assert.equal(h.requests[0].url, '/api/homepage-challenge'); assert.equal(h.requests[0].options.credentials, 'same-origin');
+  assert.equal(h.requests[0].options.cache, 'no-store'); assert.equal(h.requests[0].options.method, 'GET');
+  assert.equal(h.bot.getToken(), ''); h.fire(1000);
+  assert.equal(h.bot.getToken(), 'valid-session'); assert.equal(h.button.disabled, false);
 });
-test('expiration, timeout and widget failure invalidate token and show retry', async () => {
-  const h = harness(); await flush();
-  for (const event of ['expired-callback', 'timeout-callback', 'error-callback']) {
-    h.options.callback('valid'); h.options[event]();
-    assert.equal(h.bot.getToken(), ''); assert.equal(h.button.disabled, true);
-    assert.equal(h.form.children[0].children[2].hidden, false);
+test('busy state cannot be overridden by readiness callback', async () => {
+  const h = harness(); await flush(); h.bot.setBusy(true); h.fire(1000); assert.equal(h.button.disabled, true);
+  h.bot.reset(); await flush(); assert.equal(h.requests.length, 2); assert.equal(h.bot.getToken(), '');
+  h.fire(1000); assert.equal(h.button.disabled, false);
+});
+test('expired session refreshes without requiring extra customer fields', async () => {
+  const h = harness(); await flush(); h.fire(1000); h.fire(55 * 60 * 1000); await flush();
+  assert.equal(h.requests.length, 2); assert.equal(h.button.disabled, true); h.fire(1000); assert.equal(h.button.disabled, false);
+});
+test('network error fails closed and offers retry/direct contact', async () => {
+  const h = harness({fail: true}); await flush(); assert.equal(h.button.disabled, true);
+  const [message,retry,fallback] = h.form.children[0].children;
+  assert.match(message.textContent, /could not get ready/); assert.equal(retry.hidden, false);
+  assert.equal(fallback.children[1].href, 'mailto:contact@finallyhomeagents.com');
+  retry.handlers.click(); await flush(); assert.equal(h.requests.length, 2);
+});
+test('malformed challenge cannot enable submission', async () => {
+  for (const result of [{ token: '', readyAfterMs: 1000 }, { token: 'x', readyAfterMs: -1 }, { token: 'x', readyAfterMs: '0' }, { token: 'x', readyAfterMs: 60001 }]) {
+    const h = harness({result}); await flush(); assert.equal(h.button.disabled, true); assert.equal(h.bot.getToken(), '');
   }
-  h.form.children[0].children[2].handlers.click(); await flush(); assert.equal(h.renders, 2); assert.equal(h.removes, 1);
 });
-test('script error fails closed with useful fallback', async () => {
-  const h = harness({ loadError: true }); await flush();
-  assert.equal(h.button.disabled, true); assert.match(h.form.children[0].children[1].textContent, /could not load/);
+test('unmount aborts request and prevents stale readiness', async () => {
+  const h = harness({delayed:true}); h.bot.dispose(); h.release(); await flush();
+  assert.equal(h.requests[0].options.signal.aborted, true); assert.equal(h.timers.size, 0); assert.equal(h.bot.getToken(), '');
+  const ready = harness(); await flush(); ready.bot.dispose(); ready.fire(1000); assert.equal(ready.bot.getToken(), '');
 });
-test('unmount prevents delayed render and stale callbacks', async () => {
-  const h = harness({ delayed: true }); h.bot.dispose(); h.release(); await flush(); assert.equal(h.renders, 0);
-  const ready = harness(); await flush(); ready.bot.dispose(); ready.options.callback('stale');
-  assert.equal(ready.bot.getToken(), ''); assert.equal(ready.removes, 1); ready.bot.dispose(); assert.equal(ready.removes, 1);
-});
-test('homepage sends required token and keeps a duplicate-click lock', async () => {
+test('homepage sends form token and keeps duplicate-click lock', async () => {
   const page = await readFile(new URL('../src/HomePage.js', import.meta.url), 'utf8');
-  assert.match(page, /if \(sending \|\| disposed/); assert.match(page, /formData\.set\("turnstileToken", turnstileToken\)/);
+  assert.match(page, /if \(sending \|\| disposed/); assert.match(page, /formData\.set\("formToken", formToken\)/);
   assert.match(page, /botCheck\.reset\(\)/); assert.match(page, /requestController\.abort\(\)/);
+  assert.doesNotMatch(page, /TURNSTILE|turnstileToken/);
+  assert.match(page, /result.preview === true/);
+  assert.match(page, /Preview test passed. No inquiry was sent./);
+  assert.match(page, /result.ok !== true/);
 });
