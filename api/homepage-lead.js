@@ -1,4 +1,3 @@
-import { createSpamGuard } from '../lib/homepage-spam.mjs'
 const FORMSPREE_ENDPOINT = (process.env.FORMSPREE_ENDPOINT ?? '').trim()
 const DEFAULT_PAGE_URL = 'https://northsidegta.ca/'
 const SUCCESS_MESSAGE_HEADING = 'Thanks — we received your request.'
@@ -91,7 +90,7 @@ function sendResponse(req, res, status, body) {
   res.status(status).send(body.error || 'Unable to submit lead right now.')
 }
 
-export function createHomepageHandler({ guard = createSpamGuard(), queueInquiry, fetchImpl = (...args) => fetch(...args) } = {}) {
+export function createHomepageHandler({ guard, queueInquiry, fetchImpl = (...args) => fetch(...args) } = {}) {
 return async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store')
   if (req.method !== 'POST') {
@@ -140,7 +139,8 @@ return async function handler(req, res) {
 
   let reservation
   try {
-    reservation = await guard(req, body, payload)
+    const protect = guard || (await import('../lib/homepage-spam.mjs')).createSpamGuard()
+    reservation = await protect(req, body, payload)
     if (reservation.duplicate) { sendResponse(req, res, 200, { ok: true, ...(process.env.VERCEL_ENV === 'preview' ? {preview: true} : {}) }); return }
   } catch (error) {
     if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))
