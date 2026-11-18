@@ -24,7 +24,8 @@ export function createMoveHandler({env=process.env,guard,deliver,measure=record,
   const mapped={method:req.method,headers:req.headers,socket:req.socket,body:{destination,source:'contact',pageUrl:'https://northsidegta.ca/toronto-movers',submissionId:b.submissionId,fields}};
   // Keep delivery routing and HQ behavior governed by the existing website settings.
   try{
-   const send=deliver||(await import('./website-inquiry.js')).default;
+   // Import the shared ESM handler directly: the full site compiles API .js files to CommonJS.
+   const send=deliver||(await import('../lib/website-inquiry.mjs')).createWebsiteInquiryHandler({env,getOutbox:async()=>{const {websiteOutbox}=await import('../lib/headquarters-capture.mjs');return websiteOutbox(env);}});
    let status=200,result;
    const capture={setHeader:(...args)=>res.setHeader(...args),status(code){status=code;return this;},json(body){result=body;return this;}};
    await send(mapped,capture);
