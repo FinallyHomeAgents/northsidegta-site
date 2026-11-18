@@ -223,6 +223,14 @@
   ],
   "rewrites": [
     {
+      "source": "/toronto-movers",
+      "destination": "/toronto-movers/index.html"
+    },
+    {
+      "source": "/toronto-movers/",
+      "destination": "/toronto-movers/index.html"
+    },
+    {
       "source": "/golf-course-living/",
       "destination": "/golf-course-living/index.html"
     },
