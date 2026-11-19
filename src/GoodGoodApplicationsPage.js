@@ -53,11 +53,13 @@ function ApplicationReview({ application, refresh, onClose }) {
   const [status, setStatus] = useState(application.status);
   const [notes, setNotes] = useState(application.notes || "");
   const [draft, setDraft] = useState(null);
+  const [deliveryChecked, setDeliveryChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
   const offer = record.offer;
-  const retry = offer && !offer.sentAt && !offer.closedAt;
+  const retry = offer && !offer.sentAt && !offer.resolvedAt && !offer.closedAt;
+  const offerAge = retry ? Date.now() - offer.timestamp : 0;
   const accepted = record.status === "Accepted" || record.status === "Confirmed";
   const message = draft && (draft.customBody ?? acceptanceMessage(record, draft.seat));
   const note = draft?.note.trim();
@@ -116,6 +118,26 @@ function ApplicationReview({ application, refresh, onClose }) {
     }
   }
 
+  async function resolveOffer(outcome) {
+    setBusy(true);
+    setError("");
+    setFeedback("");
+    try {
+      const result = await request("resolve-offer", {
+        data: { id: record.id, offerId: offer.id, outcome }
+      });
+      applyRecord(result.application);
+      setDraft(null);
+      setDeliveryChecked(false);
+      setFeedback(outcome === "sent" ? "Email recorded. Awaiting reply." : "Seat released.");
+      await refresh();
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function updateDraft(event) {
     const { name, value } = event.target;
     setDraft(current => ({ ...current, [name]: value }));
@@ -138,6 +160,7 @@ function ApplicationReview({ application, refresh, onClose }) {
         {feedback && <p role="status">{feedback}</p>}
         <section className="gga-offer" aria-label="Membership offer">
           {offer?.sentAt && <p>Email sent {new Date(offer.sentAt).toLocaleString("en-CA", { timeZone: "America/Toronto" })}</p>}
+          {accepted && !offer?.sentAt && offer?.resolvedAt && <p>Email verified manually.</p>}
           {accepted && <p><strong>{record.status === "Confirmed" ? "Seat filled" : "Offer pending · Awaiting reply"}</strong></p>}
           {retry && (
             <form onSubmit={sendOffer}>
@@ -145,7 +168,21 @@ function ApplicationReview({ application, refresh, onClose }) {
               <p>{record.email} · {offer.seat}</p>
               <p><strong>{offer.subject}</strong></p>
               <p className="gga-offer-body">{offer.body}</p>
-              <button className="save" disabled={busy}>Retry email</button>
+              {offerAge < 23 * 3600000 && <button className="save" disabled={busy}>Retry email</button>}
+              {offerAge >= 23 * 3600000 && (
+                <p>Check the email provider’s send record for this recipient and subject. You can record the outcome 24 hours after the first attempt.</p>
+              )}
+              {offerAge >= 24 * 3600000 && (
+                <>
+                  <label>
+                    <span><input type="checkbox" checked={deliveryChecked} onChange={event => setDeliveryChecked(event.target.checked)} /> I verified the email outcome.</span>
+                  </label>
+                  <div className="gga-offer-actions">
+                    <button type="button" disabled={busy || !deliveryChecked} onClick={() => resolveOffer("sent")}>Record as sent</button>
+                    <button type="button" disabled={busy || !deliveryChecked} onClick={() => resolveOffer("unsent")}>Release unsent seat</button>
+                  </div>
+                </>
+              )}
             </form>
           )}
           {!accepted && !retry && (draft ? (
