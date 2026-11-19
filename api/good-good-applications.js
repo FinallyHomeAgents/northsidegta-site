@@ -42,13 +42,16 @@ if request.action == 'reserve' then
   local owner = redis.call('GET', request.seatKey)
   if owner and owner ~= a.id then return {409, 'This seat already has a pending offer or confirmed member.'} end
   -- Existing acceptances from before seat reservations still count.
-  if a.category ~= 'Other' then
-    for _, id in ipairs(redis.call('ZRANGE', KEYS[3], 0, -1)) do
-      if id ~= a.id then
-        local entry = redis.call('GET', ARGV[2] .. 'summary:' .. id)
-        if entry then
-          local other = cjson.decode(entry)
-          if other.category == a.category and not other.seat and (other.status == 'Accepted' or other.status == 'Confirmed') then
+  for _, id in ipairs(redis.call('ZRANGE', KEYS[3], 0, -1)) do
+    if id ~= a.id then
+      local entry = redis.call('GET', ARGV[2] .. 'summary:' .. id)
+      if entry then
+        local other = cjson.decode(entry)
+        if type(other.category) == 'string' and not other.seat
+          and (other.status == 'Accepted' or other.status == 'Confirmed') then
+          -- Legacy category labels came from the ASCII application dropdown.
+          local legacySeat = string.gsub(string.lower(other.category), '[^a-z0-9]', '')
+          if legacySeat ~= 'other' and legacySeat == request.normalizedSeat then
             return {409, 'Another applicant already holds this category seat.'}
           end
         end
@@ -59,6 +62,22 @@ if request.action == 'reserve' then
     body = request.body, timestamp = request.timestamp, from = request.from, replyTo = request.replyTo}
   a.offer = offer
   redis.call('SET', offer.seatKey, a.id)
+elseif request.action == 'resolve-offer' then
+  if not offer or offer.id ~= request.offerId or offer.sentAt or offer.closedAt then
+    return {409, 'The pending offer changed. Refresh the application.'}
+  end
+  -- Leave an hour after retries end for any in-flight request to finish.
+  if request.timestamp - offer.timestamp < 86400000 then
+    return {409, 'Wait until 24 hours after the first attempt to resolve this offer.'}
+  end
+  offer.resolvedAt = request.now
+  offer.resolvedBy = request.who
+  if request.outcome == 'sent' then
+    a.status = 'Accepted'
+  else
+    offer.closedAt = request.now
+    if redis.call('GET', offer.seatKey) == a.id then redis.call('DEL', offer.seatKey) end
+  end
 elseif request.action == 'sent' then
   if not offer or offer.id ~= request.offerId or offer.closedAt then return {409, 'The offer changed.'} end
   if not offer.sentAt then
@@ -72,7 +91,7 @@ else
   if status == 'Confirmed' and a.status ~= 'Accepted' and a.status ~= 'Confirmed' then
     return {409, 'Send an acceptance before confirming a member.'}
   end
-  if offer and not offer.closedAt and not offer.sentAt and status ~= a.status then
+  if offer and not offer.closedAt and not (offer.sentAt or offer.resolvedAt) and status ~= a.status then
     return {409, 'Resolve the pending email before changing the status.'}
   end
   if (a.status == 'Accepted' or a.status == 'Confirmed') and status ~= a.status and status ~= 'Confirmed' then
@@ -91,7 +110,7 @@ summary.status = a.status
 summary.updatedAt = a.updatedAt
 if offer and not offer.closedAt then
   summary.seat = offer.seat
-  summary.offerPending = not offer.sentAt
+  summary.offerPending = not (offer.sentAt or offer.resolvedAt)
 else
   summary.seat = nil
   summary.offerPending = nil
@@ -120,6 +139,14 @@ async function reviewApplication(redis, req, res, who, action) {
     return respond(await apply({ action, status, notes: clean(req.body?.notes, 6000) }))
   }
 
+  if (action === 'resolve-offer') {
+    const { outcome } = req.body || {}
+    if (!['sent', 'unsent'].includes(outcome)) {
+      return res.status(400).json({ ok: false, error: 'Choose the verified email outcome.' })
+    }
+    return respond(await apply({ action, outcome, offerId: clean(req.body?.offerId, 80) }))
+  }
+
   if (!process.env.RESEND_API_KEY) {
     return res.status(503).json({ ok: false, error: 'Acceptance email is not configured.' })
   }
@@ -134,7 +161,7 @@ async function reviewApplication(redis, req, res, who, action) {
   }
 
   const reservation = await apply({
-    action: 'reserve', seat, seatKey: PREFIX + 'seat:' + normalizedSeat,
+    action: 'reserve', seat, normalizedSeat, seatKey: PREFIX + 'seat:' + normalizedSeat,
     subject, body, offerId: crypto.randomUUID(),
     from: process.env.FROM_EMAIL || 'GOOD GOOD Business Network <no-reply@northsidegta.ca>',
     replyTo: process.env.GOOD_GOOD_NOTIFY_EMAIL || 'contact@finallyhomeagents.com'
@@ -161,7 +188,7 @@ export default async function handler(req,res){
  if(action!=='submit'){const who=user(req);if(!who)return res.status(401).json({ok:false,error:'Sign in to continue.'})
   if(req.method==='GET'&&action==='list'){const ids=await redis.zrange(PREFIX+'index',0,199,{rev:true});const applications=ids.length?(await redis.mget(...ids.map(id=>PREFIX+'summary:'+id))).filter(Boolean):[];return res.json({ok:true,applications})}
   if(req.method==='GET'&&action==='get'){const id=clean(req.query?.id,80),a=await redis.get(PREFIX+'application:'+id);return a?res.json({ok:true,application:a}):res.status(404).json({ok:false,error:'Application not found.'})}
-  if (req.method === 'POST' && ['update', 'offer'].includes(action)) {
+  if (req.method === 'POST' && ['update', 'offer', 'resolve-offer'].includes(action)) {
     return reviewApplication(redis, req, res, who, action)
   }
   return res.status(405).json({ok:false,error:'Method not allowed.'})
