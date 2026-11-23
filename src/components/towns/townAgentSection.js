@@ -1,4 +1,5 @@
 import { getFormEndpoint } from '../contact/contactConfig';
+import { submitWebsiteInquiry } from '../../lib/submitWebsiteInquiry';
 import { trackEvent } from '../../utils/analytics';
 
 const localFocus = {
@@ -98,7 +99,7 @@ export function initTownAgent(container, slug, town) {
     payload.set('source_route', `/communities/${slug}`);
     payload.set('contact_permission', 'Email reply about this request; no listing-alert subscription requested.');
     try {
-      const response = await fetch(getFormEndpoint(), { method: 'POST', body: payload, headers: { Accept: 'application/json' }, signal: controller.signal });
+      const response = await submitWebsiteInquiry(getFormEndpoint(), { method: 'POST', body: payload, headers: { Accept: 'application/json' }, signal: controller.signal });
       if (!response.ok) throw new Error('Delivery failed');
       complete = true;
       status.textContent = 'Thank you—your request has been received. Matthew or Landon will follow up by email about your move.';

@@ -42,6 +42,7 @@ function ShowingForm() { /* same behavior as approved listing page */
       payload.append("mls_number", "E13124552");
       payload.append("source_page", ROUTE);
       payload.append("lead_type", "Showing Request");
+      payload.append("working_with_realtor", form.hasRealtor);
       payload.append("inquiry_type", "listing_showing_request");
       const response = await submitInquiry(endpoint, { method: "POST", body: payload, headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error("Request failed");
