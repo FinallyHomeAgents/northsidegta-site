@@ -1,4 +1,4 @@
-import {recordDeliveryHeartbeat} from '../lib/inquiry-delivery-health.mjs';
+const recordDeliveryHeartbeat=async(...args)=>(await import('../lib/inquiry-delivery-health.mjs')).recordDeliveryHeartbeat(...args);
 import {timingSafeEqual} from 'node:crypto';
 const drainHeadquartersOutbox=async env=>(await import('../lib/headquarters-capture.mjs')).drainHeadquartersOutbox(env);
 const websiteOutbox=async env=>(await import('../lib/headquarters-capture.mjs')).websiteOutbox(env);
