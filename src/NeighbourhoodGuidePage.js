@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import HeaderShell from "./components/HeaderShell";
+import { initGuideInquiry } from "./lib/guideInquiry";
 import MARKET_DATA from "./data/marketData.json";
 
 const GUIDE_MARKET = MARKET_DATA.municipalities;
@@ -761,11 +762,12 @@ const PAGE_BODY_HTML = `
           </div>
         </div>
         <div class="fg2"><label for="f_nt">What matters most to you? (optional)</label><textarea id="f_nt" placeholder="e.g. We need a GO Train commute for my partner, top schools, and more space than we have in Leaside..."></textarea></div>
-        <button class="sbtn" id="leadSubmitBtn" onclick="submitLead()">
+        <button class="sbtn" id="leadSubmitBtn" type="button">
           <i class="fas fa-arrow-right" aria-hidden="true"></i> Help me compare towns
         </button>
         <p class="reco-note">By submitting you consent to being contacted by Matthew Mulhall and Landon Mulhall, Sales Representatives, Finally Home Agents Team, HomeLife Optimum Realty, Brokerage, under TRESA, governed by RECO. Your information will not be sold or shared with third parties. <a href="/privacy" style="color:var(--ink3);">Privacy policy</a>.</p>
       </div>
+      <p id="guideInquiryStatus" role="status" aria-live="polite"></p>
       <div class="fsucc" id="formSuccess">
         <span class="ck" aria-hidden="true">&#10003;</span>
         <h4>We'll be in touch.</h4>
@@ -820,6 +822,7 @@ export default function NeighbourhoodGuidePage() {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const disposeGuide = initGuideInquiry(containerRef.current);
     window.submitTownLead = (id, town) => {
       const n = document.getElementById(`sf_name_${id}`)?.value.trim();
       const em = document.getElementById(`sf_email_${id}`)?.value.trim();
@@ -836,7 +839,7 @@ export default function NeighbourhoodGuidePage() {
       const smsBox = document.getElementById(`sms_${id}`)?.closest(".sms-box");
       if (smsBox) smsBox.innerHTML = `<p style="color:rgba(255,255,255,0.8);font-size:13px;">&#10003; You're in. We'll text you new ${town} listings. Reply STOP to unsubscribe.</p>`;
     };
-    return () => { delete window.submitTownLead; delete window.submitSMSTown; };
+    return () => { disposeGuide(); delete window.submitTownLead; delete window.submitSMSTown; };
   }, []);
   const schemaObject = useMemo(() => JSON.parse(PAGE_SCHEMA), []);
   return (<><Helmet>
