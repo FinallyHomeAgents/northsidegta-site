@@ -20,3 +20,4 @@ test('only authenticated scheduled runs record completion; manual checks cannot 
 test('failed automatic run records failure and retains existing failure status',async()=>{
  const records=[];const h=createDeliveryWorker({env:{CRON_SECRET:secret,NORTHSIDE_HQ_CAPTURE_ENABLED:'true'},outbox:async()=>box(),drain:async()=>{throw Error('offline')},record:async(_b,r)=>records.push(r)});const res=response();await h({method:'GET',headers:{authorization:'Bearer '+secret,'user-agent':'vercel-cron/1.0'}},res);assert.equal(res.code,503);assert.equal(records[0].state,'failed');
 });
+test('previous disabled scheduled run cannot be reported healthy',async()=>{const b=box();const old=b.command;b.command=async c=>c[0]==='GET'?JSON.stringify({state:'disabled',checkedAt:new Date(now).toISOString()}):old(c);assert.equal((await deliveryHealth(b,{enabled:true,now})).state,'needs_attention');});
